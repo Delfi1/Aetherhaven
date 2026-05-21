@@ -1,0 +1,10 @@
+$C = "../Common.ui";
+
+Group #MaterialGridRow {
+  LayoutMode: Top;
+  Anchor: (Bottom: 4);
+
+  Group #Strip {
+    LayoutMode: Left;
+  }
+}

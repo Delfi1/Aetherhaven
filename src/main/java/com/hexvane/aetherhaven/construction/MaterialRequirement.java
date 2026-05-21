@@ -41,4 +41,12 @@ public final class MaterialRequirement {
         m.count = Math.max(0, count);
         return m;
     }
+
+    @Nonnull
+    public static MaterialRequirement ofResourceType(@Nonnull String resourceTypeId, int count) {
+        MaterialRequirement m = new MaterialRequirement();
+        m.resourceTypeId = resourceTypeId.trim();
+        m.count = Math.max(0, count);
+        return m;
+    }
 }

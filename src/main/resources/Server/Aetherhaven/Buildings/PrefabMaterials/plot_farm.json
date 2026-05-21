@@ -1,0 +1,38 @@
+{
+  "constructionId": "plot_farm",
+  "prefabPath": "Farm_Plot.prefab.json",
+  "materials": [
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 79
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 48
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 17
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Softwood_Beam",
+      "count": 12
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 4
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    }
+  ]
+}

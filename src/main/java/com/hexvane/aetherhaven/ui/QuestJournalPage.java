@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.difficulty.DifficultyPreset;
+import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.dialogue.DialogueActionExecutor;
 import com.hexvane.aetherhaven.guide.GuideMarkdownUiAppender;
@@ -79,7 +81,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     private static final int MAX_TOWN_VILLAGERS = 24;
     private static final int MAX_TOWN_PLOTS = 32;
     private static final int MAX_GUIDE_TOPICS = 48;
-    private static final int MAX_GUIDE_MD_ROWS = 96;
+    /** Long topics (e.g. mechanic_commands) need nested list rows; 96 truncated sub-bullets. */
+    private static final int MAX_GUIDE_MD_ROWS = 256;
     /** Tier blocks (section label + item grid), including continuation chunks for long lists. */
     private static final int MAX_GUIDE_GIFT_BLOCKS = 48;
     /** Icons per grid chunk (same widget as town gift history). */
@@ -437,34 +440,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
             }
 
-            QuestCatalog.FirstItemReward itemRw = quests.firstItemReward(sel);
-            if (itemRw != null) {
-                commandBuilder.set("#RewardRow.Visible", true);
-                commandBuilder.set("#RewardFallback.Visible", false);
-                commandBuilder.set(
-                    "#RewardSlot.Slots",
-                    new ItemGridSlot[]{new ItemGridSlot(new ItemStack(itemRw.itemId(), itemRw.count()))}
-                );
-                commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(String.valueOf(itemRw.count())));
-                Item assetItem = Item.getAssetMap().getAsset(itemRw.itemId());
-                if (assetItem != null
-                    && assetItem.getTranslationKey() != null
-                    && !assetItem.getTranslationKey().isBlank()) {
-                    commandBuilder.set("#RewardTitle.TextSpans", Message.translation(assetItem.getTranslationKey()));
-                } else {
-                    commandBuilder.set("#RewardTitle.TextSpans", Message.raw(itemRw.itemId()));
-                }
-            } else {
-                commandBuilder.set("#RewardRow.Visible", false);
-                commandBuilder.set("#RewardFallback.Visible", true);
-                commandBuilder.set(
-                    "#RewardFallback.TextSpans",
-                    Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.rewardFallback")
-                );
-                commandBuilder.set("#RewardSlot.Slots", new ItemGridSlot[]{new ItemGridSlot()});
-                commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(""));
-                commandBuilder.set("#RewardTitle.TextSpans", Message.raw(""));
-            }
+            applyQuestRewardPreview(commandBuilder, quests, sel);
 
             boolean canAbandon = town.playerCanAbandonQuests(uc.getUuid());
             commandBuilder.set("#AbandonQuestButton.Visible", canAbandon);
@@ -682,6 +658,18 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             );
             return;
         }
+        WorldDifficultyState worldDifficulty = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
+        commandBuilder.set(
+            "#SettingsDifficultyCurrent.TextSpans",
+            Message.translation("aetherhaven_difficulty.aetherhaven.difficulty.journalCurrent")
+                .param("preset", Message.translation(presetLangKey(worldDifficulty.getPreset())))
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#SettingsOpenDifficultyButton",
+            new EventData().append("Action", "OpenDifficulty"),
+            false
+        );
         AetherhavenPluginConfig cfg =
             journalSettingsFormSnapshot != null ? journalSettingsFormSnapshot : plugin.getConfig().get();
         commandBuilder.set("#SettingsSaveButton.Disabled", false);
@@ -872,6 +860,15 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     }
 
     @Nonnull
+    private static String presetLangKey(@Nonnull DifficultyPreset preset) {
+        return switch (preset) {
+            case EASY -> "aetherhaven_difficulty.aetherhaven.difficulty.easy.title";
+            case HARD -> "aetherhaven_difficulty.aetherhaven.difficulty.hard.title";
+            case CUSTOM -> "aetherhaven_difficulty.aetherhaven.difficulty.custom.title";
+            case NORMAL -> "aetherhaven_difficulty.aetherhaven.difficulty.normal.title";
+        };
+    }
+
     private static String journalPlotConstructionTitle(@Nonnull ConstructionCatalog catalog, @Nonnull PlotInstance plot) {
         String stored = plot.getConstructionId();
         if (stored == null || stored.isBlank()) {
@@ -1258,10 +1255,74 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
         commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
         commandBuilder.set("#RewardRow.Visible", false);
+        commandBuilder.set("#RewardReputationLine.Visible", false);
+        commandBuilder.set("#RewardReputationLine.TextSpans", Message.raw(""));
         commandBuilder.set("#RewardFallback.Visible", false);
         commandBuilder.set("#RewardSlot.Slots", new ItemGridSlot[]{new ItemGridSlot()});
         commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(""));
         commandBuilder.set("#RewardTitle.TextSpans", Message.raw(""));
+    }
+
+    private static void applyQuestRewardPreview(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull QuestCatalog quests,
+        @Nonnull String questId
+    ) {
+        QuestCatalog.FirstItemReward itemRw = quests.firstItemReward(questId);
+        QuestCatalog.QuestReputationGrant repRw = quests.findQuestBeneficiaryReputation(questId);
+        boolean hasItem = itemRw != null;
+        boolean hasRep = repRw != null;
+
+        if (hasItem) {
+            commandBuilder.set("#RewardRow.Visible", true);
+            commandBuilder.set(
+                "#RewardSlot.Slots",
+                new ItemGridSlot[]{new ItemGridSlot(new ItemStack(itemRw.itemId(), itemRw.count()))}
+            );
+            commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(String.valueOf(itemRw.count())));
+            Item assetItem = Item.getAssetMap().getAsset(itemRw.itemId());
+            if (assetItem != null
+                && assetItem.getTranslationKey() != null
+                && !assetItem.getTranslationKey().isBlank()) {
+                commandBuilder.set("#RewardTitle.TextSpans", Message.translation(assetItem.getTranslationKey()));
+            } else {
+                commandBuilder.set("#RewardTitle.TextSpans", Message.raw(itemRw.itemId()));
+            }
+        } else {
+            commandBuilder.set("#RewardRow.Visible", false);
+            commandBuilder.set("#RewardSlot.Slots", new ItemGridSlot[]{new ItemGridSlot()});
+            commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(""));
+            commandBuilder.set("#RewardTitle.TextSpans", Message.raw(""));
+        }
+
+        if (hasRep) {
+            commandBuilder.set("#RewardReputationLine.Visible", true);
+            commandBuilder.set(
+                "#RewardReputationLine.TextSpans",
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.rewardReputationLine")
+                    .param("amount", String.valueOf(repRw.amount()))
+                    .param(
+                        "villager",
+                        Message.translation(
+                            "aetherhaven_ui_journal_items_tail.npcRoles." + repRw.beneficiaryRoleId() + ".name"
+                        )
+                    )
+            );
+        } else {
+            commandBuilder.set("#RewardReputationLine.Visible", false);
+            commandBuilder.set("#RewardReputationLine.TextSpans", Message.raw(""));
+        }
+
+        if (!hasItem && !hasRep) {
+            commandBuilder.set("#RewardFallback.Visible", true);
+            commandBuilder.set(
+                "#RewardFallback.TextSpans",
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.rewardFallback")
+            );
+        } else {
+            commandBuilder.set("#RewardFallback.Visible", false);
+            commandBuilder.set("#RewardFallback.TextSpans", Message.raw(""));
+        }
     }
 
     @Nonnull
@@ -1521,6 +1582,18 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
             sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("OpenDifficulty")) {
+            if (!JournalSettingsAccess.canOpen(store, ref)) {
+                return;
+            }
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player == null) {
+                return;
+            }
+            // openCustomPage replaces the journal; do not require getCustomPage() == null.
+            player.getPageManager().openCustomPage(ref, store, new DifficultyPage(playerRef));
             return;
         }
         if (action.equalsIgnoreCase("SettingsSave")) {

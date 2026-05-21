@@ -224,6 +224,13 @@ $C.@PageOverlay {
                       }
                     }
 
+                    Label #RewardReputationLine {
+                      Anchor: (Bottom: 8);
+                      Visible: false;
+                      Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8e0a8);
+                      Text: "";
+                    }
+
                     Label #RewardFallback {
                       Visible: false;
                       Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #a8a090);
@@ -435,6 +442,33 @@ $C.@PageOverlay {
                   Group #SettingsInner {
                     LayoutMode: Top;
                     Padding: (Bottom: 12);
+
+                    Group #SettingsDifficultySection {
+                      LayoutMode: Top;
+                      Anchor: (Bottom: 14);
+
+                      Label #SettingsDifficultyHeading {
+                        Anchor: (Bottom: 6);
+                        Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 16);
+                        Text: "";
+                      }
+
+                      Label #SettingsDifficultyCurrent {
+                        Anchor: (Bottom: 8);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                        Text: "";
+                      }
+
+                      Group {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 4);
+
+                        $C.@SecondaryTextButton #SettingsOpenDifficultyButton {
+                          Anchor: (Width: 220, Height: 36);
+                          Text: "";
+                        }
+                      }
+                    }
 
                     Label #SettingsGeneralHeading {
                       Anchor: (Bottom: 10);

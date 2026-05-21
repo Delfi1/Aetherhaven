@@ -3,7 +3,9 @@ package com.hexvane.aetherhaven.charter;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.CharterBlock;
+import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.ui.DifficultyPage;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -77,10 +79,16 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         }
 
         Vector3i pos = event.getTargetBlock().clone();
-        world.execute(() -> finishCharterPlacement(world, pos, owner, pr));
+        world.execute(() -> finishCharterPlacement(world, pos, owner, pr, playerRef));
     }
 
-    private void finishCharterPlacement(@Nonnull World world, @Nonnull Vector3i pos, @Nonnull UUID owner, @Nonnull PlayerRef playerRef) {
+    private void finishCharterPlacement(
+        @Nonnull World world,
+        @Nonnull Vector3i pos,
+        @Nonnull UUID owner,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> entityRef
+    ) {
         WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return;
@@ -136,6 +144,15 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
             Message.translation("aetherhaven_common.aetherhaven.charter.townFounded").param("name", record.getDisplayName())
         );
         LOGGER.atInfo().log("Aetherhaven town %s created for %s at %s", townId, owner, pos);
+
+        WorldDifficultyState difficulty = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
+        if (!difficulty.isDifficultyChosen()) {
+            Store<EntityStore> entityStore = world.getEntityStore().getStore();
+            Player player = entityStore.getComponent(entityRef, Player.getComponentType());
+            if (player != null && player.getPageManager().getCustomPage() == null) {
+                player.getPageManager().openCustomPage(entityRef, entityStore, new DifficultyPage(playerRef));
+            }
+        }
     }
 
     private static void spawnElder(@Nonnull World world, @Nonnull TownRecord town, @Nonnull TownManager tm) {

@@ -2,11 +2,13 @@ package com.hexvane.aetherhaven.town;
 
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -127,6 +129,11 @@ public final class PlotInstance {
     @Nullable
     @SerializedName("assemblyActiveSectionIndex")
     private Integer assemblyActiveSectionIndex;
+
+    /** Materials deposited at the plot sign while {@link PlotInstanceState#BLUEPRINTING}. */
+    @Nullable
+    @SerializedName("depositedMaterials")
+    private ArrayList<MaterialRequirement> depositedMaterials;
 
     public PlotInstance() {}
 
@@ -423,5 +430,21 @@ public final class PlotInstance {
         this.assemblyOwnerUuid = null;
         this.assemblySectionDivisions = null;
         this.assemblyActiveSectionIndex = null;
+    }
+
+    @Nonnull
+    public List<MaterialRequirement> getDepositedMaterials() {
+        if (depositedMaterials == null || depositedMaterials.isEmpty()) {
+            return List.of();
+        }
+        return Collections.unmodifiableList(depositedMaterials);
+    }
+
+    public void setDepositedMaterials(@Nonnull List<MaterialRequirement> materials) {
+        if (materials.isEmpty()) {
+            this.depositedMaterials = null;
+        } else {
+            this.depositedMaterials = new ArrayList<>(materials);
+        }
     }
 }

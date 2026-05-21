@@ -36,6 +36,7 @@ import javax.annotation.Nullable;
 public final class AetherhavenLootChestDebugCommand extends AbstractCommandCollection {
     public AetherhavenLootChestDebugCommand() {
         super("debug-lootchest", "aetherhaven_commands_help.commands.aetherhaven.debug_lootchest.desc");
+        this.setPermissionGroup(com.hypixel.hytale.protocol.GameMode.Creative);
         this.addSubCommand(new FillSubCommand());
     }
 

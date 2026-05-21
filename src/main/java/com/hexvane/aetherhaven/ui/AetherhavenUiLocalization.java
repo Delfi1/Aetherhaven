@@ -36,6 +36,7 @@ public final class AetherhavenUiLocalization {
         b.set("#HouseResidentHideElsewhereCheckbox #HouseResidentHideElsewhereLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip"));
         b.set("#PickUpPlotButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlot"));
         b.set("#BuildButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.build"));
+        b.set("#DepositMaterialsButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.depositMaterials"));
         b.set("#InviteLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.inviteLabel"));
         b.set("#InviteSendButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.inviteSend"));
         b.set("#InvitePlayerInput.PlaceholderText", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.invitePlaceholder"));
@@ -43,6 +44,10 @@ public final class AetherhavenUiLocalization {
         b.set("#MoveBuildingModalText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.moveBuildingModalBody"));
         b.set("#MoveBuildingConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.moveBuildingModalConfirm"));
         b.set("#MoveBuildingCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.moveBuildingModalCancel"));
+        b.set("#PickUpPlotModalTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlotModalTitle"));
+        b.set("#PickUpPlotModalText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlotModalBody"));
+        b.set("#PickUpPlotConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlotModalConfirm"));
+        b.set("#PickUpPlotCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlotModalCancel"));
     }
 
     public static void applyTownMemberPermissionsPage(@Nonnull UICommandBuilder b) {
@@ -57,6 +62,23 @@ public final class AetherhavenUiLocalization {
         b.set("#CapCompleteQuests.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.completeQuests"));
         b.set("#CapAbandonQuests.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.abandonQuests"));
         b.set("#CapReviveVillagers.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.reviveVillagers"));
+    }
+
+    public static void applyDifficultyPage(@Nonnull UICommandBuilder b) {
+        b.set("#DifficultyTitleText.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.title"));
+        b.set("#CardEasyTitle.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.easy.title"));
+        b.set("#CardEasyDesc.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.easy.desc"));
+        b.set("#CardNormalTitle.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.normal.title"));
+        b.set("#CardNormalDesc.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.normal.desc"));
+        b.set("#CardHardTitle.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.hard.title"));
+        b.set("#CardHardDesc.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.hard.desc"));
+        b.set("#CustomizeButton.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.customize"));
+        b.set("#ResourceMultLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.resourceMult"));
+        b.set("#GoldMultLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.goldMult"));
+        b.set("#AllBlocksToggle #AllBlocksLabel.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.allBlocks"));
+        b.set("#BackToPresetsButton.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.back"));
+        b.set("#SaveButton.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.save"));
+        b.set("#CancelButton.TextSpans", t("aetherhaven_difficulty.aetherhaven.difficulty.cancel"));
     }
 
     public static void applyCharterAmendmentsChrome(@Nonnull UICommandBuilder b) {
@@ -83,12 +105,6 @@ public final class AetherhavenUiLocalization {
         b.set("#EmptyHint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.giftHistory.empty"));
         b.set("#GiftCyclePrev.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.giftHistory.cyclePrevTooltip"));
         b.set("#GiftCycleNext.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.giftHistory.cycleNextTooltip"));
-    }
-
-    public static void applyPlotSignAdmin(@Nonnull UICommandBuilder b) {
-        b.set("#PlotSignAdminTitleText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotadmin.title"));
-        b.set("#ConstructionFieldLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotadmin.construction"));
-        b.set("#GiveButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotadmin.give"));
     }
 
     public static void applyDialoguePage(@Nonnull UICommandBuilder b) {
@@ -208,6 +224,14 @@ public final class AetherhavenUiLocalization {
         b.set(
             "#TownShowBordersLabel.TooltipTextSpans",
             t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.showTownBordersTooltip")
+        );
+        b.set(
+            "#SettingsDifficultyHeading.TextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.journalHeading")
+        );
+        b.set(
+            "#SettingsOpenDifficultyButton.TextSpans",
+            t("aetherhaven_difficulty.aetherhaven.difficulty.journalButton")
         );
         b.set("#SettingsGeneralHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.generalHeading"));
         b.set("#SettingsPassiveLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.passiveLabel"));

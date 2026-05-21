@@ -20,11 +20,13 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
 import javax.annotation.Nonnull;
+import com.hypixel.hytale.protocol.GameMode;
 import javax.annotation.Nullable;
 
 public final class AetherhavenQuestDebugCommand extends AbstractCommandCollection {
     public AetherhavenQuestDebugCommand() {
-        super("quest", "aetherhaven_commands_help.commands.aetherhaven.questdebug.desc");
+        super("quest", "aetherhaven_commands_help.commands.aetherhaven.quest.desc");
+        this.setPermissionGroup(GameMode.Creative);
         this.addSubCommand(new GrantCommand());
         this.addSubCommand(new CompleteCommand());
         this.addSubCommand(new ClearCommand());

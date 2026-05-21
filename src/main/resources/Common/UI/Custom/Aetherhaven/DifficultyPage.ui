@@ -1,0 +1,355 @@
+$C = "../Common.ui";
+
+/** Transparent hit target so vanilla window chrome (ContainerPatch) stays visible. */
+@CardWindowBtnStyle = (
+  Default: (Background: #000000(0)),
+  Hovered: (Background: #ffffff(0.07)),
+  Pressed: (Background: #ffffff(0.12)),
+  Disabled: (Background: #000000(0))
+);
+
+@CardWindowBody = (TexturePath: "../Common/ContainerPatch.png", Border: 23);
+@CardWindowHeader = (TexturePath: "../Common/ContainerHeader.png", HorizontalBorder: 50, VerticalBorder: 0);
+@CardWindowOuter = (TexturePath: "../Common/ContainerFullPatch.png", Border: 20);
+
+@CardBodyEasy = (...@CardWindowBody, Color: #4a9e5a(0.90));
+@CardBodyNormal = (...@CardWindowBody, Color: #c9a227(0.90));
+@CardBodyHard = (...@CardWindowBody, Color: #b83838(0.90));
+
+@CardTitleStyle = (...$C.@DefaultLabelStyle, RenderBold: true, FontSize: 14, HorizontalAlignment: Center, VerticalAlignment: Center);
+@CardEasyTitleStyle = (...@CardTitleStyle, TextColor: #6ecf7a);
+@CardNormalTitleStyle = (...@CardTitleStyle, TextColor: #e8b84a);
+@CardHardTitleStyle = (...@CardTitleStyle, TextColor: #e86868);
+@CardDescStyle = (...$C.@DefaultLabelStyle, Wrap: true, FontSize: 12, HorizontalAlignment: Center, TextColor: #c8c2b0);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 720);
+
+    #Title {
+      Label #DifficultyTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 16);
+
+      Group #PresetSection {
+        LayoutMode: Top;
+
+        Group #PresetCardsRow {
+          LayoutMode: Left;
+          Anchor: (Bottom: 14, Height: 208);
+
+          Group #CardEasyShell {
+            FlexWeight: 10;
+            Anchor: (Right: 8, Height: 176, Bottom: 0);
+            LayoutMode: Top;
+            Padding: (Full: 4);
+            Background: (...@CardWindowOuter, Color: #3d913f(0.62));
+
+            Group {
+              LayoutMode: Middle;
+              Anchor: (Width: 200, Height: 11, Top: -5);
+              HitTestVisible: false;
+              Background: "../Common/ContainerDecorationTop.png";
+            }
+
+            Button #CardEasy {
+                Style: @CardWindowBtnStyle;
+                FlexWeight: 1;
+                LayoutMode: Top;
+
+                Group {
+                  Anchor: (Height: 34);
+                  LayoutMode: Full;
+                  HitTestVisible: false;
+                  Background: (...@CardWindowHeader, Color: #4a9e5a(0.94));
+
+                  Label #CardEasyTitle {
+                    Anchor: (Full: 0);
+                    Padding: (Horizontal: 6, Top: 5);
+                    Style: @CardEasyTitleStyle;
+                    Text: "";
+                  }
+                }
+
+                Group {
+                  FlexWeight: 1;
+                  LayoutMode: Top;
+                  HitTestVisible: false;
+                  Background: @CardBodyEasy;
+                  Padding: (Horizontal: 10, Top: 10, Bottom: 8);
+
+                  Group {
+                    LayoutMode: Middle;
+                    Anchor: (Bottom: 8, Height: 44);
+
+                    AssetImage #CardEasyIcon {
+                      Anchor: (Width: 36, Height: 36);
+                      AssetPath: "UI/Custom/convenient.png";
+                      FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+                    }
+                  }
+
+                  Label #CardEasyDesc {
+                    FlexWeight: 1;
+                    Style: @CardDescStyle;
+                    Text: "";
+                  }
+                }
+              }
+          }
+
+          Group #CardNormalShell {
+            FlexWeight: 10;
+            Anchor: (Right: 8, Height: 176, Bottom: 0);
+            LayoutMode: Top;
+            Padding: (Full: 4);
+            Background: (...@CardWindowOuter, Color: #c9a227(0.62));
+
+            Group {
+              LayoutMode: Middle;
+              Anchor: (Width: 200, Height: 11, Top: -5);
+              HitTestVisible: false;
+              Background: "../Common/ContainerDecorationTop.png";
+            }
+
+            Button #CardNormal {
+                Style: @CardWindowBtnStyle;
+                FlexWeight: 1;
+                LayoutMode: Top;
+
+                Group {
+                  Anchor: (Height: 34);
+                  LayoutMode: Full;
+                  HitTestVisible: false;
+                  Background: (...@CardWindowHeader, Color: #c9a227(0.94));
+
+                  Label #CardNormalTitle {
+                    Anchor: (Full: 0);
+                    Padding: (Horizontal: 6, Top: 5);
+                    Style: @CardNormalTitleStyle;
+                    Text: "";
+                  }
+                }
+
+                Group {
+                  FlexWeight: 1;
+                  LayoutMode: Top;
+                  HitTestVisible: false;
+                  Background: @CardBodyNormal;
+                  Padding: (Horizontal: 10, Top: 10, Bottom: 8);
+
+                  Group {
+                    LayoutMode: Middle;
+                    Anchor: (Bottom: 8, Height: 44);
+
+                    AssetImage #CardNormalIcon {
+                      Anchor: (Width: 36, Height: 36);
+                      AssetPath: "UI/Custom/star.png";
+                      FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+                    }
+                  }
+
+                  Label #CardNormalDesc {
+                    FlexWeight: 1;
+                    Style: @CardDescStyle;
+                    Text: "";
+                  }
+                }
+              }
+          }
+
+          Group #CardHardShell {
+            FlexWeight: 10;
+            Anchor: (Height: 176, Bottom: 0);
+            LayoutMode: Top;
+            Padding: (Full: 4);
+            Background: (...@CardWindowOuter, Color: #962f2f(0.62));
+
+            Group {
+              LayoutMode: Middle;
+              Anchor: (Width: 200, Height: 11, Top: -5);
+              HitTestVisible: false;
+              Background: "../Common/ContainerDecorationTop.png";
+            }
+
+            Button #CardHard {
+                Style: @CardWindowBtnStyle;
+                FlexWeight: 1;
+                LayoutMode: Top;
+
+                Group {
+                  Anchor: (Height: 34);
+                  LayoutMode: Full;
+                  HitTestVisible: false;
+                  Background: (...@CardWindowHeader, Color: #b83838(0.94));
+
+                  Label #CardHardTitle {
+                    Anchor: (Full: 0);
+                    Padding: (Horizontal: 6, Top: 5);
+                    Style: @CardHardTitleStyle;
+                    Text: "";
+                  }
+                }
+
+                Group {
+                  FlexWeight: 1;
+                  LayoutMode: Top;
+                  HitTestVisible: false;
+                  Background: @CardBodyHard;
+                  Padding: (Horizontal: 10, Top: 10, Bottom: 8);
+
+                  Group {
+                    LayoutMode: Middle;
+                    Anchor: (Bottom: 8, Height: 44);
+
+                    AssetImage #CardHardIcon {
+                      Anchor: (Width: 36, Height: 36);
+                      AssetPath: "UI/Custom/skull.png";
+                      FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+                    }
+                  }
+
+                  Label #CardHardDesc {
+                    FlexWeight: 1;
+                    Style: @CardDescStyle;
+                    Text: "";
+                  }
+                }
+              }
+          }
+        }
+
+        Group {
+          LayoutMode: Middle;
+          Anchor: (Bottom: 12, Horizontal: 0);
+
+          $C.@TextButton #CustomizeButton {
+            Anchor: (Width: 200, Height: 36);
+            Text: "";
+          }
+        }
+      }
+
+      Group #CustomizeSection {
+        LayoutMode: Top;
+        Visible: false;
+
+        Label #ResourceMultLabel {
+          Anchor: (Bottom: 4);
+          Style: $C.@DefaultLabelStyle;
+          Text: "";
+        }
+
+        Group #ResourceMultRow {
+          LayoutMode: Left;
+          Anchor: (Bottom: 12);
+
+          Group #ResourceMultSliderHost {
+            FlexWeight: 1;
+            Anchor: (Right: 10, Height: 5);
+            LayoutMode: Full;
+
+            $C.@FloatSlider #ResourceMultSlider {
+              Anchor: (Full: 0);
+              Min: 0.0;
+              Max: 5.0;
+              Value: 1.0;
+            }
+
+            Group #ResourceMultBlocker {
+              Visible: false;
+              LayoutMode: Full;
+              Anchor: (Full: 0);
+              HitTestVisible: true;
+              Background: #000000(0);
+            }
+          }
+
+          Label #ResourceMultValue {
+            Anchor: (Width: 48);
+            Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center);
+            Text: "";
+          }
+        }
+
+        Label #GoldMultLabel {
+          Anchor: (Bottom: 4);
+          Style: $C.@DefaultLabelStyle;
+          Text: "";
+        }
+
+        Group #GoldMultRow {
+          LayoutMode: Left;
+          Anchor: (Bottom: 12);
+
+          $C.@FloatSlider #GoldMultSlider {
+            FlexWeight: 1;
+            Anchor: (Right: 10, Height: 5);
+            Min: 0.0;
+            Max: 5.0;
+            Value: 1.0;
+          }
+
+          Label #GoldMultValue {
+            Anchor: (Width: 48);
+            Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center);
+            Text: "";
+          }
+        }
+
+        Group #AllBlocksRow {
+          LayoutMode: Left;
+          Anchor: (Bottom: 12);
+
+          Group #AllBlocksToggle {
+            LayoutMode: Left;
+
+            $C.@CheckBox #CheckBox {
+            }
+
+            Label #AllBlocksLabel {
+              Text: "";
+              Anchor: (Left: 11);
+              Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+            }
+          }
+        }
+
+        Group {
+          LayoutMode: Middle;
+          Anchor: (Bottom: 8, Horizontal: 0);
+
+          $C.@SecondaryTextButton #BackToPresetsButton {
+            Anchor: (Width: 200, Height: 36);
+            Text: "";
+          }
+        }
+      }
+
+      Group #SaveCancelRow {
+        LayoutMode: Left;
+        Anchor: (Top: 8);
+
+        $C.@TextButton #SaveButton {
+          FlexWeight: 1;
+          Anchor: (Right: 8);
+          Text: "";
+        }
+
+        $C.@SecondaryTextButton #CancelButton {
+          FlexWeight: 1;
+          Text: "";
+        }
+      }
+    }
+  }
+}

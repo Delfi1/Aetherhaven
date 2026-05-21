@@ -1,7 +1,6 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyJob;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
@@ -72,7 +71,7 @@ public final class TownJournalAdminService {
         if (!PlotFootprintChunkUtil.isPlotFullyLoaded(world, plot)) {
             return FinishPlotResult.NOT_LOADED;
         }
-        PlotAssemblyJob job = AssemblyWorldRegistry.get(world, plotId);
+        PlotAssemblyJob job = PlotAssemblyService.ensureAssemblyJob(world, plugin, town, plot, store);
         if (job == null) {
             return FinishPlotResult.NO_JOB;
         }

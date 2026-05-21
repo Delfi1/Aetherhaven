@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 public final class AetherhavenReputationDebugCommand extends AbstractCommandCollection {
     public AetherhavenReputationDebugCommand() {
         super("reputation", "aetherhaven_commands_help.commands.aetherhaven.reputation.desc");
+        this.setPermissionGroup(com.hypixel.hytale.protocol.GameMode.Creative);
         this.addAliases("rep");
         this.addSubCommand(new SetSubCommand());
         this.addSubCommand(new RewardSubCommand());

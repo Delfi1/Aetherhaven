@@ -1,9 +1,29 @@
 # Changelog
 
-## [1.6.0] - Unreleased
+## [1.7.0] - Unreleased
 
 ### Added
 
+- **Commands guide** New journal Guide page lists every `/ah` command with permissions, grouped for players, world hosts, and debug tools.
+- **Getting Started and mechanics guides** New journal pages cover founding a town, villager needs, reputation, and jewelry (including gemstone stat effects).
+- **Quest journal reputation preview** Active quest detail now shows reputation rewards alongside item rewards when a quest grants them.
+
+### Fixed
+
+- **Assembly after re-entering a world** Plot builds that were mid-assembly could lose their in-memory assembly job when leaving and re-entering a world (especially singleplayer). Passive building and journal “Finish one building now” then reported no active job. Jobs are now restored on the world thread with retries, re-created on demand when finishing from the journal, and passively re-registered when a player is in the world.
+
+### Changed
+
+- **Town command permissions** Town membership commands (`/ah town invite`, `accept`, and related) are available in Adventure mode by default.
+- **Command help text** Simplified English descriptions for `/ah` tab help.
+- **Removed `/ah plot`** Removed the old plot sign admin command that gave configured plot tokens (use the town planning desk and plot tokens instead).
+
+## [1.6.0] - 5/19/2026
+
+### Added
+
+- **World difficulty** Choose Easy, Normal, Hard, or custom building cost multipliers per world. Hard mode requires every block from each building blueprint. The founding player sets difficulty when placing the first town charter; operators can change it later in the journal Settings tab or with `/ah difficulty`.
+- **Plot construction deposits** Plot sign building UI shows a scrollable material grid with icons. Deposit materials over time; gold shows as one spendable total versus required amount.
 - **Breakable container coins** Crates, barrels, pots, sacks, and coffins in the world can rarely drop gold coins when smashed. Uses weighted rolls so most breaks find nothing and one or two coins are less common.
 - **Town Borders on Map** Added town border on the map with a town waypoint. Can be toggled per player in the journal.
 

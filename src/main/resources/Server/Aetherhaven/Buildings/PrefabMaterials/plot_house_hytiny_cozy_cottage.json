@@ -1,0 +1,290 @@
+{
+  "constructionId": "plot_house_hytiny_cozy_cottage",
+  "prefabPath": "Hytinys_Cozy_Cottage.prefab.json",
+  "materials": [
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 368
+    },
+    {
+      "itemId": "Wood_Lightwood_Roof",
+      "count": 231
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 197
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 171
+    },
+    {
+      "itemId": "Wood_Lightwood_Planks",
+      "count": 161
+    },
+    {
+      "itemId": "Wood_Blackwood_Planks",
+      "count": 98
+    },
+    {
+      "itemId": "Furniture_Village_Platform",
+      "count": 78
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 56
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 50
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Wall",
+      "count": 42
+    },
+    {
+      "itemId": "Wood_Blackwood_Beam",
+      "count": 40
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 34
+    },
+    {
+      "itemId": "Wood_Lightwood_Ornate",
+      "count": 26
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Shelf",
+      "count": 23
+    },
+    {
+      "itemId": "Wood_Lightwood_Fence",
+      "count": 23
+    },
+    {
+      "itemId": "Wood_Lightwood_Decorative",
+      "count": 22
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Stairs",
+      "count": 21
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 20
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Half",
+      "count": 20
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 18
+    },
+    {
+      "itemId": "Wood_Lightwood_Roof_Flat",
+      "count": 15
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Beam",
+      "count": 14
+    },
+    {
+      "itemId": "Wood_Lightwood_Stairs",
+      "count": 13
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 10
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 9
+    },
+    {
+      "itemId": "WinterHoliday_Garland",
+      "count": 9
+    },
+    {
+      "itemId": "Furniture_Village_Stool",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Lightwood_Beam",
+      "count": 7
+    },
+    {
+      "itemId": "Furniture_Village_Ladder",
+      "count": 5
+    },
+    {
+      "itemId": "Furniture_Ancient_Sack",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Kweebec_Candle",
+      "count": 3
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 3
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 3
+    },
+    {
+      "itemId": "Deco_Target",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Crude_Chest_Small",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Kweebec_Painting",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Kweebec_Trapdoor",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Shelf_Full",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Alchemy",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Armour",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Builders",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Tannery",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Weapon",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Kweebec_Plush",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Plate",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Treasure",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Bread",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Cheese",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Pie_Pumpkin",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Salad_Berry",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Wildmeat_Cooked",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Feran_Bench",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Goblin_Chest_Small",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Banner",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Bed",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Jungle_Planter",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Kweebec_Bed",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Chair",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Bench",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Table",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Wardrobe",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Flour",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Spices",
+      "count": 1
+    },
+    {
+      "itemId": "Potion_Regen_Mana_Large",
+      "count": 1
+    },
+    {
+      "itemId": "Potion_Stamina_Large",
+      "count": 1
+    },
+    {
+      "itemId": "Tool_Feedbag",
+      "count": 1
+    }
+  ]
+}

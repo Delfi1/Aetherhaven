@@ -7,7 +7,7 @@ items.Aetherhaven_Wood_Scaffold.legendUse=Use (F): extend tower / branch from to
 
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
 items.Aetherhaven_Plot_Sign.name=Plot sign
-items.Aetherhaven_Plot_Sign.description=Marks where a prefab can be built. Use /aetherhaven plot to configure.
+items.Aetherhaven_Plot_Sign.description=Marks where a building can be placed. Craft plot tokens at your town planning desk.
 
 items.Aetherhaven_Charter.name=Town charter
 items.Aetherhaven_Charter.description=Place to found a town. Each player may have one town per world. Use to open town info.
@@ -98,10 +98,10 @@ aetherhaven.pathTool.navvizOn=Path nav debug: on (server shows committed path no
 aetherhaven.pathTool.navvizOff=Path nav debug: off
 aetherhaven.pathTool.navvizNoPerm=Path nav debug requires aetherhaven.path.tool
 
-commands.aetherhaven.path.root.desc=Path / spline placement helpers
-commands.aetherhaven.path.revert.desc=Restore a cemented path from the undo file (aetherhaven.path.revert)
-commands.aetherhaven.path.revert.id=Path commit id (UUID from cement chat message)
-commands.aetherhaven.path.navviz.desc=Toggle debug drawing of path-nav polylines (aetherhaven.path.tool; sub: navviz)
+commands.aetherhaven.path.root.desc=Path tool helpers
+commands.aetherhaven.path.revert.desc=Undo a placed path using the id from chat when you placed it
+commands.aetherhaven.path.revert.id=Path id from chat when you placed the path
+commands.aetherhaven.path.navviz.desc=Debug: toggle path navigation debug lines
 
 items.Aetherhaven_Path_Tool.name=Path designer shovel
 items.Aetherhaven_Path_Tool.description=Designs spline paths (<color is="#5AB5B5">aetherhaven.path.tool</color>). Secondary: add nodes. Primary: select; in move mode, click ground to move. Q: mode cycle. 2nd ability: path width 1-8. 3rd ability: path style (inner blocks; PathToolStyles in config). F: nudge yaw in rotate, or place in place mode (2+ nodes). Revert: aetherhaven path revert. Config: PathToolStyles, raycast, and replace lists.

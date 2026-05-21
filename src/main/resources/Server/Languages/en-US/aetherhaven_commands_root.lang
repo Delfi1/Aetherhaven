@@ -1,19 +1,19 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
-# Bundle: /aetherhaven reload, plot admin, starter kit, export skin
+# Bundle: /aetherhaven reload, starter kit, export skin
 
-# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
-commands.aetherhaven.root.desc=Aetherhaven mod commands
-commands.aetherhaven.reload.desc=Reload config.json and Aetherhaven JSON catalogs from disk (creative mode)
+# === Commands: /aetherhaven (reload, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Aetherhaven commands (/ah)
+commands.aetherhaven.difficulty.desc=Creative: open world difficulty for building costs
+commands.aetherhaven.reload.desc=Creative: reload mod config and data from disk
 commands.aetherhaven.reload.success=Aetherhaven config and asset catalogs reloaded.
 commands.aetherhaven.reload.failure=Reload failed: {detail}
 commands.aetherhaven.reload.noPlugin=Aetherhaven plugin is not loaded.
-commands.aetherhaven.plot.desc=Open plot sign admin UI (pick construction, get item)
-commands.aetherhaven.starterkit.desc=Give yourself the Aetherhaven starter kit (plot placement staff, charter, town planning desk, building staff; creative mode)
+commands.aetherhaven.starterkit.desc=Creative: give yourself the starter kit (placement staff, charter, planning desk, building staff)
 commands.aetherhaven.starterkit.success=Starter kit added to your inventory.
 commands.aetherhaven.starterkit.partial=Starter kit partly granted; {failed} item(s) did not fit (make inventory space).
 
-commands.aetherhaven.exportskin.desc=Export your avatar skin as a model JSON (Parent: Player)
-commands.aetherhaven.exportskin.other.desc=Export another player's avatar skin as model JSON
+commands.aetherhaven.exportskin.desc=Creative: export your avatar skin as a model file
+commands.aetherhaven.exportskin.other.desc=Creative: export another player's avatar skin
 commands.aetherhaven.exportskin.arg.path=Optional output file path (default: plugin data/avatar_exports/)
 commands.aetherhaven.exportskin.noSkin=No character skin is available for this player.
 commands.aetherhaven.exportskin.invalidSkin=Skin validation failed: {detail}

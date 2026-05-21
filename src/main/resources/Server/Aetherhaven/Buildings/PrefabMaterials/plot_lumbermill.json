@@ -1,0 +1,82 @@
+{
+  "constructionId": "plot_lumbermill",
+  "prefabPath": "Lumbermill.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 160
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 72
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 60
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 59
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 30
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 29
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 22
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 19
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 14
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 11
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 10
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 10
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 9
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 9
+    },
+    {
+      "itemId": "Wood_Sticks",
+      "count": 8
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Sign",
+      "count": 1
+    }
+  ]
+}

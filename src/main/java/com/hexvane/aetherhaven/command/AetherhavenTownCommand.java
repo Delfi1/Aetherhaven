@@ -24,12 +24,14 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.protocol.GameMode;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
 public final class AetherhavenTownCommand extends AbstractCommandCollection {
     public AetherhavenTownCommand() {
         super("town", "aetherhaven_commands_help.commands.aetherhaven.town.desc");
+        this.setPermissionGroup(GameMode.Adventure);
         this.addSubCommand(new InviteCommand());
         this.addSubCommand(new AcceptCommand());
         this.addSubCommand(new DeclineCommand());

@@ -1,0 +1,78 @@
+{
+  "constructionId": "plot_house_hytiny_japanese_tea_house",
+  "prefabPath": "Hytinys_Japanese_Tea_House.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 478
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 190
+    },
+    {
+      "itemId": "Wood_Darkwood_Planks_Half",
+      "count": 91
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Roof_Shallow",
+      "count": 48
+    },
+    {
+      "itemId": "Furniture_Village_Platform",
+      "count": 42
+    },
+    {
+      "itemId": "Wood_Hardwood_Beam",
+      "count": 30
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 24
+    },
+    {
+      "itemId": "Wood_Darkwood_Planks",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Roof",
+      "count": 11
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Roof_Flat",
+      "count": 7
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 5
+    },
+    {
+      "itemId": "Furniture_Temple_Wind_Stool",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Darkwood_Decorative",
+      "count": 4
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Darkwood_Stairs",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Brazier",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    }
+  ]
+}

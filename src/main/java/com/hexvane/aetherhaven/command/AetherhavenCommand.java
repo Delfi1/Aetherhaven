@@ -1,12 +1,13 @@
 package com.hexvane.aetherhaven.command;
 
+import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 
 public final class AetherhavenCommand extends AbstractCommandCollection {
     public AetherhavenCommand() {
         super("aetherhaven", "aetherhaven_commands_root.commands.aetherhaven.root.desc");
+        this.setPermissionGroup(GameMode.Adventure);
         this.addAliases("ah");
-        this.addSubCommand(new PlotSignAdminCommand());
         this.addSubCommand(new AetherhavenStarterKitCommand());
         this.addSubCommand(new AetherhavenTownsCommand());
         this.addSubCommand(new AetherhavenReplaceCharterCommand());
@@ -27,5 +28,6 @@ public final class AetherhavenCommand extends AbstractCommandCollection {
         this.addSubCommand(new AetherhavenPathCommand());
         this.addSubCommand(new AetherhavenFloatingGiftCommand());
         this.addSubCommand(new AetherhavenTimeCommand());
+        this.addSubCommand(new AetherhavenDifficultyCommand());
     }
 }

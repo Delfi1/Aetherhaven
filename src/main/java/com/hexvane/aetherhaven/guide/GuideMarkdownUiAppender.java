@@ -131,38 +131,35 @@ public final class GuideMarkdownUiAppender {
             float font = level <= 1 ? 20f : (level == 2 ? 17f : 15f);
             cmd.append(host, "Aetherhaven/GuideMdHeading.ui");
             String sel = host + "[" + rows + "]";
-            cmd.set(sel + " #Line.TextSpans", Message.raw(collectInlineText(h)));
+            cmd.set(sel + " #Line.TextSpans", GuideMarkdownStyles.heading(h));
             cmd.set(sel + " #Line.Style.FontSize", font);
             rows++;
         }
 
         private boolean renderParagraph(@Nonnull Paragraph p) {
-            StringBuilder text = new StringBuilder();
-            boolean anyImage = false;
+            boolean wroteText = false;
             for (Node c = p.getFirstChild(); c != null; c = c.getNext()) {
                 if (c instanceof Image img) {
-                    if (text.length() > 0) {
-                        flushParagraph(text.toString());
-                        text.setLength(0);
+                    if (!wroteText) {
+                        flushParagraphRich(p);
+                        wroteText = true;
                     }
                     appendImage(img.getUrl().toString());
-                    anyImage = true;
-                } else {
-                    appendInlineFragment(text, c);
                 }
             }
-            if (text.length() > 0 || !anyImage) {
-                flushParagraph(text.toString().trim());
+            if (!wroteText) {
+                flushParagraphRich(p);
             }
             return true;
         }
 
-        private void flushParagraph(@Nonnull String t) {
+        private void flushParagraphRich(@Nonnull Paragraph p) {
+            String t = collectInlineText(p).trim();
             if (!room() || t.isEmpty()) {
                 return;
             }
             cmd.append(host, "Aetherhaven/GuideMdParagraph.ui");
-            cmd.set(host + "[" + rows + "] #Body.TextSpans", Message.raw(t));
+            cmd.set(host + "[" + rows + "] #Body.TextSpans", GuideMarkdownStyles.paragraph(p));
             rows++;
         }
 
@@ -188,40 +185,74 @@ public final class GuideMarkdownUiAppender {
         }
 
         private boolean renderBulletList(@Nonnull BulletList list) {
+            return renderBulletList(list, 0);
+        }
+
+        private boolean renderBulletList(@Nonnull BulletList list, int depth) {
             for (Node item = list.getFirstChild(); item != null; item = item.getNext()) {
                 if (!(item instanceof ListItem li)) {
                     continue;
                 }
-                Node inner = li.getFirstChild();
-                if (inner instanceof Paragraph p) {
-                    if (!room()) {
-                        return false;
-                    }
-                    String bulletText = "• " + collectInlineText(p).trim();
-                    cmd.append(host, "Aetherhaven/GuideMdBullet.ui");
-                    cmd.set(host + "[" + rows + "] #Body.TextSpans", Message.raw(bulletText));
-                    rows++;
+                if (!renderListItem(li, depth, false, 0)) {
+                    return false;
                 }
             }
             return true;
         }
 
         private boolean renderOrderedList(@Nonnull OrderedList list) {
+            return renderOrderedList(list, 0);
+        }
+
+        private boolean renderOrderedList(@Nonnull OrderedList list, int depth) {
             int idx = 1;
             for (Node item = list.getFirstChild(); item != null; item = item.getNext()) {
                 if (!(item instanceof ListItem li)) {
                     continue;
                 }
-                Node inner = li.getFirstChild();
-                if (inner instanceof Paragraph p) {
+                if (!renderListItem(li, depth, true, idx)) {
+                    return false;
+                }
+                idx++;
+            }
+            return true;
+        }
+
+        /** Renders every paragraph and nested list inside a list item (not only the first child). */
+        private boolean renderListItem(@Nonnull ListItem li, int depth, boolean ordered, int orderedIndex) {
+            boolean wroteOrderedLine = false;
+            for (Node child = li.getFirstChild(); child != null; child = child.getNext()) {
+                if (child instanceof Paragraph p) {
                     if (!room()) {
                         return false;
                     }
-                    String line = idx + ". " + collectInlineText(p).trim();
-                    cmd.append(host, "Aetherhaven/GuideMdBullet.ui");
-                    cmd.set(host + "[" + rows + "] #Body.TextSpans", Message.raw(line));
+                    String text = collectInlineText(p).trim();
+                    if (text.isEmpty()) {
+                        continue;
+                    }
+                    int lineDepth = depth;
+                    if (ordered && wroteOrderedLine) {
+                        lineDepth = depth + 1;
+                    }
+                    String prefix;
+                    if (ordered && !wroteOrderedLine) {
+                        prefix = GuideMarkdownStyles.bulletPrefixFor(depth, true, orderedIndex);
+                        wroteOrderedLine = true;
+                    } else {
+                        prefix = GuideMarkdownStyles.bulletPrefixFor(lineDepth, false, 0);
+                    }
+                    String sel = host + "[" + rows + "]";
+                    cmd.append(host, GuideMarkdownStyles.bulletUiTemplate(lineDepth));
+                    cmd.set(sel + " #Body.TextSpans", GuideMarkdownStyles.bulletLine(p, lineDepth, prefix));
                     rows++;
-                    idx++;
+                } else if (child instanceof BulletList bl) {
+                    if (!renderBulletList(bl, depth + 1)) {
+                        return false;
+                    }
+                } else if (child instanceof OrderedList ol) {
+                    if (!renderOrderedList(ol, depth + 1)) {
+                        return false;
+                    }
                 }
             }
             return true;

@@ -1,0 +1,38 @@
+{
+  "constructionId": "plot_park",
+  "prefabPath": "Park_01.prefab.json",
+  "materials": [
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 936
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 377
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 43
+    },
+    {
+      "itemId": "Rock_Stone",
+      "count": 37
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 22
+    },
+    {
+      "itemId": "Wood_Beech_Trunk_Full",
+      "count": 12
+    },
+    {
+      "resourceTypeId": "Rubble",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 4
+    }
+  ]
+}

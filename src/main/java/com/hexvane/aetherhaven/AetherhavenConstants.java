@@ -15,12 +15,13 @@ public final class AetherhavenConstants {
     public static final String PAGE_PLOT_CONSTRUCTION = "AetherhavenPlotConstruction";
     /** Management bookcase after build; separate id so OpenCustomUI resolves the correct supplier. */
     public static final String PAGE_PLOT_MANAGEMENT = "AetherhavenPlotManagement";
-    public static final String PAGE_PLOT_SIGN_ADMIN = "AetherhavenPlotSignAdmin";
     public static final String PAGE_CHARTER_TOWN = "AetherhavenCharterTown";
     public static final String PAGE_PLOT_PLACEMENT = "AetherhavenPlotPlacement";
 
     /** Reserved for OpenCustomUI wiring; dialogue is opened from NPC action or commands. */
     public static final String PAGE_DIALOGUE = "AetherhavenDialogue";
+
+    public static final String PAGE_DIFFICULTY = "AetherhavenDifficulty";
 
     public static final String PLOT_PLACEMENT_TOOL_ITEM_ID = "Aetherhaven_Plot_Placement_Tool";
 

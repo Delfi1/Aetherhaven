@@ -1,0 +1,198 @@
+{
+  "constructionId": "plot_house_hytiny_cozy_camper",
+  "prefabPath": "Hytinys_Cozy_Camper.prefab.json",
+  "materials": [
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 522
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 378
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 41
+    },
+    {
+      "itemId": "Rock_Peach_Brick_Stairs",
+      "count": 39
+    },
+    {
+      "itemId": "Rock_Chalk_Brick_Decorative",
+      "count": 38
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 31
+    },
+    {
+      "itemId": "Rock_Chalk_Brick_Stairs",
+      "count": 25
+    },
+    {
+      "itemId": "Rock_Chalk_Brick_Half",
+      "count": 18
+    },
+    {
+      "itemId": "Wood_Goldenwood_Planks",
+      "count": 18
+    },
+    {
+      "itemId": "Furniture_Village_Ladder",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Goldenwood_Stairs",
+      "count": 15
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Window",
+      "count": 12
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 11
+    },
+    {
+      "itemId": "Rock_Peach_Brick",
+      "count": 10
+    },
+    {
+      "itemId": "Wood_Softwood_Fence",
+      "count": 9
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Tavern_Trapdoor",
+      "count": 7
+    },
+    {
+      "itemId": "Furniture_Crude_Trapdoor",
+      "count": 6
+    },
+    {
+      "itemId": "WinterHoliday_Garland",
+      "count": 6
+    },
+    {
+      "itemId": "Wood_Softwood_Beam",
+      "count": 6
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Tavern_Shelf",
+      "count": 5
+    },
+    {
+      "itemId": "Deco_Rope_Diagonal",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Crude_Shelf",
+      "count": 4
+    },
+    {
+      "itemId": "Halloween_Wagon",
+      "count": 4
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Stool",
+      "count": 3
+    },
+    {
+      "itemId": "Furniture_Village_Platform",
+      "count": 3
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 3
+    },
+    {
+      "itemId": "Deco_Halloween_Lights",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Shutter",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Peach_Brick_Half",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    },
+    {
+      "itemId": "Container_Bucket",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Lever",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Map",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Feran_Bed",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Feran_Planter",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Kweebec_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Kweebec_Shelf",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Stool",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Trapdoor",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Spices",
+      "count": 1
+    },
+    {
+      "resourceTypeId": "Rubble",
+      "count": 1
+    }
+  ]
+}

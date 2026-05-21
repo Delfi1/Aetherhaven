@@ -23,11 +23,13 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Locale;
 import java.util.UUID;
+import com.hypixel.hytale.protocol.GameMode;
 import javax.annotation.Nonnull;
 
 public final class AetherhavenFloatingGiftCommand extends AbstractCommandCollection {
     public AetherhavenFloatingGiftCommand() {
         super("floatinggift", "aetherhaven_commands_help.commands.aetherhaven.floatinggift.desc");
+        this.setPermissionGroup(GameMode.Creative);
         this.addSubCommand(new SpawnSubCommand());
         this.addSubCommand(new NextSubCommand());
     }
@@ -74,6 +76,7 @@ public final class AetherhavenFloatingGiftCommand extends AbstractCommandCollect
     private static final class NextSubCommand extends AbstractPlayerCommand {
         NextSubCommand() {
             super("next", "aetherhaven_commands_help.commands.aetherhaven.floatinggift.next.desc");
+            this.setPermissionGroup(GameMode.Adventure);
         }
 
         @Override

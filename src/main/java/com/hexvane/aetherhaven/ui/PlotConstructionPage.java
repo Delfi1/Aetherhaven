@@ -5,6 +5,10 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
+import com.hexvane.aetherhaven.construction.PlotMaterialDepositService;
+import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
+import com.hexvane.aetherhaven.difficulty.EffectiveBuildingCosts;
+import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
@@ -38,7 +42,9 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -52,6 +58,7 @@ import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction
 import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
+import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.ui.DropdownEntryInfo;
 import com.hypixel.hytale.server.core.ui.LocalizableString;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -74,8 +81,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPage<PlotConstructionPage.PageData> {
-    private static final int MATERIAL_ROW_CAP = 10;
     private static final int BREAK_SETTINGS = 10;
+    private static final String MATERIALS_GRID = "#MaterialsScroll #MaterialsGrid";
+    private static final int MATERIAL_GRID_COLS = 6;
     private static final String MEMBER_ROWS = "#MemberRows";
     private static final int MAX_MEMBER_ROWS = 24;
 
@@ -87,6 +95,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     private int managementTab;
     /** Move-building confirmation modal (management block, completed plot). */
     private boolean moveBuildingConfirmOpen;
+    /** Pick-up plot confirmation modal (plot sign, blueprint plot). */
+    private boolean pickUpPlotConfirmOpen;
     /** Open the move-building modal on the first {@link #build} (e.g. returning from town needs). */
     private boolean pendingMoveBuildingModal;
     /**
@@ -138,8 +148,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         if (!templateAppended) {
             commandBuilder.append("Aetherhaven/PlotConstructionPage.ui");
             templateAppended = true;
+            AetherhavenUiLocalization.applyPlotConstructionPage(commandBuilder);
         }
-        AetherhavenUiLocalization.applyPlotConstructionPage(commandBuilder);
         if (managementUi && pendingMoveBuildingModal) {
             moveBuildingConfirmOpen = true;
             pendingMoveBuildingModal = false;
@@ -155,6 +165,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         commandBuilder.set("#PlotTabContent.Visible", plotTabActive);
         commandBuilder.set("#PlayersTabContent.Visible", managementUi && managementTab == 1);
         commandBuilder.set("#MoveBuildingModal.Visible", managementUi && moveBuildingConfirmOpen);
+        commandBuilder.set("#PickUpPlotModal.Visible", !managementUi && pickUpPlotConfirmOpen);
 
         ConstructionDefinition def = resolveDefinition(store, ref);
         Player player = store.getComponent(ref, Player.getComponentType());
@@ -177,9 +188,10 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set("#HouseResidentRow.Visible", false);
             commandBuilder.set("#WorkplaceAssignRow.Visible", false);
             commandBuilder.set("#MaterialsHeader.Visible", false);
-            for (int i = 0; i < MATERIAL_ROW_CAP; i++) {
-                commandBuilder.set("#Mat" + i + ".Visible", false);
-            }
+            commandBuilder.set("#MaterialsProgress.Visible", false);
+            commandBuilder.set("#MaterialsScroll.Visible", false);
+            commandBuilder.set("#PlotActionRow.Visible", false);
+            commandBuilder.clear(MATERIALS_GRID);
             commandBuilder.set("#BuildButton.Disabled", true);
             commandBuilder.set("#PickUpPlotButton.Visible", false);
             commandBuilder.set("#TabNeedsButton.Disabled", true);
@@ -213,19 +225,20 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
 
         commandBuilder.set("#VillagerRow.Visible", false);
 
-        long goldCost = def.getTreasuryGoldCoinCost();
+        EffectiveBuildingCosts effectiveCosts = resolveEffectiveCosts(store, def);
+        List<MaterialRequirement> requiredMaterials = effectiveCosts.getMaterials();
+        long goldCost = effectiveCosts.getTreasuryGoldCoinCost();
+        PlotInstance blueprintPlot = resolveBlueprintPlot(store, ref);
         TownRecord treasuryTown =
             !managementUi && !completed && goldCost > 0 ? resolveTownForPlotSign(store, ref) : null;
         UUIDComponent ucComp = store.getComponent(ref, UUIDComponent.getComponentType());
         UUID playerUuid = ucComp != null ? ucComp.getUuid() : null;
         boolean treasuryPerm =
             treasuryTown != null && playerUuid != null && treasuryTown.playerCanSpendTreasuryGold(playerUuid);
-        long treasuryBal = treasuryTown != null ? treasuryTown.getTreasuryGoldCoinCount() : 0L;
-        long invGold = inv != null ? InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN) : 0L;
         long spendableGold =
             treasuryTown != null && inv != null
                 ? GoldCoinPayment.totalAvailable(treasuryTown, inv, treasuryPerm)
-                : invGold;
+                : inv != null ? InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN) : 0L;
         boolean treasuryOk =
             completed
                 || goldCost <= 0
@@ -236,74 +249,44 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         boolean showTreasury = !hideConstructionDetails && goldCost > 0;
         commandBuilder.set("#TreasuryRow.Visible", showTreasury);
         if (showTreasury) {
-            String tLine;
-            if (plotReqBypassCreative) {
-                tLine = "Construction gold: " + goldCost + " (creative — not deducted)";
-                commandBuilder.set("#TreasuryLabel.Style.TextColor", "#3d913f");
-            } else if (treasuryTown == null) {
-                tLine = "Construction gold: " + goldCost + " (town not found for this plot.)";
-                commandBuilder.set("#TreasuryLabel.Style.TextColor", "#962f2f");
-            } else if (!treasuryPerm) {
-                tLine =
-                    "Construction gold: pay "
-                        + goldCost
-                        + " from inventory (treasury "
-                        + treasuryBal
-                        + " — no spend permission). You have "
-                        + invGold
-                        + " on hand.";
-                commandBuilder.set("#TreasuryLabel.Style.TextColor", spendableGold >= goldCost ? "#3d913f" : "#962f2f");
-            } else {
-                tLine =
-                    "Construction gold: pay "
-                        + goldCost
-                        + " (treasury "
-                        + treasuryBal
-                        + " + inventory "
-                        + invGold
-                        + ")";
-                commandBuilder.set("#TreasuryLabel.Style.TextColor", spendableGold >= goldCost ? "#3d913f" : "#962f2f");
-            }
-            commandBuilder.set("#TreasuryLabel.TextSpans", Message.raw(tLine));
+            commandBuilder.set(
+                "#TreasuryLabel.TextSpans",
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.treasuryGold")
+                    .param("available", String.valueOf(spendableGold))
+                    .param("required", String.valueOf(goldCost))
+            );
+            commandBuilder.set(
+                "#TreasuryLabel.Style.TextColor",
+                plotReqBypassCreative || spendableGold >= goldCost ? "#3d913f" : "#962f2f"
+            );
         }
 
-        boolean showMaterialsHeader = !hideConstructionDetails && !def.getMaterials().isEmpty();
-        commandBuilder.set("#MaterialsHeader.Visible", showMaterialsHeader);
-        String lang = this.playerRef.getLanguage();
-        int mi = 0;
-        if (!hideConstructionDetails) {
-            for (; mi < def.getMaterials().size() && mi < MATERIAL_ROW_CAP; mi++) {
-                var m = def.getMaterials().get(mi);
-                int need = m.getCount();
-                int has = inv != null ? InventoryMaterials.count(inv, m) : 0;
-                boolean ok = completed || plotReqBypassCreative || has >= need;
-                String itemLabel = UiMaterialLabels.materialLabelForUi(lang, m);
-                commandBuilder.set("#Mat" + mi + ".Visible", true);
-                commandBuilder.set(
-                    "#Mat" + mi + " #Line.TextSpans",
-                    Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.materialLine")
-                        .param("item", itemLabel)
-                        .param("need", String.valueOf(need))
-                        .param("have", String.valueOf(has))
-                );
-                commandBuilder.set("#Mat" + mi + " #Line.Style.TextColor", ok ? "#3d913f" : "#962f2f");
-            }
-        }
-        for (; mi < MATERIAL_ROW_CAP; mi++) {
-            commandBuilder.set("#Mat" + mi + ".Visible", false);
+        boolean showMaterials = !hideConstructionDetails && !requiredMaterials.isEmpty();
+        boolean showPlotActions = !managementUi && !completed;
+        boolean showDeposit =
+            showMaterials && showPlotActions && !plotReqBypassCreative && blueprintPlot != null;
+        commandBuilder.set("#MaterialsHeader.Visible", showMaterials);
+        commandBuilder.set("#MaterialsScroll.Visible", showMaterials);
+        commandBuilder.set("#PlotActionRow.Visible", showPlotActions);
+        commandBuilder.set("#DepositMaterialsButton.Visible", showDeposit);
+        if (showMaterials && blueprintPlot != null) {
+            buildMaterialsGrid(commandBuilder, eventBuilder, blueprintPlot, requiredMaterials, completed, plotReqBypassCreative);
+        } else {
+            commandBuilder.clear(MATERIALS_GRID);
+            commandBuilder.set("#MaterialsProgress.Visible", false);
         }
 
         boolean matsOk =
-            completed || plotReqBypassCreative || (inv != null && InventoryMaterials.hasAll(inv, def.getMaterials()));
+            completed
+                || plotReqBypassCreative
+                || (blueprintPlot != null && PlotMaterialDepositService.allDeposited(blueprintPlot, requiredMaterials));
         boolean canBuild = !managementUi && !completed && matsOk && treasuryOk;
+        commandBuilder.set("#BuildButton.Visible", showPlotActions);
         commandBuilder.set("#BuildButton.Disabled", !canBuild);
 
         boolean canPickupPlot =
-            !managementUi
-                && !completed
-                && def.getPlotTokenItemId() != null
-                && !def.getPlotTokenItemId().isBlank();
-        commandBuilder.set("#PickUpPlotButton.Visible", canPickupPlot);
+            def.getPlotTokenItemId() != null && !def.getPlotTokenItemId().isBlank();
+        commandBuilder.set("#PickUpPlotButton.Visible", showPlotActions);
         commandBuilder.set("#PickUpPlotButton.Disabled", !canPickupPlot);
 
         boolean needsMoveTabsOk = managementUi && completed;
@@ -433,18 +416,28 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             );
         }
 
+        if (showDeposit) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#DepositMaterialsButton",
+                new EventData().append("Action", "DepositMaterials"),
+                false
+            );
+        }
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
             "#BuildButton",
             new EventData().append("Action", "Build"),
             false
         );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.Activating,
-            "#PickUpPlotButton",
-            new EventData().append("Action", "PickupPlot"),
-            false
-        );
+        if (!managementUi && canPickupPlot) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#PickUpPlotButton",
+                new EventData().append("Action", "BeginPickUpPlot"),
+                false
+            );
+        }
 
         if (managementUi) {
             bindManagementTabEvents(eventBuilder, needsMoveTabsOk);
@@ -465,6 +458,20 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 CustomUIEventBindingType.Activating,
                 "#MoveBuildingCancelButton",
                 new EventData().append("Action", "CancelMoveBuilding"),
+                false
+            );
+        }
+        if (!managementUi && pickUpPlotConfirmOpen) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#PickUpPlotConfirmButton",
+                new EventData().append("Action", "ConfirmPickUpPlot"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#PickUpPlotCancelButton",
+                new EventData().append("Action", "CancelPickUpPlot"),
                 false
             );
         }
@@ -946,80 +953,50 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             sendUpdate(cmd, ev, false);
             return;
         }
-        if (data.action != null && data.action.equalsIgnoreCase("PickupPlot")) {
+        if (data.action != null && data.action.equalsIgnoreCase("DepositMaterial")) {
+            if (managementUi || data.materialIndex == null || data.materialIndex < 0) {
+                return;
+            }
+            handleDepositMaterial(store, ref, data.materialIndex);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("DepositMaterials")) {
             if (managementUi) {
                 return;
             }
-            PlotInstanceState st = resolvePlotState(store, ref);
-            if (st == PlotInstanceState.COMPLETE) {
+            handleDepositAllMaterials(store, ref);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("BeginPickUpPlot")) {
+            if (managementUi) {
                 return;
             }
-            ConstructionDefinition def = resolveDefinition(store, ref);
-            if (def == null) {
+            String pickUpErr = validatePickUpPlotAllowed(store, ref);
+            if (pickUpErr != null) {
+                sendBuildError(store, ref, pickUpErr);
                 return;
             }
-            String tokenId = def.getPlotTokenItemId();
-            if (tokenId == null || tokenId.isBlank()) {
+            pickUpPlotConfirmOpen = true;
+            refreshPage(ref, store);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("CancelPickUpPlot")) {
+            pickUpPlotConfirmOpen = false;
+            refreshPage(ref, store);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("ConfirmPickUpPlot")) {
+            if (managementUi) {
                 return;
             }
-            Store<ChunkStore> cstore = blockRef.getStore();
-            PlotSignBlock plot = cstore.getComponent(blockRef, PlotSignBlock.getComponentType());
-            if (plot == null || plot.getPlotId() == null || plot.getPlotId().isBlank()) {
-                sendBuildError(store, ref, "This plot sign has no plot id (legacy); replace the sign.");
+            pickUpPlotConfirmOpen = false;
+            String pickUpErr = validatePickUpPlotAllowed(store, ref);
+            if (pickUpErr != null) {
+                sendBuildError(store, ref, pickUpErr);
+                refreshPage(ref, store);
                 return;
             }
-            UUID plotId;
-            try {
-                plotId = UUID.fromString(plot.getPlotId().trim());
-            } catch (IllegalArgumentException e) {
-                sendBuildError(store, ref, "Invalid plot id on sign.");
-                return;
-            }
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc == null) {
-                return;
-            }
-            AetherhavenPlugin plugin = AetherhavenPlugin.get();
-            if (plugin == null) {
-                return;
-            }
-            World world = store.getExternalData().getWorld();
-            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-            TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
-            if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
-                sendBuildError(store, ref, "Only the town owner can pick up this plot.");
-                return;
-            }
-            if (town.findPlotById(plotId) == null) {
-                sendBuildError(store, ref, "This plot is not registered in your town.");
-                return;
-            }
-            Player player = store.getComponent(ref, Player.getComponentType());
-            CombinedItemContainer inv =
-                player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
-            ItemStack tokenStack = new ItemStack(tokenId, 1);
-            if (inv == null || !inv.canAddItemStack(tokenStack)) {
-                sendBuildError(store, ref, "Make room in your inventory for the plot token.");
-                return;
-            }
-            if (!town.removePlotInstance(plotId)) {
-                sendBuildError(store, ref, "Could not remove plot from town data.");
-                return;
-            }
-            tm.updateTown(town);
-            world.breakBlock(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z, BREAK_SETTINGS);
-            if (player != null) {
-                ItemStackTransaction giveTx = player.giveItem(tokenStack, ref, store);
-                if (!giveTx.succeeded()) {
-                    sendBuildError(store, ref, "Could not add plot token to inventory.");
-                    return;
-                }
-            }
-            PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-            if (pr != null) {
-                pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.plotRemoved"));
-            }
-            close();
+            executePickUpPlot(store, ref);
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("OpenTownNeeds")) {
@@ -1069,8 +1046,12 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
         boolean plotReqBypassCreative = player.getGameMode() == GameMode.Creative;
+        EffectiveBuildingCosts effectiveCosts = resolveEffectiveCosts(store, def);
+        List<MaterialRequirement> requiredMaterials = effectiveCosts.getMaterials();
+        PlotInstance blueprintPlot = resolveBlueprintPlot(store, ref);
         CombinedItemContainer inv = materialCombinedForPlotBlock(store, ref);
-        if (inv == null || (!plotReqBypassCreative && !InventoryMaterials.hasAll(inv, def.getMaterials()))) {
+        if (!plotReqBypassCreative
+            && (blueprintPlot == null || !PlotMaterialDepositService.allDeposited(blueprintPlot, requiredMaterials))) {
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -1111,7 +1092,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             sendBuildError(store, ref, "Prefab not found for path: " + def.getPrefabPath());
             return;
         }
-        long goldCost = def.getTreasuryGoldCoinCost();
+        long goldCost = effectiveCosts.getTreasuryGoldCoinCost();
         if (goldCost > 0 && !plotReqBypassCreative) {
             AetherhavenPlugin plugPre = AetherhavenPlugin.get();
             World worldPre = store.getExternalData().getWorld();
@@ -1136,8 +1117,9 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             tmPre.updateTown(tr);
         }
 
-        if (!plotReqBypassCreative) {
-            InventoryMaterials.removeAll(inv, def.getMaterials());
+        if (!plotReqBypassCreative && blueprintPlot != null) {
+            PlotMaterialDepositService.clearDeposits(blueprintPlot);
+            tmEarly.updateTown(townEarly);
         }
 
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -1181,6 +1163,145 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         return BenchAdjacentChestUtil.combinedPlayerAndAdjacentChestsForBlock(
             world, store, ref, blockWorldPos.x, blockWorldPos.y, blockWorldPos.z
         );
+    }
+
+    private void refreshPage(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        UICommandBuilder cmd = new UICommandBuilder();
+        UIEventBuilder ev = new UIEventBuilder();
+        build(ref, cmd, ev, store);
+        sendUpdate(cmd, ev, false);
+    }
+
+    /** Returns an error message when pick-up is not allowed, or null if it may proceed. */
+    @Nullable
+    private String validatePickUpPlotAllowed(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        if (managementUi) {
+            return null;
+        }
+        if (resolvePlotState(store, ref) == PlotInstanceState.COMPLETE) {
+            return null;
+        }
+        ConstructionDefinition def = resolveDefinition(store, ref);
+        if (def == null) {
+            return null;
+        }
+        String tokenId = def.getPlotTokenItemId();
+        if (tokenId == null || tokenId.isBlank()) {
+            return null;
+        }
+        Store<ChunkStore> cstore = blockRef.getStore();
+        PlotSignBlock plot = cstore.getComponent(blockRef, PlotSignBlock.getComponentType());
+        if (plot == null || plot.getPlotId() == null || plot.getPlotId().isBlank()) {
+            return "This plot sign has no plot id (legacy); replace the sign.";
+        }
+        UUID plotId;
+        try {
+            plotId = UUID.fromString(plot.getPlotId().trim());
+        } catch (IllegalArgumentException e) {
+            return "Invalid plot id on sign.";
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return null;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+            return "Only the town owner can pick up this plot.";
+        }
+        if (town.findPlotById(plotId) == null) {
+            return "This plot is not registered in your town.";
+        }
+        if (store.getComponent(ref, Player.getComponentType()) == null) {
+            return null;
+        }
+        return null;
+    }
+
+    private void executePickUpPlot(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        ConstructionDefinition def = resolveDefinition(store, ref);
+        if (def == null) {
+            return;
+        }
+        String tokenId = def.getPlotTokenItemId();
+        if (tokenId == null || tokenId.isBlank()) {
+            return;
+        }
+        Store<ChunkStore> cstore = blockRef.getStore();
+        PlotSignBlock plot = cstore.getComponent(blockRef, PlotSignBlock.getComponentType());
+        if (plot == null || plot.getPlotId() == null || plot.getPlotId().isBlank()) {
+            return;
+        }
+        UUID plotId;
+        try {
+            plotId = UUID.fromString(plot.getPlotId().trim());
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        if (town == null) {
+            return;
+        }
+        PlotInstance piPickup = town.findPlotById(plotId);
+        List<MaterialRequirement> refunded =
+            piPickup != null ? PlotMaterialDepositService.refundAll(piPickup) : List.of();
+        if (!town.removePlotInstance(plotId)) {
+            sendBuildError(store, ref, "Could not remove plot from town data.");
+            return;
+        }
+        tm.updateTown(town);
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        Vector3d dropPos =
+            tc != null
+                ? tc.getPosition().clone()
+                : new Vector3d(blockWorldPos.x + 0.5, blockWorldPos.y, blockWorldPos.z + 0.5);
+        if (!refunded.isEmpty()) {
+            PlotMaterialDepositService.refundToPlayer(player, ref, store, refunded, dropPos);
+        }
+        world.breakBlock(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z, BREAK_SETTINGS);
+        ItemStack tokenStack = new ItemStack(tokenId, 1);
+        ItemStackTransaction giveTx = player.giveItem(tokenStack, ref, store);
+        if (!giveTx.succeeded() || !ItemStack.isEmpty(giveTx.getRemainder())) {
+            List<ItemStack> tokenOverflow = new ArrayList<>();
+            if (!giveTx.succeeded()) {
+                tokenOverflow.add(tokenStack);
+            } else {
+                tokenOverflow.add(giveTx.getRemainder());
+            }
+            PlotMaterialDepositService.refundToPlayer(
+                player,
+                ref,
+                store,
+                tokenOverflow.stream()
+                    .map(s -> MaterialRequirement.ofItem(s.getItemId(), s.getQuantity()))
+                    .toList(),
+                dropPos
+            );
+        }
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        if (pr != null) {
+            pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.plotRemoved"));
+        }
+        close();
     }
 
     private void sendBuildError(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull String text) {
@@ -1249,7 +1370,193 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         return p.getConstructionCatalog().get(plot.getConstructionId());
     }
 
+    private void handleDepositAllMaterials(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        ConstructionDefinition def = resolveDefinition(store, ref);
+        if (def == null) {
+            return;
+        }
+        PlotInstance plot = resolveBlueprintPlot(store, ref);
+        CombinedItemContainer inv = materialCombinedForPlotBlock(store, ref);
+        if (plot == null || inv == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        EffectiveBuildingCosts costs = resolveEffectiveCosts(store, def);
+        for (MaterialRequirement line : costs.getMaterials()) {
+            if (line.getCount() > 0) {
+                PlotMaterialDepositService.depositFromContainer(plot, line, inv);
+            }
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = resolveTownForPlotSign(store, ref);
+        if (town != null) {
+            tm.updateTown(town);
+        }
+        UICommandBuilder cmd = new UICommandBuilder();
+        UIEventBuilder ev = new UIEventBuilder();
+        build(ref, cmd, ev, store);
+        sendUpdate(cmd, ev, false);
+    }
+
     @Nonnull
+    private void handleDepositMaterial(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, int materialIndex) {
+        ConstructionDefinition def = resolveDefinition(store, ref);
+        if (def == null) {
+            return;
+        }
+        EffectiveBuildingCosts costs = resolveEffectiveCosts(store, def);
+        List<MaterialRequirement> required = costs.getMaterials();
+        if (materialIndex < 0 || materialIndex >= required.size()) {
+            return;
+        }
+        PlotInstance plot = resolveBlueprintPlot(store, ref);
+        CombinedItemContainer inv = materialCombinedForPlotBlock(store, ref);
+        if (plot == null || inv == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        MaterialRequirement line = required.get(materialIndex);
+        int deposited = PlotMaterialDepositService.depositFromContainer(plot, line, inv);
+        if (deposited <= 0) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = resolveTownForPlotSign(store, ref);
+        if (town != null) {
+            tm.updateTown(town);
+        }
+        UICommandBuilder cmd = new UICommandBuilder();
+        UIEventBuilder ev = new UIEventBuilder();
+        build(ref, cmd, ev, store);
+        sendUpdate(cmd, ev, false);
+    }
+
+    private void buildMaterialsGrid(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull PlotInstance plot,
+        @Nonnull List<MaterialRequirement> required,
+        boolean completed,
+        boolean creativeBypass
+    ) {
+        commandBuilder.clear(MATERIALS_GRID);
+        List<Integer> sourceIndices = new ArrayList<>();
+        List<MaterialRequirement> lines = new ArrayList<>();
+        for (int i = 0; i < required.size(); i++) {
+            MaterialRequirement line = required.get(i);
+            if (line.getCount() > 0) {
+                sourceIndices.add(i);
+                lines.add(line);
+            }
+        }
+        int totalLines = lines.size();
+        int ready = 0;
+        for (MaterialRequirement line : lines) {
+            if (PlotMaterialDepositService.depositedCount(plot, line) >= line.getCount()) {
+                ready++;
+            }
+        }
+        if (totalLines == 0) {
+            commandBuilder.set("#MaterialsProgress.Visible", false);
+            return;
+        }
+        int numRows = (totalLines + MATERIAL_GRID_COLS - 1) / MATERIAL_GRID_COLS;
+        for (int r = 0; r < numRows; r++) {
+            commandBuilder.append(MATERIALS_GRID, "Aetherhaven/PlotConstructionMaterialRow.ui");
+            String rowBase = MATERIALS_GRID + "[" + r + "]";
+            for (int c = 0; c < MATERIAL_GRID_COLS; c++) {
+                int idx = r * MATERIAL_GRID_COLS + c;
+                if (idx >= totalLines) {
+                    break;
+                }
+                MaterialRequirement line = lines.get(idx);
+                int sourceIndex = sourceIndices.get(idx);
+                int deposited = PlotMaterialDepositService.depositedCount(plot, line);
+                commandBuilder.append(rowBase + " #Strip", "Aetherhaven/PlotConstructionMaterialCell.ui");
+                String cell = rowBase + " #Strip[" + c + "]";
+                String iconPath = UiMaterialIcons.assetPathFor(line);
+                if (iconPath != null && !iconPath.isBlank()) {
+                    commandBuilder.set(cell + " #IconBox #Icon.AssetPath", iconPath);
+                }
+                boolean ok = completed || creativeBypass || deposited >= line.getCount();
+                commandBuilder.set(
+                    cell + ".TooltipTextSpans",
+                    Message.raw(UiMaterialLabels.displayLabelFor(line) + "\n" + deposited + " / " + line.getCount())
+                );
+                commandBuilder.set(cell + " #Count.TextSpans", Message.raw(deposited + " / " + line.getCount()));
+                commandBuilder.set(cell + " #Count.Style.TextColor", ok ? "#3d913f" : "#c8a060");
+                if (!completed && !creativeBypass) {
+                    eventBuilder.addEventBinding(
+                        CustomUIEventBindingType.Activating,
+                        cell,
+                        new EventData().append("Action", "DepositMaterial").append("MaterialIndex", String.valueOf(sourceIndex)),
+                        false
+                    );
+                }
+            }
+        }
+        boolean showProgress = !completed && !creativeBypass;
+        commandBuilder.set("#MaterialsProgress.Visible", showProgress);
+        if (showProgress) {
+            commandBuilder.set(
+                "#MaterialsProgress.TextSpans",
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.materialsProgress")
+                    .param("ready", String.valueOf(ready))
+                    .param("total", String.valueOf(totalLines))
+            );
+        }
+    }
+
+    @Nonnull
+    private EffectiveBuildingCosts resolveEffectiveCosts(@Nonnull Store<EntityStore> store, @Nonnull ConstructionDefinition def) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return EffectiveBuildingCosts.forDefinition(def, WorldDifficultyState.normalUntilChosen(), PrefabMaterialsCatalog.empty());
+        }
+        World world = store.getExternalData().getWorld();
+        WorldDifficultyState difficulty = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
+        return EffectiveBuildingCosts.forDefinition(def, difficulty, plugin.getPrefabMaterialsCatalog());
+    }
+
+    @Nullable
+    private PlotInstance resolveBlueprintPlot(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        AetherhavenPlugin p = AetherhavenPlugin.get();
+        if (p == null) {
+            return null;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, p);
+        Store<ChunkStore> cs = blockRef.getStore();
+        if (managementUi) {
+            return null;
+        }
+        PlotSignBlock plot = cs.getComponent(blockRef, PlotSignBlock.getComponentType());
+        if (plot == null || plot.getPlotId() == null || plot.getPlotId().isBlank()) {
+            return null;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return null;
+        }
+        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        if (town == null) {
+            return null;
+        }
+        try {
+            return town.findPlotById(UUID.fromString(plot.getPlotId().trim()));
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
     private PlotInstanceState resolvePlotState(@Nonnull Store<EntityStore> entityStore, @Nonnull Ref<EntityStore> playerRef) {
         AetherhavenPlugin p = AetherhavenPlugin.get();
         if (p == null) {
@@ -1510,6 +1817,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 d -> d.workplaceAssignUuid
             )
             .add()
+            .append(new KeyedCodec<>("MaterialIndex", Codec.INTEGER), (d, v) -> d.materialIndex = v, d -> d.materialIndex)
+            .add()
             .build();
 
         private String action;
@@ -1522,5 +1831,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         private Boolean houseResidentHideElsewhere;
         @Nullable
         private String workplaceAssignUuid;
+        @Nullable
+        private Integer materialIndex;
     }
 }

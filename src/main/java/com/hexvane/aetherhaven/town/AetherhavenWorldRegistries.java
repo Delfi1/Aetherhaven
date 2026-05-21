@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.difficulty.WorldDifficultyPersistence;
+import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
@@ -26,6 +28,23 @@ public final class AetherhavenWorldRegistries {
     private static final ConcurrentHashMap<String, PathNavGraphService> PATH_NAV_GRAPH_SERVICES = new ConcurrentHashMap<>();
 
     private AetherhavenWorldRegistries() {}
+
+    /**
+     * Reloads {@code towns.json} when a {@link TownManager} is already cached (singleplayer re-enter without
+     * {@link #unloadWorld}).
+     */
+    public static void refreshTownDataFromDisk(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        TownManager existing = TOWN_MANAGERS.get(world.getName());
+        if (existing == null) {
+            return;
+        }
+        existing.loadFromDisk();
+        existing.clampAllPlotProductionToCatalog(
+            plugin.getProductionCatalog(),
+            plugin.getWorkplaceUnlockCatalog(),
+            plugin.getConstructionCatalog()
+        );
+    }
 
     @Nonnull
     public static TownManager getOrCreateTownManager(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
@@ -106,6 +125,12 @@ public final class AetherhavenWorldRegistries {
             }
         }
         PATH_NAV_GRAPH_SERVICES.remove(world.getName());
+        WorldDifficultyPersistence.unloadWorld(world);
+    }
+
+    @Nonnull
+    public static WorldDifficultyState getOrLoadWorldDifficulty(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        return WorldDifficultyPersistence.getOrLoad(world, plugin);
     }
 
     /** Save all town files (e.g. server shutdown). */
@@ -120,9 +145,12 @@ public final class AetherhavenWorldRegistries {
                 PathToolPersistence.save(w, p, e.getValue());
             }
         }
+        WorldDifficultyPersistence.saveAll();
     }
 
     public static void bootstrapWorld(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        WorldDifficultyPersistence.loadFromDisk(world, plugin);
+        refreshTownDataFromDisk(world, plugin);
         getOrCreateTownManager(world, plugin);
         getOrCreatePoiRegistry(world, plugin);
         getOrCreatePathToolRegistry(world, plugin);
@@ -130,7 +158,7 @@ public final class AetherhavenWorldRegistries {
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
         InnPoolService.reconcileAfterWorldLoad(world, plugin);
-        PlotAssemblyService.rehydrate(world, plugin);
+        PlotAssemblyService.scheduleRehydrateAfterWorldLoad(world, plugin);
         TownBorderMapOverlayService.startWorld(world);
         world.getWorldMapManager().addMarkerProvider("aetherhaven-towns", TownMapMarkerProvider.INSTANCE);
         TownSharedMapMarkerService.purgeLegacyStoredMarkers(world);

@@ -11,11 +11,13 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayer
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.protocol.GameMode;
 import javax.annotation.Nonnull;
 
 public final class AetherhavenTownsCommand extends AbstractPlayerCommand {
     public AetherhavenTownsCommand() {
         super("towns", "aetherhaven_commands_help.commands.aetherhaven.towns.desc");
+        this.setPermissionGroup(GameMode.Creative);
     }
 
     @Override

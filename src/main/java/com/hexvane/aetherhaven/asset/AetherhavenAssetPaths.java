@@ -16,6 +16,9 @@ public final class AetherhavenAssetPaths {
     /** Relative to pack root: one construction definition JSON per file (recursive). */
     public static final String BUILDINGS = "Server/Aetherhaven/Buildings";
 
+    /** Per-construction prefab block material lists for hard difficulty (generated). */
+    public static final String PREFAB_MATERIALS = "Server/Aetherhaven/Buildings/PrefabMaterials";
+
     /** Relative to pack root: villager weekly schedule JSON per NPC role id (recursive). */
     public static final String VILLAGER_SCHEDULES = "Server/Aetherhaven/VillagerSchedules";
 
@@ -37,6 +40,11 @@ public final class AetherhavenAssetPaths {
     @Nonnull
     public static String buildingsPrefix() {
         return BUILDINGS + "/";
+    }
+
+    @Nonnull
+    public static String prefabMaterialsPrefix() {
+        return PREFAB_MATERIALS + "/";
     }
 
     @Nonnull

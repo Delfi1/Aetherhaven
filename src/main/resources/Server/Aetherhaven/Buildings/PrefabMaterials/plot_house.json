@@ -1,0 +1,74 @@
+{
+  "constructionId": "plot_house",
+  "prefabPath": "House.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 72
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 57
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 47
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 41
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 26
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 20
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 19
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 12
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 10
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 9
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 8
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 8
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 3
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 1
+    }
+  ]
+}

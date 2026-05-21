@@ -1,0 +1,94 @@
+{
+  "constructionId": "plot_barn",
+  "prefabPath": "Barn.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 152
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 135
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 126
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 64
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 63
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 52
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 33
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 32
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 32
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Steep",
+      "count": 32
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 30
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 28
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 28
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 24
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 22
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 20
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence",
+      "count": 16
+    },
+    {
+      "itemId": "Ingredient_Hay",
+      "count": 11
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence_Gate",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Crude_Torch",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Village_Ladder",
+      "count": 5
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    }
+  ]
+}

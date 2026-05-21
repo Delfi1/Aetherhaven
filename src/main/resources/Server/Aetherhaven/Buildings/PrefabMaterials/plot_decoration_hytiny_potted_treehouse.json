@@ -1,0 +1,406 @@
+{
+  "constructionId": "plot_decoration_hytiny_potted_treehouse",
+  "prefabPath": "Hytinys_Potted_Treehouse.prefab.json",
+  "materials": [
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 26264
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 2552
+    },
+    {
+      "itemId": "Rock_Calcite_Brick_Smooth",
+      "count": 894
+    },
+    {
+      "itemId": "Wood_Ash_Trunk_Full",
+      "count": 783
+    },
+    {
+      "itemId": "Wood_Ash_Trunk",
+      "count": 533
+    },
+    {
+      "itemId": "Wood_Redwood_Planks",
+      "count": 476
+    },
+    {
+      "itemId": "Rock_Calcite_Brick_Ornate",
+      "count": 193
+    },
+    {
+      "itemId": "Rock_Calcite_Brick_Smooth_Half",
+      "count": 183
+    },
+    {
+      "itemId": "Rock_Runic_Brick",
+      "count": 172
+    },
+    {
+      "itemId": "Wood_Redwood_Roof",
+      "count": 144
+    },
+    {
+      "itemId": "Rock_Runic_Teal_Brick",
+      "count": 138
+    },
+    {
+      "itemId": "Wood_Redwood_Stairs",
+      "count": 102
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 95
+    },
+    {
+      "itemId": "Wood_Redwood_Roof_Steep",
+      "count": 59
+    },
+    {
+      "itemId": "Wood_Redwood_Beam",
+      "count": 58
+    },
+    {
+      "itemId": "Rock_Runic_Teal_Brick_Beam",
+      "count": 48
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 45
+    },
+    {
+      "itemId": "Rock_Calcite_Brick_Wall",
+      "count": 37
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 34
+    },
+    {
+      "itemId": "Wood_Redwood_Planks_Half",
+      "count": 34
+    },
+    {
+      "itemId": "Rock_Gold_Brick_Decorative",
+      "count": 31
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Ladder",
+      "count": 29
+    },
+    {
+      "itemId": "Furniture_Village_Ladder",
+      "count": 26
+    },
+    {
+      "itemId": "Rock_Runic_Brick_Stairs",
+      "count": 25
+    },
+    {
+      "itemId": "Rock_Runic_Teal_Brick_Pillar_Base",
+      "count": 25
+    },
+    {
+      "itemId": "Wood_Darkwood_Beam",
+      "count": 24
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Shelf",
+      "count": 21
+    },
+    {
+      "itemId": "Rock_Crystal_White_Block",
+      "count": 21
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 16
+    },
+    {
+      "itemId": "WinterHoliday_Garland",
+      "count": 16
+    },
+    {
+      "itemId": "Rock_Gold_Brick_Smooth_Half",
+      "count": 15
+    },
+    {
+      "itemId": "Rock_Runic_Teal_Brick_Stairs",
+      "count": 15
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Shelf",
+      "count": 14
+    },
+    {
+      "itemId": "Furniture_Temple_Wind_Ladder",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Crystal_Cyan_Block",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Gold_Brick_Smooth",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Runic_Teal_Brick_Wall",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 12
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Platform",
+      "count": 11
+    },
+    {
+      "itemId": "Furniture_Tavern_Trapdoor",
+      "count": 10
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 9
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Window",
+      "count": 9
+    },
+    {
+      "itemId": "Rock_Runic_Cobble_Half",
+      "count": 9
+    },
+    {
+      "itemId": "Rock_Runic_Teal_Brick_Half",
+      "count": 9
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 7
+    },
+    {
+      "itemId": "Furniture_Tavern_Platform",
+      "count": 7
+    },
+    {
+      "itemId": "Deco_Shutter",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Tavern_Stool",
+      "count": 6
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Half",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Tavern_Chest_Small",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Basalt_Cobble_Stairs",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Runic_Brick_Half",
+      "count": 4
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Kweebec_Candle",
+      "count": 3
+    },
+    {
+      "itemId": "Rock_Gold_Brick_Wall",
+      "count": 3
+    },
+    {
+      "resourceTypeId": "Rubble",
+      "count": 3
+    },
+    {
+      "itemId": "Alchemy_Cauldron",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Tankard",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Banner",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Lantern",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Royal_Magic_Couch",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Bench",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Chest_Large",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Platform",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Redwood_Roof_Flat",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Bucket",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Coral_Shell_Swirly",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Coral_Shell_Urchin",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Halloween_Lights",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Halloween_Pumpkin_Cute",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Inkwell",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Kweebec_Plush",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Map",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Bread",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Cheese",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Pie_Apple",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Pie_Meat",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Salad_Berry",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Salad_Mushroom",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Wildmeat_Cooked",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Faun_Stool",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Lantern_Ceiling",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Jungle_Torch",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Kweebec_Bed",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Chandelier",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Door_Medilum",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Lantern_Ceiling",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Painting",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Trapdoor",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Stool",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Salt",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Spices",
+      "count": 1
+    },
+    {
+      "itemId": "Potion_Regen_Health_Large",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Runic_Cobble",
+      "count": 1
+    },
+    {
+      "itemId": "Teleporter",
+      "count": 1
+    },
+    {
+      "itemId": "Tool_Feedbag",
+      "count": 1
+    }
+  ]
+}

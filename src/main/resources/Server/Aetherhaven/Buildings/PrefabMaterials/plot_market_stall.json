@@ -1,0 +1,46 @@
+{
+  "constructionId": "plot_market_stall",
+  "prefabPath": "Market_Stall.prefab.json",
+  "materials": [
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 52
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 41
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 15
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 11
+    },
+    {
+      "itemId": "Wood_Softwood_Beam",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Crude_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Chest_Small",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Softwood_Fence_Gate",
+      "count": 1
+    }
+  ]
+}

@@ -45,6 +45,7 @@ import javax.annotation.Nullable;
 public final class AetherhavenVillagerCommand extends AbstractCommandCollection {
     public AetherhavenVillagerCommand() {
         super("villager", "aetherhaven_commands_help.commands.aetherhaven.villager.desc");
+        this.setPermissionGroup(com.hypixel.hytale.protocol.GameMode.Creative);
         this.addSubCommand(new ListSubCommand());
         this.addSubCommand(new LocateSubCommand());
         this.addSubCommand(new FixInnSubCommand());
@@ -318,7 +319,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
 
     private static final class FixInnSubCommand extends AbstractPlayerCommand {
         FixInnSubCommand() {
-            super("fixinn", "aetherhaven_commands_help.commands.aetherhaven.villager.desc");
+            super("fixinn", "aetherhaven_commands_help.commands.aetherhaven.villager.fixinn.desc");
         }
 
         @Override

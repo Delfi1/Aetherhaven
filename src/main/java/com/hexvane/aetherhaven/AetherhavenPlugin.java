@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.config.AetherhavenConfigJsonMigration;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffAssemblyChannelComponent;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerInteraction;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerTickSystem;
@@ -113,12 +114,12 @@ import com.hexvane.aetherhaven.ui.FeastPage;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
-import com.hexvane.aetherhaven.ui.PlotSignAdminPage;
 import com.hexvane.aetherhaven.ui.GeodeOpenPage;
 import com.hexvane.aetherhaven.ui.OpenHandMirrorUiInteraction;
 import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
 import com.hexvane.aetherhaven.ui.JewelryCraftingPage;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
+import com.hexvane.aetherhaven.ui.DifficultyPage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.TownJournalPlayerInitSystem;
@@ -173,6 +174,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     private final Config<AetherhavenPluginConfig> config = this.withConfig("config", AetherhavenPluginConfig.CODEC);
     private ConstructionCatalog constructionCatalog = ConstructionCatalog.empty();
+    private PrefabMaterialsCatalog prefabMaterialsCatalog = PrefabMaterialsCatalog.empty();
     private DialogueCatalog dialogueCatalog = DialogueCatalog.empty();
     private QuestCatalog questCatalog = QuestCatalog.empty();
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
@@ -210,6 +212,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public ConstructionCatalog getConstructionCatalog() {
         return constructionCatalog;
+    }
+
+    @Nonnull
+    public PrefabMaterialsCatalog getPrefabMaterialsCatalog() {
+        return prefabMaterialsCatalog;
     }
 
     @Nonnull
@@ -731,6 +738,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             (ref, componentAccessor, playerRef, context) -> null
         );
         OpenCustomUIInteraction.registerSimple(this, QuestJournalPage.class, AetherhavenConstants.PAGE_QUEST_JOURNAL, QuestJournalPage::new);
+        OpenCustomUIInteraction.registerSimple(this, DifficultyPage.class, AetherhavenConstants.PAGE_DIFFICULTY, DifficultyPage::new);
         OpenCustomUIInteraction.registerSimple(
             this,
             JewelryAppraisalPage.class,
@@ -748,12 +756,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
             GeodeOpenPage.class,
             AetherhavenConstants.PAGE_GEODE_ANVIL,
             pr -> new GeodeOpenPage(pr, false)
-        );
-        OpenCustomUIInteraction.registerSimple(
-            this,
-            PlotSignAdminPage.class,
-            AetherhavenConstants.PAGE_PLOT_SIGN_ADMIN,
-            PlotSignAdminPage::new
         );
         NPCPlugin npc = NPCPlugin.get();
         if (npc != null) {
@@ -810,6 +812,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         ReputationRewardCatalog.refreshFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl);
+        this.prefabMaterialsCatalog = PrefabMaterialsCatalog.loadFromAssetPacksOrClasspath(cl);
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
         this.villagerScheduleRegistry = VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl);

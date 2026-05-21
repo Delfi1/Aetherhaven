@@ -66,36 +66,82 @@ public final class PlotAssemblyService {
         return Math.max(1L, sec) * 1000L;
     }
 
-    public static void rehydrate(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+    /**
+     * Schedules assembly job restoration on the world thread (and retries) after load. In-memory jobs are cleared on
+     * unload; {@link PrefabPasteEvent} can also fail if rehydrate runs before the world is ready.
+     */
+    public static void scheduleRehydrateAfterWorldLoad(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        world.execute(() -> rehydrateOnWorldThread(world, plugin));
+        plugin.scheduleOnWorld(world, () -> rehydrateOnWorldThread(world, plugin), 2_000L);
+        plugin.scheduleOnWorld(world, () -> rehydrateOnWorldThread(world, plugin), 10_000L);
+    }
+
+    /** Restores in-memory assembly jobs for every {@link PlotInstanceState#ASSEMBLING} plot missing from {@link AssemblyWorldRegistry}. */
+    public static void rehydrateOnWorldThread(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         Store<EntityStore> entityStore = world.getEntityStore().getStore();
         for (TownRecord town : tm.allTowns()) {
             for (PlotInstance plot : town.getPlotInstances()) {
-                if (plot.getState() != PlotInstanceState.ASSEMBLING) {
-                    continue;
-                }
-                if (AssemblyWorldRegistry.get(world, plot.getPlotId()) != null) {
-                    continue;
-                }
-                ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
-                if (def == null) {
-                    LOGGER.atWarning().log("Rehydrate assembly: unknown construction %s plot %s", plot.getConstructionId(), plot.getPlotId());
-                    continue;
-                }
-                Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
-                if (prefabPath == null) {
-                    LOGGER.atWarning().log("Rehydrate assembly: missing prefab %s", def.getPrefabPath());
-                    continue;
-                }
-                IPrefabBuffer buffer = PrefabBufferUtil.getCached(prefabPath);
-                Vector3i anchor = plot.resolvePrefabAnchorWorld(def);
-                Rotation yaw = plot.resolvePrefabYaw();
-                UUID owner = plot.getAssemblyOwnerUuid() != null ? plot.getAssemblyOwnerUuid() : town.getOwnerUuid();
-                if (!tryRegisterJob(world, plugin, town, plot, anchor, yaw, def, buffer, owner, entityStore)) {
-                    buffer.release();
-                }
+                rehydratePlotIfNeeded(world, plugin, town, plot, entityStore);
             }
         }
+    }
+
+    /**
+     * Returns the active job for {@code plot}, registering one from persisted assembly state when missing (e.g. after
+     * re-entering a world).
+     */
+    @Nullable
+    public static PlotAssemblyJob ensureAssemblyJob(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull Store<EntityStore> entityStore
+    ) {
+        PlotAssemblyJob existing = AssemblyWorldRegistry.get(world, plot.getPlotId());
+        if (existing != null) {
+            return existing;
+        }
+        return rehydratePlotIfNeeded(world, plugin, town, plot, entityStore);
+    }
+
+    @Nullable
+    private static PlotAssemblyJob rehydratePlotIfNeeded(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull Store<EntityStore> entityStore
+    ) {
+        if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+            return null;
+        }
+        UUID plotId = plot.getPlotId();
+        PlotAssemblyJob existing = AssemblyWorldRegistry.get(world, plotId);
+        if (existing != null) {
+            return existing;
+        }
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
+        if (def == null) {
+            LOGGER.atWarning().log("Rehydrate assembly: unknown construction %s plot %s", plot.getConstructionId(), plotId);
+            return null;
+        }
+        Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+        if (prefabPath == null) {
+            LOGGER.atWarning().log("Rehydrate assembly: missing prefab %s", def.getPrefabPath());
+            return null;
+        }
+        IPrefabBuffer buffer = PrefabBufferUtil.getCached(prefabPath);
+        Vector3i anchor = plot.resolvePrefabAnchorWorld(def);
+        Rotation yaw = plot.resolvePrefabYaw();
+        UUID owner = plot.getAssemblyOwnerUuid() != null ? plot.getAssemblyOwnerUuid() : town.getOwnerUuid();
+        if (!tryRegisterJob(world, plugin, town, plot, anchor, yaw, def, buffer, owner, entityStore)) {
+            buffer.release();
+            LOGGER.atWarning().log("Rehydrate assembly: could not register job for plot %s (prefab paste start cancelled?)", plotId);
+            return null;
+        }
+        return AssemblyWorldRegistry.get(world, plotId);
     }
 
     /**
@@ -289,6 +335,7 @@ public final class PlotAssemblyService {
             List<PendingBlock> pending = job.pendingBlocks();
             int placedCount = plot.getAssemblyPlacedBlockCount();
             if (placedCount >= pending.size()) {
+                scheduleCompleteAssembly(world, plugin, town, plot, job);
                 continue;
             }
             Instant assemblyStart = resolvePassiveAssemblyStart(plot, simNow, tm, town);
@@ -320,6 +367,14 @@ public final class PlotAssemblyService {
                 tm.updateTown(town);
                 burst++;
                 placedCount = plot.getAssemblyPlacedBlockCount();
+            }
+        }
+        for (TownRecord town : tm.allTowns()) {
+            for (PlotInstance plot : town.getPlotInstances()) {
+                if (plot.getState() == PlotInstanceState.ASSEMBLING
+                    && AssemblyWorldRegistry.get(world, plot.getPlotId()) == null) {
+                    rehydratePlotIfNeeded(world, plugin, town, plot, entityStore);
+                }
             }
         }
     }
@@ -719,19 +774,13 @@ public final class PlotAssemblyService {
         @Nonnull Store<EntityStore> entityStore,
         @Nonnull TownRecord town
     ) {
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        UUID townId = town.getTownId();
-        List<PlotAssemblyJob> jobs = new ArrayList<>();
-        for (PlotAssemblyJob job : AssemblyWorldRegistry.jobs(world)) {
-            TownRecord ownerTown = tm.findTownOwningPlot(job.plotId());
-            if (ownerTown != null && ownerTown.getTownId().equals(townId)) {
-                jobs.add(job);
-            }
-        }
         int finished = 0;
-        for (PlotAssemblyJob job : jobs) {
-            PlotInstance plot = town.findPlotById(job.plotId());
-            if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
+        for (PlotInstance plot : town.getPlotInstances()) {
+            if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+                continue;
+            }
+            PlotAssemblyJob job = ensureAssemblyJob(world, plugin, town, plot, entityStore);
+            if (job == null) {
                 continue;
             }
             if (instantCompleteJob(world, plugin, entityStore, town, plot, job)) {

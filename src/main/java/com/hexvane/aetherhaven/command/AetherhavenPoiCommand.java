@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.protocol.GameMode;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -23,6 +24,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenPoiCommand extends AbstractCommandCollection {
     public AetherhavenPoiCommand() {
         super("poi", "aetherhaven_commands_help.commands.aetherhaven.poi.desc");
+        this.setPermissionGroup(GameMode.Creative);
         this.addSubCommand(new ListCommand());
         this.addSubCommand(new DumpCommand());
     }

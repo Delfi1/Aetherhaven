@@ -37,6 +37,16 @@ $Sounds = "../Sounds.ui";
   Sounds: $Sounds.@ButtonsLight
 );
 
+// Default $C.@TextButton uses Primary.png with HorizontalBorder 80 (~172px min). Compact row buttons need Border 12.
+@PlotActionBtnBorder = 12;
+@PlotBuildButtonStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../Common/Buttons/Primary.png", Border: @PlotActionBtnBorder), LabelStyle: $C.@DefaultButtonLabelStyle),
+  Hovered: (Background: PatchStyle(TexturePath: "../Common/Buttons/Primary_Hovered.png", Border: @PlotActionBtnBorder), LabelStyle: $C.@DefaultButtonLabelStyle),
+  Pressed: (Background: PatchStyle(TexturePath: "../Common/Buttons/Primary_Pressed.png", Border: @PlotActionBtnBorder), LabelStyle: $C.@DefaultButtonLabelStyle),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: @PlotActionBtnBorder), LabelStyle: $C.@DefaultButtonDisabledLabelStyle),
+  Sounds: $Sounds.@ButtonsLight
+);
+
 $C.@PageOverlay {
   LayoutMode: Top;
 
@@ -49,7 +59,7 @@ $C.@PageOverlay {
       Anchor: (Full: 0);
 
     $C.@DecoratedContainer {
-      Anchor: (Width: 480);
+      Anchor: (Width: 620);
 
       #Title {
         Label #ShellTitleText {
@@ -150,16 +160,22 @@ $C.@PageOverlay {
             Style: (...$C.@DefaultLabelStyle, RenderBold: true);
           }
 
-          Group #Mat0 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-          Group #Mat1 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-          Group #Mat2 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-          Group #Mat3 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-          Group #Mat4 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-          Group #Mat5 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-          Group #Mat6 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-          Group #Mat7 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-          Group #Mat8 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-          Group #Mat9 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
+          Label #MaterialsProgress {
+            Text: "";
+            Anchor: (Bottom: 6);
+            Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0);
+            Visible: false;
+          }
+
+          Group #MaterialsScroll {
+            LayoutMode: TopScrolling;
+            Anchor: (Height: 200, Bottom: 8);
+            ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+            Group #MaterialsGrid {
+              LayoutMode: Top;
+            }
+          }
 
           Group {
             Anchor: (Vertical: 12, Height: 1);
@@ -241,14 +257,41 @@ $C.@PageOverlay {
             }
           }
 
-          $C.@TextButton #PickUpPlotButton {
-            Text: "";
+          Group #PlotActionRow {
+            LayoutMode: Left;
             Visible: false;
-            Anchor: (Bottom: 8);
-          }
+            Anchor: (Bottom: 8, Left: 0, Right: 0);
 
-          $C.@TextButton #BuildButton {
-            Text: "";
+            Group {
+              FlexWeight: 1;
+            }
+
+            Group #PlotActionButtons {
+              LayoutMode: Left;
+
+              $C.@SecondaryTextButton #PickUpPlotButton {
+                Anchor: (Width: 108, Height: 36, Right: 14);
+                Padding: (Horizontal: 10);
+                Text: "";
+              }
+
+              $C.@SecondaryTextButton #DepositMaterialsButton {
+                Anchor: (Width: 108, Height: 36, Right: 14);
+                Padding: (Horizontal: 10);
+                Text: "";
+              }
+
+              TextButton #BuildButton {
+                Style: @PlotBuildButtonStyle;
+                Anchor: (Width: 108, Height: 36);
+                Padding: (Horizontal: 10);
+                Text: "";
+              }
+            }
+
+            Group {
+              FlexWeight: 1;
+            }
           }
         }
 
@@ -287,50 +330,96 @@ $C.@PageOverlay {
     }
 
     Group #MoveBuildingModal {
-    LayoutMode: Middle;
-    Visible: false;
-    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
-    Background: #000000(0.55);
+      LayoutMode: Middle;
+      Visible: false;
+      Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+      Background: #000000(0.55);
 
-    $C.@DecoratedContainer {
-      Anchor: (Width: 420);
+      $C.@DecoratedContainer {
+        Anchor: (Width: 420);
 
-      #Title {
-        Label #MoveBuildingModalTitle {
-          Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
-          Padding: (Horizontal: 12);
-          Text: "";
-        }
-      }
-
-      #Content {
-        LayoutMode: Top;
-        Padding: (Full: 18);
-
-        Label #MoveBuildingModalText {
-          Anchor: (Bottom: 16);
-          Style: (...$C.@DefaultLabelStyle, Wrap: true);
-          Text: "";
-        }
-
-        Group {
-          LayoutMode: Left;
-
-          $C.@TextButton #MoveBuildingConfirmButton {
+        #Title {
+          Label #MoveBuildingModalTitle {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 12);
             Text: "";
-            FlexWeight: 1;
-            Anchor: (Right: 8);
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 18);
+
+          Label #MoveBuildingModalText {
+            Anchor: (Bottom: 16);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true);
+            Text: "";
           }
 
-          $C.@CancelTextButton #MoveBuildingCancelButton {
-            Text: "";
-            FlexWeight: 1;
-            Anchor: (Left: 8);
+          Group {
+            LayoutMode: Left;
+
+            $C.@TextButton #MoveBuildingConfirmButton {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Right: 8);
+            }
+
+            $C.@CancelTextButton #MoveBuildingCancelButton {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Left: 8);
+            }
           }
         }
       }
     }
-  }
+
+    Group #PickUpPlotModal {
+      LayoutMode: Middle;
+      Visible: false;
+      Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+      Background: #000000(0.55);
+
+      $C.@DecoratedContainer {
+        Anchor: (Width: 420);
+
+        #Title {
+          Label #PickUpPlotModalTitle {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 12);
+            Text: "";
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 18);
+
+          Label #PickUpPlotModalText {
+            Anchor: (Bottom: 16);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Left;
+
+            $C.@CancelTextButton #PickUpPlotCancelButton {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Right: 8);
+            }
+
+            $C.@TextButton #PickUpPlotConfirmButton {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Left: 8);
+            }
+          }
+        }
+      }
+    }
   }
 }
 

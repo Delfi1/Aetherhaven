@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 public final class AetherhavenTaxCommand extends AbstractCommandCollection {
     public AetherhavenTaxCommand() {
         super("tax", "aetherhaven_commands_help.commands.aetherhaven.tax.desc");
+        this.setPermissionGroup(com.hypixel.hytale.protocol.GameMode.Creative);
         this.addSubCommand(new BreakdownCommand());
         this.addSubCommand(new NowCommand());
     }

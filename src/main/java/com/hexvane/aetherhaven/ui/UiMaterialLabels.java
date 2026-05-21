@@ -46,4 +46,9 @@ public final class UiMaterialLabels {
         String itemId = m.getItemId();
         return itemId != null && !itemId.isBlank() ? itemLabelForUi(language, itemId) : "?";
     }
+
+    @Nonnull
+    public static String displayLabelFor(@Nonnull MaterialRequirement line) {
+        return materialLabelForUi("en-US", line);
+    }
 }

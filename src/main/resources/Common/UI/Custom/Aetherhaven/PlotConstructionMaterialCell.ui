@@ -1,0 +1,39 @@
+$C = "../Common.ui";
+
+Button #DepositCell {
+  LayoutMode: Full;
+  Anchor: (Width: 72, Right: 6, Bottom: 6);
+  Padding: (Full: 4);
+  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+  TextTooltipShowDelay: 0.1;
+  Style: (
+    Default: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.95))),
+    Hovered: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #2a3344(0.98))),
+    Pressed: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #141820(0.98)))
+  );
+
+  Group {
+    LayoutMode: Top;
+    Anchor: (Full: 0);
+    HitTestVisible: false;
+
+    Group #IconBox {
+      LayoutMode: Full;
+      Anchor: (Width: 48, Height: 48, Bottom: 2);
+      Background: #1a2530;
+      Padding: 2;
+      HitTestVisible: false;
+
+      AssetImage #Icon {
+        Anchor: (Full: 0);
+        FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+        HitTestVisible: false;
+      }
+    }
+
+    Label #Count {
+      Style: (...$C.@DefaultLabelStyle, FontSize: 11, HorizontalAlignment: Center, TextColor: #d8ccb8);
+      Text: "";
+    }
+  }
+}

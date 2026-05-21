@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.pathtool.PathNavViz;
+import com.hypixel.hytale.protocol.GameMode;
 
 /**
  * Reverts a cemented path by id (restores the undo snapshot and removes the record on disk) and path-nav debug
@@ -32,6 +33,7 @@ import com.hexvane.aetherhaven.pathtool.PathNavViz;
 public final class AetherhavenPathCommand extends AbstractCommandCollection {
     public AetherhavenPathCommand() {
         super("path", "aetherhaven_items.commands.aetherhaven.path.root.desc");
+        this.setPermissionGroup(GameMode.Creative);
         this.addSubCommand(new RevertCommand());
         this.addSubCommand(new NavVizCommand());
     }
@@ -43,6 +45,7 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
 
         RevertCommand() {
             super("revert", "aetherhaven_items.commands.aetherhaven.path.revert.desc");
+            this.setPermissionGroup(GameMode.Adventure);
         }
 
         @Override

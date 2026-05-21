@@ -3,9 +3,12 @@ name: Mechanics
 description: Tools, buildings, and town systems
 author: Hexvane
 sub-topics:
+  - mechanic_commands
   - mechanic_plot_placement_staff
   - mechanic_building_staff
   - mechanic_charter
+  - mechanic_villager_needs
+  - mechanic_reputation
   - mechanic_town_records_shelf
   - mechanic_production_wardrobe
   - mechanic_floating_gifts

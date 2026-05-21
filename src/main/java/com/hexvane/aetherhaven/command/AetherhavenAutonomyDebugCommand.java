@@ -17,11 +17,13 @@ import com.hypixel.hytale.server.npc.commands.NPCMultiSelectCommandBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.RoleDebugFlags;
 import java.util.EnumSet;
+import com.hypixel.hytale.protocol.GameMode;
 import javax.annotation.Nonnull;
 
 public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollection {
     public AetherhavenAutonomyDebugCommand() {
         super("debug-autonomy", "aetherhaven_commands_help.commands.aetherhaven.debug_autonomy.desc");
+        this.setPermissionGroup(GameMode.Creative);
         this.addSubCommand(new ToggleCommand());
         this.addSubCommand(new ShowCommand());
         this.addSubCommand(new ClearCommand());

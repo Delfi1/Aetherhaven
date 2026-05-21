@@ -1,0 +1,11 @@
+$C = "../Common.ui";
+
+Group #MdBulletRow {
+  LayoutMode: Top;
+  Anchor: (Bottom: 2, Left: 18);
+
+  Label #Body {
+    Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #a89f90, FontSize: 12);
+    Text: "";
+  }
+}

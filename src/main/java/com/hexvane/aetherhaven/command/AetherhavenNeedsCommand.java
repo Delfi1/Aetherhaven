@@ -21,11 +21,13 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import com.hypixel.hytale.protocol.GameMode;
 import javax.annotation.Nonnull;
 
 public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
     public AetherhavenNeedsCommand() {
         super("needs", "aetherhaven_commands_help.commands.aetherhaven.needs.desc");
+        this.setPermissionGroup(GameMode.Creative);
         this.addSubCommand(new InspectCommand());
         this.addSubCommand(new SetCommand());
     }

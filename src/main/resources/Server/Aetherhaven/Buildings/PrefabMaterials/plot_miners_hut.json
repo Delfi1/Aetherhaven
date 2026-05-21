@@ -1,0 +1,90 @@
+{
+  "constructionId": "plot_miners_hut",
+  "prefabPath": "MinersHut.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 221
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 56
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 51
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 35
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 35
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 30
+    },
+    {
+      "itemId": "Rock_Stone",
+      "count": 27
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 16
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 15
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 12
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 12
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 10
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 10
+    },
+    {
+      "resourceTypeId": "Rubble",
+      "count": 9
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 7
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Sign",
+      "count": 1
+    }
+  ]
+}

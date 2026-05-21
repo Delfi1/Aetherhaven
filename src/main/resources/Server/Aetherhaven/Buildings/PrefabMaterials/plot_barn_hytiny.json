@@ -1,0 +1,166 @@
+{
+  "constructionId": "plot_barn_hytiny",
+  "prefabPath": "Hytinys_Barn.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 593
+    },
+    {
+      "itemId": "Wood_Redwood_Planks",
+      "count": 356
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 138
+    },
+    {
+      "itemId": "Furniture_Village_Platform",
+      "count": 135
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 132
+    },
+    {
+      "itemId": "Prototype_Wood_Darkwood_Fence_Platform",
+      "count": 84
+    },
+    {
+      "itemId": "Wood_Redwood_Stairs",
+      "count": 76
+    },
+    {
+      "itemId": "Wood_Darkwood_Fence",
+      "count": 74
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 68
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 38
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 38
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Steep",
+      "count": 38
+    },
+    {
+      "itemId": "Wood_Softwood_Ornate",
+      "count": 22
+    },
+    {
+      "itemId": "Wood_Softwood_Decorative",
+      "count": 20
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 14
+    },
+    {
+      "itemId": "Wood_Darkwood_Beam",
+      "count": 14
+    },
+    {
+      "itemId": "Wood_Darkwood_Planks",
+      "count": 12
+    },
+    {
+      "itemId": "Furniture_Crude_Torch",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 8
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 7
+    },
+    {
+      "itemId": "Furniture_Kweebec_Lantern",
+      "count": 7
+    },
+    {
+      "itemId": "Ingredient_Flour",
+      "count": 7
+    },
+    {
+      "itemId": "Ingredient_Hay",
+      "count": 5
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Door",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Darkwood_Fence_Gate",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Darkwood_Stairs",
+      "count": 4
+    },
+    {
+      "itemId": "Container_Bucket",
+      "count": 3
+    },
+    {
+      "itemId": "Furniture_Feran_Stool",
+      "count": 3
+    },
+    {
+      "itemId": "Tool_Feedbag",
+      "count": 3
+    },
+    {
+      "itemId": "Bench_Trough",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Ancient_Sack",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Tannery",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    },
+    {
+      "itemId": "Coop_Chicken",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Halloween_Pumpkin_Cute",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Kweebec_Plush",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Bread",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Stool",
+      "count": 1
+    },
+    {
+      "itemId": "Tinkering_Target_Dummy",
+      "count": 1
+    }
+  ]
+}

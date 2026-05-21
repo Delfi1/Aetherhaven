@@ -1,0 +1,30 @@
+{
+  "constructionId": "plot_gaia_altar",
+  "prefabPath": "Gaia_Altar.prefab.json",
+  "materials": [
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 148
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 121
+    },
+    {
+      "itemId": "Rock_Marble_Brick",
+      "count": 33
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Pillar_Middle",
+      "count": 24
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Pillar_Base",
+      "count": 16
+    },
+    {
+      "itemId": "Furniture_Temple_Emerald_Stool",
+      "count": 2
+    }
+  ]
+}

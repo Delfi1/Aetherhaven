@@ -24,12 +24,12 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 /**
- * Plot instance listing and creative-only helpers (assembly skip, demolish). Named {@code plots} to avoid clashing with
- * {@code /aetherhaven plot} (plot sign admin UI).
+ * Plot instance listing and creative-only helpers (assembly skip, demolish).
  */
 public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
     public AetherhavenPlotsCommand() {
         super("plots", "aetherhaven_commands_help.commands.aetherhaven.plots.desc");
+        this.setPermissionGroup(GameMode.Creative);
         this.addSubCommand(new ListCommand());
         this.addSubCommand(new FinishAssemblyCommand());
         this.addSubCommand(new RemoveCommand());
