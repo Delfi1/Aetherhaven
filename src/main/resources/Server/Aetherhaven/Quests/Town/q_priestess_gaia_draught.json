@@ -4,7 +4,7 @@
   "category": "town",
   "assignNpcRoleId": "Aetherhaven_Priestess",
   "dialogueOfferEntryNodeId": "draught_quest_offer",
-  "title": "Roads under the dead",
+  "title": "Roads Under The Dead",
   "description": "Clear restless undead from the roads, then return to Serah for Gaia's Draught and the recipe at your planning desk.",
   "prerequisites": {
     "completedQuestIds": ["q_gaia_altar"],

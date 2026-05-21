@@ -51,6 +51,96 @@
           "next": "gift_confirm"
         },
         {
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.p0",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_completed",
+                "questId": "q_build_inn"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_park_plot"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_park_plot"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "corin_park_offer"
+        },
+        {
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.p1",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_park_plot"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_park"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_park_plot"
+            }
+          ],
+          "next": "corin_park_done"
+        },
+        {
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.p2",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_park_plot"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_park"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "corin_park_building"
+        },
+        {
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.p3",
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_park_plot"
+          },
+          "whenFalse": "hide",
+          "next": "corin_park_done"
+        },
+        {
           "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1",
           "condition": {
             "type": "and",
@@ -152,6 +242,76 @@
         {
           "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.c0",
           "next": "main_hub"
+        }
+      ]
+    },
+    "corin_park_offer": {
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_park_plot"
+            }
+          ],
+          "next": "corin_park_accepted"
+        },
+        {
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.c1",
+          "next": null
+        }
+      ]
+    },
+    "corin_park_accepted": {
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_accepted.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "corin_park_building": {
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.c0",
+          "actions": [
+            {
+              "type": "abandon_quest",
+              "id": "q_park_plot"
+            }
+          ],
+          "next": "corin_park_abandoned"
+        },
+        {
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.c1",
+          "next": null
+        }
+      ]
+    },
+    "corin_park_abandoned": {
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_abandoned.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_abandoned.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_abandoned.c0",
+          "next": null
+        }
+      ]
+    },
+    "corin_park_done": {
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_done.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_done.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_done.c0",
+          "next": null
         }
       ]
     },

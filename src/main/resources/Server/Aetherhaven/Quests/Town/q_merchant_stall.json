@@ -3,7 +3,7 @@
   "id": "q_merchant_stall",
   "category": "town",
   "grantPlotTokenConstructionId": "plot_market_stall",
-  "title": "Vex's market stall",
+  "title": "Vex's Market Stall",
   "description": "Give Vex a counter and a roof so salvage has somewhere honest to land.",
   "prerequisites": {
     "completedQuestIds": [],

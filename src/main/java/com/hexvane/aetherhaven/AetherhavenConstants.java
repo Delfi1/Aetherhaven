@@ -239,6 +239,8 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_BARN = "q_barn";
 
+    public static final String QUEST_PARK_PLOT = "q_park_plot";
+
     public static final String NPC_MERCHANT = "Aetherhaven_Merchant";
     public static final String NPC_BLACKSMITH = "Aetherhaven_Blacksmith";
     public static final String NPC_FARMER = "Aetherhaven_Farmer";

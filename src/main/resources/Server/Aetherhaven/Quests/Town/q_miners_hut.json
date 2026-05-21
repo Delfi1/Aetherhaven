@@ -3,7 +3,7 @@
   "id": "q_miners_hut",
   "category": "town",
   "grantPlotTokenConstructionId": "plot_miners_hut",
-  "title": "Gorruk's miners hut",
+  "title": "Gorruk's Miners Hut",
   "description": "Give Gorruk a proper shed and bench so he can haul stone and ore without crowding the inn.",
   "prerequisites": {
     "completedQuestIds": [],

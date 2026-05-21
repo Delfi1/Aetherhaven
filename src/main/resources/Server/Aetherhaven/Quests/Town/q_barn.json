@@ -3,7 +3,7 @@
   "id": "q_barn",
   "category": "town",
   "grantPlotTokenConstructionId": "plot_barn",
-  "title": "Thalen's barn",
+  "title": "Thalen's Barn",
   "description": "Raise a barn so Thalen Meadowrun can tend stock, gather hides and wool, and keep the pantry in meat and eggs.",
   "prerequisites": {
     "completedQuestIds": [],

@@ -1,5 +1,22 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_inn_welcome)
 # Full translation keys are aetherhaven_dialogue_inn_welcome.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_abandoned.body=Fair enough. I will keep the idea on the back burner until you are ready. The town can still use a bench or two when you have the time.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_abandoned.c0=All right. Maybe later.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_abandoned.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_accepted.body=Good. When the paths are down and the benches are set, come tell me at the counter. I want to hear it from you, not just see folk wandering through the trees.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_accepted.c0=You will hear it from me.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_accepted.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.body=The park is still coming together. Finish what the sign asks for, or tell me plainly if you need to set the idea aside for now.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.c0=I need to set the park aside for now.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.c1=I am still building it.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_done.body=There. Green space, a path, and benches that creak in a friendly way. Folk already look lighter when they walk past. Thank you for listening.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_done.c0=Glad the town has a place to sit.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_done.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.body=Everyone eats at my tables, but nobody rests unless they lean on a wall. I would like a small park with trees, a path, and a bench or two. Take what I give you, stake the ground with your staff, and build it when you are ready.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.c0=We will get the park built.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.c1=Not right now.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.speaker=Corin Mosscup
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body=Then I will keep the kettle here until the plot is yours. Once my name is on the shelf, come find me. I want to shake your hand before we call it settled.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0=Count on it.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker=Corin Mosscup
@@ -21,6 +38,10 @@ aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_50.speaker=Corin Mosscup
 aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_75.speaker=Corin Mosscup
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.body=Step in out of the wind. I'm Corin. I keep this hearth, and while you are under our roof you are fed as well as we can manage. That still matters, even when the world outside forgets how.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0=How do guest beds work?
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.p0=The town could use a park with benches.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.p1=The park is finished. I am here to close that quest.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.p2=The park is still under construction. Where do things stand?
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.p3=I wanted to check in now that the park is done.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1=You wanted a real room of your own.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=I listed you on the house shelf. Thought you should hear it from me.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=Your house is still coming together. I am on it.

@@ -4,6 +4,7 @@
 
 ### Added
 
+- **Innkeeper park quest** Corin Mosscup can ask you to build the town park as soon as the inn is standing, alongside his house quest.
 - **Commands guide** New journal Guide page lists every `/ah` command with permissions, grouped for players, world hosts, and debug tools.
 - **Getting Started and mechanics guides** New journal pages cover founding a town, villager needs, reputation, and jewelry (including gemstone stat effects).
 - **Quest journal reputation preview** Active quest detail now shows reputation rewards alongside item rewards when a quest grants them.

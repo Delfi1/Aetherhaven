@@ -11,6 +11,13 @@ npcRoleId: Aetherhaven_Innkeeper
 
 ### Quests
 
+#### A Place To Breathe
+Corin wants a small park with benches so townsfolk can sit outside and feel a little lighter between chores.
+
+1. Take the park plot token from Corin.
+2. Stake and build the park.
+3. Find Corin at the inn and close the quest in dialogue.
+
 #### Corin's home
 Corin feeds everyone else first. He would like a door that closes on his own mess when the night is done.
 

@@ -3,7 +3,7 @@
   "id": "q_lumbermill",
   "category": "town",
   "grantPlotTokenConstructionId": "plot_lumbermill",
-  "title": "Seren's lumbermill",
+  "title": "Seren's Lumbermill",
   "description": "Raise a mill so Seren can turn rings of timber into stacks for the town instead of pacing the common room.",
   "prerequisites": {
     "completedQuestIds": [],

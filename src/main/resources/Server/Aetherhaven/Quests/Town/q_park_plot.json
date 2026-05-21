@@ -1,10 +1,11 @@
 {
   "schemaVersion": 1,
-  "id": "q_build_town_hall",
+  "id": "q_park_plot",
   "category": "town",
-  "grantPlotTokenConstructionId": "plot_town_hall",
-  "title": "Raise The Town Hall",
-  "description": "Lyren wants a hall that belongs to everyone: records, plans, and the treasury under one roof.",
+  "grantPlotTokenConstructionId": "plot_park",
+  "title": "A Place To Breathe",
+  "description": "Corin wants a small park with benches so townsfolk can sit outside and feel a little lighter between chores.",
+  "assignNpcRoleId": "Aetherhaven_Innkeeper",
   "prerequisites": {
     "completedQuestIds": ["q_build_inn"],
     "anyCompletedQuestIds": []
@@ -13,30 +14,30 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the town hall plot token from Lyren."
+      "text": "Take the park plot token from Corin."
     },
     {
-      "id": "place_build",
+      "id": "build",
       "kind": "journal",
-      "text": "Stake and build the town hall prefab."
+      "text": "Stake and build the park."
     },
     {
-      "id": "tell_elder",
+      "id": "talk",
       "kind": "journal",
-      "text": "Tell Lyren in person when construction is complete."
+      "text": "Find Corin at the inn and close the quest in dialogue."
     }
   ],
   "rewards": [
     {
       "kind": "reputation",
-      "npcRoleId": "Aetherhaven_Elder_Lyren",
-      "amount": 20,
+      "npcRoleId": "Aetherhaven_Innkeeper",
+      "amount": 14,
       "grantTo": "quest_beneficiary_npc"
     },
     {
       "kind": "item",
       "itemId": "Aetherhaven_Gold_Coin",
-      "count": 20,
+      "count": 14,
       "grantTo": "player"
     }
   ],
