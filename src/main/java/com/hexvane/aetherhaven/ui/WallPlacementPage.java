@@ -95,7 +95,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         commandBuilder.set("#BtnPieceGate.TextSpans", Message.translation(p + ".pieceGate"));
         commandBuilder.set("#BtnPieceTower.TextSpans", Message.translation(p + ".pieceTower"));
         commandBuilder.set("#BackButton.TextSpans", Message.translation(p + ".undo"));
-        commandBuilder.set("#PlaceButton.TextSpans", Message.translation(p + ".place"));
+        commandBuilder.set("#PlaceButton.TextSpans", Message.translation(p + ".completeWall"));
         commandBuilder.set("#CancelButton.TextSpans", Message.translation(p + ".cancel"));
         commandBuilder.set("#BtnExpandZm.TooltipTextSpans", Message.translation(p + ".placeScreenUp"));
         commandBuilder.set("#BtnExpandZp.TooltipTextSpans", Message.translation(p + ".placeScreenDown"));
@@ -113,6 +113,10 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
     public void build(
         @Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder, @Nonnull Store<EntityStore> store
     ) {
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc != null) {
+            WallPlacementUiRegistry.register(uc.getUuid(), this);
+        }
         commandBuilder.append("Aetherhaven/WallPlacementPage.ui");
         applyLocalization(commandBuilder);
         boolean editPrompt = session.hasEditTarget() && !session.isRemoveConfirmOpen();
@@ -167,6 +171,10 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
 
     @Override
     public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc != null) {
+            WallPlacementUiRegistry.unregister(uc.getUuid(), this);
+        }
         super.onDismiss(ref, store);
         World world = store.getExternalData().getWorld();
         world.execute(
@@ -259,11 +267,31 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 return;
             }
             case "EditContinue" -> {
-                session.setEditTargetPlotId(null);
-                session.setEditTargetSegmentId(null);
+                if (!session.tryBeginEditContinue()) {
+                    return;
+                }
+                UUID plotId = session.getEditTargetPlotId();
+                UUID segId = session.getEditTargetSegmentId();
+                if (plotId == null && segId == null) {
+                    session.endEditContinue();
+                    scheduleRebuild(ref, store);
+                    return;
+                }
+                UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+                WallPlacementPage target = this;
+                if (uc != null) {
+                    WallPlacementPage registered = WallPlacementUiRegistry.get(uc.getUuid());
+                    if (registered != null) {
+                        target = registered;
+                    }
+                }
+                target.scheduleContinueFromEdit(ref, store, plotId, segId);
+                return;
             }
             case "EditRemove" -> {
                 session.setRemoveConfirmOpen(true);
+                scheduleRebuild(ref, store);
+                return;
             }
             case "EditCancel" -> scheduleCancel(ref, store);
             case "RemoveConfirm" -> scheduleRemoveTarget(ref, store);
@@ -275,6 +303,48 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
 
     public void refreshFootprintOverlayAfterDebugClear(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         refreshPreview(ref, store);
+    }
+
+    /** Refreshes this page when the session was updated outside {@link #handleDataEvent} (e.g. primary-use on a wall). */
+    public void scheduleUiRebuild(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        scheduleRebuild(ref, store);
+    }
+
+    void scheduleContinueFromEdit(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable UUID plotId,
+        @Nullable UUID segmentId
+    ) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                try {
+                    if (!ref.isValid()) {
+                        return;
+                    }
+                    AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                    UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+                    if (plugin == null || uc == null) {
+                        return;
+                    }
+                    TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                    TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+                    if (town == null || !session.continueFromEditTarget(town, plotId, segmentId)) {
+                        sendError(store, ref, Message.translation(MSG + ".errorNoWallHere"));
+                        rebuild();
+                        return;
+                    }
+                    session.clearBirdsEyeSnapshot();
+                    captureBirdsEyeSnapshot(ref, store);
+                    applyBirdsEyeCameraPacket(ref, store);
+                    rebuild();
+                    refreshPreview(ref, store);
+                } finally {
+                    session.endEditContinue();
+                }
+            }
+        );
     }
 
     private void scheduleRebuild(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -447,15 +517,10 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         if (plugin == null) {
             return;
         }
-        String consId = session.resolveConstructionId();
-        if (session.getPieceKind() == WallPlacementSession.PieceKind.TOWER
-            && WallTowerPrefabResolver.resolve(session.getTowerConnections()) == null) {
-            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
-            if (pr != null) {
-                WallPlacementWireframeOverlay.clearFor(pr);
-            }
-            return;
+        if (session.getPieceKind() == WallPlacementSession.PieceKind.TOWER) {
+            session.ensureTowerEndCapPreviewDefaults();
         }
+        String consId = session.resolveConstructionId();
         ConstructionDefinition def = plugin.getConstructionCatalog().get(consId);
         if (def == null) {
             PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
@@ -506,13 +571,22 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 }
             }
             PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            boolean skipInWorldSeedGhost =
+                session.isSeededContinueFromEdit() && session.getCommitted().size() == 1;
             for (WallPlacementSession.CommittedStep step : session.getCommitted()) {
+                if (skipInWorldSeedGhost) {
+                    continue;
+                }
                 spawnPreviewForStep(store, plugin, step, session.getPreviewEntityRefs());
             }
             WallPlacementSession.CommittedStep last = session.getLastCommitted();
-            Vector3i currentOrigin = def.resolvePrefabAnchorWorld(session.getCurrentAnchor(), session.getCurrentPrefabYaw());
-            PlotPreviewSpawner.rebuild(store, currentOrigin, session.getCurrentPrefabYaw(), buf, session.getPreviewEntityRefs());
-            PlotFootprintRecord currentFp = PlotFootprintUtil.computeFootprint(currentOrigin, session.getCurrentPrefabYaw(), buf);
+            PlotFootprintRecord currentFp = null;
+            if (session.shouldShowNextPiecePreview()) {
+                Vector3i currentOrigin =
+                    def.resolvePrefabAnchorWorld(session.getCurrentAnchor(), session.getCurrentPrefabYaw());
+                PlotPreviewSpawner.rebuild(store, currentOrigin, session.getCurrentPrefabYaw(), buf, session.getPreviewEntityRefs());
+                currentFp = PlotFootprintUtil.computeFootprint(currentOrigin, session.getCurrentPrefabYaw(), buf);
+            }
             PlotFootprintRecord previousFp = null;
             if (last != null) {
                 ConstructionDefinition lastDef = plugin.getConstructionCatalog().get(last.constructionId);
@@ -574,7 +648,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     ref,
                     store,
                     "expandPad",
-                    "outgoing=" + dir + (session.getPieceKind() == WallPlacementSession.PieceKind.TOWER ? " (tower joint uses run end)" : "")
+                    "outgoing=" + dir + (session.getPieceKind() == WallPlacementSession.PieceKind.TOWER ? " (commit tower)" : "")
                 );
                 if (commitCurrentPlacement(ref, store, dir, true)) {
                     logWallDebug(ref, store, "placedAndChained", "dir=" + dir);
@@ -631,21 +705,34 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
     ) {
         boolean placingTower = session.getPieceKind() == WallPlacementSession.PieceKind.TOWER;
         WallPlacementSession.CommittedStep last = session.getLastCommitted();
-        boolean lastIsTower = last != null && WallPieceGeometry.isTowerConstructionId(last.constructionId);
 
-        if (dir == null && (placingTower || last != null)) {
+        if (dir == null && chainAfter && (placingTower || last != null)) {
             sendError(store, ref, Message.translation(MSG + ".errorPickDirection"));
             return false;
+        }
+
+        if (placingTower) {
+            session.prepareTowerForCommit();
         }
 
         if (dir != null) {
             session.setPlacementExpandDir(dir);
             if (placingTower) {
                 session.prepareTowerPlacementForClick(dir);
-            } else if (lastIsTower) {
-                boolean towerUpdated = session.applyOutgoingDirectionToLastTower(dir);
-                if (towerUpdated) {
-                    syncLastCommittedTowerPlot(ref, store);
+                if (!session.isTowerReadyToCommit(dir)) {
+                    return true;
+                }
+            } else {
+                WallPlacementSession.CommittedStep lastTowerStep = session.getLastCommitted();
+                if (lastTowerStep != null
+                    && WallPieceGeometry.isTowerConstructionId(lastTowerStep.constructionId)
+                    && lastTowerStep.towerConnectionDirs != null
+                    && lastTowerStep.towerConnectionDirs.size() == 1) {
+                    boolean towerUpdated = session.applyOutgoingDirectionToLastTower(dir);
+                    if (towerUpdated) {
+                        syncLastCommittedTowerPlot(ref, store);
+                        session.previewExpandDirection(dir);
+                    }
                 }
             }
         }
@@ -655,7 +742,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
             return false;
         }
         if (chainAfter && dir != null) {
-            session.extendPreview(dir);
+            session.previewExpandDirection(dir);
         }
         return true;
     }
@@ -774,7 +861,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 placedSignPos,
                 session.getCurrentRotationSteps(),
                 session.towerConnectionsForCommit(),
-                session.getPlacementExpandDir()
+                session.chainExpandDirForCommit()
             )
         );
         session.setPlacementExpandDir(null);

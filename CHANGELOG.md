@@ -12,7 +12,6 @@
 
 ### Fixed
 
-- **Wall wand tower placement** Joint positions come from `Server/Aetherhaven/WallKit/wall_kit_geometry.json` (prefab-local offsets rotated by each piece’s placement yaw). Placement pads and chain expansion use world N/S/E/W only; UI still maps screen arrows from the camera view. Fixed camera/preview jumping to unloaded chunks when switching to the tower tab.
 - **Assembly after re-entering a world** Plot builds that were mid-assembly could lose their in-memory assembly job when leaving and re-entering a world (especially singleplayer). Passive building and journal “Finish one building now” then reported no active job. Jobs are now restored on the world thread with retries, re-created on demand when finishing from the journal, and passively re-registered when a player is in the world.
 
 ### Changed

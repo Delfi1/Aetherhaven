@@ -1,6 +1,10 @@
 package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.WallSegmentRecord;
+import com.hexvane.aetherhaven.town.WallSegmentRecord;
 import com.hexvane.aetherhaven.wall.WallCardinal;
 import com.hexvane.aetherhaven.wall.WallPieceGeometry;
 import com.hexvane.aetherhaven.wall.WallPlacementChainPlanner;
@@ -144,6 +148,14 @@ public final class WallPlacementSession {
     @Nullable
     private WallCardinal lastPositionDir;
 
+    /**
+     * True after Continue on an existing piece: blocks auto-preview until the player picks an expand pad, and marks
+     * the in-world seed so we do not stack a ghost prefab on it.
+     */
+    private boolean seededContinueFromEdit;
+
+    private boolean editContinueInFlight;
+
     private static boolean defaultDebugLogging = true;
 
     private boolean debugLogging = defaultDebugLogging;
@@ -271,9 +283,32 @@ public final class WallPlacementSession {
     public void realignPreviewToLastCommitted() {
         WallCardinal expandDir = resolveChainExpandDir();
         if (expandDir == null) {
+            if (pieceKind == PieceKind.TOWER && getLastCommitted() == null) {
+                ensureTowerEndCapPreviewDefaults();
+            }
             return;
         }
         previewExpandDirection(expandDir);
+    }
+
+    /**
+     * Shows {@code EndCap_S} in the preview before the player picks a direction pad (rotation 0). Pad clicks replace
+     * this via {@link #previewExpandDirection}.
+     */
+    public void ensureTowerEndCapPreviewDefaults() {
+        if (pieceKind != PieceKind.TOWER) {
+            return;
+        }
+        if (towerConnections.isEmpty()) {
+            currentRotationSteps = 0;
+        } else {
+            applyTowerResolvedRotation();
+        }
+    }
+
+    /** Applies resolved tower yaw before {@link #resolveConstructionId()} is used for preview or place. */
+    public void prepareTowerForCommit() {
+        ensureTowerEndCapPreviewDefaults();
     }
 
     /**
@@ -281,12 +316,26 @@ public final class WallPlacementSession {
      * this; use the Place button to commit.
      */
     public void previewExpandDirection(@Nonnull WallCardinal expandDir) {
+        seededContinueFromEdit = false;
         CommittedStep last = getLastCommitted();
         if (last == null) {
-            lastExpandDir = expandDir;
-            placementExpandDir = expandDir;
-            currentRotationSteps = expandDir.rotationStepsForLocalNorthAlongAxis();
-            arrivalFromSide = null;
+            if (pieceKind == PieceKind.TOWER) {
+                applyExpandPreviewPlan(
+                    WallPlacementChainPlanner.planExpandPreview(
+                        currentAnchor.clone(),
+                        currentRotationSteps,
+                        toPlannerPieceKind(pieceKind),
+                        toPlannerCommitted(),
+                        expandDir,
+                        null
+                    )
+                );
+            } else {
+                lastExpandDir = expandDir;
+                placementExpandDir = expandDir;
+                currentRotationSteps = expandDir.rotationStepsForLocalNorthAlongAxis();
+                arrivalFromSide = null;
+            }
             return;
         }
         applyExpandPreviewPlan(
@@ -319,6 +368,9 @@ public final class WallPlacementSession {
         if (lastExpandDir != null) {
             return lastExpandDir;
         }
+        if (seededContinueFromEdit) {
+            return null;
+        }
         CommittedStep last = getLastCommitted();
         if (last != null && last.chainExpandDir != null) {
             return last.chainExpandDir;
@@ -327,6 +379,10 @@ public final class WallPlacementSession {
             return arrivalFromSide.opposite();
         }
         return null;
+    }
+
+    public boolean isSeededContinueFromEdit() {
+        return seededContinueFromEdit;
     }
 
     /** Towers cannot be placed twice in a row; use wall/gate after a tower until another segment is placed. */
@@ -338,6 +394,7 @@ public final class WallPlacementSession {
     public void afterTowerCommittedSwitchToWall() {
         pieceKind = PieceKind.SEGMENT;
         towerConnections.clear();
+        refreshArrivalFromSide();
     }
 
     @Nonnull
@@ -380,6 +437,29 @@ public final class WallPlacementSession {
         previewExpandDirection(outgoingExpandDir);
     }
 
+    /**
+     * Corner towers need two connection faces before commit (e.g. chain north, then pad east). Straight end caps commit
+     * on the first pad along the run.
+     */
+    public boolean isTowerReadyToCommit(@Nonnull WallCardinal outgoingPad) {
+        if (pieceKind != PieceKind.TOWER) {
+            return true;
+        }
+        if (towerConnections.size() >= 2) {
+            return true;
+        }
+        CommittedStep last = getLastCommitted();
+        if (last == null) {
+            return true;
+        }
+        if (last.chainExpandDir == null) {
+            return !towerConnections.isEmpty();
+        }
+        WallPlacementChainPlanner.ChainCommittedPiece plannerLast = toPlannerPiece(last);
+        WallCardinal jointDir = WallPlacementChainPlanner.towerJointExpandDir(plannerLast, outgoingPad);
+        return WallPlacementChainPlanner.isStraightRunTowerEndCap(last.chainExpandDir, outgoingPad, jointDir);
+    }
+
     public void setPlacementExpandDir(@Nullable WallCardinal placementExpandDir) {
         this.placementExpandDir = placementExpandDir;
     }
@@ -416,6 +496,7 @@ public final class WallPlacementSession {
 
     /** Restores preview anchor, piece type, and chaining state after undo removes the last commit. */
     public void restoreStateAfterUndo() {
+        seededContinueFromEdit = false;
         towerConnections.clear();
         placementExpandDir = null;
         CommittedStep last = getLastCommitted();
@@ -494,36 +575,7 @@ public final class WallPlacementSession {
     }
 
     public void extendPreview(@Nonnull WallCardinal expandDir) {
-        lastExpandDir = expandDir;
-        CommittedStep last = getLastCommitted();
-        if (last != null) {
-            if (pieceKind == PieceKind.TOWER) {
-                applyExpandPreviewPlan(
-                    WallPlacementChainPlanner.planExpandPreview(
-                        last.signAnchor.clone(),
-                        last.rotationSteps,
-                        toPlannerPieceKind(pieceKind),
-                        toPlannerCommitted(),
-                        expandDir,
-                        null
-                    )
-                );
-                return;
-            }
-            int newRotationSteps = rotationStepsForChainAfter(last, expandDir);
-            Rotation newYaw = rotationStepsFrom(newRotationSteps);
-            currentAnchor =
-                computeChainedSignAnchor(
-                    last, newRotationSteps, newYaw, expandDir, expandDir, false
-                );
-            currentRotationSteps = newRotationSteps;
-            arrivalFromSide = expandDir.opposite();
-            return;
-        }
-        Vector3i delta = expandDir.rotateOffset(new Vector3i(0, 0, WallPieceGeometry.segmentChainSpan()));
-        currentAnchor = new Vector3i(currentAnchor.x + delta.x, currentAnchor.y, currentAnchor.z + delta.z);
-        currentRotationSteps = expandDir.rotationStepsForLocalNorthAlongAxis();
-        arrivalFromSide = expandDir.opposite();
+        previewExpandDirection(expandDir);
     }
 
     /**
@@ -542,10 +594,27 @@ public final class WallPlacementSession {
 
     @Nullable
     public EnumSet<WallCardinal> towerConnectionsForCommit() {
-        if (pieceKind != PieceKind.TOWER || towerConnections.isEmpty()) {
+        if (pieceKind != PieceKind.TOWER) {
             return null;
         }
+        if (towerConnections.isEmpty()) {
+            return EnumSet.of(WallCardinal.SOUTH);
+        }
         return EnumSet.copyOf(towerConnections);
+    }
+
+    @Nullable
+    public WallCardinal chainExpandDirForCommit() {
+        if (placementExpandDir != null) {
+            return placementExpandDir;
+        }
+        if (lastExpandDir != null) {
+            return lastExpandDir;
+        }
+        if (pieceKind == PieceKind.TOWER) {
+            return WallCardinal.SOUTH;
+        }
+        return null;
     }
 
     public void nudgeY(int dy) {
@@ -579,6 +648,194 @@ public final class WallPlacementSession {
 
     public boolean hasEditTarget() {
         return editTargetPlotId != null || editTargetSegmentId != null;
+    }
+
+    /**
+     * After "Continue" on an existing wall/tower: seed that piece as the chain base and wait for an expand pad before
+     * showing the next preview (avoids stacking a ghost on the selected sign).
+     */
+    public boolean continueFromEditTarget(@Nonnull TownRecord town) {
+        return continueFromEditTarget(town, editTargetPlotId, editTargetSegmentId);
+    }
+
+    public boolean continueFromEditTarget(
+        @Nonnull TownRecord town, @Nullable UUID plotId, @Nullable UUID segmentId
+    ) {
+        CommittedStep seed = buildCommittedSeedFromEditTarget(town, plotId, segmentId);
+        if (seed == null) {
+            return false;
+        }
+        committed.add(seed);
+        setEditTargetPlotId(null);
+        setEditTargetSegmentId(null);
+        pieceKind = PieceKind.SEGMENT;
+        towerConnections.clear();
+        currentAnchor = seed.signAnchor.clone();
+        currentRotationSteps = seed.rotationSteps;
+        lastExpandDir = null;
+        placementExpandDir = null;
+        lastPositionDir = null;
+        arrivalFromSide = inferArrivalForSeededContinue(town, seed, segmentId);
+        seededContinueFromEdit = true;
+        return true;
+    }
+
+    public boolean tryBeginEditContinue() {
+        if (editContinueInFlight) {
+            return false;
+        }
+        editContinueInFlight = true;
+        return true;
+    }
+
+    public void endEditContinue() {
+        editContinueInFlight = false;
+    }
+
+    /**
+     * World side where an existing neighbor attaches (expand into that side is blocked). Towers: opening faces.
+     * Straight wall/gate runs: probe along the run axis in town data.
+     */
+    @Nullable
+    private static WallCardinal inferArrivalForSeededContinue(
+        @Nonnull TownRecord town, @Nonnull CommittedStep seed, @Nullable UUID editSegmentId
+    ) {
+        if (WallPieceGeometry.isTowerConstructionId(seed.constructionId)) {
+            return arrivalFromSideForSeededTower(seed);
+        }
+        return inferArrivalAlongWallRun(town, seed, editSegmentId);
+    }
+
+    @Nullable
+    private static WallCardinal arrivalFromSideForSeededTower(@Nonnull CommittedStep seed) {
+        if (seed.towerConnectionDirs == null || seed.towerConnectionDirs.isEmpty()) {
+            return null;
+        }
+        if (seed.towerConnectionDirs.size() == 1) {
+            return seed.towerConnectionDirs.iterator().next();
+        }
+        return null;
+    }
+
+    @Nullable
+    private static WallCardinal inferArrivalAlongWallRun(
+        @Nonnull TownRecord town, @Nonnull CommittedStep seed, @Nullable UUID editSegmentId
+    ) {
+        boolean alongZ = (seed.rotationSteps % 2) == 0;
+        WallCardinal[] runDirs = alongZ ? new WallCardinal[] {WallCardinal.NORTH, WallCardinal.SOUTH}
+            : new WallCardinal[] {WallCardinal.EAST, WallCardinal.WEST};
+        int span = WallPieceGeometry.segmentChainSpan();
+        WallCardinal blocked = null;
+        for (WallCardinal dir : runDirs) {
+            int px = seed.signAnchor.x + dir.dx * span;
+            int pz = seed.signAnchor.z + dir.dz * span;
+            if (hasWallAlongRunAt(town, seed, editSegmentId, px, pz)) {
+                if (blocked != null) {
+                    return null;
+                }
+                blocked = dir;
+            }
+        }
+        return blocked;
+    }
+
+    private static boolean hasWallAlongRunAt(
+        @Nonnull TownRecord town,
+        @Nonnull CommittedStep seed,
+        @Nullable UUID editSegmentId,
+        int x,
+        int z
+    ) {
+        WallSegmentRecord seg = town.findWallSegmentAtBlock(x, seed.signAnchor.y, z);
+        if (seg != null) {
+            if (editSegmentId != null && seg.getSegmentId().equals(editSegmentId)) {
+                return false;
+            }
+            return true;
+        }
+        for (PlotInstance plot : town.getPlotInstances()) {
+            if (plot.getPlotId().equals(seed.plotId)) {
+                continue;
+            }
+            if (!WallPieceGeometry.isTowerConstructionId(plot.getConstructionId())
+                && !AetherhavenConstants.CONSTRUCTION_PLOT_WALL_GATE.equals(plot.getConstructionId())
+                && !AetherhavenConstants.CONSTRUCTION_PLOT_WALL_SEGMENT.equals(plot.getConstructionId())) {
+                continue;
+            }
+            int dx = Math.abs(plot.getSignX() - x);
+            int dz = Math.abs(plot.getSignZ() - z);
+            if (dx <= 2 && dz <= 2) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * True when the floating next-piece preview should render. False right after continue-from-edit until the player
+     * picks an expand direction.
+     */
+    public boolean shouldShowNextPiecePreview() {
+        if (hasEditTarget() || isRemoveConfirmOpen()) {
+            return false;
+        }
+        return getLastCommitted() == null || resolveChainExpandDir() != null;
+    }
+
+    @Nullable
+    private CommittedStep buildCommittedSeedFromEditTarget(@Nonnull TownRecord town) {
+        return buildCommittedSeedFromEditTarget(town, editTargetPlotId, editTargetSegmentId);
+    }
+
+    @Nullable
+    private CommittedStep buildCommittedSeedFromEditTarget(
+        @Nonnull TownRecord town, @Nullable UUID plotId, @Nullable UUID segmentId
+    ) {
+        if (plotId != null) {
+            PlotInstance plot = town.findPlotById(plotId);
+            if (plot == null) {
+                return null;
+            }
+            int rot = PlotPlacementSession.rotationStepsFromPrefabYaw(plot.resolvePrefabYaw());
+            EnumSet<WallCardinal> towerDirs =
+                WallPieceGeometry.isTowerConstructionId(plot.getConstructionId())
+                    ? WallTowerPrefabResolver.connectionsForPlacedTower(plot.getConstructionId(), rot)
+                    : null;
+            return new CommittedStep(
+                plotId,
+                plot.getConstructionId(),
+                new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ()),
+                rot,
+                towerDirs,
+                null
+            );
+        }
+        if (segmentId != null) {
+            WallSegmentRecord seg = town.findWallSegmentById(segmentId);
+            if (seg == null) {
+                return null;
+            }
+            int rot = PlotPlacementSession.rotationStepsFromPrefabYaw(seg.resolvePrefabYaw());
+            Vector3i sign =
+                new Vector3i(
+                    seg.getPrefabAnchorX(),
+                    seg.getPrefabAnchorY() + AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR,
+                    seg.getPrefabAnchorZ()
+                );
+            EnumSet<WallCardinal> towerDirs =
+                WallPieceGeometry.isTowerConstructionId(seg.getConstructionId())
+                    ? WallTowerPrefabResolver.connectionsForPlacedTower(seg.getConstructionId(), rot)
+                    : null;
+            return new CommittedStep(
+                segmentId,
+                seg.getConstructionId(),
+                sign,
+                rot,
+                towerDirs,
+                null
+            );
+        }
+        return null;
     }
 
     public boolean isRemoveConfirmOpen() {

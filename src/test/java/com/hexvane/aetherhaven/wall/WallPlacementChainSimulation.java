@@ -45,10 +45,17 @@ public final class WallPlacementChainSimulation {
     /** Expand pad + place + chain (matches in-game arrow click). */
     @Nonnull
     public WallPlacementChainSimulation expandPlace(@Nonnull WallCardinal outgoing) {
+        previewOnly(outgoing);
+        if (upgradeLastTowerForOutgoingPad(outgoing)) {
+            previewOnly(outgoing);
+        }
+        WallPlacementChainPlanner.ChainCommittedPiece last = lastCommitted();
+        Vector3i anchorBase = last == null ? currentAnchor : last.signAnchor();
+        int rotBase = last == null ? currentRotationSteps : last.rotationSteps();
         WallPlacementChainPlanner.ExpandPreviewPlan plan =
             WallPlacementChainPlanner.planExpandPreview(
-                currentAnchor,
-                currentRotationSteps,
+                anchorBase.clone(),
+                rotBase,
                 pieceKind,
                 committed,
                 outgoing
@@ -72,28 +79,54 @@ public final class WallPlacementChainSimulation {
 
     /** Same as {@link com.hexvane.aetherhaven.placement.WallPlacementSession#extendPreview}. */
     private void extendPreviewAfterPlace(@Nonnull WallCardinal outgoing) {
+        if (lastCommitted() != null && lastCommitted().isTower()) {
+            pieceKind = WallPlacementChainPlanner.PieceKind.SEGMENT;
+        }
         WallPlacementChainPlanner.ChainCommittedPiece last = lastCommitted();
         if (last == null) {
             return;
         }
-        WallPlacementChainPlanner.ChainCommittedPiece prev =
-            committed.size() >= 2 ? committed.get(committed.size() - 2) : null;
-        int newRotationSteps =
-            WallPlacementChainPlanner.rotationStepsForChainAfter(pieceKind, last, prev, outgoing);
-        com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation newYaw =
-            WallPlacementChainPlanner.rotationStepsFrom(newRotationSteps);
-        boolean newIsTower = pieceKind == WallPlacementChainPlanner.PieceKind.TOWER;
-        WallCardinal positionDir =
-            newIsTower && !last.isTower()
-                ? WallPlacementChainPlanner.towerJointExpandDir(last, outgoing)
-                : outgoing;
-        currentAnchor =
-            WallPlacementChainPlanner.computeChainedSignAnchor(
-                last, newRotationSteps, newYaw, positionDir, outgoing, newIsTower, pieceKind, null, null
+        WallPlacementChainPlanner.ExpandPreviewPlan plan =
+            WallPlacementChainPlanner.planExpandPreview(
+                last.signAnchor().clone(),
+                last.rotationSteps(),
+                pieceKind,
+                committed,
+                outgoing
             );
-        currentRotationSteps = newRotationSteps;
-        lastExpandDir = outgoing;
-        arrivalFromSide = outgoing.opposite();
+        applyPlan(plan);
+    }
+
+    /** Same as {@link com.hexvane.aetherhaven.placement.WallPlacementSession#applyOutgoingDirectionToLastTower}. */
+    private boolean upgradeLastTowerForOutgoingPad(@Nonnull WallCardinal outgoing) {
+        if (pieceKind != WallPlacementChainPlanner.PieceKind.SEGMENT) {
+            return false;
+        }
+        WallPlacementChainPlanner.ChainCommittedPiece last = lastCommitted();
+        if (last == null
+            || !last.isTower()
+            || last.towerConnectionDirs() == null
+            || last.towerConnectionDirs().size() != 1) {
+            return false;
+        }
+        EnumSet<WallCardinal> pair =
+            WallTowerAutoConnector.connectionsForCorner(last.towerConnectionDirs(), outgoing);
+        WallTowerPrefabResolver.ResolvedTower resolved = WallTowerAutoConnector.resolve(pair);
+        if (resolved == null) {
+            return false;
+        }
+        int idx = committed.size() - 1;
+        committed.set(
+            idx,
+            new WallPlacementChainPlanner.ChainCommittedPiece(
+                resolved.constructionId(),
+                last.signAnchor(),
+                resolved.rotationSteps(),
+                pair,
+                last.chainExpandDir()
+            )
+        );
+        return true;
     }
 
     /** Preview only (expand pad without place). */

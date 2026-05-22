@@ -34,6 +34,24 @@ class WallTowerPrefabResolverTest {
     }
 
     @Test
+    void endcapRotation_eastAndWest_useOpeningAxis_notOpposite() {
+        assertEquals(1, WallTowerPrefabResolver.endcapRotationStepsForWorldOpening(WallCardinal.EAST));
+        assertEquals(3, WallTowerPrefabResolver.endcapRotationStepsForWorldOpening(WallCardinal.WEST));
+        WallTowerPrefabResolver.ResolvedTower eastOnly = WallTowerPrefabResolver.resolve(EnumSet.of(WallCardinal.EAST));
+        assertNotNull(eastOnly);
+        assertEquals(1, eastOnly.rotationSteps());
+        WallTowerPrefabResolver.ResolvedTower westOnly = WallTowerPrefabResolver.resolve(EnumSet.of(WallCardinal.WEST));
+        assertNotNull(westOnly);
+        assertEquals(3, westOnly.rotationSteps());
+    }
+
+    @Test
+    void endcapRotation_northAndSouth_stillUseOppositeAxis() {
+        assertEquals(2, WallTowerPrefabResolver.endcapRotationStepsForWorldOpening(WallCardinal.NORTH));
+        assertEquals(0, WallTowerPrefabResolver.endcapRotationStepsForWorldOpening(WallCardinal.SOUTH));
+    }
+
+    @Test
     void resolve_southWestCorner_usesRotationThreeNotOne() {
         EnumSet<WallCardinal> requested = EnumSet.of(WallCardinal.SOUTH, WallCardinal.WEST);
         WallTowerPrefabResolver.ResolvedTower resolved = WallTowerPrefabResolver.resolve(requested);

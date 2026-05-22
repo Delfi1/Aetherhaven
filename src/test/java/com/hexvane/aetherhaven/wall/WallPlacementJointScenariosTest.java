@@ -8,6 +8,7 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import java.util.EnumSet;
 import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -100,33 +101,26 @@ class WallPlacementJointScenariosTest {
         Rotation wallYaw = sim.committed().get(0).prefabYaw();
         Rotation towerYaw = WallPlacementChainPlanner.rotationStepsFrom(plan.rotationSteps());
 
+        WallCardinal seatFace = WallPlacementChainPlanner.towerSeatDirection(sim.committed().get(0), cornerPad);
+        WallCardinal towerEnter = seatFace.opposite();
         if (runAlongZ) {
-            WallPlacementJointAssert.assertWallRowAligned(wallSign.z, tower, name);
-            WallPlacementJointAssert.assertFlushMixedJoint(
-                wallSign,
-                wallYaw,
-                plan.positionDir(),
-                false,
-                tower,
-                towerYaw,
-                plan.positionDir().opposite(),
-                true,
-                name
-            );
-        } else {
             WallPlacementJointAssert.assertWallColumnAligned(wallSign.x, tower, name);
-            WallPlacementJointAssert.assertFlushMixedJoint(
-                wallSign,
-                wallYaw,
-                plan.positionDir(),
-                false,
-                tower,
-                towerYaw,
-                plan.positionDir().opposite(),
-                true,
-                name
-            );
+            assertTrue(tower.z < wallSign.z == (chain == WallCardinal.NORTH), name + " tower at chain run tip");
+        } else {
+            WallPlacementJointAssert.assertWallRowAligned(wallSign.z, tower, name);
+            assertTrue(tower.x < wallSign.x == (chain == WallCardinal.WEST), name + " tower at chain run tip");
         }
+        WallPlacementJointAssert.assertFlushMixedJoint(
+            wallSign,
+            wallYaw,
+            seatFace,
+            false,
+            tower,
+            towerYaw,
+            towerEnter,
+            true,
+            name
+        );
         assertNotEquals(wallSign, tower);
         assertTrue(plan.towerConnections().size() == 2);
     }
@@ -169,10 +163,12 @@ class WallPlacementJointScenariosTest {
         assertTrue(south.z >= wall.z + 11, "south tower outside south end, got z=" + south.z + " wall=" + wall.z);
 
         Vector3i east = sim.previewOnly(WallCardinal.EAST).anchor();
-        assertTrue(east.x > wall.x, "east tower outside east face, got x=" + east.x + " wall=" + wall.x);
+        assertTrue(east.z < wall.z - 10, "east pad corner sits at north run tip, got z=" + east.z + " wall=" + wall.z);
+        assertTrue(planHasConnections(sim.previewOnly(WallCardinal.EAST), WallCardinal.SOUTH, WallCardinal.EAST));
 
         Vector3i west = sim.previewOnly(WallCardinal.WEST).anchor();
-        assertTrue(west.x < wall.x, "west tower outside west face, got x=" + west.x + " wall=" + wall.x);
+        assertTrue(west.z < wall.z - 10, "west pad corner sits at north run tip, got z=" + west.z);
+        assertTrue(planHasConnections(sim.previewOnly(WallCardinal.WEST), WallCardinal.SOUTH, WallCardinal.WEST));
     }
 
     /** Tower → north wall → north tower: end cap must meet the wall segment, not the next-chain ghost slot. */
@@ -201,11 +197,20 @@ class WallPlacementJointScenariosTest {
         Vector3i wallSign = sim.committed().get(0).signAnchor();
         sim.pieceKind(WallPlacementChainPlanner.PieceKind.TOWER).expandPlace(WallCardinal.WEST);
         Vector3i towerSign = sim.committed().get(1).signAnchor();
+        Rotation towerYaw = sim.committed().get(1).prefabYaw();
         sim.expandPlace(WallCardinal.WEST);
-        Vector3i seg2 = sim.anchor();
-        Rotation seg2Yaw = WallPlacementChainPlanner.rotationStepsFrom(sim.rotationSteps());
-        WallPlacementJointAssert.assertSameRow(towerSign.z, seg2, "after tower");
-        assertTrue(seg2.x < towerSign.x, "west chain continues west");
+        var seg2 = sim.committed().get(2);
+        WallPlacementJointAssert.assertSameRow(towerSign.z, seg2.signAnchor(), "after tower");
+        assertTrue(seg2.signAnchor().x < towerSign.x, "west chain continues west");
+        WallPlacementJointAssert.assertFlushTowerToSegment(
+            towerSign,
+            towerYaw,
+            WallCardinal.WEST,
+            seg2.signAnchor(),
+            seg2.prefabYaw(),
+            WallCardinal.EAST,
+            "tower → west run"
+        );
     }
 
     @org.junit.jupiter.api.Test
@@ -218,17 +223,28 @@ class WallPlacementJointScenariosTest {
         assertEquals(WallCardinal.EAST, plan.positionDir());
         assertTrue(plan.towerConnections().contains(WallCardinal.EAST));
         assertEquals(2, plan.towerConnections().size());
-        WallPlacementJointAssert.assertWallRowAligned(wallSign.z, plan.anchor(), "corner");
+        assertTrue(plan.anchor().z < wallSign.z, "corner at north run tip");
+        WallPlacementJointAssert.assertWallColumnAligned(wallSign.x, plan.anchor(), "corner");
         WallPlacementJointAssert.assertFlushMixedJoint(
             wallSign,
             sim.committed().get(0).prefabYaw(),
-            WallCardinal.EAST,
+            WallCardinal.NORTH,
             false,
             plan.anchor(),
             WallPlacementChainPlanner.rotationStepsFrom(plan.rotationSteps()),
-            WallCardinal.WEST,
+            WallCardinal.SOUTH,
             true,
             "corner"
         );
+    }
+
+    private static boolean planHasConnections(
+        @Nonnull WallPlacementChainPlanner.ExpandPreviewPlan plan,
+        @Nonnull WallCardinal a,
+        @Nonnull WallCardinal b
+    ) {
+        return plan.towerConnections() != null
+            && plan.towerConnections().contains(a)
+            && plan.towerConnections().contains(b);
     }
 }

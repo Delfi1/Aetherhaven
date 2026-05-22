@@ -90,6 +90,24 @@ public final class WallPlacementJointAssert {
         assertNear(exitWorld.z, enterWorld.z, label + " flush Z");
     }
 
+    /** Tower run exit meets the exterior face of the next segment (outside wall volume). */
+    public static void assertFlushTowerToSegment(
+        @Nonnull Vector3i towerSign,
+        @Nonnull Rotation towerYaw,
+        @Nonnull WallCardinal exitFace,
+        @Nonnull Vector3i segmentSign,
+        @Nonnull Rotation segmentYaw,
+        @Nonnull WallCardinal enterFace,
+        @Nonnull String label
+    ) {
+        Vector3i exitWorld =
+            WallPieceGeometry.connectionPointWorld(towerSign, towerYaw, exitFace, true, true, false);
+        Vector3i enterWorld =
+            WallPieceGeometry.segmentExteriorAttachWorld(segmentSign, segmentYaw, enterFace);
+        assertNear(exitWorld.x, enterWorld.x, label + " flush X");
+        assertNear(exitWorld.z, enterWorld.z, label + " flush Z");
+    }
+
     /** Mixed segment↔tower joint: exit point on A equals enter point on B. */
     public static void assertFlushMixedJoint(
         @Nonnull Vector3i fromSign,

@@ -61,7 +61,7 @@ public final class WallPieceGeometry {
             worldEnter = worldExpandDir.opposite();
         }
 
-        boolean jointOffsets = mixedJoint && !towerToSegmentRun;
+        boolean jointOffsets = mixedJoint;
         Vector3i fromExit =
             segmentToTower
                 ? worldAttachPoint(fromConstructionId, fromSign, fromYaw, worldExpandDir, WallKitCatalog.OffsetKind.EXTERIOR)
@@ -80,13 +80,15 @@ public final class WallPieceGeometry {
         Vector3i probeSign = new Vector3i(0, signY, 0);
         Vector3i towerOriginProbe = logicalAnchor(probeSign);
         WallKitCatalog.OffsetKind enterKind =
-            jointOffsets && newPieceIsTower
-                ? WallKitCatalog.OffsetKind.TOWER_CONNECTION
-                : jointOffsets && !newPieceIsTower
-                    ? WallKitCatalog.OffsetKind.TOWER_JOINT
-                    : newPieceIsTower
-                        ? WallKitCatalog.OffsetKind.TOWER_CONNECTION
-                        : WallKitCatalog.OffsetKind.CHAIN;
+            towerToSegmentRun
+                ? WallKitCatalog.OffsetKind.EXTERIOR
+                : jointOffsets && newPieceIsTower
+                    ? WallKitCatalog.OffsetKind.TOWER_CONNECTION
+                    : jointOffsets && !newPieceIsTower
+                        ? WallKitCatalog.OffsetKind.TOWER_JOINT
+                        : newPieceIsTower
+                            ? WallKitCatalog.OffsetKind.TOWER_CONNECTION
+                            : WallKitCatalog.OffsetKind.CHAIN;
         Vector3i enterAtProbe = worldAttachPoint(toConstructionId, probeSign, newYaw, worldEnter, enterKind);
         int ax = fromExit.x - (enterAtProbe.x - towerOriginProbe.x);
         int az = fromExit.z - (enterAtProbe.z - towerOriginProbe.z);

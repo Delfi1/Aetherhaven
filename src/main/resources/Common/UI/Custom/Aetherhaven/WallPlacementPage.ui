@@ -181,18 +181,19 @@ $C.@PageOverlay {
         }
 
         Group {
-          LayoutMode: Left;
+          LayoutMode: Top;
+          Anchor: (Width: 420);
           $C.@TextButton #EditContinueButton {
             Text: "";
-            Anchor: (Width: 180, Height: 44, Right: 8);
+            Anchor: (Width: 420, Height: 44);
           }
           $C.@TextButton #EditRemoveButton {
             Text: "";
-            Anchor: (Width: 180, Height: 44, Right: 8);
+            Anchor: (Top: 8, Width: 420, Height: 44);
           }
           $C.@CancelTextButton #EditCancelButton {
             Text: "";
-            Anchor: (Width: 140, Height: 44);
+            Anchor: (Top: 8, Width: 420, Height: 44);
           }
         }
       }
@@ -405,20 +406,17 @@ $C.@PageOverlay {
       }
 
       Group #RowActions {
-        LayoutMode: Center;
-        Anchor: (Top: 8);
-        Group {
-          LayoutMode: Left;
-          $C.@TextButton #PlaceButton {
-            Text: "";
-            Anchor: (Right: 10, Width: 200, Height: 48);
-            Padding: (Horizontal: 10, Vertical: 10);
-          }
-          $C.@CancelTextButton #CancelButton {
-            Text: "";
-            Anchor: (Width: 200, Height: 48);
-            Padding: (Horizontal: 10, Vertical: 10);
-          }
+        LayoutMode: Top;
+        Anchor: (Top: 8, Width: 420);
+        $C.@TextButton #PlaceButton {
+          Text: "";
+          Anchor: (Width: 420, Height: 48);
+          Padding: (Horizontal: 10, Vertical: 10);
+        }
+        $C.@CancelTextButton #CancelButton {
+          Text: "";
+          Anchor: (Top: 8, Width: 420, Height: 48);
+          Padding: (Horizontal: 10, Vertical: 10);
         }
       }
     }

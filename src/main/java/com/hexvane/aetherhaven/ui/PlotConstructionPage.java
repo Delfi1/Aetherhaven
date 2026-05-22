@@ -1278,24 +1278,26 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             PlotMaterialDepositService.refundToPlayer(player, ref, store, refunded, dropPos);
         }
         world.breakBlock(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z, BREAK_SETTINGS);
-        ItemStack tokenStack = new ItemStack(tokenId, 1);
-        ItemStackTransaction giveTx = player.giveItem(tokenStack, ref, store);
-        if (!giveTx.succeeded() || !ItemStack.isEmpty(giveTx.getRemainder())) {
-            List<ItemStack> tokenOverflow = new ArrayList<>();
-            if (!giveTx.succeeded()) {
-                tokenOverflow.add(tokenStack);
-            } else {
-                tokenOverflow.add(giveTx.getRemainder());
+        if (def.consumesPlotToken()) {
+            ItemStack tokenStack = new ItemStack(tokenId, 1);
+            ItemStackTransaction giveTx = player.giveItem(tokenStack, ref, store);
+            if (!giveTx.succeeded() || !ItemStack.isEmpty(giveTx.getRemainder())) {
+                List<ItemStack> tokenOverflow = new ArrayList<>();
+                if (!giveTx.succeeded()) {
+                    tokenOverflow.add(tokenStack);
+                } else {
+                    tokenOverflow.add(giveTx.getRemainder());
+                }
+                PlotMaterialDepositService.refundToPlayer(
+                    player,
+                    ref,
+                    store,
+                    tokenOverflow.stream()
+                        .map(s -> MaterialRequirement.ofItem(s.getItemId(), s.getQuantity()))
+                        .toList(),
+                    dropPos
+                );
             }
-            PlotMaterialDepositService.refundToPlayer(
-                player,
-                ref,
-                store,
-                tokenOverflow.stream()
-                    .map(s -> MaterialRequirement.ofItem(s.getItemId(), s.getQuantity()))
-                    .toList(),
-                dropPos
-            );
         }
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {

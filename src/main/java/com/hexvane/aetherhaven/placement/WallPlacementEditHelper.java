@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.WallSegmentRecord;
 import com.hexvane.aetherhaven.ui.WallPlacementPage;
+import com.hexvane.aetherhaven.ui.WallPlacementUiRegistry;
 import com.hexvane.aetherhaven.wall.WallPieceGeometry;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
@@ -64,6 +65,14 @@ public final class WallPlacementEditHelper {
         WallPlacementOpenHelper.cancelOtherPlacementPreviews(ref, store, playerRef, uc.getUuid());
         WallPlacementSession existing = WallPlacementSessions.get(uc.getUuid());
         if (existing != null && existing.getWorld().getName().equals(world.getName())) {
+            if (applyEditTargetFromBlock(existing, world, tb, plugin, town)) {
+                WallPlacementSessions.put(uc.getUuid(), existing);
+            }
+            WallPlacementPage activePage = WallPlacementUiRegistry.get(uc.getUuid());
+            if (activePage != null) {
+                activePage.scheduleUiRebuild(ref, store);
+                return activePage;
+            }
             return new WallPlacementPage(playerRef, existing);
         }
 
@@ -122,6 +131,74 @@ public final class WallPlacementEditHelper {
         session.setEditTargetSegmentId(seg.getSegmentId());
         WallPlacementSessions.put(uc.getUuid(), session);
         return new WallPlacementPage(playerRef, session);
+    }
+
+    /**
+     * When the wall wand UI is already open, primary-use on a wall piece switches into continue/remove mode for that
+     * target instead of ignoring the click.
+     */
+    private static boolean applyEditTargetFromBlock(
+        @Nonnull WallPlacementSession session,
+        @Nonnull World world,
+        @Nonnull BlockPosition tb,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town
+    ) {
+        PlotConstructionBlockResolver.PlotConstructionTarget signTarget =
+            PlotConstructionBlockResolver.resolveForPlotUi(world, tb, PlotSignBlock.getComponentType());
+        if (signTarget != null) {
+            PlotSignBlock sign = signTarget.blockRef().getStore().getComponent(signTarget.blockRef(), PlotSignBlock.getComponentType());
+            if (sign != null) {
+                ConstructionDefinition def = plugin.getConstructionCatalog().get(sign.getConstructionId());
+                if (WallPlacementOpenHelper.isWallConstruction(def)) {
+                    UUID plotId = parseUuid(sign.getPlotId());
+                    if (plotId != null && town.findPlotById(plotId) != null) {
+                        session.setEditTargetPlotId(plotId);
+                        session.setEditTargetSegmentId(null);
+                        session.setRemoveConfirmOpen(false);
+                        PlotInstance plot = town.findPlotById(plotId);
+                        if (plot != null) {
+                            session.setCurrentAnchor(new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ()));
+                            session.setCurrentRotationSteps(
+                                PlotPlacementSession.rotationStepsFromPrefabYaw(plot.resolvePrefabYaw())
+                            );
+                            if (WallPieceGeometry.isTowerConstructionId(plot.getConstructionId())) {
+                                session.setPieceKind(WallPlacementSession.PieceKind.TOWER);
+                            } else if (AetherhavenConstants.CONSTRUCTION_PLOT_WALL_GATE.equals(plot.getConstructionId())) {
+                                session.setPieceKind(WallPlacementSession.PieceKind.GATE);
+                            } else {
+                                session.setPieceKind(WallPlacementSession.PieceKind.SEGMENT);
+                            }
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+        WallSegmentRecord seg = town.findWallSegmentAtBlock(tb.x, tb.y, tb.z);
+        if (seg == null) {
+            return false;
+        }
+        session.setEditTargetSegmentId(seg.getSegmentId());
+        session.setEditTargetPlotId(null);
+        session.setRemoveConfirmOpen(false);
+        PlotFootprintRecord fp = seg.toFootprint();
+        session.setCurrentAnchor(
+            new Vector3i(
+                seg.getPrefabAnchorX(),
+                seg.getPrefabAnchorY() + AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR,
+                seg.getPrefabAnchorZ()
+            )
+        );
+        session.setCurrentRotationSteps(PlotPlacementSession.rotationStepsFromPrefabYaw(seg.resolvePrefabYaw()));
+        if (WallPieceGeometry.isTowerConstructionId(seg.getConstructionId())) {
+            session.setPieceKind(WallPlacementSession.PieceKind.TOWER);
+        } else if (AetherhavenConstants.CONSTRUCTION_PLOT_WALL_GATE.equals(seg.getConstructionId())) {
+            session.setPieceKind(WallPlacementSession.PieceKind.GATE);
+        } else {
+            session.setPieceKind(WallPlacementSession.PieceKind.SEGMENT);
+        }
+        return true;
     }
 
     @Nullable

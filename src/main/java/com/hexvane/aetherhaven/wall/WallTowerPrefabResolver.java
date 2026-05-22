@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.wall;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -13,6 +14,16 @@ import javax.annotation.Nullable;
  */
 public final class WallTowerPrefabResolver {
     private static final EnumSet<WallCardinal> CORNER_BASE_OPENINGS = EnumSet.of(WallCardinal.SOUTH, WallCardinal.EAST);
+
+    private static final List<EnumSet<WallCardinal>> TOWER_CONNECTION_PAIRS =
+            List.of(
+                EnumSet.of(WallCardinal.NORTH, WallCardinal.SOUTH),
+                EnumSet.of(WallCardinal.EAST, WallCardinal.WEST),
+                EnumSet.of(WallCardinal.NORTH, WallCardinal.EAST),
+                EnumSet.of(WallCardinal.EAST, WallCardinal.SOUTH),
+                EnumSet.of(WallCardinal.SOUTH, WallCardinal.WEST),
+                EnumSet.of(WallCardinal.NORTH, WallCardinal.WEST)
+            );
 
     public record ResolvedTower(@Nonnull String constructionId, int rotationSteps) {}
 
@@ -39,9 +50,11 @@ public final class WallTowerPrefabResolver {
             return null;
         }
         if (connections.size() == 1) {
-            WallCardinal only = connections.iterator().next();
-            int steps = only.opposite().rotationStepsForLocalNorthAlongAxis();
-            return new ResolvedTower(AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_ENDCAP_S, steps);
+            WallCardinal opening = connections.iterator().next();
+            return new ResolvedTower(
+                AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_ENDCAP_S,
+                endcapRotationStepsForWorldOpening(opening)
+            );
         }
         EnumSet<WallCardinal> pair = EnumSet.copyOf(connections);
         if (pair.contains(WallCardinal.NORTH) && pair.contains(WallCardinal.SOUTH)) {
@@ -61,6 +74,45 @@ public final class WallTowerPrefabResolver {
         }
         if (pair.contains(WallCardinal.NORTH) && pair.contains(WallCardinal.WEST)) {
             return new ResolvedTower(AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_OUTERCORNER_SE, 2);
+        }
+        return null;
+    }
+
+    /**
+     * {@code EndCap_S} opens toward local south at rotation 0. N/S end caps use the opposite world axis; E/W use the
+     * opening direction directly (in-game E/W faces were flipped when using {@code opposite()} for all axes).
+     */
+    public static int endcapRotationStepsForWorldOpening(@Nonnull WallCardinal openingToward) {
+        return switch (openingToward) {
+            case EAST, WEST -> openingToward.rotationStepsForLocalNorthAlongAxis();
+            case NORTH, SOUTH -> openingToward.opposite().rotationStepsForLocalNorthAlongAxis();
+        };
+    }
+
+    /** Infers connection faces from a placed tower plot (for continuing a chain from an existing piece). */
+    @Nullable
+    public static EnumSet<WallCardinal> connectionsForPlacedTower(
+        @Nonnull String constructionId, int rotationSteps
+    ) {
+        if (!WallPieceGeometry.isTowerConstructionId(constructionId)) {
+            return null;
+        }
+        int steps = ((rotationSteps % 4) + 4) % 4;
+        for (WallCardinal opening : WallCardinal.values()) {
+            ResolvedTower single = resolve(EnumSet.of(opening));
+            if (single != null
+                && single.constructionId().equals(constructionId)
+                && single.rotationSteps() == steps) {
+                return EnumSet.of(opening);
+            }
+        }
+        for (EnumSet<WallCardinal> pair : TOWER_CONNECTION_PAIRS) {
+            ResolvedTower two = resolve(pair);
+            if (two != null
+                && two.constructionId().equals(constructionId)
+                && two.rotationSteps() == steps) {
+                return EnumSet.copyOf(pair);
+            }
         }
         return null;
     }
