@@ -57,6 +57,20 @@ public final class WallPlacementChainPlanner {
         @Nonnull List<ChainCommittedPiece> committed,
         @Nonnull WallCardinal outgoingExpandDir
     ) {
+        return planExpandPreview(
+            currentAnchor, currentRotationSteps, pieceKind, committed, outgoingExpandDir, null
+        );
+    }
+
+    @Nonnull
+    public static ExpandPreviewPlan planExpandPreview(
+        @Nonnull Vector3i currentAnchor,
+        int currentRotationSteps,
+        @Nonnull PieceKind pieceKind,
+        @Nonnull List<ChainCommittedPiece> committed,
+        @Nonnull WallCardinal outgoingExpandDir,
+        @Nullable FootprintAnchorResolver footprintResolver
+    ) {
         ChainCommittedPiece last = last(committed);
         if (last == null) {
             int rot = outgoingExpandDir.rotationStepsForLocalNorthAlongAxis();
@@ -83,25 +97,52 @@ public final class WallPlacementChainPlanner {
         if (newIsTower) {
             Vector3i probeAnchor =
                 computeChainedSignAnchor(
-                    last, rotationSteps, newYaw, positionDir, outgoingExpandDir, true, pieceKind, null
+                    last, rotationSteps, newYaw, positionDir, outgoingExpandDir, true, pieceKind, null, null
                 );
-            towerConnections = towerConnectionsForOutgoing(probeAnchor, last.signAnchor(), outgoingExpandDir);
+            towerConnections =
+                towerConnectionsForOutgoing(
+                    probeAnchor, last.signAnchor(), outgoingExpandDir, last.chainExpandDir(), positionDir
+                );
             resolvedId = resolveTowerConstructionId(towerConnections);
+            boolean straightEndCap =
+                isStraightRunTowerEndCap(last.chainExpandDir(), outgoingExpandDir, positionDir);
             WallTowerPrefabResolver.ResolvedTower resolved = WallTowerPrefabResolver.resolve(towerConnections);
             if (resolved != null) {
-                rotationSteps = resolved.rotationSteps();
-                newYaw = rotationStepsFrom(rotationSteps);
+                resolvedId = resolved.constructionId();
+                if (!straightEndCap) {
+                    rotationSteps = resolved.rotationSteps();
+                    newYaw = rotationStepsFrom(rotationSteps);
+                }
             }
             anchor =
                 computeChainedSignAnchor(
-                    last, rotationSteps, newYaw, positionDir, outgoingExpandDir, true, pieceKind, null
+                    last,
+                    rotationSteps,
+                    newYaw,
+                    positionDir,
+                    outgoingExpandDir,
+                    true,
+                    pieceKind,
+                    resolvedId,
+                    footprintResolver
                 );
-            towerConnections = towerConnectionsForOutgoing(anchor, last.signAnchor(), outgoingExpandDir);
+            towerConnections =
+                towerConnectionsForOutgoing(
+                    anchor, last.signAnchor(), outgoingExpandDir, last.chainExpandDir(), positionDir
+                );
             resolvedId = resolveTowerConstructionId(towerConnections);
         } else {
             anchor =
                 computeChainedSignAnchor(
-                    last, rotationSteps, newYaw, positionDir, outgoingExpandDir, false, pieceKind, null
+                    last,
+                    rotationSteps,
+                    newYaw,
+                    positionDir,
+                    outgoingExpandDir,
+                    false,
+                    pieceKind,
+                    resolvedId,
+                    footprintResolver
                 );
         }
         WallCardinal arrival = positionDir.opposite();
@@ -143,31 +184,72 @@ public final class WallPlacementChainPlanner {
         @Nonnull WallCardinal outgoingExpandDir,
         boolean newPieceIsTower,
         @Nonnull PieceKind pieceKind,
+        @Nullable String resolvedConstructionId,
         @Nullable FootprintAnchorResolver footprintResolver
     ) {
         boolean lastTower = last.isTower();
-        // Tower tab / chain-forward tower: same slot as the next wall segment (not co-located mixed-joint math).
-        if (newPieceIsTower
-            && !lastTower
-            && last.chainExpandDir() != null
-            && positionDir == last.chainExpandDir()
-            && outgoingExpandDir == last.chainExpandDir()) {
+        if (newPieceIsTower && !lastTower) {
+            boolean straightEndCap =
+                isStraightRunTowerEndCap(last.chainExpandDir(), outgoingExpandDir, positionDir);
+            if (footprintResolver != null) {
+                Vector3i footprint =
+                    footprintResolver.resolve(
+                        last, newYaw, positionDir, true, pieceKind, resolvedConstructionId
+                    );
+                if (footprint != null) {
+                    return footprint;
+                }
+            }
+            String towerId =
+                resolvedConstructionId != null
+                    ? resolvedConstructionId
+                    : AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_ENDCAP_S;
+            if (straightEndCap) {
+                return WallPieceGeometry.seatTowerSignAtSegmentRunEnd(
+                    last.constructionId(),
+                    towerId,
+                    last.signAnchor(),
+                    last.prefabYaw(),
+                    newYaw,
+                    positionDir,
+                    last.signAnchor()
+                );
+            }
             return WallPieceGeometry.nextSignPosition(
-                last.signAnchor(), last.prefabYaw(), newYaw, positionDir, false, false
+                last.constructionId(),
+                last.signAnchor(),
+                last.prefabYaw(),
+                towerId,
+                newYaw,
+                positionDir,
+                false,
+                true
             );
         }
-        String newConsId = constructionIdFor(pieceKind, null);
+        String newConsId =
+            resolvedConstructionId != null ? resolvedConstructionId : constructionIdFor(pieceKind, null);
         if (lastTower != newPieceIsTower || !last.constructionId().equals(newConsId)) {
             if (footprintResolver != null) {
                 Vector3i footprint =
-                    footprintResolver.resolve(last, newYaw, positionDir, newPieceIsTower, pieceKind);
-                if (footprint != null) {
+                    footprintResolver.resolve(
+                        last, newYaw, positionDir, newPieceIsTower, pieceKind, resolvedConstructionId
+                    );
+                if (footprint != null
+                    && (!newPieceIsTower
+                        || isPlausibleTowerAnchor(last.signAnchor(), footprint))) {
                     return footprint;
                 }
             }
         }
         return WallPieceGeometry.nextSignPosition(
-            last.signAnchor(), last.prefabYaw(), newYaw, positionDir, lastTower, newPieceIsTower
+            last.constructionId(),
+            last.signAnchor(),
+            last.prefabYaw(),
+            newConsId,
+            newYaw,
+            positionDir,
+            lastTower,
+            newPieceIsTower
         );
     }
 
@@ -179,7 +261,8 @@ public final class WallPlacementChainPlanner {
             @Nonnull Rotation newYaw,
             @Nonnull WallCardinal positionDir,
             boolean newPieceIsTower,
-            @Nonnull PieceKind pieceKind
+            @Nonnull PieceKind pieceKind,
+            @Nullable String resolvedConstructionId
         );
     }
 
@@ -187,22 +270,45 @@ public final class WallPlacementChainPlanner {
      * Which axis to use when seating a tower on the last segment. N/S wall runs attach at the chain end (run tip);
      * E/W runs attach on the face you clicked (N/S), not the east/west run end.
      */
+    /**
+     * Which wall face the new tower meets. Pads on the chain axis use that run end; perpendicular pads use the
+     * long-side face you clicked (E/W on an N/S run, N/S on an E/W run).
+     */
+    /** Reject footprint anchors that collapsed to world origin or jumped far from the wall sign. */
+    public static boolean isPlausibleTowerAnchor(@Nonnull Vector3i wallSign, @Nonnull Vector3i towerSign) {
+        int dx = Math.abs(towerSign.x - wallSign.x);
+        int dz = Math.abs(towerSign.z - wallSign.z);
+        if (dx > 32 || dz > 32) {
+            return false;
+        }
+        long wallDist2 = (long) wallSign.x * wallSign.x + (long) wallSign.z * wallSign.z;
+        long towerDist2 = (long) towerSign.x * towerSign.x + (long) towerSign.z * towerSign.z;
+        return wallDist2 <= 10_000 || towerDist2 >= 256;
+    }
+
     @Nonnull
     public static WallCardinal towerJointExpandDir(@Nonnull ChainCommittedPiece last, @Nonnull WallCardinal outgoingExpandDir) {
-        WallCardinal chain = last.chainExpandDir();
-        if (chain == null) {
-            return outgoingExpandDir.opposite();
-        }
-        boolean runAlongZ = (last.rotationSteps() % 2) == 0;
-        if (runAlongZ) {
-            return chain;
-        }
-        return outgoingExpandDir;
+        return last.chainExpandDir() == null ? outgoingExpandDir.opposite() : outgoingExpandDir;
+    }
+
+    /** Run-axis tower tab: chain-forward or opposite run end (not a long-side corner). */
+    public static boolean isStraightRunTowerEndCap(
+        @Nullable WallCardinal chainExpandDir,
+        @Nonnull WallCardinal outgoingExpandDir,
+        @Nonnull WallCardinal positionDir
+    ) {
+        return chainExpandDir != null
+            && positionDir == outgoingExpandDir
+            && (outgoingExpandDir == chainExpandDir || outgoingExpandDir == chainExpandDir.opposite());
     }
 
     @Nonnull
     public static EnumSet<WallCardinal> towerConnectionsForOutgoing(
-        @Nonnull Vector3i previewAnchor, @Nonnull Vector3i lastSignAnchor, @Nonnull WallCardinal outgoingExpandDir
+        @Nonnull Vector3i previewAnchor,
+        @Nonnull Vector3i lastSignAnchor,
+        @Nonnull WallCardinal outgoingExpandDir,
+        @Nullable WallCardinal chainExpandDir,
+        @Nonnull WallCardinal positionDir
     ) {
         EnumSet<WallCardinal> dirs = EnumSet.noneOf(WallCardinal.class);
         WallCardinal incoming = WallCardinal.fromVector(previewAnchor, lastSignAnchor);
@@ -211,7 +317,9 @@ public final class WallPlacementChainPlanner {
         } else {
             dirs.add(outgoingExpandDir.opposite());
         }
-        dirs.add(outgoingExpandDir);
+        if (!isStraightRunTowerEndCap(chainExpandDir, outgoingExpandDir, positionDir)) {
+            dirs.add(outgoingExpandDir);
+        }
         return dirs;
     }
 

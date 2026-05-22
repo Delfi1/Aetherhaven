@@ -209,6 +209,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 if (session.canPlaceTowerNow()) {
                     session.setPieceKind(WallPlacementSession.PieceKind.TOWER);
                     scheduleRefreshPreview(ref, store);
+                    scheduleApplyCamera(ref, store);
                 }
             }
             case "ExpandZm", "ExpandZp", "ExpandXm", "ExpandXp" -> {
@@ -446,7 +447,6 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         if (plugin == null) {
             return;
         }
-        session.applyTowerResolvedRotation();
         String consId = session.resolveConstructionId();
         if (session.getPieceKind() == WallPlacementSession.PieceKind.TOWER
             && WallTowerPrefabResolver.resolve(session.getTowerConnections()) == null) {
@@ -690,9 +690,6 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uc == null) {
             return false;
-        }
-        if (session.getPieceKind() == WallPlacementSession.PieceKind.TOWER) {
-            session.applyTowerResolvedRotation();
         }
         String consId = session.resolveConstructionId();
         ConstructionDefinition def = plugin.getConstructionCatalog().get(consId);

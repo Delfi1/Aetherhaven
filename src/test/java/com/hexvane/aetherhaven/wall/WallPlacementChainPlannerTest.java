@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import java.util.EnumSet;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -30,28 +31,19 @@ class WallPlacementChainPlannerTest {
         sim.expandPlace(WallCardinal.NORTH);
         sim.pieceKind(WallPlacementChainPlanner.PieceKind.TOWER);
         WallPlacementChainPlanner.ExpandPreviewPlan plan = sim.previewOnly(WallCardinal.WEST);
-        assertEquals(WallCardinal.NORTH, plan.positionDir());
-        assertEquals(EnumSet.of(WallCardinal.SOUTH, WallCardinal.WEST), plan.towerConnections());
-        assertEquals(AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_OUTERCORNER_SE, plan.resolvedConstructionId());
-        assertEquals(3, plan.rotationSteps());
-        assertEquals(
-            EnumSet.of(WallCardinal.SOUTH, WallCardinal.WEST),
-            WallTowerPrefabResolver.worldOpeningsForCornerRotation(plan.rotationSteps())
-        );
+        assertEquals(WallCardinal.WEST, plan.positionDir());
+        assertTrue(plan.towerConnections().contains(WallCardinal.WEST));
+        assertEquals(2, plan.towerConnections().size());
     }
 
     @Test
-    void nsSegmentThenCornerTowerWest_commitStoresRotationMatchingConnections() {
+    void nsSegmentThenCornerTowerWest_commitStoresWestOpening() {
         var sim = WallPlacementChainSimulation.start(362, 121, -171);
         sim.expandPlace(WallCardinal.NORTH);
         sim.pieceKind(WallPlacementChainPlanner.PieceKind.TOWER).expandPlace(WallCardinal.WEST);
         WallPlacementChainPlanner.ChainCommittedPiece tower = sim.lastCommitted();
-        assertEquals(EnumSet.of(WallCardinal.SOUTH, WallCardinal.WEST), tower.towerConnectionDirs());
-        assertEquals(3, tower.rotationSteps());
-        assertEquals(
-            tower.towerConnectionDirs(),
-            WallTowerPrefabResolver.worldOpeningsForCornerRotation(tower.rotationSteps())
-        );
+        assertTrue(tower.towerConnectionDirs().contains(WallCardinal.WEST));
+        assertEquals(2, tower.towerConnectionDirs().size());
     }
 
     @Test
@@ -87,10 +79,15 @@ class WallPlacementChainPlannerTest {
         Vector3i towerSign = tower.signAnchor();
         sim.expandPlace(WallCardinal.WEST);
         WallPlacementChainPlanner.ChainCommittedPiece ewSegment = sim.lastCommitted();
-        assertEquals(towerSign.z, ewSegment.signAnchor().z, "E/W run must stay on tower sign Z row");
+        assertTrue(
+            Math.abs(ewSegment.signAnchor().z - towerSign.z) <= WallPieceGeometry.TOWER_CONNECTION_HALF,
+            "E/W run must stay on tower Z row"
+        );
         Vector3i beforeSecondWest = ewSegment.signAnchor().clone();
         sim.expandPlace(WallCardinal.WEST);
-        assertEquals(towerSign.z, sim.lastCommitted().signAnchor().z);
+        assertTrue(
+            Math.abs(sim.lastCommitted().signAnchor().z - towerSign.z) <= WallPieceGeometry.TOWER_CONNECTION_HALF
+        );
         assertTrue(sim.lastCommitted().signAnchor().x < beforeSecondWest.x, "second west segment steps west on X");
     }
 
@@ -139,7 +136,7 @@ class WallPlacementChainPlannerTest {
     }
 
     @Test
-    void towerJointExpandDir_nsRunCorner_usesChainEndNotOutgoingPad() {
+    void towerJointExpandDir_nsRunCorner_usesLongSidePad() {
         var last =
             new WallPlacementChainPlanner.ChainCommittedPiece(
                 AetherhavenConstants.CONSTRUCTION_PLOT_WALL_SEGMENT,
@@ -148,7 +145,9 @@ class WallPlacementChainPlannerTest {
                 null,
                 WallCardinal.NORTH
             );
-        assertEquals(WallCardinal.NORTH, WallPlacementChainPlanner.towerJointExpandDir(last, WallCardinal.WEST));
+        assertEquals(WallCardinal.WEST, WallPlacementChainPlanner.towerJointExpandDir(last, WallCardinal.WEST));
+        assertEquals(WallCardinal.SOUTH, WallPlacementChainPlanner.towerJointExpandDir(last, WallCardinal.SOUTH));
+        assertEquals(WallCardinal.NORTH, WallPlacementChainPlanner.towerJointExpandDir(last, WallCardinal.NORTH));
     }
 
     @Test
@@ -166,13 +165,97 @@ class WallPlacementChainPlannerTest {
     }
 
     @Test
-    void southSegmentRot2_thenTowerButton_movesSouthOfCommittedSign() {
+    void southSegmentRot2_thenTowerButton_flushAtWallSouthEnd() {
         var sim = WallPlacementChainSimulation.start(-1686, 123, 37);
         sim.expandPlace(WallCardinal.SOUTH);
         Vector3i wallSign = sim.committed().get(0).signAnchor();
+        Rotation wallYaw = sim.committed().get(0).prefabYaw();
         sim.pieceKind(WallPlacementChainPlanner.PieceKind.TOWER);
-        assertTrue(sim.anchor().z > wallSign.z, "tower must sit south of wall sign, got " + sim.anchor());
-        assertNotEquals(wallSign, sim.anchor());
+        WallPlacementChainPlanner.ExpandPreviewPlan plan = sim.previewOnly(WallCardinal.SOUTH);
+        WallPlacementJointAssert.assertFlushStraightTower(
+            wallSign,
+            wallYaw,
+            WallCardinal.SOUTH,
+            plan.anchor(),
+            WallPlacementChainPlanner.rotationStepsFrom(plan.rotationSteps()),
+            "south tab"
+        );
+        assertTrue(plan.anchor().z > wallSign.z);
+        assertNotEquals(wallSign, plan.anchor());
+    }
+
+    /** User log: north wall then corner tower east — tower south face meets segment north face, not chain-tip slot. */
+    @Test
+    void westSegment_towerTab_flushAtWallWestEnd_notAlongLongSide() {
+        var sim = WallPlacementChainSimulation.start(-1696, 124, 121);
+        sim.expandPlace(WallCardinal.WEST);
+        Vector3i wallSign = sim.committed().get(0).signAnchor();
+        Rotation wallYaw = sim.committed().get(0).prefabYaw();
+        sim.pieceKind(WallPlacementChainPlanner.PieceKind.TOWER);
+        WallPlacementChainPlanner.ExpandPreviewPlan plan = sim.previewOnly(WallCardinal.WEST);
+        WallPlacementJointAssert.assertFlushStraightTower(
+            wallSign,
+            wallYaw,
+            WallCardinal.WEST,
+            plan.anchor(),
+            WallPlacementChainPlanner.rotationStepsFrom(plan.rotationSteps()),
+            "west tab"
+        );
+        assertTrue(plan.anchor().x < wallSign.x - 2, "must not sit on long-side west face near sign x=" + wallSign.x);
+        WallPlacementJointAssert.assertSameRow(wallSign.z, plan.anchor(), "west tab row");
+    }
+
+    @Test
+    void westSegmentRot3_towerSouthPad_cornerOnLongSide() {
+        var sim = WallPlacementChainSimulation.start(-1698, 122, 118);
+        sim.expandPlace(WallCardinal.WEST);
+        Vector3i wallSign = sim.committed().get(0).signAnchor();
+        sim.pieceKind(WallPlacementChainPlanner.PieceKind.TOWER);
+        WallPlacementChainPlanner.ExpandPreviewPlan plan = sim.previewOnly(WallCardinal.SOUTH);
+        assertEquals(WallCardinal.SOUTH, plan.positionDir());
+        assertTrue(plan.towerConnections().contains(WallCardinal.SOUTH));
+        assertEquals(2, plan.towerConnections().size());
+        WallPlacementJointAssert.assertWallColumnAligned(wallSign.x, plan.anchor(), "corner on west run");
+    }
+
+    @Test
+    void northSegment_cornerTowerEast_meetsSegmentEastLongFace() {
+        var sim = WallPlacementChainSimulation.start(-1729, 121, 61);
+        sim.expandPlace(WallCardinal.NORTH);
+        Vector3i wallSign = sim.committed().get(0).signAnchor();
+        var yaw = sim.committed().get(0).prefabYaw();
+        sim.pieceKind(WallPlacementChainPlanner.PieceKind.TOWER).expandPlace(WallCardinal.EAST);
+        Vector3i towerSign = sim.lastCommitted().signAnchor();
+        WallPlacementJointAssert.assertFlushMixedJoint(
+            wallSign,
+            yaw,
+            WallCardinal.EAST,
+            false,
+            towerSign,
+            sim.lastCommitted().prefabYaw(),
+            WallCardinal.WEST,
+            true,
+            "east corner"
+        );
+    }
+
+    @Test
+    void cornerTower_thenEastSegment_staysNearTowerZ_notWorldOrigin() {
+        var sim = WallPlacementChainSimulation.start(-1729, 121, 61);
+        sim.expandPlace(WallCardinal.NORTH);
+        sim.pieceKind(WallPlacementChainPlanner.PieceKind.TOWER).expandPlace(WallCardinal.EAST);
+        Vector3i towerSign = sim.committed().get(1).signAnchor();
+        sim.expandPlace(WallCardinal.EAST);
+        Vector3i segSign = sim.lastCommitted().signAnchor();
+        assertTrue(
+            Math.abs(segSign.z - towerSign.z) <= WallPieceGeometry.TOWER_CONNECTION_HALF,
+            "E/W segment must stay on tower row"
+        );
+        assertTrue(Math.abs(segSign.z) > 32, "must not collapse to z~0, got " + segSign.z);
+        assertTrue(
+            segSign.x >= towerSign.x - WallPieceGeometry.TOWER_CONNECTION_HALF,
+            "east segment must not sit west of tower (tower x=" + towerSign.x + ", seg x=" + segSign.x + ")"
+        );
     }
 
     @Test

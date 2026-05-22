@@ -47,7 +47,11 @@ public final class WallPlacementChainSimulation {
     public WallPlacementChainSimulation expandPlace(@Nonnull WallCardinal outgoing) {
         WallPlacementChainPlanner.ExpandPreviewPlan plan =
             WallPlacementChainPlanner.planExpandPreview(
-                currentAnchor, currentRotationSteps, pieceKind, committed, outgoing
+                currentAnchor,
+                currentRotationSteps,
+                pieceKind,
+                committed,
+                outgoing
             );
         applyPlan(plan);
         committed.add(
@@ -85,7 +89,7 @@ public final class WallPlacementChainSimulation {
                 : outgoing;
         currentAnchor =
             WallPlacementChainPlanner.computeChainedSignAnchor(
-                last, newRotationSteps, newYaw, positionDir, outgoing, newIsTower, pieceKind, null
+                last, newRotationSteps, newYaw, positionDir, outgoing, newIsTower, pieceKind, null, null
             );
         currentRotationSteps = newRotationSteps;
         lastExpandDir = outgoing;
@@ -97,7 +101,11 @@ public final class WallPlacementChainSimulation {
     public WallPlacementChainPlanner.ExpandPreviewPlan previewOnly(@Nonnull WallCardinal outgoing) {
         WallPlacementChainPlanner.ExpandPreviewPlan plan =
             WallPlacementChainPlanner.planExpandPreview(
-                currentAnchor, currentRotationSteps, pieceKind, committed, outgoing
+                currentAnchor,
+                currentRotationSteps,
+                pieceKind,
+                committed,
+                outgoing
             );
         applyPlan(plan);
         return plan;

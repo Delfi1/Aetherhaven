@@ -1,8 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.wall.WallCardinal;
 import com.hexvane.aetherhaven.wall.WallPieceGeometry;
 import com.hexvane.aetherhaven.wall.WallPlacementChainPlanner;
@@ -253,6 +251,7 @@ public final class WallPlacementSession {
             return;
         }
         this.pieceKind = pieceKind;
+        clearBirdsEyeSnapshot();
         if (pieceKind != PieceKind.TOWER) {
             towerConnections.clear();
         } else {
@@ -282,52 +281,24 @@ public final class WallPlacementSession {
      * this; use the Place button to commit.
      */
     public void previewExpandDirection(@Nonnull WallCardinal expandDir) {
-        lastExpandDir = expandDir;
-        placementExpandDir = expandDir;
         CommittedStep last = getLastCommitted();
         if (last == null) {
+            lastExpandDir = expandDir;
+            placementExpandDir = expandDir;
             currentRotationSteps = expandDir.rotationStepsForLocalNorthAlongAxis();
             arrivalFromSide = null;
             return;
         }
-        WallPlacementChainPlanner.PieceKind plannerKind = toPlannerPieceKind(pieceKind);
-        WallPlacementChainPlanner.ChainCommittedPiece plannerLast = toPlannerPiece(last);
-        WallPlacementChainPlanner.ChainCommittedPiece plannerPrev =
-            getPreviousCommitted() == null ? null : toPlannerPiece(getPreviousCommitted());
-        boolean newIsTower = pieceKind == PieceKind.TOWER;
-        WallCardinal positionDir =
-            newIsTower && !WallPieceGeometry.isTowerConstructionId(last.constructionId)
-                ? WallPlacementChainPlanner.towerJointExpandDir(plannerLast, expandDir)
-                : expandDir;
-
-        int rotationSteps =
-            WallPlacementChainPlanner.rotationStepsForChainAfter(plannerKind, plannerLast, plannerPrev, expandDir);
-        Rotation newYaw = rotationStepsFrom(rotationSteps);
-
-        towerConnections.clear();
-        if (newIsTower) {
-            Vector3i probeAnchor =
-                computeChainedSignAnchor(last, rotationSteps, newYaw, positionDir, expandDir, true);
-            towerConnections.addAll(
-                WallPlacementChainPlanner.towerConnectionsForOutgoing(probeAnchor, last.signAnchor, expandDir)
-            );
-            applyTowerResolvedRotation();
-            rotationSteps = currentRotationSteps;
-            newYaw = rotationStepsFrom(rotationSteps);
-        }
-
-        currentAnchor =
-            computeChainedSignAnchor(last, rotationSteps, newYaw, positionDir, expandDir, newIsTower);
-        currentRotationSteps = rotationSteps;
-        lastPositionDir = positionDir;
-        arrivalFromSide = positionDir.opposite();
-        if (newIsTower) {
-            towerConnections.clear();
-            towerConnections.addAll(
-                WallPlacementChainPlanner.towerConnectionsForOutgoing(currentAnchor, last.signAnchor, expandDir)
-            );
-            applyTowerResolvedRotation();
-        }
+        applyExpandPreviewPlan(
+            WallPlacementChainPlanner.planExpandPreview(
+                last.signAnchor.clone(),
+                last.rotationSteps,
+                toPlannerPieceKind(pieceKind),
+                toPlannerCommitted(),
+                expandDir,
+                null
+            )
+        );
     }
 
     private void applyExpandPreviewPlan(@Nonnull WallPlacementChainPlanner.ExpandPreviewPlan plan) {
@@ -406,16 +377,7 @@ public final class WallPlacementSession {
      * arrived; outgoing is the pad direction.
      */
     public void prepareTowerPlacementForClick(@Nonnull WallCardinal outgoingExpandDir) {
-        towerConnections.clear();
-        CommittedStep last = getLastCommitted();
-        if (last != null) {
-            towerConnections.addAll(
-                WallPlacementChainPlanner.towerConnectionsForOutgoing(
-                    currentAnchor, last.signAnchor, outgoingExpandDir
-                )
-            );
-        }
-        applyTowerResolvedRotation();
+        previewExpandDirection(outgoingExpandDir);
     }
 
     public void setPlacementExpandDir(@Nullable WallCardinal placementExpandDir) {
@@ -535,20 +497,30 @@ public final class WallPlacementSession {
         lastExpandDir = expandDir;
         CommittedStep last = getLastCommitted();
         if (last != null) {
+            if (pieceKind == PieceKind.TOWER) {
+                applyExpandPreviewPlan(
+                    WallPlacementChainPlanner.planExpandPreview(
+                        last.signAnchor.clone(),
+                        last.rotationSteps,
+                        toPlannerPieceKind(pieceKind),
+                        toPlannerCommitted(),
+                        expandDir,
+                        null
+                    )
+                );
+                return;
+            }
             int newRotationSteps = rotationStepsForChainAfter(last, expandDir);
             Rotation newYaw = rotationStepsFrom(newRotationSteps);
             currentAnchor =
                 computeChainedSignAnchor(
-                    last, newRotationSteps, newYaw, expandDir, expandDir, pieceKind == PieceKind.TOWER
+                    last, newRotationSteps, newYaw, expandDir, expandDir, false
                 );
             currentRotationSteps = newRotationSteps;
-            if (pieceKind == PieceKind.TOWER) {
-                applyTowerResolvedRotation();
-            }
             arrivalFromSide = expandDir.opposite();
             return;
         }
-        Vector3i delta = expandDir.rotateOffset(new Vector3i(0, 0, WallPieceGeometry.SEGMENT_CHAIN_SPAN));
+        Vector3i delta = expandDir.rotateOffset(new Vector3i(0, 0, WallPieceGeometry.segmentChainSpan()));
         currentAnchor = new Vector3i(currentAnchor.x + delta.x, currentAnchor.y, currentAnchor.z + delta.z);
         currentRotationSteps = expandDir.rotationStepsForLocalNorthAlongAxis();
         arrivalFromSide = expandDir.opposite();
@@ -556,7 +528,7 @@ public final class WallPlacementSession {
 
     /**
      * Straight wall/gate runs keep the previous yaw. After a tower, match the wall segment run before the tower.
-     * Tower pieces use {@link #applyTowerResolvedRotation()} from connection toggles.
+     * Tower previews use {@link WallPlacementChainPlanner#planExpandPreview} (rotation and anchor stay in sync).
      */
     private int rotationStepsForChainAfter(@Nonnull CommittedStep last, @Nonnull WallCardinal expandDir) {
         CommittedStep previous = getPreviousCommitted();
@@ -670,45 +642,9 @@ public final class WallPlacementSession {
             outgoingExpandDir,
             newPieceIsTower,
             toPlannerPieceKind(pieceKind),
-            (l, yaw, pos, tower, kind) -> computeFootprintJointSignAnchor(last, yaw, pos, tower)
+            null,
+            null
         );
-    }
-
-    @Nullable
-    private Vector3i computeFootprintJointSignAnchor(
-        @Nonnull CommittedStep last,
-        @Nonnull Rotation newYaw,
-        @Nonnull WallCardinal positionDir,
-        boolean newPieceIsTower
-    ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return null;
-        }
-        ConstructionDefinition fromDef = plugin.getConstructionCatalog().get(last.constructionId);
-        ConstructionDefinition newDef =
-            plugin.getConstructionCatalog().get(constructionIdForPiece(newPieceIsTower));
-        if (fromDef == null || newDef == null) {
-            return null;
-        }
-        boolean lastTower = WallPieceGeometry.isTowerConstructionId(last.constructionId);
-        // Segment→tower: geometry only (footprint probe collapses anchors). Tower→segment: footprint flush join.
-        if (!lastTower || newPieceIsTower) {
-            return null;
-        }
-        return WallPlacementChainUtil.nextSignPositionFootprint(
-            fromDef, last.signAnchor, last.getPrefabYaw(), newDef, newYaw, positionDir, true
-        );
-    }
-
-    @Nonnull
-    private String constructionIdForPiece(boolean newPieceIsTower) {
-        if (newPieceIsTower) {
-            return resolveConstructionId();
-        }
-        return pieceKind.fixedConstructionId != null
-            ? pieceKind.fixedConstructionId
-            : AetherhavenConstants.CONSTRUCTION_PLOT_WALL_SEGMENT;
     }
 
     @Nonnull
