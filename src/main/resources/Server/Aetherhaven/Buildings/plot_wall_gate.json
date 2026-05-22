@@ -12,8 +12,8 @@
   "excludeFromTownJournal": true,
   "wallSegment": true,
   "materials": [
-    { "itemId": "Rock_Stone_Cobble", "count": 88 },
-    { "itemId": "Rock_Stone_Brick", "count": 38 },
-    { "itemId": "Wood_Softwood_Planks", "count": 18 }
+    { "itemId": "Rock_Stone_Cobble", "count": 200 },
+    { "itemId": "Rock_Stone_Brick", "count": 100 },
+    { "itemId": "Wood_Softwood_Planks", "count": 32 }
   ]
 }

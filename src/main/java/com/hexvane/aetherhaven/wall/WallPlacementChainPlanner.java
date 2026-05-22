@@ -484,6 +484,14 @@ public final class WallPlacementChainPlanner {
                 allowed.retainAll(forward);
                 return;
             }
+            if (last.towerConnectionDirs().size() == 1 && last.chainExpandDir() != null) {
+                EnumSet<WallCardinal> exits = EnumSet.allOf(WallCardinal.class);
+                if (back != null) {
+                    exits.remove(back);
+                }
+                allowed.retainAll(exits);
+                return;
+            }
         }
         if (last.chainExpandDir() != null) {
             allowed.retainAll(EnumSet.of(last.chainExpandDir()));

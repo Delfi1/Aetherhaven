@@ -132,6 +132,7 @@ public final class WallPlacementChainSimulation {
     /** Preview only (expand pad without place). */
     @Nonnull
     public WallPlacementChainPlanner.ExpandPreviewPlan previewOnly(@Nonnull WallCardinal outgoing) {
+        upgradeLastTowerForOutgoingPad(outgoing);
         WallPlacementChainPlanner.ExpandPreviewPlan plan =
             WallPlacementChainPlanner.planExpandPreview(
                 currentAnchor,

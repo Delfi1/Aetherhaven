@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import java.util.EnumSet;
@@ -78,7 +79,7 @@ class WallPlacementJointScenariosTest {
         WallPlacementJointAssert.assertFlushStraightTower(
             wallSign, wallYaw, WallCardinal.WEST, tower, towerYaw, "user west run"
         );
-        assertEquals(EnumSet.of(WallCardinal.EAST), plan.towerConnections(), "end cap, not E+W corner");
+        assertEquals(EnumSet.of(WallCardinal.EAST), plan.towerConnections(), "end cap toward wall, not N/S passage");
     }
 
     @ParameterizedTest(name = "{0}")
@@ -188,6 +189,22 @@ class WallPlacementJointScenariosTest {
         WallPlacementJointAssert.assertFlushStraightTower(
             wallSign, wallYaw, WallCardinal.NORTH, tower1, tower1Yaw, "wall north end cap"
         );
+    }
+
+    @org.junit.jupiter.api.Test
+    void endcapTower_upgradesConnectionsWhenContinuingAlongRun() {
+        var sim = WallPlacementChainSimulation.start(-1693, 122, 123);
+        sim.expandPlace(WallCardinal.WEST);
+        sim.pieceKind(WallPlacementChainPlanner.PieceKind.TOWER).expandPlace(WallCardinal.WEST);
+        var tower = sim.committed().get(1);
+        assertEquals(EnumSet.of(WallCardinal.EAST), tower.towerConnectionDirs());
+        assertEquals(AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_ENDCAP_S, tower.constructionId());
+
+        sim.expandPlace(WallCardinal.WEST);
+
+        tower = sim.committed().get(1);
+        assertEquals(EnumSet.of(WallCardinal.EAST, WallCardinal.WEST), tower.towerConnectionDirs());
+        assertEquals(AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_EASTDOOR_NS, tower.constructionId());
     }
 
     @org.junit.jupiter.api.Test

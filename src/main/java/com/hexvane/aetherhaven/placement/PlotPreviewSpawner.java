@@ -33,6 +33,10 @@ import javax.annotation.Nonnull;
  * Preview by spawning transient {@link BlockEntity} markers (same idea as the NPC spawn page block preview).
  * Builder paste previews send the full clipboard to the client; here we must cap server-spawned entities.
  * Large constructions (e.g. inn prefabs) exceed a few hundred solid blocks — a low cap only shows a fragment.
+ *
+ * <p>Hytale does not limit you to one prefab preview — {@link com.hypixel.hytale.server.npc.pages.EntitySpawnPage}
+ * keeps a single {@code modelPreview} ref by choice. Multiple ghosts are allowed; use {@link #append} after
+ * {@link #clear} when showing committed pieces plus the active placement ghost (e.g. wall wand chaining).
  */
 public final class PlotPreviewSpawner {
     /** Upper bound on preview block-entity count per refresh (large prefabs need thousands). */
@@ -75,10 +79,24 @@ public final class PlotPreviewSpawner {
         @Nonnull List<Ref<EntityStore>> outRefs
     ) {
         clear(store, outRefs);
+        append(store, anchor, prefabYaw, bufferAccess, outRefs);
+    }
+
+    /**
+     * Adds another prefab ghost without clearing {@code outRefs}. {@link #rebuild} clears first; call this for each
+     * additional piece in a multi-preview refresh (shared {@link #MAX_BLOCKS} budget across all appends).
+     */
+    public static void append(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Vector3i anchor,
+        @Nonnull Rotation prefabYaw,
+        @Nonnull IPrefabBuffer bufferAccess,
+        @Nonnull List<Ref<EntityStore>> outRefs
+    ) {
         Random random = new FastRandom();
         PrefabBufferCall call = new PrefabBufferCall(random, PrefabRotation.fromRotation(prefabYaw));
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
-        AtomicInteger spawned = new AtomicInteger();
+        AtomicInteger spawned = new AtomicInteger(outRefs.size());
         bufferAccess.forEach(
             IPrefabBuffer.iterateAllColumns(),
             (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {

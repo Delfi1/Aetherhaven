@@ -10,7 +10,6 @@ import com.hexvane.aetherhaven.placement.WallPlacementCameraUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
 import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
-import com.hexvane.aetherhaven.placement.PlotSignGrounding;
 import com.hexvane.aetherhaven.placement.WallPlacementDebug;
 import com.hexvane.aetherhaven.placement.WallPlacementRemoveService;
 import com.hexvane.aetherhaven.placement.WallPlacementSession;
@@ -40,6 +39,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -228,8 +228,16 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 schedulePlaceAndExpand(ref, store, expandDir);
                 return;
             }
-            case "MoveYm" -> session.nudgeY(-1);
-            case "MoveYp" -> session.nudgeY(1);
+            case "MoveYm" -> {
+                session.nudgeY(-1);
+                scheduleRefreshPreview(ref, store);
+                return;
+            }
+            case "MoveYp" -> {
+                session.nudgeY(1);
+                scheduleRefreshPreview(ref, store);
+                return;
+            }
             case "Place" -> {
                 schedulePlace(ref, store);
                 return;
@@ -564,7 +572,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 }
                 IPrefabBuffer stepBuf = PrefabBufferUtil.getCached(stepPath);
                 try {
-                    Vector3i origin = stepDef.resolvePrefabAnchorWorld(step.signAnchor, step.getPrefabYaw());
+                    Vector3i origin = step.ghostPrefabOriginWorld();
                     committedFps.add(PlotFootprintUtil.computeFootprint(origin, step.getPrefabYaw(), stepBuf));
                 } finally {
                     stepBuf.release();
@@ -584,7 +592,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
             if (session.shouldShowNextPiecePreview()) {
                 Vector3i currentOrigin =
                     def.resolvePrefabAnchorWorld(session.getCurrentAnchor(), session.getCurrentPrefabYaw());
-                PlotPreviewSpawner.rebuild(store, currentOrigin, session.getCurrentPrefabYaw(), buf, session.getPreviewEntityRefs());
+                PlotPreviewSpawner.append(store, currentOrigin, session.getCurrentPrefabYaw(), buf, session.getPreviewEntityRefs());
                 currentFp = PlotFootprintUtil.computeFootprint(currentOrigin, session.getCurrentPrefabYaw(), buf);
             }
             PlotFootprintRecord previousFp = null;
@@ -595,7 +603,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     if (lastPath != null) {
                         IPrefabBuffer lastBuf = PrefabBufferUtil.getCached(lastPath);
                         try {
-                            Vector3i lastOrigin = lastDef.resolvePrefabAnchorWorld(last.signAnchor, last.getPrefabYaw());
+                            Vector3i lastOrigin = last.ghostPrefabOriginWorld();
                             previousFp = PlotFootprintUtil.computeFootprint(lastOrigin, last.getPrefabYaw(), lastBuf);
                         } finally {
                             lastBuf.release();
@@ -628,8 +636,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
         IPrefabBuffer buf = PrefabBufferUtil.getCached(path);
         try {
-            Vector3i origin = def.resolvePrefabAnchorWorld(step.signAnchor, step.getPrefabYaw());
-            PlotPreviewSpawner.rebuild(store, origin, step.getPrefabYaw(), buf, refs);
+            PlotPreviewSpawner.append(store, step.ghostPrefabOriginWorld(), step.getPrefabYaw(), buf, refs);
         } finally {
             buf.release();
         }
@@ -643,7 +650,11 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 if (!ref.isValid()) {
                     return;
                 }
-                session.previewExpandDirection(dir);
+                boolean towerUpgraded = session.previewExpandDirection(dir);
+                if (towerUpgraded) {
+                    syncLastCommittedTowerPlot(ref, store);
+                    refreshCommittedTowerSign(ref, store);
+                }
                 logWallDebug(
                     ref,
                     store,
@@ -728,11 +739,11 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     && WallPieceGeometry.isTowerConstructionId(lastTowerStep.constructionId)
                     && lastTowerStep.towerConnectionDirs != null
                     && lastTowerStep.towerConnectionDirs.size() == 1) {
-                    boolean towerUpdated = session.applyOutgoingDirectionToLastTower(dir);
-                    if (towerUpdated) {
+                    if (session.upgradeLastCommittedTowerIfNeeded(dir)) {
                         syncLastCommittedTowerPlot(ref, store);
-                        session.previewExpandDirection(dir);
+                        refreshCommittedTowerSign(ref, store);
                     }
+                    session.previewExpandDirection(dir);
                 }
             }
         }
@@ -745,6 +756,25 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
             session.previewExpandDirection(dir);
         }
         return true;
+    }
+
+    private void refreshCommittedTowerSign(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        WallPlacementSession.CommittedStep last = session.getLastCommitted();
+        if (last == null || !WallPieceGeometry.isTowerConstructionId(last.constructionId)) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        PlotPlacementCommit.replacePlotSign(
+            world,
+            last.signAnchor.x,
+            last.signAnchor.y,
+            last.signAnchor.z,
+            last.getPrefabYaw(),
+            last.constructionId,
+            last.plotId,
+            store
+        );
+        scheduleRefreshPreview(ref, store);
     }
 
     private void syncLastCommittedTowerPlot(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -796,17 +826,11 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
             return false;
         }
         Vector3i previewAnchor = session.getCurrentAnchor();
+        int rotationSteps = session.getCurrentRotationSteps();
+        Vector3i placedSignPos = new Vector3i(previewAnchor.x, previewAnchor.y, previewAnchor.z);
+        Vector3i ghostOriginAtCommit =
+            WallPlacementSession.prefabOriginForSign(def, previewAnchor, rotationSteps);
         Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
-        Vector3i placedSignPos = previewAnchor;
-        if (prefabPath != null) {
-            IPrefabBuffer groundBuf = PrefabBufferUtil.getCached(prefabPath);
-            try {
-                placedSignPos =
-                    PlotSignGrounding.resolveSignCell(world, previewAnchor, def, session.getCurrentPrefabYaw(), groundBuf);
-            } finally {
-                groundBuf.release();
-            }
-        }
         String err =
             PlotPlacementValidator.validate(
                 world, tm, town, uc.getUuid(), previewAnchor, session.getCurrentPrefabYaw(), def, plugin
@@ -834,8 +858,9 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         if (prefabPath != null) {
             IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
             try {
-                Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(previewAnchor, session.getCurrentPrefabYaw());
-                PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getCurrentPrefabYaw(), buf);
+                Vector3i buildOrigin =
+                    WallPlacementSession.prefabOriginForSign(def, placedSignPos, rotationSteps);
+                PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(buildOrigin, session.getCurrentPrefabYaw(), buf);
                 PlotInstance inst =
                     new PlotInstance(
                         plotId,
@@ -859,11 +884,13 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 plotId,
                 consId,
                 placedSignPos,
-                session.getCurrentRotationSteps(),
+                rotationSteps,
                 session.towerConnectionsForCommit(),
-                session.chainExpandDirForCommit()
+                session.chainExpandDirForCommit(),
+                ghostOriginAtCommit
             )
         );
+        session.clearHeightManualAdjust();
         session.setPlacementExpandDir(null);
         if (WallPieceGeometry.isTowerConstructionId(consId)) {
             session.afterTowerCommittedSwitchToWall();

@@ -51,4 +51,19 @@ public final class PlotPlacementCommit {
         cs.putComponent(signRef, PlotSignBlock.getComponentType(), new PlotSignBlock(constructionId, plotId.toString()));
         return true;
     }
+
+    /** Replaces an existing plot sign (same cell) with a new construction id and placement yaw. */
+    public static boolean replacePlotSign(
+        @Nonnull World world,
+        int x,
+        int y,
+        int z,
+        @Nonnull Rotation prefabYaw,
+        @Nonnull String constructionId,
+        @Nonnull UUID plotId,
+        @Nonnull Store<EntityStore> entityStore
+    ) {
+        world.breakBlock(x, y, z, PLACE_SETTINGS);
+        return placePlotSign(world, x, y, z, prefabYaw, constructionId, plotId, entityStore);
+    }
 }

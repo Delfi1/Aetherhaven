@@ -1,9 +1,9 @@
 package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hexvane.aetherhaven.town.WallSegmentRecord;
 import com.hexvane.aetherhaven.town.WallSegmentRecord;
 import com.hexvane.aetherhaven.wall.WallCardinal;
 import com.hexvane.aetherhaven.wall.WallPieceGeometry;
@@ -53,13 +53,21 @@ public final class WallPlacementSession {
         @Nullable
         public final WallCardinal chainExpandDir;
 
+        /**
+         * Prefab buffer origin frozen when this step was committed (from the live preview anchor). Stored as ints so
+         * refresh never shares mutable {@link Vector3i} state with the active placement anchor.
+         */
+        public final int ghostOriginX;
+        public final int ghostOriginY;
+        public final int ghostOriginZ;
+
         public CommittedStep(
             @Nonnull UUID plotId,
             @Nonnull String constructionId,
             @Nonnull Vector3i signAnchor,
             int rotationSteps
         ) {
-            this(plotId, constructionId, signAnchor, rotationSteps, null, null);
+            this(plotId, constructionId, signAnchor, rotationSteps, null, null, signAnchor);
         }
 
         public CommittedStep(
@@ -69,7 +77,7 @@ public final class WallPlacementSession {
             int rotationSteps,
             @Nullable EnumSet<WallCardinal> towerConnectionDirs
         ) {
-            this(plotId, constructionId, signAnchor, rotationSteps, towerConnectionDirs, null);
+            this(plotId, constructionId, signAnchor, rotationSteps, towerConnectionDirs, null, signAnchor);
         }
 
         public CommittedStep(
@@ -80,15 +88,35 @@ public final class WallPlacementSession {
             @Nullable EnumSet<WallCardinal> towerConnectionDirs,
             @Nullable WallCardinal chainExpandDir
         ) {
+            this(plotId, constructionId, signAnchor, rotationSteps, towerConnectionDirs, chainExpandDir, signAnchor);
+        }
+
+        public CommittedStep(
+            @Nonnull UUID plotId,
+            @Nonnull String constructionId,
+            @Nonnull Vector3i signAnchor,
+            int rotationSteps,
+            @Nullable EnumSet<WallCardinal> towerConnectionDirs,
+            @Nullable WallCardinal chainExpandDir,
+            @Nonnull Vector3i ghostPrefabOriginWorld
+        ) {
             this.plotId = plotId;
             this.constructionId = constructionId;
-            this.signAnchor = signAnchor.clone();
+            this.signAnchor = new Vector3i(signAnchor.x, signAnchor.y, signAnchor.z);
             this.rotationSteps = rotationSteps;
             this.towerConnectionDirs =
                 towerConnectionDirs == null || towerConnectionDirs.isEmpty()
                     ? null
                     : EnumSet.copyOf(towerConnectionDirs);
             this.chainExpandDir = chainExpandDir;
+            this.ghostOriginX = ghostPrefabOriginWorld.x;
+            this.ghostOriginY = ghostPrefabOriginWorld.y;
+            this.ghostOriginZ = ghostPrefabOriginWorld.z;
+        }
+
+        @Nonnull
+        public Vector3i ghostPrefabOriginWorld() {
+            return new Vector3i(ghostOriginX, ghostOriginY, ghostOriginZ);
         }
 
         @Nonnull
@@ -155,6 +183,9 @@ public final class WallPlacementSession {
     private boolean seededContinueFromEdit;
 
     private boolean editContinueInFlight;
+
+    /** Set when the player uses Y nudge; keeps preview Y across expand-pad preview until the next place. */
+    private boolean heightManuallyAdjusted;
 
     private static boolean defaultDebugLogging = true;
 
@@ -314,8 +345,11 @@ public final class WallPlacementSession {
     /**
      * Picks where the current preview piece will sit relative to the last commit (does not place). Expand pads call
      * this; use the Place button to commit.
+     *
+     * @return true when a single-connection tower was upgraded to a two-face tower for {@code expandDir}
      */
-    public void previewExpandDirection(@Nonnull WallCardinal expandDir) {
+    public boolean previewExpandDirection(@Nonnull WallCardinal expandDir) {
+        boolean towerUpgraded = upgradeLastCommittedTowerIfNeeded(expandDir);
         seededContinueFromEdit = false;
         CommittedStep last = getLastCommitted();
         if (last == null) {
@@ -336,7 +370,7 @@ public final class WallPlacementSession {
                 currentRotationSteps = expandDir.rotationStepsForLocalNorthAlongAxis();
                 arrivalFromSide = null;
             }
-            return;
+            return towerUpgraded;
         }
         applyExpandPreviewPlan(
             WallPlacementChainPlanner.planExpandPreview(
@@ -348,10 +382,24 @@ public final class WallPlacementSession {
                 null
             )
         );
+        return towerUpgraded;
+    }
+
+    /**
+     * After a straight end-cap tower is committed, the next expand pad adds the outgoing face and swaps the plot to the
+     * matching corner or run-through tower (before the following wall/gate is placed).
+     */
+    public boolean upgradeLastCommittedTowerIfNeeded(@Nonnull WallCardinal outgoingExpandDir) {
+        if (pieceKind == PieceKind.TOWER) {
+            return false;
+        }
+        return applyOutgoingDirectionToLastTower(outgoingExpandDir);
     }
 
     private void applyExpandPreviewPlan(@Nonnull WallPlacementChainPlanner.ExpandPreviewPlan plan) {
+        int previewY = currentAnchor.y;
         currentAnchor = plan.anchor().clone();
+        currentAnchor = new Vector3i(currentAnchor.x, previewY, currentAnchor.z);
         currentRotationSteps = plan.rotationSteps();
         lastExpandDir = plan.outgoingExpandDir();
         placementExpandDir = plan.outgoingExpandDir();
@@ -409,7 +457,9 @@ public final class WallPlacementSession {
             return false;
         }
         EnumSet<WallCardinal> pair =
-            WallTowerAutoConnector.connectionsForCorner(last.towerConnectionDirs, outgoingExpandDir);
+            WallTowerAutoConnector.connectionsForCorner(
+                EnumSet.copyOf(last.towerConnectionDirs), outgoingExpandDir
+            );
         WallTowerPrefabResolver.ResolvedTower resolved = WallTowerAutoConnector.resolve(pair);
         if (resolved == null) {
             return false;
@@ -423,7 +473,8 @@ public final class WallPlacementSession {
                 last.signAnchor,
                 resolved.rotationSteps(),
                 pair,
-                last.chainExpandDir
+                last.chainExpandDir,
+                last.ghostPrefabOriginWorld()
             )
         );
         return true;
@@ -619,6 +670,15 @@ public final class WallPlacementSession {
 
     public void nudgeY(int dy) {
         currentAnchor = new Vector3i(currentAnchor.x, currentAnchor.y + dy, currentAnchor.z);
+        heightManuallyAdjusted = true;
+    }
+
+    public void clearHeightManualAdjust() {
+        heightManuallyAdjusted = false;
+    }
+
+    public boolean isHeightManuallyAdjusted() {
+        return heightManuallyAdjusted;
     }
 
     @Nonnull
@@ -801,14 +861,13 @@ public final class WallPlacementSession {
                 WallPieceGeometry.isTowerConstructionId(plot.getConstructionId())
                     ? WallTowerPrefabResolver.connectionsForPlacedTower(plot.getConstructionId(), rot)
                     : null;
-            return new CommittedStep(
-                plotId,
-                plot.getConstructionId(),
-                new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ()),
-                rot,
-                towerDirs,
-                null
-            );
+            Vector3i sign = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
+            ConstructionDefinition def = resolveConstructionDef(plot.getConstructionId());
+            Vector3i origin =
+                def != null
+                    ? prefabOriginForSign(def, sign, rot)
+                    : sign;
+            return new CommittedStep(plotId, plot.getConstructionId(), sign, rot, towerDirs, null, origin);
         }
         if (segmentId != null) {
             WallSegmentRecord seg = town.findWallSegmentById(segmentId);
@@ -826,16 +885,23 @@ public final class WallPlacementSession {
                 WallPieceGeometry.isTowerConstructionId(seg.getConstructionId())
                     ? WallTowerPrefabResolver.connectionsForPlacedTower(seg.getConstructionId(), rot)
                     : null;
-            return new CommittedStep(
-                segmentId,
-                seg.getConstructionId(),
-                sign,
-                rot,
-                towerDirs,
-                null
-            );
+            ConstructionDefinition def = resolveConstructionDef(seg.getConstructionId());
+            Vector3i origin =
+                def != null
+                    ? prefabOriginForSign(def, sign, rot)
+                    : sign;
+            return new CommittedStep(segmentId, seg.getConstructionId(), sign, rot, towerDirs, null, origin);
         }
         return null;
+    }
+
+    @Nullable
+    private static ConstructionDefinition resolveConstructionDef(@Nonnull String constructionId) {
+        com.hexvane.aetherhaven.AetherhavenPlugin plugin = com.hexvane.aetherhaven.AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        return plugin.getConstructionCatalog().get(constructionId);
     }
 
     public boolean isRemoveConfirmOpen() {
@@ -912,8 +978,19 @@ public final class WallPlacementSession {
     @Nonnull
     private WallPlacementChainPlanner.ChainCommittedPiece toPlannerPiece(@Nonnull CommittedStep step) {
         return new WallPlacementChainPlanner.ChainCommittedPiece(
-            step.constructionId, step.signAnchor, step.rotationSteps, step.towerConnectionDirs, step.chainExpandDir
+            step.constructionId,
+            step.signAnchor.clone(),
+            step.rotationSteps,
+            step.towerConnectionDirs,
+            step.chainExpandDir
         );
+    }
+
+    @Nonnull
+    public static Vector3i prefabOriginForSign(
+        @Nonnull ConstructionDefinition def, @Nonnull Vector3i signAnchor, int rotationSteps
+    ) {
+        return def.resolvePrefabAnchorWorld(signAnchor, rotationStepsFrom(rotationSteps));
     }
 
     @Nonnull
