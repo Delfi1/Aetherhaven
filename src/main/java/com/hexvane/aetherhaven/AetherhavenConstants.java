@@ -25,6 +25,30 @@ public final class AetherhavenConstants {
 
     public static final String PLOT_PLACEMENT_TOOL_ITEM_ID = "Aetherhaven_Plot_Placement_Tool";
 
+    public static final String WALL_WAND_ITEM_ID = "Aetherhaven_Wall_Wand";
+
+    public static final String PAGE_WALL_PLACEMENT = "AetherhavenWallPlacement";
+
+    public static final String PAGE_WALL_EDIT = "AetherhavenWallEdit";
+
+    public static final String CONSTRUCTION_PLOT_WALL_SEGMENT = "plot_wall_segment";
+
+    public static final String CONSTRUCTION_PLOT_WALL_GATE = "plot_wall_gate";
+
+    public static final String CONSTRUCTION_PLOT_WALL_TOWER_EASTDOOR_NS = "plot_wall_tower_eastdoor_ns";
+
+    public static final String CONSTRUCTION_PLOT_WALL_TOWER_EASTDOOR_SW = "plot_wall_tower_eastdoor_sw";
+
+    public static final String CONSTRUCTION_PLOT_WALL_TOWER_ENDCAP_S = "plot_wall_tower_endcap_s";
+
+    public static final String CONSTRUCTION_PLOT_WALL_TOWER_OUTERCORNER_SE = "plot_wall_tower_outercorner_se";
+
+    public static final String TOKEN_WALL_SEGMENT = "Aetherhaven_Token_Wall";
+
+    public static final String TOKEN_WALL_GATE = "Aetherhaven_Token_Wall_Gate";
+
+    public static final String TOKEN_WALL_TOWER = "Aetherhaven_Token_Wall_Tower";
+
     /**
      * Plot sign blocks sit this many cells above the logical anchor used for prefab placement math
      * ({@link com.hexvane.aetherhaven.construction.ConstructionDefinition#resolvePrefabAnchorWorld}). Raises the sign

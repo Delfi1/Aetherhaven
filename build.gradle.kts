@@ -28,6 +28,9 @@ dependencies {
     compileOnly(libs.jspecify)
     compileOnly(dynamicTooltipsLib)
     runtimeOnly(dynamicTooltipsLib)
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 /**
@@ -129,6 +132,65 @@ tasks.named<Jar>("sourcesJar") {
 
 tasks.withType<JavaCompile>().configureEach {
     options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:removal", "-Xlint:unchecked"))
+}
+
+tasks.test {
+    useJUnitPlatform {
+        includeTags("wall-placement")
+    }
+    testLogging {
+        events("passed", "failed", "skipped")
+        showStandardStreams = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+}
+
+/** Wall wand directional tests; writes build/wall-placement-test-report.txt */
+tasks.register<Test>("wallPlacementTests") {
+    group = "verification"
+    description = "Runs wall placement chaining unit tests; report at build/wall-placement-test-report.txt"
+    dependsOn(tasks.testClasses)
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+    useJUnitPlatform {
+        includeTags("wall-placement")
+    }
+    val reportFile = layout.buildDirectory.file("wall-placement-test-report.txt")
+    doFirst {
+        reportFile.get().asFile.parentFile.mkdirs()
+        reportFile.get().asFile.writeText("Wall placement chain tests\n${"=".repeat(60)}\n")
+    }
+    val listener =
+        object : org.gradle.api.tasks.testing.TestListener {
+            override fun beforeSuite(suite: org.gradle.api.tasks.testing.TestDescriptor) {}
+
+            override fun afterSuite(suite: org.gradle.api.tasks.testing.TestDescriptor, result: org.gradle.api.tasks.testing.TestResult) {
+                if (suite.parent == null) {
+                    reportFile.get().asFile.appendText(
+                        "\nTotal: ${result.testCount}  passed: ${result.successfulTestCount}  failed: ${result.failedTestCount}  skipped: ${result.skippedTestCount}\n"
+                    )
+                }
+            }
+
+            override fun beforeTest(testDescriptor: org.gradle.api.tasks.testing.TestDescriptor) {}
+
+            override fun afterTest(testDescriptor: org.gradle.api.tasks.testing.TestDescriptor, result: org.gradle.api.tasks.testing.TestResult) {
+                val line =
+                    "${result.resultType}: ${testDescriptor.className}.${testDescriptor.name}\n"
+                reportFile.get().asFile.appendText(line)
+                if (result.resultType == org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE) {
+                    reportFile.get().asFile.appendText(result.exceptions.joinToString("\n") { it.toString() } + "\n")
+                }
+            }
+        }
+    addTestListener(listener)
+    testLogging {
+        events("passed", "failed", "skipped")
+        showStandardStreams = true
+    }
+    doLast {
+        logger.lifecycle("Wall placement test report: ${reportFile.get().asFile.absolutePath}")
+    }
 }
 
 tasks.named<ProcessResources>("processResources") {

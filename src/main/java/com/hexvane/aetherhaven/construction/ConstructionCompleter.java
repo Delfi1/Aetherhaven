@@ -16,9 +16,16 @@ import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
+import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.WallSegmentRecord;
+import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
+import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
+import java.nio.file.Path;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
@@ -79,9 +86,29 @@ public final class ConstructionCompleter {
 
         long now = System.currentTimeMillis();
         plot.clearAssemblyPersistence();
+        plot.setPrefabWorldPlacement(prefabAnchorWorld.x, prefabAnchorWorld.y, prefabAnchorWorld.z, prefabYaw);
+
+        if (def != null && def.isWallSegment()) {
+            PlotFootprintRecord fp = plot.toFootprint();
+            Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+            if (prefabPath != null) {
+                IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
+                try {
+                    fp = PlotFootprintUtil.computeFootprint(prefabAnchorWorld, prefabYaw, buf);
+                } finally {
+                    buf.release();
+                }
+            }
+            town.removePlotInstance(plotId);
+            town.addWallSegment(
+                new WallSegmentRecord(plotId, plot.getConstructionId(), fp, prefabAnchorWorld.x, prefabAnchorWorld.y, prefabAnchorWorld.z, prefabYaw, now)
+            );
+            tm.updateTown(town);
+            return;
+        }
+
         plot.setState(PlotInstanceState.COMPLETE);
         plot.setLastStateChangeEpochMs(now);
-        plot.setPrefabWorldPlacement(prefabAnchorWorld.x, prefabAnchorWorld.y, prefabAnchorWorld.z, prefabYaw);
         tm.updateTown(town);
 
         if (def != null) {

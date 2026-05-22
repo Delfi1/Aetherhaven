@@ -1,0 +1,906 @@
+package com.hexvane.aetherhaven.ui;
+
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
+import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
+import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
+import com.hexvane.aetherhaven.placement.WallPlacementCameraUtil;
+import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
+import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
+import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
+import com.hexvane.aetherhaven.placement.PlotSignGrounding;
+import com.hexvane.aetherhaven.placement.WallPlacementDebug;
+import com.hexvane.aetherhaven.placement.WallPlacementRemoveService;
+import com.hexvane.aetherhaven.placement.WallPlacementSession;
+import com.hexvane.aetherhaven.placement.WallPlacementSessions;
+import com.hexvane.aetherhaven.placement.WallPlacementWireframeOverlay;
+import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.PlotInstanceState;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.wall.WallCardinal;
+import com.hexvane.aetherhaven.wall.WallPieceGeometry;
+import com.hexvane.aetherhaven.wall.WallTowerPrefabResolver;
+import com.hypixel.hytale.codec.Codec;
+import com.hypixel.hytale.codec.KeyedCodec;
+import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
+import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
+import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
+import com.hypixel.hytale.server.core.ui.Value;
+import com.hypixel.hytale.server.core.ui.builder.EventData;
+import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
+import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<WallPlacementPage.PageData> {
+    static final String MSG = "aetherhaven_wall_placement.aetherhaven.ui.wallplacement";
+
+    @Nonnull
+    private final WallPlacementSession session;
+
+    private static final String WALL_UI = "Aetherhaven/WallPlacementPage.ui";
+    private static final ArrowButtonStyles STYLES_UP =
+        new ArrowButtonStyles(Value.ref(WALL_UI, "IconUpOnStyle"), Value.ref(WALL_UI, "IconUpOffStyle"));
+    private static final ArrowButtonStyles STYLES_DOWN =
+        new ArrowButtonStyles(Value.ref(WALL_UI, "IconDownOnStyle"), Value.ref(WALL_UI, "IconDownOffStyle"));
+    private static final ArrowButtonStyles STYLES_BACK =
+        new ArrowButtonStyles(Value.ref(WALL_UI, "IconBackOnStyle"), Value.ref(WALL_UI, "IconBackOffStyle"));
+    private static final ArrowButtonStyles STYLES_FWD =
+        new ArrowButtonStyles(Value.ref(WALL_UI, "IconFwdOnStyle"), Value.ref(WALL_UI, "IconFwdOffStyle"));
+
+    private float birdsEyeDistance = WallPlacementCameraUtil.DEFAULT_DISTANCE;
+    private int wireframeRefreshSerial;
+
+    public WallPlacementPage(@Nonnull PlayerRef playerRef, @Nonnull WallPlacementSession session) {
+        super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
+        this.session = session;
+    }
+
+    public static void applyLocalization(@Nonnull UICommandBuilder commandBuilder) {
+        String p = MSG;
+        commandBuilder.set("#WallPlacementTitle.TextSpans", Message.translation(p + ".title"));
+        commandBuilder.set("#Summary.TextSpans", Message.translation(p + ".summary"));
+        commandBuilder.set("#Tips.TextSpans", Message.translation(p + ".tips"));
+        commandBuilder.set("#EditHint.TextSpans", Message.translation(p + ".editHint"));
+        commandBuilder.set("#EditContinueButton.TextSpans", Message.translation(p + ".editContinue"));
+        commandBuilder.set("#EditRemoveButton.TextSpans", Message.translation(p + ".editRemove"));
+        commandBuilder.set("#EditCancelButton.TextSpans", Message.translation(p + ".editCancel"));
+        commandBuilder.set("#RemoveConfirmText.TextSpans", Message.translation(p + ".removeConfirm"));
+        commandBuilder.set("#RemoveConfirmButton.TextSpans", Message.translation(p + ".removeConfirmYes"));
+        commandBuilder.set("#RemoveConfirmBackButton.TextSpans", Message.translation(p + ".removeConfirmBack"));
+        commandBuilder.set("#BtnPieceWall.TextSpans", Message.translation(p + ".pieceWall"));
+        commandBuilder.set("#BtnPieceGate.TextSpans", Message.translation(p + ".pieceGate"));
+        commandBuilder.set("#BtnPieceTower.TextSpans", Message.translation(p + ".pieceTower"));
+        commandBuilder.set("#BackButton.TextSpans", Message.translation(p + ".undo"));
+        commandBuilder.set("#PlaceButton.TextSpans", Message.translation(p + ".place"));
+        commandBuilder.set("#CancelButton.TextSpans", Message.translation(p + ".cancel"));
+        commandBuilder.set("#BtnExpandZm.TooltipTextSpans", Message.translation(p + ".placeScreenUp"));
+        commandBuilder.set("#BtnExpandZp.TooltipTextSpans", Message.translation(p + ".placeScreenDown"));
+        commandBuilder.set("#BtnExpandXm.TooltipTextSpans", Message.translation(p + ".placeScreenLeft"));
+        commandBuilder.set("#BtnExpandXp.TooltipTextSpans", Message.translation(p + ".placeScreenRight"));
+        commandBuilder.set("#BtnYm.TooltipTextSpans", Message.translation(p + ".moveDown"));
+        commandBuilder.set("#BtnYp.TooltipTextSpans", Message.translation(p + ".moveUp"));
+        commandBuilder.set("#BtnViewZm.TooltipTextSpans", Message.translation(p + ".viewFromNorth"));
+        commandBuilder.set("#BtnViewXp.TooltipTextSpans", Message.translation(p + ".viewFromEast"));
+        commandBuilder.set("#BtnViewZp.TooltipTextSpans", Message.translation(p + ".viewFromSouth"));
+        commandBuilder.set("#BtnViewXm.TooltipTextSpans", Message.translation(p + ".viewFromWest"));
+    }
+
+    @Override
+    public void build(
+        @Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder, @Nonnull Store<EntityStore> store
+    ) {
+        commandBuilder.append("Aetherhaven/WallPlacementPage.ui");
+        applyLocalization(commandBuilder);
+        boolean editPrompt = session.hasEditTarget() && !session.isRemoveConfirmOpen();
+        boolean removeConfirm = session.isRemoveConfirmOpen();
+        commandBuilder.set("#EditGroup.Visible", editPrompt);
+        commandBuilder.set("#RemoveConfirmGroup.Visible", removeConfirm);
+        commandBuilder.set("#PieceTypeRow.Visible", !editPrompt && !removeConfirm);
+        commandBuilder.set("#BtnPieceTower.Disabled", !session.canPlaceTowerNow());
+        commandBuilder.set("#CameraPlotRow.Visible", !editPrompt && !removeConfirm);
+        commandBuilder.set("#RowYBack.Visible", !editPrompt && !removeConfirm);
+        commandBuilder.set("#RowActions.Visible", !editPrompt && !removeConfirm);
+        commandBuilder.set("#BirdsEyeDistanceSlider.Value", birdsEyeDistance);
+        commandBuilder.set("#BirdsEyeDistanceValue.TextSpans", Message.raw(String.format("%.0f", birdsEyeDistance)));
+        if (!editPrompt && !removeConfirm) {
+            applyViewSideButtons(commandBuilder);
+            applyExpandPadButtons(commandBuilder);
+        }
+
+        bind(eventBuilder, "#BtnPieceWall", "PieceWall");
+        bind(eventBuilder, "#BtnPieceGate", "PieceGate");
+        bind(eventBuilder, "#BtnPieceTower", "PieceTower");
+        bind(eventBuilder, "#BtnExpandZm", "ExpandZm");
+        bind(eventBuilder, "#BtnExpandXm", "ExpandXm");
+        bind(eventBuilder, "#BtnExpandXp", "ExpandXp");
+        bind(eventBuilder, "#BtnExpandZp", "ExpandZp");
+        bind(eventBuilder, "#BtnYm", "MoveYm");
+        bind(eventBuilder, "#BtnYp", "MoveYp");
+        bind(eventBuilder, "#BackButton", "Back");
+        bind(eventBuilder, "#PlaceButton", "Place");
+        bind(eventBuilder, "#CancelButton", "Cancel");
+        bind(eventBuilder, "#BtnZoomOut", "ZoomOut");
+        bind(eventBuilder, "#BtnZoomIn", "ZoomIn");
+        bind(eventBuilder, "#BtnViewXm", "ViewXm");
+        bind(eventBuilder, "#BtnViewXp", "ViewXp");
+        bind(eventBuilder, "#BtnViewZm", "ViewZm");
+        bind(eventBuilder, "#BtnViewZp", "ViewZp");
+        bind(eventBuilder, "#EditContinueButton", "EditContinue");
+        bind(eventBuilder, "#EditRemoveButton", "EditRemove");
+        bind(eventBuilder, "#EditCancelButton", "EditCancel");
+        bind(eventBuilder, "#RemoveConfirmButton", "RemoveConfirm");
+        bind(eventBuilder, "#RemoveConfirmBackButton", "RemoveConfirmBack");
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#BirdsEyeDistanceSlider",
+            EventData.of("@BirdsEyeDistance", "#BirdsEyeDistanceSlider.Value"),
+            false
+        );
+
+        scheduleRefreshPreview(ref, store);
+        scheduleApplyCamera(ref, store);
+    }
+
+    @Override
+    public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        super.onDismiss(ref, store);
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+                if (pr != null) {
+                    PlotPlacementCameraUtil.resetToPlayerCamera(pr);
+                }
+            }
+        );
+    }
+
+    @Override
+    public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.birdsEyeDistance != null) {
+            birdsEyeDistance =
+                Math.max(
+                    WallPlacementCameraUtil.MIN_DISTANCE,
+                    Math.min(WallPlacementCameraUtil.MAX_DISTANCE, data.birdsEyeDistance)
+                );
+            scheduleApplyCameraAfterSlider(ref, store);
+            return;
+        }
+        if (data.action == null) {
+            return;
+        }
+        switch (data.action) {
+            case "PieceWall" -> {
+                session.setPieceKind(WallPlacementSession.PieceKind.SEGMENT);
+                scheduleRefreshPreview(ref, store);
+            }
+            case "PieceGate" -> {
+                session.setPieceKind(WallPlacementSession.PieceKind.GATE);
+                scheduleRefreshPreview(ref, store);
+            }
+            case "PieceTower" -> {
+                if (session.canPlaceTowerNow()) {
+                    session.setPieceKind(WallPlacementSession.PieceKind.TOWER);
+                    scheduleRefreshPreview(ref, store);
+                }
+            }
+            case "ExpandZm", "ExpandZp", "ExpandXm", "ExpandXp" -> {
+                WallCardinal expandDir = WallCardinal.fromExpandPad(data.action, session.getCameraViewFromSide());
+                if (!session.allowedExpandDirections().contains(expandDir)) {
+                    return;
+                }
+                schedulePlaceAndExpand(ref, store, expandDir);
+                return;
+            }
+            case "MoveYm" -> session.nudgeY(-1);
+            case "MoveYp" -> session.nudgeY(1);
+            case "Place" -> {
+                schedulePlace(ref, store);
+                return;
+            }
+            case "Back" -> scheduleUndo(ref, store);
+            case "Cancel" -> scheduleCancel(ref, store);
+            case "ViewZm" -> {
+                session.setCameraViewFromSide(WallCardinal.NORTH);
+                scheduleApplyCameraAndRebuild(ref, store);
+                return;
+            }
+            case "ViewZp" -> {
+                session.setCameraViewFromSide(WallCardinal.SOUTH);
+                scheduleApplyCameraAndRebuild(ref, store);
+                return;
+            }
+            case "ViewXm" -> {
+                session.setCameraViewFromSide(WallCardinal.WEST);
+                scheduleApplyCameraAndRebuild(ref, store);
+                return;
+            }
+            case "ViewXp" -> {
+                session.setCameraViewFromSide(WallCardinal.EAST);
+                scheduleApplyCameraAndRebuild(ref, store);
+                return;
+            }
+            case "ZoomOut" -> {
+                birdsEyeDistance = Math.min(WallPlacementCameraUtil.MAX_DISTANCE, birdsEyeDistance + 2f);
+                scheduleApplyCameraAndRebuild(ref, store);
+                return;
+            }
+            case "ZoomIn" -> {
+                birdsEyeDistance = Math.max(WallPlacementCameraUtil.MIN_DISTANCE, birdsEyeDistance - 2f);
+                scheduleApplyCameraAndRebuild(ref, store);
+                return;
+            }
+            case "EditContinue" -> {
+                session.setEditTargetPlotId(null);
+                session.setEditTargetSegmentId(null);
+            }
+            case "EditRemove" -> {
+                session.setRemoveConfirmOpen(true);
+            }
+            case "EditCancel" -> scheduleCancel(ref, store);
+            case "RemoveConfirm" -> scheduleRemoveTarget(ref, store);
+            case "RemoveConfirmBack" -> session.setRemoveConfirmOpen(false);
+            default -> {}
+        }
+        scheduleRebuild(ref, store);
+    }
+
+    public void refreshFootprintOverlayAfterDebugClear(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        refreshPreview(ref, store);
+    }
+
+    private void scheduleRebuild(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (ref.isValid()) {
+                    rebuild();
+                }
+            }
+        );
+    }
+
+    private void scheduleApplyCamera(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                session.clearBirdsEyeSnapshot();
+                captureBirdsEyeSnapshot(ref, store);
+                applyBirdsEyeCameraPacket(ref, store);
+            }
+        );
+    }
+
+    private void scheduleApplyCameraAndRebuild(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                applyBirdsEyeCameraPacket(ref, store);
+                rebuild();
+            }
+        );
+    }
+
+    private void scheduleApplyCameraAfterSlider(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (ref.isValid()) {
+                    applyBirdsEyeCameraPacket(ref, store);
+                    UICommandBuilder cmd = new UICommandBuilder();
+                    cmd.set("#BirdsEyeDistanceValue.TextSpans", Message.raw(String.format("%.0f", birdsEyeDistance)));
+                    sendUpdate(cmd, new UIEventBuilder(), false);
+                }
+            }
+        );
+    }
+
+    private void captureBirdsEyeSnapshot(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        Vector3i anchor = session.getCurrentAnchor();
+        if (plugin == null) {
+            session.setBirdsEyeSnapshot(anchor.x + 0.5, anchor.y + 0.5, anchor.z + 0.5);
+            return;
+        }
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(session.resolveConstructionId());
+        if (def == null) {
+            session.setBirdsEyeSnapshot(anchor.x + 0.5, anchor.y + 0.5, anchor.z + 0.5);
+            return;
+        }
+        Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+        if (prefabPath == null) {
+            session.setBirdsEyeSnapshot(anchor.x + 0.5, anchor.y + 0.5, anchor.z + 0.5);
+            return;
+        }
+        IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
+        try {
+            Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(anchor, session.getCurrentPrefabYaw());
+            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getCurrentPrefabYaw(), buf);
+            session.setBirdsEyeSnapshot(
+                (fp.getMinX() + fp.getMaxX() + 1) / 2.0,
+                (fp.getMinY() + fp.getMaxY() + 1) / 2.0,
+                (fp.getMinZ() + fp.getMaxZ() + 1) / 2.0
+            );
+        } finally {
+            buf.release();
+        }
+    }
+
+    private void applyBirdsEyeCameraPacket(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (!session.hasBirdsEyeSnapshot()) {
+            captureBirdsEyeSnapshot(ref, store);
+        }
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        if (pr == null || tc == null) {
+            return;
+        }
+        Vector3d p = tc.getPosition();
+        double fx = session.getBirdsEyeSnapshotX();
+        double fy = session.getBirdsEyeSnapshotY();
+        double fz = session.getBirdsEyeSnapshotZ();
+        WallPlacementCameraUtil.apply(
+            pr, birdsEyeDistance, session.getCameraViewFromSide(), p.x, p.y, p.z, fx, fy, fz
+        );
+    }
+
+    private void applyViewSideButtons(@Nonnull UICommandBuilder commandBuilder) {
+        WallCardinal active = session.getCameraViewFromSide();
+        applyArrowButton(commandBuilder, "#BtnViewZm", STYLES_UP, active == WallCardinal.NORTH);
+        applyArrowButton(commandBuilder, "#BtnViewZp", STYLES_DOWN, active == WallCardinal.SOUTH);
+        applyArrowButton(commandBuilder, "#BtnViewXm", STYLES_BACK, active == WallCardinal.WEST);
+        applyArrowButton(commandBuilder, "#BtnViewXp", STYLES_FWD, active == WallCardinal.EAST);
+    }
+
+    private void applyExpandPadButtons(@Nonnull UICommandBuilder commandBuilder) {
+        WallCardinal view = session.getCameraViewFromSide();
+        var allowed = session.allowedExpandDirections();
+        applyExpandPadButton(commandBuilder, "#BtnExpandZm", WallCardinal.screenUp(view), allowed.contains(WallCardinal.screenUp(view)));
+        applyExpandPadButton(commandBuilder, "#BtnExpandZp", WallCardinal.screenDown(view), allowed.contains(WallCardinal.screenDown(view)));
+        applyExpandPadButton(commandBuilder, "#BtnExpandXm", WallCardinal.screenLeft(view), allowed.contains(WallCardinal.screenLeft(view)));
+        applyExpandPadButton(commandBuilder, "#BtnExpandXp", WallCardinal.screenRight(view), allowed.contains(WallCardinal.screenRight(view)));
+    }
+
+    private void applyExpandPadButton(
+        @Nonnull UICommandBuilder commandBuilder, @Nonnull String selector, @Nonnull WallCardinal world, boolean enabled
+    ) {
+        commandBuilder.set(selector + ".Disabled", !enabled);
+        ArrowButtonStyles bright = expandPadStylesForScreenButton(selector);
+        applyArrowButton(commandBuilder, selector, bright, enabled);
+    }
+
+    @Nonnull
+    private static ArrowButtonStyles expandPadStylesForScreenButton(@Nonnull String selector) {
+        return switch (selector) {
+            case "#BtnExpandZm" -> STYLES_UP;
+            case "#BtnExpandZp" -> STYLES_DOWN;
+            case "#BtnExpandXp" -> STYLES_FWD;
+            default -> STYLES_BACK;
+        };
+    }
+
+    private static void applyArrowButton(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull String selector,
+        @Nonnull ArrowButtonStyles styles,
+        boolean selected
+    ) {
+        commandBuilder.set(selector + ".Style", selected ? styles.on : styles.off);
+    }
+
+    private record ArrowButtonStyles(@Nonnull Value<String> on, @Nonnull Value<String> off) {}
+
+    private void scheduleRefreshPreview(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        final int serial = ++wireframeRefreshSerial;
+        world.execute(
+            () -> {
+                if (!ref.isValid() || serial != wireframeRefreshSerial) {
+                    return;
+                }
+                refreshPreview(ref, store);
+            }
+        );
+    }
+
+    private void refreshPreview(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (session.hasEditTarget() || session.isRemoveConfirmOpen()) {
+            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        if (plugin == null) {
+            return;
+        }
+        session.applyTowerResolvedRotation();
+        String consId = session.resolveConstructionId();
+        if (session.getPieceKind() == WallPlacementSession.PieceKind.TOWER
+            && WallTowerPrefabResolver.resolve(session.getTowerConnections()) == null) {
+            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            if (pr != null) {
+                WallPlacementWireframeOverlay.clearFor(pr);
+            }
+            return;
+        }
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(consId);
+        if (def == null) {
+            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            return;
+        }
+        Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+        if (prefabPath == null) {
+            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        String err;
+        if (town == null) {
+            err = "need town";
+        } else if (!town.playerCanPlacePlots(uc.getUuid())) {
+            err = "permission";
+        } else {
+            err =
+                PlotPlacementValidator.validate(
+                    world, tm, town, uc.getUuid(), session.getCurrentAnchor(), session.getCurrentPrefabYaw(), def, plugin
+                );
+        }
+        boolean valid = err == null;
+        IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
+        try {
+            List<PlotFootprintRecord> committedFps = new ArrayList<>();
+            for (WallPlacementSession.CommittedStep step : session.getCommitted()) {
+                ConstructionDefinition stepDef = plugin.getConstructionCatalog().get(step.constructionId);
+                if (stepDef == null) {
+                    continue;
+                }
+                Path stepPath = PrefabResolveUtil.resolvePrefabPath(stepDef.getPrefabPath());
+                if (stepPath == null) {
+                    continue;
+                }
+                IPrefabBuffer stepBuf = PrefabBufferUtil.getCached(stepPath);
+                try {
+                    Vector3i origin = stepDef.resolvePrefabAnchorWorld(step.signAnchor, step.getPrefabYaw());
+                    committedFps.add(PlotFootprintUtil.computeFootprint(origin, step.getPrefabYaw(), stepBuf));
+                } finally {
+                    stepBuf.release();
+                }
+            }
+            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            for (WallPlacementSession.CommittedStep step : session.getCommitted()) {
+                spawnPreviewForStep(store, plugin, step, session.getPreviewEntityRefs());
+            }
+            WallPlacementSession.CommittedStep last = session.getLastCommitted();
+            Vector3i currentOrigin = def.resolvePrefabAnchorWorld(session.getCurrentAnchor(), session.getCurrentPrefabYaw());
+            PlotPreviewSpawner.rebuild(store, currentOrigin, session.getCurrentPrefabYaw(), buf, session.getPreviewEntityRefs());
+            PlotFootprintRecord currentFp = PlotFootprintUtil.computeFootprint(currentOrigin, session.getCurrentPrefabYaw(), buf);
+            PlotFootprintRecord previousFp = null;
+            if (last != null) {
+                ConstructionDefinition lastDef = plugin.getConstructionCatalog().get(last.constructionId);
+                if (lastDef != null) {
+                    Path lastPath = PrefabResolveUtil.resolvePrefabPath(lastDef.getPrefabPath());
+                    if (lastPath != null) {
+                        IPrefabBuffer lastBuf = PrefabBufferUtil.getCached(lastPath);
+                        try {
+                            Vector3i lastOrigin = lastDef.resolvePrefabAnchorWorld(last.signAnchor, last.getPrefabYaw());
+                            previousFp = PlotFootprintUtil.computeFootprint(lastOrigin, last.getPrefabYaw(), lastBuf);
+                        } finally {
+                            lastBuf.release();
+                        }
+                    }
+                }
+            }
+            if (pr != null) {
+                WallPlacementWireframeOverlay.send(pr, currentFp, valid, previousFp, town, committedFps);
+                PlotAssemblyPreviewSystem.repaintFrontierAfterExternalDebugClear(ref, store);
+            }
+        } finally {
+            buf.release();
+        }
+    }
+
+    private static void spawnPreviewForStep(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull WallPlacementSession.CommittedStep step,
+        @Nonnull List<Ref<EntityStore>> refs
+    ) {
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(step.constructionId);
+        if (def == null) {
+            return;
+        }
+        Path path = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+        if (path == null) {
+            return;
+        }
+        IPrefabBuffer buf = PrefabBufferUtil.getCached(path);
+        try {
+            Vector3i origin = def.resolvePrefabAnchorWorld(step.signAnchor, step.getPrefabYaw());
+            PlotPreviewSpawner.rebuild(store, origin, step.getPrefabYaw(), buf, refs);
+        } finally {
+            buf.release();
+        }
+    }
+
+    /** Places the current preview, then advances the preview along {@code dir} for the next piece. */
+    private void schedulePlaceAndExpand(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull WallCardinal dir) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                session.previewExpandDirection(dir);
+                logWallDebug(
+                    ref,
+                    store,
+                    "expandPad",
+                    "outgoing=" + dir + (session.getPieceKind() == WallPlacementSession.PieceKind.TOWER ? " (tower joint uses run end)" : "")
+                );
+                if (commitCurrentPlacement(ref, store, dir, true)) {
+                    logWallDebug(ref, store, "placedAndChained", "dir=" + dir);
+                    refreshPreview(ref, store);
+                }
+                rebuild();
+            }
+        );
+    }
+
+    /** Places the current preview without starting the next segment (for the last piece in a run). */
+    private void schedulePlace(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                WallCardinal dir = session.getPlacementExpandDir();
+                if (dir == null) {
+                    dir = session.getLastExpandDir();
+                }
+                logWallDebug(ref, store, "placeButton", dir == null ? "dir=-" : "dir=" + dir);
+                if (commitCurrentPlacement(ref, store, dir, false)) {
+                    logWallDebug(ref, store, "placedFinal", null);
+                    scheduleCancel(ref, store);
+                    return;
+                }
+                rebuild();
+            }
+        );
+    }
+
+    private void logWallDebug(
+        @Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull String event, @Nullable String detail
+    ) {
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        if (detail == null) {
+            WallPlacementDebug.logState(pr, session, event);
+        } else {
+            WallPlacementDebug.log(pr, session, event, detail + " | " + session.describeState());
+        }
+    }
+
+    /**
+     * @param chainAfter when true, moves the preview to the next slot along {@code dir} after a successful place
+     * @return whether placement succeeded
+     */
+    private boolean commitCurrentPlacement(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable WallCardinal dir,
+        boolean chainAfter
+    ) {
+        boolean placingTower = session.getPieceKind() == WallPlacementSession.PieceKind.TOWER;
+        WallPlacementSession.CommittedStep last = session.getLastCommitted();
+        boolean lastIsTower = last != null && WallPieceGeometry.isTowerConstructionId(last.constructionId);
+
+        if (dir == null && (placingTower || last != null)) {
+            sendError(store, ref, Message.translation(MSG + ".errorPickDirection"));
+            return false;
+        }
+
+        if (dir != null) {
+            session.setPlacementExpandDir(dir);
+            if (placingTower) {
+                session.prepareTowerPlacementForClick(dir);
+            } else if (lastIsTower) {
+                boolean towerUpdated = session.applyOutgoingDirectionToLastTower(dir);
+                if (towerUpdated) {
+                    syncLastCommittedTowerPlot(ref, store);
+                }
+            }
+        }
+
+        if (!tryPlace(ref, store)) {
+            logWallDebug(ref, store, "placeFailed", dir == null ? "dir=-" : "dir=" + dir);
+            return false;
+        }
+        if (chainAfter && dir != null) {
+            session.extendPreview(dir);
+        }
+        return true;
+    }
+
+    private void syncLastCommittedTowerPlot(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        WallPlacementSession.CommittedStep last = session.getLastCommitted();
+        if (plugin == null || uc == null || last == null || last.towerConnectionDirs == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        if (town == null) {
+            return;
+        }
+        PlotInstance plot = town.findPlotById(last.plotId);
+        if (plot == null) {
+            return;
+        }
+        plot.setConstructionId(last.constructionId);
+        plot.setPlacementPrefabYaw(last.getPrefabYaw());
+        tm.updateTown(town);
+    }
+
+    private boolean tryPlace(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return false;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return false;
+        }
+        if (session.getPieceKind() == WallPlacementSession.PieceKind.TOWER) {
+            session.applyTowerResolvedRotation();
+        }
+        String consId = session.resolveConstructionId();
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(consId);
+        if (def == null || !def.isWallSegment()) {
+            sendError(store, ref, Message.translation(MSG + ".errorUnknownPiece"));
+            return false;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        if (town == null) {
+            sendError(store, ref, Message.translation(MSG + ".errorNeedTown"));
+            return false;
+        }
+        if (!town.playerCanPlacePlots(uc.getUuid())) {
+            sendError(store, ref, Message.translation(MSG + ".errorPermission"));
+            return false;
+        }
+        Vector3i previewAnchor = session.getCurrentAnchor();
+        Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+        Vector3i placedSignPos = previewAnchor;
+        if (prefabPath != null) {
+            IPrefabBuffer groundBuf = PrefabBufferUtil.getCached(prefabPath);
+            try {
+                placedSignPos =
+                    PlotSignGrounding.resolveSignCell(world, previewAnchor, def, session.getCurrentPrefabYaw(), groundBuf);
+            } finally {
+                groundBuf.release();
+            }
+        }
+        String err =
+            PlotPlacementValidator.validate(
+                world, tm, town, uc.getUuid(), previewAnchor, session.getCurrentPrefabYaw(), def, plugin
+            );
+        if (err != null) {
+            sendError(store, ref, Message.raw(err));
+            return false;
+        }
+        UUID plotId = UUID.randomUUID();
+        boolean placed =
+            PlotPlacementCommit.placePlotSign(
+                world,
+                placedSignPos.x,
+                placedSignPos.y,
+                placedSignPos.z,
+                session.getCurrentPrefabYaw(),
+                consId,
+                plotId,
+                store
+            );
+        if (!placed) {
+            sendError(store, ref, Message.translation(MSG + ".errorBlocked"));
+            return false;
+        }
+        if (prefabPath != null) {
+            IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
+            try {
+                Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(previewAnchor, session.getCurrentPrefabYaw());
+                PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getCurrentPrefabYaw(), buf);
+                PlotInstance inst =
+                    new PlotInstance(
+                        plotId,
+                        consId,
+                        PlotInstanceState.BLUEPRINTING,
+                        fp,
+                        placedSignPos.x,
+                        placedSignPos.y,
+                        placedSignPos.z,
+                        System.currentTimeMillis()
+                    );
+                inst.setPlacementPrefabYaw(session.getCurrentPrefabYaw());
+                town.addPlotInstance(inst);
+                tm.updateTown(town);
+            } finally {
+                buf.release();
+            }
+        }
+        session.addCommitted(
+            new WallPlacementSession.CommittedStep(
+                plotId,
+                consId,
+                placedSignPos,
+                session.getCurrentRotationSteps(),
+                session.towerConnectionsForCommit(),
+                session.getPlacementExpandDir()
+            )
+        );
+        session.setPlacementExpandDir(null);
+        if (WallPieceGeometry.isTowerConstructionId(consId)) {
+            session.afterTowerCommittedSwitchToWall();
+        }
+        session.setCurrentAnchor(placedSignPos);
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        if (pr != null) {
+            pr.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.plotSign.placed"));
+        }
+        return true;
+    }
+
+    private void scheduleUndo(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                WallPlacementSession.CommittedStep undone = session.undoLastCommitted();
+                if (undone == null) {
+                    rebuild();
+                    return;
+                }
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+                if (plugin == null || uc == null) {
+                    rebuild();
+                    return;
+                }
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+                if (town != null) {
+                    WallPlacementRemoveService.removeWallPlot(world, plugin, town, undone.plotId, store);
+                }
+                WallPlacementRemoveService.breakPlotSignAt(
+                    world, undone.signAnchor.x, undone.signAnchor.y, undone.signAnchor.z
+                );
+                session.restoreStateAfterUndo();
+                refreshPreview(ref, store);
+                rebuild();
+            }
+        );
+    }
+
+    private void scheduleRemoveTarget(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+                if (plugin == null || uc == null) {
+                    return;
+                }
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+                if (town == null) {
+                    scheduleCancel(ref, store);
+                    return;
+                }
+                UUID plotTarget = session.getEditTargetPlotId();
+                UUID segTarget = session.getEditTargetSegmentId();
+                if (plotTarget != null) {
+                    WallPlacementRemoveService.removeWallPlot(world, plugin, town, plotTarget, store);
+                } else if (segTarget != null) {
+                    WallPlacementRemoveService.removeWallSegment(world, plugin, town, segTarget, store);
+                }
+                scheduleCancel(ref, store);
+            }
+        );
+    }
+
+    private void scheduleCancel(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+                PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+                WallPlacementWireframeOverlay.clearFor(pr);
+                UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+                if (uc != null) {
+                    WallPlacementSessions.remove(uc.getUuid());
+                }
+                if (pr != null) {
+                    PlotPlacementCameraUtil.resetToPlayerCamera(pr);
+                }
+                close();
+            }
+        );
+    }
+
+    private static void bind(@Nonnull UIEventBuilder eventBuilder, @Nonnull String selector, @Nonnull String action) {
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, selector, new EventData().append("Action", action), false);
+    }
+
+    private void sendError(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull Message msg) {
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        if (pr != null) {
+            pr.sendMessage(msg);
+        }
+    }
+
+    public static final class PageData {
+        public static final BuilderCodec<PageData> CODEC =
+            BuilderCodec.builder(PageData.class, PageData::new)
+                .append(new KeyedCodec<>("Action", Codec.STRING), (d, v) -> d.action = v, d -> d.action)
+                .add()
+                .append(new KeyedCodec<>("BirdsEyeDistance", Codec.FLOAT), (d, v) -> d.birdsEyeDistance = v, d -> d.birdsEyeDistance)
+                .add()
+                .build();
+
+        @Nullable
+        private String action;
+
+        @Nullable
+        private Float birdsEyeDistance;
+    }
+}

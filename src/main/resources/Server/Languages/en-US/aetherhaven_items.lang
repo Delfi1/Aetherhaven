@@ -27,6 +27,15 @@ benchCategories.aetherhaven.plot_tokens=Plot tokens
 items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
 items.Aetherhaven_Plot_Placement_Tool.description=Keep the matching plot token in your bags. Use this staff while aiming at the ground to see a ghost of the building. Nudge and turn it until it fits, then confirm to stake the plot. Cancel to clear the preview and use the staff again when you want a different spot.
 
+items.Aetherhaven_Wall_Wand.name=Wall wand
+items.Aetherhaven_Wall_Wand.description=Plan stone walls around your town. Secondary use opens a top down view to chain wall, gate, and tower pieces. Primary use on an existing piece lets you extend the wall or remove it. Each piece uses a plot sign and builds like other town plots.
+items.Aetherhaven_Token_Wall.name=Wall piece marker
+items.Aetherhaven_Token_Wall.description=Shows on wall plot signs during placement. Not used from your inventory.
+items.Aetherhaven_Token_Wall_Gate.name=Gate piece marker
+items.Aetherhaven_Token_Wall_Gate.description=Shows on gate plot signs during placement. Not used from your inventory.
+items.Aetherhaven_Token_Wall_Tower.name=Tower piece marker
+items.Aetherhaven_Token_Wall_Tower.description=Shows on tower plot signs during placement. Not used from your inventory.
+
 items.Aetherhaven_Poi_Tool.name=POI debug tool
 items.Aetherhaven_Poi_Tool.description=Shows town POIs while held (permission: <color is="#5AB5B5">aetherhaven.poi.tool</color>). Primary: select nearest POI. Secondary: move the POI anchor to that block. Use: set/clear autonomy path target for the selected POI (click the POI block again to clear).
 items.Aetherhaven_Poi_Tool.legendTitle=POI tool

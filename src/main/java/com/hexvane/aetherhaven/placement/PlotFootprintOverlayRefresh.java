@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.ui.CharterRelocationPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
+import com.hexvane.aetherhaven.ui.WallPlacementPage;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -26,6 +27,8 @@ public final class PlotFootprintOverlayRefresh {
             p.refreshFootprintOverlayAfterDebugClear(ref, store);
         } else if (page instanceof CharterRelocationPage c) {
             c.refreshFootprintOverlayAfterDebugClear(ref, store);
+        } else if (page instanceof WallPlacementPage w) {
+            w.refreshFootprintOverlayAfterDebugClear(ref, store);
         }
     }
 }

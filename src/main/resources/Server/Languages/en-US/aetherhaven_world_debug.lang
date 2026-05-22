@@ -84,3 +84,8 @@ aetherhaven.debug.poi.listEmpty=None registered for this town (complete a buildi
 aetherhaven.debug.poi.listLine=  {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
 aetherhaven.debug.poi.dumpHeader=All POIs in world registry ({count}):
 aetherhaven.debug.poi.dumpLine=  town={town} {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} plot={plot}
+
+# Wall wand placement debug (/ah walldebug)
+aetherhaven.debug.wall.on=Wall wand debug ON (chat + server log).
+aetherhaven.debug.wall.off=Wall wand debug OFF.
+aetherhaven.debug.wall.noSession=No active wall wand session. Open the wall wand first.

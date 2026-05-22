@@ -820,9 +820,16 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         }
 
         commandBuilder.clear(TOWN_PLOT_ROWS);
-        List<PlotInstance> plots = new ArrayList<>(town.getPlotInstances());
-        boolean canRemovePlots = town.playerCanRemovePlots(uc.getUuid());
+        List<PlotInstance> plots = new ArrayList<>();
         ConstructionCatalog plotCatalog = plugin.getConstructionCatalog();
+        for (PlotInstance p : town.getPlotInstances()) {
+            ConstructionDefinition plotDef = plotCatalog.get(p.getConstructionId());
+            if (plotDef != null && plotDef.isExcludeFromTownJournal()) {
+                continue;
+            }
+            plots.add(p);
+        }
+        boolean canRemovePlots = town.playerCanRemovePlots(uc.getUuid());
         int np = Math.min(plots.size(), MAX_TOWN_PLOTS);
         for (int i = 0; i < np; i++) {
             PlotInstance p = plots.get(i);

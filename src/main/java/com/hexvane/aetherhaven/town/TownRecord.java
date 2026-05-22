@@ -64,6 +64,9 @@ public final class TownRecord {
     @SerializedName("plotInstances")
     private List<PlotInstance> plotInstances = new ArrayList<>();
 
+    @SerializedName("wallSegments")
+    private List<WallSegmentRecord> wallSegments = new ArrayList<>();
+
     @SerializedName("activeQuestIds")
     private List<String> activeQuestIds = new ArrayList<>();
 
@@ -859,6 +862,80 @@ public final class TownRecord {
 
     public void addPlotInstance(@Nonnull PlotInstance instance) {
         getPlotInstances().add(instance);
+    }
+
+    @Nonnull
+    public List<WallSegmentRecord> getWallSegments() {
+        if (wallSegments == null) {
+            wallSegments = new ArrayList<>();
+        }
+        return wallSegments;
+    }
+
+    public void addWallSegment(@Nonnull WallSegmentRecord segment) {
+        getWallSegments().add(segment);
+    }
+
+    public boolean removeWallSegment(@Nonnull UUID segmentId) {
+        return getWallSegments().removeIf(s -> s.getSegmentId().equals(segmentId));
+    }
+
+    @Nullable
+    public WallSegmentRecord findWallSegmentById(@Nonnull UUID segmentId) {
+        for (WallSegmentRecord s : getWallSegments()) {
+            if (s.getSegmentId().equals(segmentId)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public WallSegmentRecord findWallSegmentAtBlock(int x, int y, int z) {
+        for (WallSegmentRecord s : getWallSegments()) {
+            if (s.containsBlock(x, y, z)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public PlotFootprintRecord findOverlappingNonWallPlot(@Nonnull PlotFootprintRecord candidate, @Nullable UUID excludePlotId) {
+        for (PlotInstance p : getPlotInstances()) {
+            if (excludePlotId != null && p.getPlotId().equals(excludePlotId)) {
+                continue;
+            }
+            if (p.intersectsFootprint(candidate)) {
+                return p.toFootprint();
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public PlotFootprintRecord findOverlappingWallFootprint(
+        @Nonnull PlotFootprintRecord candidate,
+        @Nullable UUID excludePlotId,
+        @Nullable UUID excludeSegmentId
+    ) {
+        for (PlotInstance p : getPlotInstances()) {
+            if (excludePlotId != null && p.getPlotId().equals(excludePlotId)) {
+                continue;
+            }
+            if (p.intersectsFootprint(candidate)) {
+                return p.toFootprint();
+            }
+        }
+        for (WallSegmentRecord s : getWallSegments()) {
+            if (excludeSegmentId != null && s.getSegmentId().equals(excludeSegmentId)) {
+                continue;
+            }
+            if (s.intersectsFootprint(candidate)) {
+                return s.toFootprint();
+            }
+        }
+        return null;
     }
 
     /** Removes a registered plot (e.g. plot sign picked up). @return true if a row was removed */

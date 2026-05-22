@@ -1,0 +1,68 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Wall_Wand.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Wall_Wand.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 0,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Stick",
+        "Quantity": 6
+      },
+      {
+        "ItemId": "Rock_Stone_Brick",
+        "Quantity": 16
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": ["Aetherhaven_TownPlanning"]
+      }
+    ]
+  },
+  "Categories": ["Items.Weapons"],
+  "Icon": "Icons/ItemsGenerated/Weapon_Staff_Crystal_Purple.png",
+  "Quality": "Common",
+  "Model": "Items/Weapons/Staff/Crystal_Purple.blockymodel",
+  "Texture": "Items/Weapons/Staff/Crystal_Purple_Texture.png",
+  "PlayerAnimationsId": "Staff",
+  "MaxStack": 1,
+  "Set": "Aetherhaven",
+  "IconProperties": {
+    "Scale": 0.31,
+    "Translation": [-30.6, -31.2],
+    "Rotation": [45, 90, 0]
+  },
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": { "Id": "AetherhavenWallEdit" }
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": { "Id": "AetherhavenWallPlacement" }
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 10,
+      "Creative": 64
+    }
+  },
+  "Tags": {
+    "Family": ["Aetherhaven"],
+    "Type": ["Tool"]
+  },
+  "ItemSoundSetId": "ISS_Weapons_Wood"
+}

@@ -72,6 +72,13 @@ public final class PlotPlacementValidator {
             if (fp.containsBlock(town.getCharterX(), town.getCharterY(), town.getCharterZ())) {
                 return "This plot would overlap the town charter.";
             }
+            if (def.isWallSegment()) {
+                PlotFootprintRecord overlap = town.findOverlappingNonWallPlot(fp, excludePlotId);
+                if (overlap != null) {
+                    return "This wall would overlap another building in your town.";
+                }
+                return null;
+            }
             PlotFootprintRecord overlap = town.findOverlappingPlot(fp, excludePlotId);
             if (overlap != null) {
                 return "This plot overlaps another registered plot in your town.";

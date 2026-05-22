@@ -4,6 +4,7 @@
 
 ### Added
 
+- **Wall wand** Craft at the town planning desk to lay out stone walls in a tilted birds-eye view. Direction arrows place a plot sign and start the next piece along that run; a separate pad picks which side you look from. Tower connection arrows toggle up to two sides (dim when off, bright when on). Completed wall pieces stay in the world but do not appear in the town journal. Primary use on a wall lets you extend the run or remove a piece.
 - **Innkeeper park quest** Corin Mosscup can ask you to build the town park as soon as the inn is standing, alongside his house quest.
 - **Commands guide** New journal Guide page lists every `/ah` command with permissions, grouped for players, world hosts, and debug tools.
 - **Getting Started and mechanics guides** New journal pages cover founding a town, villager needs, reputation, and jewelry (including gemstone stat effects).

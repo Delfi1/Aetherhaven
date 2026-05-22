@@ -97,3 +97,8 @@ commands.aetherhaven.time.set.success=Clock set to {gameTime}
 commands.aetherhaven.time.dawn.desc=Creative: set schedule clock to 6:00 in the morning
 commands.aetherhaven.time.dawn.success=Clock set: {gameTime}
 commands.aetherhaven.time.noResource=This world has no time resource loaded.
+
+commands.aetherhaven.walldebug.desc=Creative: wall wand placement debug lines in chat
+commands.aetherhaven.walldebug.on.desc=Turn wall wand debug on
+commands.aetherhaven.walldebug.off.desc=Turn wall wand debug off
+commands.aetherhaven.walldebug.dump.desc=Print current wall wand session state

@@ -51,7 +51,33 @@ public final class TownWorldFile {
         try {
             Files.move(tmp, path, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
         } catch (AtomicMoveNotSupportedException e) {
-            Files.move(tmp, path, StandardCopyOption.REPLACE_EXISTING);
+            replaceDestinationFromTemp(tmp, path);
+        } catch (IOException e) {
+            if (isReplaceBlockedOnWindows(e)) {
+                replaceDestinationFromTemp(tmp, path);
+            } else {
+                throw e;
+            }
         }
+    }
+
+    /**
+     * Windows / synced folders often reject {@link Files#move} into an existing file; copy-over is more reliable.
+     */
+    private static void replaceDestinationFromTemp(@Nonnull Path tmp, @Nonnull Path path) throws IOException {
+        try {
+            Files.move(tmp, path, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException moveFailed) {
+            if (!isReplaceBlockedOnWindows(moveFailed)) {
+                throw moveFailed;
+            }
+            Files.copy(tmp, path, StandardCopyOption.REPLACE_EXISTING);
+            Files.deleteIfExists(tmp);
+        }
+    }
+
+    private static boolean isReplaceBlockedOnWindows(@Nonnull IOException e) {
+        return e instanceof java.nio.file.AccessDeniedException
+            || (e.getCause() instanceof java.nio.file.AccessDeniedException);
     }
 }

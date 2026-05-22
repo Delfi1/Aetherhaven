@@ -154,6 +154,18 @@ public final class ConstructionDefinition {
     @SerializedName("autonomyNavRoofExclusionYBelowMaxY")
     private int autonomyNavRoofExclusionYBelowMaxY = 1;
 
+    /** When false, placement does not consume {@link #plotTokenItemId} from inventory (wall wand display tokens). */
+    @SerializedName("consumesPlotToken")
+    private boolean consumesPlotToken = true;
+
+    /** When true, the town journal plot list omits this construction. */
+    @SerializedName("excludeFromTownJournal")
+    private boolean excludeFromTownJournal;
+
+    /** Town wall segment: journal excluded, overlap rules differ, completion moves to {@link com.hexvane.aetherhaven.town.WallSegmentRecord}. */
+    @SerializedName("wallSegment")
+    private boolean wallSegment;
+
     public String getId() {
         return id;
     }
@@ -327,5 +339,17 @@ public final class ConstructionDefinition {
     /** 0/negative = use 1. */
     public int getAutonomyNavRoofExclusionYBelowMaxY() {
         return autonomyNavRoofExclusionYBelowMaxY > 0 ? autonomyNavRoofExclusionYBelowMaxY : 1;
+    }
+
+    public boolean consumesPlotToken() {
+        return consumesPlotToken;
+    }
+
+    public boolean isExcludeFromTownJournal() {
+        return excludeFromTownJournal;
+    }
+
+    public boolean isWallSegment() {
+        return wallSegment;
     }
 }

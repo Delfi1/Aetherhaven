@@ -113,7 +113,10 @@ import com.hexvane.aetherhaven.ui.CharterAmendmentsPage;
 import com.hexvane.aetherhaven.ui.FeastPage;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
+import com.hexvane.aetherhaven.placement.WallPlacementEditHelper;
+import com.hexvane.aetherhaven.placement.WallPlacementOpenHelper;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
+import com.hexvane.aetherhaven.ui.WallPlacementPage;
 import com.hexvane.aetherhaven.ui.GeodeOpenPage;
 import com.hexvane.aetherhaven.ui.OpenHandMirrorUiInteraction;
 import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
@@ -639,6 +642,18 @@ public final class AetherhavenPlugin extends JavaPlugin {
             PlotPlacementPage.class,
             AetherhavenConstants.PAGE_PLOT_PLACEMENT,
             PlotPlacementOpenHelper::tryOpen
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
+            WallPlacementPage.class,
+            AetherhavenConstants.PAGE_WALL_PLACEMENT,
+            WallPlacementOpenHelper::tryOpenBuild
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
+            WallPlacementPage.class,
+            AetherhavenConstants.PAGE_WALL_EDIT,
+            WallPlacementEditHelper::tryOpenEdit
         );
         OpenCustomUIInteraction.registerCustomPageSupplier(
             this,
