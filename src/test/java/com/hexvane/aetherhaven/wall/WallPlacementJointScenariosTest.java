@@ -79,7 +79,12 @@ class WallPlacementJointScenariosTest {
         WallPlacementJointAssert.assertFlushStraightTower(
             wallSign, wallYaw, WallCardinal.WEST, tower, towerYaw, "user west run"
         );
-        assertEquals(EnumSet.of(WallCardinal.EAST), plan.towerConnections(), "end cap toward wall, not N/S passage");
+        assertEquals(
+            EnumSet.of(WallCardinal.EAST, WallCardinal.WEST),
+            plan.towerConnections(),
+            "E/W run continuation uses passage tower with both openings"
+        );
+        assertEquals(AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_EASTDOOR_NS, plan.resolvedConstructionId());
     }
 
     @ParameterizedTest(name = "{0}")
@@ -197,8 +202,9 @@ class WallPlacementJointScenariosTest {
         sim.expandPlace(WallCardinal.WEST);
         sim.pieceKind(WallPlacementChainPlanner.PieceKind.TOWER).expandPlace(WallCardinal.WEST);
         var tower = sim.committed().get(1);
-        assertEquals(EnumSet.of(WallCardinal.EAST), tower.towerConnectionDirs());
-        assertEquals(AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_ENDCAP_S, tower.constructionId());
+        assertEquals(EnumSet.of(WallCardinal.EAST, WallCardinal.WEST), tower.towerConnectionDirs());
+        assertEquals(AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_EASTDOOR_NS, tower.constructionId());
+        assertEquals(1, tower.rotationSteps(), "E/W passage tower must use eastdoor prefab yaw");
 
         sim.expandPlace(WallCardinal.WEST);
 

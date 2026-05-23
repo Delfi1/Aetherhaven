@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
+import com.hexvane.aetherhaven.placement.PlotPlacementRotationUtil;
 import com.hexvane.aetherhaven.placement.WallPlacementCameraUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
 import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
@@ -32,6 +33,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3i;
+import java.nio.file.Path;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
@@ -107,6 +109,11 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         commandBuilder.set("#BtnViewXp.TooltipTextSpans", Message.translation(p + ".viewFromEast"));
         commandBuilder.set("#BtnViewZp.TooltipTextSpans", Message.translation(p + ".viewFromSouth"));
         commandBuilder.set("#BtnViewXm.TooltipTextSpans", Message.translation(p + ".viewFromWest"));
+        commandBuilder.set("#BtnNudgeZm.TooltipTextSpans", Message.translation(p + ".positionNudgeNorth"));
+        commandBuilder.set("#BtnNudgeZp.TooltipTextSpans", Message.translation(p + ".positionNudgeSouth"));
+        commandBuilder.set("#BtnNudgeXm.TooltipTextSpans", Message.translation(p + ".positionNudgeWest"));
+        commandBuilder.set("#BtnNudgeXp.TooltipTextSpans", Message.translation(p + ".positionNudgeEast"));
+        commandBuilder.set("#BtnRotate.TooltipTextSpans", Message.translation(p + ".rotateTooltip"));
     }
 
     @Override
@@ -128,6 +135,9 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         commandBuilder.set("#CameraPlotRow.Visible", !editPrompt && !removeConfirm);
         commandBuilder.set("#RowYBack.Visible", !editPrompt && !removeConfirm);
         commandBuilder.set("#RowActions.Visible", !editPrompt && !removeConfirm);
+        boolean firstAdjust = session.isAdjustingFirstPiece();
+        commandBuilder.set("#NudgePadColumn.Visible", firstAdjust && !editPrompt && !removeConfirm);
+        commandBuilder.set("#BtnRotate.Visible", firstAdjust && !editPrompt && !removeConfirm);
         commandBuilder.set("#BirdsEyeDistanceSlider.Value", birdsEyeDistance);
         commandBuilder.set("#BirdsEyeDistanceValue.TextSpans", Message.raw(String.format("%.0f", birdsEyeDistance)));
         if (!editPrompt && !removeConfirm) {
@@ -142,6 +152,11 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         bind(eventBuilder, "#BtnExpandXm", "ExpandXm");
         bind(eventBuilder, "#BtnExpandXp", "ExpandXp");
         bind(eventBuilder, "#BtnExpandZp", "ExpandZp");
+        bind(eventBuilder, "#BtnNudgeZm", "NudgeZm");
+        bind(eventBuilder, "#BtnNudgeXm", "NudgeXm");
+        bind(eventBuilder, "#BtnNudgeXp", "NudgeXp");
+        bind(eventBuilder, "#BtnNudgeZp", "NudgeZp");
+        bind(eventBuilder, "#BtnRotate", "Rotate");
         bind(eventBuilder, "#BtnYm", "MoveYm");
         bind(eventBuilder, "#BtnYp", "MoveYp");
         bind(eventBuilder, "#BackButton", "Back");
@@ -226,6 +241,46 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     return;
                 }
                 schedulePlaceAndExpand(ref, store, expandDir);
+                return;
+            }
+            case "NudgeZm" -> {
+                if (!session.isAdjustingFirstPiece()) {
+                    return;
+                }
+                session.nudgeHorizontal(0, -1);
+                scheduleRefreshPreviewAndCamera(ref, store);
+                return;
+            }
+            case "NudgeZp" -> {
+                if (!session.isAdjustingFirstPiece()) {
+                    return;
+                }
+                session.nudgeHorizontal(0, 1);
+                scheduleRefreshPreviewAndCamera(ref, store);
+                return;
+            }
+            case "NudgeXm" -> {
+                if (!session.isAdjustingFirstPiece()) {
+                    return;
+                }
+                session.nudgeHorizontal(-1, 0);
+                scheduleRefreshPreviewAndCamera(ref, store);
+                return;
+            }
+            case "NudgeXp" -> {
+                if (!session.isAdjustingFirstPiece()) {
+                    return;
+                }
+                session.nudgeHorizontal(1, 0);
+                scheduleRefreshPreviewAndCamera(ref, store);
+                return;
+            }
+            case "Rotate" -> {
+                if (!session.isAdjustingFirstPiece()) {
+                    return;
+                }
+                applyRotatePreservingFootprintCenter();
+                scheduleRefreshPreviewAndCamera(ref, store);
                 return;
             }
             case "MoveYm" -> {
@@ -513,6 +568,55 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 refreshPreview(ref, store);
             }
         );
+    }
+
+    private void scheduleRefreshPreviewAndCamera(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        final int serial = ++wireframeRefreshSerial;
+        world.execute(
+            () -> {
+                if (!ref.isValid() || serial != wireframeRefreshSerial) {
+                    return;
+                }
+                captureBirdsEyeSnapshot(ref, store);
+                applyBirdsEyeCameraPacket(ref, store);
+                refreshPreview(ref, store);
+            }
+        );
+    }
+
+    /**
+     * Rotates the prefab 90° while keeping the axis-aligned footprint center fixed (avoids spinning around the buffer
+     * origin corner).
+     */
+    private void applyRotatePreservingFootprintCenter() {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        String consId = session.resolveConstructionId();
+        ConstructionDefinition def = plugin != null ? plugin.getConstructionCatalog().get(consId) : null;
+        if (def == null) {
+            session.rotateClockwise90();
+            return;
+        }
+        Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+        if (prefabPath == null) {
+            session.rotateClockwise90();
+            return;
+        }
+        IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
+        try {
+            Rotation oldYaw = session.getCurrentPrefabYaw();
+            Vector3d k0 = PlotPlacementRotationUtil.footprintCenterAtSignOrigin(def, oldYaw, buf);
+            Vector3i sign0 = session.getCurrentAnchor();
+            session.rotateClockwise90();
+            Rotation newYaw = session.getCurrentPrefabYaw();
+            Vector3d k1 = PlotPlacementRotationUtil.footprintCenterAtSignOrigin(def, newYaw, buf);
+            double x = sign0.x + k0.x - k1.x;
+            double y = sign0.y + k0.y - k1.y;
+            double z = sign0.z + k0.z - k1.z;
+            session.setCurrentAnchor(new Vector3i((int) Math.round(x), (int) Math.round(y), (int) Math.round(z)));
+        } finally {
+            buf.release();
+        }
     }
 
     private void refreshPreview(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -929,7 +1033,9 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 WallPlacementRemoveService.breakPlotSignAt(
                     world, undone.signAnchor.x, undone.signAnchor.y, undone.signAnchor.z
                 );
-                session.restoreStateAfterUndo();
+                session.restoreStateAfterUndo(undone);
+                captureBirdsEyeSnapshot(ref, store);
+                applyBirdsEyeCameraPacket(ref, store);
                 refreshPreview(ref, store);
                 rebuild();
             }

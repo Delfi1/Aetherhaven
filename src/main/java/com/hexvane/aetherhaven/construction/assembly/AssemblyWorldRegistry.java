@@ -22,12 +22,20 @@ public final class AssemblyWorldRegistry {
      * {@link IPrefabBuffer#release()} on cached prefab accessors is not idempotent (internal duplicate is nulled).
      * Overlapping cleanup (e.g. unload vs tick) or any double dispose must not crash the world thread.
      */
-    private static void releaseJobBufferQuietly(@Nonnull IPrefabBuffer buffer) {
+    /** Releases a cached prefab accessor; safe when already released or shared across jobs. */
+    public static void releasePrefabBufferQuietly(@Nullable IPrefabBuffer buffer) {
+        if (buffer == null) {
+            return;
+        }
         try {
             buffer.release();
         } catch (NullPointerException ignored) {
             // Already released
         }
+    }
+
+    private static void releaseJobBufferQuietly(@Nonnull IPrefabBuffer buffer) {
+        releasePrefabBufferQuietly(buffer);
     }
 
     @Nonnull
@@ -41,7 +49,10 @@ public final class AssemblyWorldRegistry {
         @Nonnull PlotAssemblyJob job,
         @Nonnull PlotAssemblyFrontierRuntime runtime
     ) {
-        mapFor(world).put(plotId, new AssemblyEntry(job, runtime));
+        AssemblyEntry previous = mapFor(world).put(plotId, new AssemblyEntry(job, runtime));
+        if (previous != null) {
+            releaseJobBufferQuietly(previous.job().buffer());
+        }
     }
 
     @Nullable

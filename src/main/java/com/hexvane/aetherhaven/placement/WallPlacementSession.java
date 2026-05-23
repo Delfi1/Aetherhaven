@@ -176,6 +176,10 @@ public final class WallPlacementSession {
     @Nullable
     private WallCardinal lastPositionDir;
 
+    /** Last tower preview plan construction id (matches ghost); used at commit so prefab matches preview. */
+    @Nullable
+    private String previewTowerConstructionId;
+
     /**
      * True after Continue on an existing piece: blocks auto-preview until the player picks an expand pad, and marks
      * the in-world seed so we do not stack a ghost prefab on it.
@@ -187,7 +191,7 @@ public final class WallPlacementSession {
     /** Set when the player uses Y nudge; keeps preview Y across expand-pad preview until the next place. */
     private boolean heightManuallyAdjusted;
 
-    private static boolean defaultDebugLogging = true;
+    private static boolean defaultDebugLogging = false;
 
     private boolean debugLogging = defaultDebugLogging;
 
@@ -296,6 +300,7 @@ public final class WallPlacementSession {
         this.pieceKind = pieceKind;
         clearBirdsEyeSnapshot();
         if (pieceKind != PieceKind.TOWER) {
+            previewTowerConstructionId = null;
             towerConnections.clear();
         } else {
             CommittedStep last = getLastCommitted();
@@ -409,6 +414,12 @@ public final class WallPlacementSession {
         if (plan.towerConnections() != null) {
             towerConnections.addAll(plan.towerConnections());
         }
+        if (pieceKind == PieceKind.TOWER) {
+            applyTowerResolvedRotation();
+            previewTowerConstructionId = plan.resolvedConstructionId();
+        } else {
+            previewTowerConstructionId = null;
+        }
     }
 
     @Nullable
@@ -441,6 +452,7 @@ public final class WallPlacementSession {
 
     public void afterTowerCommittedSwitchToWall() {
         pieceKind = PieceKind.SEGMENT;
+        previewTowerConstructionId = null;
         towerConnections.clear();
         refreshArrivalFromSide();
     }
@@ -508,7 +520,10 @@ public final class WallPlacementSession {
         }
         WallPlacementChainPlanner.ChainCommittedPiece plannerLast = toPlannerPiece(last);
         WallCardinal jointDir = WallPlacementChainPlanner.towerJointExpandDir(plannerLast, outgoingPad);
-        return WallPlacementChainPlanner.isStraightRunTowerEndCap(last.chainExpandDir, outgoingPad, jointDir);
+        if (WallPlacementChainPlanner.isStraightRunTowerDeadEnd(last.chainExpandDir, outgoingPad, jointDir)) {
+            return !towerConnections.isEmpty();
+        }
+        return towerConnections.size() >= 2;
     }
 
     public void setPlacementExpandDir(@Nullable WallCardinal placementExpandDir) {
@@ -545,42 +560,56 @@ public final class WallPlacementSession {
         arrivalFromSide = WallCardinal.fromVector(currentAnchor, last.signAnchor);
     }
 
-    /** Restores preview anchor, piece type, and chaining state after undo removes the last commit. */
-    public void restoreStateAfterUndo() {
+    /**
+     * Restores preview to the piece that was just removed so the player can adjust or re-place it. Does not snap to the
+     * first commit or recompute a forward chain slot.
+     */
+    public void restoreStateAfterUndo(@Nullable CommittedStep undone) {
         seededContinueFromEdit = false;
-        towerConnections.clear();
         placementExpandDir = null;
-        CommittedStep last = getLastCommitted();
-        if (last == null) {
+        clearBirdsEyeSnapshot();
+        towerConnections.clear();
+
+        if (undone == null) {
             pieceKind = PieceKind.SEGMENT;
             lastExpandDir = null;
             arrivalFromSide = null;
             return;
         }
-        if (WallPieceGeometry.isTowerConstructionId(last.constructionId)) {
-            pieceKind = PieceKind.SEGMENT;
+
+        currentAnchor = undone.signAnchor.clone();
+        currentRotationSteps = undone.rotationSteps;
+
+        if (WallPieceGeometry.isTowerConstructionId(undone.constructionId)) {
+            pieceKind = PieceKind.TOWER;
+            if (undone.towerConnectionDirs != null) {
+                towerConnections.addAll(undone.towerConnectionDirs);
+            }
         } else {
             pieceKind = PieceKind.SEGMENT;
         }
-        if (last.chainExpandDir != null) {
-            WallCardinal expand = last.chainExpandDir;
-            int newRotationSteps = rotationStepsForChainAfter(last, expand);
-            Rotation newYaw = rotationStepsFrom(newRotationSteps);
-            currentAnchor = computeChainedSignAnchor(last, newRotationSteps, newYaw, expand, expand, false);
-            currentRotationSteps = newRotationSteps;
-            lastExpandDir = expand;
-            arrivalFromSide = expand.opposite();
-        } else {
-            currentAnchor = last.signAnchor.clone();
-            currentRotationSteps = last.rotationSteps;
+
+        if (committed.isEmpty()) {
             lastExpandDir = null;
             arrivalFromSide = null;
+            return;
+        }
+
+        lastExpandDir = undone.chainExpandDir;
+        if (lastExpandDir != null) {
+            arrivalFromSide = lastExpandDir.opposite();
+        } else {
+            CommittedStep last = getLastCommitted();
+            arrivalFromSide = last != null ? WallCardinal.fromVector(undone.signAnchor, last.signAnchor) : null;
         }
     }
 
     @Nonnull
     public String resolveConstructionId() {
         if (pieceKind == PieceKind.TOWER) {
+            if (previewTowerConstructionId != null) {
+                return previewTowerConstructionId;
+            }
             WallTowerPrefabResolver.ResolvedTower r = WallTowerPrefabResolver.resolve(towerConnections);
             return r != null ? r.constructionId() : AetherhavenConstants.CONSTRUCTION_PLOT_WALL_TOWER_ENDCAP_S;
         }
@@ -671,6 +700,26 @@ public final class WallPlacementSession {
     public void nudgeY(int dy) {
         currentAnchor = new Vector3i(currentAnchor.x, currentAnchor.y + dy, currentAnchor.z);
         heightManuallyAdjusted = true;
+    }
+
+    /** One-block shift on the XZ plane (bird's-eye world axes). */
+    public void nudgeHorizontal(int dx, int dz) {
+        currentAnchor = new Vector3i(currentAnchor.x + dx, currentAnchor.y, currentAnchor.z + dz);
+        clearBirdsEyeSnapshot();
+    }
+
+    public void rotateClockwise90() {
+        setCurrentRotationSteps(getCurrentRotationSteps() + 1);
+        lastExpandDir = null;
+        placementExpandDir = null;
+        clearBirdsEyeSnapshot();
+    }
+
+    /**
+     * True for a new wall wand session before the first piece is placed (not edit prompt or continue-from-edit).
+     */
+    public boolean isAdjustingFirstPiece() {
+        return !hasEditTarget() && !seededContinueFromEdit && committed.isEmpty();
     }
 
     public void clearHeightManualAdjust() {

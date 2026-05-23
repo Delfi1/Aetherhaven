@@ -19,29 +19,42 @@
       {
         "Id": "Aetherhaven_TownPlanningDesk",
         "Type": "Crafting",
-        "Categories": ["Aetherhaven_TownPlanning"]
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
       }
     ]
   },
-  "Categories": ["Items.Weapons"],
-  "Icon": "Icons/ItemsGenerated/Weapon_Staff_Crystal_Purple.png",
+  "Categories": [
+    "Items.Weapons"
+  ],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Wall_Wand.png",
   "Quality": "Common",
-  "Model": "Items/Weapons/Staff/Crystal_Purple.blockymodel",
-  "Texture": "Items/Weapons/Staff/Crystal_Purple_Texture.png",
+  "Model": "Items/Aetherhaven/Wall_Wand/Wall_Wand.blockymodel",
+  "Texture": "Items/Aetherhaven/Wall_Wand/Wall_Wand.png",
   "PlayerAnimationsId": "Staff",
   "MaxStack": 1,
   "Set": "Aetherhaven",
   "IconProperties": {
-    "Scale": 0.31,
-    "Translation": [-30.6, -31.2],
-    "Rotation": [45, 90, 0]
+    "Scale": 0.28,
+    "Rotation": [
+      39,
+      171,
+      39
+    ],
+    "Translation": [
+      -47,
+      -41
+    ]
   },
   "Interactions": {
     "Primary": {
       "Interactions": [
         {
           "Type": "OpenCustomUI",
-          "Page": { "Id": "AetherhavenWallEdit" }
+          "Page": {
+            "Id": "AetherhavenWallEdit"
+          }
         }
       ]
     },
@@ -49,7 +62,9 @@
       "Interactions": [
         {
           "Type": "OpenCustomUI",
-          "Page": { "Id": "AetherhavenWallPlacement" }
+          "Page": {
+            "Id": "AetherhavenWallPlacement"
+          }
         }
       ]
     }
@@ -61,8 +76,12 @@
     }
   },
   "Tags": {
-    "Family": ["Aetherhaven"],
-    "Type": ["Tool"]
+    "Family": [
+      "Aetherhaven"
+    ],
+    "Type": [
+      "Tool"
+    ]
   },
   "ItemSoundSetId": "ISS_Weapons_Wood"
 }

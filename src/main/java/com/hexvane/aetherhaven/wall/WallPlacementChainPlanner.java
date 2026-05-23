@@ -120,16 +120,11 @@ public final class WallPlacementChainPlanner {
                     probeAnchor, last.signAnchor(), outgoingExpandDir, last.chainExpandDir(), jointDir
                 );
             resolvedId = resolveTowerConstructionId(towerConnections);
-            boolean straightEndCap =
-                isStraightRunTowerEndCap(last.chainExpandDir(), outgoingExpandDir, jointDir);
             WallTowerPrefabResolver.ResolvedTower resolved = WallTowerPrefabResolver.resolve(towerConnections);
             if (resolved != null) {
                 resolvedId = resolved.constructionId();
-                boolean singleEndCap = towerConnections != null && towerConnections.size() == 1;
-                if (!straightEndCap || singleEndCap) {
-                    rotationSteps = resolved.rotationSteps();
-                    newYaw = rotationStepsFrom(rotationSteps);
-                }
+                rotationSteps = resolved.rotationSteps();
+                newYaw = rotationStepsFrom(rotationSteps);
             }
             anchor =
                 computeChainedSignAnchor(
@@ -208,7 +203,7 @@ public final class WallPlacementChainPlanner {
         if (newPieceIsTower && !lastTower) {
             WallCardinal seatDir = towerSeatDirection(last, outgoingExpandDir);
             boolean straightEndCap =
-                isStraightRunTowerEndCap(last.chainExpandDir(), outgoingExpandDir, towerJointExpandDir(last, outgoingExpandDir));
+                isStraightRunTowerAlongChain(last.chainExpandDir(), outgoingExpandDir, towerJointExpandDir(last, outgoingExpandDir));
             if (footprintResolver != null) {
                 Vector3i footprint =
                     footprintResolver.resolve(
@@ -322,14 +317,14 @@ public final class WallPlacementChainPlanner {
         if (last.chainExpandDir() == null) {
             return jointDir;
         }
-        if (isStraightRunTowerEndCap(last.chainExpandDir(), outgoingExpandDir, jointDir)) {
+        if (isStraightRunTowerAlongChain(last.chainExpandDir(), outgoingExpandDir, jointDir)) {
             return jointDir;
         }
         return last.chainExpandDir();
     }
 
-    /** Run-axis tower tab: chain-forward or opposite run end (not a long-side corner). */
-    public static boolean isStraightRunTowerEndCap(
+    /** Run-axis tower tab along the wall run (not a perpendicular corner). */
+    public static boolean isStraightRunTowerAlongChain(
         @Nullable WallCardinal chainExpandDir,
         @Nonnull WallCardinal outgoingExpandDir,
         @Nonnull WallCardinal positionDir
@@ -337,6 +332,39 @@ public final class WallPlacementChainPlanner {
         return chainExpandDir != null
             && positionDir == outgoingExpandDir
             && (outgoingExpandDir == chainExpandDir || outgoingExpandDir == chainExpandDir.opposite());
+    }
+
+    /**
+     * Tower at the run tip continuing the chain (e.g. west pad on a west-going run): opens toward the existing wall and
+     * along the run (E/W or N/S passage tower), not a single-face end cap.
+     */
+    public static boolean isStraightRunTowerContinuingChain(
+        @Nullable WallCardinal chainExpandDir,
+        @Nonnull WallCardinal outgoingExpandDir,
+        @Nonnull WallCardinal positionDir
+    ) {
+        return chainExpandDir != null && positionDir == outgoingExpandDir && outgoingExpandDir == chainExpandDir;
+    }
+
+    /** Tower at the far end of the run facing back along the chain (single opening toward the wall). */
+    public static boolean isStraightRunTowerDeadEnd(
+        @Nullable WallCardinal chainExpandDir,
+        @Nonnull WallCardinal outgoingExpandDir,
+        @Nonnull WallCardinal positionDir
+    ) {
+        return chainExpandDir != null
+            && positionDir == outgoingExpandDir
+            && outgoingExpandDir == chainExpandDir.opposite();
+    }
+
+    /** @deprecated use {@link #isStraightRunTowerAlongChain} */
+    @Deprecated
+    public static boolean isStraightRunTowerEndCap(
+        @Nullable WallCardinal chainExpandDir,
+        @Nonnull WallCardinal outgoingExpandDir,
+        @Nonnull WallCardinal positionDir
+    ) {
+        return isStraightRunTowerAlongChain(chainExpandDir, outgoingExpandDir, positionDir);
     }
 
     @Nonnull
@@ -354,7 +382,11 @@ public final class WallPlacementChainPlanner {
         } else {
             dirs.add(outgoingExpandDir.opposite());
         }
-        if (!isStraightRunTowerEndCap(chainExpandDir, outgoingExpandDir, positionDir)) {
+        if (isStraightRunTowerContinuingChain(chainExpandDir, outgoingExpandDir, positionDir)) {
+            if (chainExpandDir != null) {
+                dirs.add(chainExpandDir);
+            }
+        } else if (!isStraightRunTowerAlongChain(chainExpandDir, outgoingExpandDir, positionDir)) {
             dirs.add(outgoingExpandDir);
         }
         return dirs;

@@ -2,7 +2,7 @@
 
 aetherhaven.ui.wallplacement.title=Wall wand
 aetherhaven.ui.wallplacement.summary=Lay out wall pieces for your town. Direction arrows place a sign and start the next piece. Complete wall commits the current preview and ends this session. Build each sign like other plots.
-aetherhaven.ui.wallplacement.tips=Pick wall, gate, or tower. Arrows on the right place and continue the run. Complete Wall commits the current preview and ends this session (including an end-cap tower). Creative: /ah walldebug on logs each step in chat. The left pad picks which side you view from. Undo removes the last sign. Cancel ends this session.
+aetherhaven.ui.wallplacement.tips=Pick wall, gate, or tower. Use the middle arrows to slide the start spot and the turn button to spin it before your first place. Arrows on the right place and continue the run. Complete Wall commits the current preview and ends this session (including an end-cap tower). Creative: /ah walldebug on logs each step in chat. The left pad picks which side you view from. Undo removes the last sign. Cancel ends this session.
 aetherhaven.ui.wallplacement.place=Place sign
 aetherhaven.ui.wallplacement.completeWall=Complete wall
 aetherhaven.ui.wallplacement.pieceWall=Wall
@@ -20,6 +20,11 @@ aetherhaven.ui.wallplacement.viewFromWest=Look from the west
 aetherhaven.ui.wallplacement.viewFromEast=Look from the east
 aetherhaven.ui.wallplacement.moveUp=Raise this piece
 aetherhaven.ui.wallplacement.moveDown=Lower this piece
+aetherhaven.ui.wallplacement.positionNudgeNorth=Move one block north
+aetherhaven.ui.wallplacement.positionNudgeSouth=Move one block south
+aetherhaven.ui.wallplacement.positionNudgeWest=Move one block west
+aetherhaven.ui.wallplacement.positionNudgeEast=Move one block east
+aetherhaven.ui.wallplacement.rotateTooltip=Turn this piece 90 degrees
 aetherhaven.ui.wallplacement.connNorth=North connection
 aetherhaven.ui.wallplacement.connEast=East connection
 aetherhaven.ui.wallplacement.connSouth=South connection

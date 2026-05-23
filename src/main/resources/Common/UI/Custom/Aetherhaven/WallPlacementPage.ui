@@ -123,6 +123,13 @@ $Sounds = "../Sounds.ui";
   Disabled: (Background: PatchStyle(TexturePath: "../zoom_in_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
   Sounds: $Sounds.@ButtonsLight
 );
+@IconRotStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
 
 @SummaryLabelStyle = (
   FontSize: 18,
@@ -326,6 +333,57 @@ $C.@PageOverlay {
           }
         }
 
+        Group #NudgePadColumn {
+          LayoutMode: Top;
+          FlexWeight: 1;
+          Visible: false;
+
+          Group {
+            LayoutMode: Center;
+            Anchor: (Bottom: 22);
+            TextButton #BtnNudgeZm {
+              Style: @IconUpStyle;
+              Anchor: (Width: 44, Height: 40);
+              Padding: (Full: 0);
+              Text: ".";
+            }
+          }
+
+          Group {
+            LayoutMode: Center;
+            Anchor: (Bottom: 22);
+            Group {
+              LayoutMode: Left;
+              TextButton #BtnNudgeXm {
+                Style: @IconBackStyle;
+                Anchor: (Width: 44, Height: 40);
+                Padding: (Full: 0);
+                Text: ".";
+              }
+              AssetImage #NudgePadIcon {
+                Anchor: (Width: 36, Height: 36, Left: 8);
+                AssetPath: "UI/Custom/move_icon_256.png";
+              }
+              TextButton #BtnNudgeXp {
+                Style: @IconFwdStyle;
+                Anchor: (Width: 44, Height: 40, Left: 8);
+                Padding: (Full: 0);
+                Text: ".";
+              }
+            }
+          }
+
+          Group {
+            LayoutMode: Center;
+            TextButton #BtnNudgeZp {
+              Style: @IconDownStyle;
+              Anchor: (Width: 44, Height: 40);
+              Padding: (Full: 0);
+              Text: ".";
+            }
+          }
+        }
+
         Group #PlotMovePad {
           LayoutMode: Top;
           FlexWeight: 1;
@@ -391,6 +449,13 @@ $C.@PageOverlay {
           TextButton #BtnYp {
             Style: @IconPlusStyle;
             Anchor: (Width: 40, Height: 40, Left: 8);
+            Padding: (Full: 0);
+            Text: ".";
+          }
+          TextButton #BtnRotate {
+            Style: @IconRotStyle;
+            Visible: false;
+            Anchor: (Width: 44, Height: 40, Left: 10);
             Padding: (Full: 0);
             Text: ".";
           }

@@ -481,32 +481,57 @@ public final class PlotAssemblyService {
         @Nonnull PlotAssemblyJob job
     ) {
         UUID plotId = plot.getPlotId();
-        List<PendingBlock> deferredAssembly = job.assemblyDeferredBlocks();
-        if (!deferredAssembly.isEmpty()) {
-            LocalCachedChunkAccessor deferredAcc = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
-            BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
-            for (PendingBlock pb : deferredAssembly) {
-                if (!ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, deferredAcc, blockTypeMap)) {
-                    deferredAcc = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
-                    ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, deferredAcc, blockTypeMap);
+        IPrefabBuffer completionBuffer = acquireCompletionPrefabBuffer(plugin, job);
+        boolean borrowedCompletionBuffer = completionBuffer != job.buffer();
+        try {
+            List<PendingBlock> deferredAssembly = job.assemblyDeferredBlocks();
+            if (!deferredAssembly.isEmpty()) {
+                LocalCachedChunkAccessor deferredAcc =
+                    ConstructionPasteOps.createAccessor(world, job.anchor(), completionBuffer);
+                BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+                for (PendingBlock pb : deferredAssembly) {
+                    if (!ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, deferredAcc, blockTypeMap)) {
+                        deferredAcc = ConstructionPasteOps.createAccessor(world, job.anchor(), completionBuffer);
+                        ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, deferredAcc, blockTypeMap);
+                    }
                 }
             }
+            ConstructionPasteOps.finishFluidsAndEntities(
+                world,
+                job.anchor(),
+                job.prefabRotation(),
+                job.prefabId(),
+                completionBuffer,
+                job.prefabEntitiesInOrder(),
+                entityStore
+            );
+        } finally {
+            if (borrowedCompletionBuffer) {
+                AssemblyWorldRegistry.releasePrefabBufferQuietly(completionBuffer);
+            }
         }
-        ConstructionPasteOps.finishFluidsAndEntities(
-            world,
-            job.anchor(),
-            job.prefabRotation(),
-            job.prefabId(),
-            job.buffer(),
-            job.prefabEntitiesInOrder(),
-            entityStore
-        );
         PrefabPasteEvent end = new PrefabPasteEvent(job.prefabId(), false);
         entityStore.invoke(end);
         AssemblyWorldRegistry.remove(world, plotId);
         UUID finisher = plot.getAssemblyOwnerUuid() != null ? plot.getAssemblyOwnerUuid() : town.getOwnerUuid();
         AssemblyCompletionEffects.tryNotifyFinisher(world, plugin, entityStore, finisher, plot);
         ConstructionCompleter.finishBuild(world, plugin, finisher, plotId, job.anchor(), job.yaw());
+    }
+
+    /**
+     * Returns a live prefab accessor for the completion pass. The job's buffer may already be released when several
+     * assembling plots share a prefab path and an earlier completion or preview released the cached accessor.
+     */
+    @Nonnull
+    private static IPrefabBuffer acquireCompletionPrefabBuffer(@Nonnull AetherhavenPlugin plugin, @Nonnull PlotAssemblyJob job) {
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(job.constructionId());
+        if (def != null) {
+            Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+            if (prefabPath != null) {
+                return PrefabBufferUtil.getCached(prefabPath);
+            }
+        }
+        return job.buffer();
     }
 
     @Nonnull
