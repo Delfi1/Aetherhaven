@@ -2,7 +2,7 @@
 # Bundle: /aetherhaven subcommand help (tab completion)
 
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
-commands.aetherhaven.towns.desc=Debug: Список всех городов в текущем мире
+commands.aetherhaven.towns.desc=Отладка: Список всех городов в текущем мире
 
 commands.aetherhaven.replace_charter.desc=Восстановить блок устава города в прежнем положении
 commands.aetherhaven.replace_charter.townName.desc=Опцианально укажите название города (полное имя с пробелами)
@@ -29,7 +29,7 @@ commands.aetherhaven.plots.desc=Отладка: вспомогательные �
 commands.aetherhaven.plots.list.desc=Отладка: Список строящихся участков вашего города
 commands.aetherhaven.plots.finishassembly.desc=Креатив: закончить каждую недостроенную постройку в городе
 commands.aetherhaven.plots.remove.desc=Креатив: удалить один участок из города
-commands.aetherhaven.plots.remove.plotId.desc=id участка из списка
+commands.aetherhaven.plots.remove.plotId.desc=Id участка из списка
 
 commands.aetherhaven.needs.desc=Отладка: потребности жителей деревни
 commands.aetherhaven.needs.inspect.desc=Отладка: список ближайших жителей и их потребности
