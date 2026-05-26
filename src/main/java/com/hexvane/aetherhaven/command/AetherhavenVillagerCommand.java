@@ -11,8 +11,8 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.builtin.teleport.components.TeleportHistory;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.FlagArg;
@@ -45,7 +45,7 @@ import javax.annotation.Nullable;
 public final class AetherhavenVillagerCommand extends AbstractCommandCollection {
     public AetherhavenVillagerCommand() {
         super("villager", "aetherhaven_commands_help.commands.aetherhaven.villager.desc");
-        this.setPermissionGroup(com.hypixel.hytale.protocol.GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new ListSubCommand());
         this.addSubCommand(new LocateSubCommand());
         this.addSubCommand(new FixInnSubCommand());
@@ -248,21 +248,22 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
             if (!doTp) {
                 return;
             }
-            if (!PermissionsModule.get().getGroupsForUser(uc.getUuid()).contains(HytalePermissionsProvider.OP_GROUP)) {
+            if (!PermissionsModule.get().getGroupsForUser(uc.getUuid()).contains(HytalePermissionsProvider.GROUP_ADMIN)) {
                 playerRef.sendMessage(Message.translation("aetherhaven_quests_portals.aetherhaven.villager.locateOpRequired"));
                 return;
             }
             HeadRotation npcHr = store.getComponent(npcRef, HeadRotation.getComponentType());
-            Vector3f facing = npcHr != null ? npcHr.getRotation().clone() : npcTc.getRotation().clone();
-            Teleport teleportComponent = Teleport.createForPlayer(world, p.clone(), facing);
+            Rotation3f facing =
+                new Rotation3f(npcHr != null ? npcHr.getRotation() : npcTc.getRotation());
+            Teleport teleportComponent = Teleport.createForPlayer(world, new Vector3d(p), facing);
             TransformComponent playerTc = store.getComponent(ref, TransformComponent.getComponentType());
             HeadRotation playerHr = store.getComponent(ref, HeadRotation.getComponentType());
             if (playerTc != null && playerHr != null) {
                 store.ensureAndGetComponent(ref, TeleportHistory.getComponentType())
                     .append(
                         world,
-                        playerTc.getPosition().clone(),
-                        playerHr.getRotation().clone(),
+                        new Vector3d(playerTc.getPosition()),
+                        new Rotation3f(playerHr.getRotation()),
                         "Aetherhaven villager locate"
                     );
             }
@@ -306,7 +307,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
                 playerRef.sendMessage(Message.translation("aetherhaven_commands_help.aetherhaven.villager.resetFailed").param("reason", "No player position."));
                 return;
             }
-            Vector3d base = tc.getPosition().clone();
+            Vector3d base = new Vector3d(tc.getPosition());
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             String err = VillagerTownResetService.resetAllTownVillagersNearPlayer(world, plugin, town, tm, store, base);
             if (err != null) {

@@ -146,8 +146,8 @@ public final class AetherhavenConstants {
 
     public static final String PERMISSION_PATH_TOOL = "aetherhaven.path.tool";
 
-    /** Slot id for Buuz135 MHUD ({@code com.buuz135.mhud.MultipleHUD}) when that mod is present. */
-    public static final String PATH_TOOL_MHUD_SLOT = "AetherhavenPathTool";
+    /** Key for the path tool status overlay on {@link com.hypixel.hytale.server.core.entity.entities.player.hud.HudManager}. */
+    public static final String PATH_TOOL_HUD_KEY = "AetherhavenPathTool";
 
     /** Revert a placed path that was registered with an undo snapshot (e.g. operator). */
     public static final String PERMISSION_PATH_REVERT = "aetherhaven.path.revert";

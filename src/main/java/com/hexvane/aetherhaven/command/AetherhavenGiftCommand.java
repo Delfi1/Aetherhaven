@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 public final class AetherhavenGiftCommand extends AbstractCommandCollection {
     public AetherhavenGiftCommand() {
         super("gift", "aetherhaven_commands_help.commands.aetherhaven.gift.desc");
-        this.setPermissionGroup(com.hypixel.hytale.protocol.GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new ResetLimitsCommand());
         this.addSubCommand(new FillHistoryCommand());
     }

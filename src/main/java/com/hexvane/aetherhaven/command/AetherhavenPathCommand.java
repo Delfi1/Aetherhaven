@@ -33,7 +33,7 @@ import com.hypixel.hytale.protocol.GameMode;
 public final class AetherhavenPathCommand extends AbstractCommandCollection {
     public AetherhavenPathCommand() {
         super("path", "aetherhaven_items.commands.aetherhaven.path.root.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new RevertCommand());
         this.addSubCommand(new NavVizCommand());
     }
@@ -45,7 +45,7 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
 
         RevertCommand() {
             super("revert", "aetherhaven_items.commands.aetherhaven.path.revert.desc");
-            this.setPermissionGroup(GameMode.Adventure);
+            this.setPermissionGroups("hytale:Adventurer");
         }
 
         @Override
@@ -64,7 +64,7 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
             if (pl == null) {
                 return;
             }
-            if (!pl.hasPermission(AetherhavenConstants.PERMISSION_PATH_REVERT)) {
+            if (!playerRef.hasPermission(AetherhavenConstants.PERMISSION_PATH_REVERT)) {
                 playerRef.sendMessage(Message.translation("aetherhaven_items.aetherhaven.pathTool.revertNoPerm"));
                 return;
             }
@@ -118,7 +118,7 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
             if (pl == null) {
                 return;
             }
-            if (!pl.hasPermission(AetherhavenConstants.PERMISSION_PATH_TOOL)) {
+            if (!playerRef.hasPermission(AetherhavenConstants.PERMISSION_PATH_TOOL)) {
                 playerRef.sendMessage(Message.translation("aetherhaven_items.aetherhaven.pathTool.navvizNoPerm"));
                 return;
             }

@@ -8,15 +8,15 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import org.joml.Vector3d;
+import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.PlayerSkin;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.cosmetics.CosmeticsModule;
 import com.hypixel.hytale.server.core.entity.Frozen;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.modules.entity.component.DisplayNameComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -128,7 +128,7 @@ public final class FounderMonumentSpawnService {
         int blockZ,
         @Nonnull PlayerSkin skin,
         @Nonnull String displayNameForLabel,
-        @Nonnull Vector3f rotation
+        @Nonnull Rotation3f rotation
     ) {
         NPCPlugin npc = NPCPlugin.get();
         if (npc == null) {
@@ -167,8 +167,8 @@ public final class FounderMonumentSpawnService {
         store.ensureComponent(ref, Frozen.getComponentType());
         store.putComponent(
             ref,
-            DisplayNameComponent.getComponentType(),
-            new DisplayNameComponent(Message.raw(displayNameForLabel))
+            PersistentDisplayName.getComponentType(),
+            new PersistentDisplayName(Message.raw(displayNameForLabel))
         );
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         return uc != null ? uc.getUuid() : null;

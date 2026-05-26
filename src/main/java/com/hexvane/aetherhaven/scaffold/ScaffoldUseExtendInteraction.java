@@ -18,9 +18,9 @@ import com.hypixel.hytale.component.Store;
 
 import com.hypixel.hytale.math.util.ChunkUtil;
 
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 
 import com.hypixel.hytale.protocol.BlockMaterial;
 
@@ -124,12 +124,12 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
         world.performBlockUpdate(clientPlacement.x, clientPlacement.y, clientPlacement.z, false);
         ScaffoldDebug.resolve(
             "[UseExtend] resync client-predicted cell %s,%s,%s (placed at %s,%s,%s)",
-            clientPlacement.getX(),
-            clientPlacement.getY(),
-            clientPlacement.getZ(),
-            targetBlockPosition.getX(),
-            targetBlockPosition.getY(),
-            targetBlockPosition.getZ()
+            clientPlacement.x(),
+            clientPlacement.y(),
+            clientPlacement.z(),
+            targetBlockPosition.x(),
+            targetBlockPosition.y(),
+            targetBlockPosition.z()
         );
     }
 
@@ -428,7 +428,7 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
 
                 Float bodyYawRadians = null;
                 if (transformForBox != null) {
-                    float y = transformForBox.getRotation().getYaw();
+                    float y = transformForBox.getRotation().yaw();
                     if (!Float.isNaN(y)) {
                         bodyYawRadians = y;
                     }
@@ -480,7 +480,7 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
 
                         new Vector3d(reachProbe.x + 0.5, reachProbe.y + 0.5, reachProbe.z + 0.5);
 
-                    if (position.distanceSquaredTo(blockCenter) > 49.0) {
+                    if (position.distanceSquared(blockCenter) > 49.0) {
 
                         context.getState().state = InteractionState.Failed;
 
@@ -530,13 +530,10 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
 
                         world, clientState, clientPlacement, targetBlockPosition, interactionBlockTypeKey);
 
-                Vector3i placementNormal =
-
+                Vector3i placementNormal = new Vector3i(
                     useUpNormal
-
                         ? BlockFace.UP.getDirection()
-
-                        : BlockFace.fromProtocolFace(context.getClientState().blockFace).getDirection();
+                        : BlockFace.fromProtocolFace(context.getClientState().blockFace).getDirection());
 
 
 
@@ -544,67 +541,53 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
 
                     "[UseExtend] resolved=%s,%s,%s client=%s,%s,%s useUpNormal=%s placementNormal=%s,%s,%s",
 
-                    targetBlockPosition.getX(),
+                    targetBlockPosition.x(),
 
-                    targetBlockPosition.getY(),
+                    targetBlockPosition.y(),
 
-                    targetBlockPosition.getZ(),
+                    targetBlockPosition.z(),
 
-                    clientPlacement.getX(),
+                    clientPlacement.x(),
 
-                    clientPlacement.getY(),
+                    clientPlacement.y(),
 
-                    clientPlacement.getZ(),
+                    clientPlacement.z(),
 
                     useUpNormal,
 
-                    placementNormal.getX(),
+                    placementNormal.x(),
 
-                    placementNormal.getY(),
+                    placementNormal.y(),
 
-                    placementNormal.getZ()
+                    placementNormal.z()
 
                 );
 
 
 
                 BlockPlaceUtils.placeBlock(
-
                     ref,
-
                     heldItemStack,
-
                     clientPlacedBlockTypeKey != null ? clientPlacedBlockTypeKey : this.blockTypeKey,
-
                     heldItemContainer,
-
                     placementNormal,
-
                     targetBlockPosition,
-
                     blockRotation,
-
-                    playerComponent != null ? playerComponent.getInventory() : null,
-
                     context.getHeldItemSlot(),
-
                     this.removeItemInHand,
-
                     chunkReference,
-
                     chunkStore,
-
                     commandBuffer,
-
+                    false,
+                    false,
                     false
-
                 );
 
                 resyncClientPredictedCellIfRedirected(world, chunkStore, clientPlacement, targetBlockPosition);
 
                 if (AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(interactionBlockTypeKey)) {
 
-                    world.performBlockUpdate(targetBlockPosition.x, targetBlockPosition.y, targetBlockPosition.z, false);
+                    world.performBlockUpdate(targetBlockPosition.x(), targetBlockPosition.y(), targetBlockPosition.z(), false);
 
                     ScaffoldDebug.physics(
 

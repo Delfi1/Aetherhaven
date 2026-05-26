@@ -1,7 +1,7 @@
 package com.hexvane.aetherhaven.wall;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import javax.annotation.Nonnull;
 
@@ -30,9 +30,10 @@ public final class WallPieceGeometry {
         return KIT.piece(constructionId).towerConnectionHalf();
     }
 
-    /** @deprecated use {@link #towerConnectionHalf(String)} */
-    @Deprecated
-    public static final int TOWER_CONNECTION_HALF = 4;
+    /** Max {@link #towerConnectionHalf} when aligning signs across a segment↔tower joint. */
+    public static int towerConnectionTolerance(@Nonnull String constructionIdA, @Nonnull String constructionIdB) {
+        return Math.max(towerConnectionHalf(constructionIdA), towerConnectionHalf(constructionIdB));
+    }
 
     /**
      * World sign for the next piece. {@code worldExpandDir} is the pad the player chose (already mapped from UI to

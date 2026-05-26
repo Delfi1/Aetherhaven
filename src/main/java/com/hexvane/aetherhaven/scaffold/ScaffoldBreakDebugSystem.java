@@ -7,7 +7,7 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
@@ -50,9 +50,9 @@ public final class ScaffoldBreakDebugSystem extends EntityEventSystem<EntityStor
         boolean cancelled = event.isCancelled();
         ScaffoldDebug.breaking(
             "BreakBlockEvent pos=%s,%s,%s cancelled=%s handItem=%s block=%s canDeco=%s gathering=%s",
-            pos.getX(),
-            pos.getY(),
-            pos.getZ(),
+            pos.x(),
+            pos.y(),
+            pos.z(),
             cancelled,
             handId,
             bt.getId(),
@@ -61,7 +61,7 @@ public final class ScaffoldBreakDebugSystem extends EntityEventSystem<EntityStor
         );
 
         World world = store.getExternalData().getWorld();
-        BlockType atPos = world.getBlockType(pos.getX(), pos.getY(), pos.getZ());
+        BlockType atPos = world.getBlockType(pos.x(), pos.y(), pos.z());
         String atId = atPos != null ? atPos.getId() : "(null)";
         ScaffoldDebug.breaking("  world block at target (same tick, may be pre-remove): %s", atId);
     }

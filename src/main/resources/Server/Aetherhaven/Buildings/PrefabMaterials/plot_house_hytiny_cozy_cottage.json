@@ -4,7 +4,7 @@
   "materials": [
     {
       "itemId": "Ingredient_Fibre",
-      "count": 368
+      "count": 376
     },
     {
       "itemId": "Wood_Lightwood_Roof",
@@ -117,10 +117,6 @@
     {
       "itemId": "Furniture_Village_Ladder",
       "count": 5
-    },
-    {
-      "itemId": "Furniture_Ancient_Sack",
-      "count": 4
     },
     {
       "itemId": "Furniture_Kweebec_Candle",

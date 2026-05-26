@@ -1,7 +1,7 @@
 package com.hexvane.aetherhaven.placement;
 
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -57,7 +57,7 @@ public final class PlotPlacementSession {
         @Nullable UUID movePlotId
     ) {
         this.world = world;
-        this.anchor = anchor.clone();
+        this.anchor = new Vector3i(anchor);
         this.rotationSteps = rotationSteps;
         this.constructionId = constructionId;
         this.movePlotId = movePlotId;
@@ -102,11 +102,11 @@ public final class PlotPlacementSession {
 
     @Nonnull
     public Vector3i getAnchor() {
-        return anchor.clone();
+        return new Vector3i(anchor);
     }
 
     public void setAnchor(@Nonnull Vector3i anchor) {
-        this.anchor = anchor.clone();
+        this.anchor = new Vector3i(anchor);
     }
 
     public int getRotationSteps() {

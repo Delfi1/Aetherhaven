@@ -11,7 +11,7 @@ import com.hexvane.aetherhaven.wall.WallPlacementChainPlanner;
 import com.hexvane.aetherhaven.wall.WallTowerAutoConnector;
 import com.hexvane.aetherhaven.wall.WallTowerPrefabResolver;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -197,7 +197,7 @@ public final class WallPlacementSession {
 
     public WallPlacementSession(@Nonnull World world, @Nonnull Vector3i startAnchor) {
         this.world = world;
-        this.currentAnchor = startAnchor.clone();
+        this.currentAnchor = new Vector3i(startAnchor);
         this.currentRotationSteps = 0;
     }
 
@@ -265,11 +265,11 @@ public final class WallPlacementSession {
 
     @Nonnull
     public Vector3i getCurrentAnchor() {
-        return currentAnchor.clone();
+        return new Vector3i(currentAnchor);
     }
 
     public void setCurrentAnchor(@Nonnull Vector3i anchor) {
-        this.currentAnchor = anchor.clone();
+        this.currentAnchor = new Vector3i(anchor);
     }
 
     public int getCurrentRotationSteps() {
@@ -361,7 +361,7 @@ public final class WallPlacementSession {
             if (pieceKind == PieceKind.TOWER) {
                 applyExpandPreviewPlan(
                     WallPlacementChainPlanner.planExpandPreview(
-                        currentAnchor.clone(),
+                        new Vector3i(currentAnchor),
                         currentRotationSteps,
                         toPlannerPieceKind(pieceKind),
                         toPlannerCommitted(),
@@ -379,7 +379,7 @@ public final class WallPlacementSession {
         }
         applyExpandPreviewPlan(
             WallPlacementChainPlanner.planExpandPreview(
-                last.signAnchor.clone(),
+                new Vector3i(last.signAnchor),
                 last.rotationSteps,
                 toPlannerPieceKind(pieceKind),
                 toPlannerCommitted(),
@@ -403,7 +403,7 @@ public final class WallPlacementSession {
 
     private void applyExpandPreviewPlan(@Nonnull WallPlacementChainPlanner.ExpandPreviewPlan plan) {
         int previewY = currentAnchor.y;
-        currentAnchor = plan.anchor().clone();
+        currentAnchor = new Vector3i(plan.anchor());
         currentAnchor = new Vector3i(currentAnchor.x, previewY, currentAnchor.z);
         currentRotationSteps = plan.rotationSteps();
         lastExpandDir = plan.outgoingExpandDir();
@@ -577,7 +577,7 @@ public final class WallPlacementSession {
             return;
         }
 
-        currentAnchor = undone.signAnchor.clone();
+        currentAnchor = new Vector3i(undone.signAnchor);
         currentRotationSteps = undone.rotationSteps;
 
         if (WallPieceGeometry.isTowerConstructionId(undone.constructionId)) {
@@ -779,7 +779,7 @@ public final class WallPlacementSession {
         setEditTargetSegmentId(null);
         pieceKind = PieceKind.SEGMENT;
         towerConnections.clear();
-        currentAnchor = seed.signAnchor.clone();
+        currentAnchor = new Vector3i(seed.signAnchor);
         currentRotationSteps = seed.rotationSteps;
         lastExpandDir = null;
         placementExpandDir = null;
@@ -1028,7 +1028,7 @@ public final class WallPlacementSession {
     private WallPlacementChainPlanner.ChainCommittedPiece toPlannerPiece(@Nonnull CommittedStep step) {
         return new WallPlacementChainPlanner.ChainCommittedPiece(
             step.constructionId,
-            step.signAnchor.clone(),
+            new Vector3i(step.signAnchor),
             step.rotationSteps,
             step.towerConnectionDirs,
             step.chainExpandDir

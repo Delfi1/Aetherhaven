@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.8.0] - 5/26/2026
+
+### Updated to Hytale 0.5.0
+
+### Removed
+
+- **DynamicTooltipsLib Dependency**
+- **MultipleHUD Soft Dependency**
+
+### Added
+
+- **Fibre** Added Fibre to logger production options.
+
+### Changed
+
+- Migrated to Update 5 server APIs: keyed custom HUDs (path tool no longer requires Buuz135 MHUD), `org.joml.Matrix4d` debug overlays, ECS `InventoryChangeEvent` package, `PersistentDisplayName` for founder monuments, and `setPermissionGroups` for commands.
+- Manifest `ServerVersion` range is now `>=0.5.0-pre.0 <0.6.0`.
+
 ## [1.7.0] - 5/22/2026
 
 ### Added

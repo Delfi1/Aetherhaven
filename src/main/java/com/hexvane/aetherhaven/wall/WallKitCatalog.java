@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.PrefabRotation;
 import java.io.InputStream;
@@ -152,7 +152,7 @@ public final class WallKitCatalog {
             resolveInto(parentId.trim(), raw, resolved, pending);
             ResolvedPiece parent = resolved.get(parentId.trim());
             faces.putAll(parent.faces);
-            runAxis = parent.runAxisLocal.clone();
+            runAxis = new Vector3i(parent.runAxisLocal);
             towerHalf = parent.towerConnectionHalf;
             bounds = parent.bounds;
         }
@@ -170,7 +170,7 @@ public final class WallKitCatalog {
         }
         resolved.put(
             id,
-            new ResolvedPiece(id, Map.copyOf(faces), runAxis.clone(), towerHalf, bounds)
+            new ResolvedPiece(id, Map.copyOf(faces), new Vector3i(runAxis), towerHalf, bounds)
         );
         pending.remove(id);
     }
@@ -216,7 +216,7 @@ public final class WallKitCatalog {
                 if (local == null) {
                     continue;
                 }
-                Vector3i rotated = local.clone();
+                Vector3i rotated = new Vector3i(local);
                 PrefabRotation.fromRotation(yaw).rotate(rotated);
                 WallCardinal points = WallCardinal.fromVector(new Vector3i(0, 0, 0), rotated);
                 if (points == worldDir) {
@@ -227,13 +227,13 @@ public final class WallKitCatalog {
             if (fallback == null) {
                 throw new IllegalStateException("no " + kind + " offset on " + worldDir + " for wall kit " + id);
             }
-            Vector3i rotated = fallback.clone();
+            Vector3i rotated = new Vector3i(fallback);
             PrefabRotation.fromRotation(yaw).rotate(rotated);
             return rotated;
         }
 
         public boolean runAlongWorldZ(@Nonnull Rotation yaw) {
-            Vector3i run = runAxisLocal.clone();
+            Vector3i run = new Vector3i(runAxisLocal);
             PrefabRotation.fromRotation(yaw).rotate(run);
             return Math.abs(run.z) >= Math.abs(run.x);
         }

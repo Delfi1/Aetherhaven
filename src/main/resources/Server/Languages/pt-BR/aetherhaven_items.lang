@@ -36,7 +36,7 @@ aetherhaven.poiTool.legendSecondary=Secundário: mover o ponto de interesse sele
 aetherhaven.poiTool.legendUse=Utilização: define o caminho alvo do NPC para o Ponto de Interesse selecionado (Usar em bloqueios de Pontos de Interesse)
 
 aetherhaven.pathTool.legendPageTitle=Ferramenta de caminho
-aetherhaven.pathTool.legendBlurb=Crie uma spline, visualize-a e, em seguida, posicione os blocos de caminho. Um painel de status aparece no canto enquanto você segura a ferramenta. Com o Buuz135 MHUD instalado, o painel é registrado como uma camada separada, permitindo que outros HUDs personalizados também permaneçam visíveis.
+aetherhaven.pathTool.legendBlurb=Crie uma spline, visualize-a e, em seguida, posicione os blocos de caminho. Um painel de status aparece no canto enquanto você segura a ferramenta.
 aetherhaven.pathTool.legendHotkeyAdd=A mira secundária no chão adiciona um quadro-chave (esfera dourada). A mira secundária enquanto mira remove um quadro-chave. Os novos quadros-chave ficam voltados para a direção para a qual você está olhando.
 aetherhaven.pathTool.legendHotkeyAim=Observe um quadro-chave para selecioná-lo. No modo de movimento, a tecla primária no chão move o ponto. A tecla primária no mesmo nó não faz nada.
 aetherhaven.pathTool.legendHotkeyUse=F: no modo de rotação, aplica um passo de guinada no nó selecionado. No modo de movimento, F não faz nada. No modo de posicionamento, F posiciona o caminho (são necessários dois nós). Q: ciclo de modos. E: largura de 1 a 8. Terceira habilidade da ferramenta: estilo de caminho (blocos internos; veja PathToolStyles na configuração). Pressionar a tecla secundária em um quadro-chave remove o estilo.

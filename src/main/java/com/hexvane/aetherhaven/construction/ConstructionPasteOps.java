@@ -7,8 +7,8 @@ import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
@@ -193,7 +193,7 @@ public final class ConstructionPasteOps {
         double xLength = bufferAccess.getMaxX() - bufferAccess.getMinX();
         double zLength = bufferAccess.getMaxZ() - bufferAccess.getMinZ();
         int prefabRadius = (int) Math.floor(0.5 * Math.sqrt(xLength * xLength + zLength * zLength));
-        return LocalCachedChunkAccessor.atWorldCoords(world, origin.getX(), origin.getZ(), prefabRadius);
+        return LocalCachedChunkAccessor.atWorldCoords(world, origin.x(), origin.z(), prefabRadius);
     }
 
     /**
@@ -407,13 +407,13 @@ public final class ConstructionPasteOps {
         if (transformComp == null) {
             return;
         }
-        Vector3d w = transformComp.getPosition().clone();
+        Vector3d w = new Vector3d(transformComp.getPosition());
         boolean blockEntity = clone.getComponent(BlockEntity.getComponentType()) != null;
         Vector3d centerOffset = blockEntity ? new Vector3d(0.5, 0.0, 0.5) : new Vector3d(0.5, 0.5, 0.5);
-        w.subtract(centerOffset);
+        w.sub(centerOffset);
         prefabRotation.rotate(w);
         w.add(centerOffset);
-        w.add(origin);
+        w.add(origin.x, origin.y, origin.z);
         Vector3d pos = transformComp.getPosition();
         pos.x = w.x;
         pos.y = w.y;
@@ -422,10 +422,10 @@ public final class ConstructionPasteOps {
         if (prefabRotation == PrefabRotation.ROTATION_90 || prefabRotation == PrefabRotation.ROTATION_270) {
             dyaw += (float) Math.PI;
         }
-        transformComp.getRotation().setYaw(transformComp.getRotation().getYaw() + dyaw);
+        transformComp.getRotation().setYaw(transformComp.getRotation().yaw() + dyaw);
         HeadRotation headRotation = clone.getComponent(HeadRotation.getComponentType());
         if (headRotation != null) {
-            headRotation.getRotation().setYaw(headRotation.getRotation().getYaw() + dyaw);
+            headRotation.getRotation().setYaw(headRotation.getRotation().yaw() + dyaw);
         }
         PrefabPlaceEntityEvent prefabPlaceEntityEvent = new PrefabPlaceEntityEvent(prefabId, clone);
         entityAccessor.invoke(prefabPlaceEntityEvent);

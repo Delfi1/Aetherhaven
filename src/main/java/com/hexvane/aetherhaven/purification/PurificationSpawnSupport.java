@@ -6,7 +6,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.spatial.SpatialResource;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.common.map.IWeightedMap;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
@@ -68,9 +68,9 @@ public final class PurificationSpawnSupport {
     public record Target(@Nonnull Ref<EntityStore> ref, @Nonnull Kind kind, @Nonnull Vector3d position) {
 
         public double distSqTo(@Nonnull Vector3d p) {
-            double dx = position.getX() - p.getX();
-            double dy = position.getY() - p.getY();
-            double dz = position.getZ() - p.getZ();
+            double dx = position.x() - p.x();
+            double dy = position.y() - p.y();
+            double dz = position.z() - p.z();
             return dx * dx + dy * dy + dz * dz;
         }
     }
@@ -156,7 +156,7 @@ public final class PurificationSpawnSupport {
             if (tc == null) {
                 continue;
             }
-            if (center.distanceSquaredTo(tc.getPosition()) > rangeSq) {
+            if (center.distanceSquared(tc.getPosition()) > rangeSq) {
                 continue;
             }
             if (Kind.MANUAL_BEACON == kind && store.getComponent(r, SpawnBeacon.getComponentType()) == null) {
@@ -196,7 +196,7 @@ public final class PurificationSpawnSupport {
                     if (tc == null) {
                         continue;
                     }
-                    if (center.distanceSquaredTo(tc.getPosition()) > rangeSq) {
+                    if (center.distanceSquared(tc.getPosition()) > rangeSq) {
                         continue;
                     }
                     out.add(new Target(r, Kind.LEGACY_BEACON, new Vector3d(tc.getPosition())));

@@ -36,7 +36,7 @@ aetherhaven.poiTool.legendSecondary=次要操作：将选定的兴趣点移动�
 aetherhaven.poiTool.legendUse=用途：为选定的兴趣点设置NPC路径目标（用于兴趣点区域清除时）
 
 aetherhaven.pathTool.legendPageTitle=路径工具
-aetherhaven.pathTool.legendBlurb=构建样条曲线，预览，然后放置路径块。握住工具时，角落会显示一个状态面板。安装 Buuz135 MHUD 后，该面板会注册为一个独立的图层，因此其他自定义 HUD 也能保持可见。
+aetherhaven.pathTool.legendBlurb=构建样条曲线，预览，然后放置路径块。握住工具时，角落会显示一个状态面板。安装
 aetherhaven.pathTool.legendHotkeyAdd=地面上的辅助技能会添加一个关键帧（金色球体）。瞄准时，辅助技能会移除一个关键帧。新添加的关键帧会朝向你的视线方向。
 aetherhaven.pathTool.legendHotkeyAim=查看关键帧即可选中它。在移动模式下，地面上的主要元素会移动该点。同一节点上的主要元素则不会执行任何操作。
 aetherhaven.pathTool.legendHotkeyUse=F：在旋转模式下，对选定节点进行偏航步进。在移动模式下，F 键无作用。在放置模式下，F 键放置路径（需要两个节点）。Q：模式切换。E：宽度 1-8。第三个工具功能：路径样式（内部块；参见配置中的 PathToolStyles）。在关键帧上按辅助键可移除该路径。

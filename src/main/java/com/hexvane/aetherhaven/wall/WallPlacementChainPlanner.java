@@ -1,7 +1,7 @@
 package com.hexvane.aetherhaven.wall;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import java.util.EnumSet;
 import java.util.List;
@@ -88,7 +88,7 @@ public final class WallPlacementChainPlanner {
                 }
             }
             return new ExpandPreviewPlan(
-                currentAnchor.clone(),
+                new Vector3i(currentAnchor),
                 rot,
                 outgoingExpandDir,
                 outgoingExpandDir,
@@ -179,7 +179,7 @@ public final class WallPlacementChainPlanner {
         @Nonnull WallCardinal chainExpandDir
     ) {
         return planExpandPreview(
-            placed.signAnchor().clone(),
+            new Vector3i(placed.signAnchor()),
             placed.rotationSteps(),
             nextPieceKind,
             List.of(placed),

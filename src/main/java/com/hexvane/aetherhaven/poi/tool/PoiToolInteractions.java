@@ -10,7 +10,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
@@ -35,8 +35,8 @@ public final class PoiToolInteractions {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull ComponentAccessor<EntityStore> accessor
     ) {
-        Player player = accessor.getComponent(playerRef, Player.getComponentType());
-        return player != null && player.hasPermission(AetherhavenConstants.PERMISSION_POI_TOOL);
+        PlayerRef pr = accessor.getComponent(playerRef, PlayerRef.getComponentType());
+        return pr != null && pr.hasPermission(AetherhavenConstants.PERMISSION_POI_TOOL);
     }
 
     public static boolean isPoiToolItem(@Nullable ItemStack stack) {

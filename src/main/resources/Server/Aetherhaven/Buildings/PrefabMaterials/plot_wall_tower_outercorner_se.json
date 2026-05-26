@@ -1,0 +1,82 @@
+{
+  "constructionId": "plot_wall_tower_outercorner_se",
+  "prefabPath": "Wall_Tower_OuterCorner_SE.prefab.json",
+  "materials": [
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 268
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 116
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 109
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 90
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 76
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Half",
+      "count": 40
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 18
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 18
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Beam",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 14
+    },
+    {
+      "itemId": "Furniture_Village_Ladder",
+      "count": 12
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Window",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Village_Brazier",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Decorative",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 4
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 3
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 2
+    }
+  ]
+}

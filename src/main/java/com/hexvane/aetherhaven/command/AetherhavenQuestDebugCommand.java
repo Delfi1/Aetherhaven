@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 public final class AetherhavenQuestDebugCommand extends AbstractCommandCollection {
     public AetherhavenQuestDebugCommand() {
         super("quest", "aetherhaven_commands_help.commands.aetherhaven.quest.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new GrantCommand());
         this.addSubCommand(new CompleteCommand());
         this.addSubCommand(new ClearCommand());

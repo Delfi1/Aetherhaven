@@ -28,12 +28,12 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -273,7 +273,6 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         try {
             PlotPlacementRotationUtil.rotateClockwise90PreservingFootprintCenter(session, def, buf);
         } finally {
-            buf.release();
         }
     }
 
@@ -510,7 +509,6 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 (fp.getMinZ() + fp.getMaxZ() + 1) / 2.0
             );
         } finally {
-            buf.release();
         }
     }
 
@@ -625,7 +623,6 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             try {
                 placedSignPos = PlotSignGrounding.resolveSignCell(world, previewAnchor, def, session.getPrefabYaw(), groundBuf);
             } finally {
-                groundBuf.release();
             }
         } else {
             placedSignPos = previewAnchor;
@@ -684,7 +681,6 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 town.addPlotInstance(inst);
                 tm.updateTown(town);
             } finally {
-                buf.release();
             }
         } else {
             PlotFootprintRecord mini =
@@ -845,7 +841,6 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 PlotAssemblyPreviewSystem.repaintFrontierAfterExternalDebugClear(ref, store);
             }
         } finally {
-            buf.release();
         }
     }
 

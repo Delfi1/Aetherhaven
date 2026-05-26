@@ -4,7 +4,7 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
@@ -28,7 +28,6 @@ final class WallPlacementPrefabFootprints {
             Vector3i origin = def.resolvePrefabAnchorWorld(sign, yaw);
             return PlotFootprintUtil.computeFootprint(origin, yaw, buf);
         } finally {
-            buf.release();
         }
     }
 }

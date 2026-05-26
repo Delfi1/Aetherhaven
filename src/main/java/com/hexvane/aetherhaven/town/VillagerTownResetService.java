@@ -1,5 +1,9 @@
 package com.hexvane.aetherhaven.town;
 
+import com.hypixel.hytale.math.vector.Rotation3f;
+
+import com.hypixel.hytale.math.vector.Vector3fUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyTravelKick;
@@ -14,8 +18,8 @@ import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -436,7 +440,7 @@ public final class VillagerTownResetService {
         if (role.isEmpty()) {
             return null;
         }
-        var pair = npc.spawnNPC(store, role, null, pos, Vector3f.ZERO);
+        var pair = npc.spawnNPC(store, role, null, pos, Rotation3f.ZERO);
         if (pair == null) {
             return null;
         }

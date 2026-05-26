@@ -15,8 +15,8 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.PlayerSkin;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -73,7 +73,7 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
         World world = store.getExternalData().getWorld();
         Vector3i pos = event.getTargetBlock();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownContainingBlock(world.getName(), pos.getX(), pos.getZ());
+        TownRecord town = tm.findTownContainingBlock(world.getName(), pos.x(), pos.z());
         if (town == null) {
             event.setCancelled(true);
             pr.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.founder.inTerritory"));
@@ -85,7 +85,7 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
             return;
         }
         Ref<EntityStore> placingEntityRef = archetypeChunk.getReferenceTo(index);
-        Vector3f statueRotation = statueFacingOppositePlayerLook(store, placingEntityRef);
+        Rotation3f statueRotation = statueFacingOppositePlayerLook(store, placingEntityRef);
         world.execute(() -> afterMonumentPlaced(world, store, tm, town, pr, skin, pos, statueRotation));
     }
 
@@ -95,14 +95,14 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
      * statue.
      */
     @Nonnull
-    private static Vector3f statueFacingOppositePlayerLook(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> placerRef) {
+    private static Rotation3f statueFacingOppositePlayerLook(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> placerRef) {
         TransformComponent tc = store.getComponent(placerRef, TransformComponent.getComponentType());
         if (tc == null) {
-            return new Vector3f(0f, (float) Math.PI, 0f);
+            return new Rotation3f(0f, (float) Math.PI, 0f);
         }
         var r = tc.getRotation();
-        float yawOpp = r.getYaw() + (float) Math.PI;
-        return new Vector3f(r.getPitch(), yawOpp, r.getRoll());
+        float yawOpp = r.yaw() + (float) Math.PI;
+        return new Rotation3f(r.pitch(), yawOpp, r.roll());
     }
 
     private void afterMonumentPlaced(
@@ -113,13 +113,13 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
         @Nonnull PlayerRef pr,
         @Nonnull PlayerSkin skin,
         @Nonnull Vector3i pos,
-        @Nonnull Vector3f statueRotation
+        @Nonnull Rotation3f statueRotation
     ) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.getX(), pos.getZ()));
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x(), pos.z()));
         if (chunk == null) {
             return;
         }
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(pos.getX(), pos.getY(), pos.getZ());
+        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(pos.x(), pos.y(), pos.z());
         if (blockRef == null || !blockRef.isValid()) {
             LOGGER.atWarning().log("Founder monument placed at %s but no block entity", pos);
             return;
@@ -130,9 +130,9 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
             FounderMonumentSpawnService.spawnFounderStatue(
                 world,
                 store,
-                pos.getX(),
-                pos.getY(),
-                pos.getZ(),
+                pos.x(),
+                pos.y(),
+                pos.z(),
                 skin,
                 label,
                 statueRotation

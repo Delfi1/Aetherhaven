@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.hexvane"
-version = "1.7.0"
+version = "1.8.0"
 val javaVersion = 25
 
 repositories {
@@ -17,8 +17,6 @@ repositories {
     }
 }
 
-val dynamicTooltipsLib = "curse.maven:dynamictooltipslib-1459711:7939479"
-
 dependencies {
     // Core parser only. flexmark-all also embeds PDF/HTML converters (iText, OpenHTML) with tens of
     // thousands of extra classes that trigger CurseForge manual security review on upload.
@@ -26,9 +24,6 @@ dependencies {
     implementation("com.google.code.gson:gson:2.11.0")
     compileOnly(libs.jetbrains.annotations)
     compileOnly(libs.jspecify)
-    compileOnly(dynamicTooltipsLib)
-    runtimeOnly(dynamicTooltipsLib)
-
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
@@ -55,6 +50,8 @@ tasks.named<Jar>("jar") {
         exclude("META-INF/*.DSA")
         exclude("META-INF/*.RSA")
     }
+    // Mod Common/ + Server/ + manifest.json must win over anything merged from dependency jars.
+    from(sourceSets.main.get().output.resourcesDir)
 }
 
 hytale {
@@ -65,7 +62,7 @@ hytale {
 
     // uncomment if you want to develop your mod against the pre-release version of the game.
     //
-    //updateChannel = "pre-release"
+    updateChannel = "pre-release"
 }
 
 java {
@@ -280,6 +277,9 @@ afterEvaluate {
         return@afterEvaluate
     }
     val runServer = runServerTask as JavaExec
+    // hytale-mod 0.7.x always adds an empty jvmArg when HytaleServer.aot is missing; on Windows Gradle's
+    // JavaExec then fails with "Could not find or load main class" (empty ClassNotFoundException).
+    runServer.jvmArgs = runServer.jvmArgs.filter { it.isNotBlank() }
     runServer.finalizedBy(syncAssets)
     logger.lifecycle("✅ Task '${runServer.name}' finalized by syncAssets (copy build resources back to src on exit).")
 
@@ -291,6 +291,7 @@ afterEvaluate {
         mainClass = runServer.mainClass
         mainModule = runServer.mainModule
         modularity.inferModulePath = runServer.modularity.inferModulePath
+        jvmArgs = runServer.jvmArgs.filter { it.isNotBlank() }
         workingDir = runServer.workingDir
         jvmArgs = runServer.jvmArgs
         args = runServer.args

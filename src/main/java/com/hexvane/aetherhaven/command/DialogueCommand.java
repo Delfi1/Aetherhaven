@@ -26,7 +26,7 @@ public final class DialogueCommand extends AbstractPlayerCommand {
 
     public DialogueCommand() {
         super("dialogue", "aetherhaven_misc.commands.aetherhaven.dialogue.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
     }
 
     @Override

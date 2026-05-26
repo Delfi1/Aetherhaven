@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryUtils;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.player.PlayerSettings;
@@ -121,9 +122,7 @@ public final class HandMirrorLoadoutActions {
         }
         PlayerSettings settings = getPlayerSettings(ref, store);
         ItemStackTransaction t =
-            player
-                .getInventory()
-                .getContainerForItemPickup(toReturn.getItem(), settings)
+            InventoryUtils.getContainerForItemPickup(ref, toReturn.getItem(), settings, store)
                 .addItemStack(toReturn, true, false, true);
         if (!t.succeeded()) {
             return false;

@@ -1,8 +1,9 @@
 package com.hexvane.aetherhaven.pathtool;
 
-import com.hypixel.hytale.math.matrix.Matrix4d;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hexvane.aetherhaven.debug.DebugLineCylinderUtil;
+import com.hypixel.hytale.math.matrix.Matrix4dUtil;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import com.hypixel.hytale.protocol.DebugFlags;
 import com.hypixel.hytale.protocol.DebugShape;
 import com.hypixel.hytale.protocol.packets.player.ClearDebugShapes;
@@ -10,6 +11,7 @@ import com.hypixel.hytale.protocol.packets.player.DisplayDebug;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Matrix4d;
 
 /**
  * Sends {@link DisplayDebug} to a single player (unlike stock {@code DebugUtils}, which fans out to the whole world).
@@ -65,12 +67,12 @@ public final class PathDebugPreviewUtil {
         Vector3d f = PathSplineUtil.forwardHorizontal(yawDeg);
         double start = srad * 0.9 + 0.01;
         double handleLen = 0.32;
-        double ax = center.getX() + f.getX() * start;
-        double ay = center.getY() + f.getY() * start;
-        double az = center.getZ() + f.getZ() * start;
-        double bx = center.getX() + f.getX() * (start + handleLen);
-        double by = center.getY() + f.getY() * (start + handleLen);
-        double bz = center.getZ() + f.getZ() * (start + handleLen);
+        double ax = center.x() + f.x() * start;
+        double ay = center.y() + f.y() * start;
+        double az = center.z() + f.z() * start;
+        double bx = center.x() + f.x() * (start + handleLen);
+        double by = center.y() + f.y() * (start + handleLen);
+        double bz = center.z() + f.z() * (start + handleLen);
         drawLine(
             player,
             new Vector3d(ax, ay, az),
@@ -89,7 +91,7 @@ public final class PathDebugPreviewUtil {
     ) {
         Matrix4d m = new Matrix4d();
         m.identity();
-        m.translate(center.getX(), center.getY(), center.getZ());
+        m.translate(center.x(), center.y(), center.z());
         m.scale(radius, radius, radius);
         add(player, DebugShape.Sphere, m, color, opacity, FLAG_MACHINIMA, PATH_TOOL_DEBUG_HOLD_SECONDS);
     }
@@ -97,23 +99,16 @@ public final class PathDebugPreviewUtil {
     public static void drawLine(
         @Nonnull PlayerRef player, @Nonnull Vector3d a, @Nonnull Vector3d b, @Nonnull Vector3f color, double thickness
     ) {
-        double dirX = b.getX() - a.getX();
-        double dirY = b.getY() - a.getY();
-        double dirZ = b.getZ() - a.getZ();
+        double dirX = b.x() - a.x();
+        double dirY = b.y() - a.y();
+        double dirZ = b.z() - a.z();
         double len = Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
-        if (len < 0.001) {
+        Matrix4d matrix = DebugLineCylinderUtil.segmentMatrix(
+            a.x(), a.y(), a.z(), b.x(), b.y(), b.z(), thickness, len
+        );
+        if (matrix == null) {
             return;
         }
-        Matrix4d tmp = new Matrix4d();
-        Matrix4d matrix = new Matrix4d();
-        matrix.identity();
-        matrix.translate(a.getX(), a.getY(), a.getZ());
-        double angleY = Math.atan2(dirZ, dirX);
-        matrix.rotateAxis(angleY + (Math.PI / 2), 0.0, 1.0, 0.0, tmp);
-        double angleX = Math.atan2(Math.sqrt(dirX * dirX + dirZ * dirZ), dirY);
-        matrix.rotateAxis(angleX, 1.0, 0.0, 0.0, tmp);
-        matrix.translate(0.0, len * 0.5, 0.0);
-        matrix.scale(thickness, len, thickness);
         add(player, DebugShape.Cylinder, matrix, color, 0.75f, FLAG_MACHINIMA, PATH_TOOL_DEBUG_HOLD_SECONDS);
     }
 
@@ -180,8 +175,7 @@ public final class PathDebugPreviewUtil {
         int flags,
         float lifetimeSeconds
     ) {
-        com.hypixel.hytale.protocol.Vector3f col = new com.hypixel.hytale.protocol.Vector3f(color.getX(), color.getY(), color.getZ());
-        DisplayDebug p = new DisplayDebug(shape, matrix.asFloatData(), col, lifetimeSeconds, (byte) flags, null, opacity);
+        DisplayDebug p = new DisplayDebug(shape, Matrix4dUtil.asFloatData(matrix), color, lifetimeSeconds, (byte) flags, null, opacity);
         player.getPacketHandler().write(p);
     }
 }

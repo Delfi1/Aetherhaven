@@ -2,7 +2,7 @@ package com.hexvane.aetherhaven.construction.assembly;
 
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hypixel.hytale.component.Holder;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.PrefabRotation;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;

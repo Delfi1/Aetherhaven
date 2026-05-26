@@ -1,9 +1,10 @@
 package com.hexvane.aetherhaven.autonomy;
 
 import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hypixel.hytale.math.vector.Vector3dUtil;
 import com.hypixel.hytale.math.util.TrigMathUtil;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blockhitbox.BlockBoundingBoxes;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -161,7 +162,7 @@ public final class VillagerDoorUtil {
             VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, primary.x, primary.y, primary.z)
         );
         DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
-            world,
+            world.getChunkStore(),
             primary.x,
             primary.y,
             primary.z,
@@ -186,7 +187,7 @@ public final class VillagerDoorUtil {
         rotationTuple = RotationTuple.get(
             VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, primary.x, primary.y, primary.z)
         );
-        doorInfo = DoorInteraction.getDoorAtPosition(world, primary.x, primary.y, primary.z, rotationTuple.yaw());
+        doorInfo = DoorInteraction.getDoorAtPosition(world.getChunkStore(), primary.x, primary.y, primary.z, rotationTuple.yaw());
         if (doorInfo == null) {
             return false;
         }
@@ -206,7 +207,7 @@ public final class VillagerDoorUtil {
             VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPos.x, blockPos.y, blockPos.z)
         );
         DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
-            world,
+            world.getChunkStore(),
             blockPos.x,
             blockPos.y,
             blockPos.z,
@@ -241,7 +242,7 @@ public final class VillagerDoorUtil {
                 VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, pos.x, pos.y, pos.z)
             );
             DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
-                world, pos.x, pos.y, pos.z, rotationTuple.yaw()
+                world.getChunkStore(), pos.x, pos.y, pos.z, rotationTuple.yaw()
             );
             if (doorInfo == null) {
                 return false;
@@ -409,7 +410,8 @@ public final class VillagerDoorUtil {
     ) {
         double doorRotationRad = Math.toRadians(doorRotationYaw != null ? doorRotationYaw.getDegrees() : 0.0);
         Vector3d doorRotationVector = new Vector3d(TrigMathUtil.sin(doorRotationRad), 0.0, TrigMathUtil.cos(doorRotationRad));
-        Vector3d direction = Vector3d.directionTo(blockPosition, playerPosition);
+        Vector3d blockCenter = new Vector3d(blockPosition.x() + 0.5, blockPosition.y() + 0.5, blockPosition.z() + 0.5);
+        Vector3d direction = Vector3dUtil.directionTo(blockCenter, playerPosition);
         return direction.dot(doorRotationVector) < 0.0;
     }
 

@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenTownCommand extends AbstractCommandCollection {
     public AetherhavenTownCommand() {
         super("town", "aetherhaven_commands_help.commands.aetherhaven.town.desc");
-        this.setPermissionGroup(GameMode.Adventure);
+        this.setPermissionGroups("hytale:Adventurer");
         this.addSubCommand(new InviteCommand());
         this.addSubCommand(new AcceptCommand());
         this.addSubCommand(new DeclineCommand());
@@ -69,7 +69,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             if (player == null || uc == null) {
                 return;
             }
-            boolean admin = TownPermissionUtil.canAdministerForeignTowns(player);
+            boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, playerRef);
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             String townOpt = context.provided(townArg) ? context.get(townArg) : null;
             TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), townOpt, admin);
@@ -225,7 +225,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             if (player == null || uc == null) {
                 return;
             }
-            boolean admin = TownPermissionUtil.canAdministerForeignTowns(player);
+            boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, playerRef);
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             String townOpt = context.provided(townArg) ? context.get(townArg) : null;
             TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), townOpt, admin);
@@ -274,7 +274,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             if (player == null || uc == null) {
                 return;
             }
-            boolean admin = TownPermissionUtil.canAdministerForeignTowns(player);
+            boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, playerRef);
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             String townOpt = context.provided(townArg) ? context.get(townArg) : null;
             TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), townOpt, admin);

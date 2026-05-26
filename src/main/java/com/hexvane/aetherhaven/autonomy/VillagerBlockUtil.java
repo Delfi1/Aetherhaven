@@ -144,7 +144,7 @@ public final class VillagerBlockUtil {
         WorldChunk wc = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
         if (wc != null) {
             RotationTuple rt = RotationTuple.get(rotationIndexForLoadedChunk(wc, x, y, z));
-            return DoorInteraction.getDoorAtPosition(world, x, y, z, rt.yaw()) != null;
+            return DoorInteraction.getDoorAtPosition(world.getChunkStore(), x, y, z, rt.yaw()) != null;
         }
         return isDoorBlockTypeWhenChunkUnknown(t);
     }

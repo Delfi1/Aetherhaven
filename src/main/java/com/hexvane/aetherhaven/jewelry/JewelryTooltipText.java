@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.jewelry;
 
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,12 @@ public final class JewelryTooltipText {
     @Nonnull
     public static String rarityColorHex(@Nonnull String rarityKey) {
         return RARITY_HEX.getOrDefault(rarityKey, RARITY_HEX.get("COMMON"));
+    }
+
+    /** Bold, tier-colored rarity title for tooltips (e.g. {@code LEGENDARY} in gold). */
+    @Nonnull
+    public static Message rarityBanner(@Nonnull String rarityKey) {
+        return Message.raw(rarityKey).color(rarityColorHex(rarityKey)).bold(true);
     }
 
     @Nonnull

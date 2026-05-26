@@ -1,6 +1,6 @@
 package com.hexvane.aetherhaven.pathtool;
 
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,11 +53,11 @@ public final class PathPlannedCell {
             for (int i = 0; i < w; i++) {
                 // Symmetric band for any W (odd or even): e.g. W=8 uses offsets -3.5..+3.5
                 double lateral = i - 0.5 * (w - 1);
-                double wx = s.position.getX() + s.right.getX() * lateral;
-                double wz = s.position.getZ() + s.right.getZ() * lateral;
+                double wx = s.position.x() + s.right.x() * lateral;
+                double wz = s.position.z() + s.right.z() * lateral;
                 int bx = (int) Math.floor(wx);
                 int bz = (int) Math.floor(wz);
-                int startY = Math.min(319, (int) Math.floor(s.position.getY()) + rayStartAboveY);
+                int startY = Math.min(319, (int) Math.floor(s.position.y()) + rayStartAboveY);
                 Integer y = PathGrounding.findSupportY(world, bx, bz, startY, maxRayDown, 1);
                 if (y == null) {
                     continue;
@@ -96,9 +96,9 @@ public final class PathPlannedCell {
         }
         out.sort(
             (a, b) ->
-                a.pos.getY() == b.pos.getY()
-                    ? a.pos.getX() == b.pos.getX() ? Integer.compare(a.pos.getZ(), b.pos.getZ()) : Integer.compare(a.pos.getX(), b.pos.getX())
-                    : Integer.compare(a.pos.getY(), b.pos.getY())
+                a.pos.y() == b.pos.y()
+                    ? a.pos.x() == b.pos.x() ? Integer.compare(a.pos.z(), b.pos.z()) : Integer.compare(a.pos.x(), b.pos.x())
+                    : Integer.compare(a.pos.y(), b.pos.y())
         );
         return Collections.unmodifiableList(out);
     }

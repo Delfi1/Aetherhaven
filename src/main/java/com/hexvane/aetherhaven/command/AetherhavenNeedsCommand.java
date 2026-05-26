@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
     public AetherhavenNeedsCommand() {
         super("needs", "aetherhaven_commands_help.commands.aetherhaven.needs.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new InspectCommand());
         this.addSubCommand(new SetCommand());
     }

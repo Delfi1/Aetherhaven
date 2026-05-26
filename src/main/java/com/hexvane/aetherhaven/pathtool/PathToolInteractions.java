@@ -10,8 +10,8 @@ import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Transform;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
@@ -46,8 +46,8 @@ public final class PathToolInteractions {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull ComponentAccessor<EntityStore> accessor
     ) {
-        Player player = accessor.getComponent(playerRef, Player.getComponentType());
-        return player != null && player.hasPermission(AetherhavenConstants.PERMISSION_PATH_TOOL);
+        PlayerRef pr = accessor.getComponent(playerRef, PlayerRef.getComponentType());
+        return pr != null && pr.hasPermission(AetherhavenConstants.PERMISSION_PATH_TOOL);
     }
 
     public static void ensureState(
@@ -62,9 +62,9 @@ public final class PathToolInteractions {
     @Nonnull
     public static Vector3d blockTopCenter(@Nonnull Vector3i b, double yOffsetBlocks) {
         return new Vector3d(
-            b.getX() + 0.5,
-            b.getY() + 0.5 + yOffsetBlocks,
-            b.getZ() + 0.5
+            b.x() + 0.5,
+            b.y() + 0.5 + yOffsetBlocks,
+            b.z() + 0.5
         );
     }
 
@@ -456,8 +456,8 @@ public final class PathToolInteractions {
                 Vector3d pick = samples.get(pi).position;
                 TownRecord town = tm.findTownContainingBlock(
                     world.getName(),
-                    (int) Math.floor(pick.getX()),
-                    (int) Math.floor(pick.getZ())
+                    (int) Math.floor(pick.x()),
+                    (int) Math.floor(pick.z())
                 );
                 if (town != null) {
                     return town.getTownId().toString();
@@ -467,8 +467,8 @@ public final class PathToolInteractions {
             Vector3d pick = st.getNodes().get(0).getPosition();
             TownRecord town = tm.findTownContainingBlock(
                 world.getName(),
-                (int) Math.floor(pick.getX()),
-                (int) Math.floor(pick.getZ())
+                (int) Math.floor(pick.x()),
+                (int) Math.floor(pick.z())
             );
             if (town != null) {
                 return town.getTownId().toString();

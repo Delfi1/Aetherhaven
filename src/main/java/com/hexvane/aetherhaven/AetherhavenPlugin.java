@@ -78,9 +78,13 @@ import com.hexvane.aetherhaven.floatinggift.FloatingGiftLootFiles;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftSchedulerSystem;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftDamagePopSystem;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftSystem;
-import com.hexvane.aetherhaven.jewelry.TooltipBridge;
 import com.hexvane.aetherhaven.jewelry.JewelryGemTraits;
+import com.hexvane.aetherhaven.jewelry.JewelryInventoryTooltipSync;
+import com.hexvane.aetherhaven.jewelry.JewelryInventoryTooltipSyncSystem;
+import com.hexvane.aetherhaven.jewelry.JewelryNativeTooltipManager;
 import com.hexvane.aetherhaven.jewelry.JewelryPlayerInitSystem;
+import com.hexvane.aetherhaven.jewelry.JewelryTooltipPacketAdapter;
+import com.hexvane.aetherhaven.jewelry.JewelryVirtualItemRegistry;
 import com.hexvane.aetherhaven.jewelry.JewelryRolling;
 import com.hexvane.aetherhaven.jewelry.LootChestBonusInjectSystem;
 import com.hexvane.aetherhaven.jewelry.LootrPerPlayerLootInjectSystem;
@@ -134,12 +138,16 @@ import com.hexvane.aetherhaven.ui.ProductionStorageUnlocksPage;
 import com.hexvane.aetherhaven.ui.TreasuryPage;
 import com.hexvane.aetherhaven.ui.VillagerNeedsOverviewPage;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
+import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.ResourceType;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
@@ -153,9 +161,17 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.assetstore.AssetPack;
 import com.hypixel.hytale.common.plugin.PluginIdentifier;
+import com.hypixel.hytale.event.EventPriority;
 import com.hypixel.hytale.server.core.HytaleServer;
 import com.hypixel.hytale.server.core.asset.AssetModule;
 import com.hypixel.hytale.server.core.asset.AssetPackRegisterEvent;
+import com.hypixel.hytale.server.core.asset.common.CommonAsset;
+import com.hypixel.hytale.server.core.asset.common.CommonAssetModule;
+import com.hypixel.hytale.server.core.asset.common.CommonAssetRegistry;
+import com.hypixel.hytale.server.core.asset.common.events.SendCommonAssetsEvent;
+import com.hypixel.hytale.protocol.packets.setup.RequestCommonAssetsRebuild;
+import com.hypixel.hytale.server.core.universe.Universe;
+import java.util.List;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -198,6 +214,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nullable
     private ResourceType<EntityStore, AetherhavenGameTimeCursorResource> gameTimeCursorResourceType;
 
+    @Nullable
+    private JewelryVirtualItemRegistry jewelryVirtualItemRegistry;
+
+    @Nullable
+    private JewelryTooltipPacketAdapter jewelryTooltipPacketAdapter;
+
     public AetherhavenPlugin(JavaPluginInit init) {
         super(init);
     }
@@ -205,6 +227,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nullable
     public static AetherhavenPlugin get() {
         return instance;
+    }
+
+    @Nullable
+    public JewelryTooltipPacketAdapter getJewelryTooltipPacketAdapter() {
+        return jewelryTooltipPacketAdapter;
     }
 
     @Nonnull
@@ -317,7 +344,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
         GeodeLootFiles.ensureDefaultLootFile(this);
         FloatingGiftLootFiles.ensureDefaultLootFile(this);
-        TooltipBridge.register();
+        registerModCommonAssetDelivery();
+        registerJewelryNativeTooltipHooks();
+        registerJewelryRarityBorderPackets();
 
         this.gameTimeCursorResourceType =
             this.getEntityStoreRegistry()
@@ -339,6 +368,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         PlayerJewelryLoadout.register(this.getEntityStoreRegistry());
         PlayerTownJournalState.register(this.getEntityStoreRegistry());
         this.getEntityStoreRegistry().registerSystem(new JewelryPlayerInitSystem());
+        this.getEntityStoreRegistry().registerSystem(new JewelryInventoryTooltipSyncSystem());
         this.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
         this.getEntityStoreRegistry().registerSystem(new JewelryStatSyncSystem());
         LootChestWorldLootPending.register(this.getChunkStoreRegistry());
@@ -786,12 +816,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     @Override
     protected void start() {
-        TooltipBridge.registerIfNeeded();
-        if (!TooltipBridge.isRegistered()) {
-            LOGGER
-                .atWarning()
-                .log("DynamicTooltipsLib did not initialize; inventory jewelry tooltips from AetherhavenJewelryDynamicTooltipProvider are disabled");
-        }
+        JewelryNativeTooltipManager.refreshAllPlayers();
         JewelryGemTraits.validateStatIdsAtStartup();
         // Mod packs register in setup0() before LoadAssetEvent, so AssetPackRegisterEvent is not fired then;
         // Asset Editor only sees packs from that event or its early setup() pass. Re-dispatch after assets load.
@@ -803,6 +828,13 @@ public final class AetherhavenPlugin extends JavaPlugin {
                     .getEventBus()
                     .<Void, AssetPackRegisterEvent>dispatchFor(AssetPackRegisterEvent.class)
                     .dispatch(new AssetPackRegisterEvent(pack));
+                CommonAssetModule commonAssets = CommonAssetModule.get();
+                if (commonAssets != null) {
+                    commonAssets.loadCommonAssets(pack, System.nanoTime());
+                    if (Universe.get().getPlayerCount() > 0) {
+                        Universe.get().broadcastPacketNoCache(new RequestCommonAssetsRebuild());
+                    }
+                }
             } else {
                 LOGGER.atWarning().log("Asset pack %s not found in AssetModule; Asset Editor may not list this mod", packId);
             }
@@ -819,6 +851,44 @@ public final class AetherhavenPlugin extends JavaPlugin {
     public void reloadConfigsAndAssetCatalogs() {
         this.config.load().join();
         this.reloadAetherhavenAssetCatalogs();
+    }
+
+    /**
+     * Ensures joining clients receive this mod's {@code Common/} blobs (icons, blockymodels, UI). Vanilla setup only
+     * ships assets the client claims to have cached; a stale or empty {@code CachedAssets} folder skips mod files and
+     * every {@code Icons/ItemsGenerated/*.png} lookup fails even though the server loaded them from {@code build/resources/main}.
+     */
+    private void registerModCommonAssetDelivery() {
+        if (!this.getManifest().includesAssetPack()) {
+            return;
+        }
+        this.getEventRegistry()
+            .registerAsyncGlobal(
+                EventPriority.LAST,
+                SendCommonAssetsEvent.class,
+                future -> future.thenApply(this::pushModCommonAssetsToJoiningClient)
+            );
+    }
+
+    @Nonnull
+    private SendCommonAssetsEvent pushModCommonAssetsToJoiningClient(@Nonnull SendCommonAssetsEvent event) {
+        CommonAssetModule module = CommonAssetModule.get();
+        if (module == null) {
+            return event;
+        }
+        String packId = new PluginIdentifier(this.getManifest()).toString();
+        List<CommonAsset> packAssets = CommonAssetRegistry.getCommonAssetsStartingWith(packId, "");
+        if (packAssets.isEmpty()) {
+            LOGGER
+                .atWarning()
+                .log(
+                    "No common assets registered for pack %s — client item icons and models will be missing. Rebuild with processResources and restart the server.",
+                    packId
+                );
+            return event;
+        }
+        module.sendAssetsToPlayer(event.getPacketHandler(), packAssets, false);
+        return event;
     }
 
     private void reloadAetherhavenAssetCatalogs() {
@@ -843,8 +913,53 @@ public final class AetherhavenPlugin extends JavaPlugin {
         );
     }
 
+    private void registerJewelryNativeTooltipHooks() {
+        this.getEventRegistry()
+            .registerGlobal(
+                PlayerReadyEvent.class,
+                event -> {
+                    Player player = event.getPlayer();
+                    if (player == null || player.getWorld() == null || player.getReference() == null) {
+                        return;
+                    }
+                    player.getWorld()
+                        .execute(
+                            () -> {
+                                Ref<EntityStore> ref = player.getReference();
+                                Store<EntityStore> store = ref.getStore();
+                                PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+                                if (playerRef == null) {
+                                    return;
+                                }
+                                JewelryInventoryTooltipSync.syncPlayerInventory(ref, store);
+                                JewelryNativeTooltipManager.refreshPlayer(playerRef);
+                            });
+                });
+        LOGGER.atInfo().log("Jewelry tooltips use native ItemDisplay metadata (per-stack descriptions)");
+    }
+
+    private void registerJewelryRarityBorderPackets() {
+        this.jewelryVirtualItemRegistry = new JewelryVirtualItemRegistry();
+        this.jewelryTooltipPacketAdapter = new JewelryTooltipPacketAdapter(this.jewelryVirtualItemRegistry);
+        this.jewelryTooltipPacketAdapter.register();
+        this.getEventRegistry()
+            .registerGlobal(
+                PlayerDisconnectEvent.class,
+                event -> {
+                    if (this.jewelryTooltipPacketAdapter != null) {
+                        this.jewelryTooltipPacketAdapter.onPlayerLeave(event.getPlayerRef().getUuid());
+                    }
+                }
+            );
+    }
+
     @Override
     protected void shutdown() {
+        if (this.jewelryTooltipPacketAdapter != null) {
+            this.jewelryTooltipPacketAdapter.deregister();
+            this.jewelryTooltipPacketAdapter = null;
+        }
+        this.jewelryVirtualItemRegistry = null;
         PathNavViz.shutdown();
         instance = null;
         AetherhavenWorldRegistries.saveAll();

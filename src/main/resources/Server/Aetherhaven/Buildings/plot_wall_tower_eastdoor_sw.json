@@ -14,6 +14,6 @@
   "materials": [
     { "itemId": "Rock_Stone_Cobble", "count": 250 },
     { "itemId": "Rock_Stone_Brick", "count": 150 },
-    { "itemId": "Wood_Softwood_Planks", "count": 100 }
+    { "resourceTypeId": "Wood_All", "count": 100 }
   ]
 }

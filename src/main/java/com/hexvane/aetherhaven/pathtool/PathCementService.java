@@ -48,9 +48,9 @@ public final class PathCementService {
         Set<String> grassCleared = new HashSet<>();
         Random r = ThreadLocalRandom.current();
         for (PathPlannedCell.Planned p : plan) {
-            int x = p.pos.getX();
-            int y = p.pos.getY();
-            int z = p.pos.getZ();
+            int x = p.pos.x();
+            int y = p.pos.y();
+            int z = p.pos.z();
             if (!PathToolReplacePredicate.isReplaceable(cfg, world, x, y, z)) {
                 continue;
             }

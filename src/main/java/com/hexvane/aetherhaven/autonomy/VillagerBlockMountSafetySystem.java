@@ -16,7 +16,7 @@ import com.hypixel.hytale.component.dependency.RootDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.MountController;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.player.ChunkTracker;
@@ -112,7 +112,7 @@ public final class VillagerBlockMountSafetySystem extends EntityTickingSystem<En
         BlockMountComponent seat = cs.getComponent(blockRef, BlockMountComponent.getComponentType());
         if (seat != null) {
             Vector3i bp = seat.getBlockPos();
-            long seatChunk = ChunkUtil.indexChunkFromBlock(bp.getX(), bp.getZ());
+            long seatChunk = ChunkUtil.indexChunkFromBlock(bp.x(), bp.z());
             seatVis = ChunkUnloadingSystem.getChunkVisibility(trackers, seatChunk);
         }
 
@@ -137,8 +137,8 @@ public final class VillagerBlockMountSafetySystem extends EntityTickingSystem<En
     }
 
     private static long entityChunkIndex(@Nonnull TransformComponent tc) {
-        int bx = (int) Math.floor(tc.getPosition().getX());
-        int bz = (int) Math.floor(tc.getPosition().getZ());
+        int bx = (int) Math.floor(tc.getPosition().x());
+        int bz = (int) Math.floor(tc.getPosition().z());
         return ChunkUtil.indexChunkFromBlock(bx, bz);
     }
 

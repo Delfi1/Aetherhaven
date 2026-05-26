@@ -36,7 +36,7 @@ aetherhaven.poiTool.legendSecondary=Secondaire : déplacer le point d’intér�
 aetherhaven.poiTool.legendUse=Utilisation : définir la cible du chemin du PNJ pour le point d’intérêt sélectionné (à utiliser lors de la suppression du bloc de point d’intérêt)
 
 aetherhaven.pathTool.legendPageTitle=Outil Chemin
-aetherhaven.pathTool.legendBlurb=Créez une spline, prévisualisez-la, puis placez des blocs de chemin. Un panneau d'état apparaît dans le coin lorsque vous maintenez l'outil enfoncé. Avec Buuz135 MHUD installé, le panneau est enregistré comme un calque distinct, ce qui permet à d'autres HUD personnalisés de rester visibles.
+aetherhaven.pathTool.legendBlurb=Créez une spline, prévisualisez-la, puis placez des blocs de chemin. Un panneau d'état apparaît dans le coin lorsque vous maintenez l'outil enfoncé.
 aetherhaven.pathTool.legendHotkeyAdd=L'action secondaire au sol ajoute une image clé (sphère dorée). L'action secondaire en visant supprime une image clé. Les nouvelles images clés sont orientées dans la direction du regard.
 aetherhaven.pathTool.legendHotkeyAim=Utilisez une image clé pour la sélectionner. En mode déplacement, un clic principal sur le sol déplace le point. Un clic principal sur le même nœud est sans effet.
 aetherhaven.pathTool.legendHotkeyUse=F : en mode rotation, déplace le nœud sélectionné par pas de lacet. En mode déplacement, F est inactif. En mode placement, F place le tracé (deux nœuds sont nécessaires). Q : changement de mode. E : largeur (1 à 8). Troisième fonctionnalité : style de tracé (blocs internes ; voir PathToolStyles dans la configuration). Un appui secondaire sur une image clé permet de le supprimer.

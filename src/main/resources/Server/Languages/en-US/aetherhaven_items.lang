@@ -49,7 +49,7 @@ aetherhaven.poiTool.legendSecondary=Secondary: move selected POI to the block
 aetherhaven.poiTool.legendUse=Use: set NPC path target for selected POI (Use on POI block clears)
 
 aetherhaven.pathTool.legendPageTitle=Path tool
-aetherhaven.pathTool.legendBlurb=Build a spline, preview it, then place pathway blocks. A status panel appears in the corner while you hold the tool. With Buuz135 MHUD installed, the panel registers as its own layer so other custom HUDs can stay visible too.
+aetherhaven.pathTool.legendBlurb=Build a spline, preview it, then place pathway blocks. A status panel appears in the corner while you hold the tool.
 aetherhaven.pathTool.legendHotkeyAdd=Secondary on ground adds a keyframe (gold sphere). Secondary while aiming a keyframe removes it. New keyframes face the way you are looking.
 aetherhaven.pathTool.legendHotkeyAim=Look at a keyframe to select it. In move mode, primary on ground moves the point. Primary on the same node does nothing.
 aetherhaven.pathTool.legendHotkeyUse=F: in rotate mode, step yaw on the selected node. In move mode, F does nothing. In place mode, F places the path (need two nodes). Q: mode cycle. E: width 1-8. Third tool ability: path style (inner blocks; see PathToolStyles in config). Secondary on a keyframe removes it.

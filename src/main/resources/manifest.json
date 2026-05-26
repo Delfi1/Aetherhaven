@@ -10,9 +10,6 @@
   ],
   "Website": "${plugin_website}",
   "ServerVersion": "${server_version}",
-  "Dependencies": {
-    "org.herolias:DynamicTooltipsLib": ">=1.6.0"
-  },
   "OptionalDependencies": {
     "Hytale:NPC": "*"
   },

@@ -21,9 +21,9 @@ import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.RootDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
@@ -106,7 +106,8 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         if (player == null) {
             return;
         }
-        if (!player.hasPermission(AetherhavenConstants.PERMISSION_POI_TOOL)) {
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr == null || !pr.hasPermission(AetherhavenConstants.PERMISSION_POI_TOOL)) {
             clearLabelsIfPresent(world, store, commandBuffer, playerRef);
             return;
         }
@@ -134,9 +135,9 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         Vector3d ppos = t.getPosition();
         List<PoiEntry> nearby = new ArrayList<>();
         for (PoiEntry e : reg.allEntries()) {
-            double dx = (e.getX() + 0.5) - ppos.getX();
-            double dy = (e.getY() + 0.5) - ppos.getY();
-            double dz = (e.getZ() + 0.5) - ppos.getZ();
+            double dx = (e.getX() + 0.5) - ppos.x();
+            double dy = (e.getY() + 0.5) - ppos.y();
+            double dz = (e.getZ() + 0.5) - ppos.z();
             if (dx * dx + dy * dy + dz * dz <= VIZ_RANGE_SQ) {
                 nearby.add(e);
             }
@@ -203,7 +204,7 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         @Nonnull World world,
         @Nonnull PoiDebugLabelEntity entity,
         @Nonnull Vector3d position,
-        @Nonnull Vector3f rotation
+        @Nonnull Rotation3f rotation
     ) {
         if (!EntityModule.get().isKnown(entity)) {
             throw new IllegalArgumentException("Unknown entity");
@@ -215,7 +216,7 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         if (entity.getReference() != null && entity.getReference().isValid()) {
             throw new IllegalArgumentException("Entity already has a valid EntityReference: " + entity.getReference());
         }
-        if (position.getY() < -32.0) {
+        if (position.y() < -32.0) {
             throw new IllegalArgumentException("Unable to spawn entity below the world! -32 < " + position);
         }
         entity.unloadFromWorld();
@@ -251,7 +252,7 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         Model markerModel = Model.createUnitScaleModel(markerAsset);
         Model anchorModel = Model.createScaledModel(markerAsset, NAMEPLATE_ANCHOR_MODEL_SCALE);
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        Vector3f rot = new Vector3f(0.0F, 0.0F, 0.0F);
+        Rotation3f rot = new Rotation3f(0.0F, 0.0F, 0.0F);
         for (PoiEntry poi : nearby) {
             Vector3d markerPos = new Vector3d(
                 poi.getX() + POI_BLOCK_CENTER,
@@ -334,7 +335,7 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         @Nonnull Store<EntityStore> store,
         @Nonnull PoiToolPlayerComponent state,
         @Nonnull Vector3d markerPos,
-        @Nonnull Vector3f rot,
+        @Nonnull Rotation3f rot,
         @Nonnull String text,
         @Nonnull Model markerModel,
         @Nonnull Model anchorModel
@@ -357,7 +358,7 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
             state.getDebugLabelEntityUuids().add(markerUc.getUuid());
         }
 
-        Vector3d nameplatePos = new Vector3d(markerPos.getX(), markerPos.getY() + NAMEPLATE_PIVOT_OFFSET_Y, markerPos.getZ());
+        Vector3d nameplatePos = new Vector3d(markerPos.x(), markerPos.y() + NAMEPLATE_PIVOT_OFFSET_Y, markerPos.z());
         PoiDebugLabelEntity nameplateEnt = new PoiDebugLabelEntity();
         nameplateEnt.loadIntoWorld(world);
         nameplateEnt.setOwnerPlayerUuid(ownerUuid);

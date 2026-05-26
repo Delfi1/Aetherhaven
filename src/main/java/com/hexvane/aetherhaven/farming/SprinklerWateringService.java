@@ -13,7 +13,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
@@ -169,7 +169,7 @@ public final class SprinklerWateringService {
      *     a sprinkler
      */
     public static int activateSprinklerAt(@Nonnull World world, @Nonnull Store<EntityStore> entityStore, @Nonnull Vector3i pos) {
-        return activateSprinklerAt(world, entityStore, pos.getX(), pos.getY(), pos.getZ());
+        return activateSprinklerAt(world, entityStore, pos.x(), pos.y(), pos.z());
     }
 
     /**

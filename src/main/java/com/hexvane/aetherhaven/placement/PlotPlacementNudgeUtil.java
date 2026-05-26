@@ -31,7 +31,7 @@ public final class PlotPlacementNudgeUtil {
         if (tc == null) {
             return 0f;
         }
-        return tc.getRotation().getYaw();
+        return tc.getRotation().yaw();
     }
 
     public static void nudgeHorizontal(

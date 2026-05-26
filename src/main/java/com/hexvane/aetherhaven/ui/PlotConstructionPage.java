@@ -42,8 +42,8 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.server.core.Message;
@@ -128,7 +128,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     ) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
         this.blockRef = blockRef;
-        this.blockWorldPos = blockWorldPos.clone();
+        this.blockWorldPos = new Vector3i(blockWorldPos);
         this.managementUi = managementUi;
         this.managementTab = initialManagementTab;
         this.pendingMoveBuildingModal = openMoveBuildingModalOnFirstBuild;
@@ -1272,7 +1272,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         Vector3d dropPos =
             tc != null
-                ? tc.getPosition().clone()
+                ? new Vector3d(tc.getPosition())
                 : new Vector3d(blockWorldPos.x + 0.5, blockWorldPos.y, blockWorldPos.z + 0.5);
         if (!refunded.isEmpty()) {
             PlotMaterialDepositService.refundToPlayer(player, ref, store, refunded, dropPos);

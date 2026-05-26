@@ -1,0 +1,46 @@
+{
+  "constructionId": "plot_wall_segment",
+  "prefabPath": "Wall_NS.prefab.json",
+  "materials": [
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 269
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 79
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 73
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 48
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 40
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 27
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 24
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Half",
+      "count": 24
+    },
+    {
+      "itemId": "Furniture_Village_Brazier",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 4
+    }
+  ]
+}
