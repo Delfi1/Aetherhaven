@@ -4,7 +4,7 @@
   "description": "A barn variant that counts as a standard barn for jobs, production, and quests. Prefab built by HytinyBuilds.",
   "prefabPath": "Hytinys_Barn.prefab.json",
   "countsAsConstructionId": "plot_barn",
-  "selfBuildGameDays": 3,
+  "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Barn_Hytiny",
   "plotAnchorOffset": [9, 0, 9],
   "managementBlockLocalPos": [-2, 2, 7],

@@ -8,8 +8,8 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.server.core.util.TargetUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -39,9 +39,9 @@ public final class AssemblyPreviewRay {
         Transform look = TargetUtil.getLook(playerRef, store);
         Vector3d o = look.getPosition();
         Vector3d d = look.getDirection();
-        double dx = d.getX();
-        double dy = d.getY();
-        double dz = d.getZ();
+        double dx = d.x();
+        double dy = d.y();
+        double dz = d.z();
         double len = Math.sqrt(dx * dx + dy * dy + dz * dz);
         if (len < 1.0e-6) {
             return null;
@@ -49,9 +49,9 @@ public final class AssemblyPreviewRay {
         dx /= len;
         dy /= len;
         dz /= len;
-        double ox = o.getX();
-        double oy = o.getY();
-        double oz = o.getZ();
+        double ox = o.x();
+        double oy = o.y();
+        double oz = o.z();
 
         double bestT = Double.POSITIVE_INFINITY;
         Vector3i bestCell = null;

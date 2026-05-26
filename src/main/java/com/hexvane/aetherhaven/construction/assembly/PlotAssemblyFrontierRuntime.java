@@ -3,7 +3,7 @@ package com.hexvane.aetherhaven.construction.assembly;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hexvane.aetherhaven.town.PlotInstance;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;

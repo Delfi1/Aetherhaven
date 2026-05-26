@@ -11,7 +11,7 @@ import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.RootDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
-import com.hypixel.hytale.math.vector.Vector3f;
+import org.joml.Vector3f;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -69,15 +69,15 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         if (p == null) {
             return;
         }
-        if (!p.hasPermission(AetherhavenConstants.PERMISSION_PATH_TOOL)) {
-            return;
-        }
-        ItemStack hand = InventoryComponent.getItemInHand(commandBuffer, ref);
         @Nullable
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr == null) {
             return;
         }
+        if (!pr.hasPermission(AetherhavenConstants.PERMISSION_PATH_TOOL)) {
+            return;
+        }
+        ItemStack hand = InventoryComponent.getItemInHand(commandBuffer, ref);
         boolean holdingPathTool =
             hand != null && !hand.isEmpty() && AetherhavenConstants.PATH_TOOL_ITEM_ID.equals(hand.getItemId());
         boolean customPageOpen = p.getPageManager().getCustomPage() != null;
@@ -169,14 +169,14 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
                 break;
             }
             boolean isCenter = cell.role == PathPlannedCell.CellRole.Center;
-            boolean ok = PathToolReplacePredicate.isReplaceable(cfg, w, cell.pos.getX(), cell.pos.getY(), cell.pos.getZ());
+            boolean ok = PathToolReplacePredicate.isReplaceable(cfg, w, cell.pos.x(), cell.pos.y(), cell.pos.z());
             Vector3f col;
             if (isCenter) {
                 col = ok ? new Vector3f(0.5f, 0.32f, 0.12f) : new Vector3f(0.45f, 0.1f, 0.05f);
             } else {
                 col = ok ? new Vector3f(0.18f, 0.55f, 0.22f) : new Vector3f(0.4f, 0.05f, 0.05f);
             }
-            PathDebugPreviewUtil.drawPlannedBlock(pr, cell.pos.getX(), cell.pos.getY(), cell.pos.getZ(), col, w);
+            PathDebugPreviewUtil.drawPlannedBlock(pr, cell.pos.x(), cell.pos.y(), cell.pos.z(), col, w);
         }
     }
 }

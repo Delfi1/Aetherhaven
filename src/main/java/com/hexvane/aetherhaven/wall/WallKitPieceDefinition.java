@@ -1,7 +1,7 @@
 package com.hexvane.aetherhaven.wall;
 
 import com.google.gson.annotations.SerializedName;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import java.util.EnumMap;
 import java.util.Map;
 import javax.annotation.Nonnull;

@@ -11,7 +11,7 @@ import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -244,9 +244,9 @@ public final class VillagerGiftService {
         if (tc == null) {
             return;
         }
-        double hx = tc.getPosition().getX();
-        double hy = tc.getPosition().getY();
-        double hz = tc.getPosition().getZ();
+        double hx = tc.getPosition().x();
+        double hy = tc.getPosition().y();
+        double hz = tc.getPosition().z();
         float eye = 1.6F;
         ModelComponent mc = store.getComponent(npcRef, ModelComponent.getComponentType());
         if (mc != null) {

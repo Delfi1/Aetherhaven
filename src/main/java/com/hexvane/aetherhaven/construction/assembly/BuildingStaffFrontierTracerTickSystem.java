@@ -17,8 +17,8 @@ import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.server.core.modules.collision.TangiableEntitySpatialSystem;
 import com.hypixel.hytale.server.core.modules.entity.system.TransformSystems;
 import com.hypixel.hytale.server.core.modules.entity.tracker.EntityTrackerSystems;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
@@ -142,16 +142,16 @@ public final class BuildingStaffFrontierTracerTickSystem extends EntityTickingSy
         tc.setPosition(moved);
         double pitch = Math.asin(Math.max(-1.0, Math.min(1.0, ny)));
         double yaw = Math.atan2(-nx, -nz);
-        head.teleportRotation(new Vector3f((float) pitch, (float) yaw, 0.0F));
+        head.teleportRotation(new Rotation3f((float) pitch, (float) yaw, 0.0F));
         ParticleUtil.spawnParticleEffect(
             AetherhavenConstants.BUILDING_STAFF_GUIDE_TRAIL_PARTICLE_SYSTEM_ID,
-            moved.clone(),
+            new Vector3d(moved),
             store
         );
         if (tracer.getTicksAlive() % 5 == 0) {
             ParticleUtil.spawnParticleEffect(
                 AetherhavenConstants.BUILDING_STAFF_MATERIAL_BEAD_PARTICLE_SYSTEM_ID,
-                moved.clone(),
+                new Vector3d(moved),
                 store
             );
         }

@@ -9,9 +9,9 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.FastRandom;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
@@ -136,7 +136,7 @@ public final class PlotPreviewSpawner {
         RotationTuple rt = RotationTuple.get(blockRotationIndex);
         // BlockEntity meshes use a -Z forward; block RotationTuple yaw is aligned to chunk space. Add π so preview matches world block facing.
         float yawRad = (float) (rt.yaw().getRadians() + Math.PI);
-        Vector3f euler = new Vector3f(
+        Rotation3f euler = new Rotation3f(
             (float) rt.pitch().getRadians(),
             yawRad,
             (float) rt.roll().getRadians()

@@ -11,9 +11,10 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.spatial.SpatialResource;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import com.hypixel.hytale.math.vector.Rotation3fc;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.Color;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
@@ -246,16 +247,16 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         }
         HeadRotation head = store.getComponent(playerRef, HeadRotation.getComponentType());
         Vector3d forward = head != null ? head.getDirection() : directionFromRotation(transform.getRotation());
-        Vector3d tip = transform.getPosition().clone().add(0.0, 1.32, 0.0).add(forward.clone().scale(0.42));
-        float yaw = head != null ? head.getRotation().getYaw() : transform.getRotation().getYaw();
-        float pitch = head != null ? head.getRotation().getPitch() : transform.getRotation().getPitch();
-        float roll = head != null ? head.getRotation().getRoll() : transform.getRotation().getRoll();
+        Vector3d tip = new Vector3d(transform.getPosition()).add(0.0, 1.32, 0.0).add(new Vector3d(forward).mul(0.42));
+        float yaw = head != null ? head.getRotation().yaw() : transform.getRotation().yaw();
+        float pitch = head != null ? head.getRotation().pitch() : transform.getRotation().pitch();
+        float roll = head != null ? head.getRotation().roll() : transform.getRotation().roll();
         List<Ref<EntityStore>> nearby = particleRecipientsForPlayer(playerRef, tip, store);
         ParticleUtil.spawnParticleEffect(
             AetherhavenConstants.BUILDING_STAFF_STREAM_PARTICLE_SYSTEM_ID,
-            tip.getX(),
-            tip.getY(),
-            tip.getZ(),
+            tip.x(),
+            tip.y(),
+            tip.z(),
             yaw,
             pitch,
             roll,
@@ -279,7 +280,7 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         }
         HeadRotation head = store.getComponent(playerRef, HeadRotation.getComponentType());
         Vector3d forward = head != null ? head.getDirection() : directionFromRotation(transform.getRotation());
-        Vector3d tip = transform.getPosition().clone().add(0.0, 1.32, 0.0).add(forward.clone().scale(0.42));
+        Vector3d tip = new Vector3d(transform.getPosition()).add(0.0, 1.32, 0.0).add(new Vector3d(forward).mul(0.42));
         Vector3d target = new Vector3d(hit.x + 0.5, hit.y + 0.52, hit.z + 0.5);
         List<Ref<EntityStore>> nearby = particleRecipientsForPlayer(playerRef, tip, store);
         for (int i = 1; i < TRACER_STEPS; i++) {
@@ -336,9 +337,9 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
     }
 
     @Nonnull
-    private static Vector3d directionFromRotation(@Nonnull Vector3f euler) {
-        double pitch = euler.getPitch();
-        double yaw = euler.getYaw();
+    private static Vector3d directionFromRotation(@Nonnull Rotation3fc euler) {
+        double pitch = euler.pitch();
+        double yaw = euler.yaw();
         double len = Math.cos(pitch);
         double x = len * -Math.sin(yaw);
         double y = Math.sin(pitch);

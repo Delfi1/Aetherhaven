@@ -1,5 +1,9 @@
 package com.hexvane.aetherhaven.inn;
 
+import com.hypixel.hytale.math.vector.Rotation3f;
+
+import com.hypixel.hytale.math.vector.Vector3fUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -20,9 +24,9 @@ import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.time.TimeModule;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
@@ -847,7 +851,7 @@ public final class InnPoolService {
         int wy = anchor.y + d.y;
         int wz = anchor.z + d.z;
         Vector3d pos = new Vector3d(wx + 0.5, wy, wz + 0.5);
-        var pair = npc.spawnNPC(store, roleId, null, pos, Vector3f.ZERO);
+        var pair = npc.spawnNPC(store, roleId, null, pos, Rotation3f.ZERO);
         if (pair == null) {
             LOGGER.atWarning().log("Failed to spawn inn visitor %s for town %s", roleId, town.getTownId());
             return null;
@@ -888,7 +892,7 @@ public final class InnPoolService {
         if (npc == null) {
             return null;
         }
-        var pair = npc.spawnNPC(store, roleId, null, worldPosition, Vector3f.ZERO);
+        var pair = npc.spawnNPC(store, roleId, null, worldPosition, Rotation3f.ZERO);
         if (pair == null) {
             LOGGER.atWarning().log("Failed to spawn inn visitor %s for town %s at reset position", roleId, town.getTownId());
             return null;

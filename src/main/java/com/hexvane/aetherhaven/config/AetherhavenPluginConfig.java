@@ -450,7 +450,7 @@ public final class AetherhavenPluginConfig {
     private int treasuryMaxGoldTaxPerVillagerPerDay = 10;
 
     /** Chance per ore block break to drop an extra geode item. */
-    private double geodeDropChancePerOreBreak = 0.015;
+    private double geodeDropChancePerOreBreak = 0.025;
 
     private boolean geodeOreUseBlocksOresCategory = true;
 

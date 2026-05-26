@@ -1,6 +1,6 @@
 package com.hexvane.aetherhaven.pathtool;
 
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,9 +25,9 @@ public final class PathToolRayPick {
         @Nonnull List<PathToolNode> nodes,
         double nodeRadius
     ) {
-        double dx = direction.getX();
-        double dy = direction.getY();
-        double dz = direction.getZ();
+        double dx = direction.x();
+        double dy = direction.y();
+        double dz = direction.z();
         double dLen = Math.sqrt(dx * dx + dy * dy + dz * dz);
         if (dLen < 1.0e-6) {
             return null;
@@ -39,9 +39,9 @@ public final class PathToolRayPick {
         double bestT = Double.POSITIVE_INFINITY;
         PathToolNode best = null;
         for (PathToolNode n : nodes) {
-            double lx = origin.getX() - n.getX();
-            double ly = origin.getY() - n.getY();
-            double lz = origin.getZ() - n.getZ();
+            double lx = origin.x() - n.getX();
+            double ly = origin.y() - n.getY();
+            double lz = origin.z() - n.getZ();
             double b = 2.0 * (dx * lx + dy * ly + dz * lz);
             double c = lx * lx + ly * ly + lz * lz - r2;
             double disc = b * b - 4.0 * c;

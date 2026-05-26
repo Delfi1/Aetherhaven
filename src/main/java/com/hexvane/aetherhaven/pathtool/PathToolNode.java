@@ -1,6 +1,6 @@
 package com.hexvane.aetherhaven.pathtool;
 
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import java.util.Objects;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -17,9 +17,9 @@ public final class PathToolNode {
 
     public PathToolNode(@Nonnull UUID id, @Nonnull Vector3d pos, double yawDeg) {
         this.id = id;
-        this.x = pos.getX();
-        this.y = pos.getY();
-        this.z = pos.getZ();
+        this.x = pos.x();
+        this.y = pos.y();
+        this.z = pos.z();
         this.yawDeg = normalizeYaw360(yawDeg);
     }
 

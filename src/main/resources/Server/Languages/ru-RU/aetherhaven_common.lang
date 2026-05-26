@@ -21,7 +21,7 @@ aetherhaven.common.ownerOnlyStatue=Использовать статую мож�
 aetherhaven.common.noReviveVillagersPermission=Вы не можете оживлять жителей деревни у этой статуи.
 aetherhaven.common.noPlayerId=Идентификатор игрока отсутствует.
 aetherhaven.common.playersOnly=Только для игроков.
-aetherhaven.common.invalidVillager=Житель не найден
+aetherhaven.common.invalidVillager=Житель деревни с ограниченными возможностями здоровья.
 
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter
@@ -33,4 +33,4 @@ aetherhaven.chartertown.info.townDataMissing=Данные о городе не �
 aetherhaven.chartertown.townInfoBlock=Название города: {name}\nID города: {id}\nУровень: {tier}\nТерритория (радиус в чанках): {radius}\nУстав расположен на {cx}, {cy}, {cz}
 aetherhaven.chartertown.nameEmpty=Название города не может быть пустым.
 aetherhaven.chartertown.nameDuplicate=Это название уже используется другим городом в этом мире.
-aetherhaven.chartertown.nameSaved=Название города обновлено: {name}
+aetherhaven.chartertown.nameSaved=Сохранено название города: {name}

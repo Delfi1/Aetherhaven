@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import java.util.EnumSet;
 import java.util.List;
@@ -36,7 +36,13 @@ class WallPlacementChainPlannerTest {
         assertTrue(plan.towerConnections().contains(WallCardinal.SOUTH));
         assertTrue(plan.towerConnections().contains(WallCardinal.EAST));
         assertTrue(plan.anchor().z < northWall.z, "tower at north run tip, not south of start");
-        WallPlacementJointAssert.assertWallColumnAligned(northWall.x, plan.anchor(), "corner at north tip");
+        WallPlacementJointAssert.assertWallColumnAligned(
+            northWall.x,
+            plan.anchor(),
+            sim.committed().get(0).constructionId(),
+            plan.resolvedConstructionId(),
+            "corner at north tip"
+        );
     }
 
     @Test
@@ -93,14 +99,16 @@ class WallPlacementChainPlannerTest {
         Vector3i towerSign = tower.signAnchor();
         sim.expandPlace(WallCardinal.WEST);
         WallPlacementChainPlanner.ChainCommittedPiece ewSegment = sim.lastCommitted();
+        int jointHalf =
+            WallPieceGeometry.towerConnectionTolerance(tower.constructionId(), ewSegment.constructionId());
         assertTrue(
-            Math.abs(ewSegment.signAnchor().z - towerSign.z) <= WallPieceGeometry.TOWER_CONNECTION_HALF,
+            Math.abs(ewSegment.signAnchor().z - towerSign.z) <= jointHalf,
             "E/W run must stay on tower Z row"
         );
-        Vector3i beforeSecondWest = ewSegment.signAnchor().clone();
+        Vector3i beforeSecondWest = new Vector3i(ewSegment.signAnchor());
         sim.expandPlace(WallCardinal.WEST);
         assertTrue(
-            Math.abs(sim.lastCommitted().signAnchor().z - towerSign.z) <= WallPieceGeometry.TOWER_CONNECTION_HALF
+            Math.abs(sim.lastCommitted().signAnchor().z - towerSign.z) <= jointHalf
         );
         assertTrue(sim.lastCommitted().signAnchor().x < beforeSecondWest.x, "second west segment steps west on X");
     }
@@ -229,7 +237,13 @@ class WallPlacementChainPlannerTest {
         assertEquals(WallCardinal.SOUTH, plan.positionDir());
         assertTrue(plan.towerConnections().contains(WallCardinal.SOUTH));
         assertEquals(2, plan.towerConnections().size());
-        WallPlacementJointAssert.assertWallRowAligned(wallSign.z, plan.anchor(), "corner at west run tip");
+        WallPlacementJointAssert.assertWallRowAligned(
+            wallSign.z,
+            plan.anchor(),
+            sim.committed().get(0).constructionId(),
+            plan.resolvedConstructionId(),
+            "corner at west run tip"
+        );
         assertTrue(plan.anchor().x < wallSign.x, "south pad keeps tower at west chain end");
     }
 
@@ -261,14 +275,18 @@ class WallPlacementChainPlannerTest {
         sim.pieceKind(WallPlacementChainPlanner.PieceKind.TOWER).expandPlace(WallCardinal.EAST);
         Vector3i towerSign = sim.committed().get(1).signAnchor();
         sim.expandPlace(WallCardinal.EAST);
-        Vector3i segSign = sim.lastCommitted().signAnchor();
+        WallPlacementChainPlanner.ChainCommittedPiece towerPiece = sim.committed().get(1);
+        WallPlacementChainPlanner.ChainCommittedPiece segPiece = sim.lastCommitted();
+        Vector3i segSign = segPiece.signAnchor();
+        int jointHalf =
+            WallPieceGeometry.towerConnectionTolerance(towerPiece.constructionId(), segPiece.constructionId());
         assertTrue(
-            Math.abs(segSign.z - towerSign.z) <= WallPieceGeometry.TOWER_CONNECTION_HALF,
+            Math.abs(segSign.z - towerSign.z) <= jointHalf,
             "E/W segment must stay on tower row"
         );
         assertTrue(Math.abs(segSign.z) > 32, "must not collapse to z~0, got " + segSign.z);
         assertTrue(
-            segSign.x >= towerSign.x - WallPieceGeometry.TOWER_CONNECTION_HALF,
+            segSign.x >= towerSign.x - jointHalf,
             "east segment must not sit west of tower (tower x=" + towerSign.x + ", seg x=" + segSign.x + ")"
         );
     }

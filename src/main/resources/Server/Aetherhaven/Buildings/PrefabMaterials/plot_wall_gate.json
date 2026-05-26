@@ -1,0 +1,42 @@
+{
+  "constructionId": "plot_wall_gate",
+  "prefabPath": "Wall_Gate_NS.prefab.json",
+  "materials": [
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 242
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 91
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 70
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 48
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 42
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 33
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Half",
+      "count": 24
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 20
+    },
+    {
+      "itemId": "Furniture_Village_Brazier",
+      "count": 4
+    }
+  ]
+}

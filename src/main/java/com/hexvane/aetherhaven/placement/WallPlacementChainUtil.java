@@ -12,7 +12,7 @@ import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 
 import com.hexvane.aetherhaven.wall.WallCardinal;
 
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 
@@ -260,11 +260,6 @@ public final class WallPlacementChainUtil {
             );
 
         } finally {
-
-            fromBuf.release();
-
-            newBuf.release();
-
         }
 
     }

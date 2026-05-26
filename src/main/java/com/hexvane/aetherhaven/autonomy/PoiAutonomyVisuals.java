@@ -9,9 +9,9 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
@@ -140,9 +140,8 @@ public final class PoiAutonomyVisuals {
         }
         try {
             hb.getInventory().setItemStackForSlot((short) 0, new ItemStack(AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID, 1));
-            hb.setActiveSlot((byte) 0);
+            hb.setActiveSlot((byte) 0, npcRef, commandBuffer);
             commandBuffer.putComponent(npcRef, InventoryComponent.Hotbar.getComponentType(), hb);
-            invalidateLivingEquipment(npcRef, store);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not equip campfire display item on NPC hotbar");
         }
@@ -160,20 +159,8 @@ public final class PoiAutonomyVisuals {
         try {
             hb.getInventory().removeItemStackFromSlot((short) 0);
             commandBuffer.putComponent(npcRef, InventoryComponent.Hotbar.getComponentType(), hb);
-            invalidateLivingEquipment(npcRef, store);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not clear campfire display item from NPC hotbar");
-        }
-    }
-
-    /**
-     * {@link com.hypixel.hytale.server.core.inventory.Inventory} keeps the same Java references as ECS hotbar
-     * components; cloning hotbar desyncs {@code getItemInHand()} and skips equipment network updates.
-     */
-    private static void invalidateLivingEquipment(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
-        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-        if (npc != null) {
-            npc.invalidateEquipmentNetwork();
         }
     }
 
@@ -200,7 +187,7 @@ public final class PoiAutonomyVisuals {
         }
         try {
             Vector3i block = new Vector3i(poi.getX(), poi.getY(), poi.getZ());
-            Vector3f hit = mountPickHit(store, npcRef, poi);
+            Vector3d hit = mountPickHit(store, npcRef, poi);
             BlockMountAPI.BlockMountResult result = BlockMountAPI.mountOnBlock(npcRef, commandBuffer, block, hit);
             return result instanceof BlockMountAPI.Mounted;
         } catch (RuntimeException ex) {
@@ -210,7 +197,7 @@ public final class PoiAutonomyVisuals {
     }
 
     @Nonnull
-    private static Vector3f mountPickHit(
+    private static Vector3d mountPickHit(
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull PoiEntry poi
@@ -218,9 +205,9 @@ public final class PoiAutonomyVisuals {
         TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
         if (tc != null) {
             Vector3d p = tc.getPosition();
-            return new Vector3f((float) p.x, (float) p.y + 0.5F, (float) p.z);
+            return new Vector3d(p.x, p.y + 0.5, p.z);
         }
-        return new Vector3f(poi.getX() + 0.5F, poi.getY() + 0.5F, poi.getZ() + 0.5F);
+        return new Vector3d(poi.getX() + 0.5, poi.getY() + 0.5, poi.getZ() + 0.5);
     }
 
     /** When bed mount fails (chunk, etc.): lie on mattress height without the old corner nudge (wrong pillow / below bed). */

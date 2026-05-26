@@ -1,10 +1,10 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.debug.DebugLineCylinderUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.WallSegmentRecord;
-import com.hypixel.hytale.math.matrix.Matrix4d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.matrix.Matrix4dUtil;
 import com.hypixel.hytale.protocol.DebugShape;
 import com.hypixel.hytale.protocol.packets.player.ClearDebugShapes;
 import com.hypixel.hytale.protocol.packets.player.DisplayDebug;
@@ -13,6 +13,8 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Matrix4d;
+import org.joml.Vector3f;
 
 public final class WallPlacementWireframeOverlay {
     private static final float OUTLINE_DISPLAY_SECONDS = 6f * 60f * 60f;
@@ -87,24 +89,15 @@ public final class WallPlacementWireframeOverlay {
         double dirY = endY - startY;
         double dirZ = endZ - startZ;
         double length = Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
-        if (length < 0.001) {
+        Matrix4d matrix = DebugLineCylinderUtil.segmentMatrix(startX, startY, startZ, endX, endY, endZ, LINE_THICKNESS, length);
+        if (matrix == null) {
             return;
         }
-        Matrix4d tmp = new Matrix4d();
-        Matrix4d matrix = new Matrix4d();
-        matrix.identity();
-        matrix.translate(startX, startY, startZ);
-        double angleY = Math.atan2(dirZ, dirX);
-        matrix.rotateAxis(angleY + (Math.PI / 2), 0.0, 1.0, 0.0, tmp);
-        double angleX = Math.atan2(Math.sqrt(dirX * dirX + dirZ * dirZ), dirY);
-        matrix.rotateAxis(angleX, 1.0, 0.0, 0.0, tmp);
-        matrix.translate(0.0, length / 2.0, 0.0);
-        matrix.scale(LINE_THICKNESS, length, LINE_THICKNESS);
         DisplayDebug packet =
             new DisplayDebug(
                 DebugShape.Cylinder,
-                matrix.asFloatData(),
-                new com.hypixel.hytale.protocol.Vector3f(color.x, color.y, color.z),
+                Matrix4dUtil.asFloatData(matrix),
+                color,
                 OUTLINE_DISPLAY_SECONDS,
                 (byte) LINE_FLAGS,
                 null,

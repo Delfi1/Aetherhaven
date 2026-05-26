@@ -9,8 +9,8 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.protocol.BlockRotation;
 import com.hypixel.hytale.protocol.GameMode;
@@ -140,7 +140,7 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
                 Box playerWorldBox = null;
                 if (bboxComp != null && transformForBox != null) {
                     Vector3d pos = transformForBox.getPosition();
-                    playerWorldBox = bboxComp.getBoundingBox().getBox(pos.getX(), pos.getY(), pos.getZ());
+                    playerWorldBox = bboxComp.getBoundingBox().getBox(pos.x(), pos.y(), pos.z());
                 }
 
                 Vector3i clientPlacement = new Vector3i(blockPosition.x, blockPosition.y, blockPosition.z);
@@ -171,7 +171,7 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
                         clientPlacement.equals(targetBlockPosition) ? targetBlockPosition : clientPlacement;
                     Vector3d blockCenter =
                         new Vector3d(reachProbe.x + 0.5, reachProbe.y + 0.5, reachProbe.z + 0.5);
-                    if (position.distanceSquaredTo(blockCenter) > 49.0) {
+                    if (position.distanceSquared(blockCenter) > 49.0) {
                         context.getState().state = InteractionState.Failed;
                         return;
                     }
@@ -199,23 +199,23 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
                         targetBlockPosition,
                         interactionBlockTypeKey,
                         velocityComp);
-                Vector3i placementNormal =
+                Vector3i placementNormal = new Vector3i(
                     useUpNormal
                         ? BlockFace.UP.getDirection()
-                        : BlockFace.fromProtocolFace(context.getClientState().blockFace).getDirection();
+                        : BlockFace.fromProtocolFace(context.getClientState().blockFace).getDirection());
 
                 ScaffoldDebug.place(
                     "resolved=%s,%s,%s client=%s,%s,%s useUpNormal=%s placementNormal=%s,%s,%s",
-                    targetBlockPosition.getX(),
-                    targetBlockPosition.getY(),
-                    targetBlockPosition.getZ(),
-                    clientPlacement.getX(),
-                    clientPlacement.getY(),
-                    clientPlacement.getZ(),
+                    targetBlockPosition.x(),
+                    targetBlockPosition.y(),
+                    targetBlockPosition.z(),
+                    clientPlacement.x(),
+                    clientPlacement.y(),
+                    clientPlacement.z(),
                     useUpNormal,
-                    placementNormal.getX(),
-                    placementNormal.getY(),
-                    placementNormal.getZ()
+                    placementNormal.x(),
+                    placementNormal.y(),
+                    placementNormal.z()
                 );
 
                 BlockPlaceUtils.placeBlock(
@@ -226,12 +226,13 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
                     placementNormal,
                     targetBlockPosition,
                     blockRotation,
-                    playerComponent != null ? playerComponent.getInventory() : null,
                     context.getHeldItemSlot(),
                     this.removeItemInHand,
                     chunkReference,
                     chunkStore,
                     commandBuffer,
+                    false,
+                    false,
                     false
                 );
 

@@ -7,7 +7,7 @@ import com.hexvane.aetherhaven.floatinggift.FloatingGiftSpawnService;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftSystem;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenFloatingGiftCommand extends AbstractCommandCollection {
     public AetherhavenFloatingGiftCommand() {
         super("floatinggift", "aetherhaven_commands_help.commands.aetherhaven.floatinggift.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new SpawnSubCommand());
         this.addSubCommand(new NextSubCommand());
     }
@@ -64,7 +64,7 @@ public final class AetherhavenFloatingGiftCommand extends AbstractCommandCollect
                 );
                 return;
             }
-            Ref<EntityStore> gift = FloatingGiftSpawnService.spawnAroundTarget(store, p.clone(), p.clone());
+            Ref<EntityStore> gift = FloatingGiftSpawnService.spawnAroundTarget(store, new Vector3d(p), new Vector3d(p));
             if (gift != null && gift.isValid()) {
                 playerRef.sendMessage(Message.raw("Spawned floating gift."));
             } else {
@@ -76,7 +76,7 @@ public final class AetherhavenFloatingGiftCommand extends AbstractCommandCollect
     private static final class NextSubCommand extends AbstractPlayerCommand {
         NextSubCommand() {
             super("next", "aetherhaven_commands_help.commands.aetherhaven.floatinggift.next.desc");
-            this.setPermissionGroup(GameMode.Adventure);
+            this.setPermissionGroups("hytale:Adventurer");
         }
 
         @Override

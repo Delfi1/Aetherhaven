@@ -6,7 +6,7 @@ import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Holder;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.event.PrefabPasteEvent;
@@ -108,7 +108,6 @@ public final class ConstructionAnimator {
         PrefabPasteEvent start = new PrefabPasteEvent(prefabId, true);
         entityAccessor.invoke(start);
         if (start.isCancelled()) {
-            bufferAccess.release();
             return;
         }
         ConstructionAnimator job = new ConstructionAnimator(
@@ -164,7 +163,6 @@ public final class ConstructionAnimator {
         if (onComplete != null) {
             onComplete.run();
         }
-        bufferAccess.release();
         finished.set(true);
     }
 }

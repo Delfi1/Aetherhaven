@@ -16,7 +16,7 @@ import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
@@ -137,7 +137,6 @@ public final class PlotAssemblyService {
         Rotation yaw = plot.resolvePrefabYaw();
         UUID owner = plot.getAssemblyOwnerUuid() != null ? plot.getAssemblyOwnerUuid() : town.getOwnerUuid();
         if (!tryRegisterJob(world, plugin, town, plot, anchor, yaw, def, buffer, owner, entityStore)) {
-            buffer.release();
             LOGGER.atWarning().log("Rehydrate assembly: could not register job for plot %s (prefab paste start cancelled?)", plotId);
             return null;
         }
@@ -170,7 +169,6 @@ public final class PlotAssemblyService {
         PrefabPasteEvent start = new PrefabPasteEvent(prefabId, true);
         entityStore.invoke(start);
         if (start.isCancelled()) {
-            buffer.release();
             LOGGER.atWarning().log("Prefab paste start cancelled for plot %s", plotId);
             return;
         }

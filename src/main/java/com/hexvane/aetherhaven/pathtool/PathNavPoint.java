@@ -1,7 +1,7 @@
 package com.hexvane.aetherhaven.pathtool;
 
 import com.google.gson.annotations.SerializedName;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import javax.annotation.Nonnull;
 
 /** Serializable path-nav waypoint (world-space). */

@@ -10,7 +10,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
@@ -104,9 +104,9 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
         while (!queue.isEmpty()) {
             Vector3i c = queue.poll();
             for (int i = 0; i < 6; i++) {
-                int nx = c.getX() + DX6[i];
-                int ny = c.getY() + DY6[i];
-                int nz = c.getZ() + DZ6[i];
+                int nx = c.x() + DX6[i];
+                int ny = c.y() + DY6[i];
+                int nz = c.z() + DZ6[i];
                 if (ny < ChunkUtil.MIN_Y || ny > ChunkUtil.HEIGHT_MINUS_1) {
                     continue;
                 }
@@ -129,16 +129,16 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
         HashSet<Vector3i> grounded = new HashSet<>();
         ArrayDeque<Vector3i> queue = new ArrayDeque<>();
         for (Vector3i p : component) {
-            if (hasDirectStructuralGroundBelow(world, p.getX(), p.getY(), p.getZ()) && grounded.add(p)) {
+            if (hasDirectStructuralGroundBelow(world, p.x(), p.y(), p.z()) && grounded.add(p)) {
                 queue.add(p);
             }
         }
         while (!queue.isEmpty()) {
             Vector3i c = queue.poll();
             for (int i = 0; i < 6; i++) {
-                int nx = c.getX() + DX6[i];
-                int ny = c.getY() + DY6[i];
-                int nz = c.getZ() + DZ6[i];
+                int nx = c.x() + DX6[i];
+                int ny = c.y() + DY6[i];
+                int nz = c.z() + DZ6[i];
                 Vector3i n = new Vector3i(nx, ny, nz);
                 if (!component.contains(n)) {
                     continue;
@@ -210,20 +210,20 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
     ) {
         Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
         for (Vector3i p : floatingDescendingY) {
-            BlockType t = world.getBlockType(p.getX(), p.getY(), p.getZ());
+            BlockType t = world.getBlockType(p.x(), p.y(), p.z());
             if (!isWoodScaffold(t)) {
                 continue;
             }
-            long chunkIndex = ChunkUtil.indexChunkFromBlock(p.getX(), p.getZ());
+            long chunkIndex = ChunkUtil.indexChunkFromBlock(p.x(), p.z());
             Ref<ChunkStore> chunkRef = chunkStore.getExternalData().getChunkReference(chunkIndex);
             if (chunkRef == null || !chunkRef.isValid()) {
                 continue;
             }
-            BlockSection section = ScaffoldBlockSync.blockSectionAtWorldBlock(world, chunkStore, p.getX(), p.getY(), p.getZ());
+            BlockSection section = ScaffoldBlockSync.blockSectionAtWorldBlock(world, chunkStore, p.x(), p.y(), p.z());
             if (section == null) {
                 continue;
             }
-            int filler = section.getFiller(p.getX(), p.getY(), p.getZ());
+            int filler = section.getFiller(p.x(), p.y(), p.z());
             naturallyRemoveBlockByPhysicsNonDeprecated(p, t, filler, 0, chunkRef, entityStore, chunkStore);
         }
     }
@@ -267,7 +267,7 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
                         floating.add(p);
                     }
                 }
-                floating.sort(Comparator.comparingInt(Vector3i::getY).reversed());
+                floating.sort(Comparator.comparingInt((Vector3i v) -> v.y()).reversed());
                 removeFloatingScaffold(world, entityStore, floating);
             } finally {
                 IN_MOD_CASCADE.set(false);

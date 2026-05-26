@@ -1,7 +1,7 @@
 package com.hexvane.aetherhaven.placement;
 
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -38,7 +38,7 @@ public final class CharterRelocationSession {
     public CharterRelocationSession(@Nonnull World world, @Nonnull Vector3i charterAnchor, @Nonnull UUID townId) {
         this.world = world;
         this.townId = townId;
-        this.anchor = charterAnchor.clone();
+        this.anchor = new Vector3i(charterAnchor);
     }
 
     @Nonnull
@@ -53,11 +53,11 @@ public final class CharterRelocationSession {
 
     @Nonnull
     public Vector3i getAnchor() {
-        return anchor.clone();
+        return new Vector3i(anchor);
     }
 
     public void setAnchor(@Nonnull Vector3i anchor) {
-        this.anchor = anchor.clone();
+        this.anchor = new Vector3i(anchor);
     }
 
     public void nudge(int dx, int dy, int dz) {

@@ -1,6 +1,6 @@
 package com.hexvane.aetherhaven.wall;
 
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.PrefabRotation;
 import javax.annotation.Nonnull;
@@ -157,7 +157,7 @@ public enum WallCardinal {
 
     @Nonnull
     public Vector3i rotateOffset(@Nonnull Vector3i local) {
-        Vector3i copy = local.clone();
+        Vector3i copy = new Vector3i(local);
         PrefabRotation.fromRotation(toPrefabYaw()).rotate(copy);
         return copy;
     }

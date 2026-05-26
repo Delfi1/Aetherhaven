@@ -36,7 +36,7 @@ aetherhaven.poiTool.legendSecondary=Sekundär: Ausgewählten POI in den Block ve
 aetherhaven.poiTool.legendUse=Verwendung: NPC-Pfadziel für ausgewählten POI festlegen (Anwendung bei POI-Blocklöschungen)
 
 aetherhaven.pathTool.legendPageTitle=Pfadwerkzeug
-aetherhaven.pathTool.legendBlurb=Erstellen Sie eine Spline-Linie, sehen Sie sich die Vorschau an und platzieren Sie dann Wegblöcke. Solange Sie das Werkzeug gedrückt halten, erscheint ein Statusfeld in der Ecke. Mit installiertem Buuz135 MHUD wird das Feld als eigene Ebene erkannt, sodass auch andere benutzerdefinierte HUDs sichtbar bleiben.
+aetherhaven.pathTool.legendBlurb=Erstellen Sie eine Spline-Linie, sehen Sie sich die Vorschau an und platzieren Sie dann Wegblöcke. Solange Sie das Werkzeug gedrückt halten, erscheint ein Statusfeld in der Ecke.
 aetherhaven.pathTool.legendHotkeyAdd=Ein Sekundärangriff auf dem Boden fügt einen Keyframe (goldene Kugel) hinzu. Ein Sekundärangriff beim Zielen entfernt den vorhandenen Keyframe. Neue Keyframes zeigen in Blickrichtung.
 aetherhaven.pathTool.legendHotkeyAim=Wählen Sie den entsprechenden Keyframe aus. Im Verschieben-Modus verschiebt ein primärer Klick auf dem Boden den Punkt. Ein primärer Klick auf demselben Knoten hat keine Auswirkung.
 aetherhaven.pathTool.legendHotkeyUse=F: Im Drehmodus: Gieren des ausgewählten Knotens. Im Verschieben-Modus: Keine Funktion. Im Platzieren-Modus: Pfad platzieren (zwei Knoten erforderlich). Q: Moduswechsel. E: Breite 1–8. Dritte Werkzeugfunktion: Pfadstil (innere Blöcke; siehe PathToolStyles in der Konfiguration). Sekundär auf einem Keyframe entfernt den Stil.

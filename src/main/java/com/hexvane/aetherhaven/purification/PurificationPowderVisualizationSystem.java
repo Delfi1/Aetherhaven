@@ -11,8 +11,8 @@ import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.RootDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -163,7 +163,7 @@ public final class PurificationPowderVisualizationSystem extends EntityTickingSy
                 continue;
             }
             Vector3d base = t.position();
-            Vector3d pposM = new Vector3d(base.getX(), base.getY() + PREVIEW_Y_OFFSET, base.getZ());
+            Vector3d pposM = new Vector3d(base.x(), base.y() + PREVIEW_Y_OFFSET, base.z());
             @Nullable
             UUID existingPrev = st.getSpawnEntityIdToPreviewEntityId().get(spawnKey);
             if (existingPrev == null) {
@@ -186,9 +186,9 @@ public final class PurificationPowderVisualizationSystem extends EntityTickingSy
             }
             TransformComponent tco = store.getComponent(prevRef, TransformComponent.getComponentType());
             if (tco != null) {
-                Vector3f r = tco.getRotation();
-                float y = r.getYaw() + dyaw;
-                Vector3f nr = new Vector3f(r.getPitch(), y, r.getRoll());
+                Rotation3f r = tco.getRotation();
+                float y = r.yaw() + dyaw;
+                Rotation3f nr = new Rotation3f(r.pitch(), y, r.roll());
                 commandBuffer.putComponent(prevRef, TransformComponent.getComponentType(), new TransformComponent(tco.getPosition(), nr));
                 commandBuffer.putComponent(prevRef, HeadRotation.getComponentType(), new HeadRotation(nr));
             }
@@ -293,7 +293,7 @@ public final class PurificationPowderVisualizationSystem extends EntityTickingSy
             }
             ent.loadIntoWorld(world);
             ent.setOwnerPlayerUuid(ownerEntityUuid);
-            Vector3f rot = new Vector3f(0.0F, 0.0F, 0.0F);
+            Rotation3f rot = new Rotation3f(0.0F, 0.0F, 0.0F);
             ent.unloadFromWorld();
             Holder<EntityStore> holder = ent.toHolder();
             HeadRotation head = holder.ensureAndGetComponent(HeadRotation.getComponentType());

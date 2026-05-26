@@ -18,9 +18,9 @@ import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
@@ -83,7 +83,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
         this.townId = townId;
         this.managementBlockRef = managementBlockRef;
-        this.managementBlockPos = managementBlockPos != null ? managementBlockPos.clone() : null;
+        this.managementBlockPos = managementBlockPos != null ? new Vector3i(managementBlockPos) : null;
         this.initialVillagerIndex = initialVillagerIndex;
         if (initialVillagerIndex >= 0) {
             this.selectedIndex = initialVillagerIndex;
@@ -314,13 +314,14 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
                     return;
                 }
                 Vector3d pPos = pTc.getPosition();
-                float yaw = pTc.getRotation().getYaw();
+                float yaw = pTc.getRotation().yaw();
                 double side = 1.5;
                 double cos = Math.cos(yaw);
                 double sin = Math.sin(yaw);
                 Vector3d target = new Vector3d(pPos.x + cos * side, pPos.y, pPos.z - sin * side);
                 TransformComponent nTc = es.getComponent(npcRef, TransformComponent.getComponentType());
-                Vector3f bodyRot = nTc != null ? nTc.getRotation().clone() : new Vector3f(yaw, 0f, 0f);
+                Rotation3f bodyRot =
+                    nTc != null ? new Rotation3f(nTc.getRotation()) : new Rotation3f(0f, yaw, 0f);
                 es.addComponent(npcRef, Teleport.getComponentType(), Teleport.createExact(target, bodyRot));
                 long now = VillagerAutonomySystem.resolveAutonomyNowMs(es);
                 VillagerAutonomySystem.resetAutonomyForRescue(npcRef, es, now);

@@ -1,5 +1,9 @@
 package com.hexvane.aetherhaven.inn;
 
+import com.hypixel.hytale.math.vector.Rotation3f;
+
+import com.hypixel.hytale.math.vector.Vector3fUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -15,9 +19,9 @@ import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -99,7 +103,7 @@ public final class InnkeeperSpawnService {
             return;
         }
         Store<EntityStore> store = world.getEntityStore().getStore();
-        var pair = npc.spawnNPC(store, AetherhavenConstants.INNKEEPER_NPC_ROLE_ID, null, pos, Vector3f.ZERO);
+        var pair = npc.spawnNPC(store, AetherhavenConstants.INNKEEPER_NPC_ROLE_ID, null, pos, Rotation3f.ZERO);
         if (pair == null) {
             LOGGER.atWarning().log("Failed to spawn innkeeper for town %s", town.getTownId());
             return;

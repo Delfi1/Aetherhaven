@@ -28,7 +28,6 @@ public final class AssemblyWorldRegistry {
             return;
         }
         try {
-            buffer.release();
         } catch (NullPointerException ignored) {
             // Already released
         }

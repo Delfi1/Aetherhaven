@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenPoiCommand extends AbstractCommandCollection {
     public AetherhavenPoiCommand() {
         super("poi", "aetherhaven_commands_help.commands.aetherhaven.poi.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new ListCommand());
         this.addSubCommand(new DumpCommand());
     }

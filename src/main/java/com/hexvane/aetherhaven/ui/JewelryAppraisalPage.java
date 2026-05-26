@@ -39,8 +39,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.herolias.tooltips.api.DynamicTooltipsApi;
-import org.herolias.tooltips.api.DynamicTooltipsApiProvider;
+import com.hexvane.aetherhaven.jewelry.JewelryNativeTooltipManager;
+import com.hexvane.aetherhaven.jewelry.JewelryTooltipUiSupport;
 
 /** Appraise jewelry stacks in combined inventory; merchant charges gold, appraisal bench does not. */
 public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPage<JewelryAppraisalPage.PageData> {
@@ -125,6 +125,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         for (int i = 0; i < n; i++) {
             short slot = slots.get(i);
             ItemStack stack = inv.getItemStack(slot);
+            JewelryTooltipUiSupport.ensureVirtualItemForStack(pr, stack);
             commandBuilder.append(ROWS, "Aetherhaven/JewelryAppraisalRow.ui");
             String row = ROWS + "[" + i + "]";
             Item it = stack.getItem();
@@ -330,10 +331,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
             NotificationStyle.Success
         );
         if (uc != null) {
-            DynamicTooltipsApi dtlApi = DynamicTooltipsApiProvider.get();
-            if (dtlApi != null) {
-                dtlApi.refreshPlayer(uc.getUuid());
-            }
+            JewelryNativeTooltipManager.refreshPlayer(uc.getUuid());
         }
         UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_ARCANE_WORKBENCH_CRAFT);
         selectedSlot = slot;

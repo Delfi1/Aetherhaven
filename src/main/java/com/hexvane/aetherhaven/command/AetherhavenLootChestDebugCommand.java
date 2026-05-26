@@ -8,7 +8,7 @@ import com.hypixel.hytale.builtin.adventure.stash.StashPlugin;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 public final class AetherhavenLootChestDebugCommand extends AbstractCommandCollection {
     public AetherhavenLootChestDebugCommand() {
         super("debug-lootchest", "aetherhaven_commands_help.commands.aetherhaven.debug_lootchest.desc");
-        this.setPermissionGroup(com.hypixel.hytale.protocol.GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new FillSubCommand());
     }
 

@@ -1,5 +1,9 @@
 package com.hexvane.aetherhaven.construction;
 
+import com.hypixel.hytale.math.vector.Rotation3f;
+
+import com.hypixel.hytale.math.vector.Vector3fUtil;
+
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hypixel.hytale.component.AddReason;
@@ -7,8 +11,8 @@ import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -191,7 +195,7 @@ public final class PlotMaterialDepositService {
                         continue;
                     }
                     Holder<EntityStore>[] holders =
-                        ItemComponent.generateItemDrops(commandBuffer, stacks, dropPosition, Vector3f.ZERO);
+                        ItemComponent.generateItemDrops(commandBuffer, stacks, dropPosition, Rotation3f.ZERO);
                     if (holders.length > 0) {
                         commandBuffer.addEntities(holders, AddReason.SPAWN);
                     }

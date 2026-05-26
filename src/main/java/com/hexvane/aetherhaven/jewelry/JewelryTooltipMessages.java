@@ -20,18 +20,12 @@ public final class JewelryTooltipMessages {
         }
         JewelryRarity rarity = JewelryMetadata.readRarity(stack);
         String rarityKey = rarity != null ? rarity.wireName() : "COMMON";
-        Message header =
-            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.tooltipHeader")
-                .param(
-                    "rarity",
-                    Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.rarity." + rarityKey)
-                        .color(JewelryTooltipText.rarityColorHex(rarityKey)));
+        Message body = JewelryTooltipText.rarityBanner(rarityKey);
         if (!JewelryMetadata.isAppraised(stack)) {
-            header = header
+            body = body
                 .insert(Message.raw("\n"))
                 .insert(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.tooltipUnappraised").color("#8A8F98"));
         }
-        Message body = header;
         var traits = JewelryMetadata.readTraits(stack);
         if (!JewelryMetadata.isAppraised(stack)) {
             int lines = !traits.isEmpty() ? traits.size() : (rarity != null ? rarity.traitCount() : 1);

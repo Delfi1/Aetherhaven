@@ -40,9 +40,9 @@ public final class ScaffoldDamageBlockDebugSystem extends EntityEventSystem<Enti
         String handId = hand != null && hand.getItem() != null ? hand.getItem().getId() : "(null)";
         ScaffoldDebug.breaking(
             "DamageBlockEvent pos=%s,%s,%s cancelled=%s dmg=%s curHp=%s hand=%s",
-            event.getTargetBlock().getX(),
-            event.getTargetBlock().getY(),
-            event.getTargetBlock().getZ(),
+            event.getTargetBlock().x(),
+            event.getTargetBlock().y(),
+            event.getTargetBlock().z(),
             event.isCancelled(),
             event.getDamage(),
             event.getCurrentDamage(),

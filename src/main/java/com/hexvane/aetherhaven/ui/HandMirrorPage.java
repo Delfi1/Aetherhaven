@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryMetadata;
+import com.hexvane.aetherhaven.jewelry.JewelryTooltipUiSupport;
 import com.hexvane.aetherhaven.jewelry.PlayerJewelryLoadout;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -15,6 +16,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -67,12 +69,12 @@ public final class HandMirrorPage extends AetherhavenInteractiveCustomUIPage<Han
             return;
         }
 
-        CombinedItemContainer inv = player.getInventory().getCombinedHotbarFirst();
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
         PlayerJewelryLoadout lw = HandMirrorLoadoutActions.loadoutOrCreate(ref, store);
 
-        applyEquippedSlot(commandBuilder, R1_ICON, R1_UNEQUIP, lw.getRing1());
-        applyEquippedSlot(commandBuilder, R2_ICON, R2_UNEQUIP, lw.getRing2());
-        applyEquippedSlot(commandBuilder, NECK_ICON, NECK_UNEQUIP, lw.getNecklace());
+        applyEquippedSlot(commandBuilder, pr, R1_ICON, R1_UNEQUIP, lw.getRing1());
+        applyEquippedSlot(commandBuilder, pr, R2_ICON, R2_UNEQUIP, lw.getRing2());
+        applyEquippedSlot(commandBuilder, pr, NECK_ICON, NECK_UNEQUIP, lw.getNecklace());
         commandBuilder.set(TRAIT_BODY + ".TextSpans", HandMirrorLoadoutPanel.forLoadout(lw));
 
         bindUnequip(eventBuilder, R1_UNEQUIP, 0);
@@ -99,6 +101,7 @@ public final class HandMirrorPage extends AetherhavenInteractiveCustomUIPage<Han
         for (int i = 0; i < n; i++) {
             short slot = jewelrySlots.get(i);
             ItemStack stack = inv.getItemStack(slot);
+            JewelryTooltipUiSupport.ensureVirtualItemForStack(pr, stack);
             commandBuilder.append(ROWS, "Aetherhaven/HandMirrorRow.ui");
             String row = ROWS + "[" + i + "]";
             Item it = stack.getItem();
@@ -154,6 +157,7 @@ public final class HandMirrorPage extends AetherhavenInteractiveCustomUIPage<Han
 
     private static void applyEquippedSlot(
         @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull PlayerRef pr,
         @Nonnull String iconSelector,
         @Nonnull String unequipSelector,
         @Nullable ItemStack st) {
@@ -163,6 +167,7 @@ public final class HandMirrorPage extends AetherhavenInteractiveCustomUIPage<Han
             return;
         }
         commandBuilder.set(unequipSelector + ".Visible", true);
+        JewelryTooltipUiSupport.ensureVirtualItemForStack(pr, st);
         AetherhavenUiItemGrids.setSingleSlot(commandBuilder, iconSelector, AetherhavenUiItemGrids.jewelrySlotForUi(st));
     }
 
@@ -214,7 +219,7 @@ public final class HandMirrorPage extends AetherhavenInteractiveCustomUIPage<Han
         if (target < 0) {
             return;
         }
-        CombinedItemContainer inv = player.getInventory().getCombinedHotbarFirst();
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.HOTBAR_FIRST);
         if (inv == null) {
             refresh(ref, store);
             return;

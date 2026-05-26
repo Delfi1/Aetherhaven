@@ -39,7 +39,7 @@ public final class ExportAvatarSkinCommand extends AbstractPlayerCommand {
 
     public ExportAvatarSkinCommand() {
         super("exportskin", "aetherhaven_commands_root.commands.aetherhaven.exportskin.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addUsageVariant(new ExportAvatarSkinOtherCommand());
     }
 
@@ -130,7 +130,7 @@ public final class ExportAvatarSkinCommand extends AbstractPlayerCommand {
 
         ExportAvatarSkinOtherCommand() {
             super("aetherhaven_commands_root.commands.aetherhaven.exportskin.other.desc");
-            this.setPermissionGroup(GameMode.Creative);
+            this.setPermissionGroups("hytale:WorldEditor");
         }
 
         @Override

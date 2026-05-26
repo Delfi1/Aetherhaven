@@ -10,8 +10,8 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.util.MathUtil;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import org.joml.Vector3d;
+import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
@@ -67,8 +67,8 @@ public final class FloatingGiftSpawnService {
         if (!FloatingGiftSpawnSchedule.tryBeginDeferredSpawn(playerUuid)) {
             return;
         }
-        Vector3d o = origin.clone();
-        Vector3d t = target.clone();
+        Vector3d o = new Vector3d(origin);
+        Vector3d t = new Vector3d(target);
         world.execute(() -> {
             try {
                 if (!world.isAlive()) {
@@ -169,7 +169,7 @@ public final class FloatingGiftSpawnService {
             dirHz = hdz / lenH;
         }
         Vector3d dirFlat = new Vector3d(dirHx, 0.0, dirHz);
-        Vector3f rot = toYawPitch(dirFlat);
+        Rotation3f rot = toYawPitch(dirFlat);
 
         ModelAsset asset = ModelAsset.getAssetMap().getAsset(MODEL_ID);
         if (asset == null) {
@@ -209,10 +209,10 @@ public final class FloatingGiftSpawnService {
     }
 
     @Nonnull
-    public static Vector3f toYawPitch(@Nonnull Vector3d dir) {
+    public static Rotation3f toYawPitch(@Nonnull Vector3d dir) {
         double ny = Math.max(-1.0, Math.min(1.0, dir.y));
         double pitch = Math.asin(ny);
         double yaw = Math.atan2(-dir.x, -dir.z);
-        return new Vector3f((float) pitch, (float) yaw, 0.0f);
+        return new Rotation3f((float) pitch, (float) yaw, 0.0f);
     }
 }

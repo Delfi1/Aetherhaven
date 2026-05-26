@@ -19,7 +19,7 @@ public final class AetherhavenReloadCommand extends AbstractPlayerCommand {
 
     public AetherhavenReloadCommand() {
         super("reload", "aetherhaven_commands_root.commands.aetherhaven.reload.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
     }
 
     @Override

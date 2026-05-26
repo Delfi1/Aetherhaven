@@ -1,6 +1,6 @@
 package com.hexvane.aetherhaven.wall;
 
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -17,7 +17,7 @@ public final class WallPlacementChainSimulation {
     private WallCardinal arrivalFromSide;
 
     private WallPlacementChainSimulation(@Nonnull Vector3i startAnchor) {
-        this.currentAnchor = startAnchor.clone();
+        this.currentAnchor = new Vector3i(startAnchor);
         this.currentRotationSteps = 0;
     }
 
@@ -54,7 +54,7 @@ public final class WallPlacementChainSimulation {
         int rotBase = last == null ? currentRotationSteps : last.rotationSteps();
         WallPlacementChainPlanner.ExpandPreviewPlan plan =
             WallPlacementChainPlanner.planExpandPreview(
-                anchorBase.clone(),
+                new Vector3i(anchorBase),
                 rotBase,
                 pieceKind,
                 committed,
@@ -64,7 +64,7 @@ public final class WallPlacementChainSimulation {
         committed.add(
             new WallPlacementChainPlanner.ChainCommittedPiece(
                 plan.resolvedConstructionId(),
-                currentAnchor.clone(),
+                new Vector3i(currentAnchor),
                 currentRotationSteps,
                 plan.towerConnections(),
                 outgoing
@@ -88,7 +88,7 @@ public final class WallPlacementChainSimulation {
         }
         WallPlacementChainPlanner.ExpandPreviewPlan plan =
             WallPlacementChainPlanner.planExpandPreview(
-                last.signAnchor().clone(),
+                new Vector3i(last.signAnchor()),
                 last.rotationSteps(),
                 pieceKind,
                 committed,
@@ -146,7 +146,7 @@ public final class WallPlacementChainSimulation {
     }
 
     private void applyPlan(@Nonnull WallPlacementChainPlanner.ExpandPreviewPlan plan) {
-        currentAnchor = plan.anchor().clone();
+        currentAnchor = new Vector3i(plan.anchor());
         currentRotationSteps = plan.rotationSteps();
         lastExpandDir = plan.outgoingExpandDir();
         arrivalFromSide = plan.arrivalFromSide();
@@ -162,7 +162,7 @@ public final class WallPlacementChainSimulation {
 
     @Nonnull
     public Vector3i anchor() {
-        return currentAnchor.clone();
+        return new Vector3i(currentAnchor);
     }
 
     public int rotationSteps() {
