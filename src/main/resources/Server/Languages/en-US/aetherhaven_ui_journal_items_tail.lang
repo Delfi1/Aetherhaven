@@ -148,6 +148,7 @@ npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
 npcRoles.Aetherhaven_Miner.name=Gorruk Stonevein
 npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
 npcRoles.Aetherhaven_Rancher.name=Thalen Meadowrun
+npcRoles.Aetherhaven_Townsfolk.name=Townsfolk
 
 items.Aetherhaven_Production_Storage.name=Workplace stores
 items.Aetherhaven_Production_Storage.description=Holds what your workers bring in. Open to set outputs and take stacks. Part of the building and <color is="#ffa726">cannot be picked up</color>.

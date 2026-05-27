@@ -1,0 +1,17 @@
+{
+  "id": "male_goblin_03",
+  "displayName": "Razz Coppernose",
+  "gender": "male",
+  "race": "goblin",
+  "modelAssetId": "Male_Goblin_03",
+  "personalityIds": [
+    "homebody",
+    "shy",
+    "stoic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "guard"
+  ],
+  "befriendable": false
+}

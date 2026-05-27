@@ -1,0 +1,12 @@
+{
+  "id": "homebody",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.homebody.greeting.1"
+  ],
+  "leisurePoiTagWeights": {
+    "SIT": 1.4,
+    "SLEEP": 1.2,
+    "FUN": 0.7
+  },
+  "preferredScheduleLocations": ["home"]
+}

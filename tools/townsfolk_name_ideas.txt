@@ -1,0 +1,86 @@
+# Townsfolk display name ideas — paste into Server/Aetherhaven/Townsfolk/<id>.json "displayName"
+# Sections by cultural flavor; mix and match. Keep unique within your mod.
+
+## Human (Heartland / Vale)
+Aldric Mosswick X
+Brenna Fairrow X
+Cedric Holt X
+Delia Bramble X
+Ewan Thatch X
+Fiona Greystone X
+Gareth Millson
+Hester Wold X
+Ivor Penn X
+Jora Kettle X
+
+## Sylvian (Elf / Greenwood)
+Aelindra Dawnsong X
+Calen Thornwhisper X
+Elowen Mistvale X
+Faelar Silverbough X
+Lirien Moonfern X
+Maeris Windleaf
+Naelis Riverbark X
+Sylara Greenhollow X
+Thalen Oakspire X
+Virel Ashsong X
+
+## Stonekin (Dwarf / Golem-adjacent)
+Brakka Ironvein
+Durin Slatebeard
+Gorrim Hammerfall
+Helga Stonecup
+Korin Deepdelve
+Mira Flintmark
+Orin Rockmantle
+Petra Anvilhand
+Thrain Cobblefoot
+Ulma Forgeheart
+
+## Coastborn (Harbor / Fisher)
+Coraline Saltwind
+Darian Nettle
+Finn Harrowbay X
+Giselle Driftwood
+Harlan Tidewalk X
+Isla Brinemark
+Jonas Reefson X
+Mara Shellwick
+Nico Stormlass X
+Pearl Dockhand
+
+## Highborn (Noble / Court)
+Alaric Thornmere X
+Beatrice Valecourt X
+Cassian Greyhall
+Elara Whitford X
+Edmund Crestfall X
+Genevieve Starling X
+Henrik Goldmere
+Isolde Ravenmark
+Julian Highspire X
+Lysandra Crownwell X
+
+## Goblin / Underfolk
+Brix Snaggletooth X
+Grik Mudboot X
+Nix Candlefinger X
+Pip Sootgrin X
+Razz Coppernose X
+Skrit Ashpocket
+Twitch Lanternjaw
+Vex Grimecap
+Wizzle Thornpick X
+Zog Kettlewhistle
+
+## Dark Elf / Twilight
+Draelis Nightweave X
+Kethra Shadowmere X
+Malrik Duskbane X
+Nyssara Voidlace X
+Riven Umbral
+Sylthra Moonglass
+Theron Ashveil
+Vaela Grimthread
+Xandrel Blackfern
+Zephyra Silentstep

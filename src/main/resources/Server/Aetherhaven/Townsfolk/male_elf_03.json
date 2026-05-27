@@ -1,0 +1,17 @@
+{
+  "id": "male_elf_03",
+  "displayName": "Lirien Moonfern",
+  "gender": "male",
+  "race": "sylvian",
+  "modelAssetId": "Male_Elf_03",
+  "personalityIds": [
+    "cheerful",
+    "curious",
+    "homebody"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

@@ -1,0 +1,17 @@
+{
+  "id": "male_goblin_01",
+  "displayName": "Grik Mudboot",
+  "gender": "male",
+  "race": "goblin",
+  "modelAssetId": "Male_Goblin_01",
+  "personalityIds": [
+    "stoic",
+    "shy",
+    "homebody"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "guard"
+  ],
+  "befriendable": false
+}

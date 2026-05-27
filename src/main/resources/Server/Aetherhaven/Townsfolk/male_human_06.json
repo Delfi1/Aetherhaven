@@ -1,0 +1,18 @@
+{
+  "id": "male_human_06",
+  "displayName": "Ewan Thatch",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Male_Human_06",
+  "personalityIds": [
+    "homebody",
+    "shy",
+    "stoic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false
+}

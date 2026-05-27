@@ -1,0 +1,17 @@
+{
+  "id": "aetherhaven_townsfolk_generic",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "",
+      "bodyMode": "villager_greeting",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_townsfolk.aetherhaven.dialogue.aetherhaven_townsfolk_generic.main_hub.leave",
+          "next": null,
+          "actions": [{ "type": "close" }]
+        }
+      ]
+    }
+  }
+}

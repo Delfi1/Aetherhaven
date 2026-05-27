@@ -1,0 +1,17 @@
+{
+  "id": "male_darkelf_01",
+  "displayName": "Draelis Nightweave",
+  "gender": "male",
+  "race": "darkelf",
+  "modelAssetId": "Male_DarkElf_01",
+  "personalityIds": [
+    "mischievous",
+    "cheerful",
+    "curious"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "guard"
+  ],
+  "befriendable": false
+}

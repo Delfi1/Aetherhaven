@@ -1,0 +1,13 @@
+{
+  "id": "cheerful",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.cheerful.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.cheerful.greeting.2"
+  ],
+  "leisurePoiTagWeights": {
+    "FUN": 1.4,
+    "SIT": 1.2,
+    "EAT": 0.9
+  },
+  "preferredScheduleLocations": ["park", "inn"]
+}

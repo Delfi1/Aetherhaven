@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiOccupancy;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityCatalog;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityDefinition;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import java.util.List;
@@ -64,6 +66,45 @@ public final class PoiScoring {
             s = funDef * 0.2f + hungerDef * 0.1f;
         }
         return s;
+    }
+
+    /**
+     * Averages leisure tag weights across all personalities on a townsfolk character (1.0 when none apply).
+     */
+    public static float townsfolkBlendedTagMultiplier(
+        @Nonnull PoiEntry poi,
+        @Nonnull TownsfolkPersonalityCatalog catalog,
+        @Nonnull List<String> personalityIds
+    ) {
+        if (personalityIds.isEmpty()) {
+            return 1f;
+        }
+        float sum = 0f;
+        int count = 0;
+        for (String pid : personalityIds) {
+            TownsfolkPersonalityDefinition p = catalog.byId(pid);
+            if (p == null) {
+                continue;
+            }
+            float m = 1f;
+            for (var e : p.getLeisurePoiTagWeights().entrySet()) {
+                if (poi.getTags().contains(e.getKey())) {
+                    m = Math.max(m, e.getValue().floatValue());
+                }
+            }
+            sum += m;
+            count++;
+        }
+        return count > 0 ? sum / count : 1f;
+    }
+
+    public static float scoreWithTownsfolkBlend(
+        @Nonnull VillagerNeeds needs,
+        @Nonnull PoiEntry poi,
+        @Nonnull TownsfolkPersonalityCatalog catalog,
+        @Nonnull List<String> personalityIds
+    ) {
+        return score(needs, poi) * townsfolkBlendedTagMultiplier(poi, catalog, personalityIds);
     }
 
     @Nullable

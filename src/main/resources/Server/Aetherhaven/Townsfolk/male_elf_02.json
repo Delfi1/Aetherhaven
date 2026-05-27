@@ -1,0 +1,17 @@
+{
+  "id": "male_elf_02",
+  "displayName": "Faelar Silverbough",
+  "gender": "male",
+  "race": "sylvian",
+  "modelAssetId": "Male_Elf_02",
+  "personalityIds": [
+    "homebody",
+    "shy",
+    "stoic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

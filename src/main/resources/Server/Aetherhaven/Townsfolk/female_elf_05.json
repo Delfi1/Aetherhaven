@@ -1,0 +1,17 @@
+{
+  "id": "female_elf_05",
+  "displayName": "Virel Ashsong",
+  "gender": "female",
+  "race": "sylvian",
+  "modelAssetId": "Female_Elf_05",
+  "personalityIds": [
+    "cheerful",
+    "curious",
+    "homebody"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

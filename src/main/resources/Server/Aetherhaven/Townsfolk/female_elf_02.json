@@ -1,0 +1,17 @@
+{
+  "id": "female_elf_02",
+  "displayName": "Naelis Riverbark",
+  "gender": "female",
+  "race": "sylvian",
+  "modelAssetId": "Female_Elf_02",
+  "personalityIds": [
+    "stoic",
+    "shy",
+    "homebody"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

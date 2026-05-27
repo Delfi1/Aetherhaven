@@ -1,0 +1,11 @@
+{
+  "id": "mischievous",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.mischievous.greeting.1"
+  ],
+  "leisurePoiTagWeights": {
+    "FUN": 1.5,
+    "EAT": 1.1
+  },
+  "preferredScheduleLocations": ["inn", "park"]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "shy",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.shy.greeting.1"
+  ],
+  "leisurePoiTagWeights": {
+    "SIT": 1.3,
+    "FUN": 0.8
+  },
+  "preferredScheduleLocations": ["home"]
+}

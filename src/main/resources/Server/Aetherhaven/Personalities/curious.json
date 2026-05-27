@@ -1,0 +1,11 @@
+{
+  "id": "curious",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.curious.greeting.1"
+  ],
+  "leisurePoiTagWeights": {
+    "FUN": 1.2,
+    "WORK": 0.7
+  },
+  "preferredScheduleLocations": ["park"]
+}

@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -161,6 +162,14 @@ public final class VillagerReputationService {
         @Nonnull UUID villagerEntityUuid,
         long gameEpochDay
     ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            Store<EntityStore> store = world.getEntityStore().getStore();
+            Ref<EntityStore> npcRef = store.getExternalData().getRefFromUUID(villagerEntityUuid);
+            if (!VillagerBefriendableResolver.isBefriendable(store, npcRef, plugin)) {
+                return 0;
+            }
+        }
         VillagerReputationEntry e = getOrCreateEntry(town, playerUuid, villagerEntityUuid);
         Long last = e.getLastTalkGameEpochDay();
         // Same-day check must be equality, not >=: if lastTalkGameEpochDay was ever ahead of the
@@ -203,6 +212,11 @@ public final class VillagerReputationService {
         if (!qr.beneficiaryRoleId().equals(beneficiaryNpcRoleName.trim())) {
             return false;
         }
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        Ref<EntityStore> beneficiaryRef = store.getExternalData().getRefFromUUID(beneficiaryNpcEntityUuid);
+        if (!VillagerBefriendableResolver.isBefriendable(store, beneficiaryRef, plugin)) {
+            return false;
+        }
         VillagerReputationEntry e = getOrCreateEntry(town, playerUuid, beneficiaryNpcEntityUuid);
         return addReputationInternal(town, world, playerUuid, beneficiaryNpcEntityUuid, e, qr.amount(), tm);
     }
@@ -218,6 +232,14 @@ public final class VillagerReputationService {
     ) {
         if (delta == 0) {
             return false;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            Store<EntityStore> store = world.getEntityStore().getStore();
+            Ref<EntityStore> npcRef = store.getExternalData().getRefFromUUID(villagerEntityUuid);
+            if (!VillagerBefriendableResolver.isBefriendable(store, npcRef, plugin)) {
+                return false;
+            }
         }
         int old = e.getReputation();
         int next = Math.max(0, Math.min(MAX_REPUTATION, old + delta));

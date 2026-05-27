@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import com.hypixel.hytale.component.Ref;
@@ -35,6 +36,9 @@ public final class DialogueResolver {
     public static final String VISITOR_ELDER = "aetherhaven_visitor_elder";
     public static final String VISITOR_INN = "aetherhaven_visitor_inn";
 
+    public static final String KIND_TOWNSFOLK = "townsfolk";
+    public static final String TREE_TOWNSFOLK_GENERIC = "aetherhaven_townsfolk_generic";
+
     private final Map<String, String> kindToTree = new HashMap<>();
     private final Map<String, String> kindToVisitorTree = new HashMap<>();
 
@@ -56,6 +60,13 @@ public final class DialogueResolver {
         kindToVisitorTree.put("miner", VISITOR_DEFAULT);
         kindToVisitorTree.put("logger", VISITOR_DEFAULT);
         kindToVisitorTree.put("rancher", VISITOR_DEFAULT);
+        registerNonVillagerDialogueKinds();
+    }
+
+    /** Townsfolk and other dialogue kinds not backed by {@link VillagerDefinition} assets. */
+    private void registerNonVillagerDialogueKinds() {
+        kindToTree.put(KIND_TOWNSFOLK, TREE_TOWNSFOLK_GENERIC);
+        kindToVisitorTree.put(KIND_TOWNSFOLK, VISITOR_DEFAULT);
     }
 
     /** Called on asset catalog reload. Falls back to {@link #applyLegacyDefaultKindMaps} when the catalog is empty. */
@@ -79,6 +90,7 @@ public final class DialogueResolver {
             kindToTree.put(k, res);
             kindToVisitorTree.put(k, vis);
         }
+        registerNonVillagerDialogueKinds();
     }
 
     @Nonnull
@@ -89,12 +101,22 @@ public final class DialogueResolver {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store
     ) {
-        String kind = villagerKind != null && !villagerKind.isBlank() ? villagerKind.trim() : DEFAULT_DIALOGUE_KIND;
-        String tree =
-            explicitDialogueId != null && !explicitDialogueId.isBlank()
-                ? explicitDialogueId.trim()
-                : kindToTree.getOrDefault(kind, DEFAULT_RESIDENT_DIALOGUE_TREE);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        String kind = villagerKind != null && !villagerKind.isBlank() ? villagerKind.trim() : DEFAULT_DIALOGUE_KIND;
+        if (plugin != null && npcRef != null && npcRef.isValid()) {
+            if (store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType())
+                != null) {
+                kind = KIND_TOWNSFOLK;
+            }
+        }
+        String tree;
+        if (explicitDialogueId != null && !explicitDialogueId.isBlank()) {
+            tree = explicitDialogueId.trim();
+        } else if (KIND_TOWNSFOLK.equals(kind)) {
+            tree = TREE_TOWNSFOLK_GENERIC;
+        } else {
+            tree = kindToTree.getOrDefault(kind, DEFAULT_RESIDENT_DIALOGUE_TREE);
+        }
         String entry = "root";
         if (plugin != null) {
             DialogueTreeDefinition treeDef = plugin.getDialogueCatalog().get(tree);
@@ -118,12 +140,15 @@ public final class DialogueResolver {
             TownRecord town = VillagerReputationService.findTownForPlayer(playerRef, store, tm);
             UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
             if (town != null && pu != null && nu != null) {
-                String pendingEntry = VillagerReputationService.peekPendingRewardEntryNode(
-                    world, tm, town, pu.getUuid(), nu.getUuid()
-                );
-                if (pendingEntry != null && !pendingEntry.isBlank()) {
-                    entry = pendingEntry.trim();
-                } else {
+                if (VillagerBefriendableResolver.isBefriendable(store, npcRef, plugin)) {
+                    String pendingEntry = VillagerReputationService.peekPendingRewardEntryNode(
+                        world, tm, town, pu.getUuid(), nu.getUuid()
+                    );
+                    if (pendingEntry != null && !pendingEntry.isBlank()) {
+                        entry = pendingEntry.trim();
+                    }
+                }
+                if ("root".equals(entry)) {
                     NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
                     String npcRole = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
                     if (!npcRole.isEmpty()) {

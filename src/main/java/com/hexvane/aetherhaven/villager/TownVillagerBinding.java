@@ -48,6 +48,9 @@ public final class TownVillagerBinding implements Component<EntityStore> {
 
     public static final String KIND_VISITOR_RANCHER = "visitor_rancher";
 
+    /** Shared pool townsfolk (tourist, guard, idle test, etc.). */
+    public static final String KIND_TOWNSFOLK = "townsfolk";
+
     /** True for inn pool visitors only; permanent residents use {@link #KIND_MERCHANT}, {@link #KIND_ELDER}, etc. */
     public static boolean isVisitorKind(@Nonnull String kind) {
         return kind.startsWith("visitor_");

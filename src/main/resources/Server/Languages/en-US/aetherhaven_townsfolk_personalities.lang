@@ -1,0 +1,14 @@
+# Townsfolk personality greeting lines (picked at spawn from character's personalityIds)
+
+aetherhaven.townsfolk.personality.cheerful.greeting.1=Good day! Lovely weather for a stroll, isn't it?
+aetherhaven.townsfolk.personality.cheerful.greeting.2=Hello there! Always nice to see a friendly face in town.
+
+aetherhaven.townsfolk.personality.shy.greeting.1=Oh—hello. I did not mean to stare.
+
+aetherhaven.townsfolk.personality.curious.greeting.1=Have you seen anything interesting around here lately?
+
+aetherhaven.townsfolk.personality.stoic.greeting.1=...
+
+aetherhaven.townsfolk.personality.mischievous.greeting.1=If you hear a crash later, that was definitely not me.
+
+aetherhaven.townsfolk.personality.homebody.greeting.1=I was just heading home. The hearth beats the square, most days.

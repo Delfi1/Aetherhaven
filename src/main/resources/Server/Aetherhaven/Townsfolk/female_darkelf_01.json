@@ -1,0 +1,18 @@
+{
+  "id": "female_darkelf_01",
+  "displayName": "Kethra Shadowmere",
+  "gender": "female",
+  "race": "darkelf",
+  "modelAssetId": "Female_DarkElf_01",
+  "personalityIds": [
+    "cheerful",
+    "curious",
+    "homebody"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false
+}

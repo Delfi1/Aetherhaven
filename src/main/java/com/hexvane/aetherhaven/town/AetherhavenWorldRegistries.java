@@ -9,6 +9,8 @@ import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
 import com.hexvane.aetherhaven.farming.SprinklerWateringService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolPersistence;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
 import com.hexvane.aetherhaven.pathtool.PathToolPersistence;
 import com.hexvane.aetherhaven.pathtool.PathToolRegistry;
 import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
@@ -126,6 +128,7 @@ public final class AetherhavenWorldRegistries {
         }
         PATH_NAV_GRAPH_SERVICES.remove(world.getName());
         WorldDifficultyPersistence.unloadWorld(world);
+        TownsfolkPoolPersistence.unloadWorld(world);
     }
 
     @Nonnull
@@ -146,6 +149,7 @@ public final class AetherhavenWorldRegistries {
             }
         }
         WorldDifficultyPersistence.saveAll();
+        TownsfolkPoolPersistence.saveAll();
     }
 
     public static void bootstrapWorld(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
@@ -158,6 +162,7 @@ public final class AetherhavenWorldRegistries {
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
         InnPoolService.reconcileAfterWorldLoad(world, plugin);
+        TownsfolkSpawnService.reconcileAfterWorldLoad(world, plugin);
         PlotAssemblyService.scheduleRehydrateAfterWorldLoad(world, plugin);
         TownBorderMapOverlayService.startWorld(world);
         world.getWorldMapManager().addMarkerProvider("aetherhaven-towns", TownMapMarkerProvider.INSTANCE);

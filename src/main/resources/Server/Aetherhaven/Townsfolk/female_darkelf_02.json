@@ -1,0 +1,18 @@
+{
+  "id": "female_darkelf_02",
+  "displayName": "Nyssara Voidlace",
+  "gender": "female",
+  "race": "darkelf",
+  "modelAssetId": "Female_DarkElf_02",
+  "personalityIds": [
+    "shy",
+    "stoic",
+    "homebody"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false
+}

@@ -1,0 +1,18 @@
+{
+  "id": "male_human_08",
+  "displayName": "Cedric Holt",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Male_Human_08",
+  "personalityIds": [
+    "shy",
+    "stoic",
+    "homebody"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false
+}

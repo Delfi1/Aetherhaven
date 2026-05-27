@@ -1,0 +1,18 @@
+{
+  "id": "female_human_01",
+  "displayName": "Alaric Thornmere",
+  "gender": "female",
+  "race": "human",
+  "modelAssetId": "Female_Human_01",
+  "personalityIds": [
+    "curious",
+    "cheerful",
+    "mischievous"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false
+}

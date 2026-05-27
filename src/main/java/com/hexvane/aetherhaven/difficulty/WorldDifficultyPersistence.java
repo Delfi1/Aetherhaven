@@ -38,25 +38,26 @@ public final class WorldDifficultyPersistence {
 
     @Nonnull
     public static WorldDifficultyState getOrLoad(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
-        return CACHE.computeIfAbsent(world.getName(), n -> loadFromDisk(world, plugin));
+        return CACHE.computeIfAbsent(world.getName(), n -> readFromDisk(world, plugin));
     }
 
     @Nonnull
     public static WorldDifficultyState loadFromDisk(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        WorldDifficultyState loaded = readFromDisk(world, plugin);
+        CACHE.put(world.getName(), loaded);
+        return loaded;
+    }
+
+    @Nonnull
+    private static WorldDifficultyState readFromDisk(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
         Path path = difficultyFile(world, plugin);
         try {
             WorldDifficultyFile file = WorldDifficultyFile.readOrEmpty(path);
             WorldDifficultyState state = file.getState();
-            if (state == null) {
-                state = WorldDifficultyState.normalUntilChosen();
-            }
-            CACHE.put(world.getName(), state);
-            return state;
+            return state != null ? state : WorldDifficultyState.normalUntilChosen();
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to load difficulty for world %s", world.getName());
-            WorldDifficultyState fallback = WorldDifficultyState.normalUntilChosen();
-            CACHE.put(world.getName(), fallback);
-            return fallback;
+            return WorldDifficultyState.normalUntilChosen();
         }
     }
 
