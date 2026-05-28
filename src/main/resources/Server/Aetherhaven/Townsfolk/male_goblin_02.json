@@ -7,11 +7,11 @@
   "personalityIds": [
     "curious",
     "cheerful",
-    "mischievous"
+    "crafty"
   ],
   "allowedAssignmentKinds": [
     "idle",
-    "guard"
+    "tourist"
   ],
   "befriendable": false
 }

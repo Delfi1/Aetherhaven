@@ -5,9 +5,9 @@
   "race": "darkelf",
   "modelAssetId": "Female_DarkElf_02",
   "personalityIds": [
-    "shy",
+    "adventurer",
     "stoic",
-    "homebody"
+    "mischievous"
   ],
   "allowedAssignmentKinds": [
     "idle",

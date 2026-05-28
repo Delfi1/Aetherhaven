@@ -5,13 +5,14 @@
   "race": "sylvian",
   "modelAssetId": "Male_Elf_03",
   "personalityIds": [
-    "cheerful",
-    "curious",
-    "homebody"
+    "gloomy",
+    "musical",
+    "blunt"
   ],
   "allowedAssignmentKinds": [
     "idle",
-    "tourist"
+    "tourist",
+    "guard"
   ],
   "befriendable": false
 }

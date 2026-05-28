@@ -5,9 +5,9 @@
   "race": "human",
   "modelAssetId": "Female_Human_08",
   "personalityIds": [
-    "homebody",
-    "shy",
-    "stoic"
+    "mischievous",
+    "adventurer",
+    "gossipy"
   ],
   "allowedAssignmentKinds": [
     "idle",

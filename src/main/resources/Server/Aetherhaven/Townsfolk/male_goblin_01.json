@@ -5,12 +5,13 @@
   "race": "goblin",
   "modelAssetId": "Male_Goblin_01",
   "personalityIds": [
-    "stoic",
-    "shy",
-    "homebody"
+    "gloomy",
+    "cynical",
+    "dramatic"
   ],
   "allowedAssignmentKinds": [
     "idle",
+    "tourist",
     "guard"
   ],
   "befriendable": false

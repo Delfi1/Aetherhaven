@@ -5,9 +5,9 @@
   "race": "human",
   "modelAssetId": "Male_Human_03",
   "personalityIds": [
-    "mischievous",
-    "cheerful",
-    "curious"
+    "impatient",
+    "rude",
+    "crafty"
   ],
   "allowedAssignmentKinds": [
     "idle",

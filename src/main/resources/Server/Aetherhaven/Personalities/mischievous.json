@@ -1,11 +1,18 @@
 {
   "id": "mischievous",
   "dialogueGreetingLangKeys": [
-    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.mischievous.greeting.1"
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.mischievous.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.mischievous.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.mischievous.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.mischievous.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.mischievous.greeting.5"
   ],
   "leisurePoiTagWeights": {
     "FUN": 1.5,
     "EAT": 1.1
   },
-  "preferredScheduleLocations": ["inn", "park"]
+  "preferredScheduleLocations": [
+    "inn",
+    "park"
+  ]
 }

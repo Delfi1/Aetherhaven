@@ -5,12 +5,13 @@
   "race": "darkelf",
   "modelAssetId": "Male_DarkElf_02",
   "personalityIds": [
-    "stoic",
+    "rude",
     "shy",
-    "homebody"
+    "bitter"
   ],
   "allowedAssignmentKinds": [
     "idle",
+    "tourist",
     "guard"
   ],
   "befriendable": false

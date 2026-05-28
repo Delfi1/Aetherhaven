@@ -7,12 +7,11 @@
   "personalityIds": [
     "cheerful",
     "curious",
-    "homebody"
+    "bookworm"
   ],
   "allowedAssignmentKinds": [
     "idle",
-    "tourist",
-    "guard"
+    "tourist"
   ],
   "befriendable": false
 }

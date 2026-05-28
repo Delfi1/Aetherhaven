@@ -5,8 +5,8 @@
   "race": "human",
   "modelAssetId": "Male_Human_06",
   "personalityIds": [
-    "homebody",
-    "shy",
+    "grumpy",
+    "blunt",
     "stoic"
   ],
   "allowedAssignmentKinds": [

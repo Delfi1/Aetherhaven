@@ -1,0 +1,19 @@
+{
+  "id": "lazy",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.lazy.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.lazy.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.lazy.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.lazy.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.lazy.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "SLEEP": 1.5,
+    "SIT": 1.4,
+    "FUN": 0.5,
+    "WORK": 0.4
+  },
+  "preferredScheduleLocations": [
+    "home"
+  ]
+}

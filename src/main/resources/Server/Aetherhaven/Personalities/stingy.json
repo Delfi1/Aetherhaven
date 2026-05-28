@@ -1,0 +1,19 @@
+{
+  "id": "stingy",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.stingy.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.stingy.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.stingy.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.stingy.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.stingy.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "WORK": 1.4,
+    "EAT": 0.7,
+    "FUN": 0.5,
+    "SIT": 1.0
+  },
+  "preferredScheduleLocations": [
+    "home"
+  ]
+}

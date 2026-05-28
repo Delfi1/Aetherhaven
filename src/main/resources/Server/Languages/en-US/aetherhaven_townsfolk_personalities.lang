@@ -1,14 +1,161 @@
-# Townsfolk personality greeting lines (picked at spawn from character's personalityIds)
+# Townsfolk personality greeting lines
 
-aetherhaven.townsfolk.personality.cheerful.greeting.1=Good day! Lovely weather for a stroll, isn't it?
-aetherhaven.townsfolk.personality.cheerful.greeting.2=Hello there! Always nice to see a friendly face in town.
+aetherhaven.townsfolk.personality.cheerful.greeting.1=Hello! It is always nice to see a friendly face around town.
+aetherhaven.townsfolk.personality.cheerful.greeting.2=Hi there! I hope your day is going well so far.
+aetherhaven.townsfolk.personality.cheerful.greeting.3=Oh, hello! I was just thinking how lucky we are to live here.
+aetherhaven.townsfolk.personality.cheerful.greeting.4=Hey! Good to bump into you. I was in a great mood already and now it is even better.
+aetherhaven.townsfolk.personality.cheerful.greeting.5=Hello again! If you need directions or a smile, I have plenty of both.
 
-aetherhaven.townsfolk.personality.shy.greeting.1=Oh—hello. I did not mean to stare.
+aetherhaven.townsfolk.personality.shy.greeting.1=Oh, hello. I did not mean to stare.
+aetherhaven.townsfolk.personality.shy.greeting.2=Hi. Sorry, I am not very good at starting conversations.
+aetherhaven.townsfolk.personality.shy.greeting.3=Hello. I was just passing through. Please do not mind me.
+aetherhaven.townsfolk.personality.shy.greeting.4=Oh. Hi. I hope I am not in your way.
+aetherhaven.townsfolk.personality.shy.greeting.5=Hello there. I will try not to talk your ear off.
 
 aetherhaven.townsfolk.personality.curious.greeting.1=Have you seen anything interesting around here lately?
+aetherhaven.townsfolk.personality.curious.greeting.2=Hello! I have been wondering what brings people through town today.
+aetherhaven.townsfolk.personality.curious.greeting.3=Hi. Mind if I ask where you are headed? I like knowing how the town connects.
+aetherhaven.townsfolk.personality.curious.greeting.4=Oh, hello! I am always looking for a new story or a strange detail to puzzle over.
+aetherhaven.townsfolk.personality.curious.greeting.5=Hi there. You look like you have seen something worth talking about.
 
-aetherhaven.townsfolk.personality.stoic.greeting.1=...
+aetherhaven.townsfolk.personality.stoic.greeting.1=Hello.
+aetherhaven.townsfolk.personality.stoic.greeting.2=Hi.
+aetherhaven.townsfolk.personality.stoic.greeting.3=Yes?
+aetherhaven.townsfolk.personality.stoic.greeting.4=I am here if you need something.
+aetherhaven.townsfolk.personality.stoic.greeting.5=Go on, then.
 
 aetherhaven.townsfolk.personality.mischievous.greeting.1=If you hear a crash later, that was definitely not me.
+aetherhaven.townsfolk.personality.mischievous.greeting.2=Hello! I was just planning something harmless. Probably.
+aetherhaven.townsfolk.personality.mischievous.greeting.3=Hi there. You look like you could use a little excitement. I might know a guy.
+aetherhaven.townsfolk.personality.mischievous.greeting.4=Oh, perfect timing. I needed a witness who wouldn't snitch.
+aetherhaven.townsfolk.personality.mischievous.greeting.5=Hey! Promise you will not repeat this, but I may have left a surprise for someone.
 
-aetherhaven.townsfolk.personality.homebody.greeting.1=I was just heading home. The hearth beats the square, most days.
+aetherhaven.townsfolk.personality.homebody.greeting.1=Hello. I was just thinking about heading back home soon.
+aetherhaven.townsfolk.personality.homebody.greeting.2=Hi. Nothing beats my own hearth when I finally get there.
+aetherhaven.townsfolk.personality.homebody.greeting.3=Oh, hello. I only came out for a short errand. Short for me, anyway.
+aetherhaven.townsfolk.personality.homebody.greeting.4=Hi there. I left a kettle on at home, so I should not stay long.
+aetherhaven.townsfolk.personality.homebody.greeting.5=Hello. Town is fine, but my chair at home knows my name.
+
+aetherhaven.townsfolk.personality.sporty.greeting.1=Hey! I was just about to go for a run. Care to join?
+aetherhaven.townsfolk.personality.sporty.greeting.2=Hello! I try to stay limber. A quick stretch now saves me trouble later.
+aetherhaven.townsfolk.personality.sporty.greeting.3=Hi there. I have been keeping active. It keeps my mood up.
+aetherhaven.townsfolk.personality.sporty.greeting.4=Oh, hello! I was counting steps in my head. Old habit.
+aetherhaven.townsfolk.personality.sporty.greeting.5=Hey! If you need someone to race to the next corner, I am your person.
+
+# Hobby traits
+
+aetherhaven.townsfolk.personality.adventurer.greeting.1=Hello! I heard something odd out past the edge of town. Might go look later.
+aetherhaven.townsfolk.personality.adventurer.greeting.2=Hi. Every road out of town feels like a story waiting to happen.
+aetherhaven.townsfolk.personality.adventurer.greeting.3=Oh, hello. You look like you have been places. I respect that.
+aetherhaven.townsfolk.personality.adventurer.greeting.4=Hey! I am always packing light in case the horizon calls.
+aetherhaven.townsfolk.personality.adventurer.greeting.5=Hi there. I keep a list of places I have not been yet. It is a long list.
+
+aetherhaven.townsfolk.personality.crafty.greeting.1=Hello. I finally got the joints square back at my workbench.
+aetherhaven.townsfolk.personality.crafty.greeting.2=Hi. I am between projects, but I am already sketching the next one in my head.
+aetherhaven.townsfolk.personality.crafty.greeting.3=Oh, hello. If you need something fixed, ask nicely and I might help.
+aetherhaven.townsfolk.personality.crafty.greeting.4=Hey! I have glue on my hands and ideas in my pockets. Busy day.
+aetherhaven.townsfolk.personality.crafty.greeting.5=Hi there. I measure twice so I only apologize once.
+
+aetherhaven.townsfolk.personality.gardener.greeting.1=Hello! My garden at home could use rain, or praise. I offer both when I get back.
+aetherhaven.townsfolk.personality.gardener.greeting.2=Hi. I talk to plants. They listen better than most people.
+aetherhaven.townsfolk.personality.gardener.greeting.3=Oh, hello. If you step on seedlings anywhere in town, I will notice. Politely, but I will notice.
+aetherhaven.townsfolk.personality.gardener.greeting.4=Hey! I was thinking about compost and happiness. Same category for me.
+aetherhaven.townsfolk.personality.gardener.greeting.5=Hi there. A good harvest starts with patience. I have plenty of that.
+
+aetherhaven.townsfolk.personality.fisher.greeting.1=Hello. The big ones always know when you are watching.
+aetherhaven.townsfolk.personality.fisher.greeting.2=Hi. I will trade a story about fish for a fresh rumor any day.
+aetherhaven.townsfolk.personality.fisher.greeting.3=Oh, hello. Patience is the whole job. The rest is luck and bait.
+aetherhaven.townsfolk.personality.fisher.greeting.4=Hey! I swear the one that got away was bigger every time I tell it.
+aetherhaven.townsfolk.personality.fisher.greeting.5=Hi there. Quiet water teaches you more than loud crowds.
+
+aetherhaven.townsfolk.personality.bookworm.greeting.1=Sorry, I was lost in a chapter. What did you need?
+aetherhaven.townsfolk.personality.bookworm.greeting.2=Hello. I left a bookmark at home in a very important spot.
+aetherhaven.townsfolk.personality.bookworm.greeting.3=Hi. I read whenever I can. It beats small talk, no offense.
+aetherhaven.townsfolk.personality.bookworm.greeting.4=Oh, hello. If you know a good title, I am always collecting recommendations.
+aetherhaven.townsfolk.personality.bookworm.greeting.5=Hi there. I remember quotes better than names. It is a problem sometimes.
+
+aetherhaven.townsfolk.personality.foodie.greeting.1=Hello! You look like someone who eats on purpose. I respect that.
+aetherhaven.townsfolk.personality.foodie.greeting.2=Hi. I am always hunting for whatever smells good from a kitchen somewhere.
+aetherhaven.townsfolk.personality.foodie.greeting.3=Oh, hello. I can discuss seasoning longer than most people find polite.
+aetherhaven.townsfolk.personality.foodie.greeting.4=Hey! I ate well last time I cooked at home. I aim to repeat that.
+aetherhaven.townsfolk.personality.foodie.greeting.5=Hi there. Life is too short for bland soup.
+
+aetherhaven.townsfolk.personality.musical.greeting.1=Hello! I cannot help tapping along when the breeze rattles things. You understand.
+aetherhaven.townsfolk.personality.musical.greeting.2=Hi. I hum when I am happy. I am humming now, so draw your own conclusion.
+aetherhaven.townsfolk.personality.musical.greeting.3=Oh, hello. I left my instrument at home, but the rhythm is still in my head.
+aetherhaven.townsfolk.personality.musical.greeting.4=Hey! If you hum a note, I will probably harmonize by accident.
+aetherhaven.townsfolk.personality.musical.greeting.5=Hi there. A good melody fixes a lot of small problems.
+
+# Negative and prickly traits
+
+aetherhaven.townsfolk.personality.lazy.greeting.1=Oh. It is you. I was not napping. I was assessing the chair.
+aetherhaven.townsfolk.personality.lazy.greeting.2=Hello. If this conversation involves stairs, I am afraid I cannot help.
+aetherhaven.townsfolk.personality.lazy.greeting.3=Hi. I was going to do something productive. Eventually.
+aetherhaven.townsfolk.personality.lazy.greeting.4=Hey. I found a comfortable spot and it would be rude to abandon it.
+aetherhaven.townsfolk.personality.lazy.greeting.5=Oh, hello. I will get around to it. That is my whole philosophy.
+
+aetherhaven.townsfolk.personality.grumpy.greeting.1=What? I was having a fine mood until people started talking to me.
+aetherhaven.townsfolk.personality.grumpy.greeting.2=Hello. Try not to make this worse.
+aetherhaven.townsfolk.personality.grumpy.greeting.3=Hi. I am not in the mood, but here we are.
+aetherhaven.townsfolk.personality.grumpy.greeting.4=Oh, great. Company. Just what I needed.
+aetherhaven.townsfolk.personality.grumpy.greeting.5=Hey. Keep it short and we might both survive this.
+
+aetherhaven.townsfolk.personality.rude.greeting.1=You are in the way. Move along.
+aetherhaven.townsfolk.personality.rude.greeting.2=I do not have time for small talk. Or large talk. Any talk, really.
+aetherhaven.townsfolk.personality.rude.greeting.3=What do you want? Make it quick.
+aetherhaven.townsfolk.personality.rude.greeting.4=I was busy ignoring people. You interrupted that.
+aetherhaven.townsfolk.personality.rude.greeting.5=Hello. No, I am not happy to see you. Try someone nicer.
+
+aetherhaven.townsfolk.personality.gloomy.greeting.1=Hello. Rain would suit my mood better. Or snow. Anything dim.
+aetherhaven.townsfolk.personality.gloomy.greeting.2=Hi. I was thinking about how nothing lasts. Cheerful, I know.
+aetherhaven.townsfolk.personality.gloomy.greeting.3=Oh, hello. I hope your day goes better than I expect mine will.
+aetherhaven.townsfolk.personality.gloomy.greeting.4=Hey. The world keeps turning. I am not sure why.
+aetherhaven.townsfolk.personality.gloomy.greeting.5=Hi there. I brought my umbrella and my doubts.
+
+aetherhaven.townsfolk.personality.snooty.greeting.1=Hmm. Your boots are louder than fashion allows.
+aetherhaven.townsfolk.personality.snooty.greeting.2=Hello. I suppose some people enjoy common conversation. I am not one of them.
+aetherhaven.townsfolk.personality.snooty.greeting.3=Oh. You again. How pedestrian.
+aetherhaven.townsfolk.personality.snooty.greeting.4=Hi. I was enjoying my own company. It is superior.
+aetherhaven.townsfolk.personality.snooty.greeting.5=Hello there. Try to keep up. I do not repeat myself for just anyone.
+
+aetherhaven.townsfolk.personality.impatient.greeting.1=Yes? Yes? Get on with it.
+aetherhaven.townsfolk.personality.impatient.greeting.2=Hello. I have places to be. Several of them, all at once.
+aetherhaven.townsfolk.personality.impatient.greeting.3=Hi. Clock is ticking. So am I, figuratively.
+aetherhaven.townsfolk.personality.impatient.greeting.4=Oh, hello. Please skip the preamble.
+aetherhaven.townsfolk.personality.impatient.greeting.5=Hey. I already lost patience. Now I am losing time.
+
+aetherhaven.townsfolk.personality.gossipy.greeting.1=You will never guess who was arguing in town. Actually, you might.
+aetherhaven.townsfolk.personality.gossipy.greeting.2=Wait, before you go, did you hear about the new fence someone put up?
+aetherhaven.townsfolk.personality.gossipy.greeting.3=Hello! I have news. Well, rumors. Same thing, mostly.
+aetherhaven.townsfolk.personality.gossipy.greeting.4=Hi there. I heard something juicy and I need to tell someone.
+aetherhaven.townsfolk.personality.gossipy.greeting.5=Oh, perfect. I was hoping for an audience.
+
+aetherhaven.townsfolk.personality.cynical.greeting.1=Sure, today will be different. They all say that.
+aetherhaven.townsfolk.personality.cynical.greeting.2=Hello. If someone offers you a bargain, check your pockets afterward.
+aetherhaven.townsfolk.personality.cynical.greeting.3=Hi. I have seen enough promises to fill a warehouse.
+aetherhaven.townsfolk.personality.cynical.greeting.4=Oh, hello. Trust is earned. Mine is expensive.
+aetherhaven.townsfolk.personality.cynical.greeting.5=Hey. Hope for the best, plan for the mess. That is my motto.
+
+aetherhaven.townsfolk.personality.dramatic.greeting.1=Nobody understands the weight I carry. It is mostly groceries, but still.
+aetherhaven.townsfolk.personality.dramatic.greeting.2=Hello! This town will remember the day I tripped on that cobble. Mark my words.
+aetherhaven.townsfolk.personality.dramatic.greeting.3=Hi. I feel everything at full volume. Even this greeting.
+aetherhaven.townsfolk.personality.dramatic.greeting.4=Oh, fate! You have crossed my path again.
+aetherhaven.townsfolk.personality.dramatic.greeting.5=Hey! My life is a saga and you are in the latest chapter.
+
+aetherhaven.townsfolk.personality.bitter.greeting.1=Fine weather. For someone who deserved it, I mean.
+aetherhaven.townsfolk.personality.bitter.greeting.2=Hello. I used to smile more. Then I learned how calendars work.
+aetherhaven.townsfolk.personality.bitter.greeting.3=Hi. Some people get lucky. I get reminders.
+aetherhaven.townsfolk.personality.bitter.greeting.4=Oh, hello. I hope you enjoy whatever good thing happens next. I will be over here.
+aetherhaven.townsfolk.personality.bitter.greeting.5=Hey. I am not angry. I am just tired of being disappointed.
+
+aetherhaven.townsfolk.personality.stingy.greeting.1=I am not buying rounds. I am not buying corners either.
+aetherhaven.townsfolk.personality.stingy.greeting.2=Hello. That coin you dropped? Finders keepers. I found it mentally.
+aetherhaven.townsfolk.personality.stingy.greeting.3=Hi. I count what I spend twice and what I lend never.
+aetherhaven.townsfolk.personality.stingy.greeting.4=Oh, hello. If this is about sharing, I brought nothing.
+aetherhaven.townsfolk.personality.stingy.greeting.5=Hey. My purse stays closed and my advice is free. Pick one.
+
+aetherhaven.townsfolk.personality.blunt.greeting.1=You look tired. You should fix that.
+aetherhaven.townsfolk.personality.blunt.greeting.2=Hello. I will say what others will not. That hat is a choice.
+aetherhaven.townsfolk.personality.blunt.greeting.3=Hi. I do not sugarcoat. Saves time.
+aetherhaven.townsfolk.personality.blunt.greeting.4=Oh, hello. You asked for honesty. That was your first mistake.
+aetherhaven.townsfolk.personality.blunt.greeting.5=Hey. I mean well. I just sound like I do not.

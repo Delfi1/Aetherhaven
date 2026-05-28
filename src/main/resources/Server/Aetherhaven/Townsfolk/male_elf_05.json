@@ -5,9 +5,9 @@
   "race": "sylvian",
   "modelAssetId": "Male_Elf_05",
   "personalityIds": [
-    "mischievous",
-    "cheerful",
-    "curious"
+    "gloomy",
+    "bookworm",
+    "rude"
   ],
   "allowedAssignmentKinds": [
     "idle",

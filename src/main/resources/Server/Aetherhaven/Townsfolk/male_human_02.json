@@ -6,8 +6,8 @@
   "modelAssetId": "Male_Human_02",
   "personalityIds": [
     "shy",
-    "stoic",
-    "homebody"
+    "bitter",
+    "sporty"
   ],
   "allowedAssignmentKinds": [
     "idle",

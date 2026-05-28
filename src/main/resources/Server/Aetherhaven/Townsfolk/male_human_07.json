@@ -5,9 +5,9 @@
   "race": "human",
   "modelAssetId": "Male_Human_07",
   "personalityIds": [
-    "cheerful",
-    "curious",
-    "homebody"
+    "gardener",
+    "adventurer",
+    "dramatic"
   ],
   "allowedAssignmentKinds": [
     "idle",

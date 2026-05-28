@@ -5,13 +5,14 @@
   "race": "sylvian",
   "modelAssetId": "Female_Elf_03",
   "personalityIds": [
-    "curious",
-    "cheerful",
-    "mischievous"
+    "gardener",
+    "impatient",
+    "dramatic"
   ],
   "allowedAssignmentKinds": [
     "idle",
-    "tourist"
+    "tourist",
+    "guard"
   ],
   "befriendable": false
 }

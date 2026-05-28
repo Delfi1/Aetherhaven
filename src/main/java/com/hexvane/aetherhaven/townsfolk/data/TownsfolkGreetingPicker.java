@@ -6,6 +6,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -26,16 +27,26 @@ public final class TownsfolkGreetingPicker {
         if (binding == null) {
             return null;
         }
+        List<String> personalityIds = binding.getPersonalityIds();
+        if (personalityIds.isEmpty()) {
+            TownsfolkCharacterDefinition character =
+                plugin.getTownsfolkCharacterCatalog().byId(binding.getCharacterId());
+            if (character != null) {
+                personalityIds = character.getPersonalityIds();
+            }
+        }
         TownsfolkPersonalityCatalog personalities = plugin.getTownsfolkPersonalityCatalog();
-        TownsfolkPersonalityDefinition personality = personalities.byId(binding.getActivePersonalityId());
-        if (personality == null) {
+        List<String> greetingKeys = new ArrayList<>();
+        for (String pid : personalityIds) {
+            TownsfolkPersonalityDefinition personality = personalities.byId(pid);
+            if (personality != null) {
+                greetingKeys.addAll(personality.getDialogueGreetingLangKeys());
+            }
+        }
+        if (greetingKeys.isEmpty()) {
             return null;
         }
-        List<String> keys = personality.getDialogueGreetingLangKeys();
-        if (keys.isEmpty()) {
-            return null;
-        }
-        int idx = Math.floorMod(playerUuid.hashCode() ^ npcEntityUuid.hashCode(), keys.size());
-        return Message.translation(keys.get(idx));
+        int idx = Math.floorMod(playerUuid.hashCode() ^ npcEntityUuid.hashCode(), greetingKeys.size());
+        return Message.translation(greetingKeys.get(idx));
     }
 }

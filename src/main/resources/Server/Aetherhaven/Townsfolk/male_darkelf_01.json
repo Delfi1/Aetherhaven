@@ -6,11 +6,12 @@
   "modelAssetId": "Male_DarkElf_01",
   "personalityIds": [
     "mischievous",
-    "cheerful",
-    "curious"
+    "lazy",
+    "crafty"
   ],
   "allowedAssignmentKinds": [
     "idle",
+    "tourist",
     "guard"
   ],
   "befriendable": false

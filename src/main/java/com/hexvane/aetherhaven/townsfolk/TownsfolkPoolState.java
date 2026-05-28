@@ -75,6 +75,12 @@ public final class TownsfolkPoolState {
         return checkouts.remove(characterId.trim()) != null;
     }
 
+    public int clearAllCheckouts() {
+        int n = checkouts.size();
+        checkouts.clear();
+        return n;
+    }
+
     public void loadFromFile(@Nonnull TownsfolkPoolFile file) {
         checkouts.clear();
         checkouts.putAll(file.checkoutsByCharacterId());

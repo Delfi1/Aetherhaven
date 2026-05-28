@@ -1,11 +1,17 @@
 {
   "id": "stoic",
   "dialogueGreetingLangKeys": [
-    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.stoic.greeting.1"
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.stoic.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.stoic.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.stoic.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.stoic.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.stoic.greeting.5"
   ],
   "leisurePoiTagWeights": {
     "SIT": 1.1,
     "WORK": 1.2
   },
-  "preferredScheduleLocations": ["work"]
+  "preferredScheduleLocations": [
+    "work"
+  ]
 }

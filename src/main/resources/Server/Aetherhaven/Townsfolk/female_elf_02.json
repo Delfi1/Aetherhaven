@@ -5,8 +5,8 @@
   "race": "sylvian",
   "modelAssetId": "Female_Elf_02",
   "personalityIds": [
-    "stoic",
-    "shy",
+    "foodie",
+    "musical",
     "homebody"
   ],
   "allowedAssignmentKinds": [

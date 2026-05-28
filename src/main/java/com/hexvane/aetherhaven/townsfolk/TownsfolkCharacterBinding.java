@@ -13,7 +13,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Per-entity townsfolk identity: catalog character, active personality, and assignment role. */
+/** Per-entity townsfolk identity: catalog character, fixed personality traits, and assignment role. */
 public final class TownsfolkCharacterBinding implements Component<EntityStore> {
     @Nonnull
     public static final BuilderCodec<TownsfolkCharacterBinding> CODEC =

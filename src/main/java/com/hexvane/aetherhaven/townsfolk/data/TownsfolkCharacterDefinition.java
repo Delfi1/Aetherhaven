@@ -26,6 +26,7 @@ public final class TownsfolkCharacterDefinition {
     @SerializedName("modelAssetId")
     private String modelAssetId = "";
 
+    /** All personality traits for this character (fixed in data; not chosen at spawn). */
     @SerializedName("personalityIds")
     @Nullable
     private List<String> personalityIds;

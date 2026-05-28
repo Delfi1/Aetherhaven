@@ -5,9 +5,9 @@
   "race": "goblin",
   "modelAssetId": "Female_Goblin_02",
   "personalityIds": [
-    "mischievous",
-    "cheerful",
-    "curious"
+    "musical",
+    "impatient",
+    "dramatic"
   ],
   "allowedAssignmentKinds": [
     "idle",

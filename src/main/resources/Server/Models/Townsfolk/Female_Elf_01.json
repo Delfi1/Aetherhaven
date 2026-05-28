@@ -44,6 +44,12 @@
       "GradientId": "BrownDarker"
     },
     {
+      "Model": "Characters/Haircuts/GenericLong.blockymodel",
+      "Texture": "Characters/Haircuts/GenericLong_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "BrownDarker"
+    },
+    {
       "Model": "Characters/Haircuts/Magical_Pigtails.blockymodel",
       "Texture": "Characters/Haircuts/Magical_Pigtails_Greyscale.png",
       "GradientSet": "Hair",

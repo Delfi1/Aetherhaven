@@ -6,12 +6,12 @@
   "modelAssetId": "Female_Goblin_01",
   "personalityIds": [
     "shy",
-    "stoic",
-    "homebody"
+    "curious",
+    "foodie"
   ],
   "allowedAssignmentKinds": [
     "idle",
-    "guard"
+    "tourist"
   ],
   "befriendable": false
 }

@@ -22,8 +22,9 @@ import javax.annotation.Nullable;
  *
  * <p>Haircut + hat: matches {@link com.hypixel.hytale.server.core.cosmetics.CosmeticsModule#isValidHaircutAttachment}
  * a {@link PlayerSkinPart.HeadAccessoryType#HalfCovering} head accessory with a haircut that
- * {@link PlayerSkinPart#doesRequireGenericHaircut()} exports as {@code Generic{HairType}} plus the same hair
- * gradient id as the chosen style (see server validation using {@code Generic} + {@link PlayerSkinPart#getHairType()}).
+ * {@link PlayerSkinPart#doesRequireGenericHaircut()} exports as {@code Generic{HairType}} only (same hair gradient id).
+ * Without a half-covering hat, export only the chosen style. The style blockymodel already includes a
+ * {@code HairBase} mesh; duplicating {@code Generic{HairType}} as a second attachment z-fights on NPC models.
  *
  * <p>Attachment order (inner → outer draw order): body, underwear, skin feature, face features,
  * hair, lower body, tops, footwear, gloves, head/face/ear accessories, cape.
@@ -38,6 +39,10 @@ import javax.annotation.Nullable;
 public final class PlayerSkinModelExporter {
     private static final String PARENT_PLAYER = "Player";
     private static final String HAIR_GRADIENT_SET_ID = "Hair";
+    private static final String EARS1_BLOCKYMODEL = "Characters/Body_Attachments/Ears/Ears1.blockymodel";
+    private static final String EAR_DEFAULT_NPC_GREYSCALE =
+        "Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png";
+    private static final String LEGACY_EAR_GREYSCALE = "Characters/Body_Attachments/Ears/Ears.png";
 
     private PlayerSkinModelExporter() {}
 
@@ -63,8 +68,14 @@ public final class PlayerSkinModelExporter {
     public static ModelAttachment[] toModelAttachments(@Nonnull PlayerSkin skin, @Nonnull CosmeticRegistry registry) {
         List<ModelAttachment> list = new ArrayList<>();
         for (Slot slot : Slot.values()) {
-            String raw =
-                slot == Slot.HAIRCUT ? effectiveHaircutIdForHeadAccessory(skin, registry) : slot.getter.apply(skin);
+            String raw;
+            if (slot == Slot.HAIRCUT) {
+                raw = effectiveHaircutIdForHeadAccessory(skin, registry);
+            } else if (slot == Slot.FACE) {
+                raw = effectiveFaceIdForFacialHair(skin);
+            } else {
+                raw = slot.getter.apply(skin);
+            }
             if (raw == null || raw.isEmpty()) {
                 continue;
             }
@@ -183,7 +194,7 @@ public final class PlayerSkinModelExporter {
             }
             return new ModelAttachment(
                 modelPath,
-                greyscale,
+                npcEarGreyscaleTexture(modelPath, greyscale),
                 Objects.requireNonNull(part.getGradientSet()),
                 selector,
                 1.0
@@ -289,6 +300,42 @@ public final class PlayerSkinModelExporter {
         }
 
         return haircutId;
+    }
+
+    /** Character Creator lists {@link #LEGACY_EAR_GREYSCALE} for default ears; static NPC models need {@link #EAR_DEFAULT_NPC_GREYSCALE}. */
+    @Nonnull
+    private static String npcEarGreyscaleTexture(@Nonnull String modelPath, @Nonnull String greyscale) {
+        if (EARS1_BLOCKYMODEL.equals(modelPath) && LEGACY_EAR_GREYSCALE.equals(greyscale)) {
+            return EAR_DEFAULT_NPC_GREYSCALE;
+        }
+        return greyscale;
+    }
+
+    /**
+     * {@code Face_Stubble} paints chin stubble on the detached face texture; with a beard attachment that overlaps
+     * and smears on NPC {@code DefaultAttachments}. Use neutral face when facial hair is equipped.
+     */
+    @Nullable
+    private static String effectiveFaceIdForFacialHair(@Nonnull PlayerSkin skin) {
+        String faceId = skin.face;
+        if (faceId == null || faceId.isEmpty()) {
+            return null;
+        }
+        if (skin.facialHair == null || skin.facialHair.isEmpty()) {
+            return faceId;
+        }
+        String[] parts = faceId.split("\\.");
+        if (!"Face_Stubble".equals(parts[0])) {
+            return faceId;
+        }
+        if (parts.length > 1) {
+            StringBuilder sb = new StringBuilder("Face_Neutral");
+            for (int i = 1; i < parts.length; i++) {
+                sb.append('.').append(parts[i]);
+            }
+            return sb.toString();
+        }
+        return "Face_Neutral";
     }
 
     private enum Slot {

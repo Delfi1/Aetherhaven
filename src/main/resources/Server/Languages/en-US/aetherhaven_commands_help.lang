@@ -104,7 +104,8 @@ commands.aetherhaven.walldebug.off.desc=Turn wall wand debug off
 commands.aetherhaven.walldebug.dump.desc=Print current wall wand session state
 
 commands.aetherhaven.townsfolk.desc=Debug: spawn and manage shared townsfolk pool NPCs
-commands.aetherhaven.townsfolk.spawn.desc=Spawn a townsfolk NPC in your town (random pool pick unless characterId is set)
+commands.aetherhaven.townsfolk.spawn.desc=Spawn a townsfolk NPC in your town (random pool pick, or pass character id)
+commands.aetherhaven.townsfolk.id.desc=Townsfolk character id (e.g. female_elf_01)
 commands.aetherhaven.townsfolk.release.desc=Release a character back to the world pool
 commands.aetherhaven.townsfolk.list.desc=List available and checked-out townsfolk in this world
 commands.aetherhaven.townsfolk.characterId.desc=Townsfolk character id from Server/Aetherhaven/Townsfolk/
@@ -117,3 +118,5 @@ commands.aetherhaven.townsfolk.release.notCheckedOut=That character is not check
 commands.aetherhaven.townsfolk.list.available=Available for {assignment}: {ids}
 commands.aetherhaven.townsfolk.list.availableIdle=Available for idle: {ids}
 commands.aetherhaven.townsfolk.list.inUse=Checked out: {ids}
+commands.aetherhaven.townsfolk.clear.desc=Despawn all townsfolk in this world and reset the shared pool
+commands.aetherhaven.townsfolk.clear.ok=Removed {count} townsfolk and cleared the pool for this world

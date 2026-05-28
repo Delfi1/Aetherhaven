@@ -11,8 +11,7 @@
   ],
   "allowedAssignmentKinds": [
     "idle",
-    "tourist",
-    "guard"
+    "tourist"
   ],
   "befriendable": false
 }

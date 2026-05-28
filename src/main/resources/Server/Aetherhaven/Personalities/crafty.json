@@ -1,0 +1,18 @@
+{
+  "id": "crafty",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.crafty.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.crafty.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.crafty.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.crafty.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.crafty.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "WORK": 1.4,
+    "SIT": 1.1,
+    "FUN": 0.7
+  },
+  "preferredScheduleLocations": [
+    "home"
+  ]
+}

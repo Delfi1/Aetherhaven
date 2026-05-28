@@ -1,0 +1,19 @@
+{
+  "id": "grumpy",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.grumpy.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.grumpy.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.grumpy.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.grumpy.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.grumpy.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "SIT": 1.2,
+    "FUN": 0.5,
+    "EAT": 0.9,
+    "SLEEP": 1.1
+  },
+  "preferredScheduleLocations": [
+    "home"
+  ]
+}

@@ -5,14 +5,13 @@
   "race": "human",
   "modelAssetId": "Male_Human_10",
   "personalityIds": [
-    "stoic",
-    "shy",
-    "homebody"
+    "gardener",
+    "cheerful",
+    "foodie"
   ],
   "allowedAssignmentKinds": [
     "idle",
-    "tourist",
-    "guard"
+    "tourist"
   ],
   "befriendable": false
 }

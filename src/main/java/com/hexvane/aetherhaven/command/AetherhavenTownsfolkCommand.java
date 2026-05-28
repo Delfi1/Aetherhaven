@@ -14,6 +14,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.FlagArg;
 import com.hypixel.hytale.server.core.command.system.arguments.system.OptionalArg;
+import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
@@ -23,6 +24,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,6 +37,7 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
         this.addSubCommand(new SpawnSubCommand());
         this.addSubCommand(new ReleaseSubCommand());
         this.addSubCommand(new ListSubCommand());
+        this.addSubCommand(new ClearSubCommand());
     }
 
     @Nullable
@@ -52,14 +55,60 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
         return AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
     }
 
+    private static void executeSpawn(
+        @Nonnull CommandContext ctx,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull World world,
+        @Nullable String characterId,
+        @Nonnull String assignmentKind
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            ctx.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
+            return;
+        }
+        TownRecord town = townForPlayer(store, ref, world);
+        if (town == null) {
+            ctx.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
+            return;
+        }
+        TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
+        if (transform == null) {
+            return;
+        }
+        Vector3d pos = new Vector3d(transform.getPosition());
+        Optional<TownsfolkSpawnService.SpawnedTownsfolk> spawned =
+            TownsfolkSpawnService.trySpawn(
+                world,
+                plugin,
+                town,
+                store,
+                pos,
+                assignmentKind,
+                characterId,
+                new Random()
+            );
+        if (spawned.isEmpty()) {
+            ctx.sendMessage(Message.translation("aetherhaven_commands_help.commands.aetherhaven.townsfolk.spawn.failed"));
+            return;
+        }
+        TownsfolkSpawnService.SpawnedTownsfolk s = spawned.get();
+        ctx.sendMessage(
+            Message.translation("aetherhaven_commands_help.commands.aetherhaven.townsfolk.spawn.ok")
+                .param("id", s.characterId())
+                .param("assignment", s.assignmentKind())
+        );
+    }
+
     private static final class SpawnSubCommand extends AbstractPlayerCommand {
-        private final OptionalArg<String> characterIdArg =
-            this.withOptionalArg("characterId", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.characterId.desc", ArgTypes.STRING);
         private final OptionalArg<String> assignmentArg =
             this.withOptionalArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", ArgTypes.STRING);
 
         SpawnSubCommand() {
             super("spawn", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.spawn.desc");
+            this.addUsageVariant(new SpawnWithIdCommand());
+            this.addUsageVariant(new SpawnWithIdAndAssignmentCommand());
         }
 
         @Override
@@ -70,49 +119,62 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
             @Nonnull PlayerRef playerRef,
             @Nonnull World world
         ) {
-            AetherhavenPlugin plugin = AetherhavenPlugin.get();
-            if (plugin == null) {
-                ctx.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
-                return;
-            }
-            TownRecord town = townForPlayer(store, ref, world);
-            if (town == null) {
-                ctx.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
-                return;
-            }
-            TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
-            if (transform == null) {
-                return;
-            }
-            Vector3d pos = new Vector3d(transform.getPosition());
             String assignment = assignmentArg.provided(ctx) ? assignmentArg.get(ctx) : TownsfolkAssignmentKinds.IDLE;
-            String characterId = characterIdArg.provided(ctx) ? characterIdArg.get(ctx) : null;
-            var spawned =
-                TownsfolkSpawnService.trySpawn(
-                    world,
-                    plugin,
-                    town,
-                    store,
-                    pos,
-                    assignment,
-                    characterId,
-                    new Random()
-                );
-            if (spawned.isEmpty()) {
-                ctx.sendMessage(Message.translation("aetherhaven_commands_help.commands.aetherhaven.townsfolk.spawn.failed"));
-                return;
-            }
-            TownsfolkSpawnService.SpawnedTownsfolk s = spawned.get();
-            ctx.sendMessage(
-                Message.translation("aetherhaven_commands_help.commands.aetherhaven.townsfolk.spawn.ok")
-                    .param("id", s.characterId())
-                    .param("assignment", s.assignmentKind())
-            );
+            executeSpawn(ctx, store, ref, world, null, assignment);
+        }
+    }
+
+    /** {@code /aetherhaven townsfolk spawn female_elf_01} */
+    private static final class SpawnWithIdCommand extends AbstractPlayerCommand {
+        private final RequiredArg<String> idArg =
+            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.id.desc", ArgTypes.STRING);
+        private final OptionalArg<String> assignmentArg =
+            this.withOptionalArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", ArgTypes.STRING);
+
+        SpawnWithIdCommand() {
+            super("aetherhaven_commands_help.commands.aetherhaven.townsfolk.spawn.desc");
+            this.setPermissionGroups("hytale:WorldEditor");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext ctx,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            String assignment = assignmentArg.provided(ctx) ? assignmentArg.get(ctx) : TownsfolkAssignmentKinds.IDLE;
+            executeSpawn(ctx, store, ref, world, idArg.get(ctx).trim(), assignment);
+        }
+    }
+
+    /** {@code /aetherhaven townsfolk spawn female_elf_01 tourist} */
+    private static final class SpawnWithIdAndAssignmentCommand extends AbstractPlayerCommand {
+        private final RequiredArg<String> idArg =
+            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.id.desc", ArgTypes.STRING);
+        private final RequiredArg<String> assignmentArg =
+            this.withRequiredArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", ArgTypes.STRING);
+
+        SpawnWithIdAndAssignmentCommand() {
+            super("aetherhaven_commands_help.commands.aetherhaven.townsfolk.spawn.desc");
+            this.setPermissionGroups("hytale:WorldEditor");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext ctx,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            executeSpawn(ctx, store, ref, world, idArg.get(ctx).trim(), assignmentArg.get(ctx).trim());
         }
     }
 
     private static final class ReleaseSubCommand extends AbstractPlayerCommand {
-        private final com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg<String> characterIdArg =
+        private final RequiredArg<String> characterIdArg =
             this.withRequiredArg("characterId", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.characterId.desc", ArgTypes.STRING);
         private final FlagArg despawnFlag = this.withFlagArg("despawn", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.despawn.desc");
 
@@ -206,6 +268,32 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
             ctx.sendMessage(
                 Message.translation("aetherhaven_commands_help.commands.aetherhaven.townsfolk.list.inUse")
                     .param("ids", checked.isEmpty() ? "(none)" : checked.toString())
+            );
+        }
+    }
+
+    private static final class ClearSubCommand extends AbstractPlayerCommand {
+        ClearSubCommand() {
+            super("clear", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.clear.desc");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext ctx,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null) {
+                ctx.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
+                return;
+            }
+            int despawned = TownsfolkSpawnService.clearPoolAndDespawnAll(world, plugin);
+            ctx.sendMessage(
+                Message.translation("aetherhaven_commands_help.commands.aetherhaven.townsfolk.clear.ok")
+                    .param("count", despawned)
             );
         }
     }

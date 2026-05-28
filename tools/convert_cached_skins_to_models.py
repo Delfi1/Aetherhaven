@@ -25,6 +25,10 @@ from typing import Any
 SKIN_GRADIENT_SET_ID = "Skin"
 HAIR_GRADIENT_SET_ID = "Hair"
 PARENT_PLAYER = "Player"
+# Ears1.blockymodel + Skin gradient; Character Creator lists Ears.png but NPC/Player.json use this greyscale.
+EARS1_BLOCKYMODEL = "Characters/Body_Attachments/Ears/Ears1.blockymodel"
+EAR_DEFAULT_NPC_GREYSCALE = "Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png"
+LEGACY_EAR_GREYSCALE = "Characters/Body_Attachments/Ears/Ears.png"
 
 DEFAULT_ASSETS = Path(r"c:\Users\gchou\OneDrive\Documents\Hytale-Modding\HytaleSourceCode\Assets")
 DEFAULT_INPUT = Path(os.environ.get("APPDATA", "")) / "Hytale" / "UserData" / "CachedPlayerSkins"
@@ -145,6 +149,25 @@ def inherit_hair_gradient_selector(skin: dict[str, Any], registry: CosmeticRegis
     return None
 
 
+def npc_ear_greyscale_texture(model_path: str, texture_path: str) -> str:
+    if model_path == EARS1_BLOCKYMODEL and texture_path == LEGACY_EAR_GREYSCALE:
+        return EAR_DEFAULT_NPC_GREYSCALE
+    return texture_path
+
+
+def effective_face_id(skin: dict[str, Any]) -> str | None:
+    """Face_Stubble paints chin stubble on the detached face; with a beard attachment that overlaps and smears on NPC models."""
+    raw = skin.get("face")
+    if not raw:
+        return None
+    if skin.get("facialHair") and raw.split(".")[0] == "Face_Stubble":
+        parts = raw.split(".")
+        if len(parts) > 1:
+            return "Face_Neutral." + ".".join(parts[1:])
+        return "Face_Neutral"
+    return raw
+
+
 def effective_haircut_id(skin: dict[str, Any], registry: CosmeticRegistry) -> str | None:
     haircut_id = skin.get("haircut")
     if not haircut_id:
@@ -259,6 +282,7 @@ def resolve_slot(
     if gradient_match:
         if not greyscale:
             raise ValueError(f"{slot_label} gradient part missing GreyscaleTexture for id: {part_id}")
+        greyscale = npc_ear_greyscale_texture(model_path, greyscale)
         return ModelAttachment(model_path, greyscale, gradient_set_id, selector)
 
     if not texture_map or selector not in texture_map:
@@ -275,6 +299,8 @@ def skin_to_attachments(skin: dict[str, Any], registry: CosmeticRegistry) -> lis
     for skin_key, slot_label, filename in SLOT_ORDER:
         if skin_key == "haircut":
             raw = effective_haircut_id(skin, registry)
+        elif skin_key == "face":
+            raw = effective_face_id(skin)
         else:
             raw = skin.get(skin_key)
         if raw is None or raw == "":

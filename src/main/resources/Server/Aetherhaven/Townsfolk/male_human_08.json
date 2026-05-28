@@ -6,13 +6,12 @@
   "modelAssetId": "Male_Human_08",
   "personalityIds": [
     "shy",
-    "stoic",
+    "musical",
     "homebody"
   ],
   "allowedAssignmentKinds": [
     "idle",
-    "tourist",
-    "guard"
+    "tourist"
   ],
   "befriendable": false
 }

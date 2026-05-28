@@ -1,11 +1,17 @@
 {
   "id": "curious",
   "dialogueGreetingLangKeys": [
-    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.curious.greeting.1"
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.curious.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.curious.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.curious.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.curious.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.curious.greeting.5"
   ],
   "leisurePoiTagWeights": {
     "FUN": 1.2,
     "WORK": 0.7
   },
-  "preferredScheduleLocations": ["park"]
+  "preferredScheduleLocations": [
+    "park"
+  ]
 }

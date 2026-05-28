@@ -1,0 +1,18 @@
+{
+  "id": "foodie",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.foodie.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.foodie.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.foodie.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.foodie.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.foodie.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "EAT": 1.5,
+    "FUN": 0.9,
+    "SIT": 1.1
+  },
+  "preferredScheduleLocations": [
+    "inn"
+  ]
+}

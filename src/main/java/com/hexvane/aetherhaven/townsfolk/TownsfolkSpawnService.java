@@ -7,9 +7,8 @@ import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
-import com.hypixel.hytale.component.ArchetypeChunk;
-import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -38,7 +37,7 @@ public final class TownsfolkSpawnService {
     public record SpawnedTownsfolk(
         @Nonnull String characterId,
         @Nonnull UUID entityUuid,
-        @Nonnull String activePersonalityId,
+        @Nonnull List<String> personalityIds,
         @Nonnull String assignmentKind
     ) {}
 
@@ -96,7 +95,6 @@ public final class TownsfolkSpawnService {
             return Optional.empty();
         }
         List<String> personalities = character.getPersonalityIds();
-        String activePersonality = personalities.get(random.nextInt(personalities.size()));
 
         NPCPlugin npcPlugin = NPCPlugin.get();
         if (npcPlugin == null) {
@@ -127,7 +125,7 @@ public final class TownsfolkSpawnService {
             TownsfolkCharacterBinding.getComponentType(),
             new TownsfolkCharacterBinding(
                 characterId,
-                activePersonality,
+                "",
                 kind,
                 character.getModelAssetId(),
                 personalities
@@ -145,11 +143,11 @@ public final class TownsfolkSpawnService {
                 town.getTownId().toString(),
                 entityUuid.toString(),
                 kind,
-                activePersonality
+                ""
             )
         );
         TownsfolkPoolPersistence.save(world, plugin, pool);
-        return Optional.of(new SpawnedTownsfolk(characterId, entityUuid, activePersonality, kind));
+        return Optional.of(new SpawnedTownsfolk(characterId, entityUuid, personalities, kind));
     }
 
     public static void release(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull String characterId) {
@@ -166,6 +164,44 @@ public final class TownsfolkSpawnService {
             pool.release(rec.getCharacterId());
             TownsfolkPoolPersistence.save(world, plugin, pool);
         }
+    }
+
+    /**
+     * Despawns every townsfolk NPC in this world and clears all pool checkouts.
+     *
+     * @return number of entities removed from the world
+     */
+    public static int clearPoolAndDespawnAll(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        List<Ref<EntityStore>> refs = new ArrayList<>();
+        store.forEachChunk(
+            Query.and(TownsfolkCharacterBinding.getComponentType(), NPCEntity.getComponentType()),
+            (archetypeChunk, commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    Ref<EntityStore> ref = archetypeChunk.getReferenceTo(i);
+                    if (ref != null && ref.isValid()) {
+                        refs.add(ref);
+                    }
+                }
+            }
+        );
+        int despawned = 0;
+        for (Ref<EntityStore> ref : refs) {
+            if (ref.isValid()) {
+                store.removeEntity(ref, RemoveReason.REMOVE);
+                despawned++;
+            }
+        }
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        int checkouts = pool.clearAllCheckouts();
+        TownsfolkPoolPersistence.save(world, plugin, pool);
+        LOGGER.atInfo().log(
+            "Cleared townsfolk pool in world %s: despawned %s entities, released %s checkouts",
+            world.getName(),
+            despawned,
+            checkouts
+        );
+        return despawned;
     }
 
     public static void reconcileAfterWorldLoad(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {

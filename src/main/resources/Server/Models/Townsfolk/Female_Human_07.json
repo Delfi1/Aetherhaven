@@ -21,7 +21,7 @@
     },
     {
       "Model": "Characters/Body_Attachments/Ears/Ears1.blockymodel",
-      "Texture": "Characters/Body_Attachments/Ears/Ears.png",
+      "Texture": "Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png",
       "GradientSet": "Skin",
       "GradientId": "14"
     },
@@ -40,6 +40,12 @@
     {
       "Model": "Characters/Body_Attachments/Eyebrows/Shaved.blockymodel",
       "Texture": "Characters/Body_Attachments/Eyebrows/Shaved_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "Blond"
+    },
+    {
+      "Model": "Characters/Haircuts/GenericMedium.blockymodel",
+      "Texture": "Characters/Haircuts/GenericMedium_Greyscale.png",
       "GradientSet": "Hair",
       "GradientId": "Blond"
     },

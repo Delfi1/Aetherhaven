@@ -5,14 +5,13 @@
   "race": "human",
   "modelAssetId": "Female_Human_01",
   "personalityIds": [
-    "curious",
+    "gossipy",
     "cheerful",
-    "mischievous"
+    "bookworm"
   ],
   "allowedAssignmentKinds": [
     "idle",
-    "tourist",
-    "guard"
+    "tourist"
   ],
   "befriendable": false
 }
