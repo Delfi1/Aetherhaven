@@ -1,0 +1,18 @@
+{
+  "id": "homebody",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.homebody.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.homebody.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.homebody.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.homebody.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.homebody.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "SIT": 1.4,
+    "SLEEP": 1.2,
+    "FUN": 0.7
+  },
+  "preferredScheduleLocations": [
+    "home"
+  ]
+}

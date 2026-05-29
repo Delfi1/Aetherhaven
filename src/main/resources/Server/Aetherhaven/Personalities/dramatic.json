@@ -1,0 +1,19 @@
+{
+  "id": "dramatic",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.dramatic.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.dramatic.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.dramatic.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.dramatic.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.dramatic.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "FUN": 1.1,
+    "SIT": 1.2,
+    "EAT": 1.0
+  },
+  "preferredScheduleLocations": [
+    "inn",
+    "park"
+  ]
+}

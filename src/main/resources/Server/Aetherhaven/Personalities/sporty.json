@@ -1,0 +1,18 @@
+{
+  "id": "sporty",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.sporty.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.sporty.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.sporty.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.sporty.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.sporty.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "FUN": 1.5,
+    "SIT": 0.8,
+    "EAT": 1.0
+  },
+  "preferredScheduleLocations": [
+    "park"
+  ]
+}

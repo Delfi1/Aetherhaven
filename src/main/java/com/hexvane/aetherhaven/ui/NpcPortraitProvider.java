@@ -34,6 +34,24 @@ public final class NpcPortraitProvider {
 
     private NpcPortraitProvider() {}
 
+    /**
+     * Portrait for a townsfolk body model ({@code Male_Human_01.png}, etc.) under {@link #ICON_DIR}.
+     */
+    @Nonnull
+    public static String portraitPathForModelAssetId(@Nonnull String modelAssetId) {
+        String id = modelAssetId.trim();
+        if (id.isEmpty()) {
+            return MISSING;
+        }
+        if (id.startsWith("UI/") || id.startsWith("Icons/")) {
+            return id;
+        }
+        if (id.endsWith(".png")) {
+            return ICON_DIR + id;
+        }
+        return ICON_DIR + id + ".png";
+    }
+
     @Nonnull
     public static String portraitPathForRoleId(@Nonnull String roleId) {
         String r = roleId.trim();

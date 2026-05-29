@@ -1,0 +1,17 @@
+{
+  "id": "female_elf_04",
+  "displayName": "Sylara Greenhollow",
+  "gender": "female",
+  "race": "sylvian",
+  "modelAssetId": "Female_Elf_04",
+  "personalityIds": [
+    "curious",
+    "lazy",
+    "sporty"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

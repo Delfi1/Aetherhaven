@@ -1,0 +1,17 @@
+{
+  "id": "male_elf_05",
+  "displayName": "Maeris Windleaf",
+  "gender": "male",
+  "race": "sylvian",
+  "modelAssetId": "Male_Elf_05",
+  "personalityIds": [
+    "gloomy",
+    "bookworm",
+    "rude"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

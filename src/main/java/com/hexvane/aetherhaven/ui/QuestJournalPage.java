@@ -18,6 +18,7 @@ import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -811,12 +812,16 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 row + " #VillagerName.TextSpans",
                 Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + r.roleId() + ".name")
             );
+            boolean befriendable = VillagerBefriendableResolver.isBefriendableForJournal(store, r.entityUuid(), r.roleId(), plugin);
             String heartsPath = row + " #ReputationHeartSlots";
-            for (int h = 0; h < 10; h++) {
-                commandBuilder.append(heartsPath, "Aetherhaven/HeartSlot.ui");
+            commandBuilder.set(heartsPath + ".Visible", befriendable);
+            if (befriendable) {
+                for (int h = 0; h < 10; h++) {
+                    commandBuilder.append(heartsPath, "Aetherhaven/HeartSlot.ui");
+                }
+                int rep = VillagerReputationService.getOrCreateEntry(town, uc.getUuid(), r.entityUuid()).getReputation();
+                ReputationHeartUi.applyHearts(commandBuilder, heartsPath, rep);
             }
-            int rep = VillagerReputationService.getOrCreateEntry(town, uc.getUuid(), r.entityUuid()).getReputation();
-            ReputationHeartUi.applyHearts(commandBuilder, heartsPath, rep);
             commandBuilder.set(row + " #ScheduleLocation.TextSpans", scheduleLocationMessage(plugin, r.roleId(), gameNow));
         }
 
@@ -1160,7 +1165,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
 
             int giftCount =
-                vdef.getGiftLoves().size() + vdef.getGiftLikes().size() + vdef.getGiftDislikes().size();
+                vdef.isBefriendable()
+                    ? vdef.getGiftLoves().size() + vdef.getGiftLikes().size() + vdef.getGiftDislikes().size()
+                    : 0;
             if (giftCount > 0) {
                 commandBuilder.set("#GuideGiftBlock.Visible", true);
                 commandBuilder.set(

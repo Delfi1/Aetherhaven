@@ -1,0 +1,17 @@
+{
+  "id": "female_human_05",
+  "displayName": "Elara Whitford",
+  "gender": "female",
+  "race": "human",
+  "modelAssetId": "Female_Human_05",
+  "personalityIds": [
+    "shy",
+    "fisher",
+    "curious"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

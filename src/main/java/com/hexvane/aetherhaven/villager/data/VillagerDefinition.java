@@ -101,6 +101,13 @@ public final class VillagerDefinition {
     @Nullable
     private List<String> dialogueGiftHintLangKeys;
 
+    /**
+     * When false, no reputation bar, gifts, or reputation gains. Omitted defaults to true for essential villagers.
+     */
+    @SerializedName("befriendable")
+    @Nullable
+    private Boolean befriendable;
+
     @Nonnull
     public String getNpcRoleId() {
         return npcRoleId != null ? npcRoleId.trim() : "";
@@ -230,6 +237,11 @@ public final class VillagerDefinition {
     @Nonnull
     public List<String> getDialogueGiftHintLangKeys() {
         return listOrEmpty(dialogueGiftHintLangKeys);
+    }
+
+    /** True when omitted (essential villagers stay befriendable by default). */
+    public boolean isBefriendable() {
+        return befriendable == null || befriendable;
     }
 
     @Nonnull

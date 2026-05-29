@@ -66,6 +66,12 @@ import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleRegistry;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentSystem;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolPersistence;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityCatalog;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerNpcWorldSpawnSanitizeSystems;
@@ -198,6 +204,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private QuestCatalog questCatalog = QuestCatalog.empty();
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
+    private TownsfolkPersonalityCatalog townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.empty();
+    private TownsfolkCharacterCatalog townsfolkCharacterCatalog = TownsfolkCharacterCatalog.empty();
     private ProductionCatalog productionCatalog = ProductionCatalog.empty();
     private WorkplaceUnlockCatalog workplaceUnlockCatalog = WorkplaceUnlockCatalog.empty();
     private final DialogueResolver dialogueResolver = new DialogueResolver();
@@ -277,6 +285,16 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public VillagerDefinitionCatalog getVillagerDefinitionCatalog() {
         return villagerDefinitionCatalog;
+    }
+
+    @Nonnull
+    public TownsfolkPersonalityCatalog getTownsfolkPersonalityCatalog() {
+        return townsfolkPersonalityCatalog;
+    }
+
+    @Nonnull
+    public TownsfolkCharacterCatalog getTownsfolkCharacterCatalog() {
+        return townsfolkCharacterCatalog;
     }
 
     @Nonnull
@@ -381,6 +399,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
+        TownsfolkCharacterBinding.register(this.getEntityStoreRegistry());
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.OnAdd());
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.EachTick());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
@@ -503,6 +522,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new TownsfolkAssignmentSystem());
         this.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
@@ -894,6 +914,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private void reloadAetherhavenAssetCatalogs() {
         ClassLoader cl = this.getClassLoader();
         this.villagerDefinitionCatalog = VillagerDefinitionCatalog.loadFromAssetPacksOrClasspath(cl);
+        this.townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.loadFromAssetPacksOrClasspath(cl);
+        this.townsfolkCharacterCatalog =
+            TownsfolkCharacterCatalog.loadFromAssetPacksOrClasspath(cl, this.townsfolkPersonalityCatalog);
         ReputationRewardCatalog.refreshFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl);

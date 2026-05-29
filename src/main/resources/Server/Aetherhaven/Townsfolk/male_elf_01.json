@@ -1,0 +1,17 @@
+{
+  "id": "male_elf_01",
+  "displayName": "Calen Thornwhisper",
+  "gender": "male",
+  "race": "sylvian",
+  "modelAssetId": "Male_Elf_01",
+  "personalityIds": [
+    "shy",
+    "bookworm",
+    "homebody"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -160,7 +161,6 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         }
 
         commandBuilder.set("#RescueTeleportButton.Visible", true);
-        commandBuilder.set("#GiftHistoryButton.Visible", true);
         commandBuilder.set("#Hint.Visible", false);
         commandBuilder.clear(VILLAGER_ROWS);
         int n = Math.min(rows.size(), MAX_ROWS);
@@ -190,8 +190,12 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         commandBuilder.set("#FunBar.Value", fun);
         commandBuilder.set("#Portrait.AssetPath", NpcPortraitProvider.portraitPathForRoleId(sel.roleId()));
 
+        Ref<EntityStore> selRef = entityStore.getExternalData().getRefFromUUID(sel.entityUuid());
+        boolean befriendable = VillagerBefriendableResolver.isBefriendable(entityStore, selRef, plugin);
+        commandBuilder.set("#ReputationBlock.Visible", befriendable);
+        commandBuilder.set("#GiftHistoryButton.Visible", befriendable);
         UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (pu != null) {
+        if (befriendable && pu != null) {
             int rep = VillagerReputationService.getOrCreateEntry(town, pu.getUuid(), sel.entityUuid()).getReputation();
             ReputationHeartUi.applyHearts(commandBuilder, REPUTATION_HEART_SLOTS, rep);
             commandBuilder.set(

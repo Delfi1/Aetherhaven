@@ -15,6 +15,10 @@ import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkGreetingPicker;
+import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerGreetingPicker;
 import com.hypixel.hytale.builtin.adventure.shop.barter.BarterPage;
@@ -179,10 +183,14 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return;
         }
 
-        boolean showRep = npcRef != null && npcRef.isValid();
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        boolean showRep =
+            npcRef != null
+                && npcRef.isValid()
+                && plugin != null
+                && VillagerBefriendableResolver.isBefriendable(store, npcRef, plugin);
         commandBuilder.set(REPUTATION_ROW + ".Visible", showRep);
         if (showRep) {
-            AetherhavenPlugin plugin = AetherhavenPlugin.get();
             if (plugin != null) {
                 World world = store.getExternalData().getWorld();
                 TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -212,7 +220,6 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
 
         applyPortrait(commandBuilder, store);
-        String speaker = node.getSpeaker() != null ? node.getSpeaker() : "";
 
         Message bodyMsg = resolveDialogueBody(ref, store, node);
         if ("main_hub".equals(nodeId) && npcRef != null && npcRef.isValid()) {
@@ -237,10 +244,32 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             }
         }
 
-        commandBuilder.set(SPEAKER_SPANS, dialogueMessage(speaker));
+        commandBuilder.set(SPEAKER_SPANS, resolveSpeakerMessage(store, node));
         commandBuilder.set(BODY_TEXT_SPANS, bodyMsg);
         setChoicesFrameVisible(commandBuilder, true);
         appendChoices(ref, store, commandBuilder, eventBuilder, node);
+    }
+
+    @Nonnull
+    private Message resolveSpeakerMessage(@Nonnull Store<EntityStore> store, @Nonnull DialogueNodeDefinition node) {
+        String speaker = node.getSpeaker() != null ? node.getSpeaker() : "";
+        if (!speaker.isBlank()) {
+            return dialogueMessage(speaker);
+        }
+        if (npcRef == null || !npcRef.isValid()) {
+            return Message.raw("");
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return Message.raw("");
+        }
+        TownsfolkCharacterBinding binding = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
+        if (binding == null) {
+            return Message.raw("");
+        }
+        TownsfolkCharacterDefinition character = plugin.getTownsfolkCharacterCatalog().byId(binding.getCharacterId());
+        String name = character != null ? character.getDisplayName() : null;
+        return name != null && !name.isBlank() ? Message.raw(name) : Message.raw("");
     }
 
     @Nonnull
@@ -256,6 +285,10 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 if (npc != null && npc.getRoleName() != null && nu != null && pu != null) {
                     AetherhavenPlugin plugin = AetherhavenPlugin.get();
                     if (plugin != null) {
+                        Message townsfolkGreeting = TownsfolkGreetingPicker.pickMessage(store, npcRef, plugin, pu.getUuid(), nu.getUuid());
+                        if (townsfolkGreeting != null) {
+                            return townsfolkGreeting;
+                        }
                         VillagerDefinition vdef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(npc.getRoleName().trim());
                         if (vdef != null) {
                             long day = VillagerReputationService.currentGameEpochDay(store);
@@ -325,6 +358,22 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             commandBuilder.set(PORTRAIT_ASSET, NpcPortraitProvider.portraitPathForRoleId(""));
             return;
         }
+        TownsfolkCharacterBinding townsfolk = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
+        if (townsfolk != null) {
+            String modelId = townsfolk.getModelAssetId();
+            if (modelId.isBlank()) {
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                if (plugin != null) {
+                    TownsfolkCharacterDefinition character =
+                        plugin.getTownsfolkCharacterCatalog().byId(townsfolk.getCharacterId());
+                    if (character != null) {
+                        modelId = character.getModelAssetId();
+                    }
+                }
+            }
+            commandBuilder.set(PORTRAIT_ASSET, NpcPortraitProvider.portraitPathForModelAssetId(modelId));
+            return;
+        }
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (npc == null) {
             commandBuilder.set(PORTRAIT_ASSET, NpcPortraitProvider.portraitPathForRoleId(""));
@@ -357,8 +406,13 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             }
             boolean disabled =
                 visOnly != null ? !baseOk : !baseOk && "disabled".equalsIgnoreCase(wf);
-            if (ch.isGiftDisableWhenNotAllowed() && baseOk) {
-                if (!dialogueWorldView.villagerGiftAllowed(ref, store, npcRef)) {
+            if (ch.isGiftDisableWhenNotAllowed()) {
+                AetherhavenPlugin giftPlugin = AetherhavenPlugin.get();
+                if (giftPlugin == null
+                    || !VillagerBefriendableResolver.isBefriendable(store, npcRef, giftPlugin)) {
+                    continue;
+                }
+                if (baseOk && !dialogueWorldView.villagerGiftAllowed(ref, store, npcRef)) {
                     disabled = true;
                 }
             }

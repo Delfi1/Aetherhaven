@@ -380,6 +380,7 @@ public final class DialogueActionExecutor {
             case EMPTY_HAND -> "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.emptyHand";
             case DAILY_LIMIT -> "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.dailyLimit";
             case WEEKLY_LIMIT -> "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.weeklyLimit";
+            case NOT_BEFRIENDABLE -> "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.generic";
             case NO_CONTEXT, NO_PLAYER -> "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.generic";
         };
     }
@@ -411,6 +412,9 @@ public final class DialogueActionExecutor {
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
         if (pu == null || nu == null || !town.playerCanCompleteQuests(pu.getUuid())) {
+            return;
+        }
+        if (!com.hexvane.aetherhaven.villager.VillagerBefriendableResolver.isBefriendable(store, npcRef, plugin)) {
             return;
         }
         Player player = store.getComponent(playerRef, Player.getComponentType());

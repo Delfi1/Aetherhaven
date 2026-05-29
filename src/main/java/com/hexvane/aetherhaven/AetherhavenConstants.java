@@ -277,6 +277,9 @@ public final class AetherhavenConstants {
 
     public static final String NPC_RANCHER = "Aetherhaven_Rancher";
 
+    /** Shared role for all townsfolk; appearance set per character at spawn. */
+    public static final String NPC_TOWNSFOLK = "Aetherhaven_Townsfolk";
+
     public static final String PLOT_TOKEN_MARKET_STALL = "Aetherhaven_Plot_Token_Market_Stall";
 
     public static final String PLOT_TOKEN_FARM = "Aetherhaven_Plot_Token_Farm";

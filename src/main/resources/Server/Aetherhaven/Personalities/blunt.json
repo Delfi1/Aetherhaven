@@ -1,0 +1,19 @@
+{
+  "id": "blunt",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.blunt.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.blunt.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.blunt.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.blunt.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.blunt.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "WORK": 1.2,
+    "SIT": 1.0,
+    "FUN": 0.6
+  },
+  "preferredScheduleLocations": [
+    "park",
+    "home"
+  ]
+}

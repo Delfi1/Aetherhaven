@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -226,6 +227,10 @@ public final class FeastService {
         @Nonnull UUID playerUuid,
         @Nonnull Store<EntityStore> store
     ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
         UUID tid = town.getTownId();
         Query<EntityStore> q =
             Query.and(
@@ -248,6 +253,10 @@ public final class FeastService {
                     }
                     UUID npcUuid = nu.getUuid();
                     if (!seen.add(npcUuid)) {
+                        continue;
+                    }
+                    Ref<EntityStore> npcRef = chunk.getReferenceTo(i);
+                    if (!VillagerBefriendableResolver.isBefriendable(store, npcRef, plugin)) {
                         continue;
                     }
                     VillagerReputationService.addReputationInternal(
