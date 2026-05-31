@@ -127,6 +127,30 @@ public final class TownRecord {
     @SerializedName("innVisitorPoolExcludedRoleIds")
     private LinkedHashSet<String> innVisitorPoolExcludedRoleIds = new LinkedHashSet<>();
 
+    @Nullable
+    @SerializedName("guildMasterEntityUuid")
+    private String guildMasterEntityUuid;
+
+    @SerializedName("guildHallActive")
+    private boolean guildHallActive;
+
+    /** Entity UUID strings for unhired guild hall adventurers (dawn cycled). */
+    @SerializedName("guildHallAdventurerNpcIds")
+    private List<String> guildHallAdventurerNpcIds = new ArrayList<>();
+
+    @Nullable
+    @SerializedName("guildHallLastMorningEpochDay")
+    private Long guildHallLastMorningEpochDay;
+
+    /** Hired guards not yet promoted to tax paying citizens. */
+    @SerializedName("hiredGuardRecords")
+    private List<HiredGuardRecord> hiredGuardRecords = new ArrayList<>();
+
+    /** Entity UUID of guard targeted by active {@link com.hexvane.aetherhaven.AetherhavenConstants#QUEST_HOUSE_GUARD}. */
+    @Nullable
+    @SerializedName("guardHouseQuestTargetEntityUuid")
+    private String guardHouseQuestTargetEntityUuid;
+
     /** Shared town treasury balance (gold coins); all treasury blocks in this town read/write this. */
     @SerializedName("treasuryGoldCoinCount")
     private long treasuryGoldCoinCount;
@@ -852,6 +876,64 @@ public final class TownRecord {
         this.innPoolLastMorningEpochDay = epochDay;
     }
 
+    @Nullable
+    public UUID getGuildMasterEntityUuid() {
+        return guildMasterEntityUuid != null && !guildMasterEntityUuid.isBlank() ? UUID.fromString(guildMasterEntityUuid) : null;
+    }
+
+    public void setGuildMasterEntityUuid(@Nullable UUID uuid) {
+        this.guildMasterEntityUuid = uuid != null ? uuid.toString() : null;
+    }
+
+    public boolean isGuildHallActive() {
+        return guildHallActive;
+    }
+
+    public void setGuildHallActive(boolean guildHallActive) {
+        this.guildHallActive = guildHallActive;
+    }
+
+    @Nonnull
+    public List<String> getGuildHallAdventurerNpcIds() {
+        if (guildHallAdventurerNpcIds == null) {
+            guildHallAdventurerNpcIds = new ArrayList<>();
+        }
+        return guildHallAdventurerNpcIds;
+    }
+
+    @Nullable
+    public Long getGuildHallLastMorningEpochDay() {
+        return guildHallLastMorningEpochDay;
+    }
+
+    public void setGuildHallLastMorningEpochDay(@Nullable Long epochDay) {
+        this.guildHallLastMorningEpochDay = epochDay;
+    }
+
+    @Nonnull
+    public List<HiredGuardRecord> getHiredGuardRecords() {
+        if (hiredGuardRecords == null) {
+            hiredGuardRecords = new ArrayList<>();
+        }
+        return hiredGuardRecords;
+    }
+
+    @Nullable
+    public UUID getGuardHouseQuestTargetEntityUuid() {
+        if (guardHouseQuestTargetEntityUuid == null || guardHouseQuestTargetEntityUuid.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(guardHouseQuestTargetEntityUuid.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public void setGuardHouseQuestTargetEntityUuid(@Nullable UUID uuid) {
+        this.guardHouseQuestTargetEntityUuid = uuid != null ? uuid.toString() : null;
+    }
+
     @Nonnull
     public List<PlotInstance> getPlotInstances() {
         if (plotInstances == null) {
@@ -947,6 +1029,17 @@ public final class TownRecord {
     public PlotInstance findPlotById(@Nonnull UUID plotId) {
         for (PlotInstance p : getPlotInstances()) {
             if (p.getPlotId().equals(plotId)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    /** First complete plot whose footprint contains the block (for POI tool placement). */
+    @Nullable
+    public PlotInstance findCompletePlotContaining(int x, int y, int z) {
+        for (PlotInstance p : getPlotInstances()) {
+            if (p.containsWorldBlock(x, y, z)) {
                 return p;
             }
         }

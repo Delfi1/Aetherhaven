@@ -58,6 +58,8 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     private static final String CHOICES_FRAME = DIALOGUE_COLUMN + " #ChoicesFrame";
     /** Inner list inside {@link #CHOICES_FRAME} scroll; append/clear/indexed selectors need full path. */
     private static final String CHOICES_ROOT = DIALOGUE_COLUMN + " #ChoicesFrame #ChoicesScroll #ChoicesRoot";
+    private static final String LANG_GUILD_ADVENTURER_HIRE =
+        "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire";
     private static final String LANG_PRIESTESS_DRAUGHT_SHARD =
         "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_shard";
     private static final String LANG_PRIESTESS_DRAUGHT_CATALYST =
@@ -344,6 +346,10 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         if (LANG_PRIESTESS_DRAUGHT_CATALYST.equals(text)) {
             long gold = dialogueWorldView.nextGaiaDraughtCatalystUpgradeGoldCost(ref, store, npcRef);
+            return m.param("gold", Long.toString(gold));
+        }
+        if (LANG_GUILD_ADVENTURER_HIRE.equals(text)) {
+            long gold = dialogueWorldView.guardHireGoldCost(ref, store, npcRef);
             return m.param("gold", Long.toString(gold));
         }
         return m;

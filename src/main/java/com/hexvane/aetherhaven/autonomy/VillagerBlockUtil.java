@@ -9,6 +9,8 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 
 /**
  * Ground sampling and block queries for POI visuals. Travel uses vanilla NPC Seek + leash.
@@ -168,6 +170,60 @@ public final class VillagerBlockUtil {
      * when {@link com.hypixel.hytale.builtin.mounts.BlockMountComponent#findAvailableSeat} picks a seat on the far
      * side of the block.
      */
+    /**
+     * Finds a chair/bed-style mount block near {@code npcFeet}, preferring the block under the spawn marker when the
+     * marker was placed on a seat.
+     */
+    @Nullable
+    public static Vector3i findMountBlockNear(
+        @Nonnull World world,
+        double npcX,
+        double npcYFeet,
+        double npcZ,
+        @Nonnull Vector3d spawnMarkerPosition
+    ) {
+        int markerBx = (int) Math.floor(spawnMarkerPosition.x);
+        int markerBy = (int) Math.floor(spawnMarkerPosition.y);
+        int markerBz = (int) Math.floor(spawnMarkerPosition.z);
+        Vector3i underMarker = tryMountBlockAt(world, npcX, npcYFeet, npcZ, markerBx, markerBy - 1, markerBz);
+        if (underMarker != null) {
+            return underMarker;
+        }
+        underMarker = tryMountBlockAt(world, npcX, npcYFeet, npcZ, markerBx, markerBy, markerBz);
+        if (underMarker != null) {
+            return underMarker;
+        }
+        int feetY = (int) Math.floor(npcYFeet);
+        int bx = (int) Math.floor(npcX);
+        int bz = (int) Math.floor(npcZ);
+        for (int dy = 0; dy <= 3; dy++) {
+            Vector3i found = tryMountBlockAt(world, npcX, npcYFeet, npcZ, bx, feetY - dy, bz);
+            if (found != null) {
+                return found;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static Vector3i tryMountBlockAt(
+        @Nonnull World world,
+        double npcX,
+        double npcYFeet,
+        double npcZ,
+        int bx,
+        int by,
+        int bz
+    ) {
+        if (by < 0 || by >= 320) {
+            return null;
+        }
+        if (!canNpcMountBlockPoi(world, npcX, npcYFeet, npcZ, bx, by, bz)) {
+            return null;
+        }
+        return new Vector3i(bx, by, bz);
+    }
+
     public static boolean canNpcMountBlockPoi(
         @Nonnull World world,
         double npcX,

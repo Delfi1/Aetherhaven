@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.quest;
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
+import com.hexvane.aetherhaven.inn.InnPoolService;
+import com.hexvane.aetherhaven.guild.GuildHallCompletion;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestEffectEntry;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -20,6 +22,11 @@ public final class QuestLifecycleEffects {
     public static final String EFFECT_LOCK_INN_VISITOR_FOR_NPC = "lock_inn_visitor_for_npc";
     public static final String EFFECT_CLEAR_INN_VISITOR_LOCKS = "clear_inn_visitor_locks";
     public static final String EFFECT_SPAWN_INNKEEPER_IF_INN_READY = "spawn_innkeeper_if_inn_ready";
+    public static final String EFFECT_REFRESH_INN_POOL = "refresh_inn_pool";
+    /** Alias for {@link #EFFECT_REFRESH_INN_POOL} — existing quest JSON may still reference this name. */
+    @Deprecated
+    public static final String EFFECT_SPAWN_GUILD_MASTER_IF_READY = "spawn_guild_master_if_ready";
+    public static final String EFFECT_ACTIVATE_GUILD_HALL_IF_READY = "activate_guild_hall_if_ready";
 
     private QuestLifecycleEffects() {}
 
@@ -75,6 +82,9 @@ public final class QuestLifecycleEffects {
                 case EFFECT_LOCK_INN_VISITOR_FOR_NPC -> applyLockInnVisitor(town, params, talkingNpcUuid);
                 case EFFECT_CLEAR_INN_VISITOR_LOCKS -> town.getInnLockedEntityUuids().clear();
                 case EFFECT_SPAWN_INNKEEPER_IF_INN_READY -> InnkeeperSpawnService.trySpawnAfterInnQuestComplete(world, plugin, town);
+                case EFFECT_REFRESH_INN_POOL, EFFECT_SPAWN_GUILD_MASTER_IF_READY ->
+                    InnPoolService.tryFillOpenSlotsAfterTownStateChange(world, plugin, town);
+                case EFFECT_ACTIVATE_GUILD_HALL_IF_READY -> activateGuildHall(world, plugin, town, tm);
                 default -> LOGGER.atWarning().log("Unknown quest lifecycle effect: %s (quest %s)", name, def.idOrEmpty());
             }
         }
@@ -91,6 +101,18 @@ public final class QuestLifecycleEffects {
         }
         if (lock && talkingNpcUuid != null) {
             town.addInnLockedEntity(talkingNpcUuid);
+        }
+    }
+
+    private static void activateGuildHall(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm
+    ) {
+        var plot = town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), com.hexvane.aetherhaven.AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL);
+        if (plot != null) {
+            GuildHallCompletion.onGuildHallBuilt(world, plugin, town, plot.getPlotId(), tm);
         }
     }
 }

@@ -9,6 +9,7 @@
   "plotAnchorOffset": [9, 0, 6],
   "managementBlockLocalPos": [6, 2, 4],
   "innkeeperSpawnLocal": [4, 1, 4],
+  "guildMasterSpawnLocal": [7, 1, 2],
   "visitorSpawnLocals": [[5, 1, 0], [2, 1, 0]],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,

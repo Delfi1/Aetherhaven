@@ -1,7 +1,10 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.guild.GuardHireService;
+import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -53,6 +56,13 @@ public final class HouseResidentAssignment {
         pi.setHomeResidentEntityUuid(residentUuid);
         tm.updateTown(town);
         if (residentUuid != null && world != null && store != null) {
+            if (town.hasQuestActive(AetherhavenConstants.QUEST_HOUSE_GUARD)
+                && residentUuid.equals(town.getGuardHouseQuestTargetEntityUuid())) {
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                if (plugin != null) {
+                    VillagerDeathHandlerSystem.promoteGuardToCitizen(world, plugin, town, tm, residentUuid, store);
+                }
+            }
             ResidentRegistryService.syncHouseAssignment(town, tm, store, residentUuid);
         }
     }

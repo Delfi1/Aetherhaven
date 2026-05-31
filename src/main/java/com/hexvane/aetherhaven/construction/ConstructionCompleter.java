@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.inn.LumbermillCompletion;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.inn.MinerHutCompletion;
+import com.hexvane.aetherhaven.guild.GuildHallCompletion;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
@@ -112,7 +113,21 @@ public final class ConstructionCompleter {
 
         if (def != null) {
             String gid = def.getGameplayConstructionId();
-            PoiExtractor.registerForCompletedBuild(plugin, world, town, plotId, def.getId(), prefabAnchorWorld, prefabYaw);
+            Store<EntityStore> entityStore =
+                world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
+            if (entityStore != null) {
+                PoiExtractor.registerForCompletedBuild(
+                    plugin,
+                    world,
+                    entityStore,
+                    town,
+                    plotId,
+                    plot,
+                    def.getId(),
+                    prefabAnchorWorld,
+                    prefabYaw
+                );
+            }
             stampManagementBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
             stampTreasuryBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
             stampGaiaStatueBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
@@ -137,6 +152,9 @@ public final class ConstructionCompleter {
             if (AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(gid)) {
                 BarnCompletion.onBarnBuilt(world, plugin, town, plotId, tm);
             }
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gid)) {
+                GuildHallCompletion.onGuildHallBuilt(world, plugin, town, plotId, tm);
+            }
             if (ProductionCatalog.isProductionWorkplaceConstruction(gid)) {
                 PlotProductionState pps = town.getOrCreatePlotProduction(plotId);
                 ProductionCatalog.Entry eff =
@@ -153,8 +171,9 @@ public final class ConstructionCompleter {
             }
             // If onStallBuilt/onFarmBuilt/etc. no-op (e.g. missing WORK POI, NPC ref not resolved), promotion may still
             // succeed here without requiring a separate fixinn run.
-            Store<EntityStore> entityStore = world.getEntityStore().getStore();
-            InnPoolService.repairInnPoolForTown(world, plugin, town, tm, entityStore);
+            if (entityStore != null) {
+                InnPoolService.repairInnPoolForTown(world, plugin, town, tm, entityStore);
+            }
         }
     }
 

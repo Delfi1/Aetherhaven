@@ -1,0 +1,144 @@
+{
+  "Type": "Generic",
+  "Parameters": {
+    "Invulnerable": { "Value": false, "Description": "Whether the NPC is invulnerable." },
+    "MemoriesNameOverride": { "Value": "Aetherhaven_Guard_Mage", "Description": "Memory name override" },
+    "NameTranslationKey": {
+      "Value": "aetherhaven_ui_journal_items_tail.npcRoles.Aetherhaven_Guard.name",
+      "Description": "Translation key for NPC name display"
+    },
+    "ViewRange": { "Value": 24, "Description": "Combat detection range for aggressive mobs" },
+    "TooCloseDistance": { "Value": 5, "Description": "Back away when hostiles enter this range" },
+    "DesiredRangedDistance": { "Value": [8, 14], "Description": "Preferred staff casting range" },
+    "AetherhavenWanderPhaseTime": { "Value": [6, 14], "Description": "Patrol wander phase (seconds)" },
+    "AetherhavenPausePhaseTime": { "Value": [2, 5], "Description": "Patrol pause (seconds)" }
+  },
+  "StartState": "Idle",
+  "DefaultNPCAttitude": "Neutral",
+  "DefaultPlayerAttitude": "Neutral",
+  "Appearance": "Male_Human_01",
+  "MaxHealth": 90,
+  "IsMemory": false,
+  "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },
+  "DisableDamageGroups": ["Self", "Player"],
+  "BusyStates": ["Idle", "Combat"],
+  "Invulnerable": { "Compute": "Invulnerable" },
+  "KnockbackScale": 0.5,
+  "HotbarSize": 3,
+  "OffHandSlots": 2,
+  "MotionControllerList": [
+    {
+      "Type": "Walk",
+      "MaxWalkSpeed": 5.5,
+      "Gravity": 10,
+      "RunThreshold": 0.3,
+      "MaxFallSpeed": 15,
+      "MaxRotationSpeed": 360,
+      "Acceleration": 10
+    }
+  ],
+  "Instructions": [
+    {
+      "Instructions": [
+        {
+          "Sensor": { "Type": "State", "State": "Idle" },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Mob",
+                "Range": { "Compute": "ViewRange" },
+                "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
+                "Collector": { "Type": "CombatTargets" }
+              },
+              "Actions": [
+                { "Type": "OverrideAttitude", "Attitude": "Hostile", "Duration": 120 },
+                { "Type": "State", "State": "Combat" }
+              ]
+            },
+            {
+              "Reference": "Component_Instruction_Aetherhaven_Guard_Rect_Wander_Idle",
+              "Modify": {
+                "WanderRectTimer": { "Compute": "AetherhavenWanderPhaseTime" },
+                "PauseTimer": { "Compute": "AetherhavenPausePhaseTime" }
+              }
+            }
+          ]
+        },
+        {
+          "Sensor": { "Type": "State", "State": "Combat" },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Or",
+                "Sensors": [
+                  {
+                    "Type": "Mob",
+                    "Range": { "Compute": "ViewRange" },
+                    "LockOnTarget": false,
+                    "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
+                    "Collector": { "Type": "CombatTargets" }
+                  },
+                  { "Type": "HasHostileTargetMemory" }
+                ]
+              },
+              "Instructions": [
+                {
+                  "Continue": true,
+                  "Sensor": { "Type": "Damage", "Combat": true },
+                  "Actions": [{ "Type": "AddToHostileTargetMemory" }]
+                },
+                {
+                  "Continue": true,
+                  "Sensor": { "Type": "Target", "Range": { "Compute": "TooCloseDistance" } },
+                  "BodyMotion": {
+                    "Type": "Flee",
+                    "SlowDownDistance": 6,
+                    "StopDistance": 10,
+                    "RelativeSpeed": 0.65
+                  }
+                },
+                {
+                  "Sensor": {
+                    "Type": "Target",
+                    "Range": { "Compute": "ViewRange" },
+                    "Filters": [{ "Type": "LineOfSight" }]
+                  },
+                  "ActionsBlocking": true,
+                  "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 0.45, "HitProbability": 1.0 },
+                  "BodyMotion": {
+                    "Type": "MaintainDistance",
+                    "DesiredDistanceRange": { "Compute": "DesiredRangedDistance" },
+                    "MoveThreshold": 0.2,
+                    "RelativeForwardsSpeed": 0.35,
+                    "RelativeBackwardsSpeed": 0.5
+                  },
+                  "Actions": [
+                    {
+                      "Type": "Attack",
+                      "Attack": "Skeleton_Archmage_Staff_Corruption_Orb",
+                      "AimingTimeRange": [0.8, 1.6],
+                      "AttackPauseRange": [2, 3]
+                    }
+                  ]
+                },
+                {
+                  "Sensor": { "Type": "Target", "Range": { "Compute": "ViewRange" } },
+                  "BodyMotion": {
+                    "Type": "Seek",
+                    "SlowDownDistance": 12,
+                    "StopDistance": 8,
+                    "RelativeSpeed": 0.45
+                  }
+                }
+              ]
+            },
+            {
+              "Actions": [{ "Type": "State", "State": "Idle" }]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "NameTranslationKey": { "Compute": "NameTranslationKey" }
+}

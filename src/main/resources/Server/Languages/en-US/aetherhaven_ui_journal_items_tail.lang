@@ -149,6 +149,14 @@ npcRoles.Aetherhaven_Miner.name=Gorruk Stonevein
 npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
 npcRoles.Aetherhaven_Rancher.name=Thalen Meadowrun
 npcRoles.Aetherhaven_Townsfolk.name=Townsfolk
+npcRoles.Aetherhaven_Guild_Master.name=Lyra Fairhollow
+npcRoles.Aetherhaven_Guard.name=Town guard
+
+items.Aetherhaven_Quest_Board.name=Quest board
+items.Aetherhaven_Quest_Board.description=A wooden board for posting work and bounties. Decorative for now.
+
+items.Aetherhaven_Plot_Token_Guild_Hall.name=Guild hall plot token
+items.Aetherhaven_Plot_Token_Guild_Hall.description=Marks where the guild hall prefab can be built. Craft at the town planning desk.
 
 items.Aetherhaven_Production_Storage.name=Workplace stores
 items.Aetherhaven_Production_Storage.description=Holds what your workers bring in. Open to set outputs and take stacks. Part of the building and <color is="#ffa726">cannot be picked up</color>.

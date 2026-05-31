@@ -1,0 +1,69 @@
+package com.hexvane.aetherhaven.town;
+
+import com.google.gson.annotations.SerializedName;
+import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+/** Persisted hired guard row (not yet a tax paying citizen until housed). */
+public final class HiredGuardRecord {
+    @SerializedName("characterId")
+    private String characterId = "";
+
+    @SerializedName("entityUuid")
+    private String entityUuid = "";
+
+    @SerializedName("equipmentProfileId")
+    private String equipmentProfileId = "";
+
+    @SerializedName("citizen")
+    private boolean citizen;
+
+    public HiredGuardRecord() {}
+
+    public HiredGuardRecord(
+        @Nonnull String characterId,
+        @Nonnull UUID entityUuid,
+        @Nonnull String equipmentProfileId,
+        boolean citizen
+    ) {
+        this.characterId = characterId;
+        this.entityUuid = entityUuid.toString();
+        this.equipmentProfileId = equipmentProfileId;
+        this.citizen = citizen;
+    }
+
+    @Nonnull
+    public String getCharacterId() {
+        return characterId != null ? characterId : "";
+    }
+
+    @Nullable
+    public UUID getEntityUuid() {
+        if (entityUuid == null || entityUuid.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(entityUuid.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public void setEntityUuid(@Nonnull UUID uuid) {
+        this.entityUuid = uuid.toString();
+    }
+
+    @Nonnull
+    public String getEquipmentProfileId() {
+        return equipmentProfileId != null ? equipmentProfileId : "";
+    }
+
+    public boolean isCitizen() {
+        return citizen;
+    }
+
+    public void setCitizen(boolean citizen) {
+        this.citizen = citizen;
+    }
+}

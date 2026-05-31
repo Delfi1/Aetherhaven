@@ -1769,6 +1769,26 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             town,
             currentHousePlotId
         );
+        if (plugin != null) {
+            for (com.hexvane.aetherhaven.town.HiredGuardRecord rec : town.getHiredGuardRecords()) {
+                if (rec.isCitizen()) {
+                    continue;
+                }
+                UUID guardUuid = rec.getEntityUuid();
+                if (guardUuid == null || byUuid.containsKey(guardUuid)) {
+                    continue;
+                }
+                if (hideElsewhereHoused
+                    && isHomeResidentElsewhereOnHouse(town, plugin.getConstructionCatalog(), currentHousePlotId, guardUuid)) {
+                    continue;
+                }
+                String label =
+                    plugin.getTownsfolkCharacterCatalog().byId(rec.getCharacterId()) != null
+                        ? plugin.getTownsfolkCharacterCatalog().byId(rec.getCharacterId()).getDisplayName()
+                        : "Guard";
+                byUuid.put(guardUuid, new HouseResidentRow(label, guardUuid));
+            }
+        }
         List<HouseResidentRow> out = new ArrayList<>(byUuid.values());
         out.sort(Comparator.comparing(HouseResidentRow::label, String.CASE_INSENSITIVE_ORDER));
         return out;

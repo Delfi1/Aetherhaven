@@ -1,0 +1,19 @@
+{
+  "Parent": "Player",
+  "Model": "NPC/Prowl/prowl_hytale.blockymodel",
+  "Texture": "NPC/Prowl/prowl_hytale.png",
+  "DefaultAttachments": [],
+  "Icon": "Icons/ModelsGenerated/Prowl.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      21,
+      0
+    ],
+    "Translation": [
+      0,
+      -106
+    ]
+  }
+}

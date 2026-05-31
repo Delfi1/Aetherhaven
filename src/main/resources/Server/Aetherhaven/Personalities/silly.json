@@ -1,0 +1,19 @@
+{
+  "id": "silly",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.silly.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.silly.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.silly.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.silly.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.silly.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "FUN": 1.5,
+    "SIT": 1.1,
+    "EAT": 1.0
+  },
+  "preferredScheduleLocations": [
+    "park",
+    "inn"
+  ]
+}

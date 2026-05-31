@@ -123,6 +123,16 @@ public final class ConstructionDefinition {
     @Nullable
     private int[][] visitorSpawnLocals;
 
+    /** Prefab-local spawn cell for the guild master at the inn before the guild hall is built; optional. */
+    @SerializedName("guildMasterSpawnLocal")
+    @Nullable
+    private int[] guildMasterSpawnLocal;
+
+    /** Prefab-local spawn cells for guild hall adventurers (guard eligible townsfolk); optional. */
+    @SerializedName("adventurerSpawnLocals")
+    @Nullable
+    private int[][] adventurerSpawnLocals;
+
     /** Prefab-local position of the treasury block (town-shared gold storage); optional. */
     @SerializedName("treasuryLocalPos")
     @Nullable
@@ -313,6 +323,18 @@ public final class ConstructionDefinition {
     @Nullable
     public int[][] getVisitorSpawnLocals() {
         return visitorSpawnLocals;
+    }
+
+    /** @return prefab-local x,y,z for guild master spawn at inn, or null */
+    @Nullable
+    public int[] getGuildMasterSpawnLocal() {
+        return guildMasterSpawnLocal != null && guildMasterSpawnLocal.length == 3 ? guildMasterSpawnLocal : null;
+    }
+
+    /** @return prefab-local guild hall adventurer spawn positions, or null */
+    @Nullable
+    public int[][] getAdventurerSpawnLocals() {
+        return adventurerSpawnLocals;
     }
 
     /** @return prefab-local x,y,z of treasury block, or null */

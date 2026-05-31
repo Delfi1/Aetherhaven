@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3i;
 
 /** POI tool selection + transient debug label entity ids (labels are not persisted). */
 public final class PoiToolPlayerComponent implements Component<EntityStore> {
@@ -27,6 +28,12 @@ public final class PoiToolPlayerComponent implements Component<EntityStore> {
             c -> c.selectedPoiId != null ? c.selectedPoiId : NO_SELECTION
         )
         .add()
+        .append(
+            new KeyedCodec<>("Mode", Codec.STRING),
+            (c, s) -> c.mode = PoiToolMode.fromSerialized(s),
+            c -> c.mode.name()
+        )
+        .add()
         .build();
 
     @Nullable
@@ -34,9 +41,18 @@ public final class PoiToolPlayerComponent implements Component<EntityStore> {
 
     @Nullable
     private UUID selectedPoiId;
+    @Nonnull
+    private PoiToolMode mode = PoiToolMode.PoiEdit;
     /** Not serialized; cleared when tool is unequipped. */
     @Nonnull
     private final List<UUID> debugLabelEntityUuids = new ArrayList<>();
+    /** Pending POI placement target block (not serialized). */
+    @Nullable
+    private Vector3i pendingPlacementBlock;
+    @Nullable
+    private UUID pendingTownId;
+    @Nullable
+    private UUID pendingPlotId;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         componentType = registry.registerComponent(PoiToolPlayerComponent.class, "AetherhavenPoiTool", PoiToolPlayerComponent.CODEC);
@@ -61,6 +77,26 @@ public final class PoiToolPlayerComponent implements Component<EntityStore> {
     }
 
     @Nonnull
+    public PoiToolMode getMode() {
+        return mode;
+    }
+
+    public void setMode(@Nonnull PoiToolMode mode) {
+        this.mode = mode;
+    }
+
+    /** Cycles: POI edit -> POI placement -> POI remove -> adventurer spawn markers -> POI edit. */
+    public void cycleMode() {
+        this.mode =
+            switch (mode) {
+                case PoiEdit -> PoiToolMode.PoiPlacement;
+                case PoiPlacement -> PoiToolMode.PoiRemove;
+                case PoiRemove -> PoiToolMode.AdventurerSpawnMarker;
+                case AdventurerSpawnMarker -> PoiToolMode.PoiEdit;
+            };
+    }
+
+    @Nonnull
     public List<UUID> getDebugLabelEntityUuids() {
         return debugLabelEntityUuids;
     }
@@ -69,11 +105,39 @@ public final class PoiToolPlayerComponent implements Component<EntityStore> {
         debugLabelEntityUuids.clear();
     }
 
+    public void setPendingPlacement(@Nullable Vector3i block, @Nullable UUID townId, @Nullable UUID plotId) {
+        this.pendingPlacementBlock = block != null ? new Vector3i(block) : null;
+        this.pendingTownId = townId;
+        this.pendingPlotId = plotId;
+    }
+
+    @Nullable
+    public Vector3i getPendingPlacementBlock() {
+        return pendingPlacementBlock;
+    }
+
+    @Nullable
+    public UUID getPendingTownId() {
+        return pendingTownId;
+    }
+
+    @Nullable
+    public UUID getPendingPlotId() {
+        return pendingPlotId;
+    }
+
+    public void clearPendingPlacement() {
+        pendingPlacementBlock = null;
+        pendingTownId = null;
+        pendingPlotId = null;
+    }
+
     @Nonnull
     @Override
     public Component<EntityStore> clone() {
         PoiToolPlayerComponent c = new PoiToolPlayerComponent();
         c.selectedPoiId = this.selectedPoiId;
+        c.mode = this.mode;
         return c;
     }
 }

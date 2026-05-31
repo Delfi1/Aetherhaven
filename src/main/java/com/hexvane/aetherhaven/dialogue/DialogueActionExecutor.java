@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.dialogue;
 
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.guild.GuardHireService;
+import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtService;
@@ -117,6 +119,8 @@ public final class DialogueActionExecutor {
             case "gaia_draught_upgrade_shard" -> gaiaDraughtUpgradeShard(playerRef, store, npcRef);
             case "gaia_draught_upgrade_catalyst" -> gaiaDraughtUpgradeCatalyst(playerRef, store, npcRef);
             case "priestess_gold_heal" -> priestessGoldHeal(playerRef, store, npcRef);
+            case "hire_guild_adventurer" -> hireGuildAdventurer(playerRef, store, npcRef, out);
+            case "start_guard_house_quest" -> startGuardHouseQuest(playerRef, store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
     }
@@ -296,6 +300,14 @@ public final class DialogueActionExecutor {
             }
         }
         tm.updateTown(town);
+        if (AetherhavenConstants.QUEST_HOUSE_GUARD.equals(qid.trim())) {
+            UUID target = town.getGuardHouseQuestTargetEntityUuid();
+            if (target != null && store != null) {
+                VillagerDeathHandlerSystem.promoteGuardToCitizen(world, plugin, town, tm, target, store);
+            }
+            town.setGuardHouseQuestTargetEntityUuid(null);
+            tm.updateTown(town);
+        }
         if (store != null && isInnVisitorJobQuestForResidentPromotion(qid)) {
             InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
         }
@@ -326,7 +338,8 @@ public final class DialogueActionExecutor {
             || q.equals(AetherhavenConstants.QUEST_GAIA_ALTAR)
             || q.equals(AetherhavenConstants.QUEST_MINERS_HUT)
             || q.equals(AetherhavenConstants.QUEST_LUMBERMILL)
-            || q.equals(AetherhavenConstants.QUEST_BARN);
+            || q.equals(AetherhavenConstants.QUEST_BARN)
+            || q.equals(AetherhavenConstants.QUEST_BUILD_GUILD_HALL);
     }
 
     @Nullable
@@ -745,6 +758,63 @@ public final class DialogueActionExecutor {
     private static String resolveItemLabel(@Nullable PlayerRef playerRef, @Nonnull String itemId) {
         String lang = playerRef != null && playerRef.getLanguage() != null ? playerRef.getLanguage() : "en-US";
         return UiMaterialLabels.itemLabelForUi(lang, itemId);
+    }
+
+    private static void hireGuildAdventurer(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        @Nonnull DialogueActionBatchResult out
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        if (town == null) {
+            return;
+        }
+        if (GuardHireService.tryHire(world, plugin, town, tm, playerRef, npcRef, store)) {
+            out.setCloseDialogue(true);
+        }
+    }
+
+    private static void startGuardHouseQuest(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        if (town == null) {
+            return;
+        }
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu == null || !town.playerCanAcceptQuests(pu.getUuid())) {
+            return;
+        }
+        UUID guardUuid = GuardHireService.firstUnhousedHiredGuardUuid(town, plugin);
+        if (guardUuid == null) {
+            return;
+        }
+        town.setGuardHouseQuestTargetEntityUuid(guardUuid);
+        town.addActiveQuest(AetherhavenConstants.QUEST_HOUSE_GUARD);
+        QuestDefinition qdef = plugin.getQuestCatalog().get(AetherhavenConstants.QUEST_HOUSE_GUARD);
+        if (qdef != null) {
+            town.initQuestObjectiveProgress(AetherhavenConstants.QUEST_HOUSE_GUARD, qdef.trackableObjectiveIds());
+            QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store);
+        }
+        tm.updateTown(town);
     }
 
     private static void playBannerSound(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {

@@ -1,0 +1,52 @@
+{
+  "id": "aetherhaven_guild_adventurer",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "",
+      "bodyMode": "villager_greeting",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire",
+          "visibilityCondition": { "type": "npc_is_guild_hall_adventurer" },
+          "condition": { "type": "guard_hire_affordable" },
+          "whenFalse": "disabled",
+          "next": "hire_confirm"
+        },
+        {
+          "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave",
+          "next": null,
+          "actions": [{ "type": "close" }]
+        }
+      ]
+    },
+    "hire_confirm": {
+      "speaker": "",
+      "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes",
+          "condition": { "type": "guard_hire_affordable" },
+          "whenFalse": "disabled",
+          "actions": [{ "type": "hire_guild_adventurer" }],
+          "next": "hire_done"
+        },
+        {
+          "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "hire_done": {
+      "speaker": "",
+      "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave",
+          "next": null,
+          "actions": [{ "type": "close" }]
+        }
+      ]
+    }
+  }
+}

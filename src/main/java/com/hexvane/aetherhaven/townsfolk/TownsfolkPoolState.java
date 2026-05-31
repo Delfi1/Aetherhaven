@@ -67,6 +67,28 @@ public final class TownsfolkPoolState {
         return available.get(random.nextInt(available.size()));
     }
 
+    /** Characters that allow guard assignment and are not checked out. */
+    @Nonnull
+    public List<String> availableGuardEligibleCharacterIds(@Nonnull TownsfolkCharacterCatalog catalog) {
+        List<String> out = new ArrayList<>();
+        for (TownsfolkCharacterDefinition def : catalog.allById().values()) {
+            String id = def.getId();
+            if (!checkouts.containsKey(id) && def.supportsAssignment(TownsfolkAssignmentKinds.GUARD)) {
+                out.add(id);
+            }
+        }
+        return out;
+    }
+
+    @Nullable
+    public String pickRandomGuardEligibleCharacterId(@Nonnull TownsfolkCharacterCatalog catalog, @Nonnull Random random) {
+        List<String> available = availableGuardEligibleCharacterIds(catalog);
+        if (available.isEmpty()) {
+            return null;
+        }
+        return available.get(random.nextInt(available.size()));
+    }
+
     public void checkout(@Nonnull TownsfolkPoolCheckoutRecord record) {
         checkouts.put(record.getCharacterId(), record);
     }

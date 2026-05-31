@@ -1,0 +1,35 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Plot_Token_Guild_Hall.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Plot_Token_Guild_Hall.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 0,
+    "Input": [
+      {
+        "ItemId": "Aetherhaven_Gold_Coin",
+        "Quantity": 8
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": ["Aetherhaven_TownPlanningPlotTokens"]
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Token_Townhall.png",
+  "Model": "Blocks/Decorative_Sets/Lumberjack/Sign.blockymodel",
+  "Texture": "Items/Aetherhaven/Plot_Token_Sign_Texture.png",
+  "MaxStack": 64,
+  "PlayerAnimationsId": "Item",
+  "Categories": ["Items.Utility"],
+  "Set": "Aetherhaven",
+  "Quality": "Common",
+  "Tags": {
+    "Type": ["Tool"],
+    "Family": ["Aetherhaven"]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

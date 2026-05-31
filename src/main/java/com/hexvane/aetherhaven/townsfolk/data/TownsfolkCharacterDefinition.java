@@ -39,6 +39,16 @@ public final class TownsfolkCharacterDefinition {
     @Nullable
     private Boolean befriendable;
 
+    /** Equipment profile for guards or job visuals (see Server/Aetherhaven/Equipment/). */
+    @SerializedName("equipmentProfileId")
+    @Nullable
+    private String equipmentProfileId;
+
+    /** Optional model scale multiplier (1.0 = default). Applied when the character model is set on spawn. */
+    @SerializedName("modelScale")
+    @Nullable
+    private Float modelScale;
+
     @Nonnull
     public String getId() {
         return id != null ? id.trim() : "";
@@ -76,6 +86,20 @@ public final class TownsfolkCharacterDefinition {
 
     public boolean isBefriendable() {
         return Boolean.TRUE.equals(befriendable);
+    }
+
+    @Nullable
+    public String getEquipmentProfileId() {
+        return equipmentProfileId != null && !equipmentProfileId.isBlank() ? equipmentProfileId.trim() : null;
+    }
+
+    /** @return custom model scale when {@code modelScale} is set and valid; otherwise {@code null} */
+    @Nullable
+    public Float getModelScale() {
+        if (modelScale == null || modelScale <= 0f || Float.isNaN(modelScale) || Float.isInfinite(modelScale)) {
+            return null;
+        }
+        return modelScale;
     }
 
     public boolean supportsAssignment(@Nonnull String assignmentKind) {

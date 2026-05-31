@@ -33,9 +33,18 @@ import com.hexvane.aetherhaven.plot.SprinklerBlock;
 import com.hexvane.aetherhaven.plot.FounderMonumentBlock;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
+import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchor;
+import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchorSystem;
+import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
+import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerSystems;
+import com.hexvane.aetherhaven.poi.marker.PoiMarkerDataComponent;
+import com.hexvane.aetherhaven.poi.marker.PoiMarkerEntity;
+import com.hexvane.aetherhaven.poi.marker.PoiMarkerSystems;
 import com.hexvane.aetherhaven.poi.tool.PoiDebugLabelEntity;
+import com.hexvane.aetherhaven.poi.tool.PoiToolModeCycleInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolMoveInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolPlayerComponent;
+import com.hexvane.aetherhaven.poi.tool.PoiToolSecondaryInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerComponent;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSetTargetInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSelectInteraction;
@@ -66,10 +75,12 @@ import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleRegistry;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentSystem;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolPersistence;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
+import com.hexvane.aetherhaven.equipment.data.EquipmentProfileCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityCatalog;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
@@ -206,6 +217,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
     private TownsfolkPersonalityCatalog townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.empty();
     private TownsfolkCharacterCatalog townsfolkCharacterCatalog = TownsfolkCharacterCatalog.empty();
+    private EquipmentProfileCatalog equipmentProfileCatalog = EquipmentProfileCatalog.empty();
     private ProductionCatalog productionCatalog = ProductionCatalog.empty();
     private WorkplaceUnlockCatalog workplaceUnlockCatalog = WorkplaceUnlockCatalog.empty();
     private final DialogueResolver dialogueResolver = new DialogueResolver();
@@ -295,6 +307,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public TownsfolkCharacterCatalog getTownsfolkCharacterCatalog() {
         return townsfolkCharacterCatalog;
+    }
+
+    @Nonnull
+    public EquipmentProfileCatalog getEquipmentProfileCatalog() {
+        return equipmentProfileCatalog;
     }
 
     @Nonnull
@@ -400,6 +417,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
         TownsfolkCharacterBinding.register(this.getEntityStoreRegistry());
+        GuildHallDisplayAnchor.register(this.getEntityStoreRegistry());
+        PoiMarkerDataComponent.register(this.getEntityStoreRegistry());
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.OnAdd());
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.EachTick());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
@@ -411,6 +430,32 @@ public final class AetherhavenPlugin extends JavaPlugin {
         BuildingStaffAssemblyChannelComponent.register(this.getEntityStoreRegistry());
         BuildingStaffFrontierTracerComponent.register(this.getEntityStoreRegistry());
         FloatingGiftComponent.register(this.getEntityStoreRegistry());
+        this.getEntityRegistry()
+            .registerEntity(
+                "AetherhavenAdventurerSpawnMarker",
+                AdventurerSpawnMarkerEntity.class,
+                world -> {
+                    AdventurerSpawnMarkerEntity e = new AdventurerSpawnMarkerEntity();
+                    if (world != null) {
+                        e.loadIntoWorld(world);
+                    }
+                    return e;
+                },
+                AdventurerSpawnMarkerEntity.CODEC
+            );
+        this.getEntityRegistry()
+            .registerEntity(
+                "AetherhavenPoiMarker",
+                PoiMarkerEntity.class,
+                world -> {
+                    PoiMarkerEntity e = new PoiMarkerEntity();
+                    if (world != null) {
+                        e.loadIntoWorld(world);
+                    }
+                    return e;
+                },
+                PoiMarkerEntity.CODEC
+            );
         this.getEntityRegistry()
             .registerEntity(
                 "AetherhavenPoiDebugLabel",
@@ -442,6 +487,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
             .register("AetherhavenPoiToolSelect", PoiToolSelectInteraction.class, PoiToolSelectInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPoiToolMove", PoiToolMoveInteraction.class, PoiToolMoveInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPoiToolSecondary", PoiToolSecondaryInteraction.class, PoiToolSecondaryInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPoiToolModeCycle", PoiToolModeCycleInteraction.class, PoiToolModeCycleInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
             .register(
                 "AetherhavenPoiToolSetTarget",
@@ -523,6 +572,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new TownsfolkAssignmentSystem());
+        this.getEntityStoreRegistry().registerSystem(new VillagerDeathHandlerSystem(this));
         this.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
@@ -532,6 +582,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem());
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentBreakSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new AdventurerSpawnMarkerSystems.EnsurePrefabCopyable());
+        this.getEntityStoreRegistry().registerSystem(new PoiMarkerSystems.EnsurePrefabCopyable());
+        this.getEntityStoreRegistry().registerSystem(new GuildHallDisplayAnchorSystem());
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderVisualizationSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderPlayerRemoveSystem());
         this.getEntityStoreRegistry().registerSystem(new QuestKillProgressSystem(this));
@@ -917,6 +970,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.loadFromAssetPacksOrClasspath(cl);
         this.townsfolkCharacterCatalog =
             TownsfolkCharacterCatalog.loadFromAssetPacksOrClasspath(cl, this.townsfolkPersonalityCatalog);
+        this.equipmentProfileCatalog = EquipmentProfileCatalog.loadFromAssetPacksOrClasspath(cl);
         ReputationRewardCatalog.refreshFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl);

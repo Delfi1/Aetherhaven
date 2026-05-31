@@ -1,0 +1,147 @@
+package com.hexvane.aetherhaven.guild;
+
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.town.HiredGuardRecord;
+import com.hexvane.aetherhaven.town.ResidentRegistryService;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.VillagerNeeds;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
+import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
+import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import java.util.Iterator;
+import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+/** Handles town NPC death: guards return to pool; adventurers release checkout. */
+public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem {
+    @Nonnull
+    private final AetherhavenPlugin plugin;
+
+    public VillagerDeathHandlerSystem(@Nonnull AetherhavenPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @Nonnull
+    @Override
+    public Query<EntityStore> getQuery() {
+        return Query.and(TownVillagerBinding.getComponentType(), EntityStatMap.getComponentType());
+    }
+
+    @Override
+    public void onComponentAdded(
+        @Nonnull Ref<EntityStore> victimRef,
+        @Nonnull DeathComponent death,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        TownVillagerBinding binding = store.getComponent(victimRef, TownVillagerBinding.getComponentType());
+        if (binding == null) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(victimRef, UUIDComponent.getComponentType());
+        UUID entityUuid = uc != null ? uc.getUuid() : null;
+
+        World world = store.getExternalData().getWorld();
+        var tm = com.hexvane.aetherhaven.town.AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(binding.getTownId());
+        if (town == null) {
+            return;
+        }
+
+        if (TownVillagerBinding.KIND_GUARD.equals(binding.getKind())) {
+            handleGuardDeath(world, town, tm, victimRef, store, entityUuid);
+            return;
+        }
+
+        if (entityUuid != null && GuildHallAdventurerPoolService.isGuildHallAdventurer(town, entityUuid)) {
+            town.getGuildHallAdventurerNpcIds().removeIf(s -> entityUuid.toString().equalsIgnoreCase(s != null ? s.trim() : ""));
+            TownsfolkCharacterBinding tb = store.getComponent(victimRef, TownsfolkCharacterBinding.getComponentType());
+            if (tb != null) {
+                TownsfolkSpawnService.release(world, plugin, tb.getCharacterId());
+            }
+            tm.updateTown(town);
+        }
+    }
+
+    private static void handleGuardDeath(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Ref<EntityStore> victimRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable UUID entityUuid
+    ) {
+        TownsfolkCharacterBinding tb = store.getComponent(victimRef, TownsfolkCharacterBinding.getComponentType());
+        String characterId = tb != null ? tb.getCharacterId() : null;
+
+        Iterator<HiredGuardRecord> it = town.getHiredGuardRecords().iterator();
+        while (it.hasNext()) {
+            HiredGuardRecord rec = it.next();
+            if (entityUuid != null && entityUuid.equals(rec.getEntityUuid())) {
+                it.remove();
+                if (characterId == null) {
+                    characterId = rec.getCharacterId();
+                }
+                break;
+            }
+            if (characterId != null && characterId.equalsIgnoreCase(rec.getCharacterId())) {
+                it.remove();
+                break;
+            }
+        }
+
+        if (characterId != null && !characterId.isBlank()) {
+            TownsfolkSpawnService.release(world, AetherhavenPlugin.get(), characterId);
+        }
+
+        if (entityUuid != null) {
+            for (var plot : town.getPlotInstances()) {
+                if (entityUuid.equals(plot.getHomeResidentEntityUuid())) {
+                    plot.setHomeResidentEntityUuid(null);
+                }
+            }
+            town.getResidentNpcRecords().removeIf(r -> entityUuid.equals(r.getLastEntityUuid()));
+        }
+        tm.updateTown(town);
+    }
+
+    /** Promote a housed guard to a tax paying citizen. */
+    public static void promoteGuardToCitizen(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID guardEntityUuid,
+        @Nonnull Store<EntityStore> store
+    ) {
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(guardEntityUuid);
+        if (ref == null || !ref.isValid()) {
+            return;
+        }
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            UUID u = rec.getEntityUuid();
+            if (u != null && u.equals(guardEntityUuid)) {
+                rec.setCitizen(true);
+                break;
+            }
+        }
+        if (store.getComponent(ref, VillagerNeeds.getComponentType()) == null) {
+            store.putComponent(ref, VillagerNeeds.getComponentType(), VillagerNeeds.full());
+        }
+        ResidentRegistryService.syncHouseAssignment(town, tm, store, guardEntityUuid);
+        tm.updateTown(town);
+    }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "work_logger",
+  "displayName": "Logger tools",
+  "hireGoldCost": 0,
+  "hotbar": [
+    { "slot": 0, "itemId": "Tool_Hatchet_Iron" }
+  ]
+}

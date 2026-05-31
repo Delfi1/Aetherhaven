@@ -135,6 +135,10 @@ public final class DialogueConditionEvaluator {
                 getString(o, "objectiveId")
             );
             case "priestess_heal_affordable" -> worldView.priestessHealGoldAffordable(playerRef, store, npcRef);
+            case "npc_is_guild_hall_adventurer" -> worldView.npcIsGuildHallAdventurer(playerRef, store, npcRef);
+            case "guard_hire_affordable" -> worldView.guardHireAffordable(playerRef, store, npcRef);
+            case "player_has_unhoused_hired_guard" -> worldView.playerHasUnhousedHiredGuard(playerRef, store);
+            case "guard_house_quest_target_housed" -> worldView.guardHouseQuestTargetHoused(playerRef, store);
             default -> {
                 LOGGER.atWarning().log("Unknown dialogue condition type: %s", type);
                 yield false;

@@ -36,6 +36,11 @@ public final class DialogueResolver {
     public static final String VISITOR_ELDER = "aetherhaven_visitor_elder";
     public static final String VISITOR_INN = "aetherhaven_visitor_inn";
 
+    public static final String KIND_GUILD_MASTER = "guild_master";
+    public static final String TREE_GUILD_MASTER = "aetherhaven_guild_master";
+    public static final String KIND_GUILD_ADVENTURER = "guild_adventurer";
+    public static final String TREE_GUILD_ADVENTURER = "aetherhaven_guild_adventurer";
+
     public static final String KIND_TOWNSFOLK = "townsfolk";
     public static final String TREE_TOWNSFOLK_GENERIC = "aetherhaven_townsfolk_generic";
 
@@ -51,6 +56,8 @@ public final class DialogueResolver {
         kindToVisitorTree.clear();
         kindToTree.put(KIND_ELDER_LYREN, TREE_ELDER_WEEK2);
         kindToTree.put(KIND_INNKEEPER, TREE_INN_WELCOME);
+        kindToTree.put(KIND_GUILD_MASTER, TREE_GUILD_MASTER);
+        kindToTree.put(KIND_GUILD_ADVENTURER, TREE_GUILD_ADVENTURER);
         kindToVisitorTree.put(KIND_ELDER_LYREN, VISITOR_ELDER);
         kindToVisitorTree.put(KIND_INNKEEPER, VISITOR_INN);
         kindToVisitorTree.put("merchant", VISITOR_DEFAULT);
@@ -66,7 +73,10 @@ public final class DialogueResolver {
     /** Townsfolk and other dialogue kinds not backed by {@link VillagerDefinition} assets. */
     private void registerNonVillagerDialogueKinds() {
         kindToTree.put(KIND_TOWNSFOLK, TREE_TOWNSFOLK_GENERIC);
+        kindToTree.put(KIND_GUILD_ADVENTURER, TREE_GUILD_ADVENTURER);
         kindToVisitorTree.put(KIND_TOWNSFOLK, VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_GUILD_MASTER, VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_GUILD_ADVENTURER, VISITOR_DEFAULT);
     }
 
     /** Called on asset catalog reload. Falls back to {@link #applyLegacyDefaultKindMaps} when the catalog is empty. */
@@ -104,14 +114,20 @@ public final class DialogueResolver {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         String kind = villagerKind != null && !villagerKind.isBlank() ? villagerKind.trim() : DEFAULT_DIALOGUE_KIND;
         if (plugin != null && npcRef != null && npcRef.isValid()) {
-            if (store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType())
-                != null) {
-                kind = KIND_TOWNSFOLK;
+            var townsfolkBinding = store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType());
+            if (townsfolkBinding != null) {
+                if (com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds.isGuildHallAdventurer(townsfolkBinding.getAssignmentKind())) {
+                    kind = KIND_GUILD_ADVENTURER;
+                } else {
+                    kind = KIND_TOWNSFOLK;
+                }
             }
         }
         String tree;
         if (explicitDialogueId != null && !explicitDialogueId.isBlank()) {
             tree = explicitDialogueId.trim();
+        } else if (KIND_GUILD_ADVENTURER.equals(kind)) {
+            tree = TREE_GUILD_ADVENTURER;
         } else if (KIND_TOWNSFOLK.equals(kind)) {
             tree = TREE_TOWNSFOLK_GENERIC;
         } else {

@@ -149,6 +149,9 @@ public final class AetherhavenConstants {
     /** Key for the path tool status overlay on {@link com.hypixel.hytale.server.core.entity.entities.player.hud.HudManager}. */
     public static final String PATH_TOOL_HUD_KEY = "AetherhavenPathTool";
 
+    /** Key for the POI tool legend overlay on {@link com.hypixel.hytale.server.core.entity.entities.player.hud.HudManager}. */
+    public static final String POI_TOOL_HUD_KEY = "AetherhavenPoiTool";
+
     /** Revert a placed path that was registered with an undo snapshot (e.g. operator). */
     public static final String PERMISSION_PATH_REVERT = "aetherhaven.path.revert";
 
@@ -184,6 +187,9 @@ public final class AetherhavenConstants {
 
     /** Town hall civic building; definition in {@code Server/Aetherhaven/Buildings/plot_town_hall.json}. */
     public static final String CONSTRUCTION_PLOT_TOWN_HALL = "plot_town_hall";
+
+    /** Guild hall workplace; definition in {@code Server/Aetherhaven/Buildings/plot_guild_hall.json}. */
+    public static final String CONSTRUCTION_PLOT_GUILD_HALL = "plot_guild_hall";
 
     /** Blacksmith workplace; definition in {@code Server/Aetherhaven/Buildings/plot_blacksmith_shop.json}. */
     public static final String CONSTRUCTION_PLOT_BLACKSMITH_SHOP = "plot_blacksmith_shop";
@@ -227,6 +233,10 @@ public final class AetherhavenConstants {
     public static final String QUEST_BUILD_INN = "q_build_inn";
 
     public static final String QUEST_BUILD_TOWN_HALL = "q_build_town_hall";
+
+    public static final String QUEST_BUILD_GUILD_HALL = "q_build_guild_hall";
+
+    public static final String QUEST_HOUSE_GUARD = "q_house_guard";
 
     public static final String QUEST_MERCHANT_STALL = "q_merchant_stall";
 
@@ -291,6 +301,8 @@ public final class AetherhavenConstants {
     public static final String PLOT_TOKEN_HOUSE = "Aetherhaven_Plot_Token_House";
 
     public static final String PLOT_TOKEN_TOWN_HALL = "Aetherhaven_Plot_Token_Town_Hall";
+
+    public static final String PLOT_TOKEN_GUILD_HALL = "Aetherhaven_Plot_Token_Guild_Hall";
 
     public static final String PLOT_TOKEN_GAIA_ALTAR = "Aetherhaven_Plot_Token_Gaia_Altar";
 
@@ -411,6 +423,13 @@ public final class AetherhavenConstants {
 
     public static final String INNKEEPER_NPC_ROLE_ID = "Aetherhaven_Innkeeper";
 
+    public static final String GUILD_MASTER_NPC_ROLE_ID = "Aetherhaven_Guild_Master";
+
+    /** Hired guard NPC role (combat + large patrol wander). Appearance set from townsfolk model at spawn. */
+    public static final String NPC_GUARD_KNIGHT = "Aetherhaven_Guard_Knight";
+    public static final String NPC_GUARD_ARCHER = "Aetherhaven_Guard_Archer";
+    public static final String NPC_GUARD_MAGE = "Aetherhaven_Guard_Mage";
+
     /** Shown during autonomous campfire “eating”; matches vanilla cooked meat (consume / third-person eat anim). */
     public static final String CAMPFIRE_EAT_ITEM_ID = "Food_Wildmeat_Cooked";
 
@@ -419,6 +438,9 @@ public final class AetherhavenConstants {
      * moves or plays POI animations, so Idle {@code WanderInRect} does not fight scripted motion.
      */
     public static final String NPC_STATE_AUTONOMY_POI = "AetherhavenAutonomy";
+
+    /** Guild hall display pool: stand still at spawn anchor (no rect wander). */
+    public static final String NPC_STATE_GUILD_HALL_DISPLAY = "GuildHallDisplay";
 
     /**
      * Synthetic autonomy target: path to the scheduled plot's footprint (no POI interaction). Vanilla wander rects are

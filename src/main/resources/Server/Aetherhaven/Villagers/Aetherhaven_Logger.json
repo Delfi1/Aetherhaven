@@ -4,6 +4,7 @@
   "residentTreeId": "aetherhaven_logger",
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_lumbermill",
+  "workEquipmentProfileId": "work_logger",
   "scheduleRoleId": "Aetherhaven_Logger",
   "displayName": "Seren Fairhollow",
   "portraitIcon": "Aetherhaven_Logger.png",

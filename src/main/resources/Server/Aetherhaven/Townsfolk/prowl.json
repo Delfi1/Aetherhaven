@@ -1,0 +1,18 @@
+{
+  "id": "prowl",
+  "displayName": "Prowl",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Prowl",
+  "personalityIds": [
+    "silly",
+    "mischievous",
+    "sporty"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false
+}

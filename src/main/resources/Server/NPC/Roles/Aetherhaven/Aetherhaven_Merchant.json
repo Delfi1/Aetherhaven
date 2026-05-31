@@ -1,7 +1,7 @@
 {
   "Type": "Generic",
   "Parameters": {
-    "Invulnerable": { "Value": true, "Description": "Whether the NPC is invulnerable." },
+    "Invulnerable": { "Value": false, "Description": "Whether the NPC is invulnerable." },
     "MemoriesNameOverride": { "Value": "Aetherhaven_Merchant", "Description": "Memory name override" },
     "NameTranslationKey": {
       "Value": "aetherhaven_ui_journal_items_tail.npcRoles.Aetherhaven_Merchant.name",
@@ -11,14 +11,14 @@
     "AetherhavenPausePhaseTime": { "Value": [3, 7], "Description": "Idle pause between wander bursts (seconds)" }
   },
   "StartState": "Idle",
-  "DefaultNPCAttitude": "Ignore",
+  "DefaultNPCAttitude": "Neutral",
   "DefaultPlayerAttitude": "Neutral",
   "Appearance": "Merchant",
   "MaxHealth": 100,
   "IsMemory": true,
   "MemoriesCategory": "Aetherhaven",
   "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },
-  "DisableDamageGroups": ["Self"],
+  "DisableDamageGroups": ["Self", "Player"],
   "CombatConfig": { "EntityEffect": "Immunity_Environmental" },
   "BusyStates": ["$Interaction"],
   "Invulnerable": { "Compute": "Invulnerable" },
@@ -42,6 +42,58 @@
     }
   ],
   "Instructions": [
+    {
+      "Continue": true,
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Not",
+            "Sensor": { "Type": "State", "State": "Flee" }
+          },
+          "Instructions": [
+            {
+              "Sensor": { "Type": "Damage", "Combat": true },
+              "Actions": [{ "Type": "State", "State": "Flee" }]
+            },
+            {
+              "Sensor": {
+                "Type": "Mob",
+                "Range": 10,
+                "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }]
+              },
+              "BodyMotion": {
+                "Type": "Flee",
+                "SlowDownDistance": 12,
+                "StopDistance": 18,
+                "RelativeSpeed": 0.85
+              }
+            }
+          ]
+        },
+        {
+          "Sensor": { "Type": "State", "State": "Flee" },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Mob",
+                "Range": 12,
+                "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }]
+              },
+              "BodyMotion": {
+                "Type": "Flee",
+                "SlowDownDistance": 12,
+                "StopDistance": 18,
+                "RelativeSpeed": 0.9
+              }
+            },
+            {
+              "Sensor": { "Type": "Any" },
+              "Actions": [{ "Type": "State", "State": "Idle" }]
+            }
+          ]
+        }
+      ]
+    },
     {
       "Instructions": [
         {

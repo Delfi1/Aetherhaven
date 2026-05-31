@@ -93,6 +93,38 @@ public final class InnPoolService {
         return null;
     }
 
+    private static boolean isRoleEligibleForInnPool(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull List<InnPoolEntry> pool,
+        @Nonnull String roleId
+    ) {
+        for (InnPoolEntry e : pool) {
+            if (roleId.equals(e.npcRoleId())) {
+                return e.requires().isEmpty() || e.requires().satisfiedBy(town, plugin);
+            }
+        }
+        return true;
+    }
+
+    @Nullable
+    private static int[] resolveSpawnLocal(
+        @Nonnull List<InnPoolEntry> pool,
+        @Nonnull String roleId,
+        @Nonnull int[][] visitorSpawnLocals,
+        int slotIndex
+    ) {
+        for (InnPoolEntry e : pool) {
+            if (roleId.equals(e.npcRoleId()) && e.spawnLocal() != null) {
+                return e.spawnLocal();
+            }
+        }
+        if (visitorSpawnLocals.length == 0) {
+            return null;
+        }
+        return visitorSpawnLocals[Math.min(slotIndex, visitorSpawnLocals.length - 1)];
+    }
+
     private static final Object TICK_LOCK = new Object();
     private static String lastTickWorld;
     private static long lastTickGameEpochSecond = Long.MIN_VALUE;
@@ -617,6 +649,43 @@ public final class InnPoolService {
         fillEmptySlotsForSpawn(world, plugin, town, tm, store, innPlot, innDef, spawnLocals, wtr);
     }
 
+    /**
+     * Fills open inn visitor slots when town state changes (e.g. town hall quest complete). Does not require the
+     * morning window; still requires a complete inn plot and loaded management chunk (same as dawn fill).
+     */
+    public static void tryFillOpenSlotsAfterTownStateChange(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town
+    ) {
+        world.execute(
+            () -> {
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                var innPlot = town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+                if (innPlot == null) {
+                    return;
+                }
+                ConstructionDefinition innDef = plugin.getConstructionCatalog().get(AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+                if (innDef == null) {
+                    return;
+                }
+                int[][] spawnLocals = innDef.getVisitorSpawnLocals();
+                if (spawnLocals == null || spawnLocals.length == 0) {
+                    return;
+                }
+                Store<EntityStore> store = world.getEntityStore().getStore();
+                if (store == null) {
+                    return;
+                }
+                WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
+                if (wtr == null) {
+                    return;
+                }
+                fillEmptySlotsForSpawn(world, plugin, town, tm, store, innPlot, innDef, spawnLocals, wtr);
+            }
+        );
+    }
+
     private static void fillEmptySlotsForSpawn(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
@@ -646,7 +715,7 @@ public final class InnPoolService {
         List<String> shuffledPoolOrder = new ArrayList<>();
         for (InnPoolEntry e : pool) {
             String rid = e.npcRoleId();
-            if (rid != null && !rid.isBlank()) {
+            if (rid != null && !rid.isBlank() && isRoleEligibleForInnPool(plugin, town, pool, rid)) {
                 shuffledPoolOrder.add(rid);
             }
         }
@@ -668,6 +737,9 @@ public final class InnPoolService {
             if (town.getInnPoolNpcIds().size() >= MAX_VISITORS) {
                 break;
             }
+            if (!isRoleEligibleForInnPool(plugin, town, pool, roleId)) {
+                continue;
+            }
             if (town.getInnVisitorPoolExcludedRoleIds().contains(roleId)) {
                 continue;
             }
@@ -682,7 +754,7 @@ public final class InnPoolService {
                 kind = TownVillagerBinding.KIND_VISITOR_MERCHANT;
             }
             int slotIndex = town.getInnPoolNpcIds().size();
-            int[] local = spawnLocals[Math.min(slotIndex, spawnLocals.length - 1)];
+            int[] local = resolveSpawnLocal(pool, roleId, spawnLocals, slotIndex);
             if (local == null || local.length != 3) {
                 break;
             }
@@ -807,6 +879,9 @@ public final class InnPoolService {
         }
         if (town.hasQuestActive(AetherhavenConstants.QUEST_BARN)) {
             presentRoles.add(AetherhavenConstants.NPC_RANCHER);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_BUILD_GUILD_HALL)) {
+            presentRoles.add(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID);
         }
     }
 
@@ -936,7 +1011,7 @@ public final class InnPoolService {
         List<String> shuffledPoolOrder = new ArrayList<>();
         for (InnPoolEntry e : pool) {
             String rid = e.npcRoleId();
-            if (rid != null && !rid.isBlank()) {
+            if (rid != null && !rid.isBlank() && isRoleEligibleForInnPool(plugin, town, pool, rid)) {
                 shuffledPoolOrder.add(rid);
             }
         }
@@ -995,6 +1070,9 @@ public final class InnPoolService {
             if (town.getInnPoolNpcIds().size() >= MAX_VISITORS) {
                 break;
             }
+            if (!isRoleEligibleForInnPool(plugin, town, pool, roleId)) {
+                continue;
+            }
             if (town.getInnVisitorPoolExcludedRoleIds().contains(roleId)) {
                 continue;
             }
@@ -1049,6 +1127,9 @@ public final class InnPoolService {
         if (AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
             return town.hasQuestActive(AetherhavenConstants.QUEST_BARN);
         }
+        if (AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_BUILD_GUILD_HALL);
+        }
         return false;
     }
 
@@ -1059,7 +1140,8 @@ public final class InnPoolService {
             || town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR)
             || town.hasQuestActive(AetherhavenConstants.QUEST_MINERS_HUT)
             || town.hasQuestActive(AetherhavenConstants.QUEST_LUMBERMILL)
-            || town.hasQuestActive(AetherhavenConstants.QUEST_BARN);
+            || town.hasQuestActive(AetherhavenConstants.QUEST_BARN)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_BUILD_GUILD_HALL);
     }
 
     private static boolean shouldPreserveInnVisitorFromQuestState(
@@ -1123,6 +1205,14 @@ public final class InnPoolService {
         }
         if (town.hasQuestActive(AetherhavenConstants.QUEST_BARN)) {
             out.add(AetherhavenConstants.NPC_RANCHER);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_BUILD_GUILD_HALL)) {
+            out.add(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID);
+        }
+        if (town.hasQuestCompleted(AetherhavenConstants.QUEST_BUILD_TOWN_HALL)
+            && !town.isGuildHallActive()
+            && !town.getInnVisitorPoolExcludedRoleIds().contains(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID)) {
+            out.add(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID);
         }
         return out;
     }
@@ -1235,6 +1325,9 @@ public final class InnPoolService {
             } else if (AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
                 constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_BARN;
                 residentKind = TownVillagerBinding.KIND_RANCHER;
+            } else if (AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL;
+                residentKind = TownVillagerBinding.KIND_GUILD_MASTER;
             } else {
                 continue;
             }
@@ -1250,6 +1343,9 @@ public final class InnPoolService {
             town.getInnPoolNpcIds().removeIf(x -> u.toString().equalsIgnoreCase(x));
             town.removeInnLockedEntity(u);
             town.addInnVisitorPoolExcludedRoleId(roleId);
+            if (AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equals(roleId)) {
+                town.setGuildHallActive(true);
+            }
             ResidentRegistryService.upsert(town, tm, roleId, residentKind, residentPlot.getPlotId(), uuidComp.getUuid());
             tm.updateTown(town);
             promoted++;

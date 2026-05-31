@@ -48,8 +48,16 @@ public final class TownVillagerBinding implements Component<EntityStore> {
 
     public static final String KIND_VISITOR_RANCHER = "visitor_rancher";
 
+    public static final String KIND_VISITOR_GUILD_MASTER = "visitor_guild_master";
+
     /** Shared pool townsfolk (tourist, guard, idle test, etc.). */
     public static final String KIND_TOWNSFOLK = "townsfolk";
+
+    /** Permanent guild master at the guild hall (after build). */
+    public static final String KIND_GUILD_MASTER = "guild_master";
+
+    /** Hired guard from guild hall adventurer pool. */
+    public static final String KIND_GUARD = "guard";
 
     /** True for inn pool visitors only; permanent residents use {@link #KIND_MERCHANT}, {@link #KIND_ELDER}, etc. */
     public static boolean isVisitorKind(@Nonnull String kind) {

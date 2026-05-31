@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.economy.TownEconomyTimeService;
 import com.hexvane.aetherhaven.farming.SprinklerWateringService;
 import com.hexvane.aetherhaven.feast.FeastService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
+import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
@@ -37,6 +38,7 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         TownEconomyTimeService.onGameTimeFromHub(world, plugin, wtr, store);
         VillagerScheduleService.applyForWorld(world, store, plugin, false);
         InnPoolService.scheduleTickFromHub(world, plugin, wtr);
+        GuildHallAdventurerPoolService.scheduleTickFromHub(world, plugin, wtr);
         SprinklerWateringService.scheduleFromHub(world, store, plugin);
         FeastService.pruneExpiredForWorld(world, plugin, store);
         FeastService.checkGatherTimeoutsForWorld(world, plugin);
@@ -59,6 +61,7 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         }
         VillagerScheduleService.applyForWorld(world, store, plugin, true);
         InnPoolService.scheduleTickFromHub(world, plugin, wtr);
+        GuildHallAdventurerPoolService.scheduleTickFromHub(world, plugin, wtr);
         SprinklerWateringService.scheduleFromHub(world, store, plugin);
         FeastService.pruneExpiredForWorld(world, plugin, store);
         FeastService.checkGatherTimeoutsForWorld(world, plugin);

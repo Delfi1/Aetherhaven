@@ -293,4 +293,12 @@ public final class AetherhavenUiLocalization {
     ) {
         b.set(scoped.apply("#PathToolHudTitleText.TextSpans"), t("aetherhaven_items.aetherhaven.pathTool.hudTitle"));
     }
+
+    /** Title only; dynamic lines are set in {@link com.hexvane.aetherhaven.poi.tool.PoiToolLegendHud#refresh}. */
+    public static void applyPoiToolLegendHudTitle(
+        @Nonnull UICommandBuilder b,
+        @Nonnull UnaryOperator<String> scoped
+    ) {
+        b.set(scoped.apply("#PoiToolHudTitleText.TextSpans"), t("aetherhaven_items.aetherhaven.poiTool.hudTitle"));
+    }
 }

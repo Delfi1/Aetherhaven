@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.0] - Unreleased
+
+### Added
+
+- **POI debug staff overhaul** Three modes (Q): edit existing POIs, place new prefab-saveable POI markers via a configuration GUI (need type, capacity, mount toggle, work equipment), and adventurer spawn markers. JSON building POIs still register on construction and merge with prefab markers (markers win at the same local cell). Guild hall adventurers spawn facing their marker and stand still at the spot.
+- **Townsfolk** Non-essential npcs that are chosen from a large pool of hand-designed characters. They each have three personality traits assigned to them that determine what dialogue lines they use. This will be used for tourists, guards, and more.
+
 ## [1.8.0] - 5/26/2026
 
 ### Updated to Hytale 0.5.0

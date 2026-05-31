@@ -170,6 +170,9 @@ public final class ResidentRegistryService {
             if (TownVillagerBinding.isVisitorKind(r.getKind())) {
                 continue;
             }
+            if (TownVillagerBinding.KIND_GUARD.equals(r.getKind()) && !isGuardCitizen(town, r)) {
+                continue;
+            }
             out.add(r);
         }
         return out;
@@ -199,6 +202,12 @@ public final class ResidentRegistryService {
                     TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
                     if (b == null || !tid.equals(b.getTownId()) || TownVillagerBinding.isVisitorKind(b.getKind())) {
                         continue;
+                    }
+                    if (TownVillagerBinding.KIND_GUARD.equals(b.getKind())) {
+                        UUIDComponent guardUc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                        if (guardUc == null || !isGuardCitizenUuid(town, guardUc.getUuid())) {
+                            continue;
+                        }
                     }
                     UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
                     NPCEntity npc = archetypeChunk.getComponent(i, NPCEntity.getComponentType());
@@ -374,5 +383,20 @@ public final class ResidentRegistryService {
             }
             return;
         }
+    }
+
+    private static boolean isGuardCitizen(@Nonnull TownRecord town, @Nonnull ResidentNpcRecord record) {
+        UUID entityUuid = record.getLastEntityUuid();
+        return entityUuid != null && isGuardCitizenUuid(town, entityUuid);
+    }
+
+    private static boolean isGuardCitizenUuid(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            UUID u = rec.getEntityUuid();
+            if (u != null && u.equals(entityUuid)) {
+                return rec.isCitizen();
+            }
+        }
+        return false;
     }
 }

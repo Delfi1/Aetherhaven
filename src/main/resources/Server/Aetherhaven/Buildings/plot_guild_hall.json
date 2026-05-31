@@ -1,0 +1,33 @@
+{
+  "id": "plot_guild_hall",
+  "displayName": "Guild Hall",
+  "description": "A hall for the guild master, a quest board, and adventurers looking for guard work.",
+  "prefabPath": "Guild_Hall.prefab.json",
+  "selfBuildGameDays": 1,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Guild_Hall",
+  "plotAnchorOffset": [9, 0, 9],
+  "managementBlockLocalPos": [3, 2, -6],
+  "adventurerSpawnLocals": [],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 2,
+  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 520 },
+    { "resourceTypeId": "Rock", "count": 280 }
+  ],
+  "pois": [
+    {
+      "localX": 3,
+      "localY": 2,
+      "localZ": -6,
+      "blockTypeId": "Aetherhaven_Management_Block",
+      "interactionKind": "WORK_SURFACE",
+      "tags": ["WORK"],
+      "capacity": 1,
+      "interactionTargetLocalX": 2,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -6
+    }
+  ]
+}

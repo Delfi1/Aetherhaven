@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "q_house_guard",
+  "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
+  "title": "A home for your guard",
+  "description": "Lyra can help you find a house for a guard you hired at the guild hall. Once they have a roof, they count as a full resident.",
+  "prerequisites": {
+    "completedQuestIds": ["q_build_guild_hall"],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Take a house plot token from Lyra at the guild hall."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the house prefab."
+    },
+    {
+      "id": "assign",
+      "kind": "custom",
+      "text": "Assign your guard as resident on the house management block."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Return to Lyra to finish the quest."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "none" }
+}
