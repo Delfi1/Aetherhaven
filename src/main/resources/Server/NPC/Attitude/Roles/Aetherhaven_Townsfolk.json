@@ -1,0 +1,12 @@
+{
+  "Groups": {
+    "Friendly": [
+      "Friendly",
+      "Aetherhaven_Townsfolk",
+      "Player"
+    ],
+    "Hostile": [
+      "Aggressive"
+    ]
+  }
+}

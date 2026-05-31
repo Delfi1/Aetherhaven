@@ -31,5 +31,6 @@ public final class AetherhavenCommand extends AbstractCommandCollection {
         this.addSubCommand(new AetherhavenDifficultyCommand());
         this.addSubCommand(new AetherhavenWallDebugCommand());
         this.addSubCommand(new AetherhavenTownsfolkCommand());
+        this.addSubCommand(new AetherhavenGuildCommand());
     }
 }

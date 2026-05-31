@@ -5,32 +5,38 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileDefinition;
-import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.HiredGuardRecord;
+import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
-import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolPersistence;
-import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolState;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolCheckoutRecord;
+import com.hexvane.aetherhaven.villager.NpcModelSpawnUtil;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
+import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
-import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.hypixel.hytale.server.npc.role.Role;
-import com.hypixel.hytale.server.npc.systems.RoleChangeSystem;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3d;
 
 public final class GuardHireService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -88,7 +94,8 @@ public final class GuardHireService {
         if (pu == null || !town.hasMemberOrOwner(pu.getUuid())) {
             return false;
         }
-        if (!GuildHallAdventurerPoolService.isGuildHallAdventurer(town, npcUuid(store, npcRef))) {
+        UUID adventurerUuid = npcUuid(store, npcRef);
+        if (adventurerUuid == null || !GuildHallAdventurerPoolService.isGuildHallAdventurer(town, adventurerUuid)) {
             return false;
         }
         TownsfolkCharacterBinding tb = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
@@ -97,6 +104,12 @@ public final class GuardHireService {
             return false;
         }
         if (!TownsfolkAssignmentKinds.isGuildHallAdventurer(tb.getAssignmentKind())) {
+            return false;
+        }
+
+        TownsfolkPoolCheckoutRecord checkout = TownsfolkExistenceService.checkoutForCharacter(world, plugin, tb.getCharacterId());
+        if (checkout == null) {
+            LOGGER.atWarning().log("Cannot hire %s: missing townsfolk ledger entry", tb.getCharacterId());
             return false;
         }
 
@@ -117,13 +130,12 @@ public final class GuardHireService {
             return false;
         }
 
-        UUID entityUuid = npcUuid(store, npcRef);
-        if (entityUuid == null) {
+        TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
+        if (tc == null) {
             return false;
         }
-
-        town.getGuildHallAdventurerNpcIds().removeIf(s -> entityUuid.toString().equalsIgnoreCase(s != null ? s.trim() : ""));
-        town.getGuildHallAdventurerSlotByNpcId().remove(entityUuid.toString());
+        Vector3d spawnPos = new Vector3d(tc.getPosition());
+        Rotation3f spawnRot = new Rotation3f(tc.getRotation());
 
         var guildPlot = town.findCompletePlotWithConstruction(
             plugin.getConstructionCatalog(),
@@ -131,13 +143,106 @@ public final class GuardHireService {
         );
         UUID jobPlot = guildPlot != null ? guildPlot.getPlotId() : null;
 
+        GuardHireCleanup.prepareForGuardDuty(npcRef, store);
+        Ref<EntityStore> guardRef = spawnHiredGuard(world, plugin, store, profile, tb, town, spawnPos, spawnRot, jobPlot, guildPlot);
+        if (guardRef == null) {
+            LOGGER.atWarning().log("Failed to spawn hired guard for townsfolk %s in town %s", tb.getCharacterId(), town.getTownId());
+            return false;
+        }
+
+        UUIDComponent guardUuidComp = store.getComponent(guardRef, UUIDComponent.getComponentType());
+        if (guardUuidComp == null) {
+            store.removeEntity(guardRef, RemoveReason.REMOVE);
+            return false;
+        }
+        UUID newEntityUuid = guardUuidComp.getUuid();
+
+        if (!TownsfolkExistenceService.transferInstanceOnHire(world, plugin, tb.getCharacterId(), newEntityUuid, town.getTownId())) {
+            store.removeEntity(guardRef, RemoveReason.REMOVE);
+            return false;
+        }
+
+        store.removeEntity(npcRef, RemoveReason.REMOVE);
+        TownsfolkExistenceService.purgeDuplicateEntities(store, tb.getCharacterId(), newEntityUuid);
+
+        Integer hiredSlot = town.getGuildHallAdventurerSlotByNpcId().get(adventurerUuid.toString());
+        town.getGuildHallAdventurerNpcIds().removeIf(s -> adventurerUuid.toString().equalsIgnoreCase(s != null ? s.trim() : ""));
+        town.getGuildHallAdventurerSlotByNpcId().remove(adventurerUuid.toString());
+        if (hiredSlot != null) {
+            town.getGuildHallAdventurerFilledSlots().remove(hiredSlot);
+        }
+
+        town.getHiredGuardRecords().removeIf(r -> tb.getCharacterId().equalsIgnoreCase(r.getCharacterId()));
+        town.getHiredGuardRecords().add(new HiredGuardRecord(tb.getCharacterId(), newEntityUuid, profileId, false));
+        tm.updateTown(town);
+
+        LOGGER.atInfo().log("Hired guard %s for town %s", tb.getCharacterId(), town.getTownId());
+        return true;
+    }
+
+    @Nullable
+    private static Ref<EntityStore> spawnHiredGuard(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull EquipmentProfileDefinition profile,
+        @Nonnull TownsfolkCharacterBinding tb,
+        @Nonnull TownRecord town,
+        @Nonnull Vector3d spawnPos,
+        @Nonnull Rotation3f spawnRot,
+        @Nullable UUID jobPlot,
+        @Nullable PlotInstance guildPlot
+    ) {
+        NPCPlugin npcPlugin = NPCPlugin.get();
+        if (npcPlugin == null) {
+            return null;
+        }
+        String guardRole = profile.getGuardNpcRole();
+        int roleIndex = npcPlugin.getIndex(guardRole);
+        if (roleIndex < 0) {
+            return null;
+        }
+
+        TownsfolkCharacterDefinition character = plugin.getTownsfolkCharacterCatalog().byId(tb.getCharacterId());
+        Model spawnModel = null;
+        final float spawnScale;
+        if (character != null) {
+            spawnModel = NpcModelSpawnUtil.buildScaledModel(character.getModelAssetId(), character.getModelScale());
+            spawnScale = spawnModel != null ? spawnModel.getScale() : 1.0f;
+        } else {
+            spawnScale = 1.0f;
+        }
+
+        var pair = npcPlugin.spawnEntity(
+            store,
+            roleIndex,
+            spawnPos,
+            spawnRot,
+            spawnModel,
+            (npcEntity, holder, st) -> npcEntity.setInitialModelScale(spawnScale),
+            null
+        );
+        if (pair == null) {
+            return null;
+        }
+        Ref<EntityStore> guardRef = pair.first();
+
+        if (character != null) {
+            String displayName = character.getDisplayName();
+            if (displayName != null) {
+                store.putComponent(guardRef, PersistentDisplayName.getComponentType(), new PersistentDisplayName(Message.raw(displayName)));
+            }
+        }
+
+        String handle = "Guard_" + tb.getCharacterId() + "_" + shortHex(town.getTownId());
+        store.putComponent(guardRef, AetherhavenVillagerHandle.getComponentType(), new AetherhavenVillagerHandle(handle));
         store.putComponent(
-            npcRef,
+            guardRef,
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_GUARD, jobPlot, jobPlot)
         );
         store.putComponent(
-            npcRef,
+            guardRef,
             TownsfolkCharacterBinding.getComponentType(),
             new TownsfolkCharacterBinding(
                 tb.getCharacterId(),
@@ -148,42 +253,24 @@ public final class GuardHireService {
             )
         );
 
-        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
-        var checkout = pool.checkoutForCharacter(tb.getCharacterId());
-        if (checkout != null) {
-            checkout.setHired(true);
-            TownsfolkPoolPersistence.save(world, plugin, pool);
+        NPCEntity npc = store.getComponent(guardRef, NPCEntity.getComponentType());
+        if (npc != null) {
+            if (guildPlot != null) {
+                npc.setLeashPoint(GuardHireCleanup.patrolLeashPoint(store, guildPlot));
+            }
+            if (npc.getRole() != null) {
+                npc.getRole().getStateSupport().setState(guardRef, "Idle", null, store);
+            }
         }
 
-        town.getHiredGuardRecords().removeIf(r -> tb.getCharacterId().equalsIgnoreCase(r.getCharacterId()));
-        town.getHiredGuardRecords().add(new HiredGuardRecord(tb.getCharacterId(), entityUuid, profileId, false));
-        tm.updateTown(town);
-
-        GuardHireCleanup.prepareForGuardDuty(npcRef, store, guildPlot);
-        changeToGuardRole(npcRef, store, profile);
-        VillagerEquipmentService.applyProfile(npcRef, store, null, plugin.getEquipmentProfileCatalog(), profileId);
-        LOGGER.atInfo().log("Hired guard %s for town %s", tb.getCharacterId(), town.getTownId());
-        return true;
+        VillagerEquipmentService.applyProfile(guardRef, store, null, plugin.getEquipmentProfileCatalog(), profile.getId());
+        return guardRef;
     }
 
-    private static void changeToGuardRole(
-        @Nonnull Ref<EntityStore> npcRef,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull EquipmentProfileDefinition profile
-    ) {
-        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-        NPCPlugin npcPlugin = NPCPlugin.get();
-        if (npc == null || npcPlugin == null || npc.getRole() == null) {
-            return;
-        }
-        String roleName = profile.getGuardNpcRole();
-        int guardIndex = npcPlugin.getIndex(roleName);
-        if (guardIndex < 0) {
-            LOGGER.atWarning().log("Guard NPC role %s not found", roleName);
-            return;
-        }
-        Role role = npc.getRole();
-        RoleChangeSystem.requestRoleChange(npcRef, role, guardIndex, false, "Idle", null, store);
+    @Nonnull
+    private static String shortHex(@Nonnull UUID townId) {
+        String hex = townId.toString().replace("-", "");
+        return hex.length() >= 8 ? hex.substring(0, 8) : hex;
     }
 
     @Nullable

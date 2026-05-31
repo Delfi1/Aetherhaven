@@ -76,5 +76,9 @@
       "Texture": "Cosmetics/Shoes/BootsBasic_Textures/Scavenger_Leather.png"
     }
   ],
-  "Icon": "Icons/ModelsGenerated/Male_Human_04.png"
+  "Icon": "Icons/ModelsGenerated/Male_Human_04.png",
+  "Model": "Characters/Player.blockymodel",
+  "Texture": "Characters/Player_Textures/Player_Muscular_Greyscale.png",
+  "GradientSet": "Skin",
+  "GradientId": "04"
 }

@@ -2,8 +2,8 @@ package com.hexvane.aetherhaven.townsfolk;
 
 import com.google.gson.annotations.SerializedName;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
+/** Persisted ledger row: one catalog character checked out into the world. */
 public final class TownsfolkPoolCheckoutRecord {
     @SerializedName("characterId")
     private String characterId = "";
@@ -17,11 +17,11 @@ public final class TownsfolkPoolCheckoutRecord {
     @SerializedName("assignmentKind")
     private String assignmentKind = "";
 
+    @SerializedName("instanceGeneration")
+    private int instanceGeneration = 1;
+
     @SerializedName("activePersonalityId")
     private String activePersonalityId = "";
-
-    @SerializedName("hired")
-    private boolean hired;
 
     public TownsfolkPoolCheckoutRecord() {}
 
@@ -32,7 +32,7 @@ public final class TownsfolkPoolCheckoutRecord {
         @Nonnull String assignmentKind,
         @Nonnull String activePersonalityId
     ) {
-        this(characterId, townId, entityUuid, assignmentKind, activePersonalityId, false);
+        this(characterId, townId, entityUuid, assignmentKind, 1, activePersonalityId);
     }
 
     public TownsfolkPoolCheckoutRecord(
@@ -40,15 +40,15 @@ public final class TownsfolkPoolCheckoutRecord {
         @Nonnull String townId,
         @Nonnull String entityUuid,
         @Nonnull String assignmentKind,
-        @Nonnull String activePersonalityId,
-        boolean hired
+        int instanceGeneration,
+        @Nonnull String activePersonalityId
     ) {
         this.characterId = characterId;
         this.townId = townId;
         this.entityUuid = entityUuid;
         this.assignmentKind = assignmentKind;
+        this.instanceGeneration = Math.max(1, instanceGeneration);
         this.activePersonalityId = activePersonalityId;
-        this.hired = hired;
     }
 
     @Nonnull
@@ -71,16 +71,28 @@ public final class TownsfolkPoolCheckoutRecord {
         return assignmentKind != null ? assignmentKind : "";
     }
 
+    public int getInstanceGeneration() {
+        return instanceGeneration;
+    }
+
     @Nonnull
     public String getActivePersonalityId() {
         return activePersonalityId != null ? activePersonalityId : "";
     }
 
-    public boolean isHired() {
-        return hired;
+    public void setEntityUuid(@Nonnull String entityUuid) {
+        this.entityUuid = entityUuid;
     }
 
-    public void setHired(boolean hired) {
-        this.hired = hired;
+    public void setAssignmentKind(@Nonnull String assignmentKind) {
+        this.assignmentKind = assignmentKind;
+    }
+
+    public void setTownId(@Nonnull String townId) {
+        this.townId = townId;
+    }
+
+    public void setInstanceGeneration(int instanceGeneration) {
+        this.instanceGeneration = Math.max(1, instanceGeneration);
     }
 }

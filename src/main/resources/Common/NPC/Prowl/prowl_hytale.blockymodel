@@ -497,6 +497,25 @@
                                         "doubleSided": false,
                                         "shadingMode": "flat"
                                       }
+                                    },
+                                    {
+                                      "id": "14",
+                                      "name": "L-Attachment",
+                                      "position": {"x": 0, "y": -6, "z": 0},
+                                      "orientation": {"x": 0.70711, "y": 0, "z": 0, "w": 0.70711},
+                                      "shape": {
+                                        "type": "none",
+                                        "offset": {"x": 0, "y": 0, "z": 0},
+                                        "stretch": {"x": 1, "y": 1, "z": 1},
+                                        "settings": {
+                                          "isPiece": false
+                                        },
+                                        "textureLayout": {},
+                                        "unwrapMode": "custom",
+                                        "visible": true,
+                                        "doubleSided": false,
+                                        "shadingMode": "flat"
+                                      }
                                     }
                                   ]
                                 }
@@ -507,7 +526,7 @@
                       ]
                     },
                     {
-                      "id": "14",
+                      "id": "15",
                       "name": "R-Shoulder",
                       "position": {"x": 16.928, "y": 14.79204, "z": -1.56558},
                       "orientation": {"x": 0, "y": 0, "z": 0.04362, "w": 0.99905},
@@ -526,7 +545,7 @@
                       },
                       "children": [
                         {
-                          "id": "15",
+                          "id": "16",
                           "name": "R-Arm",
                           "position": {"x": -0.09282, "y": -2.7839, "z": 0},
                           "orientation": {"x": 0, "y": 1, "z": 0, "w": 0},
@@ -577,7 +596,7 @@
                           },
                           "children": [
                             {
-                              "id": "16",
+                              "id": "17",
                               "name": "shoulderL--C1",
                               "position": {"x": 34.99008, "y": 16.27228, "z": 0.06542},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -629,7 +648,7 @@
                               }
                             },
                             {
-                              "id": "17",
+                              "id": "18",
                               "name": "R-Forearm",
                               "position": {"x": -1.4137, "y": -4.99018, "z": 0.06332},
                               "orientation": {"x": 0, "y": 1, "z": 0, "w": 0},
@@ -680,7 +699,7 @@
                               },
                               "children": [
                                 {
-                                  "id": "18",
+                                  "id": "19",
                                   "name": "R-Hand",
                                   "position": {"x": 2.67258, "y": -7.98036, "z": -0.1357},
                                   "orientation": {"x": 0, "y": 0, "z": 0.02181, "w": 0.99976},
@@ -699,7 +718,7 @@
                                   },
                                   "children": [
                                     {
-                                      "id": "19",
+                                      "id": "20",
                                       "name": "handL--C1",
                                       "position": {"x": -2.3871, "y": -6.14176, "z": 0},
                                       "orientation": {"x": 0, "y": 0, "z": -0.04362, "w": 0.99905},
@@ -749,6 +768,25 @@
                                         "doubleSided": false,
                                         "shadingMode": "flat"
                                       }
+                                    },
+                                    {
+                                      "id": "21",
+                                      "name": "R-Attachment",
+                                      "position": {"x": 0, "y": -6, "z": 0},
+                                      "orientation": {"x": 0.70711, "y": 0, "z": 0, "w": 0.70711},
+                                      "shape": {
+                                        "type": "none",
+                                        "offset": {"x": 0, "y": 0, "z": 0},
+                                        "stretch": {"x": 1, "y": 1, "z": 1},
+                                        "settings": {
+                                          "isPiece": false
+                                        },
+                                        "textureLayout": {},
+                                        "unwrapMode": "custom",
+                                        "visible": true,
+                                        "doubleSided": false,
+                                        "shadingMode": "flat"
+                                      }
                                     }
                                   ]
                                 }
@@ -759,7 +797,7 @@
                       ]
                     },
                     {
-                      "id": "20",
+                      "id": "22",
                       "name": "Head",
                       "position": {"x": 2.00194, "y": 16.5, "z": -5.5},
                       "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -778,7 +816,7 @@
                       },
                       "children": [
                         {
-                          "id": "21",
+                          "id": "23",
                           "name": "neck--C1",
                           "position": {"x": -0.00194, "y": -2.5, "z": 2.89474},
                           "orientation": {"x": 0, "y": 1, "z": 0, "w": 0},
@@ -830,7 +868,7 @@
                           }
                         },
                         {
-                          "id": "22",
+                          "id": "24",
                           "name": "Neck",
                           "position": {"x": -1.07546, "y": 13.41652, "z": 12.8944},
                           "orientation": {"x": 0, "y": 1, "z": 0, "w": 0},
@@ -881,7 +919,7 @@
                           },
                           "children": [
                             {
-                              "id": "23",
+                              "id": "25",
                               "name": "hair--C1",
                               "position": {"x": 0, "y": 0, "z": 0},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -933,7 +971,7 @@
                               }
                             },
                             {
-                              "id": "24",
+                              "id": "26",
                               "name": "hair--C2",
                               "position": {"x": 0, "y": -21.59704, "z": -8.67918},
                               "orientation": {"x": -0.08716, "y": 0, "z": 0, "w": 0.99619},
@@ -960,7 +998,7 @@
                               }
                             },
                             {
-                              "id": "25",
+                              "id": "27",
                               "name": "hair--C3",
                               "position": {"x": 0, "y": 16, "z": 0},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1007,7 +1045,7 @@
                               }
                             },
                             {
-                              "id": "26",
+                              "id": "28",
                               "name": "Ear1",
                               "position": {"x": -17.20748, "y": -5.6282, "z": -1.10526},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1026,7 +1064,7 @@
                               },
                               "children": [
                                 {
-                                  "id": "27",
+                                  "id": "29",
                                   "name": "earRight--C1",
                                   "position": {"x": 0, "y": 0, "z": 0},
                                   "orientation": {"x": 0, "y": 0, "z": 0.04362, "w": 0.99905},
@@ -1078,7 +1116,7 @@
                                   }
                                 },
                                 {
-                                  "id": "28",
+                                  "id": "30",
                                   "name": "earLeft--C2",
                                   "position": {"x": 33.96044, "y": 0.54168, "z": 1.5},
                                   "orientation": {"x": 0, "y": 0, "z": -0.04362, "w": 0.99905},
@@ -1132,7 +1170,7 @@
                               ]
                             },
                             {
-                              "id": "29",
+                              "id": "31",
                               "name": "eyeballRight--C4",
                               "position": {"x": -1, "y": -110, "z": 0.9},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1160,7 +1198,7 @@
                               }
                             },
                             {
-                              "id": "30",
+                              "id": "32",
                               "name": "eyeballLeft--C5",
                               "position": {"x": 1, "y": -110, "z": 0.9},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1188,7 +1226,7 @@
                               }
                             },
                             {
-                              "id": "31",
+                              "id": "33",
                               "name": "R-Eyebrow-Attachment",
                               "position": {"x": 8, "y": 3, "z": -14.05},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1215,7 +1253,7 @@
                               }
                             },
                             {
-                              "id": "32",
+                              "id": "34",
                               "name": "L-Eyebrow-Attachment",
                               "position": {"x": -8, "y": 3, "z": -14.05},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1242,7 +1280,7 @@
                               }
                             },
                             {
-                              "id": "33",
+                              "id": "35",
                               "name": "Mouth",
                               "position": {"x": 0, "y": -9.2, "z": -14.15},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1269,7 +1307,7 @@
                               }
                             },
                             {
-                              "id": "34",
+                              "id": "36",
                               "name": "L-Eye-Attachment",
                               "position": {"x": -7.35, "y": -2.4, "z": -13.85},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1296,7 +1334,7 @@
                               }
                             },
                             {
-                              "id": "35",
+                              "id": "37",
                               "name": "R-Eye-Attachment",
                               "position": {"x": 7.35, "y": -2.4, "z": -13.85},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1323,7 +1361,7 @@
                               }
                             },
                             {
-                              "id": "36",
+                              "id": "38",
                               "name": "L-Eyelid",
                               "position": {"x": -8, "y": 3, "z": -13.95},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1350,7 +1388,7 @@
                               }
                             },
                             {
-                              "id": "37",
+                              "id": "39",
                               "name": "R-Eyelid",
                               "position": {"x": 8, "y": 3, "z": -13.95},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1377,7 +1415,7 @@
                               }
                             },
                             {
-                              "id": "38",
+                              "id": "40",
                               "name": "L-Eyelid-Bot",
                               "position": {"x": -8, "y": -9, "z": -13.9},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1404,7 +1442,7 @@
                               }
                             },
                             {
-                              "id": "39",
+                              "id": "41",
                               "name": "R-Eyelid-Bot",
                               "position": {"x": 8, "y": -9, "z": -13.9},
                               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1439,7 +1477,7 @@
               ]
             },
             {
-              "id": "40",
+              "id": "42",
               "name": "R-Thigh",
               "position": {"x": 8, "y": 23.5, "z": 0.5},
               "orientation": {"x": 0.00084, "y": 0.01918, "z": 0.04361, "w": 0.99886},
@@ -1490,7 +1528,7 @@
               },
               "children": [
                 {
-                  "id": "41",
+                  "id": "43",
                   "name": "R-Calf",
                   "position": {"x": 0, "y": -8, "z": -3},
                   "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1536,7 +1574,7 @@
                   },
                   "children": [
                     {
-                      "id": "42",
+                      "id": "44",
                       "name": "R-Foot",
                       "position": {"x": -0.15706, "y": -9.99794, "z": -2.10526},
                       "orientation": {"x": 0, "y": 0, "z": -0.04362, "w": 0.99905},
@@ -1587,7 +1625,7 @@
                       },
                       "children": [
                         {
-                          "id": "43",
+                          "id": "45",
                           "name": "footL--C1",
                           "position": {"x": 0, "y": 8, "z": 6},
                           "orientation": {"x": 0.17365, "y": 0, "z": 0, "w": 0.98481},
@@ -1615,7 +1653,7 @@
                           }
                         },
                         {
-                          "id": "44",
+                          "id": "46",
                           "name": "footL--C2",
                           "position": {"x": 0.002, "y": 0.37992, "z": 10.57076},
                           "orientation": {"x": -0.13053, "y": 0, "z": 0, "w": 0.99144},
@@ -1673,7 +1711,7 @@
               ]
             },
             {
-              "id": "45",
+              "id": "47",
               "name": "L-Thigh",
               "position": {"x": -8, "y": 23.5, "z": 0.5},
               "orientation": {"x": 0.00084, "y": -0.01918, "z": -0.04361, "w": 0.99886},
@@ -1724,7 +1762,7 @@
               },
               "children": [
                 {
-                  "id": "46",
+                  "id": "48",
                   "name": "L-Calf",
                   "position": {"x": 0, "y": -8, "z": -3},
                   "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
@@ -1770,7 +1808,7 @@
                   },
                   "children": [
                     {
-                      "id": "47",
+                      "id": "49",
                       "name": "L-Foot",
                       "position": {"x": 0.15706, "y": -9.99794, "z": -2.10526},
                       "orientation": {"x": 0, "y": 0, "z": 0.04362, "w": 0.99905},
@@ -1821,7 +1859,7 @@
                       },
                       "children": [
                         {
-                          "id": "48",
+                          "id": "50",
                           "name": "footL--C1",
                           "position": {"x": 7.00194, "y": -3.5, "z": -2.10526},
                           "orientation": {"x": 0.17365, "y": 0, "z": 0, "w": 0.98481},
@@ -1849,7 +1887,7 @@
                           }
                         },
                         {
-                          "id": "49",
+                          "id": "51",
                           "name": "footL--C2",
                           "position": {"x": 7.00194, "y": -3.5, "z": -2.10526},
                           "orientation": {"x": -0.13053, "y": 0, "z": 0, "w": 0.99144},

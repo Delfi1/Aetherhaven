@@ -9,6 +9,7 @@ import com.hypixel.hytale.server.core.cosmetics.PlayerSkinGradientSet;
 import com.hypixel.hytale.server.core.cosmetics.PlayerSkinPart;
 import com.hypixel.hytale.server.core.cosmetics.PlayerSkinPartTexture;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -43,17 +44,47 @@ public final class PlayerSkinModelExporter {
     private static final String EAR_DEFAULT_NPC_GREYSCALE =
         "Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png";
     private static final String LEGACY_EAR_GREYSCALE = "Characters/Body_Attachments/Ears/Ears.png";
+    private static final String PLAYER_BLOCKYMODEL = "Characters/Player.blockymodel";
+    private static final String GENERIC_SHORT_HAIR = "Characters/Haircuts/GenericShort.blockymodel";
+    private static final String GENERIC_MEDIUM_HAIR = "Characters/Haircuts/GenericMedium.blockymodel";
+    private static final String GENERIC_LONG_HAIR = "Characters/Haircuts/GenericLong.blockymodel";
 
     private PlayerSkinModelExporter() {}
 
     @Nonnull
     public static JsonObject toModelJson(@Nonnull PlayerSkin skin, @Nonnull CosmeticRegistry registry) {
+        List<ModelAttachment> list = buildAttachmentList(skin, registry);
+        String rootModel = null;
+        String rootTexture = null;
+        String rootGradientSet = null;
+        String rootGradientId = null;
+        for (Iterator<ModelAttachment> it = list.iterator(); it.hasNext(); ) {
+            ModelAttachment body = it.next();
+            if (PLAYER_BLOCKYMODEL.equals(body.getModel())) {
+                rootModel = body.getModel();
+                rootTexture = body.getTexture();
+                rootGradientSet = body.getGradientSet();
+                rootGradientId = body.getGradientId();
+                it.remove();
+                break;
+            }
+        }
+        sanitizeAttachmentList(list);
+
         JsonArray attachments = new JsonArray();
-        for (ModelAttachment ma : toModelAttachments(skin, registry)) {
+        for (ModelAttachment ma : list) {
             attachments.add(modelAttachmentToJson(ma));
         }
         JsonObject root = new JsonObject();
         root.addProperty("Parent", PARENT_PLAYER);
+        if (rootModel != null) {
+            root.addProperty("Model", rootModel);
+            root.addProperty("Texture", rootTexture);
+            if (rootGradientSet != null && !rootGradientSet.isEmpty()) {
+                root.addProperty("GradientSet", rootGradientSet);
+                root.addProperty("GradientId", rootGradientId);
+            }
+        }
         root.add("DefaultAttachments", attachments);
         return root;
     }
@@ -66,6 +97,13 @@ public final class PlayerSkinModelExporter {
      */
     @Nonnull
     public static ModelAttachment[] toModelAttachments(@Nonnull PlayerSkin skin, @Nonnull CosmeticRegistry registry) {
+        List<ModelAttachment> list = buildAttachmentList(skin, registry);
+        sanitizeAttachmentList(list);
+        return list.toArray(ModelAttachment[]::new);
+    }
+
+    @Nonnull
+    private static List<ModelAttachment> buildAttachmentList(@Nonnull PlayerSkin skin, @Nonnull CosmeticRegistry registry) {
         List<ModelAttachment> list = new ArrayList<>();
         for (Slot slot : Slot.values()) {
             String raw;
@@ -84,7 +122,46 @@ public final class PlayerSkinModelExporter {
                 list.add(one);
             }
         }
-        return list.toArray(ModelAttachment[]::new);
+        return list;
+    }
+
+    /**
+     * Body mesh from the skin's body characteristic (e.g. muscular), before NPC sanitization drops the body attachment.
+     */
+    @Nullable
+    public static String findPlayerBodyModel(@Nonnull PlayerSkin skin, @Nonnull CosmeticRegistry registry) {
+        for (ModelAttachment attachment : buildAttachmentList(skin, registry)) {
+            if (PLAYER_BLOCKYMODEL.equals(attachment.getModel())) {
+                return attachment.getModel();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Drops NPC-problematic attachments: duplicate {@code Generic*} hair bases when a styled haircut is present, and
+     * {@code Player.blockymodel} body meshes (the {@code Player} parent already provides the base mesh).
+     */
+    public static void sanitizeAttachmentList(@Nonnull List<ModelAttachment> list) {
+        removeRedundantGenericHaircuts(list);
+        list.removeIf(a -> PLAYER_BLOCKYMODEL.equals(a.getModel()));
+    }
+
+    private static void removeRedundantGenericHaircuts(@Nonnull List<ModelAttachment> list) {
+        boolean hasStyledHaircut =
+            list.stream().anyMatch(a -> a.getModel() != null && isStyledHaircutModel(a.getModel()));
+        if (!hasStyledHaircut) {
+            return;
+        }
+        list.removeIf(a -> a.getModel() != null && isGenericHaircutModel(a.getModel()));
+    }
+
+    private static boolean isGenericHaircutModel(@Nonnull String model) {
+        return GENERIC_SHORT_HAIR.equals(model) || GENERIC_MEDIUM_HAIR.equals(model) || GENERIC_LONG_HAIR.equals(model);
+    }
+
+    private static boolean isStyledHaircutModel(@Nonnull String model) {
+        return model.startsWith("Characters/Haircuts/") && !isGenericHaircutModel(model);
     }
 
     @Nonnull

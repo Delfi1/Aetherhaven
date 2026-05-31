@@ -79,5 +79,9 @@
       "GradientSet": "Flashy_Synthetic",
       "GradientId": "Black"
     }
-  ]
+  ],
+  "Model": "Characters/Player.blockymodel",
+  "Texture": "Characters/Player_Textures/Player_Greyscale.png",
+  "GradientSet": "Skin",
+  "GradientId": "26"
 }

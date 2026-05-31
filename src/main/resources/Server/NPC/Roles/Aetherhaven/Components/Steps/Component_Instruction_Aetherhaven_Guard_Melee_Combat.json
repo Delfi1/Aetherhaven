@@ -2,7 +2,7 @@
   "Type": "Component",
   "Class": "Instruction",
   "Interface": "Hytale.Instruction",
-  "$Comment": "Custom melee combat for Aetherhaven town guards.",
+  "$Comment": "Melee combat: MaintainDistance strafing + Push separation on the role keeps co-attacking knights from stacking.",
   "Parameters": {
     "ViewRange": {
       "Value": 24,
@@ -12,72 +12,88 @@
       "Value": 2.5,
       "Description": "Melee attack range"
     },
+    "DesiredAttackDistanceRange": {
+      "Value": [2, 2.5],
+      "Description": "Preferred melee engagement band (skeleton knight style)"
+    },
+    "CombatBehaviorDistance": {
+      "Value": 24,
+      "Description": "Distance within which combat positioning runs"
+    },
+    "StrafingDurationRange": {
+      "Value": [0.4, 1],
+      "Description": "How long to strafe while maintaining distance"
+    },
+    "StrafingFrequencyRange": {
+      "Value": [0.5, 1.5],
+      "Description": "How often to strafe while maintaining distance"
+    },
     "MeleeAttack": {
       "Value": "Root_NPC_Attack_Melee",
       "Description": "Melee attack interaction root"
+    },
+    "AttackPauseRange": {
+      "Value": [1, 2],
+      "Description": "Pause between melee swings"
+    },
+    "CombatAttackPreDelay": {
+      "Value": [0.15, 0.35],
+      "Description": "Brief stop before swinging so the hit connects"
     }
   },
   "Content": {
-    "Sensor": {
-      "Type": "Or",
-      "Sensors": [
-        {
-          "Type": "Mob",
-          "Range": { "Compute": "ViewRange" },
-          "LockOnTarget": true,
-          "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
-          "Collector": { "Type": "CombatTargets" }
-        },
-        { "Type": "HasHostileTargetMemory" }
-      ]
-    },
     "Instructions": [
       {
         "Continue": true,
         "Sensor": { "Type": "Damage", "Combat": true },
-        "Actions": [{ "Type": "AddToHostileTargetMemory" }]
+        "Actions": [
+          { "Type": "AddToHostileTargetMemory" },
+          { "Type": "OverrideAttitude", "Attitude": "Hostile", "Duration": 60 }
+        ]
       },
       {
         "Continue": true,
         "Sensor": {
           "Type": "Target",
-          "Range": { "Compute": "ViewRange" },
+          "Range": { "Compute": "CombatBehaviorDistance" },
           "Filters": [{ "Type": "LineOfSight" }]
         },
-        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 0.5, "HitProbability": 1.0 }
+        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 1.5, "HitProbability": 1.0 }
       },
       {
+        "Continue": true,
         "Sensor": {
           "Type": "Target",
           "Range": { "Compute": "AttackDistance" },
           "Filters": [{ "Type": "LineOfSight" }]
         },
         "ActionsBlocking": true,
-        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 0.5, "HitProbability": 1.0 },
-        "BodyMotion": {
-          "Type": "MaintainDistance",
-          "DesiredDistanceRange": [2, 3],
-          "MoveThreshold": 0.15,
-          "RelativeForwardsSpeed": 0.45,
-          "RelativeBackwardsSpeed": 0.45
-        },
+        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 1.5, "HitProbability": 1.0 },
         "Actions": [
+          { "Type": "Timeout", "Delay": { "Compute": "CombatAttackPreDelay" } },
           {
             "Type": "Attack",
             "Attack": { "Compute": "MeleeAttack" },
-            "LineOfSight": true,
             "AvoidFriendlyFire": true,
-            "AttackPauseRange": [1, 2]
+            "AttackPauseRange": { "Compute": "AttackPauseRange" }
           }
         ]
       },
       {
-        "Sensor": { "Type": "Target", "Range": { "Compute": "ViewRange" } },
+        "Continue": true,
+        "Sensor": {
+          "Type": "Target",
+          "Range": { "Compute": "CombatBehaviorDistance" },
+          "Filters": [{ "Type": "LineOfSight" }]
+        },
         "BodyMotion": {
-          "Type": "Seek",
-          "SlowDownDistance": 2.5,
-          "StopDistance": 2,
-          "RelativeSpeed": 0.5
+          "Type": "MaintainDistance",
+          "DesiredDistanceRange": { "Compute": "DesiredAttackDistanceRange" },
+          "MoveThreshold": 0.3,
+          "StrafingDurationRange": { "Compute": "StrafingDurationRange" },
+          "StrafingFrequencyRange": { "Compute": "StrafingFrequencyRange" },
+          "RelativeForwardsSpeed": 0.65,
+          "RelativeBackwardsSpeed": 0.4
         }
       }
     ]

@@ -1,0 +1,617 @@
+package com.hexvane.aetherhaven.townsfolk;
+
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchor;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.RemoveReason;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import org.joml.Vector3d;
+
+/** World-scoped ledger for townsfolk character existence (characterId is canonical). */
+public final class TownsfolkExistenceService {
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private static final double SLOT_OCCUPANCY_RADIUS_SQ = 1.5 * 1.5;
+
+    public enum ReleaseReason {
+        DEATH,
+        DESPAWN,
+        RECONCILE,
+        ADMIN
+    }
+
+    public record LiveTownsfolkEntity(
+        @Nonnull String characterId,
+        @Nonnull UUID entityUuid,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull String assignmentKind,
+        @Nullable UUID townId
+    ) {}
+
+    private TownsfolkExistenceService() {}
+
+    public static boolean isCharacterOccupied(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String characterId
+    ) {
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        return pool.isCheckedOut(characterId.trim());
+    }
+
+    public static void registerSpawn(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownsfolkPoolCheckoutRecord record
+    ) {
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        pool.checkout(record);
+        TownsfolkPoolPersistence.save(world, plugin, pool);
+    }
+
+    public static boolean transferInstanceOnHire(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String characterId,
+        @Nonnull UUID newEntityUuid,
+        @Nonnull UUID townId
+    ) {
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        TownsfolkPoolCheckoutRecord checkout = pool.checkoutForCharacter(characterId);
+        if (checkout == null) {
+            LOGGER.atWarning().log("Hire transfer failed: no ledger entry for townsfolk %s", characterId);
+            return false;
+        }
+        checkout.setAssignmentKind(TownsfolkAssignmentKinds.GUARD);
+        checkout.setEntityUuid(newEntityUuid.toString());
+        checkout.setInstanceGeneration(checkout.getInstanceGeneration() + 1);
+        checkout.setTownId(townId.toString());
+        TownsfolkPoolPersistence.save(world, plugin, pool);
+        return true;
+    }
+
+    public static void releaseCharacter(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String characterId,
+        @Nonnull ReleaseReason reason
+    ) {
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        if (pool.release(characterId)) {
+            TownsfolkPoolPersistence.save(world, plugin, pool);
+            LOGGER.atFine().log("Released townsfolk %s from ledger (%s)", characterId, reason);
+        }
+    }
+
+    public static void releaseByEntity(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID entityUuid
+    ) {
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        TownsfolkPoolCheckoutRecord rec = pool.checkoutForEntity(entityUuid);
+        if (rec != null) {
+            pool.release(rec.getCharacterId());
+            TownsfolkPoolPersistence.save(world, plugin, pool);
+        }
+    }
+
+    @Nullable
+    public static TownsfolkPoolCheckoutRecord checkoutForCharacter(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String characterId
+    ) {
+        return TownsfolkPoolPersistence.getOrLoad(world, plugin).checkoutForCharacter(characterId);
+    }
+
+    /**
+     * Releases non-guard ledger rows whose character is not live in the world. Keeps guard rows when the entity is
+     * unloaded (chunk not loaded). Fixes stale {@code guild_adventurer} checkouts that block dawn spawns.
+     */
+    public static int reclaimAbsentNonGuardCheckouts(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store
+    ) {
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        Map<String, LiveTownsfolkEntity> live = buildLiveIndex(store);
+        List<String> toRelease = new ArrayList<>();
+        for (TownsfolkPoolCheckoutRecord rec : pool.getCheckouts().values()) {
+            String characterId = rec.getCharacterId();
+            if (characterId.isBlank()) {
+                continue;
+            }
+            if (TownsfolkAssignmentKinds.GUARD.equalsIgnoreCase(rec.getAssignmentKind().trim())) {
+                continue;
+            }
+            if (live.containsKey(characterId)) {
+                continue;
+            }
+            UUID ledgerUuid = parseUuid(rec.getEntityUuid());
+            if (ledgerUuid != null) {
+                Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(ledgerUuid);
+                if (ref != null && ref.isValid()) {
+                    continue;
+                }
+            }
+            toRelease.add(characterId);
+        }
+        for (String characterId : toRelease) {
+            pool.release(characterId);
+        }
+        if (!toRelease.isEmpty()) {
+            TownsfolkPoolPersistence.save(world, plugin, pool);
+        }
+        return toRelease.size();
+    }
+
+    @Nonnull
+    public static PoolSummary summarizePool(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        int guard = 0;
+        int adventurer = 0;
+        int other = 0;
+        for (TownsfolkPoolCheckoutRecord rec : pool.getCheckouts().values()) {
+            String kind = rec.getAssignmentKind().trim().toLowerCase();
+            if (TownsfolkAssignmentKinds.GUARD.equals(kind)) {
+                guard++;
+            } else if (TownsfolkAssignmentKinds.isGuildHallAdventurer(kind)) {
+                adventurer++;
+            } else {
+                other++;
+            }
+        }
+        return new PoolSummary(pool.getCheckouts().size(), guard, adventurer, other);
+    }
+
+    public record PoolSummary(int total, int guards, int guildAdventurers, int other) {}
+
+    @Nonnull
+    public static Map<String, LiveTownsfolkEntity> buildLiveIndex(@Nonnull Store<EntityStore> store) {
+        Map<String, LiveTownsfolkEntity> byCharacter = new HashMap<>();
+        store.forEachChunk(
+            Query.and(TownsfolkCharacterBinding.getComponentType(), UUIDComponent.getComponentType()),
+            (archetypeChunk, commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    Ref<EntityStore> ref = archetypeChunk.getReferenceTo(i);
+                    if (ref == null || !ref.isValid()) {
+                        continue;
+                    }
+                    TownsfolkCharacterBinding tb = archetypeChunk.getComponent(i, TownsfolkCharacterBinding.getComponentType());
+                    UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    if (tb == null || uc == null) {
+                        continue;
+                    }
+                    String characterId = tb.getCharacterId().trim();
+                    if (characterId.isEmpty()) {
+                        continue;
+                    }
+                    UUID townId = null;
+                    TownVillagerBinding vb = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (vb != null) {
+                        townId = vb.getTownId();
+                    }
+                    byCharacter.put(
+                        characterId,
+                        new LiveTownsfolkEntity(characterId, uc.getUuid(), ref, tb.getAssignmentKind(), townId)
+                    );
+                }
+            }
+        );
+        return byCharacter;
+    }
+
+    @Nonnull
+    public static Map<String, List<LiveTownsfolkEntity>> buildLiveIndexAllInstances(@Nonnull Store<EntityStore> store) {
+        Map<String, List<LiveTownsfolkEntity>> all = new HashMap<>();
+        for (LiveTownsfolkEntity live : buildLiveIndex(store).values()) {
+            all.computeIfAbsent(live.characterId(), k -> new ArrayList<>()).add(live);
+        }
+        // Rescan to capture duplicates (buildLiveIndex keeps last only)
+        store.forEachChunk(
+            Query.and(TownsfolkCharacterBinding.getComponentType(), UUIDComponent.getComponentType()),
+            (archetypeChunk, commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    Ref<EntityStore> ref = archetypeChunk.getReferenceTo(i);
+                    if (ref == null || !ref.isValid()) {
+                        continue;
+                    }
+                    TownsfolkCharacterBinding tb = archetypeChunk.getComponent(i, TownsfolkCharacterBinding.getComponentType());
+                    UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    if (tb == null || uc == null) {
+                        continue;
+                    }
+                    String characterId = tb.getCharacterId().trim();
+                    if (characterId.isEmpty()) {
+                        continue;
+                    }
+                    UUID townId = null;
+                    TownVillagerBinding vb = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (vb != null) {
+                        townId = vb.getTownId();
+                    }
+                    LiveTownsfolkEntity live = new LiveTownsfolkEntity(characterId, uc.getUuid(), ref, tb.getAssignmentKind(), townId);
+                    List<LiveTownsfolkEntity> list = all.computeIfAbsent(characterId, k -> new ArrayList<>());
+                    boolean seen = false;
+                    for (LiveTownsfolkEntity existing : list) {
+                        if (existing.entityUuid().equals(live.entityUuid())) {
+                            seen = true;
+                            break;
+                        }
+                    }
+                    if (!seen) {
+                        list.add(live);
+                    }
+                }
+            }
+        );
+        return all;
+    }
+
+    public static void purgeDuplicateEntities(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String characterId,
+        @Nonnull UUID canonicalUuid
+    ) {
+        store.forEachChunk(
+            Query.and(TownsfolkCharacterBinding.getComponentType(), UUIDComponent.getComponentType()),
+            (archetypeChunk, commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    Ref<EntityStore> ref = archetypeChunk.getReferenceTo(i);
+                    if (ref == null || !ref.isValid()) {
+                        continue;
+                    }
+                    TownsfolkCharacterBinding tb = archetypeChunk.getComponent(i, TownsfolkCharacterBinding.getComponentType());
+                    UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    if (tb == null || uc == null) {
+                        continue;
+                    }
+                    if (!characterId.equalsIgnoreCase(tb.getCharacterId().trim())) {
+                        continue;
+                    }
+                    if (canonicalUuid.equals(uc.getUuid())) {
+                        continue;
+                    }
+                    commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+                    LOGGER.atWarning().log(
+                        "Removed duplicate townsfolk entity for %s (stale uuid %s, canonical %s)",
+                        characterId,
+                        uc.getUuid(),
+                        canonicalUuid
+                    );
+                }
+            }
+        );
+    }
+
+    public static void purgeStaleGuildHallAdventurers(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotInstance hallPlot
+    ) {
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        PlotFootprintRecord footprint = hallPlot.toFootprint();
+
+        store.forEachChunk(
+            Query.and(TownVillagerBinding.getComponentType(), TownsfolkCharacterBinding.getComponentType(), TransformComponent.getComponentType()),
+            (archetypeChunk, commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    Ref<EntityStore> ref = archetypeChunk.getReferenceTo(i);
+                    if (ref == null || !ref.isValid()) {
+                        continue;
+                    }
+                    TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (b == null || !b.getTownId().equals(town.getTownId()) || !TownVillagerBinding.KIND_TOWNSFOLK.equals(b.getKind())) {
+                        continue;
+                    }
+                    TownsfolkCharacterBinding tb = archetypeChunk.getComponent(i, TownsfolkCharacterBinding.getComponentType());
+                    if (tb == null || !TownsfolkAssignmentKinds.isGuildHallAdventurer(tb.getAssignmentKind())) {
+                        continue;
+                    }
+                    TransformComponent tc = archetypeChunk.getComponent(i, TransformComponent.getComponentType());
+                    if (tc == null) {
+                        continue;
+                    }
+                    Vector3d pos = tc.getPosition();
+                    int bx = (int) Math.floor(pos.x);
+                    int by = (int) Math.floor(pos.y);
+                    int bz = (int) Math.floor(pos.z);
+                    if (!footprint.containsBlock(bx, by, bz)) {
+                        continue;
+                    }
+                    UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    if (uc == null) {
+                        continue;
+                    }
+                    String characterId = tb.getCharacterId().trim();
+                    TownsfolkPoolCheckoutRecord checkout = pool.checkoutForCharacter(characterId);
+                    boolean stale =
+                        checkout == null
+                            || !TownsfolkAssignmentKinds.isGuildHallAdventurer(checkout.getAssignmentKind())
+                            || !uc.getUuid().toString().equalsIgnoreCase(checkout.getEntityUuid());
+                    if (stale) {
+                        commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+                    }
+                }
+            }
+        );
+    }
+
+    public static boolean isSlotOccupiedByLiveAdventurer(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotInstance hallPlot,
+        @Nonnull Vector3d slotPosition,
+        int slot
+    ) {
+        PlotFootprintRecord footprint = hallPlot.toFootprint();
+        double slotX = slotPosition.x;
+        double slotZ = slotPosition.z;
+        boolean[] occupied = { false };
+
+        store.forEachChunk(
+            Query.and(TownVillagerBinding.getComponentType(), TownsfolkCharacterBinding.getComponentType(), TransformComponent.getComponentType()),
+            (archetypeChunk, commandBuffer) -> {
+                if (occupied[0]) {
+                    return;
+                }
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    Ref<EntityStore> ref = archetypeChunk.getReferenceTo(i);
+                    if (ref == null || !ref.isValid()) {
+                        continue;
+                    }
+                    TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (b == null || !b.getTownId().equals(town.getTownId()) || !TownVillagerBinding.KIND_TOWNSFOLK.equals(b.getKind())) {
+                        continue;
+                    }
+                    TownsfolkCharacterBinding tb = archetypeChunk.getComponent(i, TownsfolkCharacterBinding.getComponentType());
+                    if (tb == null || !TownsfolkAssignmentKinds.isGuildHallAdventurer(tb.getAssignmentKind())) {
+                        continue;
+                    }
+                    TransformComponent tc = archetypeChunk.getComponent(i, TransformComponent.getComponentType());
+                    if (tc == null) {
+                        continue;
+                    }
+                    Vector3d pos = tc.getPosition();
+                    int bx = (int) Math.floor(pos.x);
+                    int by = (int) Math.floor(pos.y);
+                    int bz = (int) Math.floor(pos.z);
+                    if (!footprint.containsBlock(bx, by, bz)) {
+                        continue;
+                    }
+                    GuildHallDisplayAnchor anchor = archetypeChunk.getComponent(i, GuildHallDisplayAnchor.getComponentType());
+                    if (anchor != null) {
+                        Vector3d ap = anchor.getPosition();
+                        double dx = ap.x - slotX;
+                        double dz = ap.z - slotZ;
+                        if (dx * dx + dz * dz <= SLOT_OCCUPANCY_RADIUS_SQ) {
+                            occupied[0] = true;
+                            return;
+                        }
+                    }
+                    double dx = pos.x - slotX;
+                    double dz = pos.z - slotZ;
+                    if (dx * dx + dz * dz <= SLOT_OCCUPANCY_RADIUS_SQ) {
+                        occupied[0] = true;
+                        return;
+                    }
+                }
+            }
+        );
+        return occupied[0];
+    }
+
+    public static void reconcileAfterWorldLoad(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        world.execute(() -> reconcileOnWorldThread(world, plugin));
+    }
+
+    private static void reconcileOnWorldThread(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        var entityStore = world.getEntityStore();
+        Store<EntityStore> store = entityStore != null ? entityStore.getStore() : null;
+        if (store == null) {
+            LOGGER.atWarning().log("Townsfolk existence reconcile skipped: entity store not ready for world %s", world.getName());
+            return;
+        }
+
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        Map<String, List<LiveTownsfolkEntity>> liveAll = buildLiveIndexAllInstances(store);
+        List<String> toRelease = new ArrayList<>();
+        boolean poolChanged = false;
+
+        for (TownsfolkPoolCheckoutRecord rec : new ArrayList<>(pool.getCheckouts().values())) {
+            String characterId = rec.getCharacterId();
+            List<LiveTownsfolkEntity> liveList = liveAll.get(characterId);
+            UUID ledgerUuid = parseUuid(rec.getEntityUuid());
+
+            if (liveList != null && !liveList.isEmpty()) {
+                UUID canonical = resolveCanonicalUuid(rec, liveList);
+                if (canonical != null && ledgerUuid != null && !canonical.equals(ledgerUuid)) {
+                    rec.setEntityUuid(canonical.toString());
+                    poolChanged = true;
+                }
+                purgeDuplicateEntities(store, characterId, canonical != null ? canonical : liveList.get(0).entityUuid());
+                continue;
+            }
+
+            if (ledgerUuid == null) {
+                toRelease.add(characterId);
+                continue;
+            }
+
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(ledgerUuid);
+            if (ref != null && !ref.isValid()) {
+                toRelease.add(characterId);
+            }
+            // ref == null: entity unloaded — keep ledger entry
+        }
+
+        for (String characterId : toRelease) {
+            pool.release(characterId);
+            poolChanged = true;
+        }
+
+        if (poolChanged) {
+            TownsfolkPoolPersistence.save(world, plugin, pool);
+            LOGGER.atInfo().log("Townsfolk existence reconcile updated ledger in world %s", world.getName());
+        }
+
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        for (TownRecord town : tm.allTowns()) {
+            if (!world.getName().equals(town.getWorldName()) || !town.isGuildHallActive()) {
+                continue;
+            }
+            PlotInstance hallPlot =
+                town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL);
+            if (hallPlot == null) {
+                continue;
+            }
+            purgeStaleGuildHallAdventurers(world, plugin, town, store, hallPlot);
+            syncTownGuildHallLists(world, plugin, town, store, tm, pool);
+        }
+    }
+
+    private static void syncTownGuildHallLists(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownManager tm,
+        @Nonnull TownsfolkPoolState pool
+    ) {
+        Set<String> validNpcIds = new HashSet<>();
+
+        for (TownsfolkPoolCheckoutRecord rec : pool.getCheckouts().values()) {
+            if (!town.getTownId().toString().equals(rec.getTownId())) {
+                continue;
+            }
+            if (!TownsfolkAssignmentKinds.isGuildHallAdventurer(rec.getAssignmentKind())) {
+                continue;
+            }
+            UUID u = parseUuid(rec.getEntityUuid());
+            if (u == null) {
+                continue;
+            }
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
+            if (ref == null || !ref.isValid()) {
+                continue;
+            }
+            if (!isLiveGuildAdventurer(town, store, ref, u)) {
+                continue;
+            }
+            String uuidStr = u.toString();
+            validNpcIds.add(uuidStr.toLowerCase());
+        }
+
+        boolean changed = false;
+        List<String> npcIds = town.getGuildHallAdventurerNpcIds();
+        List<String> pruned = new ArrayList<>();
+        for (String sid : npcIds) {
+            if (sid != null && validNpcIds.contains(sid.trim().toLowerCase())) {
+                pruned.add(sid.trim());
+            } else if (sid != null && !sid.isBlank()) {
+                changed = true;
+            }
+        }
+        if (pruned.size() != npcIds.size()) {
+            npcIds.clear();
+            npcIds.addAll(pruned);
+            changed = true;
+        }
+
+        var slotMap = town.getGuildHallAdventurerSlotByNpcId();
+        Set<String> slotKeysToRemove = new HashSet<>();
+        for (String key : slotMap.keySet()) {
+            if (key == null || !validNpcIds.contains(key.trim().toLowerCase())) {
+                slotKeysToRemove.add(key);
+            }
+        }
+        if (!slotKeysToRemove.isEmpty()) {
+            for (String key : slotKeysToRemove) {
+                slotMap.remove(key);
+            }
+            changed = true;
+        }
+
+        if (changed) {
+            tm.updateTown(town);
+        }
+    }
+
+    @Nullable
+    private static UUID resolveCanonicalUuid(
+        @Nonnull TownsfolkPoolCheckoutRecord rec,
+        @Nonnull List<LiveTownsfolkEntity> liveList
+    ) {
+        UUID ledgerUuid = parseUuid(rec.getEntityUuid());
+        if (ledgerUuid != null) {
+            for (LiveTownsfolkEntity live : liveList) {
+                if (ledgerUuid.equals(live.entityUuid())) {
+                    return ledgerUuid;
+                }
+            }
+        }
+        if (liveList.size() == 1) {
+            return liveList.get(0).entityUuid();
+        }
+        for (LiveTownsfolkEntity live : liveList) {
+            if (rec.getAssignmentKind().equalsIgnoreCase(live.assignmentKind())) {
+                return live.entityUuid();
+            }
+        }
+        return liveList.get(0).entityUuid();
+    }
+
+    private static boolean isLiveGuildAdventurer(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull UUID entityUuid
+    ) {
+        TownVillagerBinding b = store.getComponent(ref, TownVillagerBinding.getComponentType());
+        if (b == null || !b.getTownId().equals(town.getTownId()) || !TownVillagerBinding.KIND_TOWNSFOLK.equals(b.getKind())) {
+            return false;
+        }
+        TownsfolkCharacterBinding tb = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
+        if (tb == null || !TownsfolkAssignmentKinds.isGuildHallAdventurer(tb.getAssignmentKind())) {
+            return false;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        return uc != null && entityUuid.equals(uc.getUuid());
+    }
+
+    @Nullable
+    private static UUID parseUuid(@Nullable String s) {
+        if (s == null || s.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(s.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+}

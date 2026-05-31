@@ -149,7 +149,7 @@ public final class PoiAutonomyVisuals {
     ) {
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (poi.getInteractionKind() == PoiInteractionKind.SIT || poi.getInteractionKind() == PoiInteractionKind.SLEEP) {
-            commandBuffer.tryRemoveComponent(npcRef, MountedComponent.getComponentType());
+            BlockMountRelease.release(npcRef, store, commandBuffer);
         }
         if (poi.getInteractionKind() == PoiInteractionKind.USE_BENCH && poi.getTags().contains("EAT")) {
             stopCampfireConsumeVisuals(npcRef, store, commandBuffer, npc);

@@ -14,7 +14,11 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolPersistence;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolState;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Ref;
@@ -46,6 +50,14 @@ public final class GuildHallAdventurerPoolService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final float ADVENTURER_FILL_CHANCE = 0.5f;
 
+    public record ForceRespawnResult(
+        int reclaimedCheckouts,
+        int despawnedAdventurers,
+        int slotsRolled,
+        int spawned,
+        int poolAvailable
+    ) {}
+
     private GuildHallAdventurerPoolService() {}
 
     public static void scheduleTickFromHub(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull WorldTimeResource wtr) {
@@ -60,9 +72,13 @@ public final class GuildHallAdventurerPoolService {
         }
         int morningStart = plugin.getConfig().get().getGameMorningStartHour();
         int morningEndEx = plugin.getConfig().get().getGameMorningEndHourExclusive();
+        TownsfolkExistenceService.reclaimAbsentNonGuardCheckouts(world, plugin, store);
 
         for (TownRecord town : tm.allTowns()) {
-            if (!world.getName().equals(town.getWorldName()) || !town.isGuildHallActive()) {
+            if (!world.getName().equals(town.getWorldName())) {
+                continue;
+            }
+            if (!town.isGuildHallActive()) {
                 continue;
             }
             PlotInstance hallPlot =
@@ -76,6 +92,7 @@ public final class GuildHallAdventurerPoolService {
             }
             List<AdventurerSpawnSlot> spawnSlots = AdventurerSpawnMarkerLocator.resolveSpawnSlots(store, hallPlot, hallDef);
             if (spawnSlots.isEmpty()) {
+                LOGGER.atWarning().log("Guild hall tick skip town %s: no adventurer spawn slots", town.getTownId());
                 continue;
             }
             if (!isManagementChunkLoaded(world, hallPlot, hallDef)) {
@@ -84,9 +101,92 @@ public final class GuildHallAdventurerPoolService {
 
             dedupeAdventurerIds(town, tm);
             pruneMissingAdventurers(town, store, tm);
+            TownsfolkExistenceService.purgeStaleGuildHallAdventurers(world, plugin, town, store, hallPlot);
             morningRefreshIfDue(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr, morningStart, morningEndEx);
-            fillEmptySlots(world, plugin, town, tm, store, spawnSlots, wtr);
+            fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr);
         }
+    }
+
+    /**
+     * Admin / debug: despawn current hall adventurers, roll today's slots, and fill immediately (does not require dawn).
+     */
+    @Nonnull
+    public static ForceRespawnResult forceRespawnAdventurers(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull WorldTimeResource wtr
+    ) {
+        PlotInstance hallPlot =
+            town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL);
+        if (hallPlot == null) {
+            return new ForceRespawnResult(0, 0, 0, 0, 0);
+        }
+        ConstructionDefinition hallDef = plugin.getConstructionCatalog().get(hallPlot.getConstructionId());
+        if (hallDef == null) {
+            return new ForceRespawnResult(0, 0, 0, 0, 0);
+        }
+        List<AdventurerSpawnSlot> spawnSlots = AdventurerSpawnMarkerLocator.resolveSpawnSlots(store, hallPlot, hallDef);
+        if (spawnSlots.isEmpty()) {
+            return new ForceRespawnResult(0, 0, 0, 0, 0);
+        }
+
+        int reclaimed = TownsfolkExistenceService.reclaimAbsentNonGuardCheckouts(world, plugin, store);
+        int despawned = despawnGuildHallAdventurersInPlot(world, plugin, town, store, hallPlot);
+        town.getGuildHallAdventurerNpcIds().clear();
+        town.getGuildHallAdventurerSlotByNpcId().clear();
+        town.getGuildHallAdventurerFilledSlots().clear();
+
+        long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
+        long seed = town.getTownId().getLeastSignificantBits() ^ epochDay * 0x9E3779B97F4A7C15L;
+        Random slotRandom = new Random(seed);
+        for (int slot = 0; slot < spawnSlots.size(); slot++) {
+            if (slotRandom.nextFloat() < ADVENTURER_FILL_CHANCE) {
+                town.getGuildHallAdventurerFilledSlots().add(slot);
+            }
+        }
+        town.setGuildHallLastMorningEpochDay(epochDay);
+        tm.updateTown(town);
+
+        int spawned = fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr);
+        int available = availableGuardEligibleCount(world, plugin);
+        return new ForceRespawnResult(reclaimed, despawned, town.getGuildHallAdventurerFilledSlots().size(), spawned, available);
+    }
+
+    /** Despawns hired guard NPCs for this town and releases their ledger rows. */
+    public static int clearHiredGuardsInTown(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store
+    ) {
+        int despawned = 0;
+        for (var rec : new ArrayList<>(town.getHiredGuardRecords())) {
+            UUID entityUuid = rec.getEntityUuid();
+            if (entityUuid != null) {
+                Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
+                if (ref != null && ref.isValid()) {
+                    store.removeEntity(ref, RemoveReason.REMOVE);
+                    despawned++;
+                }
+            }
+            String characterId = rec.getCharacterId();
+            if (characterId != null && !characterId.isBlank()) {
+                TownsfolkExistenceService.releaseCharacter(world, plugin, characterId, TownsfolkExistenceService.ReleaseReason.ADMIN);
+            }
+        }
+        town.getHiredGuardRecords().clear();
+        tm.updateTown(town);
+        return despawned;
+    }
+
+    private static int availableGuardEligibleCount(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        TownsfolkCharacterCatalog catalog = plugin.getTownsfolkCharacterCatalog();
+        return pool.availableGuardEligibleCharacterIds(catalog).size();
     }
 
     private static void dedupeAdventurerIds(@Nonnull TownRecord town, @Nonnull TownManager tm) {
@@ -101,7 +201,11 @@ public final class GuildHallAdventurerPoolService {
         if (out.size() != ids.size()) {
             ids.clear();
             ids.addAll(out);
-            town.getGuildHallAdventurerSlotByNpcId().keySet().removeIf(k -> !out.contains(k));
+            Set<String> lower = new HashSet<>();
+            for (String s : out) {
+                lower.add(s.toLowerCase());
+            }
+            town.getGuildHallAdventurerSlotByNpcId().keySet().removeIf(k -> k == null || !lower.contains(k.trim().toLowerCase()));
             tm.updateTown(town);
         }
     }
@@ -124,9 +228,6 @@ public final class GuildHallAdventurerPoolService {
             }
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
             if (ref != null && ref.isValid()) {
-                continue;
-            }
-            if (ref == null) {
                 continue;
             }
             it.remove();
@@ -175,15 +276,9 @@ public final class GuildHallAdventurerPoolService {
 
         town.setGuildHallLastMorningEpochDay(epochDay);
         tm.updateTown(town);
-        LOGGER.atInfo().log(
-            "Guild hall adventurer morning refresh for town %s: %s/%s slots",
-            town.getTownId(),
-            town.getGuildHallAdventurerFilledSlots().size(),
-            spawnSlots.size()
-        );
     }
 
-    private static void despawnGuildHallAdventurersInPlot(
+    private static int despawnGuildHallAdventurersInPlot(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town,
@@ -192,6 +287,7 @@ public final class GuildHallAdventurerPoolService {
     ) {
         PlotFootprintRecord footprint = hallPlot.toFootprint();
         Set<UUID> toRemove = ConcurrentHashMap.newKeySet();
+        int despawned = 0;
 
         for (String sid : new ArrayList<>(town.getGuildHallAdventurerNpcIds())) {
             UUID u = parseUuid(sid);
@@ -200,8 +296,10 @@ public final class GuildHallAdventurerPoolService {
             }
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
             if (ref != null && ref.isValid() && isAdventurerEntity(town, store, ref, u)) {
+                String characterId = adventurerCharacterId(store, ref);
                 store.removeEntity(ref, RemoveReason.REMOVE);
-                TownsfolkSpawnService.releaseByEntity(world, plugin, u);
+                releaseAdventurerCheckout(world, plugin, characterId, u);
+                despawned++;
             }
             toRemove.add(u);
         }
@@ -236,8 +334,9 @@ public final class GuildHallAdventurerPoolService {
             }
             UUID u = uc.getUuid();
             if (toRemove.add(u)) {
+                String characterId = tb.getCharacterId();
                 commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
-                TownsfolkSpawnService.releaseByEntity(world, plugin, u);
+                releaseAdventurerCheckout(world, plugin, characterId, u);
             }
         });
 
@@ -245,28 +344,60 @@ public final class GuildHallAdventurerPoolService {
             town.getGuildHallAdventurerNpcIds().removeIf(s -> u.toString().equalsIgnoreCase(s != null ? s.trim() : ""));
             town.getGuildHallAdventurerSlotByNpcId().remove(u.toString());
         }
+        return despawned;
     }
 
-    private static void fillEmptySlots(
+    @Nullable
+    private static String adventurerCharacterId(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        TownsfolkCharacterBinding tb = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
+        if (tb == null || tb.getCharacterId().isBlank()) {
+            return null;
+        }
+        return tb.getCharacterId();
+    }
+
+    private static void releaseAdventurerCheckout(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable String characterId,
+        @Nullable UUID entityUuid
+    ) {
+        if (characterId != null && !characterId.isBlank()) {
+            TownsfolkExistenceService.releaseCharacter(
+                world,
+                plugin,
+                characterId,
+                TownsfolkExistenceService.ReleaseReason.DESPAWN
+            );
+            return;
+        }
+        if (entityUuid != null) {
+            TownsfolkExistenceService.releaseByEntity(world, plugin, entityUuid);
+        }
+    }
+
+    private static int fillEmptySlots(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town,
         @Nonnull TownManager tm,
         @Nonnull Store<EntityStore> store,
+        @Nonnull PlotInstance hallPlot,
         @Nonnull List<AdventurerSpawnSlot> spawnSlots,
         @Nonnull WorldTimeResource wtr
     ) {
         Long lastDay = town.getGuildHallLastMorningEpochDay();
         long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
         if (lastDay == null || lastDay != epochDay) {
-            return;
+            return 0;
         }
 
+        int spawned = 0;
         for (int slot : town.getGuildHallAdventurerFilledSlots()) {
             if (slot < 0 || slot >= spawnSlots.size()) {
                 continue;
             }
-            if (isSlotOccupied(town, store, slot)) {
+            if (isSlotOccupied(town, store, hallPlot, spawnSlots, slot)) {
                 continue;
             }
             AdventurerSpawnSlot spawnSlot = spawnSlots.get(slot);
@@ -277,7 +408,7 @@ public final class GuildHallAdventurerPoolService {
                     ^ (long) world.getName().hashCode() << 1
                     ^ epochDay * 0x9E3779B97F4A7C15L
                     ^ slot;
-            var spawned =
+            var result =
                 TownsfolkSpawnService.trySpawn(
                     world,
                     plugin,
@@ -290,21 +421,32 @@ public final class GuildHallAdventurerPoolService {
                     new Rotation3f(0.0F, spawnSlot.yawRadians(), 0.0F),
                     spawnSlot.yawRadians()
                 );
-            if (spawned.isEmpty()) {
-                break;
+            if (result.isEmpty()) {
+                continue;
             }
-            String uuidStr = spawned.get().entityUuid().toString();
+            String uuidStr = result.get().entityUuid().toString();
             town.getGuildHallAdventurerNpcIds().add(uuidStr);
             town.getGuildHallAdventurerSlotByNpcId().put(uuidStr, slot);
             tm.updateTown(town);
+            spawned++;
         }
+        return spawned;
     }
 
     private static boolean isSlotOccupied(
         @Nonnull TownRecord town,
         @Nonnull Store<EntityStore> store,
+        @Nonnull PlotInstance hallPlot,
+        @Nonnull List<AdventurerSpawnSlot> spawnSlots,
         int slot
     ) {
+        if (slot < 0 || slot >= spawnSlots.size()) {
+            return false;
+        }
+        Vector3d slotPos = spawnSlots.get(slot).position();
+        if (TownsfolkExistenceService.isSlotOccupiedByLiveAdventurer(town, store, hallPlot, slotPos, slot)) {
+            return true;
+        }
         for (Map.Entry<String, Integer> entry : town.getGuildHallAdventurerSlotByNpcId().entrySet()) {
             if (entry.getValue() == null || entry.getValue() != slot) {
                 continue;

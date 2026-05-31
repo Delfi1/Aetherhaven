@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.NpcModelSpawnUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
@@ -15,10 +16,9 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
-import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
@@ -130,13 +130,31 @@ public final class TownsfolkSpawnService {
         if (npcPlugin == null) {
             return Optional.empty();
         }
-        var pair = npcPlugin.spawnNPC(store, AetherhavenConstants.NPC_TOWNSFOLK, null, position, rotation);
+        int roleIndex = npcPlugin.getIndex(AetherhavenConstants.NPC_TOWNSFOLK);
+        if (roleIndex < 0) {
+            LOGGER.atWarning().log("Townsfolk NPC role not registered: %s", AetherhavenConstants.NPC_TOWNSFOLK);
+            return Optional.empty();
+        }
+        Model spawnModel = NpcModelSpawnUtil.buildScaledModel(character.getModelAssetId(), character.getModelScale());
+        if (spawnModel == null) {
+            LOGGER.atWarning().log("Unknown townsfolk model asset %s for character %s", character.getModelAssetId(), characterId);
+            return Optional.empty();
+        }
+        float spawnScale = spawnModel.getScale();
+        var pair = npcPlugin.spawnEntity(
+            store,
+            roleIndex,
+            position,
+            rotation,
+            spawnModel,
+            (npcEntity, holder, st) -> npcEntity.setInitialModelScale(spawnScale),
+            null
+        );
         if (pair == null) {
             LOGGER.atWarning().log("Failed to spawn townsfolk NPC %s for town %s", characterId, town.getTownId());
             return Optional.empty();
         }
         Ref<EntityStore> ref = pair.first();
-        applyCharacterAppearance(ref, store, character.getModelAssetId(), character.getModelScale());
 
         String displayName = character.getDisplayName();
         if (displayName != null) {
@@ -164,7 +182,9 @@ public final class TownsfolkSpawnService {
 
         if (TownsfolkAssignmentKinds.isGuildHallAdventurer(kind)) {
             float anchorYaw = displayAnchorYawRadians != null ? displayAnchorYawRadians : rotation.yaw();
-            store.putComponent(ref, GuildHallDisplayAnchor.getComponentType(), new GuildHallDisplayAnchor(position, anchorYaw));
+            GuildHallDisplayAnchor displayAnchor = new GuildHallDisplayAnchor(position, anchorYaw);
+            displayAnchor.setDisplayStateApplied(true);
+            store.putComponent(ref, GuildHallDisplayAnchor.getComponentType(), displayAnchor);
             NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
             if (npc != null && npc.getRole() != null) {
                 npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUILD_HALL_DISPLAY, null, store);
@@ -176,7 +196,9 @@ public final class TownsfolkSpawnService {
             return Optional.empty();
         }
         UUID entityUuid = uuidComp.getUuid();
-        pool.checkout(
+        TownsfolkExistenceService.registerSpawn(
+            world,
+            plugin,
             new TownsfolkPoolCheckoutRecord(
                 characterId,
                 town.getTownId().toString(),
@@ -185,24 +207,15 @@ public final class TownsfolkSpawnService {
                 ""
             )
         );
-        TownsfolkPoolPersistence.save(world, plugin, pool);
         return Optional.of(new SpawnedTownsfolk(characterId, entityUuid, personalities, kind));
     }
 
     public static void release(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull String characterId) {
-        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
-        if (pool.release(characterId)) {
-            TownsfolkPoolPersistence.save(world, plugin, pool);
-        }
+        TownsfolkExistenceService.releaseCharacter(world, plugin, characterId, TownsfolkExistenceService.ReleaseReason.DESPAWN);
     }
 
     public static void releaseByEntity(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull UUID entityUuid) {
-        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
-        TownsfolkPoolCheckoutRecord rec = pool.checkoutForEntity(entityUuid);
-        if (rec != null) {
-            pool.release(rec.getCharacterId());
-            TownsfolkPoolPersistence.save(world, plugin, pool);
-        }
+        TownsfolkExistenceService.releaseByEntity(world, plugin, entityUuid);
     }
 
     /**
@@ -244,32 +257,7 @@ public final class TownsfolkSpawnService {
     }
 
     public static void reconcileAfterWorldLoad(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
-        Store<EntityStore> store = world.getEntityStore().getStore();
-        if (store == null) {
-            return;
-        }
-        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
-        List<String> toRelease = new ArrayList<>();
-        for (TownsfolkPoolCheckoutRecord rec : pool.getCheckouts().values()) {
-            UUID entityId;
-            try {
-                entityId = UUID.fromString(rec.getEntityUuid());
-            } catch (IllegalArgumentException e) {
-                toRelease.add(rec.getCharacterId());
-                continue;
-            }
-            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityId);
-            if (ref == null || !ref.isValid()) {
-                toRelease.add(rec.getCharacterId());
-            }
-        }
-        for (String id : toRelease) {
-            pool.release(id);
-        }
-        if (!toRelease.isEmpty()) {
-            TownsfolkPoolPersistence.save(world, plugin, pool);
-            LOGGER.atInfo().log("Released %s townsfolk pool entries with missing entities in world %s", toRelease.size(), world.getName());
-        }
+        TownsfolkExistenceService.reconcileAfterWorldLoad(world, plugin);
     }
 
     @Nonnull
@@ -278,7 +266,7 @@ public final class TownsfolkSpawnService {
         return hex.length() >= 8 ? hex.substring(0, 8) : hex;
     }
 
-    private static void applyCharacterAppearance(
+    public static void applyCharacterAppearance(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
         @Nonnull String modelAssetId,
@@ -290,16 +278,12 @@ public final class TownsfolkSpawnService {
                 npc.setInitialModelScale(modelScale);
             }
         }
-        NPCEntity.setAppearance(ref, modelAssetId, store);
-        if (modelScale != null) {
-            ModelComponent modelComponent = store.getComponent(ref, ModelComponent.getComponentType());
-            if (modelComponent != null) {
-                store.putComponent(
-                    ref,
-                    PersistentModel.getComponentType(),
-                    new PersistentModel(modelComponent.getModel().toReference())
-                );
-            }
+        if (!NPCEntity.setAppearance(ref, modelAssetId, store)) {
+            return;
+        }
+        var world = store.getExternalData().getWorld();
+        if (world != null) {
+            world.execute(() -> NpcModelSpawnUtil.resyncFromPersistentModel(ref, store));
         }
     }
 }

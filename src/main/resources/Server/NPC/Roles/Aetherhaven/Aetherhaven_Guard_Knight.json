@@ -13,19 +13,42 @@
     "AetherhavenPausePhaseTime": { "Value": [2, 5], "Description": "Patrol pause (seconds)" }
   },
   "StartState": "Idle",
+  "AttitudeGroup": "Aetherhaven_Townsfolk",
   "DefaultNPCAttitude": "Neutral",
   "DefaultPlayerAttitude": "Neutral",
   "Appearance": "Male_Human_01",
   "MaxHealth": 120,
   "IsMemory": false,
   "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },
-  "DisableDamageGroups": ["Self", "Player"],
-  "BusyStates": ["Idle", "Combat"],
+  "DisableDamageGroups": ["Self", "Player", "Aetherhaven_Townsfolk", "Friendly"],
+  "BusyStates": ["Combat", "$Interaction"],
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.5,
+  "ApplySeparation": true,
+  "SeparationDistance": 2.5,
+  "SeparationMode": "Push",
+  "SeparationPushDistanceWeightTarget": 8,
+  "SeparationPushDistanceWeightAttacker": 8,
+  "SeparationPushSafeDistanceMultiplier": 0.8,
+  "SeparationPushSteeringStrength": 0.8,
+  "SeparationPushSpeedScale": 0.5,
   "HotbarItems": ["Weapon_Sword_Iron"],
   "HotbarSize": 3,
   "OffHandSlots": 2,
+  "InteractionVars": {
+    "Melee_Damage": {
+      "Interactions": [
+        {
+          "Parent": "NPC_Attack_Melee_Damage",
+          "DamageCalculator": {
+            "Type": "Absolute",
+            "BaseDamage": { "Physical": 12 },
+            "RandomPercentageModifier": 0.1
+          }
+        }
+      ]
+    }
+  },
   "MotionControllerList": [
     {
       "Type": "Walk",
@@ -35,14 +58,6 @@
       "MaxFallSpeed": 15,
       "MaxRotationSpeed": 360,
       "Acceleration": 10
-    }
-  ],
-  "StateTransitions": [
-    {
-      "States": [{ "To": ["Idle", "Combat"], "From": [] }],
-      "Actions": [
-        { "Type": "Inventory", "Operation": "EquipHotbar", "UseTarget": false, "Slot": 0 }
-      ]
     }
   ],
   "Instructions": [
@@ -83,35 +98,82 @@
           "Sensor": { "Type": "State", "State": "Combat" },
           "Instructions": [
             {
-              "Reference": "Component_Instruction_Aetherhaven_Guard_Melee_Combat",
-              "Modify": {
-                "ViewRange": { "Compute": "ViewRange" },
-                "AttackDistance": { "Compute": "AttackDistance" }
-              }
-            },
-            {
               "Sensor": {
-                "Type": "And",
+                "Type": "Or",
                 "Sensors": [
                   {
-                    "Type": "Not",
-                    "Sensor": {
-                      "Type": "Mob",
-                      "Range": { "Compute": "ViewRange" },
-                      "LockOnTarget": false,
-                      "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
-                      "Collector": { "Type": "CombatTargets" }
-                    }
+                    "Type": "Mob",
+                    "Range": { "Compute": "ViewRange" },
+                    "LockOnTarget": false,
+                    "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
+                    "Collector": { "Type": "CombatTargets" }
                   },
-                  { "Type": "Not", "Sensor": { "Type": "HasHostileTargetMemory" } }
+                  { "Type": "HasHostileTargetMemory" }
                 ]
               },
-              "Actions": [{ "Type": "State", "State": "Idle" }]
+              "Instructions": [
+                {
+                  "Reference": "Component_Instruction_Aetherhaven_Guard_Melee_Combat",
+                  "Modify": {
+                    "ViewRange": { "Compute": "ViewRange" },
+                    "AttackDistance": { "Compute": "AttackDistance" }
+                  }
+                }
+              ]
+            },
+            {
+              "Actions": [
+                { "Type": "ReleaseTarget" },
+                { "Type": "State", "State": "Idle" }
+              ]
+            }
+          ]
+        },
+        {
+          "$Comment": "$Interaction cannot live in a referenced Component (engine validation).",
+          "Sensor": { "Type": "State", "State": "$Interaction" },
+          "Instructions": [
+            {
+              "Continue": true,
+              "Sensor": { "Type": "Target", "Range": 16 },
+              "HeadMotion": { "Type": "Watch" }
+            },
+            {
+              "Sensor": { "Type": "Any" },
+              "BodyMotion": { "Type": "Nothing" }
             }
           ]
         }
       ]
     }
   ],
+  "InteractionInstruction": {
+    "Instructions": [
+      {
+        "Sensor": { "Type": "Not", "Sensor": { "Type": "CanInteract", "ViewSector": 360 } },
+        "Actions": [{ "Type": "SetInteractable", "Interactable": false }]
+      },
+      {
+        "Continue": true,
+        "Sensor": { "Type": "Any" },
+        "Actions": [
+          { "Type": "SetInteractable", "Interactable": true, "Hint": "aetherhaven_misc.aetherhaven.interaction.dialogue" }
+        ]
+      },
+      {
+        "Sensor": { "Type": "HasInteracted" },
+        "Instructions": [
+          {
+            "Sensor": { "Type": "Not", "Sensor": { "Type": "State", "State": "$Interaction" } },
+            "Actions": [
+              { "Type": "LockOnInteractionTarget" },
+              { "Type": "OpenAetherhavenDialogue", "VillagerKind": "townsfolk" },
+              { "Type": "State", "State": "$Interaction" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "NameTranslationKey": { "Compute": "NameTranslationKey" }
 }

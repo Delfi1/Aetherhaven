@@ -11,6 +11,7 @@
     "AetherhavenPausePhaseTime": { "Value": [3, 7], "Description": "Idle pause between wander bursts (seconds)" }
   },
   "StartState": "Idle",
+  "AttitudeGroup": "Aetherhaven_Townsfolk",
   "DefaultNPCAttitude": "Neutral",
   "DefaultPlayerAttitude": "Neutral",
   "Appearance": "Blacksmith",
@@ -18,11 +19,19 @@
   "IsMemory": true,
   "MemoriesCategory": "Aetherhaven",
   "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },
-  "DisableDamageGroups": ["Self", "Player"],
+  "DisableDamageGroups": ["Self", "Player", "Aetherhaven_Townsfolk", "Friendly"],
   "CombatConfig": { "EntityEffect": "Immunity_Environmental" },
   "BusyStates": ["$Interaction"],
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.5,
+  "ApplySeparation": true,
+  "SeparationDistance": 2.5,
+  "SeparationMode": "Push",
+  "SeparationPushDistanceWeightTarget": 8,
+  "SeparationPushDistanceWeightAttacker": 8,
+  "SeparationPushSafeDistanceMultiplier": 0.8,
+  "SeparationPushSteeringStrength": 0.8,
+  "SeparationPushSpeedScale": 0.5,
   "MotionControllerList": [
     {
       "Type": "Walk",

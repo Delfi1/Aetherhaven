@@ -6,7 +6,7 @@ import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
-import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -71,7 +71,9 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
             town.getGuildHallAdventurerSlotByNpcId().remove(entityUuid.toString());
             TownsfolkCharacterBinding tb = store.getComponent(victimRef, TownsfolkCharacterBinding.getComponentType());
             if (tb != null) {
-                TownsfolkSpawnService.release(world, plugin, tb.getCharacterId());
+                TownsfolkExistenceService.releaseCharacter(
+                    world, plugin, tb.getCharacterId(), TownsfolkExistenceService.ReleaseReason.DEATH
+                );
             }
             tm.updateTown(town);
         }
@@ -105,7 +107,9 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
         }
 
         if (characterId != null && !characterId.isBlank()) {
-            TownsfolkSpawnService.release(world, AetherhavenPlugin.get(), characterId);
+            TownsfolkExistenceService.releaseCharacter(
+                world, AetherhavenPlugin.get(), characterId, TownsfolkExistenceService.ReleaseReason.DEATH
+            );
         }
 
         if (entityUuid != null) {

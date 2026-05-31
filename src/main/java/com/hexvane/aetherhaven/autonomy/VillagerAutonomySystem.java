@@ -96,7 +96,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 clearAutonomyRoleState(ref, npc, commandBuffer);
             }
         }
-        commandBuffer.tryRemoveComponent(ref, MountedComponent.getComponentType());
+        BlockMountRelease.release(ref, store, commandBuffer);
     }
 
     private final AetherhavenPlugin plugin;

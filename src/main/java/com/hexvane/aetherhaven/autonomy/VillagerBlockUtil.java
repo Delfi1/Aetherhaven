@@ -172,7 +172,7 @@ public final class VillagerBlockUtil {
      */
     /**
      * Finds a chair/bed-style mount block near {@code npcFeet}, preferring the block under the spawn marker when the
-     * marker was placed on a seat.
+     * marker was placed on a seat. Only blocks with seat/bed mount points are considered.
      */
     @Nullable
     public static Vector3i findMountBlockNear(
@@ -189,18 +189,41 @@ public final class VillagerBlockUtil {
         if (underMarker != null) {
             return underMarker;
         }
-        underMarker = tryMountBlockAt(world, npcX, npcYFeet, npcZ, markerBx, markerBy, markerBz);
-        if (underMarker != null) {
-            return underMarker;
+        return tryMountBlockAt(world, npcX, npcYFeet, npcZ, markerBx, markerBy, markerBz);
+    }
+
+    /** True when the block at {@code (bx, by, bz)} has seat or bed mount points. */
+    public static boolean isBlockMountSeat(@Nonnull World world, int bx, int by, int bz) {
+        if (by < 0 || by >= 320) {
+            return false;
         }
-        int feetY = (int) Math.floor(npcYFeet);
-        int bx = (int) Math.floor(npcX);
-        int bz = (int) Math.floor(npcZ);
-        for (int dy = 0; dy <= 3; dy++) {
-            Vector3i found = tryMountBlockAt(world, npcX, npcYFeet, npcZ, bx, feetY - dy, bz);
-            if (found != null) {
-                return found;
+        BlockType blockType = world.getBlockType(bx, by, bz);
+        if (blockType == null || blockType == BlockType.EMPTY) {
+            return false;
+        }
+        return blockType.getSeats() != null || blockType.getBeds() != null;
+    }
+
+    /**
+     * Lowest seat/bed block directly under a guild hall adventurer spawn anchor (marker sits at {@code block.y + 1}).
+     */
+    @Nullable
+    public static Vector3i findGuildHallSeatBelowSpawn(@Nonnull World world, @Nonnull Vector3d spawnAnchor) {
+        int bx = (int) Math.floor(spawnAnchor.x);
+        int bz = (int) Math.floor(spawnAnchor.z);
+        int anchorBlockY = (int) Math.floor(spawnAnchor.y);
+        Vector3i lowest = null;
+        for (int dy = 1; dy <= 4; dy++) {
+            int by = anchorBlockY - dy;
+            if (isBlockMountSeat(world, bx, by, bz)) {
+                lowest = new Vector3i(bx, by, bz);
             }
+        }
+        if (lowest != null) {
+            return lowest;
+        }
+        if (isBlockMountSeat(world, bx, anchorBlockY, bz)) {
+            return new Vector3i(bx, anchorBlockY, bz);
         }
         return null;
     }
@@ -216,6 +239,9 @@ public final class VillagerBlockUtil {
         int bz
     ) {
         if (by < 0 || by >= 320) {
+            return null;
+        }
+        if (!isBlockMountSeat(world, bx, by, bz)) {
             return null;
         }
         if (!canNpcMountBlockPoi(world, npcX, npcYFeet, npcZ, bx, by, bz)) {

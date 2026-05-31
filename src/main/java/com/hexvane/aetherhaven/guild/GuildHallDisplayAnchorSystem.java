@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.hypixel.hytale.server.npc.role.support.StateSupport;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import org.joml.Vector3d;
@@ -64,30 +65,37 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
             return;
         }
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+        boolean anchorChanged = false;
 
         if (!anchor.isChairMountFinished() && !GuildHallAdventurerChairMount.isBlockMounted(store, commandBuffer, ref)) {
-            if (GuildHallAdventurerChairMount.tryMountChairBelowSpawn(ref, store, commandBuffer, anchor.getPosition())) {
+            if (!GuildHallAdventurerChairMount.hasSeatNearSpawn(store, anchor)) {
                 anchor.markChairMountFinished();
+                anchorChanged = true;
+            } else if (GuildHallAdventurerChairMount.tryMountChairBelowSpawn(ref, store, commandBuffer, anchor)) {
+                anchor.markChairMountFinished();
+                anchorChanged = true;
             } else {
                 anchor.incrementChairMountAttempts();
                 if (anchor.getChairMountAttempts() >= GuildHallDisplayAnchor.MAX_CHAIR_MOUNT_ATTEMPTS) {
-                    GuildHallAdventurerChairMount.applySitFallbackPose(ref, store, commandBuffer, anchor.getPosition(), anchor.getYawRadians());
+                    GuildHallAdventurerChairMount.applySeatPoseFallback(ref, store, commandBuffer, anchor);
                     anchor.setSitFallbackApplied(true);
                     anchor.markChairMountFinished();
                 }
+                anchorChanged = true;
             }
+        }
+
+        anchorChanged |= applyDisplayStateIfNeeded(npc, ref, commandBuffer, anchor);
+
+        if (anchorChanged) {
             commandBuffer.putComponent(ref, GuildHallDisplayAnchor.getComponentType(), anchor);
         }
 
-        applyDisplayStateIfNeeded(npc, ref, commandBuffer);
-
-        if (GuildHallAdventurerChairMount.isBlockMounted(store, commandBuffer, ref)) {
-            syncHeadYawIfNeeded(ref, store, commandBuffer, anchor.getYawRadians());
-            return;
-        }
-
-        if (anchor.isSitFallbackApplied()) {
-            syncHeadYawIfNeeded(ref, store, commandBuffer, anchor.getYawRadians());
+        boolean inDialogue = isInInteractionDialogue(npc);
+        if (GuildHallAdventurerChairMount.isBlockMounted(store, commandBuffer, ref) || anchor.isSitFallbackApplied()) {
+            if (!inDialogue) {
+                syncHeadYawIfNeeded(ref, store, commandBuffer, anchor.getYawRadians());
+            }
             return;
         }
 
@@ -96,28 +104,54 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         double dx = pos.x - target.x;
         double dy = pos.y - target.y;
         double dz = pos.z - target.z;
-        if (dx * dx + dy * dy + dz * dz > SNAP_DIST_SQ) {
+        if (!inDialogue && dx * dx + dy * dy + dz * dz > SNAP_DIST_SQ) {
             Rotation3f rot = new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F);
             commandBuffer.putComponent(ref, TransformComponent.getComponentType(), new TransformComponent(new Vector3d(target), rot));
-            syncHeadYawIfNeeded(ref, store, commandBuffer, anchor.getYawRadians());
-        } else {
+        }
+        if (!inDialogue) {
             syncHeadYawIfNeeded(ref, store, commandBuffer, anchor.getYawRadians());
         }
     }
 
-    private static void applyDisplayStateIfNeeded(
+    /** {@link StateSupport#getStateName()} is {@code State.subState}, not the bare state id. */
+    private static boolean isInInteractionDialogue(@Nonnull NPCEntity npc) {
+        if (npc.getRole() == null) {
+            return false;
+        }
+        StateSupport stateSupport = npc.getRole().getStateSupport();
+        int interactionState = stateSupport.getStateHelper().getStateIndex("$Interaction");
+        return interactionState >= 0 && stateSupport.inState(interactionState);
+    }
+
+    /** @return true when anchor transient flags changed and should be persisted on the buffer */
+    private static boolean applyDisplayStateIfNeeded(
         @Nonnull NPCEntity npc,
         @Nonnull Ref<EntityStore> ref,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull GuildHallDisplayAnchor anchor
     ) {
-        String state = npc.getRole().getStateSupport().getStateName();
-        if (state != null && state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
-            npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUILD_HALL_DISPLAY, null, commandBuffer);
-        } else if (!AetherhavenConstants.NPC_STATE_GUILD_HALL_DISPLAY.equals(state)
-            && !"$Interaction".equals(state)
-            && !"Flee".equals(state)) {
-            npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUILD_HALL_DISPLAY, null, commandBuffer);
+        if (isInInteractionDialogue(npc)) {
+            if (anchor.isDisplayStateApplied()) {
+                anchor.setDisplayStateApplied(false);
+                return true;
+            }
+            return false;
         }
+        StateSupport stateSupport = npc.getRole().getStateSupport();
+        int displayState = stateSupport.getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_GUILD_HALL_DISPLAY);
+        if (displayState >= 0 && stateSupport.inState(displayState)) {
+            if (!anchor.isDisplayStateApplied()) {
+                anchor.setDisplayStateApplied(true);
+                return true;
+            }
+            return false;
+        }
+        if (anchor.isDisplayStateApplied()) {
+            return false;
+        }
+        npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUILD_HALL_DISPLAY, null, commandBuffer);
+        anchor.setDisplayStateApplied(true);
+        return true;
     }
 
     private static void syncHeadYawIfNeeded(

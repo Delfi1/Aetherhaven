@@ -37,6 +37,12 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
     private transient int chairMountAttempts;
     /** Not serialized; sit fallback applied when block mount never succeeds. */
     private transient boolean sitFallbackApplied;
+    /** Not serialized; avoid repeating GuildHallDisplay setState (resets animations). */
+    private transient boolean displayStateApplied;
+    /** Not serialized; feet aligned over chair block before first mount attempt. */
+    private transient boolean chairAlignedForMount;
+    /** Not serialized; Sit status animation already started for this display session. */
+    private transient boolean sitAnimationApplied;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         componentType = registry.registerComponent(GuildHallDisplayAnchor.class, "AetherhavenGuildHallDisplayAnchor", CODEC);
@@ -96,12 +102,45 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
         this.sitFallbackApplied = sitFallbackApplied;
     }
 
+    public boolean isDisplayStateApplied() {
+        return displayStateApplied;
+    }
+
+    public void setDisplayStateApplied(boolean displayStateApplied) {
+        this.displayStateApplied = displayStateApplied;
+    }
+
+    public boolean isChairAlignedForMount() {
+        return chairAlignedForMount;
+    }
+
+    public void setChairAlignedForMount(boolean chairAlignedForMount) {
+        this.chairAlignedForMount = chairAlignedForMount;
+    }
+
+    public boolean isSitAnimationApplied() {
+        return sitAnimationApplied;
+    }
+
+    public void setSitAnimationApplied(boolean sitAnimationApplied) {
+        this.sitAnimationApplied = sitAnimationApplied;
+    }
+
+    public void updatePosition(@Nonnull Vector3d position) {
+        this.x = position.x;
+        this.y = position.y;
+        this.z = position.z;
+    }
+
     @Nonnull
     @Override
     public Component<EntityStore> clone() {
         GuildHallDisplayAnchor copy = new GuildHallDisplayAnchor(getPosition(), yawRadians);
         copy.chairMountAttempts = chairMountAttempts;
         copy.sitFallbackApplied = sitFallbackApplied;
+        copy.displayStateApplied = displayStateApplied;
+        copy.chairAlignedForMount = chairAlignedForMount;
+        copy.sitAnimationApplied = sitAnimationApplied;
         return copy;
     }
 }

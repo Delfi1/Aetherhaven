@@ -2,12 +2,6 @@
   "Parent": "Player",
   "DefaultAttachments": [
     {
-      "Model": "Characters/Player.blockymodel",
-      "Texture": "Characters/Player_Textures/Player_Muscular_Greyscale.png",
-      "GradientSet": "Skin",
-      "GradientId": "17"
-    },
-    {
       "Model": "Cosmetics/Underwears/Underwear.blockymodel",
       "Texture": "Cosmetics/Underwears/Underwear_Textures/Underwear_Bandeau_Texture.png",
       "GradientSet": "Colored_Cotton",
@@ -15,7 +9,7 @@
     },
     {
       "Model": "Characters/Body_Attachments/Faces/Player_Face_Detached.blockymodel",
-      "Texture": "Characters/Body_Attachments/Faces/Faces_Detached_Textures/Face_Stubble.png",
+      "Texture": "Characters/Body_Attachments/Faces/Faces_Detached_Textures/Face.png",
       "GradientSet": "Skin",
       "GradientId": "17"
     },
@@ -76,5 +70,9 @@
       "Texture": "Cosmetics/Shoes/BootsBasic_Textures/Scavenger_Leather.png"
     }
   ],
-  "Icon": "Icons/ModelsGenerated/Male_Elf_03.png"
+  "Icon": "Icons/ModelsGenerated/Male_Elf_03.png",
+  "Model": "Characters/Player.blockymodel",
+  "Texture": "Characters/Player_Textures/Player_Muscular_Greyscale.png",
+  "GradientSet": "Skin",
+  "GradientId": "17"
 }
