@@ -46,8 +46,21 @@
       "Instructions": [
         {
           "Sensor": {
-            "Type": "Not",
-            "Sensor": { "Type": "State", "State": "Flee" }
+            "Type": "And",
+            "Sensors": [
+              {
+                "Type": "Not",
+                "Sensor": { "Type": "State", "State": "Flee" }
+              },
+              {
+                "Type": "Not",
+                "Sensor": { "Type": "State", "State": "GuildHallDisplay", "IgnoreMissingSetState": true }
+              },
+              {
+                "Type": "Not",
+                "Sensor": { "Type": "State", "State": "$Interaction" }
+              }
+            ]
           },
           "Instructions": [
             {

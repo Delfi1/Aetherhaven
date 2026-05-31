@@ -1,0 +1,99 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "Interface": "Hytale.Instruction",
+  "$Comment": "Custom staff combat for Aetherhaven mage guards.",
+  "Parameters": {
+    "ViewRange": {
+      "Value": 24,
+      "Description": "Combat awareness range"
+    },
+    "TooCloseDistance": {
+      "Value": 5,
+      "Description": "Back away when hostiles enter this range"
+    },
+    "DesiredRangedDistance": {
+      "Value": [8, 14],
+      "Description": "Preferred casting range"
+    },
+    "RangedAttack": {
+      "Value": "Skeleton_Archmage_Staff_Corruption_Orb",
+      "Description": "Staff attack interaction"
+    }
+  },
+  "Content": {
+    "Sensor": {
+      "Type": "Or",
+      "Sensors": [
+        {
+          "Type": "Mob",
+          "Range": { "Compute": "ViewRange" },
+          "LockOnTarget": true,
+          "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
+          "Collector": { "Type": "CombatTargets" }
+        },
+        { "Type": "HasHostileTargetMemory" }
+      ]
+    },
+    "Instructions": [
+      {
+        "Continue": true,
+        "Sensor": { "Type": "Damage", "Combat": true },
+        "Actions": [{ "Type": "AddToHostileTargetMemory" }]
+      },
+      {
+        "Continue": true,
+        "Sensor": { "Type": "Target", "Range": { "Compute": "TooCloseDistance" } },
+        "BodyMotion": {
+          "Type": "Flee",
+          "SlowDownDistance": 6,
+          "StopDistance": 10,
+          "RelativeSpeed": 0.65
+        }
+      },
+      {
+        "Continue": true,
+        "Sensor": {
+          "Type": "Target",
+          "Range": { "Compute": "ViewRange" },
+          "Filters": [{ "Type": "LineOfSight" }]
+        },
+        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 0.45, "HitProbability": 1.0 }
+      },
+      {
+        "Sensor": {
+          "Type": "Target",
+          "Range": { "Compute": "ViewRange" },
+          "Filters": [{ "Type": "LineOfSight" }]
+        },
+        "ActionsBlocking": true,
+        "BodyMotion": {
+          "Type": "MaintainDistance",
+          "DesiredDistanceRange": { "Compute": "DesiredRangedDistance" },
+          "MoveThreshold": 0.2,
+          "RelativeForwardsSpeed": 0.35,
+          "RelativeBackwardsSpeed": 0.5
+        },
+        "Actions": [
+          {
+            "Type": "Attack",
+            "Attack": { "Compute": "RangedAttack" },
+            "AimingTimeRange": [0.8, 1.6],
+            "LineOfSight": true,
+            "AvoidFriendlyFire": true,
+            "AttackPauseRange": [2, 3]
+          }
+        ]
+      },
+      {
+        "Sensor": { "Type": "Target", "Range": { "Compute": "ViewRange" } },
+        "BodyMotion": {
+          "Type": "Seek",
+          "SlowDownDistance": 12,
+          "StopDistance": 8,
+          "RelativeSpeed": 0.45
+        }
+      }
+    ]
+  }
+}

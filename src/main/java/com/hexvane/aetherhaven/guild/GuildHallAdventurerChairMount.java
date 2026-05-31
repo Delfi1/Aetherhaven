@@ -15,6 +15,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.logging.Level;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
@@ -46,10 +47,11 @@ public final class GuildHallAdventurerChairMount {
         if (!VillagerBlockUtil.canNpcMountBlockPoi(world, feet.x, feet.y, feet.z, mountBlock.x, mountBlock.y, mountBlock.z)) {
             return false;
         }
+        alignFeetAboveChair(npcRef, commandBuffer, feet, mountBlock);
         try {
-            Vector3d hit = new Vector3d(feet.x, feet.y + 0.5, feet.z);
-            BlockMountAPI.BlockMountResult result =
-                BlockMountAPI.mountOnBlock(npcRef, commandBuffer, mountBlock, hit);
+            Vector3d hitNearNpc = new Vector3d(feet.x, feet.y + 0.5, feet.z);
+            Vector3d hitBlockCenter = new Vector3d(mountBlock.x + 0.5, mountBlock.y + 0.5, mountBlock.z + 0.5);
+            BlockMountAPI.BlockMountResult result = tryMountWithHits(npcRef, commandBuffer, mountBlock, hitNearNpc, hitBlockCenter);
             if (!(result instanceof BlockMountAPI.Mounted)) {
                 return false;
             }
@@ -65,9 +67,85 @@ public final class GuildHallAdventurerChairMount {
         }
     }
 
+    public static void applySitFallbackPose(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Vector3d spawnPosition,
+        float yawRadians
+    ) {
+        World world = store.getExternalData().getWorld();
+        TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
+        if (tc == null) {
+            return;
+        }
+        Vector3d feet = tc.getPosition();
+        Vector3i mountBlock = VillagerBlockUtil.findMountBlockNear(world, feet.x, feet.y, feet.z, spawnPosition);
+        if (mountBlock == null) {
+            return;
+        }
+        Vector3d pos = tc.getPosition();
+        pos.x = mountBlock.x + 0.5;
+        pos.z = mountBlock.z + 0.5;
+        pos.y = mountBlock.y + 0.35;
+        commandBuffer.putComponent(
+            npcRef,
+            TransformComponent.getComponentType(),
+            new TransformComponent(new Vector3d(pos), new com.hypixel.hytale.math.vector.Rotation3f(0.0F, yawRadians, 0.0F))
+        );
+        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+        if (npc != null) {
+            npc.playAnimation(npcRef, AnimationSlot.Status, "Sit", store);
+        }
+    }
+
     public static boolean isBlockMounted(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> npcRef) {
-        MountedComponent mounted = store.getComponent(npcRef, MountedComponent.getComponentType());
+        return isBlockMounted(store, null, npcRef);
+    }
+
+    public static boolean isBlockMounted(
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Ref<EntityStore> npcRef
+    ) {
+        MountedComponent mounted = commandBuffer != null
+            ? commandBuffer.getComponent(npcRef, MountedComponent.getComponentType())
+            : null;
+        if (mounted == null) {
+            mounted = store.getComponent(npcRef, MountedComponent.getComponentType());
+        }
         return mounted != null && mounted.getControllerType() == MountController.BlockMount;
+    }
+
+    private static void alignFeetAboveChair(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Vector3d feet,
+        @Nonnull Vector3i mountBlock
+    ) {
+        feet.x = mountBlock.x + 0.5;
+        feet.z = mountBlock.z + 0.5;
+        TransformComponent tc = commandBuffer.getComponent(npcRef, TransformComponent.getComponentType());
+        if (tc == null) {
+            return;
+        }
+        tc.setPosition(new Vector3d(feet));
+        commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
+    }
+
+    @Nonnull
+    private static BlockMountAPI.BlockMountResult tryMountWithHits(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Vector3i mountBlock,
+        @Nonnull Vector3d primaryHit,
+        @Nonnull Vector3d fallbackHit
+    ) {
+        BlockMountAPI.BlockMountResult result = BlockMountAPI.mountOnBlock(npcRef, commandBuffer, mountBlock, primaryHit);
+        if (result instanceof BlockMountAPI.Mounted) {
+            return result;
+        }
+        return BlockMountAPI.mountOnBlock(npcRef, commandBuffer, mountBlock, fallbackHit);
     }
 
     private static void syncAnchorAfterMount(
@@ -76,7 +154,10 @@ public final class GuildHallAdventurerChairMount {
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
         GuildHallDisplayAnchor anchor = store.getComponent(npcRef, GuildHallDisplayAnchor.getComponentType());
-        TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
+        TransformComponent tc = commandBuffer.getComponent(npcRef, TransformComponent.getComponentType());
+        if (tc == null) {
+            tc = store.getComponent(npcRef, TransformComponent.getComponentType());
+        }
         if (anchor == null || tc == null) {
             return;
         }

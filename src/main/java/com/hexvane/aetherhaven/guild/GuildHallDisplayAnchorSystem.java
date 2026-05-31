@@ -23,6 +23,7 @@ import org.joml.Vector3d;
 /** Keeps guild hall display adventurers at their spawn anchor facing and out of wander states. */
 public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<EntityStore> {
     private static final double SNAP_DIST_SQ = 0.35 * 0.35;
+    private static final float HEAD_YAW_EPS = 0.05F;
 
     @Nonnull
     private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
@@ -63,43 +64,48 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
             return;
         }
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
-        if (!anchor.isChairMountAttempted()) {
-            anchor.setChairMountAttempted(true);
-            commandBuffer.putComponent(ref, GuildHallDisplayAnchor.getComponentType(), anchor);
-            GuildHallAdventurerChairMount.tryMountChairBelowSpawn(ref, store, commandBuffer, anchor.getPosition());
-        }
-        if (GuildHallAdventurerChairMount.isBlockMounted(store, ref)) {
-            applyDisplayState(npc, ref, commandBuffer);
-            Rotation3f rot = new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F);
-            HeadRotation head = store.getComponent(ref, HeadRotation.getComponentType());
-            if (head != null) {
-                head.teleportRotation(rot);
-                commandBuffer.putComponent(ref, HeadRotation.getComponentType(), head);
+
+        if (!anchor.isChairMountFinished() && !GuildHallAdventurerChairMount.isBlockMounted(store, commandBuffer, ref)) {
+            if (GuildHallAdventurerChairMount.tryMountChairBelowSpawn(ref, store, commandBuffer, anchor.getPosition())) {
+                anchor.markChairMountFinished();
+            } else {
+                anchor.incrementChairMountAttempts();
+                if (anchor.getChairMountAttempts() >= GuildHallDisplayAnchor.MAX_CHAIR_MOUNT_ATTEMPTS) {
+                    GuildHallAdventurerChairMount.applySitFallbackPose(ref, store, commandBuffer, anchor.getPosition(), anchor.getYawRadians());
+                    anchor.setSitFallbackApplied(true);
+                    anchor.markChairMountFinished();
+                }
             }
+            commandBuffer.putComponent(ref, GuildHallDisplayAnchor.getComponentType(), anchor);
+        }
+
+        applyDisplayStateIfNeeded(npc, ref, commandBuffer);
+
+        if (GuildHallAdventurerChairMount.isBlockMounted(store, commandBuffer, ref)) {
+            syncHeadYawIfNeeded(ref, store, commandBuffer, anchor.getYawRadians());
             return;
         }
-        Vector3d target = anchor.getPosition();
-        Rotation3f rot = new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F);
 
-        applyDisplayState(npc, ref, commandBuffer);
-        npc.setLeashPoint(new Vector3d(target));
+        if (anchor.isSitFallbackApplied()) {
+            syncHeadYawIfNeeded(ref, store, commandBuffer, anchor.getYawRadians());
+            return;
+        }
+
+        Vector3d target = anchor.getPosition();
         Vector3d pos = tc.getPosition();
         double dx = pos.x - target.x;
         double dy = pos.y - target.y;
         double dz = pos.z - target.z;
         if (dx * dx + dy * dy + dz * dz > SNAP_DIST_SQ) {
+            Rotation3f rot = new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F);
             commandBuffer.putComponent(ref, TransformComponent.getComponentType(), new TransformComponent(new Vector3d(target), rot));
+            syncHeadYawIfNeeded(ref, store, commandBuffer, anchor.getYawRadians());
         } else {
-            commandBuffer.putComponent(ref, TransformComponent.getComponentType(), new TransformComponent(new Vector3d(pos), rot));
-        }
-        HeadRotation head = store.getComponent(ref, HeadRotation.getComponentType());
-        if (head != null) {
-            head.teleportRotation(rot);
-            commandBuffer.putComponent(ref, HeadRotation.getComponentType(), head);
+            syncHeadYawIfNeeded(ref, store, commandBuffer, anchor.getYawRadians());
         }
     }
 
-    private static void applyDisplayState(
+    private static void applyDisplayStateIfNeeded(
         @Nonnull NPCEntity npc,
         @Nonnull Ref<EntityStore> ref,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
@@ -112,5 +118,23 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
             && !"Flee".equals(state)) {
             npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUILD_HALL_DISPLAY, null, commandBuffer);
         }
+    }
+
+    private static void syncHeadYawIfNeeded(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        float yawRadians
+    ) {
+        HeadRotation head = store.getComponent(ref, HeadRotation.getComponentType());
+        if (head == null) {
+            return;
+        }
+        float current = head.getRotation().y();
+        if (Math.abs(current - yawRadians) <= HEAD_YAW_EPS) {
+            return;
+        }
+        head.teleportRotation(new Rotation3f(0.0F, yawRadians, 0.0F));
+        commandBuffer.putComponent(ref, HeadRotation.getComponentType(), head);
     }
 }

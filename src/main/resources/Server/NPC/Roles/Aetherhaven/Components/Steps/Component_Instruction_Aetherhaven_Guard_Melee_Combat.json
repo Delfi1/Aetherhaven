@@ -1,0 +1,85 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "Interface": "Hytale.Instruction",
+  "$Comment": "Custom melee combat for Aetherhaven town guards.",
+  "Parameters": {
+    "ViewRange": {
+      "Value": 24,
+      "Description": "Combat awareness range"
+    },
+    "AttackDistance": {
+      "Value": 2.5,
+      "Description": "Melee attack range"
+    },
+    "MeleeAttack": {
+      "Value": "Root_NPC_Attack_Melee",
+      "Description": "Melee attack interaction root"
+    }
+  },
+  "Content": {
+    "Sensor": {
+      "Type": "Or",
+      "Sensors": [
+        {
+          "Type": "Mob",
+          "Range": { "Compute": "ViewRange" },
+          "LockOnTarget": true,
+          "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
+          "Collector": { "Type": "CombatTargets" }
+        },
+        { "Type": "HasHostileTargetMemory" }
+      ]
+    },
+    "Instructions": [
+      {
+        "Continue": true,
+        "Sensor": { "Type": "Damage", "Combat": true },
+        "Actions": [{ "Type": "AddToHostileTargetMemory" }]
+      },
+      {
+        "Continue": true,
+        "Sensor": {
+          "Type": "Target",
+          "Range": { "Compute": "ViewRange" },
+          "Filters": [{ "Type": "LineOfSight" }]
+        },
+        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 0.5, "HitProbability": 1.0 }
+      },
+      {
+        "Sensor": {
+          "Type": "Target",
+          "Range": { "Compute": "AttackDistance" },
+          "Filters": [{ "Type": "LineOfSight" }]
+        },
+        "ActionsBlocking": true,
+        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 0.5, "HitProbability": 1.0 },
+        "BodyMotion": {
+          "Type": "MaintainDistance",
+          "DesiredDistanceRange": [2, 3],
+          "MoveThreshold": 0.15,
+          "RelativeForwardsSpeed": 0.45,
+          "RelativeBackwardsSpeed": 0.45
+        },
+        "Actions": [
+          {
+            "Type": "Attack",
+            "Attack": { "Compute": "MeleeAttack" },
+            "LineOfSight": true,
+            "AvoidFriendlyFire": true,
+            "AttackPauseRange": [1, 2]
+          }
+        ]
+      },
+      {
+        "Sensor": { "Type": "Target", "Range": { "Compute": "ViewRange" } },
+        "BodyMotion": {
+          "Type": "Seek",
+          "SlowDownDistance": 2.5,
+          "StopDistance": 2,
+          "RelativeSpeed": 0.5
+        }
+      }
+    ]
+  }
+}

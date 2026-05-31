@@ -123,6 +123,7 @@ public final class GuardHireService {
         }
 
         town.getGuildHallAdventurerNpcIds().removeIf(s -> entityUuid.toString().equalsIgnoreCase(s != null ? s.trim() : ""));
+        town.getGuildHallAdventurerSlotByNpcId().remove(entityUuid.toString());
 
         var guildPlot = town.findCompletePlotWithConstruction(
             plugin.getConstructionCatalog(),
@@ -158,6 +159,7 @@ public final class GuardHireService {
         town.getHiredGuardRecords().add(new HiredGuardRecord(tb.getCharacterId(), entityUuid, profileId, false));
         tm.updateTown(town);
 
+        GuardHireCleanup.prepareForGuardDuty(npcRef, store, guildPlot);
         changeToGuardRole(npcRef, store, profile);
         VillagerEquipmentService.applyProfile(npcRef, store, null, plugin.getEquipmentProfileCatalog(), profileId);
         LOGGER.atInfo().log("Hired guard %s for town %s", tb.getCharacterId(), town.getTownId());

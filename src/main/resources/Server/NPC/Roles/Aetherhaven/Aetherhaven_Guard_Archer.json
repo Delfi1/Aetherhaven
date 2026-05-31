@@ -24,6 +24,9 @@
   "BusyStates": ["Idle", "Combat"],
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.5,
+  "HotbarItems": ["Weapon_Shortbow_Iron"],
+  "OverrideHeadPitchAngle": true,
+  "HeadPitchAngleRange": [-89, 89],
   "HotbarSize": 3,
   "OffHandSlots": 2,
   "MotionControllerList": [
@@ -37,23 +40,38 @@
       "Acceleration": 10
     }
   ],
+  "StateTransitions": [
+    {
+      "States": [{ "To": ["Idle", "Combat"], "From": [] }],
+      "Actions": [
+        { "Type": "Inventory", "Operation": "EquipHotbar", "UseTarget": false, "Slot": 0 }
+      ]
+    }
+  ],
   "Instructions": [
+    {
+      "Continue": true,
+      "Instructions": [
+        {
+          "Continue": true,
+          "Sensor": { "Type": "Any", "Once": true },
+          "Actions": [
+            { "Type": "Inventory", "Operation": "EquipHotbar", "UseTarget": false, "Slot": 0 }
+          ]
+        }
+      ]
+    },
     {
       "Instructions": [
         {
           "Sensor": { "Type": "State", "State": "Idle" },
           "Instructions": [
             {
-              "Sensor": {
-                "Type": "Mob",
-                "Range": { "Compute": "ViewRange" },
-                "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
-                "Collector": { "Type": "CombatTargets" }
-              },
-              "Actions": [
-                { "Type": "OverrideAttitude", "Attitude": "Hostile", "Duration": 120 },
-                { "Type": "State", "State": "Combat" }
-              ]
+              "Reference": "Component_Instruction_Aetherhaven_Guard_Idle_Aggro",
+              "Modify": {
+                "_ExportStates": ["Combat"],
+                "ViewRange": { "Compute": "ViewRange" }
+              }
             },
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Rect_Wander_Idle",
@@ -68,71 +86,30 @@
           "Sensor": { "Type": "State", "State": "Combat" },
           "Instructions": [
             {
-              "Sensor": {
-                "Type": "Or",
-                "Sensors": [
-                  {
-                    "Type": "Mob",
-                    "Range": { "Compute": "ViewRange" },
-                    "LockOnTarget": false,
-                    "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
-                    "Collector": { "Type": "CombatTargets" }
-                  },
-                  { "Type": "HasHostileTargetMemory" }
-                ]
-              },
-              "Instructions": [
-                {
-                  "Continue": true,
-                  "Sensor": { "Type": "Damage", "Combat": true },
-                  "Actions": [{ "Type": "AddToHostileTargetMemory" }]
-                },
-                {
-                  "Continue": true,
-                  "Sensor": { "Type": "Target", "Range": { "Compute": "TooCloseDistance" } },
-                  "BodyMotion": {
-                    "Type": "Flee",
-                    "SlowDownDistance": 6,
-                    "StopDistance": 10,
-                    "RelativeSpeed": 0.65
-                  }
-                },
-                {
-                  "Sensor": {
-                    "Type": "Target",
-                    "Range": { "Compute": "ViewRange" },
-                    "Filters": [{ "Type": "LineOfSight" }]
-                  },
-                  "ActionsBlocking": true,
-                  "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 0.5, "HitProbability": 1.0 },
-                  "BodyMotion": {
-                    "Type": "MaintainDistance",
-                    "DesiredDistanceRange": { "Compute": "DesiredRangedDistance" },
-                    "MoveThreshold": 0.2,
-                    "RelativeForwardsSpeed": 0.4,
-                    "RelativeBackwardsSpeed": 0.55
-                  },
-                  "Actions": [
-                    {
-                      "Type": "Attack",
-                      "Attack": "Skeleton_Archer_Bow_Shoot",
-                      "AimingTimeRange": [0.4, 1.2],
-                      "AttackPauseRange": [1.5, 2.5]
-                    }
-                  ]
-                },
-                {
-                  "Sensor": { "Type": "Target", "Range": { "Compute": "ViewRange" } },
-                  "BodyMotion": {
-                    "Type": "Seek",
-                    "SlowDownDistance": 12,
-                    "StopDistance": 8,
-                    "RelativeSpeed": 0.5
-                  }
-                }
-              ]
+              "Reference": "Component_Instruction_Aetherhaven_Guard_Ranged_Combat",
+              "Modify": {
+                "ViewRange": { "Compute": "ViewRange" },
+                "TooCloseDistance": { "Compute": "TooCloseDistance" },
+                "DesiredRangedDistance": { "Compute": "DesiredRangedDistance" }
+              }
             },
             {
+              "Sensor": {
+                "Type": "And",
+                "Sensors": [
+                  {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "Mob",
+                      "Range": { "Compute": "ViewRange" },
+                      "LockOnTarget": false,
+                      "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
+                      "Collector": { "Type": "CombatTargets" }
+                    }
+                  },
+                  { "Type": "Not", "Sensor": { "Type": "HasHostileTargetMemory" } }
+                ]
+              },
               "Actions": [{ "Type": "State", "State": "Idle" }]
             }
           ]

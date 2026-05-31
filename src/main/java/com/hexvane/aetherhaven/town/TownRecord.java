@@ -142,6 +142,14 @@ public final class TownRecord {
     @SerializedName("guildHallLastMorningEpochDay")
     private Long guildHallLastMorningEpochDay;
 
+    /** Slot indices chosen for today's ~50% guild hall adventurer fill. */
+    @SerializedName("guildHallAdventurerFilledSlots")
+    private List<Integer> guildHallAdventurerFilledSlots = new ArrayList<>();
+
+    /** Maps adventurer entity UUID string to spawn slot index for the current day. */
+    @SerializedName("guildHallAdventurerSlotByNpcId")
+    private Map<String, Integer> guildHallAdventurerSlotByNpcId = new LinkedHashMap<>();
+
     /** Hired guards not yet promoted to tax paying citizens. */
     @SerializedName("hiredGuardRecords")
     private List<HiredGuardRecord> hiredGuardRecords = new ArrayList<>();
@@ -908,6 +916,22 @@ public final class TownRecord {
 
     public void setGuildHallLastMorningEpochDay(@Nullable Long epochDay) {
         this.guildHallLastMorningEpochDay = epochDay;
+    }
+
+    @Nonnull
+    public List<Integer> getGuildHallAdventurerFilledSlots() {
+        if (guildHallAdventurerFilledSlots == null) {
+            guildHallAdventurerFilledSlots = new ArrayList<>();
+        }
+        return guildHallAdventurerFilledSlots;
+    }
+
+    @Nonnull
+    public Map<String, Integer> getGuildHallAdventurerSlotByNpcId() {
+        if (guildHallAdventurerSlotByNpcId == null) {
+            guildHallAdventurerSlotByNpcId = new LinkedHashMap<>();
+        }
+        return guildHallAdventurerSlotByNpcId;
     }
 
     @Nonnull

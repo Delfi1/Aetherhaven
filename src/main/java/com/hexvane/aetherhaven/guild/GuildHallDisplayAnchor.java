@@ -33,8 +33,10 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
     private double y;
     private double z;
     private float yawRadians;
-    /** Not serialized; one-shot chair mount attempt per entity load. */
-    private transient boolean chairMountAttempted;
+    /** Not serialized; mount attempts this session (chunk/mount can lag after spawn). */
+    private transient int chairMountAttempts;
+    /** Not serialized; sit fallback applied when block mount never succeeds. */
+    private transient boolean sitFallbackApplied;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         componentType = registry.registerComponent(GuildHallDisplayAnchor.class, "AetherhavenGuildHallDisplayAnchor", CODEC);
@@ -67,19 +69,39 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
         return yawRadians;
     }
 
-    public boolean isChairMountAttempted() {
-        return chairMountAttempted;
+    public int getChairMountAttempts() {
+        return chairMountAttempts;
     }
 
-    public void setChairMountAttempted(boolean chairMountAttempted) {
-        this.chairMountAttempted = chairMountAttempted;
+    public void incrementChairMountAttempts() {
+        chairMountAttempts++;
+    }
+
+    public static final int MAX_CHAIR_MOUNT_ATTEMPTS = 30;
+
+    /** True after a successful mount, sit fallback, or max failed attempts. */
+    public boolean isChairMountFinished() {
+        return chairMountAttempts >= MAX_CHAIR_MOUNT_ATTEMPTS || sitFallbackApplied;
+    }
+
+    public void markChairMountFinished() {
+        chairMountAttempts = MAX_CHAIR_MOUNT_ATTEMPTS;
+    }
+
+    public boolean isSitFallbackApplied() {
+        return sitFallbackApplied;
+    }
+
+    public void setSitFallbackApplied(boolean sitFallbackApplied) {
+        this.sitFallbackApplied = sitFallbackApplied;
     }
 
     @Nonnull
     @Override
     public Component<EntityStore> clone() {
         GuildHallDisplayAnchor copy = new GuildHallDisplayAnchor(getPosition(), yawRadians);
-        copy.chairMountAttempted = chairMountAttempted;
+        copy.chairMountAttempts = chairMountAttempts;
+        copy.sitFallbackApplied = sitFallbackApplied;
         return copy;
     }
 }

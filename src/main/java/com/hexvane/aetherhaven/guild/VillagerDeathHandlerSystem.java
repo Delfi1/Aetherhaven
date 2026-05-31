@@ -68,6 +68,7 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
 
         if (entityUuid != null && GuildHallAdventurerPoolService.isGuildHallAdventurer(town, entityUuid)) {
             town.getGuildHallAdventurerNpcIds().removeIf(s -> entityUuid.toString().equalsIgnoreCase(s != null ? s.trim() : ""));
+            town.getGuildHallAdventurerSlotByNpcId().remove(entityUuid.toString());
             TownsfolkCharacterBinding tb = store.getComponent(victimRef, TownsfolkCharacterBinding.getComponentType());
             if (tb != null) {
                 TownsfolkSpawnService.release(world, plugin, tb.getCharacterId());

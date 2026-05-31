@@ -62,12 +62,32 @@ public final class GuildHallCompletion {
         if (masterRef == null || !masterRef.isValid()) {
             return;
         }
+        TownVillagerBinding existingBinding = store.getComponent(masterRef, TownVillagerBinding.getComponentType());
+        boolean alreadyAtHall =
+            existingBinding != null
+                && TownVillagerBinding.KIND_GUILD_MASTER.equals(existingBinding.getKind())
+                && plotId.equals(existingBinding.getJobPlotId());
         TransformComponent tc = store.getComponent(masterRef, TransformComponent.getComponentType());
-        if (tc != null) {
+        if (tc != null && !alreadyAtHall) {
             Vector3d p = tc.getPosition();
-            p.x = work.getX() + 0.5;
-            p.y = work.getY() + 0.02;
-            p.z = work.getZ() + 0.5;
+            if (work.hasInteractionTarget()) {
+                Double tx = work.getInteractionTargetX();
+                Double ty = work.getInteractionTargetY();
+                Double tz = work.getInteractionTargetZ();
+                if (tx != null && ty != null && tz != null) {
+                    p.x = tx;
+                    p.y = ty;
+                    p.z = tz;
+                } else {
+                    p.x = work.getX() + 0.5;
+                    p.y = work.getY() + 0.02;
+                    p.z = work.getZ() + 0.5;
+                }
+            } else {
+                p.x = work.getX() + 0.5;
+                p.y = work.getY() + 0.02;
+                p.z = work.getZ() + 0.5;
+            }
             store.putComponent(masterRef, TransformComponent.getComponentType(), tc);
         }
         UUIDComponent uuidComp = store.getComponent(masterRef, UUIDComponent.getComponentType());
@@ -99,7 +119,12 @@ public final class GuildHallCompletion {
         }
         town.setGuildHallActive(true);
         tm.updateTown(town);
-        LOGGER.atInfo().log("Moved guild master to guild hall at %s,%s,%s", work.getX(), work.getY(), work.getZ());
+        LOGGER.atInfo().log(
+            "Moved guild master to guild hall at %s,%s,%s",
+            work.hasInteractionTarget() ? work.getInteractionTargetX() : work.getX() + 0.5,
+            work.hasInteractionTarget() ? work.getInteractionTargetY() : work.getY() + 0.02,
+            work.hasInteractionTarget() ? work.getInteractionTargetZ() : work.getZ() + 0.5
+        );
     }
 
     @Nullable
