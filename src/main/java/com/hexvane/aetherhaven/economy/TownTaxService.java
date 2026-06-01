@@ -8,12 +8,16 @@ import com.hexvane.aetherhaven.feast.FeastService;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.CharterTaxPolicy;
+import com.hexvane.aetherhaven.town.HiredGuardRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownResidentDisplay;
+import com.hexvane.aetherhaven.town.TownResidentEligibility;
+import com.hypixel.hytale.component.Ref;
 import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
-import com.hexvane.aetherhaven.villager.AetherhavenRoleLabels;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -68,7 +72,8 @@ public final class TownTaxService {
         float energy,
         float fun,
         float needsRatio,
-        long contributionGold
+        long contributionGold,
+        boolean townsfolkFlatTax
     ) {}
 
     /**
@@ -305,6 +310,11 @@ public final class TownTaxService {
         @Nonnull List<VillagerTaxLine> outLines,
         @Nonnull int[] simulatedResidentEntityCountOut
     ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return 0L;
+        }
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
         UUID tid = town.getTownId();
         long[] sum = new long[1];
         Set<UUID> counted = new HashSet<>();
@@ -329,14 +339,17 @@ public final class TownTaxService {
                     }
                     UUIDComponent id = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
                     NPCEntity npc = archetypeChunk.getComponent(i, NPCEntity.getComponentType());
-                    if (id == null) {
+                    if (id == null || npc == null || npc.getRoleName() == null) {
+                        continue;
+                    }
+                    String role = npc.getRoleName().trim();
+                    if (!TownResidentEligibility.usesVillagerNeeds(b.getKind(), role, plugin)) {
                         continue;
                     }
                     UUID entityUuid = id.getUuid();
                     counted.add(entityUuid);
                     simulatedResidentEntityCountOut[0]++;
-                    String role = npc != null ? npc.getRoleName() : null;
-                    String displayName = AetherhavenRoleLabels.listLinePlainEnglish(role, b.getKind());
+                    TownResidentDisplay.Resolved display = TownResidentDisplay.resolveFromChunk(archetypeChunk, i, role, plugin);
                     float avg = (needs.getHunger() + needs.getEnergy() + needs.getFun()) / 3f;
                     float ratio = Math.max(0f, Math.min(1f, avg / VillagerNeeds.MAX));
                     long floored = contributionGold(maxPerVillager, cfg, policy, ratio);
@@ -346,23 +359,26 @@ public final class TownTaxService {
                             entityUuid,
                             b.getKind(),
                             role,
-                            displayName,
+                            display.displayName(),
                             needs.getHunger(),
                             needs.getEnergy(),
                             needs.getFun(),
                             ratio,
-                            floored
+                            floored,
+                            false
                         )
                     );
                 }
             }
         );
-        appendOfflineResidentTaxFromRecords(town, maxPerVillager, cfg, policy, counted, outLines, sum);
+        appendOfflineResidentTaxFromRecords(town, plugin, maxPerVillager, cfg, policy, counted, outLines, sum);
+        sum[0] += appendTownsfolkTaxLines(town, store, plugin, catalog, counted, outLines, simulatedResidentEntityCountOut);
         return sum[0];
     }
 
     private static void appendOfflineResidentTaxFromRecords(
         @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin,
         int maxPerVillager,
         @Nonnull AetherhavenPluginConfig cfg,
         @Nullable CharterTaxPolicy policy,
@@ -376,6 +392,10 @@ public final class TownTaxService {
                 continue;
             }
             if (TownVillagerBinding.isVisitorKind(rec.getKind())) {
+                continue;
+            }
+            String roleId = rec.getNpcRoleId().trim();
+            if (TownResidentEligibility.isTownsfolkPoolKind(rec.getKind(), roleId, plugin)) {
                 continue;
             }
             UUID id = rec.getLastEntityUuid();
@@ -393,23 +413,166 @@ public final class TownTaxService {
             float ratio = Math.max(0f, Math.min(1f, avg / VillagerNeeds.MAX));
             long floored = contributionGold(maxPerVillager, cfg, policy, ratio);
             sum[0] += floored;
-            String roleId = rec.getNpcRoleId();
-            String role = roleId != null && !roleId.isBlank() ? roleId : null;
-            String displayName = AetherhavenRoleLabels.listLinePlainEnglish(role, rec.getKind());
+            String role = roleId.isBlank() ? null : roleId;
+            TownResidentDisplay.Resolved display = TownResidentDisplay.resolveOffline(plugin, roleId, null, null);
             outLines.add(
-                new VillagerTaxLine(
-                    id,
-                    rec.getKind(),
-                    role,
-                    displayName,
-                    h,
-                    e,
-                    f,
-                    ratio,
-                    floored
-                )
+                new VillagerTaxLine(id, rec.getKind(), role, display.displayName(), h, e, f, ratio, floored, false)
             );
         }
+    }
+
+    private static long appendTownsfolkTaxLines(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull Set<UUID> countedEntityIds,
+        @Nonnull List<VillagerTaxLine> outLines,
+        @Nonnull int[] simulatedResidentEntityCountOut
+    ) {
+        long flatGold = AetherhavenConstants.TOWNSFOLK_TAX_GOLD_PER_DAY;
+        long[] added = new long[1];
+        UUID tid = town.getTownId();
+        Query<EntityStore> q =
+            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType(), NPCEntity.getComponentType());
+        store.forEachChunk(
+            q,
+            (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (b == null || !tid.equals(b.getTownId())) {
+                        continue;
+                    }
+                    UUIDComponent id = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    NPCEntity npc = archetypeChunk.getComponent(i, NPCEntity.getComponentType());
+                    if (id == null || npc == null || npc.getRoleName() == null) {
+                        continue;
+                    }
+                    UUID entityUuid = id.getUuid();
+                    if (countedEntityIds.contains(entityUuid)) {
+                        continue;
+                    }
+                    String role = npc.getRoleName().trim();
+                    if (!TownResidentEligibility.countsAsTownsfolkTax(town, entityUuid, b, role, plugin, catalog)) {
+                        continue;
+                    }
+                    countedEntityIds.add(entityUuid);
+                    simulatedResidentEntityCountOut[0]++;
+                    TownResidentDisplay.Resolved display = TownResidentDisplay.resolveFromChunk(archetypeChunk, i, role, plugin);
+                    added[0] += flatGold;
+                    outLines.add(
+                        new VillagerTaxLine(
+                            entityUuid,
+                            b.getKind(),
+                            role,
+                            display.displayName(),
+                            0f,
+                            0f,
+                            0f,
+                            0f,
+                            flatGold,
+                            true
+                        )
+                    );
+                }
+            }
+        );
+        for (PlotInstance plot : town.getPlotInstances()) {
+            if (plot.getState() != PlotInstanceState.COMPLETE) {
+                continue;
+            }
+            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(catalog.resolveGameplayConstructionId(plot.getConstructionId()))) {
+                continue;
+            }
+            UUID home = plot.getHomeResidentEntityUuid();
+            if (home == null || countedEntityIds.contains(home)) {
+                continue;
+            }
+            added[0] +=
+                appendOfflineTownsfolkTaxLine(town, store, plugin, catalog, countedEntityIds, outLines, simulatedResidentEntityCountOut, home, flatGold);
+        }
+        for (HiredGuardRecord guard : town.getHiredGuardRecords()) {
+            UUID guardUuid = guard.getEntityUuid();
+            if (guardUuid == null || countedEntityIds.contains(guardUuid)) {
+                continue;
+            }
+            if (!town.isNpcHomeResidentOnHousePlot(guardUuid, catalog)) {
+                continue;
+            }
+            added[0] +=
+                appendOfflineTownsfolkTaxLine(
+                    town, store, plugin, catalog, countedEntityIds, outLines, simulatedResidentEntityCountOut, guardUuid, flatGold
+                );
+        }
+        return added[0];
+    }
+
+    private static long appendOfflineTownsfolkTaxLine(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull Set<UUID> countedEntityIds,
+        @Nonnull List<VillagerTaxLine> outLines,
+        @Nonnull int[] simulatedResidentEntityCountOut,
+        @Nonnull UUID entityUuid,
+        long flatGold
+    ) {
+        if (countedEntityIds.contains(entityUuid)) {
+            return 0L;
+        }
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
+        if (ref != null && ref.isValid()) {
+            TownVillagerBinding b = store.getComponent(ref, TownVillagerBinding.getComponentType());
+            NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+            if (b != null && npc != null && npc.getRoleName() != null) {
+                String role = npc.getRoleName().trim();
+                if (!TownResidentEligibility.countsAsTownsfolkTax(town, entityUuid, b, role, plugin, catalog)) {
+                    return 0L;
+                }
+                countedEntityIds.add(entityUuid);
+                simulatedResidentEntityCountOut[0]++;
+                TownResidentDisplay.Resolved display = TownResidentDisplay.resolveFromEntity(store, ref, role, plugin);
+                outLines.add(
+                    new VillagerTaxLine(
+                        entityUuid,
+                        b.getKind(),
+                        role,
+                        display.displayName(),
+                        0f,
+                        0f,
+                        0f,
+                        0f,
+                        flatGold,
+                        true
+                    )
+                );
+                return flatGold;
+            }
+        }
+        String roleId = AetherhavenConstants.NPC_GUARD_KNIGHT;
+        String kind = TownVillagerBinding.KIND_GUARD;
+        String characterId = null;
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            UUID u = rec.getEntityUuid();
+            if (u != null && u.equals(entityUuid)) {
+                characterId = rec.getCharacterId();
+                break;
+            }
+        }
+        if (characterId == null) {
+            roleId = AetherhavenConstants.NPC_TOWNSFOLK;
+            kind = TownVillagerBinding.KIND_TOWNSFOLK;
+        }
+        if (!TownResidentEligibility.countsAsTownsfolkTax(town, entityUuid, kind, roleId, plugin, catalog)) {
+            return 0L;
+        }
+        countedEntityIds.add(entityUuid);
+        TownResidentDisplay.Resolved display = TownResidentDisplay.resolveOffline(plugin, roleId, characterId, null);
+        outLines.add(
+            new VillagerTaxLine(entityUuid, kind, roleId, display.displayName(), 0f, 0f, 0f, 0f, flatGold, true)
+        );
+        return flatGold;
     }
 
     private static long contributionGold(

@@ -57,7 +57,7 @@ public final class HouseResidentAssignment {
         tm.updateTown(town);
         if (residentUuid != null && world != null && store != null) {
             if (town.hasQuestActive(AetherhavenConstants.QUEST_HOUSE_GUARD)
-                && residentUuid.equals(town.getGuardHouseQuestTargetEntityUuid())) {
+                && residentUuid.equals(town.getQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_GUARD))) {
                 AetherhavenPlugin plugin = AetherhavenPlugin.get();
                 if (plugin != null) {
                     VillagerDeathHandlerSystem.promoteGuardToCitizen(world, plugin, town, tm, residentUuid, store);

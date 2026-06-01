@@ -64,6 +64,12 @@ public final class QuestDefinition {
     private String assignNpcRoleId;
 
     /**
+     * When true, the quest targets a specific entity UUID (stored on the town) rather than a fixed {@link #assignNpcRoleId}.
+     */
+    @SerializedName("assignByEntity")
+    private boolean assignByEntity;
+
+    /**
      * When set with {@link #assignNpcRoleId}, residents who talk to that NPC may enter dialogue at this node id when the
      * quest is offerable (see {@link com.hexvane.aetherhaven.quest.QuestDialogueEntry}).
      */
@@ -147,6 +153,10 @@ public final class QuestDefinition {
     @Nullable
     public String assignNpcRoleId() {
         return assignNpcRoleId != null ? assignNpcRoleId.trim() : null;
+    }
+
+    public boolean assignByEntity() {
+        return assignByEntity;
     }
 
     @Nullable

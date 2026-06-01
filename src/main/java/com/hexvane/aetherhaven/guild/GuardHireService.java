@@ -163,7 +163,7 @@ public final class GuardHireService {
         }
 
         store.removeEntity(npcRef, RemoveReason.REMOVE);
-        TownsfolkExistenceService.purgeDuplicateEntities(store, tb.getCharacterId(), newEntityUuid);
+        TownsfolkExistenceService.purgeDuplicateEntities(world, store, tb.getCharacterId(), newEntityUuid);
 
         Integer hiredSlot = town.getGuildHallAdventurerSlotByNpcId().get(adventurerUuid.toString());
         town.getGuildHallAdventurerNpcIds().removeIf(s -> adventurerUuid.toString().equalsIgnoreCase(s != null ? s.trim() : ""));
@@ -311,7 +311,7 @@ public final class GuardHireService {
     }
 
     public static boolean isGuardHouseQuestTargetHoused(@Nonnull TownRecord town, @Nonnull AetherhavenPlugin plugin) {
-        UUID target = town.getGuardHouseQuestTargetEntityUuid();
+        UUID target = town.getQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_GUARD);
         return target != null && town.isNpcHomeResidentOnHousePlot(target, plugin.getConstructionCatalog());
     }
 }

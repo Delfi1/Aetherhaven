@@ -28,8 +28,9 @@ public final class AetherhavenUiLocalization {
     public static void applyPlotConstructionPage(@Nonnull UICommandBuilder b) {
         applyManagementTabTooltips(b);
         b.set("#MaterialsHeader.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.materials"));
-        b.set("#HouseResidentDropdown #HouseResidentFieldLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResident"));
-        b.set("#AssignHouseResidentButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.assignHouseResident"));
+        b.set("#ChooseHouseResidentButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.chooseHouseResident"));
+        b.set("#HouseResidentPickerTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResidentPickerTitle"));
+        b.set("#HouseResidentPickerCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResidentPickerCancel"));
         b.set("#WorkplaceAssignDropdown #WorkplaceAssignFieldLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceWorker"));
         b.set("#AssignWorkplaceButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.assignWorkplace"));
         b.set("#HouseResidentHideElsewhereCheckbox #HouseResidentHideElsewhereLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere"));
@@ -122,6 +123,26 @@ public final class AetherhavenUiLocalization {
 
     public static void applyGaiaStatueReviveRow(@Nonnull UICommandBuilder b, @Nonnull String rowPath) {
         b.set(rowPath + " #ReviveButton.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.revive"));
+    }
+
+    public static void applyPatrolWandAssignGuardPage(@Nonnull UICommandBuilder b) {
+        b.set("#PatrolAssignTitleText.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.assignPageTitle"));
+    }
+
+    public static void applyPatrolWandAssignGuardRow(@Nonnull UICommandBuilder b, @Nonnull String rowPath) {
+        b.set(rowPath + " #AssignButton.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.assignPageAssignButton"));
+    }
+
+    public static void applyHouseResidentAssignRow(@Nonnull UICommandBuilder b, @Nonnull String rowPath) {
+        b.set(rowPath + " #SelectButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResidentSelect"));
+    }
+
+    public static void applyPatrolWandNameRoutePage(@Nonnull UICommandBuilder b) {
+        b.set("#PatrolNameRouteTitleText.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.nameRouteTitle"));
+        b.set("#NameLabel.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.nameRouteLabel"));
+        b.set("#RouteNameInput.PlaceholderText", t("aetherhaven_items.aetherhaven.patrolWand.nameRoutePlaceholder"));
+        b.set("#SaveRouteNameButton.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.nameRouteSave"));
+        b.set("#CancelRouteNameButton.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.nameRouteCancel"));
     }
 
     public static void applyTreasuryPage(@Nonnull UICommandBuilder b) {

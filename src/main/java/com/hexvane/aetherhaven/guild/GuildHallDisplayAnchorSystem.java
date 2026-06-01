@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.guild;
 
+import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
@@ -8,26 +9,29 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.dependency.Dependency;
-import com.hypixel.hytale.component.dependency.RootDependency;
+import com.hypixel.hytale.component.dependency.Order;
+import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.math.vector.Rotation3f;
-import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.entity.system.TransformSystems;
+import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.support.StateSupport;
+import com.hypixel.hytale.server.npc.systems.SteeringSystem;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import org.joml.Vector3d;
 
 /** Keeps guild hall display adventurers at their spawn anchor facing and out of wander states. */
 public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<EntityStore> {
-    private static final double SNAP_DIST_SQ = 0.35 * 0.35;
-    private static final float HEAD_YAW_EPS = 0.05F;
-
     @Nonnull
-    private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
+    private final Set<Dependency<EntityStore>> dependencies = Set.of(
+        new SystemDependency<>(Order.AFTER, SteeringSystem.class),
+        new SystemDependency<>(Order.BEFORE, TransformSystems.EntityTrackerUpdate.class)
+    );
 
     @Nonnull
     @Override
@@ -92,24 +96,14 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         }
 
         boolean inDialogue = isInInteractionDialogue(npc);
-        if (GuildHallAdventurerChairMount.isBlockMounted(store, commandBuffer, ref) || anchor.isSitFallbackApplied()) {
-            if (!inDialogue) {
-                syncHeadYawIfNeeded(ref, store, commandBuffer, anchor.getYawRadians());
-            }
+        if (GuildHallAdventurerChairMount.isBlockMounted(store, commandBuffer, ref)) {
             return;
         }
-
-        Vector3d target = anchor.getPosition();
-        Vector3d pos = tc.getPosition();
-        double dx = pos.x - target.x;
-        double dy = pos.y - target.y;
-        double dz = pos.z - target.z;
-        if (!inDialogue && dx * dx + dy * dy + dz * dz > SNAP_DIST_SQ) {
-            Rotation3f rot = new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F);
-            commandBuffer.putComponent(ref, TransformComponent.getComponentType(), new TransformComponent(new Vector3d(target), rot));
-        }
-        if (!inDialogue) {
-            syncHeadYawIfNeeded(ref, store, commandBuffer, anchor.getYawRadians());
+        if (!inDialogue
+            && anchor.isChairMountFinished()
+            && !anchor.isSitFallbackApplied()
+            && !GuildHallAdventurerChairMount.hasSeatNearSpawn(store, anchor)) {
+            lockDisplayTransform(ref, commandBuffer, anchor);
         }
     }
 
@@ -154,21 +148,23 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         return true;
     }
 
-    private static void syncHeadYawIfNeeded(
+    /** Runs after {@link SteeringSystem} so separation/collision steering cannot drift display NPCs. */
+    private static void lockDisplayTransform(
         @Nonnull Ref<EntityStore> ref,
-        @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
-        float yawRadians
+        @Nonnull GuildHallDisplayAnchor anchor
     ) {
-        HeadRotation head = store.getComponent(ref, HeadRotation.getComponentType());
-        if (head == null) {
-            return;
+        Vector3d target = anchor.getPosition();
+        TransformComponentUtil.replacePreservingChunk(
+            ref,
+            commandBuffer,
+            target,
+            new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F)
+        );
+        Velocity velocity = commandBuffer.getComponent(ref, Velocity.getComponentType());
+        if (velocity != null) {
+            velocity.setZero();
+            commandBuffer.putComponent(ref, Velocity.getComponentType(), velocity);
         }
-        float current = head.getRotation().y();
-        if (Math.abs(current - yawRadians) <= HEAD_YAW_EPS) {
-            return;
-        }
-        head.teleportRotation(new Rotation3f(0.0F, yawRadians, 0.0F));
-        commandBuffer.putComponent(ref, HeadRotation.getComponentType(), head);
     }
 }

@@ -6,6 +6,14 @@
 
 - **POI debug staff overhaul** Three modes (Q): edit existing POIs, place new prefab-saveable POI markers via a configuration GUI (need type, capacity, mount toggle, work equipment), and adventurer spawn markers. JSON building POIs still register on construction and merge with prefab markers (markers win at the same local cell). Guild hall adventurers spawn facing their marker and stand still at the spot.
 - **Townsfolk** Non-essential npcs that are chosen from a large pool of hand-designed characters. They each have three personality traits assigned to them that determine what dialogue lines they use. This will be used for tourists, guards, and more.
+- **Guild Hall** A place adventurers gather and can be hired as guards.
+- **Guards** Adventurer's can be hired as guards that will patrol the town and fight any hostile enemies.
+- **Patrol Wand** A new wand that lets you create and assign patrol routes to guards.
+
+### Changed
+
+- **Wall Costs** Walls now cost any type of wood instead of planks and now cost some gold to build.
+- **Resident Assigning** The gui for assigning residents has been improved.
 
 ## [1.8.0] - 5/26/2026
 

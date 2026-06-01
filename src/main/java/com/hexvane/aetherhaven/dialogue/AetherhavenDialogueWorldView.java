@@ -551,7 +551,66 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
 
     @Override
     public boolean guardHouseQuestTargetHoused(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        return questTargetEntityHoused(playerRef, store, AetherhavenConstants.QUEST_HOUSE_GUARD);
+    }
+
+    @Override
+    public boolean npcIsUnhousedHiredGuard(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
         TownRecord town = townFor(playerRef, store);
-        return town != null && GuardHireService.isGuardHouseQuestTargetHoused(town, plugin);
+        return nu != null && town != null && GuardHireService.isUnhousedHiredGuard(town, nu.getUuid());
+    }
+
+    @Override
+    public boolean npcIsQuestTarget(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        @Nonnull String questId
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        TownRecord town = townFor(playerRef, store);
+        if (nu == null || town == null) {
+            return false;
+        }
+        UUID target = town.getQuestTargetEntityUuid(questId);
+        return target != null && target.equals(nu.getUuid());
+    }
+
+    @Override
+    public boolean questTargetEntityHoused(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String questId
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        if (town == null) {
+            return false;
+        }
+        UUID target = town.getQuestTargetEntityUuid(questId);
+        return target != null && town.isNpcHomeResidentOnHousePlot(target, plugin.getConstructionCatalog());
+    }
+
+    @Override
+    public boolean questCompletedForNpc(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        @Nonnull String questId
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        TownRecord town = townFor(playerRef, store);
+        return nu != null && town != null && town.hasQuestCompletedForEntity(questId, nu.getUuid());
     }
 }

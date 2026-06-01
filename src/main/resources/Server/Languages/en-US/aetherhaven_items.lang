@@ -133,6 +133,73 @@ commands.aetherhaven.path.navviz.desc=Debug: toggle path navigation debug lines
 items.Aetherhaven_Path_Tool.name=Path designer shovel
 items.Aetherhaven_Path_Tool.description=Designs spline paths (<color is="#5AB5B5">aetherhaven.path.tool</color>). Secondary: add nodes. Primary: select; in move mode, click ground to move. Q: mode cycle. 2nd ability: path width 1-8. 3rd ability: path style (inner blocks; PathToolStyles in config). F: nudge yaw in rotate, or place in place mode (2+ nodes). Revert: aetherhaven path revert. Config: PathToolStyles, raycast, and replace lists.
 
+items.Aetherhaven_Patrol_Wand.name=Patrol wand
+items.Aetherhaven_Patrol_Wand.description=Sets guard patrol routes for your town (<color is="#5AB5B5">aetherhaven.patrol.wand</color>). Craft at the town planning desk. See the on screen legend while holding it.
+
+aetherhaven.patrolWand.legendPageTitle=Patrol wand
+aetherhaven.patrolWand.legendBlurb=Place patrol points, save a route, then assign a guard. Blue sparkles show routes only while you hold this wand.
+aetherhaven.patrolWand.legendHotkeyAdd=Build mode: right click the ground to add a point. Right click a point to remove it.
+aetherhaven.patrolWand.legendHotkeySelect=Left click a point on a saved route to select and edit that route.
+aetherhaven.patrolWand.legendHotkeyUse=Build mode: F opens a name prompt and saves the route (needs at least two points). Assign mode: F opens a guard list for the selected route.
+aetherhaven.patrolWand.legendHotkeyAbility=Q switches build and assign mode. E starts a new route in build mode, or removes the guard from the selected route in assign mode. R toggles closed loop in build mode.
+aetherhaven.patrolWand.legendVisuals=Selected routes glow green. Other routes stay blue. Guards with more than one route take turns walking each loop.
+aetherhaven.patrolWand.nameRouteTitle=Name patrol route
+aetherhaven.patrolWand.nameRouteHint=This route has {n} points. Choose a name, then save.
+aetherhaven.patrolWand.nameRouteLabel=Route name
+aetherhaven.patrolWand.nameRoutePlaceholder=Gate patrol
+aetherhaven.patrolWand.nameRouteSave=Save route
+aetherhaven.patrolWand.nameRouteCancel=Cancel
+
+aetherhaven.patrolWand.hudTitle=Patrol wand
+aetherhaven.patrolWand.hudNameBuild=Build route
+aetherhaven.patrolWand.hudNameAssign=Assign guard
+aetherhaven.patrolWand.hudHelpBuild=Right click ground to add a point. Right click a point to remove. F names and saves. R toggles closed loop. E starts fresh. Q switches mode.
+aetherhaven.patrolWand.hudHelpAssign=Left click a route point to select. F opens the guard list. E clears the guard. Q switches mode.
+aetherhaven.patrolWand.hudRoute=Route: {name}
+aetherhaven.patrolWand.hudNodes=Points: {n}
+aetherhaven.patrolWand.hudLoopClosed=Path: closed loop
+aetherhaven.patrolWand.hudLoopOpen=Path: back and forth
+aetherhaven.patrolWand.hudGuard=Guard: {guard}
+aetherhaven.patrolWand.hudGuardNone=No guard
+aetherhaven.patrolWand.hudGuardAssigned=Assigned
+aetherhaven.patrolWand.hudRouteNew=New route
+aetherhaven.patrolWand.hudHint=Build: add points, R loop, F name and save | Assign: F guard list | Q: mode | E: new route or clear guard
+
+aetherhaven.patrolWand.addedNode=Point added. {n} on this route.
+aetherhaven.patrolWand.removedNode=Point removed. {n} left on this route.
+aetherhaven.patrolWand.needBuildMode=Switch to build mode with Q to add or remove points.
+aetherhaven.patrolWand.notInTown=Stand inside your town to use the patrol wand.
+aetherhaven.patrolWand.notMember=You must be a town member to edit patrol routes.
+aetherhaven.patrolWand.noRouteHit=No route point in your crosshair.
+aetherhaven.patrolWand.selectedRoute=Selected {name}. Press F to save in build mode, or F to assign a guard in assign mode.
+aetherhaven.patrolWand.needTwoNodes=Need at least two points before saving.
+aetherhaven.patrolWand.needTwoNodesForLoop=Need at least two points before toggling the loop.
+aetherhaven.patrolWand.loopClosed=Route closed — guards loop from last point back to first.
+aetherhaven.patrolWand.loopOpen=Route open — guards walk back and forth along the path.
+aetherhaven.patrolWand.savedRoute=Saved {name} with {n} points. Pick a guard to assign.
+aetherhaven.patrolWand.selectRouteFirst=Select a route first. Left click one of its points.
+aetherhaven.patrolWand.routeMissing=That route no longer exists.
+aetherhaven.patrolWand.invalidGuard=That is not a guard from this town.
+aetherhaven.patrolWand.assignedGuard=Put {name} on {route}.
+aetherhaven.patrolWand.clearedGuard=Removed the guard from {route}.
+aetherhaven.patrolWand.modeBuild=Build mode. Place patrol points.
+aetherhaven.patrolWand.modeAssign=Assign mode. Pick a route, then press F to choose a guard.
+aetherhaven.patrolWand.newRoute=Started a new route.
+aetherhaven.patrolWand.assignPageTitle=Assign guard
+aetherhaven.patrolWand.assignPageHint=Choose a guard for {route}.
+aetherhaven.patrolWand.assignPageNoGuards=No guards in town. Hire guards at the guild hall first.
+aetherhaven.patrolWand.assignPageAssignButton=Assign
+aetherhaven.patrolWand.guardTypeKnight=Knight
+aetherhaven.patrolWand.guardTypeArcher=Archer
+aetherhaven.patrolWand.guardTypeMage=Mage
+aetherhaven.patrolWand.toastAdded=Point added
+aetherhaven.patrolWand.toastRemoved=Point removed
+aetherhaven.patrolWand.toastSelected=Route selected
+aetherhaven.patrolWand.toastSaved=Route saved
+aetherhaven.patrolWand.toastAssigned=Guard assigned
+aetherhaven.patrolWand.toastCleared=Guard removed
+aetherhaven.patrolWand.toastNewRoute=New route
+
 items.Aetherhaven_Plot_Token_Inn.name=Inn plot token
 items.Aetherhaven_Plot_Token_Inn.description=<color is="#ffa726">Required</color> in inventory to use the plot placement staff for the inn footprint.
 

@@ -58,6 +58,16 @@ import com.hexvane.aetherhaven.pathtool.PathToolStyleCycleInteraction;
 import com.hexvane.aetherhaven.pathtool.PathToolUseInteraction;
 import com.hexvane.aetherhaven.pathtool.PathToolWidthCycleInteraction;
 import com.hexvane.aetherhaven.pathtool.PathNavViz;
+import com.hexvane.aetherhaven.patrol.GuardPatrolState;
+import com.hexvane.aetherhaven.patrol.GuardPatrolSystem;
+import com.hexvane.aetherhaven.patrol.PatrolWandModeCycleInteraction;
+import com.hexvane.aetherhaven.patrol.PatrolWandNewRouteInteraction;
+import com.hexvane.aetherhaven.patrol.PatrolWandPlayerComponent;
+import com.hexvane.aetherhaven.patrol.PatrolWandPreviewSystem;
+import com.hexvane.aetherhaven.patrol.PatrolWandPrimaryInteraction;
+import com.hexvane.aetherhaven.patrol.PatrolWandSecondaryInteraction;
+import com.hexvane.aetherhaven.patrol.PatrolWandToggleClosedInteraction;
+import com.hexvane.aetherhaven.patrol.PatrolWandUseInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderUseInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerRemoveSystem;
 import com.hexvane.aetherhaven.purification.PurificationPowderVisualizationSystem;
@@ -77,6 +87,8 @@ import com.hexvane.aetherhaven.schedule.VillagerScheduleRegistry;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
+import com.hexvane.aetherhaven.townsfolk.EntityChunkStaleReferenceCleanupSystem;
+import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalSystem;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentSystem;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolPersistence;
@@ -412,6 +424,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         LootrChestProcessedPlayers.register(this.getChunkStoreRegistry());
         this.getChunkStoreRegistry().registerSystem(new LootChestWorldLootMarkSystem());
         this.getChunkStoreRegistry().registerSystem(new LootChestBonusInjectSystem(this));
+        this.getChunkStoreRegistry().registerSystem(new EntityChunkStaleReferenceCleanupSystem());
         LootrPerPlayerLootInjectSystem lootrCompat = LootrPerPlayerLootInjectSystem.createIfAvailable(this);
         if (lootrCompat != null) {
             this.getChunkStoreRegistry().registerSystem(lootrCompat);
@@ -428,6 +441,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         VillagerAutonomyDebugTag.register(this.getEntityStoreRegistry());
         PoiToolPlayerComponent.register(this.getEntityStoreRegistry());
         PathToolPlayerComponent.register(this.getEntityStoreRegistry());
+        PatrolWandPlayerComponent.register(this.getEntityStoreRegistry());
+        GuardPatrolState.register(this.getEntityStoreRegistry());
         PurificationPowderPlayerComponent.register(this.getEntityStoreRegistry());
         BuildingStaffAssemblyChannelComponent.register(this.getEntityStoreRegistry());
         BuildingStaffFrontierTracerComponent.register(this.getEntityStoreRegistry());
@@ -544,6 +559,34 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 PathToolStyleCycleInteraction.CODEC
             );
         this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPatrolWandPrimary", PatrolWandPrimaryInteraction.class, PatrolWandPrimaryInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPatrolWandSecondary",
+                PatrolWandSecondaryInteraction.class,
+                PatrolWandSecondaryInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPatrolWandUse", PatrolWandUseInteraction.class, PatrolWandUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPatrolWandModeCycle",
+                PatrolWandModeCycleInteraction.class,
+                PatrolWandModeCycleInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPatrolWandNewRoute",
+                PatrolWandNewRouteInteraction.class,
+                PatrolWandNewRouteInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPatrolWandToggleClosed",
+                PatrolWandToggleClosedInteraction.class,
+                PatrolWandToggleClosedInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
             .register(
                 "AetherhavenBuildingStaffSecondary",
                 BuildingStaffSecondaryInteraction.class,
@@ -574,6 +617,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new BlockMountDeathCleanupSystem());
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PendingEntityRemovalSystem());
         this.getEntityStoreRegistry().registerSystem(new TownsfolkAssignmentSystem());
         this.getEntityStoreRegistry().registerSystem(new VillagerDeathHandlerSystem(this));
         this.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(this));
@@ -598,6 +642,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new GaiaDraughtInventoryChangeSystem());
         this.getEntityStoreRegistry().registerSystem(new GaiaDraughtInventorySyncSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PathToolPreviewSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PatrolWandPreviewSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new GuardPatrolSystem(this));
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftSchedulerSystem());
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftSystem());
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftDamagePopSystem());

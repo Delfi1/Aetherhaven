@@ -81,6 +81,26 @@ public final class AetherhavenConstants {
     /** Survival path spline designer item id (shovel visuals; see item JSON). */
     public static final String PATH_TOOL_ITEM_ID = "Aetherhaven_Path_Tool";
 
+    /** Guard patrol route designer wand. */
+    public static final String PATROL_WAND_ITEM_ID = "Aetherhaven_Patrol_Wand";
+
+    public static final String PERMISSION_PATROL_WAND = "aetherhaven.patrol.wand";
+
+    public static final String PATROL_WAND_HUD_KEY = "AetherhavenPatrolWand";
+
+    /** Route particle systems (Wayfinder style visuals). */
+    public static final String ROUTE_PARTICLE_TRAIL_ID = "Aetherhaven_Route_Trail";
+
+    public static final String ROUTE_PARTICLE_NODE_ID = "Aetherhaven_Route_Node";
+
+    /** Green variants for the currently selected patrol route preview. */
+    public static final String ROUTE_PARTICLE_TRAIL_SELECTED_ID = "Aetherhaven_Route_Trail_Selected";
+
+    public static final String ROUTE_PARTICLE_NODE_SELECTED_ID = "Aetherhaven_Route_Node_Selected";
+
+    /** NPC role state for guard waypoint patrol. */
+    public static final String NPC_STATE_GUARD_PATROL = "Patrol";
+
     /** Channels frontier placement over half a second per brush when aimed at assembly preview cubes. */
     public static final String BUILDING_STAFF_ITEM_ID = "Aetherhaven_Building_Staff";
 
@@ -238,6 +258,8 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_HOUSE_GUARD = "q_house_guard";
 
+    public static final String QUEST_HOUSE_GUILD_MASTER = "q_house_guild_master";
+
     public static final String QUEST_MERCHANT_STALL = "q_merchant_stall";
 
     public static final String QUEST_FARM_PLOT = "q_farm_plot";
@@ -374,6 +396,9 @@ public final class AetherhavenConstants {
 
     /** Gold coins charged per geode opened at the blacksmith UI. */
     public static final int GEODE_OPEN_GOLD_COST = 5;
+
+    /** Daily treasury tithe per housed townsfolk or guard (before town wide tax bonuses). */
+    public static final int TOWNSFOLK_TAX_GOLD_PER_DAY = 5;
 
     /** Gold coins charged per jewelry appraisal at the merchant UI. */
     public static final int JEWELRY_APPRAISAL_GOLD_COST = 10;

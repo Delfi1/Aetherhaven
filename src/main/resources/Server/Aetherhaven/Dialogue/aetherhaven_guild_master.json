@@ -54,18 +54,18 @@
           "next": "guild_hall_building"
         },
         {
-          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.c_guard_house",
+          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.c_house",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "player_has_unhoused_hired_guard" },
+              { "type": "town_quest_completed", "questId": "q_build_guild_hall" },
               {
                 "type": "not",
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_house_guard" },
-                    { "type": "town_quest_completed", "questId": "q_house_guard" }
+                    { "type": "town_quest_active", "questId": "q_house_guild_master" },
+                    { "type": "town_quest_completed", "questId": "q_house_guild_master" }
                   ]
                 }
               },
@@ -73,32 +73,32 @@
             ]
           },
           "whenFalse": "hide",
-          "next": "guard_house_offer"
+          "next": "lyra_house_offer"
         },
         {
-          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.c_guard_house_finish",
+          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.c_house_finish",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_guard" },
-              { "type": "guard_house_quest_target_housed" }
+              { "type": "town_quest_active", "questId": "q_house_guild_master" },
+              { "type": "town_npc_home_resident_house" }
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_house_guard" }],
-          "next": "guard_house_finish"
+          "actions": [{ "type": "complete_quest", "id": "q_house_guild_master" }],
+          "next": "lyra_house_finish"
         },
         {
-          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.c_guard_house_remind",
+          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.c_house_remind",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_guard" },
-              { "type": "not", "condition": { "type": "guard_house_quest_target_housed" } }
+              { "type": "town_quest_active", "questId": "q_house_guild_master" },
+              { "type": "not", "condition": { "type": "town_npc_home_resident_house" } }
             ]
           },
           "whenFalse": "hide",
-          "next": "guard_house_remind"
+          "next": "lyra_house_remind"
         },
         {
           "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.leave",
@@ -152,47 +152,47 @@
         }
       ]
     },
-    "guard_house_offer": {
-      "speaker": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_offer.speaker",
-      "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_offer.body",
+    "lyra_house_offer": {
+      "speaker": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_offer.speaker",
+      "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_offer.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_offer.accept",
-          "actions": [{ "type": "start_guard_house_quest" }],
-          "next": "guard_house_accepted"
+          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_offer.accept",
+          "actions": [{ "type": "start_quest", "id": "q_house_guild_master" }],
+          "next": "lyra_house_accepted"
         },
         {
-          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_offer.decline",
+          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_offer.decline",
           "next": null
         }
       ]
     },
-    "guard_house_accepted": {
-      "speaker": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_accepted.speaker",
-      "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_accepted.body",
+    "lyra_house_accepted": {
+      "speaker": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_accepted.speaker",
+      "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_accepted.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_accepted.ok",
+          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_accepted.ok",
           "next": null
         }
       ]
     },
-    "guard_house_remind": {
-      "speaker": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_remind.speaker",
-      "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_remind.body",
+    "lyra_house_remind": {
+      "speaker": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_remind.speaker",
+      "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_remind.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_remind.ok",
+          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_remind.ok",
           "next": null
         }
       ]
     },
-    "guard_house_finish": {
-      "speaker": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_finish.speaker",
-      "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_finish.body",
+    "lyra_house_finish": {
+      "speaker": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_finish.speaker",
+      "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_finish.body",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.guard_house_finish.ok",
+          "text": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.lyra_house_finish.ok",
           "next": null
         }
       ]

@@ -2,9 +2,11 @@
   "schemaVersion": 1,
   "id": "q_house_guard",
   "category": "housing",
+  "assignByEntity": true,
   "grantPlotTokenConstructionId": "plot_house",
-  "title": "A home for your guard",
-  "description": "Lyra can help you find a house for a guard you hired at the guild hall. Once they have a roof, they count as a full resident.",
+  "dialogueOfferEntryNodeId": "guard_house_offer",
+  "title": "A home for a guard",
+  "description": "This guard wants a house in town before they count as a full resident.",
   "prerequisites": {
     "completedQuestIds": ["q_build_guild_hall"],
     "anyCompletedQuestIds": []
@@ -13,22 +15,22 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take a house plot token from Lyra at the guild hall."
+      "text": "Talk to the guard and take a house plot token."
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the house prefab."
+      "text": "Stake and build the house."
     },
     {
       "id": "assign",
       "kind": "custom",
-      "text": "Assign your guard as resident on the house management block."
+      "text": "Assign this guard on the house sign."
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Return to Lyra to finish the quest."
+      "text": "Talk to the guard again when they are living there."
     }
   ],
   "rewards": [
@@ -44,5 +46,5 @@
     "onComplete": [],
     "onAbandon": []
   },
-  "repeat": { "mode": "none" }
+  "repeat": { "mode": "per_entity" }
 }

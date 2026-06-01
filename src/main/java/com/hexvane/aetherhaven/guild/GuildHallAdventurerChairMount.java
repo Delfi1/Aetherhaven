@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.guild;
 
 
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
+import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 
 import com.hypixel.hytale.builtin.mounts.BlockMountAPI;
 
@@ -132,6 +133,14 @@ public final class GuildHallAdventurerChairMount {
 
             playSitAnimationOnce(npcRef, store, anchor);
 
+            TransformComponent mountedTransform = commandBuffer.getComponent(npcRef, TransformComponent.getComponentType());
+            if (mountedTransform == null) {
+                mountedTransform = store.getComponent(npcRef, TransformComponent.getComponentType());
+            }
+            if (mountedTransform != null) {
+                commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), mountedTransform);
+            }
+
             syncAnchorAfterMount(npcRef, store, commandBuffer, anchor);
 
             return true;
@@ -180,14 +189,12 @@ public final class GuildHallAdventurerChairMount {
 
         }
 
-        commandBuffer.putComponent(
-
+        TransformComponentUtil.replacePreservingChunk(
             npcRef,
-
-            TransformComponent.getComponentType(),
-
-            new TransformComponent(new Vector3d(seatPos), new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F))
-
+            store,
+            commandBuffer,
+            seatPos,
+            new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F)
         );
 
         playSitAnimationOnce(npcRef, store, anchor);
@@ -319,10 +326,7 @@ public final class GuildHallAdventurerChairMount {
         }
 
         Vector3d pos = new Vector3d(mountBlock.x + 0.5, mountBlock.y + 1.0, mountBlock.z + 0.5);
-
-        tc.setPosition(pos);
-
-        commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
+        TransformComponentUtil.replacePreservingChunk(npcRef, commandBuffer, pos, tc.getRotation());
 
     }
 

@@ -27,7 +27,7 @@ public final class ResidentRegistryService {
     private ResidentRegistryService() {}
 
     /**
-     * One row per {@code npcRoleId} in town. Replaces any existing row with the same role id.
+     * Story villagers: one row per {@code npcRoleId}. Guards and townsfolk: one row per entity uuid.
      */
     public static void upsert(
         @Nonnull TownRecord town,
@@ -43,9 +43,15 @@ public final class ResidentRegistryService {
         }
         List<ResidentNpcRecord> list = town.getResidentNpcRecords();
         ResidentNpcRecord incoming = new ResidentNpcRecord(rid, kind, jobPlotId, entityUuid);
+        boolean perEntity =
+            TownVillagerBinding.KIND_GUARD.equals(kind) || TownVillagerBinding.KIND_TOWNSFOLK.equals(kind);
         boolean[] copied = {false};
         list.removeIf(r -> {
-            if (!rid.equalsIgnoreCase(r.getNpcRoleId())) {
+            if (perEntity) {
+                if (!entityUuid.equals(r.getLastEntityUuid())) {
+                    return false;
+                }
+            } else if (!rid.equalsIgnoreCase(r.getNpcRoleId())) {
                 return false;
             }
             if (!copied[0] && entityUuid.equals(r.getLastEntityUuid()) && r.hasLastKnownNeeds()) {
@@ -377,6 +383,9 @@ public final class ResidentRegistryService {
         for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
             if (!entityUuid.equals(r.getLastEntityUuid())) {
                 continue;
+            }
+            if (TownVillagerBinding.KIND_GUARD.equals(r.getKind()) || TownVillagerBinding.KIND_TOWNSFOLK.equals(r.getKind())) {
+                return;
             }
             if (r.setLastKnownNeedsIfChanged(hunger, energy, fun, 0.5f)) {
                 tm.updateTown(town);

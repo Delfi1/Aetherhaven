@@ -184,34 +184,38 @@ $C.@PageOverlay {
                 }
               }
 
-              Label #NeedHungerLabel {
-                Text: "";
-                Style: (...$C.@DefaultLabelStyle, RenderBold: true);
-                Anchor: (Bottom: 4);
-              }
-              $C.@ProgressBar #HungerBar {
-                @Anchor = (Bottom: 8, Left: 0, Right: 0);
-                Value: 1.0;
-              }
+              Group #NeedsBarsGroup {
+                LayoutMode: Top;
 
-              Label #NeedEnergyLabel {
-                Text: "";
-                Style: (...$C.@DefaultLabelStyle, RenderBold: true);
-                Anchor: (Bottom: 4);
-              }
-              $C.@ProgressBar #EnergyBar {
-                @Anchor = (Bottom: 8, Left: 0, Right: 0);
-                Value: 1.0;
-              }
+                Label #NeedHungerLabel {
+                  Text: "";
+                  Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+                  Anchor: (Bottom: 4);
+                }
+                $C.@ProgressBar #HungerBar {
+                  @Anchor = (Bottom: 8, Left: 0, Right: 0);
+                  Value: 1.0;
+                }
 
-              Label #NeedFunLabel {
-                Text: "";
-                Style: (...$C.@DefaultLabelStyle, RenderBold: true);
-                Anchor: (Bottom: 4);
-              }
-              $C.@ProgressBar #FunBar {
-                @Anchor = (Bottom: 0, Left: 0, Right: 0);
-                Value: 1.0;
+                Label #NeedEnergyLabel {
+                  Text: "";
+                  Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+                  Anchor: (Bottom: 4);
+                }
+                $C.@ProgressBar #EnergyBar {
+                  @Anchor = (Bottom: 8, Left: 0, Right: 0);
+                  Value: 1.0;
+                }
+
+                Label #NeedFunLabel {
+                  Text: "";
+                  Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+                  Anchor: (Bottom: 4);
+                }
+                $C.@ProgressBar #FunBar {
+                  @Anchor = (Bottom: 0, Left: 0, Right: 0);
+                  Value: 1.0;
+                }
               }
             }
           }
@@ -222,9 +226,21 @@ $C.@PageOverlay {
             Anchor: (Top: 8, Bottom: 6);
           }
 
-          Group #VillagerRows {
-            LayoutMode: Top;
-            Anchor: (Bottom: 4);
+          Group #VillagerListScroll {
+            LayoutMode: TopScrolling;
+            ScrollbarStyle: $C.@DefaultScrollbarStyle;
+            Anchor: (Height: 220, Bottom: 4);
+
+            Group #VillagerRows {
+              LayoutMode: Top;
+            }
+          }
+
+          Label #NoNeedsHint {
+            Visible: false;
+            Anchor: (Bottom: 8);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #8a7a60);
+            Text: "";
           }
         }
       }

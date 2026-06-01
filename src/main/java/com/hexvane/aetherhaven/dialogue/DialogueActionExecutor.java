@@ -120,7 +120,6 @@ public final class DialogueActionExecutor {
             case "gaia_draught_upgrade_catalyst" -> gaiaDraughtUpgradeCatalyst(playerRef, store, npcRef);
             case "priestess_gold_heal" -> priestessGoldHeal(playerRef, store, npcRef);
             case "hire_guild_adventurer" -> hireGuildAdventurer(playerRef, store, npcRef, out);
-            case "start_guard_house_quest" -> startGuardHouseQuest(playerRef, store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
     }
@@ -178,11 +177,28 @@ public final class DialogueActionExecutor {
             return;
         }
         String qid = id.trim();
-        town.addActiveQuest(qid);
         QuestCatalog quests = plugin.getQuestCatalog();
         QuestDefinition qdef = quests.get(qid);
         UUID npcUuid = npcUuidFromRef(store, npcRef);
+        if (qdef != null && qdef.repeatOrDefault().isPerEntity()) {
+            if (town.hasQuestActive(qid)) {
+                return;
+            }
+            if (npcUuid != null && town.hasQuestCompletedForEntity(qid, npcUuid)) {
+                return;
+            }
+            if (town.hasQuestCompleted(qid)) {
+                town.clearGlobalQuestCompletion(qid);
+            }
+        } else if (town.hasQuestActive(qid)) {
+            return;
+        }
+        town.addActiveQuest(qid);
         if (qdef != null) {
+            boolean bindTarget = boolField(a, "bindTargetEntity", false) || qdef.assignByEntity();
+            if (bindTarget && npcUuid != null) {
+                town.setQuestTargetEntityUuid(qid, npcUuid);
+            }
             town.initQuestObjectiveProgress(qid, qdef.trackableObjectiveIds());
             town.initQuestKillProgress(qid, qdef.entityKillObjectiveIds());
             QuestLifecycleEffects.runOnStart(world, plugin, town, tm, qdef, npcUuid);
@@ -270,8 +286,27 @@ public final class DialogueActionExecutor {
         @Nullable UUID beneficiaryNpcUuid,
         @Nullable Store<EntityStore> store
     ) {
-        town.completeQuest(qid);
         QuestDefinition def = plugin.getQuestCatalog().get(qid);
+        UUID guardPromoteUuid = null;
+        if (AetherhavenConstants.QUEST_HOUSE_GUARD.equals(qid.trim())) {
+            guardPromoteUuid = town.getQuestTargetEntityUuid(qid);
+            if (guardPromoteUuid == null && beneficiaryNpcUuid != null) {
+                guardPromoteUuid = beneficiaryNpcUuid;
+            }
+        }
+        if (def != null && def.repeatOrDefault().isPerEntity()) {
+            UUID target = town.getQuestTargetEntityUuid(qid);
+            if (target == null) {
+                target = beneficiaryNpcUuid;
+            }
+            if (target != null) {
+                town.completeQuestForEntity(qid, target);
+            } else {
+                town.completeQuest(qid);
+            }
+        } else {
+            town.completeQuest(qid);
+        }
         if (def != null) {
             QuestLifecycleEffects.runOnComplete(world, plugin, town, tm, def, null);
             if (rewardPlayerRef != null && store != null) {
@@ -300,12 +335,8 @@ public final class DialogueActionExecutor {
             }
         }
         tm.updateTown(town);
-        if (AetherhavenConstants.QUEST_HOUSE_GUARD.equals(qid.trim())) {
-            UUID target = town.getGuardHouseQuestTargetEntityUuid();
-            if (target != null && store != null) {
-                VillagerDeathHandlerSystem.promoteGuardToCitizen(world, plugin, town, tm, target, store);
-            }
-            town.setGuardHouseQuestTargetEntityUuid(null);
+        if (guardPromoteUuid != null && store != null) {
+            VillagerDeathHandlerSystem.promoteGuardToCitizen(world, plugin, town, tm, guardPromoteUuid, store);
             tm.updateTown(town);
         }
         if (store != null && isInnVisitorJobQuestForResidentPromotion(qid)) {
@@ -782,39 +813,6 @@ public final class DialogueActionExecutor {
         if (GuardHireService.tryHire(world, plugin, town, tm, playerRef, npcRef, store)) {
             out.setCloseDialogue(true);
         }
-    }
-
-    private static void startGuardHouseQuest(
-        @Nonnull Ref<EntityStore> playerRef,
-        @Nonnull Store<EntityStore> store,
-        @Nullable Ref<EntityStore> npcRef
-    ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return;
-        }
-        World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
-        if (town == null) {
-            return;
-        }
-        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (pu == null || !town.playerCanAcceptQuests(pu.getUuid())) {
-            return;
-        }
-        UUID guardUuid = GuardHireService.firstUnhousedHiredGuardUuid(town, plugin);
-        if (guardUuid == null) {
-            return;
-        }
-        town.setGuardHouseQuestTargetEntityUuid(guardUuid);
-        town.addActiveQuest(AetherhavenConstants.QUEST_HOUSE_GUARD);
-        QuestDefinition qdef = plugin.getQuestCatalog().get(AetherhavenConstants.QUEST_HOUSE_GUARD);
-        if (qdef != null) {
-            town.initQuestObjectiveProgress(AetherhavenConstants.QUEST_HOUSE_GUARD, qdef.trackableObjectiveIds());
-            QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store);
-        }
-        tm.updateTown(town);
     }
 
     private static void playBannerSound(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {

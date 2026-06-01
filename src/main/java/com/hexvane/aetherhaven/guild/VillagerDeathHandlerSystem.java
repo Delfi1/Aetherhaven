@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.guild;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.patrol.GuardPatrolSystem;
 import com.hexvane.aetherhaven.town.HiredGuardRecord;
 import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -8,7 +10,6 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
-import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -113,12 +114,17 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
         }
 
         if (entityUuid != null) {
+            GuardPatrolSystem.clearAssignmentsForGuard(world, AetherhavenPlugin.get(), entityUuid);
             for (var plot : town.getPlotInstances()) {
                 if (entityUuid.equals(plot.getHomeResidentEntityUuid())) {
                     plot.setHomeResidentEntityUuid(null);
                 }
             }
             town.getResidentNpcRecords().removeIf(r -> entityUuid.equals(r.getLastEntityUuid()));
+            UUID questTarget = town.getQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_GUARD);
+            if (entityUuid.equals(questTarget) || (questTarget == null && town.hasQuestActive(AetherhavenConstants.QUEST_HOUSE_GUARD))) {
+                town.clearActiveQuest(AetherhavenConstants.QUEST_HOUSE_GUARD);
+            }
         }
         tm.updateTown(town);
     }
@@ -142,9 +148,6 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
                 rec.setCitizen(true);
                 break;
             }
-        }
-        if (store.getComponent(ref, VillagerNeeds.getComponentType()) == null) {
-            store.putComponent(ref, VillagerNeeds.getComponentType(), VillagerNeeds.full());
         }
         ResidentRegistryService.syncHouseAssignment(town, tm, store, guardEntityUuid);
         tm.updateTown(town);

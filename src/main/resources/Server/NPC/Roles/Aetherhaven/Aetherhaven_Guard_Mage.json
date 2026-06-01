@@ -50,6 +50,12 @@
       "Acceleration": 10
     }
   ],
+  "StateTransitions": [
+    {
+      "States": [{ "From": ["Patrol"], "To": ["Idle"] }],
+      "Actions": { "Reference": "Component_ActionList_Aetherhaven_Clear_Status" }
+    }
+  ],
   "Instructions": [
     {
       "Continue": true,
@@ -81,6 +87,21 @@
                 "WanderRectTimer": { "Compute": "AetherhavenWanderPhaseTime" },
                 "PauseTimer": { "Compute": "AetherhavenPausePhaseTime" }
               }
+            }
+          ]
+        },
+        {
+          "Sensor": { "Type": "State", "State": "Patrol", "IgnoreMissingSetState": true },
+          "Instructions": [
+            {
+              "Reference": "Component_Instruction_Aetherhaven_Guard_Idle_Aggro",
+              "Modify": {
+                "_ExportStates": ["Combat"],
+                "ViewRange": { "Compute": "ViewRange" }
+              }
+            },
+            {
+              "Reference": "Component_Instruction_Aetherhaven_Guard_Patrol_Seek"
             }
           ]
         },
@@ -159,7 +180,7 @@
             "Sensor": { "Type": "Not", "Sensor": { "Type": "State", "State": "$Interaction" } },
             "Actions": [
               { "Type": "LockOnInteractionTarget" },
-              { "Type": "OpenAetherhavenDialogue", "VillagerKind": "townsfolk" },
+              { "Type": "OpenAetherhavenDialogue", "VillagerKind": "guard" },
               { "Type": "State", "State": "$Interaction" }
             ]
           }

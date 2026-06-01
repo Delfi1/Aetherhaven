@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
+import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolPersistence;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolState;
@@ -39,6 +40,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,6 +51,8 @@ import org.joml.Vector3i;
 public final class GuildHallAdventurerPoolService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final float ADVENTURER_FILL_CHANCE = 0.5f;
+
+    private record AdventurerInPlotDespawn(@Nullable String characterId, @Nonnull UUID entityUuid) {}
 
     public record ForceRespawnResult(
         int reclaimedCheckouts,
@@ -92,7 +96,6 @@ public final class GuildHallAdventurerPoolService {
             }
             List<AdventurerSpawnSlot> spawnSlots = AdventurerSpawnMarkerLocator.resolveSpawnSlots(store, hallPlot, hallDef);
             if (spawnSlots.isEmpty()) {
-                LOGGER.atWarning().log("Guild hall tick skip town %s: no adventurer spawn slots", town.getTownId());
                 continue;
             }
             if (!isManagementChunkLoaded(world, hallPlot, hallDef)) {
@@ -101,7 +104,7 @@ public final class GuildHallAdventurerPoolService {
 
             dedupeAdventurerIds(town, tm);
             pruneMissingAdventurers(town, store, tm);
-            TownsfolkExistenceService.purgeStaleGuildHallAdventurers(world, plugin, town, store, hallPlot);
+            TownsfolkExistenceService.purgeStaleGuildHallAdventurers(world, plugin, town, store, hallPlot, tm);
             morningRefreshIfDue(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr, morningStart, morningEndEx);
             fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr);
         }
@@ -169,7 +172,7 @@ public final class GuildHallAdventurerPoolService {
             if (entityUuid != null) {
                 Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
                 if (ref != null && ref.isValid()) {
-                    store.removeEntity(ref, RemoveReason.REMOVE);
+                    PendingEntityRemovalService.schedule(world, entityUuid);
                     despawned++;
                 }
             }
@@ -287,6 +290,7 @@ public final class GuildHallAdventurerPoolService {
     ) {
         PlotFootprintRecord footprint = hallPlot.toFootprint();
         Set<UUID> toRemove = ConcurrentHashMap.newKeySet();
+        List<UUID> despawnEntityUuids = new ArrayList<>();
         int despawned = 0;
 
         for (String sid : new ArrayList<>(town.getGuildHallAdventurerNpcIds())) {
@@ -297,13 +301,14 @@ public final class GuildHallAdventurerPoolService {
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
             if (ref != null && ref.isValid() && isAdventurerEntity(town, store, ref, u)) {
                 String characterId = adventurerCharacterId(store, ref);
-                store.removeEntity(ref, RemoveReason.REMOVE);
+                despawnEntityUuids.add(u);
                 releaseAdventurerCheckout(world, plugin, characterId, u);
                 despawned++;
             }
             toRemove.add(u);
         }
 
+        List<AdventurerInPlotDespawn> extraInPlot = Collections.synchronizedList(new ArrayList<>());
         store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
             Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
             if (ref == null || !ref.isValid()) {
@@ -334,11 +339,15 @@ public final class GuildHallAdventurerPoolService {
             }
             UUID u = uc.getUuid();
             if (toRemove.add(u)) {
-                String characterId = tb.getCharacterId();
-                commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
-                releaseAdventurerCheckout(world, plugin, characterId, u);
+                extraInPlot.add(new AdventurerInPlotDespawn(tb.getCharacterId(), u));
             }
         });
+        for (AdventurerInPlotDespawn entry : extraInPlot) {
+            despawnEntityUuids.add(entry.entityUuid());
+            releaseAdventurerCheckout(world, plugin, entry.characterId(), entry.entityUuid());
+            despawned++;
+        }
+        PendingEntityRemovalService.scheduleAll(world, despawnEntityUuids);
 
         for (UUID u : toRemove) {
             town.getGuildHallAdventurerNpcIds().removeIf(s -> u.toString().equalsIgnoreCase(s != null ? s.trim() : ""));

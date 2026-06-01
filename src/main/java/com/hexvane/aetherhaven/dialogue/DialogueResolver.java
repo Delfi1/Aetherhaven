@@ -43,6 +43,8 @@ public final class DialogueResolver {
 
     public static final String KIND_TOWNSFOLK = "townsfolk";
     public static final String TREE_TOWNSFOLK_GENERIC = "aetherhaven_townsfolk_generic";
+    public static final String KIND_GUARD = "guard";
+    public static final String TREE_GUARD = "aetherhaven_guard";
 
     private final Map<String, String> kindToTree = new HashMap<>();
     private final Map<String, String> kindToVisitorTree = new HashMap<>();
@@ -73,8 +75,10 @@ public final class DialogueResolver {
     /** Townsfolk and other dialogue kinds not backed by {@link VillagerDefinition} assets. */
     private void registerNonVillagerDialogueKinds() {
         kindToTree.put(KIND_TOWNSFOLK, TREE_TOWNSFOLK_GENERIC);
+        kindToTree.put(KIND_GUARD, TREE_GUARD);
         kindToTree.put(KIND_GUILD_ADVENTURER, TREE_GUILD_ADVENTURER);
         kindToVisitorTree.put(KIND_TOWNSFOLK, VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_GUARD, VISITOR_DEFAULT);
         kindToVisitorTree.put(KIND_GUILD_MASTER, VISITOR_DEFAULT);
         kindToVisitorTree.put(KIND_GUILD_ADVENTURER, VISITOR_DEFAULT);
     }
@@ -114,12 +118,20 @@ public final class DialogueResolver {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         String kind = villagerKind != null && !villagerKind.isBlank() ? villagerKind.trim() : DEFAULT_DIALOGUE_KIND;
         if (plugin != null && npcRef != null && npcRef.isValid()) {
-            var townsfolkBinding = store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType());
-            if (townsfolkBinding != null) {
-                if (com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds.isGuildHallAdventurer(townsfolkBinding.getAssignmentKind())) {
-                    kind = KIND_GUILD_ADVENTURER;
-                } else {
-                    kind = KIND_TOWNSFOLK;
+            TownVillagerBinding guardBinding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+            if (guardBinding != null && TownVillagerBinding.KIND_GUARD.equals(guardBinding.getKind())) {
+                kind = KIND_GUARD;
+            } else {
+                var townsfolkBinding =
+                    store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType());
+                if (townsfolkBinding != null) {
+                    if (com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds.isGuildHallAdventurer(
+                        townsfolkBinding.getAssignmentKind()
+                    )) {
+                        kind = KIND_GUILD_ADVENTURER;
+                    } else {
+                        kind = KIND_TOWNSFOLK;
+                    }
                 }
             }
         }
@@ -130,6 +142,8 @@ public final class DialogueResolver {
             tree = TREE_GUILD_ADVENTURER;
         } else if (KIND_TOWNSFOLK.equals(kind)) {
             tree = TREE_TOWNSFOLK_GENERIC;
+        } else if (KIND_GUARD.equals(kind)) {
+            tree = TREE_GUARD;
         } else {
             tree = kindToTree.getOrDefault(kind, DEFAULT_RESIDENT_DIALOGUE_TREE);
         }
@@ -167,7 +181,16 @@ public final class DialogueResolver {
                 if ("root".equals(entry)) {
                     NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
                     String npcRole = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
-                    if (!npcRole.isEmpty()) {
+                    String qEntryEntity = QuestDialogueEntry.resolveOfferEntryNodeIdForEntity(
+                        plugin.getQuestCatalog(),
+                        town,
+                        pu.getUuid(),
+                        nu.getUuid()
+                    );
+                    if (qEntryEntity != null && !qEntryEntity.isBlank()) {
+                        entry = qEntryEntity.trim();
+                    }
+                    if ("root".equals(entry) && !npcRole.isEmpty()) {
                         String qEntry = QuestDialogueEntry.resolveOfferEntryNodeId(
                             plugin.getQuestCatalog(),
                             town,

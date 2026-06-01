@@ -139,6 +139,24 @@ public final class DialogueConditionEvaluator {
             case "guard_hire_affordable" -> worldView.guardHireAffordable(playerRef, store, npcRef);
             case "player_has_unhoused_hired_guard" -> worldView.playerHasUnhousedHiredGuard(playerRef, store);
             case "guard_house_quest_target_housed" -> worldView.guardHouseQuestTargetHoused(playerRef, store);
+            case "npc_is_unhoused_hired_guard" -> worldView.npcIsUnhousedHiredGuard(playerRef, store, npcRef);
+            case "npc_is_quest_target" -> worldView.npcIsQuestTarget(
+                playerRef,
+                store,
+                npcRef,
+                stringOrEmpty(o, "questId")
+            );
+            case "quest_target_entity_housed" -> worldView.questTargetEntityHoused(
+                playerRef,
+                store,
+                stringOrEmpty(o, "questId")
+            );
+            case "quest_completed_for_npc" -> worldView.questCompletedForNpc(
+                playerRef,
+                store,
+                npcRef,
+                stringOrEmpty(o, "questId")
+            );
             default -> {
                 LOGGER.atWarning().log("Unknown dialogue condition type: %s", type);
                 yield false;

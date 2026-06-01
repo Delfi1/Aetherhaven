@@ -68,6 +68,8 @@ aetherhaven.profession.kind.priestess=Priestess
 aetherhaven.profession.kind.miner=Miner
 aetherhaven.profession.kind.logger=Logger
 aetherhaven.profession.kind.rancher=Rancher
+aetherhaven.profession.kind.guild_master=Guild Master
+aetherhaven.profession.kind.townsfolk=Townsfolk
 aetherhaven.profession.kind.unknown=Resident
 
 # === UI: town charter (held item: name, dissolve, relocate) ===
@@ -111,6 +113,7 @@ aetherhaven.ui.treasury.tax.sheetFeastLabel=Steward's Ledger feast bonus ({mult}
 aetherhaven.ui.treasury.tax.sheetTotalLabel=About what you get next morning
 aetherhaven.ui.treasury.tax.residentsHeader=Villagers in this list
 aetherhaven.ui.treasury.tax.residentLine={name} ({job})
+aetherhaven.ui.treasury.tax.townsfolkFlatGold=Pays {amount} gold
 aetherhaven.ui.treasury.tax.footerMore=Only {shown} of {total} residents fit here. Load more of the town and open this again to see the rest.
 
 # === UI: open geodes (blacksmith) + result / error lines ===

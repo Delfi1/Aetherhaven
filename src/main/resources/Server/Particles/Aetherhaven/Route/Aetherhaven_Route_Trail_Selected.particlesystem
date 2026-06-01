@@ -1,0 +1,16 @@
+{
+  "CullDistance": 50,
+  "BoundingRadius": 2,
+  "LifeSpan": 1.0,
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Route_Core_Glow_Selected"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Route_Sparkles_Selected"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Route_Spiral_Motes_Selected"
+    }
+  ]
+}

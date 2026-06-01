@@ -159,6 +159,14 @@ public final class TownRecord {
     @SerializedName("guardHouseQuestTargetEntityUuid")
     private String guardHouseQuestTargetEntityUuid;
 
+    /** Active entity-scoped quests: quest id → target entity UUID string. */
+    @SerializedName("questTargetEntityUuidByQuestId")
+    private Map<String, String> questTargetEntityUuidByQuestId;
+
+    /** Per-entity quest completions for {@code repeat.mode: per_entity} quests. */
+    @SerializedName("questCompletedEntityUuids")
+    private Map<String, List<String>> questCompletedEntityUuids;
+
     /** Shared town treasury balance (gold coins); all treasury blocks in this town read/write this. */
     @SerializedName("treasuryGoldCoinCount")
     private long treasuryGoldCoinCount;
@@ -942,20 +950,108 @@ public final class TownRecord {
         return hiredGuardRecords;
     }
 
-    @Nullable
-    public UUID getGuardHouseQuestTargetEntityUuid() {
+    private void migrateLegacyGuardHouseQuestTarget() {
         if (guardHouseQuestTargetEntityUuid == null || guardHouseQuestTargetEntityUuid.isBlank()) {
+            return;
+        }
+        if (questTargetEntityUuidByQuestId == null) {
+            questTargetEntityUuidByQuestId = new LinkedHashMap<>();
+        }
+        String qid = com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_GUARD;
+        questTargetEntityUuidByQuestId.putIfAbsent(qid, guardHouseQuestTargetEntityUuid.trim());
+    }
+
+    @Nullable
+    public UUID getQuestTargetEntityUuid(@Nonnull String questId) {
+        migrateLegacyGuardHouseQuestTarget();
+        String q = questId.trim();
+        if (q.isEmpty() || questTargetEntityUuidByQuestId == null) {
+            return null;
+        }
+        String raw = questTargetEntityUuidByQuestId.get(q);
+        if (raw == null || raw.isBlank()) {
             return null;
         }
         try {
-            return UUID.fromString(guardHouseQuestTargetEntityUuid.trim());
+            return UUID.fromString(raw.trim());
         } catch (IllegalArgumentException e) {
             return null;
         }
     }
 
+    public void setQuestTargetEntityUuid(@Nonnull String questId, @Nullable UUID uuid) {
+        migrateLegacyGuardHouseQuestTarget();
+        String q = questId.trim();
+        if (q.isEmpty()) {
+            return;
+        }
+        if (questTargetEntityUuidByQuestId == null) {
+            questTargetEntityUuidByQuestId = new LinkedHashMap<>();
+        }
+        if (uuid == null) {
+            questTargetEntityUuidByQuestId.remove(q);
+            if (com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_GUARD.equals(q)) {
+                guardHouseQuestTargetEntityUuid = null;
+            }
+        } else {
+            String s = uuid.toString();
+            questTargetEntityUuidByQuestId.put(q, s);
+            if (com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_GUARD.equals(q)) {
+                guardHouseQuestTargetEntityUuid = s;
+            }
+        }
+    }
+
+    public void clearQuestTarget(@Nonnull String questId) {
+        setQuestTargetEntityUuid(questId, null);
+    }
+
+    public boolean hasQuestCompletedForEntity(@Nonnull String questId, @Nonnull UUID entityUuid) {
+        String q = questId.trim();
+        if (q.isEmpty()) {
+            return false;
+        }
+        if (questCompletedEntityUuids == null) {
+            return false;
+        }
+        List<String> list = questCompletedEntityUuids.get(q);
+        if (list == null || list.isEmpty()) {
+            return false;
+        }
+        String want = entityUuid.toString();
+        for (String s : list) {
+            if (s != null && want.equalsIgnoreCase(s.trim())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void markQuestCompletedForEntity(@Nonnull String questId, @Nonnull UUID entityUuid) {
+        String q = questId.trim();
+        if (q.isEmpty()) {
+            return;
+        }
+        if (questCompletedEntityUuids == null) {
+            questCompletedEntityUuids = new LinkedHashMap<>();
+        }
+        List<String> list = questCompletedEntityUuids.computeIfAbsent(q, k -> new ArrayList<>());
+        String s = entityUuid.toString();
+        for (String existing : list) {
+            if (existing != null && s.equalsIgnoreCase(existing.trim())) {
+                return;
+            }
+        }
+        list.add(s);
+    }
+
+    @Nullable
+    public UUID getGuardHouseQuestTargetEntityUuid() {
+        return getQuestTargetEntityUuid(com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_GUARD);
+    }
+
     public void setGuardHouseQuestTargetEntityUuid(@Nullable UUID uuid) {
-        this.guardHouseQuestTargetEntityUuid = uuid != null ? uuid.toString() : null;
+        setQuestTargetEntityUuid(com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_GUARD, uuid);
     }
 
     @Nonnull
@@ -1099,6 +1195,19 @@ public final class TownRecord {
         return normalizedQuestSet(completedQuestIds).contains(questId);
     }
 
+    /** Removes a quest id from the town wide completed list (used when migrating to per entity repeat). */
+    public void clearGlobalQuestCompletion(@Nonnull String questId) {
+        String q = questId.trim();
+        if (q.isEmpty()) {
+            return;
+        }
+        Set<String> done = normalizedQuestSet(completedQuestIds);
+        if (!done.remove(q)) {
+            return;
+        }
+        completedQuestIds = new ArrayList<>(done);
+    }
+
     /**
      * True if the quest is active or was completed. Used when job buildings finish so promotion still runs if the
      * quest was turned in before the construction hook applied (or the hook failed earlier).
@@ -1138,6 +1247,7 @@ public final class TownRecord {
         completedQuestIds = new ArrayList<>(done);
         clearQuestObjectiveProgress(q);
         clearQuestKillProgress(q);
+        clearQuestTarget(q);
     }
 
     public void clearActiveQuest(@Nonnull String questId) {
@@ -1150,6 +1260,24 @@ public final class TownRecord {
         activeQuestIds = new ArrayList<>(active);
         clearQuestObjectiveProgress(q);
         clearQuestKillProgress(q);
+        clearQuestTarget(q);
+    }
+
+    /**
+     * Completes a {@code per_entity} quest for one NPC without marking the whole town as done for that quest id.
+     */
+    public void completeQuestForEntity(@Nonnull String questId, @Nonnull UUID entityUuid) {
+        String q = questId.trim();
+        if (q.isEmpty()) {
+            return;
+        }
+        Set<String> active = normalizedQuestSet(activeQuestIds);
+        active.remove(q);
+        activeQuestIds = new ArrayList<>(active);
+        markQuestCompletedForEntity(q, entityUuid);
+        clearQuestObjectiveProgress(q);
+        clearQuestKillProgress(q);
+        clearQuestTarget(q);
     }
 
     /** Initializes tracking entries for objectives that are not {@code journal} kind (future hooks). */

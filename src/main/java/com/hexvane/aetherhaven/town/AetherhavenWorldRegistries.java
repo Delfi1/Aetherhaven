@@ -11,6 +11,8 @@ import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolPersistence;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
+import com.hexvane.aetherhaven.patrol.PatrolRoutePersistence;
+import com.hexvane.aetherhaven.patrol.PatrolRouteRegistry;
 import com.hexvane.aetherhaven.pathtool.PathToolPersistence;
 import com.hexvane.aetherhaven.pathtool.PathToolRegistry;
 import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
@@ -28,6 +30,7 @@ public final class AetherhavenWorldRegistries {
     private static final ConcurrentHashMap<String, PoiRegistry> POI_REGISTRIES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, PathToolRegistry> PATH_TOOL_REGISTRIES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, PathNavGraphService> PATH_NAV_GRAPH_SERVICES = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, PatrolRouteRegistry> PATROL_ROUTE_REGISTRIES = new ConcurrentHashMap<>();
 
     private AetherhavenWorldRegistries() {}
 
@@ -87,6 +90,18 @@ public final class AetherhavenWorldRegistries {
     }
 
     @Nonnull
+    public static PatrolRouteRegistry getOrCreatePatrolRouteRegistry(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        return PATROL_ROUTE_REGISTRIES.computeIfAbsent(world.getName(), n -> {
+            PatrolRouteRegistry r = new PatrolRouteRegistry(world);
+            PatrolRoutePersistence.load(world, plugin, r);
+            return r;
+        });
+    }
+
+    @Nonnull
     public static TownManager getTownManager(@Nonnull World world) {
         TownManager m = TOWN_MANAGERS.get(world.getName());
         if (m == null) {
@@ -127,6 +142,13 @@ public final class AetherhavenWorldRegistries {
             }
         }
         PATH_NAV_GRAPH_SERVICES.remove(world.getName());
+        PatrolRouteRegistry patrolReg = PATROL_ROUTE_REGISTRIES.remove(world.getName());
+        if (patrolReg != null) {
+            AetherhavenPlugin p3 = AetherhavenPlugin.get();
+            if (p3 != null) {
+                PatrolRoutePersistence.save(world, p3, patrolReg);
+            }
+        }
         WorldDifficultyPersistence.unloadWorld(world);
         TownsfolkPoolPersistence.unloadWorld(world);
     }
@@ -147,6 +169,10 @@ public final class AetherhavenWorldRegistries {
                 World w = e.getValue().getWorld();
                 PathToolPersistence.save(w, p, e.getValue());
             }
+            for (var e : PATROL_ROUTE_REGISTRIES.entrySet()) {
+                World w = e.getValue().getWorld();
+                PatrolRoutePersistence.save(w, p, e.getValue());
+            }
         }
         WorldDifficultyPersistence.saveAll();
         TownsfolkPoolPersistence.saveAll();
@@ -158,6 +184,7 @@ public final class AetherhavenWorldRegistries {
         getOrCreateTownManager(world, plugin);
         getOrCreatePoiRegistry(world, plugin);
         getOrCreatePathToolRegistry(world, plugin);
+        getOrCreatePatrolRouteRegistry(world, plugin);
         getOrCreatePathNavGraphService(world);
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);

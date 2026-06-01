@@ -10,7 +10,6 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -271,10 +270,12 @@ public final class TownsfolkExistenceService {
     }
 
     public static void purgeDuplicateEntities(
+        @Nonnull World world,
         @Nonnull Store<EntityStore> store,
         @Nonnull String characterId,
         @Nonnull UUID canonicalUuid
     ) {
+        List<UUID> duplicateUuids = new ArrayList<>();
         store.forEachChunk(
             Query.and(TownsfolkCharacterBinding.getComponentType(), UUIDComponent.getComponentType()),
             (archetypeChunk, commandBuffer) -> {
@@ -294,27 +295,38 @@ public final class TownsfolkExistenceService {
                     if (canonicalUuid.equals(uc.getUuid())) {
                         continue;
                     }
-                    commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
-                    LOGGER.atWarning().log(
-                        "Removed duplicate townsfolk entity for %s (stale uuid %s, canonical %s)",
-                        characterId,
-                        uc.getUuid(),
-                        canonicalUuid
-                    );
+                    duplicateUuids.add(uc.getUuid());
                 }
             }
         );
+        PendingEntityRemovalService.scheduleAll(world, duplicateUuids);
+        for (UUID staleUuid : duplicateUuids) {
+            LOGGER.atWarning().log(
+                "Removed duplicate townsfolk entity for %s (stale uuid %s, canonical %s)",
+                characterId,
+                staleUuid,
+                canonicalUuid
+            );
+        }
     }
 
-    public static void purgeStaleGuildHallAdventurers(
+    private record StaleGuildHallAdventurer(@Nonnull UUID entityUuid, @Nonnull String characterId) {}
+
+    /**
+     * Despawns guild hall adventurer entities that are not backed by a valid pool checkout. Entity removal is deferred
+     * until after chunk save for this tick.
+     */
+    public static int purgeStaleGuildHallAdventurers(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town,
         @Nonnull Store<EntityStore> store,
-        @Nonnull PlotInstance hallPlot
+        @Nonnull PlotInstance hallPlot,
+        @Nullable TownManager tm
     ) {
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
         PlotFootprintRecord footprint = hallPlot.toFootprint();
+        List<StaleGuildHallAdventurer> stale = new ArrayList<>();
 
         store.forEachChunk(
             Query.and(TownVillagerBinding.getComponentType(), TownsfolkCharacterBinding.getComponentType(), TransformComponent.getComponentType()),
@@ -348,17 +360,43 @@ public final class TownsfolkExistenceService {
                         continue;
                     }
                     String characterId = tb.getCharacterId().trim();
+                    if (characterId.isEmpty()) {
+                        continue;
+                    }
                     TownsfolkPoolCheckoutRecord checkout = pool.checkoutForCharacter(characterId);
-                    boolean stale =
+                    boolean isStale =
                         checkout == null
                             || !TownsfolkAssignmentKinds.isGuildHallAdventurer(checkout.getAssignmentKind())
                             || !uc.getUuid().toString().equalsIgnoreCase(checkout.getEntityUuid());
-                    if (stale) {
-                        commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+                    if (isStale) {
+                        stale.add(new StaleGuildHallAdventurer(uc.getUuid(), characterId));
                     }
                 }
             }
         );
+
+        if (stale.isEmpty()) {
+            return 0;
+        }
+
+        List<UUID> despawnUuids = new ArrayList<>(stale.size());
+        boolean townChanged = false;
+        for (StaleGuildHallAdventurer entry : stale) {
+            despawnUuids.add(entry.entityUuid());
+            releaseCharacter(world, plugin, entry.characterId(), ReleaseReason.RECONCILE);
+            String uuidStr = entry.entityUuid().toString();
+            if (town.getGuildHallAdventurerNpcIds().removeIf(s -> s != null && uuidStr.equalsIgnoreCase(s.trim()))) {
+                townChanged = true;
+            }
+            if (town.getGuildHallAdventurerSlotByNpcId().remove(uuidStr) != null) {
+                townChanged = true;
+            }
+        }
+        if (townChanged && tm != null) {
+            tm.updateTown(town);
+        }
+        PendingEntityRemovalService.scheduleAll(world, despawnUuids);
+        return stale.size();
     }
 
     public static boolean isSlotOccupiedByLiveAdventurer(
@@ -453,7 +491,12 @@ public final class TownsfolkExistenceService {
                     rec.setEntityUuid(canonical.toString());
                     poolChanged = true;
                 }
-                purgeDuplicateEntities(store, characterId, canonical != null ? canonical : liveList.get(0).entityUuid());
+                purgeDuplicateEntities(
+                    world,
+                    store,
+                    characterId,
+                    canonical != null ? canonical : liveList.get(0).entityUuid()
+                );
                 continue;
             }
 
@@ -489,7 +532,7 @@ public final class TownsfolkExistenceService {
             if (hallPlot == null) {
                 continue;
             }
-            purgeStaleGuildHallAdventurers(world, plugin, town, store, hallPlot);
+            purgeStaleGuildHallAdventurers(world, plugin, town, store, hallPlot, tm);
             syncTownGuildHallLists(world, plugin, town, store, tm, pool);
         }
     }
