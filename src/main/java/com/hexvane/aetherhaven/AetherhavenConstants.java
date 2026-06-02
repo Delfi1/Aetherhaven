@@ -65,6 +65,8 @@ public final class AetherhavenConstants {
     /** Root remover: clears underground trunk and root wood from a right clicked tree trunk. */
     public static final String ITEM_ROOT_REMOVER = "Aetherhaven_Root_Remover";
 
+    public static final String ITEM_GROWTH_SERUM = "Aetherhaven_Growth_Serum";
+
     /**
      * Vanilla NPC corpse-despawn puff ({@code Template_Predator} / {@code DeathParticles}); used when purification removes a
      * spawn.
