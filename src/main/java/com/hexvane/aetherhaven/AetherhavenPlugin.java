@@ -69,6 +69,7 @@ import com.hexvane.aetherhaven.patrol.PatrolWandSecondaryInteraction;
 import com.hexvane.aetherhaven.patrol.PatrolWandToggleClosedInteraction;
 import com.hexvane.aetherhaven.patrol.PatrolWandUseInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderUseInteraction;
+import com.hexvane.aetherhaven.rootremover.RootRemoverUseInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerRemoveSystem;
 import com.hexvane.aetherhaven.purification.PurificationPowderVisualizationSystem;
 import com.hexvane.aetherhaven.purification.PurificationPreviewEntity;
@@ -531,6 +532,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 "AetherhavenPurificationPowderUse",
                 PurificationPowderUseInteraction.class,
                 PurificationPowderUseInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenRootRemoverUse",
+                RootRemoverUseInteraction.class,
+                RootRemoverUseInteraction.CODEC
             );
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenGaiasDraughtConsume", GaiasDraughtConsumeInteraction.class, GaiasDraughtConsumeInteraction.CODEC);

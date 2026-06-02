@@ -62,6 +62,9 @@ public final class AetherhavenConstants {
     /** Purification powder: highlights mob spawn beacons/markers and can remove them. */
     public static final String ITEM_PURIFICATION_POWDER = "Aetherhaven_Purification_Powder";
 
+    /** Root remover: clears underground trunk and root wood from a right clicked tree trunk. */
+    public static final String ITEM_ROOT_REMOVER = "Aetherhaven_Root_Remover";
+
     /**
      * Vanilla NPC corpse-despawn puff ({@code Template_Predator} / {@code DeathParticles}); used when purification removes a
      * spawn.

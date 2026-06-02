@@ -36,6 +36,17 @@
   "HotbarSize": 3,
   "OffHandSlots": 2,
   "InteractionVars": {
+    "Melee_Start": {
+      "Interactions": [
+        {
+          "Parent": "NPC_Attack_Melee_Simple",
+          "Effects": {
+            "ItemPlayerAnimationsId": "Sword",
+            "ItemAnimationId": "SwingLeft"
+          }
+        }
+      ]
+    },
     "Melee_Damage": {
       "Interactions": [
         {

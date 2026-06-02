@@ -284,6 +284,22 @@
           "next": "main_hub"
         }
       ]
+    },
+    "rep_reward_100": {
+      "speaker": "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.rep_reward_100.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.logger.100",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_logger_100"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }
