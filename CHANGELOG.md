@@ -13,6 +13,7 @@
 - **Firewood** Dried log fuel that burns about twice as long as charcoal. Seren Fairhollow shares the pattern at 50 reputation. Craft five bundles at the town planning desk from any log trunk and fire essence.
 - **Root Remover** Right click a tree trunk to clear buried roots and stumps below ground, leaving dirt and dropping the wood at your feet. Seren Fairhollow shares the recipe at 100 reputation. Craft five at the town planning desk from dirt and life essence.
 - **Growth Serum** Right click a young animal to help it grow up right away. Thalen Meadowrun shares the recipe at 50 reputation. Craft it at the alchemist's bench from life essence, bone fragments, and blood petals.
+- **Hunting Knife** A one handed blade with iron dagger damage and sword attacks. Kill animals with it to sometimes get extra raw meat, hide, and feathers. Thalen Meadowrun shares the recipe at 100 reputation. Craft it at the weapons bench from iron bars, light leather, and linen scraps.
 
 ### Changed
 

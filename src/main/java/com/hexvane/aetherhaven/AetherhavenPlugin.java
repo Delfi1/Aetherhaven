@@ -70,6 +70,7 @@ import com.hexvane.aetherhaven.patrol.PatrolWandToggleClosedInteraction;
 import com.hexvane.aetherhaven.patrol.PatrolWandUseInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderUseInteraction;
 import com.hexvane.aetherhaven.growthserum.GrowthSerumUseInteraction;
+import com.hexvane.aetherhaven.huntingknife.HuntingKnifeBonusDropSystem;
 import com.hexvane.aetherhaven.rootremover.RootRemoverUseInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerRemoveSystem;
 import com.hexvane.aetherhaven.purification.PurificationPowderVisualizationSystem;
@@ -650,6 +651,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderVisualizationSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderPlayerRemoveSystem());
         this.getEntityStoreRegistry().registerSystem(new QuestKillProgressSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new HuntingKnifeBonusDropSystem());
         GaiaDraughtCraftSystem gaiaDraughtCraftSystem = new GaiaDraughtCraftSystem(this);
         this.getEntityStoreRegistry().registerSystem(gaiaDraughtCraftSystem);
         this.getEntityStoreRegistry().registerSystem(new GaiaDraughtCraftSystem.Pre(gaiaDraughtCraftSystem));

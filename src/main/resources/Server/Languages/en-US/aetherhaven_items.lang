@@ -10,6 +10,9 @@ items.Aetherhaven_Root_Remover.description=Right click a tree trunk to pull up b
 items.Aetherhaven_Growth_Serum.name=Growth Serum
 items.Aetherhaven_Growth_Serum.description=Use on a young animal to help it grow up right away. Uses one vial.
 
+items.Aetherhaven_Hunting_Knife.name=Hunting Knife
+items.Aetherhaven_Hunting_Knife.description=A sharp knife for hunters. Kill animals with it to sometimes get extra raw meat, hide, and feathers.
+
 items.Aetherhaven_Wood_Scaffold.name=Wood scaffolding
 items.Aetherhaven_Wood_Scaffold.description=Climb like a ladder. Right-click places like a normal block. Hold Use (F) while aiming at scaffolding to extend the tower from the side or branch horizontally from the top face. Breaking the bottom unsupported piece collapses the stack.
 items.Aetherhaven_Wood_Scaffold.legendUse=Use (F): extend tower / branch from top while aiming at scaffold. Right-click: normal block placement.

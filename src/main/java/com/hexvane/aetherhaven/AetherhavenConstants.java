@@ -67,6 +67,8 @@ public final class AetherhavenConstants {
 
     public static final String ITEM_GROWTH_SERUM = "Aetherhaven_Growth_Serum";
 
+    public static final String ITEM_HUNTING_KNIFE = "Aetherhaven_Hunting_Knife";
+
     /**
      * Vanilla NPC corpse-despawn puff ({@code Template_Predator} / {@code DeathParticles}); used when purification removes a
      * spawn.
