@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryMetadata;
+import com.hexvane.aetherhaven.jewelry.JewelryPieceKind;
 import com.hexvane.aetherhaven.jewelry.JewelryRarity;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -100,7 +101,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
             if (ItemStack.isEmpty(st)) {
                 continue;
             }
-            if (JewelryItemIds.isJewelry(st.getItemId())) {
+            if (JewelryPieceKind.isEnchanted(st.getItemId())) {
                 slots.add(s);
             }
         }

@@ -24,6 +24,9 @@ public final class JewelryTooltipWire {
         if (ItemStack.isEmpty(inventoryStack) || !JewelryItemIds.isJewelry(inventoryStack.getItemId())) {
             return inventoryStack;
         }
+        if (JewelryPieceKind.isArtifact(inventoryStack.getItemId())) {
+            return inventoryStack;
+        }
         ItemStack prepared = JewelryMetadata.ensureRolled(inventoryStack);
         String itemId = prepared.getItemId();
         JewelryRarity rarity = JewelryMetadata.readRarity(prepared);

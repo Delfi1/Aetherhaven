@@ -15,6 +15,9 @@ public final class JewelryTooltipMessages {
         if (ItemStack.isEmpty(stack) || !JewelryItemIds.isJewelry(stack.getItemId())) {
             return Message.raw("");
         }
+        if (JewelryPieceKind.isArtifact(stack.getItemId())) {
+            return Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.artifact.wornLight").color("#C9E8FF");
+        }
         if (!JewelryMetadata.hasJewelryMeta(stack)) {
             return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.tooltipUnattuned");
         }

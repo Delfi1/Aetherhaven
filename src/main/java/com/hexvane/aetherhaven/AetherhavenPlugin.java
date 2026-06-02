@@ -122,7 +122,7 @@ import com.hexvane.aetherhaven.jewelry.LootrPerPlayerLootInjectSystem;
 import com.hexvane.aetherhaven.jewelry.LootrChestProcessedPlayers;
 import com.hexvane.aetherhaven.jewelry.LootChestWorldLootMarkSystem;
 import com.hexvane.aetherhaven.jewelry.LootChestWorldLootPending;
-import com.hexvane.aetherhaven.jewelry.JewelryStatSyncSystem;
+import com.hexvane.aetherhaven.jewelry.JewelryLoadoutEffectSyncSystem;
 import com.hexvane.aetherhaven.jewelry.PlayerJewelryLoadout;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtCraftSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventoryChangeSystem;
@@ -419,7 +419,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new JewelryPlayerInitSystem());
         this.getEntityStoreRegistry().registerSystem(new JewelryInventoryTooltipSyncSystem());
         this.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
-        this.getEntityStoreRegistry().registerSystem(new JewelryStatSyncSystem());
+        this.getEntityStoreRegistry().registerSystem(new JewelryLoadoutEffectSyncSystem());
         LootChestWorldLootPending.register(this.getChunkStoreRegistry());
         LootrChestProcessedPlayers.register(this.getChunkStoreRegistry());
         this.getChunkStoreRegistry().registerSystem(new LootChestWorldLootMarkSystem());

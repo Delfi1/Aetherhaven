@@ -13,7 +13,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Set;
 import javax.annotation.Nonnull;
 
-public final class JewelryStatSyncSystem extends EntityTickingSystem<EntityStore> {
+public final class JewelryLoadoutEffectSyncSystem extends EntityTickingSystem<EntityStore> {
     @Nonnull
     private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
 
@@ -43,12 +43,10 @@ public final class JewelryStatSyncSystem extends EntityTickingSystem<EntityStore
         }
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
         EntityStatMap map = store.getComponent(ref, EntityStatMap.getComponentType());
-        if (map == null) {
-            loadout.clearStatsDirty();
-            commandBuffer.putComponent(ref, PlayerJewelryLoadout.getComponentType(), loadout);
-            return;
+        if (map != null) {
+            JewelryStatSync.apply(ref, store, loadout);
         }
-        JewelryStatSync.apply(ref, store, loadout);
+        JewelryLightEffect.apply(ref, commandBuffer, loadout);
         loadout.clearStatsDirty();
         commandBuffer.putComponent(ref, PlayerJewelryLoadout.getComponentType(), loadout);
     }

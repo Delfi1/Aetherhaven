@@ -414,6 +414,10 @@ public final class AetherhavenConstants {
     /** Jewelry crafting bench; recipe from merchant rep 100; must match item JSON. */
     public static final String ITEM_JEWELRY_CRAFTING_BENCH = "Aetherhaven_Jewelry_Crafting_Bench";
 
+    public static final String ITEM_RING_GLOW = "Aetherhaven_Ring_Glow";
+
+    public static final String ITEM_RING_LARGE_GLOW = "Aetherhaven_Ring_Large_Glow";
+
     /** OpenCustomUI id; must match block interaction in {@code Aetherhaven_Jewelry_Crafting_Bench.json}. */
     public static final String PAGE_JEWELRY_CRAFTING_BENCH = "AetherhavenJewelryCraftingBench";
 

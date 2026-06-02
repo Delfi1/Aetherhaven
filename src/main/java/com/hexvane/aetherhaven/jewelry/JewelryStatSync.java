@@ -25,9 +25,9 @@ public final class JewelryStatSync {
             return;
         }
         clearAll(map);
-        for (int slot = 0; slot < 3; slot++) {
+        for (int slot = 0; slot < JewelrySlot.COUNT; slot++) {
             ItemStack equipped = loadout.getSlot(slot);
-            if (ItemStack.isEmpty(equipped)) {
+            if (ItemStack.isEmpty(equipped) || !JewelryPieceKind.isEnchanted(equipped.getItemId())) {
                 continue;
             }
             List<JewelryMetadata.RolledTrait> traits = JewelryMetadata.readTraits(equipped);

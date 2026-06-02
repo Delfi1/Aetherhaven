@@ -12,7 +12,24 @@
   "innPoolEligible": true,
   "innPoolOrder": 4,
   "visitorBindingKind": "visitor_miner",
-  "reputationMilestones": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_miner_50",
+      "minReputation": 50,
+      "itemId": "Aetherhaven_Ring_Glow",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": ""
+    },
+    {
+      "rewardId": "rep_miner_100",
+      "minReputation": 100,
+      "itemId": "Aetherhaven_Ring_Large_Glow",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_100",
+      "learnRecipeItemId": ""
+    }
+  ],
   "giftLoves": [
     "Tool_Pickaxe_Adamantite",
     "Tool_Pickaxe_Onyxium",
