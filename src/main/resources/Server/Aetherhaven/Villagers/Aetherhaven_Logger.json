@@ -12,7 +12,16 @@
   "innPoolEligible": true,
   "innPoolOrder": 5,
   "visitorBindingKind": "visitor_logger",
-  "reputationMilestones": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_logger_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Firewood"
+    }
+  ],
   "giftLoves": [
     "Tool_Hatchet_Mithril",
     "Tool_Hatchet_Onyxium",

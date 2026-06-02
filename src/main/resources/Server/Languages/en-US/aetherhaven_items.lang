@@ -1,6 +1,9 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
+items.Aetherhaven_Firewood.name=Firewood
+items.Aetherhaven_Firewood.description=Dried log bundles. Burns about twice as long as charcoal in furnaces and campfires.
+
 items.Aetherhaven_Wood_Scaffold.name=Wood scaffolding
 items.Aetherhaven_Wood_Scaffold.description=Climb like a ladder. Right-click places like a normal block. Hold Use (F) while aiming at scaffolding to extend the tower from the side or branch horizontally from the top face. Breaking the bottom unsupported piece collapses the stack.
 items.Aetherhaven_Wood_Scaffold.legendUse=Use (F): extend tower / branch from top while aiming at scaffold. Right-click: normal block placement.

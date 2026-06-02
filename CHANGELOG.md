@@ -10,6 +10,7 @@
 - **Guards** Adventurer's can be hired as guards that will patrol the town and fight any hostile enemies.
 - **Patrol Wand** A new wand that lets you create and assign patrol routes to guards.
 - **Glow rings** Artifact rings that shed light while worn from the hand mirror. Gorruk the miner gifts them at 50 and 100 reputation. They can rarely appear in world chest jewelry rolls.
+- **Firewood** Dried log fuel that burns about twice as long as charcoal. Seren Fairhollow shares the pattern at 50 reputation. Craft five bundles at the town planning desk from any log trunk and fire essence.
 
 ### Changed
 
