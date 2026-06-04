@@ -110,14 +110,14 @@ public final class ShopSpotLookAtSystem extends EntityTickingSystem<EntityStore>
             return;
         }
         boolean gameDay = ShopSpotOpenService.isGameDay(store);
-        int sig = st.hudSignature(record, gameDay);
+        int sig = st.hudSignature(record, gameDay, pr.getUuid(), town);
         Integer prev = LAST_SIG.get(pr.getUuid());
         if (prev != null && prev == sig && ShopSpotHudSupport.isActive(player)) {
             return;
         }
         LAST_SIG.put(pr.getUuid(), sig);
         ShopSpotStatusHud hud = ShopSpotHudSupport.obtainHud(player, pr);
-        hud.refresh(world, record, town, gameDay, plugin);
+        hud.refresh(world, record, town, gameDay, pr.getUuid(), plugin);
     }
 
     public static void invalidateSignature(@Nonnull UUID playerUuid) {

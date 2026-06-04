@@ -106,6 +106,12 @@ public final class ShopSpotPurchaseService {
             return false;
         }
         UUID buyer = uc.getUuid();
+        if (record.isPlayerControlled()
+            && record.getSellerUuid() != null
+            && record.getSellerUuid().equals(buyer)) {
+            notify(playerRef, store, commandBuffer, Message.translation(MSG + ".cannotBuyOwnListing"));
+            return false;
+        }
         TownRecord payerTown = tm.findTownForPlayerInWorld(buyer);
         boolean allowTreasury =
             payerTown != null && payerTown.getTownId().equals(record.getTownId());
@@ -121,14 +127,16 @@ public final class ShopSpotPurchaseService {
             return false;
         }
         ItemStack grant = ShopSpotJewelrySupport.buildListingStack(itemId, itemQty, record);
-        ItemStackTransaction give = player.giveItem(grant, playerRef, store);
-        if (!give.succeeded()) {
+        ShopSpotItemDelivery.Result delivery = ShopSpotItemDelivery.grantAtShop(player, playerRef, store, grant, targetBlock);
+        if (!delivery.succeeded()) {
             GoldCoinPayment.refund(payerTown, player, playerRef, store, breakdown);
             if (payerTown != null) {
                 tm.updateTown(payerTown);
             }
-            notify(playerRef, store, commandBuffer, Message.translation(MSG + ".inventoryFull"));
             return false;
+        }
+        if (delivery.droppedOnGround()) {
+            notify(playerRef, store, commandBuffer, Message.translation(MSG + ".itemsDropped"));
         }
         if (payerTown != null) {
             tm.updateTown(payerTown);
@@ -229,19 +237,17 @@ public final class ShopSpotPurchaseService {
         }
         UUID playerUuid = uc.getUuid();
         if (record.hasStock() && record.getSellerUuid() != null && record.getSellerUuid().equals(playerUuid)) {
-            if (secondary) {
-                removeListing(playerRef, commandBuffer, context, world, plugin, registry, record, town, playerUuid);
-            } else {
-                fail(context);
-            }
+            removeListing(playerRef, commandBuffer, context, world, plugin, registry, record, town, targetBlock);
             return;
         }
-        if (!secondary && record.hasStock()) {
+        if (record.hasStock()) {
             fail(context);
             return;
         }
-        if (!town.hasMemberOrOwner(playerUuid)) {
-            notify(playerRef, commandBuffer, Message.translation(MSG + ".notTownMember"));
+        if (!town.playerCanUseShopSpots(playerUuid)) {
+            String key =
+                town.hasMemberOrOwner(playerUuid) ? MSG + ".noShopSpotPermission" : MSG + ".notTownMember";
+            notify(playerRef, commandBuffer, Message.translation(key));
             fail(context);
             return;
         }
@@ -305,7 +311,7 @@ public final class ShopSpotPurchaseService {
         @Nonnull ShopSpotRegistry registry,
         @Nonnull ShopSpotRecord record,
         @Nonnull TownRecord town,
-        @Nonnull UUID playerUuid
+        @Nonnull Vector3i shopBlock
     ) {
         String itemId = record.getItemId();
         int stock = record.getStock();
@@ -319,12 +325,15 @@ public final class ShopSpotPurchaseService {
             fail(context);
             return;
         }
-        ItemStackTransaction give =
-            player.giveItem(ShopSpotJewelrySupport.buildListingStack(itemId, stock, record), playerRef, store);
-        if (!give.succeeded()) {
+        ItemStack stack = ShopSpotJewelrySupport.buildListingStack(itemId, stock, record);
+        ShopSpotItemDelivery.Result delivery = ShopSpotItemDelivery.grantAtShop(player, playerRef, store, stack, shopBlock);
+        if (!delivery.succeeded()) {
             notify(playerRef, commandBuffer, Message.translation(MSG + ".inventoryFull"));
             fail(context);
             return;
+        }
+        if (delivery.droppedOnGround()) {
+            notify(playerRef, commandBuffer, Message.translation(MSG + ".itemsDropped"));
         }
         record.setItemId(null);
         record.setStock(0);

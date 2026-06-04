@@ -284,22 +284,34 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
         if (town == null) {
             return false;
         }
-        if (!ShopSpotOpenService.isOpen(record, town, world, store)) {
-            PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+        PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+        if (!ShopSpotOpenService.isGameDay(store)) {
             if (pr != null) {
-                String key =
-                    ShopSpotOpenService.isGameDay(store)
-                        ? "aetherhaven_shop.aetherhaven.shop.closed"
-                        : "aetherhaven_shop.aetherhaven.shop.closedNight";
-                pr.sendMessage(Message.translation(key));
+                pr.sendMessage(Message.translation("aetherhaven_shop.aetherhaven.shop.closedNight"));
             }
             return false;
         }
         if (!record.hasStock()) {
+            if (pr != null) {
+                if (record.isPlayerControlled()) {
+                    UUIDComponent uc = commandBuffer.getComponent(playerRef, UUIDComponent.getComponentType());
+                    if (uc != null && town.playerCanUseShopSpots(uc.getUuid())) {
+                        pr.sendMessage(Message.translation("aetherhaven_shop.aetherhaven.shop.holdItemToList"));
+                    }
+                } else {
+                    pr.sendMessage(Message.translation("aetherhaven_shop.aetherhaven.shop.closed"));
+                }
+            }
+            return false;
+        }
+        UUIDComponent uc = commandBuffer.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (record.isPlayerControlled()
+            && record.getSellerUuid() != null
+            && uc != null
+            && record.getSellerUuid().equals(uc.getUuid())) {
             return false;
         }
         Player player = commandBuffer.getComponent(playerRef, Player.getComponentType());
-        PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
         if (player == null || pr == null || player.getPageManager().getCustomPage() != null) {
             return false;
         }

@@ -1645,6 +1645,17 @@ public final class TownRecord {
         return getEffectiveMemberPermissions(playerUuid).removePlots();
     }
 
+    /** Town owner always may list on player shop spots; members need the explicit permission. */
+    public boolean playerCanUseShopSpots(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        if (!isMemberPlayer(playerUuid)) {
+            return false;
+        }
+        return getEffectiveMemberPermissions(playerUuid).useShopSpots();
+    }
+
     /** Legacy: true if the player may place plots or manage constructions (any former "build" capability). */
     public boolean playerHasBuildPermission(@Nonnull UUID playerUuid) {
         return playerCanPlacePlots(playerUuid) || playerCanManageConstructions(playerUuid);

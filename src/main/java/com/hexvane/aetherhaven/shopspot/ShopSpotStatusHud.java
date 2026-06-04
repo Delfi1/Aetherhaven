@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 
 public final class ShopSpotStatusHud extends CustomUIHud {
@@ -27,10 +28,12 @@ public final class ShopSpotStatusHud extends CustomUIHud {
         @Nonnull ShopSpotRecord record,
         @Nonnull TownRecord town,
         boolean gameDay,
+        @Nonnull UUID viewerUuid,
         @Nonnull AetherhavenPlugin plugin
     ) {
         UICommandBuilder b = new UICommandBuilder();
         b.set("#ShopSpotHudTitle.TextSpans", Message.translation(MSG + ".title"));
+        applyHint(b, record, town, viewerUuid, gameDay);
         if (!gameDay) {
             showClosed(b, Message.translation(MSG + ".closedNight"));
             this.update(false, b);
@@ -77,6 +80,22 @@ public final class ShopSpotStatusHud extends CustomUIHud {
             }
         }
         this.update(false, b);
+    }
+
+    private static void applyHint(
+        @Nonnull UICommandBuilder b,
+        @Nonnull ShopSpotRecord record,
+        @Nonnull TownRecord town,
+        @Nonnull UUID viewerUuid,
+        boolean gameDay
+    ) {
+        String hintKey = ShopSpotHudHints.hintTranslationKey(record, town, viewerUuid, gameDay);
+        if (hintKey == null) {
+            b.set("#HintLine.Visible", false);
+            return;
+        }
+        b.set("#HintLine.Visible", true);
+        b.set("#HintLine.TextSpans", Message.translation(hintKey));
     }
 
     private static void showClosed(@Nonnull UICommandBuilder b, @Nonnull Message line) {

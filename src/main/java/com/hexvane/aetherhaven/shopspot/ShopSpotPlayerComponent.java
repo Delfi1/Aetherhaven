@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.shopspot;
 
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -135,7 +136,12 @@ public final class ShopSpotPlayerComponent implements Component<EntityStore> {
         this.focusedSpotId = focusedSpotId;
     }
 
-    public int hudSignature(@Nullable ShopSpotRecord record, boolean gameDay) {
+    public int hudSignature(
+        @Nullable ShopSpotRecord record,
+        boolean gameDay,
+        @Nonnull UUID viewerUuid,
+        @Nonnull TownRecord town
+    ) {
         if (record == null) {
             return 0;
         }
@@ -144,6 +150,12 @@ public final class ShopSpotPlayerComponent implements Component<EntityStore> {
         h = 31 * h + record.getStock();
         h = 31 * h + (gameDay ? 1 : 0);
         h = 31 * h + (record.isPlayerControlled() ? 1 : 0);
+        h = 31 * h + viewerUuid.hashCode();
+        h = 31 * h + (town.playerCanUseShopSpots(viewerUuid) ? 1 : 0);
+        UUID seller = record.getSellerUuid();
+        h = 31 * h + (seller != null ? seller.hashCode() : 0);
+        String hint = ShopSpotHudHints.hintTranslationKey(record, town, viewerUuid, gameDay);
+        h = 31 * h + (hint != null ? hint.hashCode() : 0);
         return h;
     }
 

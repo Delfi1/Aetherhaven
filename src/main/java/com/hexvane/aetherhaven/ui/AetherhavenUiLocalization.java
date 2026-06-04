@@ -63,6 +63,7 @@ public final class AetherhavenUiLocalization {
         b.set("#CapCompleteQuests.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.completeQuests"));
         b.set("#CapAbandonQuests.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.abandonQuests"));
         b.set("#CapReviveVillagers.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.reviveVillagers"));
+        b.set("#CapUseShopSpots.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.useShopSpots"));
     }
 
     public static void applyDifficultyPage(@Nonnull UICommandBuilder b) {

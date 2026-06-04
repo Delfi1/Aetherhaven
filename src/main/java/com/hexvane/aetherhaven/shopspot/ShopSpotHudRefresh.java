@@ -48,7 +48,7 @@ public final class ShopSpotHudRefresh {
         if (!ShopSpotHudSupport.isActive(player)) {
             ShopSpotHudSupport.obtainHud(player, pr);
         }
-        ShopSpotHudSupport.obtainHud(player, pr).refresh(world, record, town, gameDay, plugin);
+        ShopSpotHudSupport.obtainHud(player, pr).refresh(world, record, town, gameDay, pr.getUuid(), plugin);
     }
 
     public static void refreshAtBlock(
