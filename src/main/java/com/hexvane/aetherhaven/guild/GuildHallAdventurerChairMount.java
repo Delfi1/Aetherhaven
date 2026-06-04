@@ -19,8 +19,6 @@ import com.hypixel.hytale.component.Store;
 
 import com.hypixel.hytale.logger.HytaleLogger;
 
-import com.hypixel.hytale.math.util.ChunkUtil;
-
 import com.hypixel.hytale.math.vector.Rotation3f;
 
 import com.hypixel.hytale.protocol.AnimationSlot;
@@ -33,7 +31,9 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 
 import com.hypixel.hytale.server.core.universe.world.World;
 
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
+
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
@@ -253,15 +253,20 @@ public final class GuildHallAdventurerChairMount {
 
         }
 
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(mountBlock.x, mountBlock.z));
-
-        if (chunk == null) {
-
+        int y = mountBlock.y;
+        if (y < 0 || y >= 320) {
             return null;
-
         }
-
-        int rotationIndex = chunk.getRotationIndex(mountBlock.x, mountBlock.y, mountBlock.z);
+        ChunkStore chunkStore = world.getChunkStore();
+        Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(mountBlock.x, y, mountBlock.z);
+        if (sectionRef == null || !sectionRef.isValid()) {
+            return null;
+        }
+        BlockSection section = chunkStore.getStore().getComponent(sectionRef, BlockSection.getComponentType());
+        if (section == null) {
+            return null;
+        }
+        int rotationIndex = section.getRotationIndex(mountBlock.x, y, mountBlock.z);
 
         BlockMountPoint[] points = blockType.getSeats().getRotated(rotationIndex);
 

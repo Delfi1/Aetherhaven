@@ -278,6 +278,11 @@ public final class AetherhavenUiLocalization {
             "#SettingsBreakableWeightTwoLabel.TextSpans",
             t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.breakableWeightTwoLabel")
         );
+        b.set("#SettingsShopHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.shopHeading"));
+        b.set(
+            "#SettingsShopMemberPriceLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.shopMemberPriceLabel")
+        );
         b.set("#SettingsGiftHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.giftHeading"));
         b.set("#SettingsGiftEnabledLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.giftEnabledLabel"));
         b.set("#SettingsGiftDaysMinLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.giftDaysMinLabel"));

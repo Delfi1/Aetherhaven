@@ -1,0 +1,71 @@
+$C = "../Common.ui";
+
+@ShopHudItemStyle = (...$C.@DefaultLabelStyle, TextColor: #b8d8ff, FontSize: 20, RenderBold: true, Wrap: true, HorizontalAlignment: Center);
+@ShopHudDetailStyle = (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 17, Wrap: true, HorizontalAlignment: Center);
+
+Group #ShopSpotStatusRoot {
+  LayoutMode: Top;
+
+  $C.@DecoratedContainer {
+    Anchor: (Top: 88, Right: 20, Width: 420);
+
+    #Title {
+      Label #ShopSpotHudTitle {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 12);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Left: 14, Right: 14, Top: 10, Bottom: 14);
+
+      Group #ClosedPanel {
+        LayoutMode: Top;
+        Visible: false;
+        Group {
+          LayoutMode: Center;
+          Anchor: (Horizontal: 0);
+          Label #ClosedLine {
+            Text: " ";
+            Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 17, Wrap: true, HorizontalAlignment: Center);
+            Anchor: (Width: 380);
+          }
+        }
+      }
+
+      Group #OpenPanel {
+        LayoutMode: Top;
+        Visible: true;
+        Group {
+          LayoutMode: Center;
+          Anchor: (Bottom: 6, Horizontal: 0);
+          Label #ItemLine {
+            Text: " ";
+            Style: @ShopHudItemStyle;
+            Anchor: (Width: 380);
+          }
+        }
+        Group {
+          LayoutMode: Center;
+          Anchor: (Bottom: 4, Horizontal: 0);
+          Label #PriceLine {
+            Text: " ";
+            Style: @ShopHudDetailStyle;
+            Anchor: (Width: 380);
+          }
+        }
+        Group {
+          LayoutMode: Center;
+          Anchor: (Horizontal: 0);
+          Label #StockLine {
+            Text: " ";
+            Style: @ShopHudDetailStyle;
+            Anchor: (Width: 380);
+          }
+        }
+      }
+    }
+  }
+}

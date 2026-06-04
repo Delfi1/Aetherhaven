@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.patrol;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.io.IOException;
@@ -40,6 +41,10 @@ public final class PatrolRoutePersistence {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull PatrolRouteRegistry registry
     ) {
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            registry.replaceAll(java.util.List.of());
+            return;
+        }
         Path p = pathFile(plugin, world.getName());
         try {
             PatrolRoutesWorldFile f = PatrolRoutesWorldFile.readOrEmpty(p);
@@ -60,6 +65,9 @@ public final class PatrolRoutePersistence {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull PatrolRouteRegistry registry
     ) {
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            return;
+        }
         Path p = pathFile(plugin, world.getName());
         try {
             PatrolRoutesWorldFile f = new PatrolRoutesWorldFile();

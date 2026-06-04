@@ -107,6 +107,19 @@ import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.economy.TreasuryBreakBlockSystem;
 import com.hexvane.aetherhaven.geode.GeodeLootFiles;
+import com.hexvane.aetherhaven.shopspot.ShopLootFiles;
+import com.hexvane.aetherhaven.shopspot.ShopPriceCatalog;
+import com.hexvane.aetherhaven.shopspot.ShopPriceTooltipMessages;
+import com.hexvane.aetherhaven.shopspot.ShopPriceTooltipPacketAdapter;
+import com.hexvane.aetherhaven.shopspot.ShopPriceFiles;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBlock;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBreakBlockSystem;
+import com.hexvane.aetherhaven.shopspot.ShopSpotDisplayTickSystem;
+import com.hexvane.aetherhaven.shopspot.ShopSpotLookAtSystem;
+import com.hexvane.aetherhaven.shopspot.ShopSpotPlaceEventSystem;
+import com.hexvane.aetherhaven.shopspot.ShopSpotPlayerComponent;
+import com.hexvane.aetherhaven.shopspot.ShopSpotSecondaryInteraction;
+import com.hexvane.aetherhaven.shopspot.ShopSpotUseInteraction;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftComponent;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftLootFiles;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftSchedulerSystem;
@@ -156,6 +169,7 @@ import com.hexvane.aetherhaven.placement.WallPlacementOpenHelper;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.WallPlacementPage;
 import com.hexvane.aetherhaven.ui.GeodeOpenPage;
+import com.hexvane.aetherhaven.ui.ShopSpotConfigPage;
 import com.hexvane.aetherhaven.ui.OpenHandMirrorUiInteraction;
 import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
 import com.hexvane.aetherhaven.ui.JewelryCraftingPage;
@@ -256,6 +270,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     @Nullable
     private JewelryTooltipPacketAdapter jewelryTooltipPacketAdapter;
+    @Nullable
+    private ShopPriceTooltipPacketAdapter shopPriceTooltipPacketAdapter;
+
+    private ShopPriceCatalog shopPriceCatalog = ShopPriceCatalog.empty();
 
     public AetherhavenPlugin(JavaPluginInit init) {
         super(init);
@@ -342,6 +360,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     }
 
     @Nonnull
+    public ShopPriceCatalog getShopPriceCatalog() {
+        return shopPriceCatalog;
+    }
+
+    @Nonnull
     public DialogueWorldView createDialogueWorldView(@Nonnull World world) {
         return new AetherhavenDialogueWorldView(world, this);
     }
@@ -396,9 +419,14 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
         GeodeLootFiles.ensureDefaultLootFile(this);
         FloatingGiftLootFiles.ensureDefaultLootFile(this);
+        ShopPriceFiles.ensureDefaultPricesFile(this);
+        ShopLootFiles.ensureDefaultLootTables(this);
+        this.shopPriceCatalog = ShopPriceFiles.loadCatalog(this);
+        ShopPriceTooltipMessages.clearCache();
         registerModCommonAssetDelivery();
         registerJewelryNativeTooltipHooks();
         registerJewelryRarityBorderPackets();
+        registerShopPriceTooltipPackets();
 
         this.gameTimeCursorResourceType =
             this.getEntityStoreRegistry()
@@ -414,6 +442,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         GaiaStatueBlock.register(this.getChunkStoreRegistry());
         SprinklerBlock.register(this.getChunkStoreRegistry());
         FounderMonumentBlock.register(this.getChunkStoreRegistry());
+        ShopSpotBlock.register(this.getChunkStoreRegistry());
         FounderMonumentStatueSkin.register(this.getEntityStoreRegistry());
 
         VillagerNeeds.register(this.getEntityStoreRegistry());
@@ -447,6 +476,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         PatrolWandPlayerComponent.register(this.getEntityStoreRegistry());
         GuardPatrolState.register(this.getEntityStoreRegistry());
         PurificationPowderPlayerComponent.register(this.getEntityStoreRegistry());
+        ShopSpotPlayerComponent.register(this.getEntityStoreRegistry());
         BuildingStaffAssemblyChannelComponent.register(this.getEntityStoreRegistry());
         BuildingStaffFrontierTracerComponent.register(this.getEntityStoreRegistry());
         FloatingGiftComponent.register(this.getEntityStoreRegistry());
@@ -625,6 +655,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 ScaffoldUseExtendInteraction.class,
                 ScaffoldUseExtendInteraction.CODEC
             );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenShopSpotUse", ShopSpotUseInteraction.class, ShopSpotUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenShopSpotSecondary", ShopSpotSecondaryInteraction.class, ShopSpotSecondaryInteraction.CODEC);
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new BuildingStaffFrontierTracerTickSystem(this));
@@ -638,6 +672,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ShopSpotPlaceEventSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ShopSpotBreakBlockSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ShopSpotDisplayTickSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ShopSpotLookAtSystem(this));
         this.getEntityStoreRegistry().registerSystem(new ScaffoldColumnCascadeBreakSystem());
         this.getEntityStoreRegistry().registerSystem(new PlayerBlockBreakBonusSystem(this));
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentPlaceSystem(this));
@@ -941,6 +979,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
             AetherhavenConstants.PAGE_GEODE_ANVIL,
             pr -> new GeodeOpenPage(pr, false)
         );
+        OpenCustomUIInteraction.registerSimple(
+            this,
+            ShopSpotConfigPage.class,
+            AetherhavenConstants.PAGE_SHOP_SPOT_CONFIG,
+            ShopSpotConfigPage::new
+        );
         NPCPlugin npc = NPCPlugin.get();
         if (npc != null) {
             npc.registerCoreComponentType("OpenAetherhavenDialogue", BuilderActionOpenAetherhavenDialogue::new);
@@ -990,6 +1034,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
     public void reloadConfigsAndAssetCatalogs() {
         this.config.load().join();
         this.reloadAetherhavenAssetCatalogs();
+        this.shopPriceCatalog = ShopPriceFiles.loadCatalog(this);
+        ShopPriceTooltipMessages.clearCache();
     }
 
     /**
@@ -1081,6 +1127,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
         LOGGER.atInfo().log("Jewelry tooltips use native ItemDisplay metadata (per-stack descriptions)");
     }
 
+    private void registerShopPriceTooltipPackets() {
+        this.shopPriceTooltipPacketAdapter = new ShopPriceTooltipPacketAdapter();
+        this.shopPriceTooltipPacketAdapter.register();
+    }
+
     private void registerJewelryRarityBorderPackets() {
         this.jewelryVirtualItemRegistry = new JewelryVirtualItemRegistry();
         this.jewelryTooltipPacketAdapter = new JewelryTooltipPacketAdapter(this.jewelryVirtualItemRegistry);
@@ -1098,6 +1149,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     @Override
     protected void shutdown() {
+        if (this.shopPriceTooltipPacketAdapter != null) {
+            this.shopPriceTooltipPacketAdapter.deregister();
+            this.shopPriceTooltipPacketAdapter = null;
+        }
         if (this.jewelryTooltipPacketAdapter != null) {
             this.jewelryTooltipPacketAdapter.deregister();
             this.jewelryTooltipPacketAdapter = null;

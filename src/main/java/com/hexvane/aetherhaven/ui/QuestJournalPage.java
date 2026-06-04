@@ -713,6 +713,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             "#SettingsGiftDaysMaxField.Value",
             String.format(Locale.US, "%.2f", cfg.getFloatingGiftSpawnIntervalDaysMax())
         );
+        commandBuilder.set(
+            "#SettingsShopMemberPriceField.Value",
+            String.valueOf(cfg.getShopSpotPlayerListingPricePercent())
+        );
 
         TownRecord town = uc != null ? AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid()) : null;
         boolean tools = town != null;
@@ -744,7 +748,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 .append("@BreakW2", "#SettingsBreakableWeightTwoField.Value")
                 .append("@GiftEn", "#SettingsGiftEnabledCheck #CheckBox.Value")
                 .append("@GiftMinDays", "#SettingsGiftDaysMinField.Value")
-                .append("@GiftMaxDays", "#SettingsGiftDaysMaxField.Value"),
+                .append("@GiftMaxDays", "#SettingsGiftDaysMaxField.Value")
+                .append("@ShopMemberPct", "#SettingsShopMemberPriceField.Value"),
             false
         );
         eventBuilder.addEventBinding(
@@ -1707,6 +1712,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
             boolean floatingOn =
                 data.giftEn != null ? data.giftEn.booleanValue() : parseSrc.isFloatingGiftEnabled();
+            int shopMemberPct = parseIntSafe(
+                data.shopMemberPct,
+                1,
+                100,
+                parseSrc.getShopSpotPlayerListingPricePercent()
+            );
             if (journalSettingsFormSnapshot != null) {
                 cfg.copyStateFrom(journalSettingsFormSnapshot);
                 journalSettingsFormSnapshot = null;
@@ -1725,7 +1736,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 breakW2,
                 floatingOn,
                 giftMinDays,
-                giftMaxDays
+                giftMaxDays,
+                shopMemberPct
             );
             try {
                 plugin.getConfig().save().join();
@@ -2149,6 +2161,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             .add()
             .append(new KeyedCodec<>("@GiftMaxDays", Codec.STRING), (d, v) -> d.giftMaxDays = v, d -> d.giftMaxDays)
             .add()
+            .append(new KeyedCodec<>("@ShopMemberPct", Codec.STRING), (d, v) -> d.shopMemberPct = v, d -> d.shopMemberPct)
+            .add()
             .append(new KeyedCodec<>("@PlotPick", Codec.STRING), (d, v) -> d.plotPick = v, d -> d.plotPick)
             .add()
             .append(new KeyedCodec<>("@VillagerPick", Codec.STRING), (d, v) -> d.villagerPick = v, d -> d.villagerPick)
@@ -2197,6 +2211,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private String giftMinDays;
         @Nullable
         private String giftMaxDays;
+        @Nullable
+        private String shopMemberPct;
         @Nullable
         private String plotPick;
         @Nullable

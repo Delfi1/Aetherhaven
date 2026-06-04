@@ -1,0 +1,57 @@
+# Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
+
+items.Aetherhaven_Shop_Spot.name=Shop spot
+items.Aetherhaven_Shop_Spot.description=Place in a finished building plot to open a shop. Stalls are open during the day and closed at night. NPC stock restocks at dawn. Town members can list items on player spots.
+
+aetherhaven.shop.notInTown=Place this inside a town.
+aetherhaven.shop.notInPlot=Place this inside a finished building plot.
+aetherhaven.shop.closed=Sold out
+aetherhaven.shop.closedNight=Shop closed for the night
+aetherhaven.shop.cannotAfford=You cannot afford that.
+aetherhaven.shop.inventoryFull=Your inventory is full.
+aetherhaven.shop.notTownMember=Only town members can sell here.
+aetherhaven.shop.noPrice=That item cannot be sold here.
+aetherhaven.shop.wrongBatchSize=Sell a multiple of {count} at a time.
+aetherhaven.shop.jewelryNeedsAppraisal=Appraise that jewelry before listing it for sale.
+aetherhaven.shop.listed=Your items are now for sale.
+aetherhaven.shop.removedListing=Listing removed.
+aetherhaven.shop.soldNotify={buyer} bought {count} {item} for {gold} gold
+
+aetherhaven.shop.config.title=Set up this shop
+aetherhaven.shop.config.intro=Choose how this stall works. NPC shops restock at dawn from the stock table you pick.
+aetherhaven.shop.config.playerControlled=Let town members sell here
+aetherhaven.shop.config.npcHeading=NPC shop stock
+aetherhaven.shop.config.lootHeader=Stock table file
+aetherhaven.shop.config.lootTableLabel=Table
+aetherhaven.shop.config.lootStockHint=Per-entry stockMin and stockMax in each shop_loot/*.json entry (defaults to 1 batch if omitted).
+aetherhaven.shop.config.confirm=Confirm
+aetherhaven.shop.config.cancel=Cancel
+aetherhaven.shop.config.saved=Shop spot ready
+
+aetherhaven.shop.hud.title=Shop
+aetherhaven.shop.hud.closedNight=Shop closed for the night
+aetherhaven.shop.hud.soldOut=Sold out — restocks at dawn
+aetherhaven.shop.hud.emptyListing=Nothing for sale
+aetherhaven.shop.hud.item=Buying: {item}
+aetherhaven.shop.hud.price={gold} gold each
+aetherhaven.shop.hud.priceBatch={gold} gold for {count} {item}
+aetherhaven.shop.hud.stock={n} left
+aetherhaven.shop.hud.stockBatches={batches} lots left ({items} total)
+aetherhaven.shop.hud.hint=F to buy | RMB with item to list or remove your listing
+
+aetherhaven.shop.buy.title=Buy
+aetherhaven.shop.buy.item={item}
+aetherhaven.shop.buy.price={gold} gold each
+aetherhaven.shop.buy.priceBatch={gold} gold for {count} {item}
+aetherhaven.shop.buy.stock={n} left
+aetherhaven.shop.buy.stockBatches={batches} lots ({items} items)
+aetherhaven.shop.buy.qty=Amount: {n} — Total: {total} gold
+aetherhaven.shop.buy.qtyBatches=Lots: {n} — Total: {total} gold
+aetherhaven.shop.buy.step10=×10
+aetherhaven.shop.buy.max=Max
+aetherhaven.shop.buy.buy=Buy
+aetherhaven.shop.buy.cancel=Cancel
+
+aetherhaven.shop.items.tooltipWithPrice={body}\n{price}
+aetherhaven.shop.items.tooltipPrice={amount} Gold Coins
+aetherhaven.shop.items.tooltipPriceBatch={amount} Gold Coins per {count}

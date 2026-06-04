@@ -539,5 +539,16 @@ public final class AetherhavenConstants {
 
     public static final String REP_PRIESTESS_100 = "rep_priestess_100";
 
+    public static final String SHOP_SPOT_ITEM_ID = "Aetherhaven_Shop_Spot";
+    public static final String SHOP_SPOT_BLOCK_TYPE_ID = "Aetherhaven_Shop_Spot";
+    public static final String PAGE_SHOP_SPOT_CONFIG = "AetherhavenShopSpotConfig";
+    public static final String SHOP_SPOT_HUD_KEY = "AetherhavenShopSpot";
+    public static final int SHOP_SPOT_DEFAULT_GOLD_PRICE = 5;
+    /** Default NPC stock batch range when a loot table JSON omits stockMin/stockMax. */
+    public static final int SHOP_LOOT_DEFAULT_STOCK_MIN = 10;
+    public static final int SHOP_LOOT_DEFAULT_STOCK_MAX = 10;
+    public static final String SHOP_LOOT_TABLE_GIFTS = "gifts";
+    public static final String SHOP_LOOT_TABLE_MERCHANT = "merchant";
+
     private AetherhavenConstants() {}
 }

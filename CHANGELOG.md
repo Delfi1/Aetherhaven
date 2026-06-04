@@ -14,11 +14,14 @@
 - **Root Remover** Right click a tree trunk to clear buried roots and stumps below ground, leaving dirt and dropping the wood at your feet. Seren Fairhollow shares the recipe at 100 reputation. Craft five at the town planning desk from dirt and life essence.
 - **Growth Serum** Right click a young animal to help it grow up right away. Thalen Meadowrun shares the recipe at 50 reputation. Craft it at the alchemist's bench from life essence, bone fragments, and blood petals.
 - **Hunting Knife** A one handed blade with iron dagger damage and sword attacks. Kill animals with it to sometimes get extra raw meat, hide, and feathers. Thalen Meadowrun shares the recipe at 100 reputation. Craft it at the weapons bench from iron bars, light leather, and linen scraps.
+- **Shop spot** Creative-only stall block for finished building plots. NPC shops roll stock at dawn from loot tables. Use (F) opens a buy panel with ±1/±10/max quantity; look-at HUD shows item, price, and stock. Stall facing rotates the floating item display.
 
 ### Changed
 
+- **Shop spot interactions** Removed LMB/RMB quantity overlay (it blocked breaking blocks). Player listings use RMB with an item in hand; buys use the F buy UI.
 - **Wall Costs** Walls now cost any type of wood instead of planks and now cost some gold to build.
 - **Resident Assigning** The gui for assigning residents has been improved.
+- **Instances** Town saves were being created in instances which doesn't make much sense, this was fixed. Towns now can't be created in instances, only permanent worlds.
 
 ## [1.8.0] - 5/26/2026
 

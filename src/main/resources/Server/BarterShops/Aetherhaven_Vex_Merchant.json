@@ -138,7 +138,7 @@
         {
           "Weight": 0.18,
           "Output": { "ItemId": "Aetherhaven_Necklace_Gold_Diamond", "Quantity": 1 },
-          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 125 }],
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 159 }],
           "Stock": [0, 1]
         }
       ]

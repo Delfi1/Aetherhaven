@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.pathtool;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.io.IOException;
@@ -36,6 +37,10 @@ public final class PathToolPersistence {
     }
 
     public static void load(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull PathToolRegistry registry) {
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            registry.replaceAll(java.util.List.of());
+            return;
+        }
         Path p = pathFile(plugin, world.getName());
         try {
             PathToolWorldFile f = PathToolWorldFile.readOrEmpty(p);
@@ -47,6 +52,9 @@ public final class PathToolPersistence {
     }
 
     public static void save(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull PathToolRegistry registry) {
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            return;
+        }
         Path p = pathFile(plugin, world.getName());
         try {
             PathToolWorldFile f = new PathToolWorldFile();

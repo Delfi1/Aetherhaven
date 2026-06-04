@@ -43,6 +43,12 @@ public final class JewelryConfig {
                 o -> o.crafting
             )
             .add()
+            .append(
+                new KeyedCodec<>("ShopPriceMultipliers", JewelryShopPriceMultiplierConfig.CODEC),
+                (o, v) -> o.shopPriceMultipliers = v != null ? v : new JewelryShopPriceMultiplierConfig(),
+                o -> o.shopPriceMultipliers
+            )
+            .add()
             .build();
 
     @Nullable
@@ -55,6 +61,8 @@ public final class JewelryConfig {
     private JewelryStatBlockConfig stat = new JewelryStatBlockConfig();
     @Nonnull
     private JewelryCraftingConfig crafting = new JewelryCraftingConfig();
+    @Nonnull
+    private JewelryShopPriceMultiplierConfig shopPriceMultipliers = new JewelryShopPriceMultiplierConfig();
 
     public JewelryConfig() {}
 
@@ -92,5 +100,10 @@ public final class JewelryConfig {
     @Nonnull
     public JewelryCraftingConfig getCrafting() {
         return crafting != null ? crafting : new JewelryCraftingConfig();
+    }
+
+    @Nonnull
+    public JewelryShopPriceMultiplierConfig getShopPriceMultipliers() {
+        return shopPriceMultipliers != null ? shopPriceMultipliers : new JewelryShopPriceMultiplierConfig();
     }
 }

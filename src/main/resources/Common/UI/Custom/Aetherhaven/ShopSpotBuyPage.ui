@@ -1,0 +1,199 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@IconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@IconMinusStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #5c6a78(0.45)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconPlusStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #5c6a78(0.45)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconDblMinusStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #9eb0c2), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #b5c4d2), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #7a8e9c), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #5c6a78(0.4)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconDblPlusStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #9eb0c2), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #b5c4d2), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #7a8e9c), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #5c6a78(0.4)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@Step10Lbl = (
+  FontSize: 11,
+  TextColor: #9eb0c2,
+  RenderBold: true,
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@ShopInfoItemStyle = (...$C.@DefaultLabelStyle, TextColor: #b8d8ff, FontSize: 20, RenderBold: true, Wrap: true, HorizontalAlignment: Center);
+@ShopInfoDetailStyle = (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 17, Wrap: true, HorizontalAlignment: Center);
+@QtyAmountStyle = (...$C.@DefaultLabelStyle, HorizontalAlignment: Center, VerticalAlignment: Center, FontSize: 17, RenderBold: true, TextColor: #e8dcc8, Wrap: true);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 480);
+
+    #Title {
+      Label #BuyTitle {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 14);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Top: 12, Left: 16, Right: 16, Bottom: 16);
+
+      Group {
+        LayoutMode: Center;
+        Anchor: (Bottom: 6, Horizontal: 0);
+        Label #ItemLine {
+          Style: @ShopInfoItemStyle;
+          Anchor: (Width: 440);
+          Text: "";
+        }
+      }
+      Group {
+        LayoutMode: Center;
+        Anchor: (Bottom: 4, Horizontal: 0);
+        Label #PriceLine {
+          Style: @ShopInfoDetailStyle;
+          Anchor: (Width: 440);
+          Text: "";
+        }
+      }
+      Group {
+        LayoutMode: Center;
+        Anchor: (Bottom: 12, Horizontal: 0);
+        Label #StockLine {
+          Style: @ShopInfoDetailStyle;
+          Anchor: (Width: 440);
+          Text: "";
+        }
+      }
+
+      Group {
+        LayoutMode: Center;
+        Anchor: (Bottom: 12, Horizontal: 0);
+
+        Group #QtyRow {
+          LayoutMode: Left;
+
+          Group #Dec10Wrap {
+            LayoutMode: Top;
+            Anchor: (Right: 6);
+            Label #Dec10Hint {
+              Style: (...@Step10Lbl);
+              Anchor: (Height: 14, Bottom: 2);
+              Text: "×10";
+            }
+            TextButton #Dec10Btn {
+              Style: @IconDblMinusStyle;
+              Anchor: (Width: 32, Height: 32);
+              Text: " ";
+            }
+          }
+
+          Group #Dec1Wrap {
+            LayoutMode: Top;
+            Anchor: (Right: 6);
+            Label #Dec1Spacer {
+              Style: (...@Step10Lbl, TextColor: #ffffff(0.01));
+              Anchor: (Height: 14, Bottom: 2);
+              Text: " ";
+            }
+            TextButton #Dec1Btn {
+              Style: @IconMinusStyle;
+              Anchor: (Width: 32, Height: 32);
+              Text: " ";
+            }
+          }
+
+          Label #QtyValue {
+            Anchor: (Width: 280, Height: 48, Left: 4, Right: 4, Vertical: 0);
+            Style: @QtyAmountStyle;
+            Text: "";
+          }
+
+          Group #Inc1Wrap {
+            LayoutMode: Top;
+            Anchor: (Left: 4, Right: 6);
+            Label #Inc1Spacer {
+              Style: (...@Step10Lbl, TextColor: #ffffff(0.01));
+              Anchor: (Height: 14, Bottom: 2);
+              Text: " ";
+            }
+            TextButton #Inc1Btn {
+              Style: @IconPlusStyle;
+              Anchor: (Width: 32, Height: 32);
+              Text: " ";
+            }
+          }
+
+          Group #Inc10Wrap {
+            LayoutMode: Top;
+            Anchor: (Right: 0);
+            Label #Inc10Hint {
+              Style: (...@Step10Lbl);
+              Anchor: (Height: 14, Bottom: 2);
+              Text: "×10";
+            }
+            TextButton #Inc10Btn {
+              Style: @IconDblPlusStyle;
+              Anchor: (Width: 32, Height: 32);
+              Text: " ";
+            }
+          }
+        }
+      }
+
+      Group {
+        LayoutMode: Center;
+        Anchor: (Bottom: 14, Horizontal: 0);
+        $C.@TextButton #MaxBtn {
+          Anchor: (Width: 200, Height: 36);
+          Text: "";
+        }
+      }
+
+      Group #ButtonRow {
+        LayoutMode: Left;
+        Anchor: (Top: 4);
+
+        $C.@TextButton #BuyBtn {
+          FlexWeight: 1;
+          Anchor: (Right: 10, Height: 40);
+          Text: "";
+        }
+        $C.@CancelTextButton #CancelBtn {
+          FlexWeight: 1;
+          Anchor: (Height: 40);
+          Text: "";
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,113 @@
+$C = "../Common.ui";
+
+@SectionHeadingStyle = (
+  FontSize: 13,
+  TextColor: #c8b8a0,
+  RenderBold: true,
+  Wrap: true
+);
+
+@HintStyle = (
+  FontSize: 12,
+  TextColor: #8a8070,
+  Wrap: true
+);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 520);
+
+    #Title {
+      Label #ShopSpotConfigTitle {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Top: 14, Left: 18, Right: 18, Bottom: 18);
+
+      Label #IntroHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 14);
+      }
+
+      Group #PlayerRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+        Padding: (Horizontal: 8, Vertical: 8);
+        Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+        $C.@CheckBox #PlayerControlledToggle {}
+
+        Label #PlayerControlledLabel {
+          Text: "";
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+          Anchor: (Left: 11);
+        }
+      }
+
+      Group #NpcShopPanel {
+        LayoutMode: Top;
+        Anchor: (Bottom: 14);
+        Padding: (Horizontal: 10, Vertical: 10);
+        Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+        Label #NpcShopHeading {
+          Style: (...@SectionHeadingStyle);
+          Text: "";
+          Anchor: (Bottom: 10);
+        }
+
+        Label #LootHeader {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #a89878);
+          Text: "";
+          Anchor: (Bottom: 6);
+        }
+
+        Group #LootTableRow {
+          LayoutMode: Left;
+          Anchor: (Bottom: 8);
+
+          Label #LootTableLabel {
+            Text: "";
+            Anchor: (Top: 8, Right: 12, Width: 120);
+            Style: $C.@DefaultLabelStyle;
+          }
+
+          $C.@DropdownBox #LootTableDropdown {
+            FlexWeight: 1;
+            Anchor: (Left: 0, Right: 0, Height: $C.@DropdownBoxHeight);
+          }
+        }
+
+        Label #LootStockHint {
+          Style: (...@HintStyle);
+          Text: "";
+        }
+      }
+
+      Group #ButtonRow {
+        LayoutMode: Left;
+        Anchor: (Top: 4);
+
+        $C.@TextButton #ConfirmBtn {
+          FlexWeight: 1;
+          Anchor: (Right: 10, Height: 40);
+          Text: "";
+        }
+
+        $C.@CancelTextButton #CancelBtn {
+          FlexWeight: 1;
+          Anchor: (Height: 40);
+          Text: "";
+        }
+      }
+    }
+  }
+}

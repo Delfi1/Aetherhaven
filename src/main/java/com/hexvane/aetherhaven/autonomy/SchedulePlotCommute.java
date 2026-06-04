@@ -54,6 +54,9 @@ public final class SchedulePlotCommute {
         if (TownVillagerBinding.isVisitorKind(binding.getKind())) {
             return false;
         }
+        if (VillagerAutonomySystem.skipsPoiAutonomy(binding, npc)) {
+            return false;
+        }
         UUID plotUuid = binding.getPreferredPlotId();
         if (plotUuid == null) {
             return false;

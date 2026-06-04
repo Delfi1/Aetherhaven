@@ -1,0 +1,10 @@
+{
+  "entries": [
+    { "itemId": "Potion_Health_Small", "weight": 1, "stockMin": 2, "stockMax": 6 },
+    { "itemId": "Potion_Health", "weight": 1, "stockMin": 1, "stockMax": 4 },
+    { "itemId": "Potion_Stamina_Small", "weight": 1, "stockMin": 2, "stockMax": 6 },
+    { "itemId": "Food_Pie_Meat", "weight": 1, "stockMin": 3, "stockMax": 8 },
+    { "itemId": "Food_Pie_Apple", "weight": 1, "stockMin": 3, "stockMax": 8 },
+    { "itemId": "Tool_Repair_Kit_Iron", "weight": 1, "stockMin": 1, "stockMax": 3 }
+  ]
+}

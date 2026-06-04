@@ -142,6 +142,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (binding == null || needs == null) {
             return;
         }
+        if (skipsPoiAutonomy(binding, npc)) {
+            return;
+        }
 
         long now = resolveNowMs(store);
         VillagerAutonomyState autonomy = archetypeChunk.getComponent(index, VillagerAutonomyState.getComponentType());
@@ -731,12 +734,27 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         store.putComponent(npcRef, NPCEntity.getComponentType(), npc);
     }
 
+    /** Hired guards and other roles without an {@code AetherhavenAutonomy} instruction block must not enter POI travel. */
+    static boolean skipsPoiAutonomy(@Nonnull TownVillagerBinding binding, @Nonnull NPCEntity npc) {
+        if (TownVillagerBinding.KIND_GUARD.equals(binding.getKind())) {
+            return true;
+        }
+        return !supportsAutonomyPoiRoleState(npc);
+    }
+
+    static boolean supportsAutonomyPoiRoleState(@Nonnull NPCEntity npc) {
+        if (npc.getRole() == null) {
+            return false;
+        }
+        return npc.getRole().getStateSupport().getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_AUTONOMY_POI) >= 0;
+    }
+
     static void applyAutonomyRoleState(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull NPCEntity npc,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        if (npc.getRole() == null) {
+        if (!supportsAutonomyPoiRoleState(npc)) {
             return;
         }
         npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, commandBuffer);

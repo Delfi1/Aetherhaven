@@ -290,6 +290,15 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("ShopSpotPlayerListingPricePercent", Codec.INTEGER),
+            (o, v) -> o.shopSpotPlayerListingPricePercent = v,
+            o -> o.shopSpotPlayerListingPricePercent
+        )
+        .documentation(
+            "Percent of catalog gold price buyers pay at player controlled shop spots (NPC spots use full catalog price). Default 75."
+        )
+        .add()
+        .append(
             new KeyedCodec<>("PathToolNodeBlockYOffset", Codec.DOUBLE),
             (o, v) -> o.pathToolNodeBlockYOffset = v != null ? v : 1.0,
             o -> o.pathToolNodeBlockYOffset
@@ -482,6 +491,8 @@ public final class AetherhavenPluginConfig {
 
     /** Multiplier on catalog production ticks (workplace outputs). Default 1.0. */
     private double productionTimeMultiplier = 1.0;
+    /** Buyer price at player shop spots as percent of catalog price (1-100). Default 75. */
+    private int shopSpotPlayerListingPricePercent = 75;
 
     private double pathToolNodeBlockYOffset = 1.0;
     private int pathToolSamplesPerBlock = 2;
@@ -749,6 +760,17 @@ public final class AetherhavenPluginConfig {
      * Multiplier applied to catalog production tick counts (below 1 = faster, above 1 = slower). Clamped to the range
      * 0.05–100; NaN and non-positive stored values fall back to 1.0.
      */
+    public int getShopSpotPlayerListingPricePercent() {
+        int p = shopSpotPlayerListingPricePercent;
+        if (p < 1) {
+            return 1;
+        }
+        if (p > 100) {
+            return 100;
+        }
+        return p;
+    }
+
     public double getProductionTimeMultiplier() {
         double v = productionTimeMultiplier;
         if (Double.isNaN(v) || v <= 0.0) {
@@ -979,6 +1001,10 @@ public final class AetherhavenPluginConfig {
         return v > 0.0 ? v : 1.15;
     }
 
+    public double getJewelryShopPriceMultiplier(@Nonnull com.hexvane.aetherhaven.jewelry.JewelryRarity rarity) {
+        return getJewelry().getShopPriceMultipliers().forRarity(rarity);
+    }
+
     public double getJewelryStatHealthCommonMin() {
         return getJewelry().getStat().getHealth().getCommon().getMin();
     }
@@ -1149,7 +1175,8 @@ public final class AetherhavenPluginConfig {
         int breakableWeightTwoRaw,
         boolean floatingGiftEnabled,
         double floatingGiftIntervalDaysMinRaw,
-        double floatingGiftIntervalDaysMaxRaw
+        double floatingGiftIntervalDaysMaxRaw,
+        int shopSpotPlayerListingPricePercentRaw
     ) {
         this.passivePlotAssembly = passivePlotAssembly;
         this.constructionBlocksPerTick = Math.max(1, constructionBlocksPerTickRaw);
@@ -1173,6 +1200,13 @@ public final class AetherhavenPluginConfig {
         if (this.floatingGift == null) {
             this.floatingGift = new FloatingGiftConfig();
         }
+        int shopPct = shopSpotPlayerListingPricePercentRaw;
+        if (shopPct < 1) {
+            shopPct = 1;
+        } else if (shopPct > 100) {
+            shopPct = 100;
+        }
+        this.shopSpotPlayerListingPricePercent = shopPct;
         this.floatingGift.applyJournalSpawnCadence(
             floatingGiftEnabled,
             floatingGiftIntervalDaysMinRaw,
@@ -1218,6 +1252,7 @@ public final class AetherhavenPluginConfig {
         this.feastNeedsDecayScalePermille = o.feastNeedsDecayScalePermille;
         this.feastGatherTimeoutSeconds = o.feastGatherTimeoutSeconds;
         this.productionTimeMultiplier = o.productionTimeMultiplier;
+        this.shopSpotPlayerListingPricePercent = o.shopSpotPlayerListingPricePercent;
         this.pathToolNodeBlockYOffset = o.pathToolNodeBlockYOffset;
         this.pathToolSamplesPerBlock = o.pathToolSamplesPerBlock;
         this.pathToolHalfWidth = o.pathToolHalfWidth;

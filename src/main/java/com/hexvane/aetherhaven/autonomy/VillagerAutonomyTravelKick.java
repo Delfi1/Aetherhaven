@@ -81,6 +81,9 @@ public final class VillagerAutonomyTravelKick {
                     if (TownVillagerBinding.isVisitorKind(binding.getKind())) {
                         return true;
                     }
+                    if (VillagerAutonomySystem.skipsPoiAutonomy(binding, npc)) {
+                        return true;
+                    }
                     long now = resolveNowMs(store);
                     VillagerAutonomyState autonomy = chunk.getComponent(i, VillagerAutonomyState.getComponentType());
                     if (autonomy == null) {

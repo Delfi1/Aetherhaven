@@ -19,6 +19,7 @@
 #   aetherhaven_commands_help.lang — /aetherhaven subcommand descriptions (tab help)
 #   aetherhaven_feasts_production.lang — feasts; workplace production / unlocks
 #   aetherhaven_misc.lang            — blacksmith repair; dialogue test command; banners; building staff
+#   aetherhaven_shop.lang            — shop spot block, config UI, HUD, purchases
 #
 # Villager dialogue trees: aetherhaven_dialogue_<tree>.lang (see docs/DIALOGUE_WRITING.md).
 

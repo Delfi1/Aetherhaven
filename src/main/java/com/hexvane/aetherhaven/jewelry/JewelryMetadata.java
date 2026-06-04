@@ -345,5 +345,44 @@ public final class JewelryMetadata {
         return (float) v.asNumber().doubleValue();
     }
 
+    /** Serializes {@link #BSON_KEY} for shop spot persistence; null when stack has no jewelry metadata. */
+    @Nullable
+    public static String exportJewelryRootJson(@Nonnull ItemStack stack) {
+        BsonDocument root = readRoot(stack);
+        return root != null ? root.toJson() : null;
+    }
+
+    /** Applies persisted jewelry metadata and rebuilds tooltip display state. */
+    @Nonnull
+    public static ItemStack applyJewelryRootJson(@Nonnull ItemStack stack, @Nonnull String jewelryRootJson) {
+        if (ItemStack.isEmpty(stack) || jewelryRootJson.isBlank()) {
+            return stack;
+        }
+        try {
+            BsonDocument root = BsonDocument.parse(jewelryRootJson);
+            stack = syncInstanceDescriptionForTooltip(writeRoot(stack, root));
+            return JewelryNativeTooltipManager.apply(stack);
+        } catch (Exception ignored) {
+            return stack;
+        }
+    }
+
+    @Nullable
+    public static JewelryRarity readRarityFromRootJson(@Nullable String jewelryRootJson) {
+        if (jewelryRootJson == null || jewelryRootJson.isBlank()) {
+            return null;
+        }
+        try {
+            BsonDocument root = BsonDocument.parse(jewelryRootJson);
+            BsonValue v = root.get("rarity");
+            if (v == null || !v.isString()) {
+                return null;
+            }
+            return JewelryRarity.fromWire(v.asString().getValue());
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
     public record RolledTrait(int gemTraitIndex, @Nonnull String statId, @Nonnull String calculationType, float amount) {}
 }
