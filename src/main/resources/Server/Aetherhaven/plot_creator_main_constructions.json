@@ -1,0 +1,52 @@
+{
+  "mainConstructions": [
+    {
+      "id": "plot_barn",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_barn"
+    },
+    {
+      "id": "plot_blacksmith_shop",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_blacksmith_shop"
+    },
+    {
+      "id": "plot_farm",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_farm"
+    },
+    {
+      "id": "plot_gaia_altar",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_gaia_altar"
+    },
+    {
+      "id": "plot_guild_hall",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_guild_hall"
+    },
+    {
+      "id": "plot_house",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_house"
+    },
+    {
+      "id": "plot_inn",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_inn"
+    },
+    {
+      "id": "plot_lumbermill",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_lumbermill"
+    },
+    {
+      "id": "plot_market_stall",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_market_stall"
+    },
+    {
+      "id": "plot_miners_hut",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_miners_hut"
+    },
+    {
+      "id": "plot_park",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_park"
+    },
+    {
+      "id": "plot_town_hall",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_town_hall"
+    }
+  ]
+}

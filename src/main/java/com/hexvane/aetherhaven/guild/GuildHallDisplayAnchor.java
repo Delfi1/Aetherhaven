@@ -24,6 +24,12 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
             .add()
             .append(new KeyedCodec<>("YawRadians", Codec.FLOAT), (c, v) -> c.yawRadians = v, c -> c.yawRadians)
             .add()
+            .append(new KeyedCodec<>("MarkerX", Codec.DOUBLE), (c, v) -> c.markerX = v, c -> c.markerX)
+            .add()
+            .append(new KeyedCodec<>("MarkerY", Codec.DOUBLE), (c, v) -> c.markerY = v, c -> c.markerY)
+            .add()
+            .append(new KeyedCodec<>("MarkerZ", Codec.DOUBLE), (c, v) -> c.markerZ = v, c -> c.markerZ)
+            .add()
             .build();
 
     @Nullable
@@ -33,6 +39,10 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
     private double y;
     private double z;
     private float yawRadians;
+    /** Stand-cell center used to find a chair below (may differ from {@link #getPosition()} when feet are on the seat). */
+    private double markerX = Double.NaN;
+    private double markerY = Double.NaN;
+    private double markerZ = Double.NaN;
     /** Not serialized; mount attempts this session (chunk/mount can lag after spawn). */
     private transient int chairMountAttempts;
     /** Not serialized; sit fallback applied when block mount never succeeds. */
@@ -66,6 +76,21 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
         this.yawRadians = yawRadians;
     }
 
+    public void setSpawnMarkerPosition(@Nonnull Vector3d spawnMarker) {
+        this.markerX = spawnMarker.x;
+        this.markerY = spawnMarker.y;
+        this.markerZ = spawnMarker.z;
+    }
+
+    /** Adventurer spot stand cell (for chair lookup); defaults to {@link #getPosition()} when unset. */
+    @Nonnull
+    public Vector3d getSpawnMarkerPosition() {
+        if (Double.isNaN(markerX)) {
+            return getPosition();
+        }
+        return new Vector3d(markerX, markerY, markerZ);
+    }
+
     @Nonnull
     public Vector3d getPosition() {
         return new Vector3d(x, y, z);
@@ -92,6 +117,14 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
 
     public void markChairMountFinished() {
         chairMountAttempts = MAX_CHAIR_MOUNT_ATTEMPTS;
+    }
+
+    /** Re-opens chair mount when a seat was missed while the plot chunk was still loading. */
+    public void resetChairMountForRetry() {
+        chairMountAttempts = 0;
+        chairAlignedForMount = false;
+        sitFallbackApplied = false;
+        sitAnimationApplied = false;
     }
 
     public boolean isSitFallbackApplied() {
@@ -141,6 +174,9 @@ public final class GuildHallDisplayAnchor implements Component<EntityStore> {
         copy.displayStateApplied = displayStateApplied;
         copy.chairAlignedForMount = chairAlignedForMount;
         copy.sitAnimationApplied = sitAnimationApplied;
+        copy.markerX = markerX;
+        copy.markerY = markerY;
+        copy.markerZ = markerZ;
         return copy;
     }
 }

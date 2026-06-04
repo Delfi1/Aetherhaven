@@ -23,17 +23,9 @@ import com.hypixel.hytale.math.vector.Rotation3f;
 
 import com.hypixel.hytale.protocol.AnimationSlot;
 
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
-
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.mountpoints.BlockMountPoint;
-
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 
 import com.hypixel.hytale.server.core.universe.world.World;
-
-import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
-
-import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
@@ -64,11 +56,8 @@ public final class GuildHallAdventurerChairMount {
 
 
     public static boolean hasSeatNearSpawn(@Nonnull Store<EntityStore> store, @Nonnull GuildHallDisplayAnchor anchor) {
-
         World world = store.getExternalData().getWorld();
-
-        return VillagerBlockUtil.findGuildHallSeatBelowSpawn(world, anchor.getPosition()) != null;
-
+        return VillagerBlockUtil.findGuildHallSeatBelowSpawn(world, anchor.getSpawnMarkerPosition()) != null;
     }
 
 
@@ -93,9 +82,7 @@ public final class GuildHallAdventurerChairMount {
 
         World world = store.getExternalData().getWorld();
 
-        Vector3d spawnPosition = anchor.getPosition();
-
-        Vector3i mountBlock = VillagerBlockUtil.findGuildHallSeatBelowSpawn(world, spawnPosition);
+        Vector3i mountBlock = VillagerBlockUtil.findGuildHallSeatBelowSpawn(world, anchor.getSpawnMarkerPosition());
 
         if (mountBlock == null) {
 
@@ -111,19 +98,17 @@ public final class GuildHallAdventurerChairMount {
             return false;
         }
         if (!anchor.isChairAlignedForMount()) {
-            alignFeetForSeatMount(npcRef, commandBuffer, mountBlock);
+            alignFeetForSeatMount(npcRef, commandBuffer, world, mountBlock);
             anchor.setChairAlignedForMount(true);
-            tc = commandBuffer.getComponent(npcRef, TransformComponent.getComponentType());
-            if (tc == null) {
-                return false;
-            }
+            return false;
         }
         try {
             Vector3d feet = tc.getPosition();
             Vector3d hitBlockCenter = new Vector3d(mountBlock.x + 0.5, mountBlock.y + 0.5, mountBlock.z + 0.5);
             Vector3d seatHit = seatWorldPosition(world, mountBlock);
-            Vector3d primaryHit = seatHit != null ? seatHit : new Vector3d(feet.x, feet.y + 0.5, feet.z);
-            BlockMountAPI.BlockMountResult result = tryMountWithHits(npcRef, commandBuffer, mountBlock, primaryHit, hitBlockCenter);
+            Vector3d feetPick = new Vector3d(feet.x, feet.y + 0.5, feet.z);
+            Vector3d primaryHit = seatHit != null ? seatHit : feetPick;
+            BlockMountAPI.BlockMountResult result = tryMountWithHits(npcRef, commandBuffer, mountBlock, feetPick, primaryHit, hitBlockCenter);
 
             if (!(result instanceof BlockMountAPI.Mounted)) {
 
@@ -142,6 +127,18 @@ public final class GuildHallAdventurerChairMount {
             }
 
             syncAnchorAfterMount(npcRef, store, commandBuffer, anchor);
+            TransformComponent mountedTc = commandBuffer.getComponent(npcRef, TransformComponent.getComponentType());
+            if (mountedTc == null) {
+                mountedTc = store.getComponent(npcRef, TransformComponent.getComponentType());
+            }
+            if (mountedTc != null) {
+                TransformComponentUtil.replacePreservingChunk(
+                    npcRef,
+                    commandBuffer,
+                    mountedTc.getPosition(),
+                    new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F)
+                );
+            }
 
             return true;
 
@@ -173,20 +170,15 @@ public final class GuildHallAdventurerChairMount {
 
         World world = store.getExternalData().getWorld();
 
-        Vector3i mountBlock = VillagerBlockUtil.findGuildHallSeatBelowSpawn(world, anchor.getPosition());
+        Vector3i mountBlock = VillagerBlockUtil.findGuildHallSeatBelowSpawn(world, anchor.getSpawnMarkerPosition());
 
         if (mountBlock == null) {
-
             return;
-
         }
 
         Vector3d seatPos = seatWorldPosition(world, mountBlock);
-
         if (seatPos == null) {
-
-            return;
-
+            seatPos = new Vector3d(mountBlock.x + 0.5, mountBlock.y + 1.0, mountBlock.z + 0.5);
         }
 
         TransformComponentUtil.replacePreservingChunk(
@@ -244,95 +236,50 @@ public final class GuildHallAdventurerChairMount {
     @Nullable
 
     private static Vector3d seatWorldPosition(@Nonnull World world, @Nonnull Vector3i mountBlock) {
-
-        BlockType blockType = world.getBlockType(mountBlock.x, mountBlock.y, mountBlock.z);
-
-        if (blockType == null || blockType.getSeats() == null) {
-
-            return null;
-
-        }
-
-        int y = mountBlock.y;
-        if (y < 0 || y >= 320) {
-            return null;
-        }
-        ChunkStore chunkStore = world.getChunkStore();
-        Ref<ChunkStore> sectionRef = chunkStore.getChunkSectionReferenceAtBlock(mountBlock.x, y, mountBlock.z);
-        if (sectionRef == null || !sectionRef.isValid()) {
-            return null;
-        }
-        BlockSection section = chunkStore.getStore().getComponent(sectionRef, BlockSection.getComponentType());
-        if (section == null) {
-            return null;
-        }
-        int rotationIndex = section.getRotationIndex(mountBlock.x, y, mountBlock.z);
-
-        BlockMountPoint[] points = blockType.getSeats().getRotated(rotationIndex);
-
-        if (points == null || points.length == 0) {
-
-            return null;
-
-        }
-
-        return points[0].computeWorldSpacePosition(mountBlock);
-
+        return VillagerBlockUtil.seatWorldPosition(world, mountBlock);
     }
 
 
 
-    private static void playSitAnimationOnce(
-
+    /** Re-applies Sit while seated; {@link com.hexvane.aetherhaven.AetherhavenConstants#NPC_STATE_GUILD_HALL_DISPLAY} uses standing idle. */
+    public static void ensureSitVisuals(
         @Nonnull Ref<EntityStore> npcRef,
-
         @Nonnull Store<EntityStore> store,
-
         @Nonnull GuildHallDisplayAnchor anchor
-
     ) {
-
-        if (anchor.isSitAnimationApplied()) {
-
-            return;
-
-        }
-
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-
-        if (npc != null) {
-
-            npc.playAnimation(npcRef, AnimationSlot.Status, "Sit", store);
-
-            anchor.setSitAnimationApplied(true);
-
+        if (npc == null) {
+            return;
         }
+        npc.playAnimation(npcRef, AnimationSlot.Status, "Sit", store);
+        anchor.setSitAnimationApplied(true);
+    }
 
+    private static void playSitAnimationOnce(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull GuildHallDisplayAnchor anchor
+    ) {
+        ensureSitVisuals(npcRef, store, anchor);
     }
 
 
 
     private static void alignFeetForSeatMount(
-
         @Nonnull Ref<EntityStore> npcRef,
-
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
-
+        @Nonnull World world,
         @Nonnull Vector3i mountBlock
-
     ) {
-
         TransformComponent tc = commandBuffer.getComponent(npcRef, TransformComponent.getComponentType());
-
         if (tc == null) {
-
             return;
-
         }
-
-        Vector3d pos = new Vector3d(mountBlock.x + 0.5, mountBlock.y + 1.0, mountBlock.z + 0.5);
+        Vector3d pos = seatWorldPosition(world, mountBlock);
+        if (pos == null) {
+            pos = new Vector3d(mountBlock.x + 0.5, mountBlock.y + 1.0, mountBlock.z + 0.5);
+        }
         TransformComponentUtil.replacePreservingChunk(npcRef, commandBuffer, pos, tc.getRotation());
-
     }
 
 
@@ -340,29 +287,20 @@ public final class GuildHallAdventurerChairMount {
     @Nonnull
 
     private static BlockMountAPI.BlockMountResult tryMountWithHits(
-
         @Nonnull Ref<EntityStore> npcRef,
-
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
-
         @Nonnull Vector3i mountBlock,
-
-        @Nonnull Vector3d primaryHit,
-
-        @Nonnull Vector3d fallbackHit
-
+        @Nonnull Vector3d... hits
     ) {
-
-        BlockMountAPI.BlockMountResult result = BlockMountAPI.mountOnBlock(npcRef, commandBuffer, mountBlock, primaryHit);
-
-        if (result instanceof BlockMountAPI.Mounted) {
-
-            return result;
-
+        BlockMountAPI.BlockMountResult last = BlockMountAPI.DidNotMount.NO_MOUNT_POINT_FOUND;
+        for (Vector3d hit : hits) {
+            BlockMountAPI.BlockMountResult result = BlockMountAPI.mountOnBlock(npcRef, commandBuffer, mountBlock, hit);
+            if (result instanceof BlockMountAPI.Mounted) {
+                return result;
+            }
+            last = result;
         }
-
-        return BlockMountAPI.mountOnBlock(npcRef, commandBuffer, mountBlock, fallbackHit);
-
+        return last;
     }
 
 

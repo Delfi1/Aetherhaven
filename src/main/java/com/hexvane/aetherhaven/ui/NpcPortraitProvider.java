@@ -30,6 +30,7 @@ public final class NpcPortraitProvider {
         Map.entry(AetherhavenConstants.NPC_MINER, "Aetherhaven_Miner.png"),
         Map.entry(AetherhavenConstants.NPC_LOGGER, "Aetherhaven_Logger.png"),
         Map.entry(AetherhavenConstants.NPC_RANCHER, "Aetherhaven_Rancher.png"),
+        Map.entry(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID, "Aetherhaven_Guild_Master.png"),
         Map.entry(AetherhavenConstants.NPC_GUARD_KNIGHT, "Guild_Master.png"),
         Map.entry(AetherhavenConstants.NPC_GUARD_ARCHER, "Guild_Master.png"),
         Map.entry(AetherhavenConstants.NPC_GUARD_MAGE, "Guild_Master.png")

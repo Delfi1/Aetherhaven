@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
 import com.hexvane.aetherhaven.asset.ClasspathResourceScanner;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingsLoader;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,6 +38,14 @@ public final class PrefabMaterialsCatalog {
 
     @Nonnull
     public static PrefabMaterialsCatalog loadFromAssetPacksOrClasspath(@Nonnull ClassLoader classLoader) {
+        return loadFromAssetPacksOrClasspath(classLoader, null);
+    }
+
+    @Nonnull
+    public static PrefabMaterialsCatalog loadFromAssetPacksOrClasspath(
+        @Nonnull ClassLoader classLoader,
+        @Nullable Path dataDirectory
+    ) {
         Gson gson = new GsonBuilder().create();
         Map<String, List<MaterialRequirement>> map = new LinkedHashMap<>();
         List<PackJsonFile> packFiles =
@@ -56,6 +65,9 @@ public final class PrefabMaterialsCatalog {
                     LOGGER.atSevere().withCause(e).log("Failed to load prefab materials %s", path);
                 }
             }
+        }
+        if (dataDirectory != null) {
+            CustomBuildingsLoader.overlayPrefabMaterialsFromDataDirectory(gson, dataDirectory, map);
         }
         LOGGER.atInfo().log("Loaded prefab materials for %s construction(s)", map.size());
         return new PrefabMaterialsCatalog(Collections.unmodifiableMap(map));

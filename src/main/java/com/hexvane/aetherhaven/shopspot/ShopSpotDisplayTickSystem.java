@@ -35,6 +35,7 @@ public final class ShopSpotDisplayTickSystem extends TickingSystem<EntityStore> 
         var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         for (ShopSpotRecord record : registry.allRecords()) {
             if (!ShopSpotDisplayService.isSpotChunkLoaded(world, record)) {
+                ShopSpotDisplayService.removeDisplay(world, store, null, plugin, registry, record);
                 continue;
             }
             TownRecord town = tm.getTown(record.getTownId());

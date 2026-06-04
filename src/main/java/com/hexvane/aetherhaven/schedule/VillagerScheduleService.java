@@ -5,8 +5,10 @@ import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
+import java.util.List;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -142,16 +144,21 @@ public final class VillagerScheduleService {
             return;
         }
 
-        VillagerScheduleResolveOutcome out = VillagerScheduleResolver.resolvePlot(
-            town,
-            binding,
-            uc.getUuid(),
-            loc,
-            vdef,
-            plugin.getConstructionCatalog(),
-            tickState,
-            timeJump
-        );
+        TownsfolkCharacterBinding townsfolkBinding = archetypeChunk.getComponent(index, TownsfolkCharacterBinding.getComponentType());
+        List<String> personalityIds = townsfolkBinding != null ? townsfolkBinding.getPersonalityIds() : List.of();
+        VillagerScheduleResolveOutcome out =
+            VillagerScheduleResolver.resolvePlot(
+                town,
+                binding,
+                uc.getUuid(),
+                loc,
+                vdef,
+                plugin.getConstructionCatalog(),
+                tickState,
+                timeJump,
+                plugin.getTownsfolkPersonalityCatalog(),
+                personalityIds
+            );
         UUID targetPlot = out.plotId();
         if (targetPlot == null) {
             if (cfg.isVillagerScheduleDebugLog() && gameEpochHour != tickState.getLastUnresolvedDebugLogGameEpochHour()) {

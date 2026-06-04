@@ -24,6 +24,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
 import com.hexvane.aetherhaven.npc.movement.BuilderBodyMotionWanderInRectGroundPreference;
+import com.hexvane.aetherhaven.placement.PlotBlockPreviewCleanupSystem;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.plot.CharterBlock;
@@ -58,6 +59,13 @@ import com.hexvane.aetherhaven.pathtool.PathToolStyleCycleInteraction;
 import com.hexvane.aetherhaven.pathtool.PathToolUseInteraction;
 import com.hexvane.aetherhaven.pathtool.PathToolWidthCycleInteraction;
 import com.hexvane.aetherhaven.pathtool.PathNavViz;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorBlockInteraction;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorBreakAllowSystem;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorCancelInteraction;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorPreviewSystem;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorStepBackInteraction;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorStepForwardInteraction;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorUseInteraction;
 import com.hexvane.aetherhaven.patrol.GuardPatrolState;
 import com.hexvane.aetherhaven.patrol.GuardPatrolSystem;
 import com.hexvane.aetherhaven.patrol.PatrolWandModeCycleInteraction;
@@ -604,6 +612,28 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 PathToolStyleCycleInteraction.CODEC
             );
         this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPlotCreatorUse", PlotCreatorUseInteraction.class, PlotCreatorUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPlotCreatorBlock", PlotCreatorBlockInteraction.class, PlotCreatorBlockInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotCreatorStepBack",
+                PlotCreatorStepBackInteraction.class,
+                PlotCreatorStepBackInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotCreatorStepForward",
+                PlotCreatorStepForwardInteraction.class,
+                PlotCreatorStepForwardInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotCreatorCancel",
+                PlotCreatorCancelInteraction.class,
+                PlotCreatorCancelInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPatrolWandPrimary", PatrolWandPrimaryInteraction.class, PatrolWandPrimaryInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
             .register(
@@ -672,6 +702,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PlotCreatorBreakAllowSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PlotCreatorPreviewSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PlotBlockPreviewCleanupSystem());
         this.getEntityStoreRegistry().registerSystem(new ShopSpotPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new ShopSpotBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new ShopSpotDisplayTickSystem(this));
@@ -1085,8 +1118,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.equipmentProfileCatalog = EquipmentProfileCatalog.loadFromAssetPacksOrClasspath(cl);
         ReputationRewardCatalog.refreshFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);
-        this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl);
-        this.prefabMaterialsCatalog = PrefabMaterialsCatalog.loadFromAssetPacksOrClasspath(cl);
+        Path customData = this.getDataDirectory();
+        this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl, customData);
+        this.prefabMaterialsCatalog = PrefabMaterialsCatalog.loadFromAssetPacksOrClasspath(cl, customData);
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
         this.villagerScheduleRegistry = VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl);

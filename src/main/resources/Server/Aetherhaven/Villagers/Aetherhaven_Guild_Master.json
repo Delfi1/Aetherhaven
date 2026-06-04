@@ -5,7 +5,7 @@
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_guild_hall",
   "displayName": "Lyra Fairhollow",
-  "portraitIcon": "Guild_Master.png",
+  "portraitIcon": "Aetherhaven_Guild_Master.png",
   "uiSortOrder": 12,
   "innPoolEligible": true,
   "innPoolOrder": 7,

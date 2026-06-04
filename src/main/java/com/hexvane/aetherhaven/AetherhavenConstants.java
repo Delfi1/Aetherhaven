@@ -85,6 +85,16 @@ public final class AetherhavenConstants {
      */
     public static final String PERMISSION_POI_TOOL = "aetherhaven.poi.tool";
 
+    /** Permission to use the plot creator staff and save custom buildings. */
+    public static final String PERMISSION_PLOT_CREATOR = "aetherhaven.plot.creator";
+
+    /** Unified plot token item; {@link com.hexvane.aetherhaven.plot.PlotTokenMetadata} holds the construction id. */
+    public static final String PLOT_TOKEN_UNIFIED = "Aetherhaven_Plot_Token";
+
+    public static final String PLOT_CREATOR_STAFF_ITEM_ID = "Aetherhaven_Plot_Creator_Staff";
+
+    public static final String PLOT_CREATOR_HUD_KEY = "AetherhavenPlotCreator";
+
     /** Survival path spline designer item id (shovel visuals; see item JSON). */
     public static final String PATH_TOOL_ITEM_ID = "Aetherhaven_Path_Tool";
 

@@ -111,6 +111,23 @@ public final class PatrolRouteRegistry {
         }
     }
 
+    /** @return true when any route assignment was updated */
+    public boolean migrateGuardAssignment(@Nonnull UUID oldGuardEntityUuid, @Nonnull UUID newGuardEntityUuid) {
+        if (oldGuardEntityUuid.equals(newGuardEntityUuid)) {
+            return false;
+        }
+        String oldId = oldGuardEntityUuid.toString();
+        String newId = newGuardEntityUuid.toString();
+        boolean changed = false;
+        for (PatrolRouteRecord r : records) {
+            if (r != null && oldId.equals(r.assignedGuardUuid)) {
+                r.assignedGuardUuid = newId;
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
     public void clearStaleGuardAssignments(@Nonnull java.util.function.Predicate<UUID> isValidGuard) {
         for (PatrolRouteRecord r : records) {
             if (r == null) {

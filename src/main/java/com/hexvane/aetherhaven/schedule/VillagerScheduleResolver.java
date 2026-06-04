@@ -1,7 +1,10 @@
 package com.hexvane.aetherhaven.schedule;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.autonomy.BuildingTagScoring;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityCatalog;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -158,6 +161,33 @@ public final class VillagerScheduleResolver {
         @Nullable VillagerScheduleTickState tickState,
         boolean timeJump
     ) {
+        return resolvePlot(
+            town,
+            binding,
+            entityUuid,
+            locationSymbol,
+            villagerDef,
+            constructionCatalog,
+            tickState,
+            timeJump,
+            null,
+            null
+        );
+    }
+
+    @Nonnull
+    public static VillagerScheduleResolveOutcome resolvePlot(
+        @Nonnull TownRecord town,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull UUID entityUuid,
+        @Nonnull String locationSymbol,
+        @Nullable VillagerDefinition villagerDef,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable VillagerScheduleTickState tickState,
+        boolean timeJump,
+        @Nullable TownsfolkPersonalityCatalog personalityCatalog,
+        @Nullable List<String> personalityIds
+    ) {
         String loc = normalizeLocation(locationSymbol);
         if (loc == null) {
             return VillagerScheduleResolveOutcome.skip();
@@ -166,11 +196,38 @@ public final class VillagerScheduleResolver {
             case LOC_HOME -> resolveHome(town, entityUuid, constructionCatalog);
             case LOC_WORK -> resolveWork(town, binding, villagerDef, constructionCatalog);
             case LOC_INN ->
-                resolveSharedBuilding(town, constructionCatalog, sharedConstructionId(loc, villagerDef), loc, tickState, timeJump);
+                resolveSharedBuilding(
+                    town,
+                    constructionCatalog,
+                    sharedConstructionId(loc, villagerDef),
+                    loc,
+                    tickState,
+                    timeJump,
+                    personalityCatalog,
+                    personalityIds
+                );
             case LOC_PARK ->
-                resolveSharedBuilding(town, constructionCatalog, sharedConstructionId(loc, villagerDef), loc, tickState, timeJump);
+                resolveSharedBuilding(
+                    town,
+                    constructionCatalog,
+                    sharedConstructionId(loc, villagerDef),
+                    loc,
+                    tickState,
+                    timeJump,
+                    personalityCatalog,
+                    personalityIds
+                );
             case LOC_GAIA_ALTAR ->
-                resolveSharedBuilding(town, constructionCatalog, sharedConstructionId(loc, villagerDef), loc, tickState, timeJump);
+                resolveSharedBuilding(
+                    town,
+                    constructionCatalog,
+                    sharedConstructionId(loc, villagerDef),
+                    loc,
+                    tickState,
+                    timeJump,
+                    personalityCatalog,
+                    personalityIds
+                );
             default -> VillagerScheduleResolveOutcome.skip();
         };
     }
@@ -397,7 +454,9 @@ public final class VillagerScheduleResolver {
         @Nonnull String gameplayConstructionId,
         @Nonnull String normalizedScheduleSegment,
         @Nullable VillagerScheduleTickState tickState,
-        boolean timeJump
+        boolean timeJump,
+        @Nullable TownsfolkPersonalityCatalog personalityCatalog,
+        @Nullable List<String> personalityIds
     ) {
         String g = gameplayConstructionId.trim();
         if (g.isEmpty()) {
@@ -431,10 +490,45 @@ public final class VillagerScheduleResolver {
             }
         }
         if (picked == null) {
-            int idx = ThreadLocalRandom.current().nextInt(complete.size());
-            picked = complete.get(idx).getPlotId();
+            picked = pickSharedPlot(complete, constructionCatalog, personalityCatalog, personalityIds);
         }
         return new VillagerScheduleResolveOutcome(picked, null, g, normalizedScheduleSegment, picked);
+    }
+
+    @Nonnull
+    private static UUID pickSharedPlot(
+        @Nonnull List<PlotInstance> complete,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable TownsfolkPersonalityCatalog personalityCatalog,
+        @Nullable List<String> personalityIds
+    ) {
+        if (complete.size() == 1) {
+            return complete.get(0).getPlotId();
+        }
+        float total = 0f;
+        float[] weights = new float[complete.size()];
+        for (int i = 0; i < complete.size(); i++) {
+            PlotInstance pi = complete.get(i);
+            ConstructionDefinition def = constructionCatalog.get(pi.getConstructionId());
+            float w = 1f;
+            if (def != null) {
+                w = BuildingTagScoring.multiplier(def, personalityCatalog, personalityIds);
+            }
+            weights[i] = w;
+            total += w;
+        }
+        if (total <= 0f) {
+            return complete.get(ThreadLocalRandom.current().nextInt(complete.size())).getPlotId();
+        }
+        float roll = ThreadLocalRandom.current().nextFloat() * total;
+        float acc = 0f;
+        for (int i = 0; i < weights.length; i++) {
+            acc += weights[i];
+            if (roll <= acc) {
+                return complete.get(i).getPlotId();
+            }
+        }
+        return complete.get(complete.size() - 1).getPlotId();
     }
 
     private record Segment(int weekMinute, @Nonnull String location) {}

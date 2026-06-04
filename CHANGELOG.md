@@ -4,6 +4,7 @@
 
 ### Added
 
+- **Plot Creator Staff** A new staff that allows the player to create and configure a building they've created as a fully working plot for villagers. It walks you through it step by step.
 - **POI debug staff overhaul** Three modes (Q): edit existing POIs, place new prefab-saveable POI markers via a configuration GUI (need type, capacity, mount toggle, work equipment), and adventurer spawn markers. JSON building POIs still register on construction and merge with prefab markers (markers win at the same local cell). Guild hall adventurers spawn facing their marker and stand still at the spot.
 - **Townsfolk** Non-essential npcs that are chosen from a large pool of hand-designed characters. They each have three personality traits assigned to them that determine what dialogue lines they use. This will be used for tourists, guards, and more.
 - **Guild Hall** A place adventurers gather and can be hired as guards.

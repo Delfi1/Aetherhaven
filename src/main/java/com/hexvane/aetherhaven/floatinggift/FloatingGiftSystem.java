@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.floatinggift;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.entity.EntityChunkUtil;
 import com.hexvane.aetherhaven.jewelry.LootChestBonusApplier;
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -146,6 +147,11 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         double nz = p.z + dz * speed * dt;
         double bob = FLOAT_BOB_AMPLITUDE_BLOCKS * Math.sin(FLOAT_BOB_RAD_PER_SEC * gift.getLifeSeconds());
         double ny = gift.getAnchorY() + bob;
+        World world = store.getExternalData().getWorld();
+        if (!EntityChunkUtil.isBlockChunkInMemory(world, (int) Math.floor(nx), (int) Math.floor(nz))) {
+            commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+            return;
+        }
         transform.setPosition(new Vector3d(nx, ny, nz));
         // Do not refresh head rotation every tick — client animation drivers can glitch procedural clips.
         tryProjectileProximityPop(commandBuffer, store, ref, gift, transform, velocity, giftBoundingBox);
@@ -280,8 +286,12 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         velocity.set(0.0, -fall, 0.0);
         Vector3d p = transform.getPosition();
         Vector3d next = new Vector3d(p.x, p.y - fall * dt, p.z);
-        transform.setPosition(next);
         World world = store.getExternalData().getWorld();
+        if (!EntityChunkUtil.isPositionChunkInMemory(world, next)) {
+            commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+            return;
+        }
+        transform.setPosition(next);
         int bx = (int) Math.floor(next.x);
         int by = (int) Math.floor(next.y);
         int bz = (int) Math.floor(next.z);

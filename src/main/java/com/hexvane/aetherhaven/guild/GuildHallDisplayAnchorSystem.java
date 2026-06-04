@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.guild;
 
+import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.entity.TransformComponentUtil;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
@@ -14,6 +15,7 @@ import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.math.vector.Rotation3f;
+import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.system.TransformSystems;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
@@ -70,11 +72,22 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
         }
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
         boolean anchorChanged = false;
+        Vector3d spawnMarker = anchor.getSpawnMarkerPosition();
+        boolean columnLoaded = VillagerBlockUtil.isGuildHallSpawnColumnLoaded(store.getExternalData().getWorld(), spawnMarker);
+        boolean hasSeat = columnLoaded && GuildHallAdventurerChairMount.hasSeatNearSpawn(store, anchor);
+        boolean blockMounted = GuildHallAdventurerChairMount.isBlockMounted(store, commandBuffer, ref);
 
-        if (!anchor.isChairMountFinished() && !GuildHallAdventurerChairMount.isBlockMounted(store, commandBuffer, ref)) {
-            if (!GuildHallAdventurerChairMount.hasSeatNearSpawn(store, anchor)) {
-                anchor.markChairMountFinished();
-                anchorChanged = true;
+        if (anchor.isChairMountFinished() && hasSeat && !blockMounted && !anchor.isSitFallbackApplied()) {
+            anchor.resetChairMountForRetry();
+            anchorChanged = true;
+        }
+
+        if (!anchor.isChairMountFinished() && !blockMounted) {
+            if (!hasSeat) {
+                if (columnLoaded) {
+                    anchor.markChairMountFinished();
+                    anchorChanged = true;
+                }
             } else if (GuildHallAdventurerChairMount.tryMountChairBelowSpawn(ref, store, commandBuffer, anchor)) {
                 anchor.markChairMountFinished();
                 anchorChanged = true;
@@ -89,21 +102,37 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
             }
         }
 
-        anchorChanged |= applyDisplayStateIfNeeded(npc, ref, commandBuffer, anchor);
+        blockMounted = GuildHallAdventurerChairMount.isBlockMounted(store, commandBuffer, ref);
+        boolean seated = blockMounted || (anchor.isSitFallbackApplied() && hasSeat);
+
+        if (seated) {
+            GuildHallAdventurerChairMount.ensureSitVisuals(ref, store, anchor);
+        }
+        if (seated || (anchor.isChairMountFinished() && !hasSeat)) {
+            anchorChanged |= applyDisplayStateIfNeeded(npc, ref, commandBuffer, anchor);
+        }
 
         if (anchorChanged) {
             commandBuffer.putComponent(ref, GuildHallDisplayAnchor.getComponentType(), anchor);
         }
 
         boolean inDialogue = isInInteractionDialogue(npc);
-        if (GuildHallAdventurerChairMount.isBlockMounted(store, commandBuffer, ref)) {
+        if (seated) {
+            if (blockMounted) {
+                lockSeatedBodyFacing(ref, store, commandBuffer, anchor, inDialogue);
+            } else if (!inDialogue) {
+                lockDisplayTransform(ref, store, commandBuffer, anchor);
+            } else {
+                lockSeatedBodyFacing(ref, store, commandBuffer, anchor, true);
+            }
+            zeroVelocity(ref, commandBuffer);
             return;
         }
         if (!inDialogue
             && anchor.isChairMountFinished()
             && !anchor.isSitFallbackApplied()
-            && !GuildHallAdventurerChairMount.hasSeatNearSpawn(store, anchor)) {
-            lockDisplayTransform(ref, commandBuffer, anchor);
+            && !hasSeat) {
+            lockDisplayTransform(ref, store, commandBuffer, anchor);
         }
     }
 
@@ -151,6 +180,7 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
     /** Runs after {@link SteeringSystem} so separation/collision steering cannot drift display NPCs. */
     private static void lockDisplayTransform(
         @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull GuildHallDisplayAnchor anchor
     ) {
@@ -161,6 +191,54 @@ public final class GuildHallDisplayAnchorSystem extends EntityTickingSystem<Enti
             target,
             new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F)
         );
+        syncHeadToBodyFacing(ref, store, commandBuffer, anchor.getYawRadians());
+    }
+
+    /**
+     * Keeps the adventurer spot facing while seated on a block mount (chair rotation is ignored). During dialogue only
+     * the body yaw is locked; {@code $Interaction} head motion can still turn toward the player.
+     */
+    private static void lockSeatedBodyFacing(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull GuildHallDisplayAnchor anchor,
+        boolean inDialogue
+    ) {
+        Rotation3f bodyRot = new Rotation3f(0.0F, anchor.getYawRadians(), 0.0F);
+        TransformComponent tc = commandBuffer.getComponent(ref, TransformComponent.getComponentType());
+        if (tc == null) {
+            tc = store.getComponent(ref, TransformComponent.getComponentType());
+        }
+        if (tc != null) {
+            TransformComponentUtil.replacePreservingChunk(ref, commandBuffer, tc.getPosition(), bodyRot);
+        }
+        if (!inDialogue) {
+            syncHeadToBodyFacing(ref, store, commandBuffer, anchor.getYawRadians());
+        }
+    }
+
+    private static void syncHeadToBodyFacing(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        float yawRadians
+    ) {
+        HeadRotation head = commandBuffer.getComponent(ref, HeadRotation.getComponentType());
+        if (head == null) {
+            head = store.getComponent(ref, HeadRotation.getComponentType());
+        }
+        if (head == null) {
+            return;
+        }
+        head.teleportRotation(new Rotation3f(0.0F, yawRadians, 0.0F));
+        commandBuffer.putComponent(ref, HeadRotation.getComponentType(), head);
+    }
+
+    private static void zeroVelocity(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
         Velocity velocity = commandBuffer.getComponent(ref, Velocity.getComponentType());
         if (velocity != null) {
             velocity.setZero();

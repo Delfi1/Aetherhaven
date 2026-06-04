@@ -4,9 +4,18 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import javax.annotation.Nullable;
 
-/** Maps gameplay construction ids (production catalog keys) to resident {@link TownVillagerBinding} kinds. */
+/**
+ * Maps gameplay construction ids to resident {@link TownVillagerBinding} kinds for the management-block
+ * workplace worker dropdown. Includes every core building with a permanent villager job ({@code workConstructionId}
+ * in {@code Server/Aetherhaven/Villagers/}), not homes, parks, or decoration plots.
+ */
 public final class ProductionWorkplaceKinds {
     private ProductionWorkplaceKinds() {}
+
+    /** True when the town records shelf may assign a villager to work at this completed plot. */
+    public static boolean supportsWorkerAssignment(@Nullable String gameplayConstructionId) {
+        return residentBindingKindForGameplayConstruction(gameplayConstructionId) != null;
+    }
 
     @Nullable
     public static String residentBindingKindForGameplayConstruction(@Nullable String gameplayConstructionId) {
@@ -14,6 +23,10 @@ public final class ProductionWorkplaceKinds {
             return null;
         }
         return switch (gameplayConstructionId.trim()) {
+            case AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL -> TownVillagerBinding.KIND_ELDER;
+            case AetherhavenConstants.CONSTRUCTION_PLOT_INN -> TownVillagerBinding.KIND_INNKEEPER;
+            case AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL -> TownVillagerBinding.KIND_GUILD_MASTER;
+            case AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR -> TownVillagerBinding.KIND_PRIESTESS;
             case AetherhavenConstants.CONSTRUCTION_PLOT_FARM -> TownVillagerBinding.KIND_FARMER;
             case AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT -> TownVillagerBinding.KIND_MINER;
             case AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL -> TownVillagerBinding.KIND_LOGGER;

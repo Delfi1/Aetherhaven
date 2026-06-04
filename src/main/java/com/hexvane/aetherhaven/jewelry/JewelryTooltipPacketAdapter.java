@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.jewelry;
 
+import com.hexvane.aetherhaven.ui.CustomUiItemStackWire;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.InventorySection;
 import com.hypixel.hytale.protocol.ItemBase;
@@ -341,7 +342,7 @@ public final class JewelryTooltipPacketAdapter {
     }
 
     private boolean walkCustomUiDocument(@Nonnull BsonDocument doc, @Nonnull Map<String, ItemBase> newVirtual) {
-        boolean modified = false;
+        boolean modified = CustomUiItemStackWire.sanitizeItemStackDocument(doc);
         BsonValue itemStackValue = doc.get("ItemStack");
         if (itemStackValue != null && itemStackValue.isDocument()) {
             modified |= JewelryTooltipWire.applyToItemStackDocument(itemStackValue.asDocument(), virtualItems, newVirtual);

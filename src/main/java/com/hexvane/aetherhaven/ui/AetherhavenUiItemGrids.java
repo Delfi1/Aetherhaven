@@ -19,6 +19,21 @@ import javax.annotation.Nonnull;
 public final class AetherhavenUiItemGrids {
     private AetherhavenUiItemGrids() {}
 
+    /**
+     * Stack safe for {@link ItemGridSlot}: custom UI decodes metadata as {@code ClientItemMetadata}; strip BSON /
+     * {@code ItemDisplay} blobs that crash the client (see {@link com.hexvane.aetherhaven.jewelry.JewelryTooltipWire}).
+     */
+    @Nonnull
+    public static ItemStack plainStackForUi(@Nonnull String itemId, int quantity) {
+        ItemStack probe = new ItemStack(itemId, quantity);
+        return new ItemStack(itemId, probe.getQuantity(), probe.getDurability(), probe.getMaxDurability(), null);
+    }
+
+    @Nonnull
+    public static ItemGridSlot plainSlotForUi(@Nonnull String itemId) {
+        return new ItemGridSlot(plainStackForUi(itemId, 1));
+    }
+
     @Nonnull
     public static ItemGridSlot jewelrySlotForUi(@Nonnull ItemStack inventoryJewelryStack) {
         ItemGridSlot slot = new ItemGridSlot(JewelryTooltipWire.forItemGrid(inventoryJewelryStack));
@@ -36,7 +51,11 @@ public final class AetherhavenUiItemGrids {
     }
 
     public static void setSingleSlot(@Nonnull UICommandBuilder commandBuilder, @Nonnull String itemGridSelector, @Nonnull ItemStack stack) {
-        commandBuilder.set(itemGridSelector + ".Slots", new ItemGridSlot[] {new ItemGridSlot(stack)});
+        if (!ItemStack.isEmpty(stack) && JewelryItemIds.isJewelry(stack.getItemId())) {
+            setSingleSlot(commandBuilder, itemGridSelector, jewelrySlotForUi(stack));
+            return;
+        }
+        commandBuilder.set(itemGridSelector + ".Slots", new ItemGridSlot[] {new ItemGridSlot(plainStackForUi(stack.getItemId(), stack.getQuantity()))});
     }
 
     public static void setSingleSlotEmpty(@Nonnull UICommandBuilder commandBuilder, @Nonnull String itemGridSelector) {

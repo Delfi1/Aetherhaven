@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.guild;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerLocator;
@@ -10,6 +11,7 @@ import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
@@ -82,16 +84,17 @@ public final class GuildHallAdventurerPoolService {
             if (!world.getName().equals(town.getWorldName())) {
                 continue;
             }
-            if (!town.isGuildHallActive()) {
-                continue;
-            }
             PlotInstance hallPlot =
-                town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL);
+                resolveGuildHallPlot(town, plugin.getConstructionCatalog(), store);
             if (hallPlot == null) {
                 continue;
             }
             ConstructionDefinition hallDef = plugin.getConstructionCatalog().get(hallPlot.getConstructionId());
             if (hallDef == null) {
+                continue;
+            }
+            if (!GuildHallStaffing.hasGuildMasterAssigned(store, town.getTownId(), hallPlot.getPlotId())) {
+                clearAdventurersForHall(world, plugin, town, tm, store, hallPlot);
                 continue;
             }
             List<AdventurerSpawnSlot> spawnSlots = AdventurerSpawnMarkerLocator.resolveSpawnSlots(store, hallPlot, hallDef);
@@ -122,10 +125,13 @@ public final class GuildHallAdventurerPoolService {
         @Nonnull Store<EntityStore> store,
         @Nonnull WorldTimeResource wtr
     ) {
-        PlotInstance hallPlot =
-            town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL);
+        PlotInstance hallPlot = resolveGuildHallPlot(town, plugin.getConstructionCatalog(), store);
         if (hallPlot == null) {
             return new ForceRespawnResult(0, 0, 0, 0, 0);
+        }
+        if (!GuildHallStaffing.hasGuildMasterAssigned(store, town.getTownId(), hallPlot.getPlotId())) {
+            int cleared = clearAdventurersForHall(world, plugin, town, tm, store, hallPlot);
+            return new ForceRespawnResult(0, cleared, 0, 0, availableGuardEligibleCount(world, plugin));
         }
         ConstructionDefinition hallDef = plugin.getConstructionCatalog().get(hallPlot.getConstructionId());
         if (hallDef == null) {
@@ -140,22 +146,38 @@ public final class GuildHallAdventurerPoolService {
         int despawned = despawnGuildHallAdventurersInPlot(world, plugin, town, store, hallPlot);
         town.getGuildHallAdventurerNpcIds().clear();
         town.getGuildHallAdventurerSlotByNpcId().clear();
-        town.getGuildHallAdventurerFilledSlots().clear();
 
         long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
-        long seed = town.getTownId().getLeastSignificantBits() ^ epochDay * 0x9E3779B97F4A7C15L;
-        Random slotRandom = new Random(seed);
-        for (int slot = 0; slot < spawnSlots.size(); slot++) {
-            if (slotRandom.nextFloat() < ADVENTURER_FILL_CHANCE) {
-                town.getGuildHallAdventurerFilledSlots().add(slot);
-            }
-        }
-        town.setGuildHallLastMorningEpochDay(epochDay);
-        tm.updateTown(town);
+        rollTodayAdventurerSlots(town, tm, spawnSlots.size(), epochDay);
 
         int spawned = fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr);
         int available = availableGuardEligibleCount(world, plugin);
         return new ForceRespawnResult(reclaimed, despawned, town.getGuildHallAdventurerFilledSlots().size(), spawned, available);
+    }
+
+    /**
+     * Despawns guild hall adventurers in this plot and clears town slot state. Safe to call when no master is assigned or
+     * the workplace dropdown is set to Unassigned.
+     */
+    public static int clearAdventurersForHall(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotInstance hallPlot
+    ) {
+        if (town.getGuildHallAdventurerNpcIds().isEmpty()
+            && town.getGuildHallAdventurerSlotByNpcId().isEmpty()
+            && town.getGuildHallAdventurerFilledSlots().isEmpty()) {
+            return 0;
+        }
+        int despawned = despawnGuildHallAdventurersInPlot(world, plugin, town, store, hallPlot);
+        town.getGuildHallAdventurerNpcIds().clear();
+        town.getGuildHallAdventurerSlotByNpcId().clear();
+        town.getGuildHallAdventurerFilledSlots().clear();
+        tm.updateTown(town);
+        return despawned;
     }
 
     /** Despawns hired guard NPCs for this town and releases their ledger rows. */
@@ -242,6 +264,54 @@ public final class GuildHallAdventurerPoolService {
         }
     }
 
+    /**
+     * After assigning a guild master, roll today's adventurer slots (if not already rolled) and spawn any open slots
+     * immediately — same-day assignment should not wait until the next dawn.
+     */
+    public static void tryFillAfterGuildMasterAssigned(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID guildHallPlotId,
+        @Nonnull Store<EntityStore> store
+    ) {
+        world.execute(
+            () -> {
+                PlotInstance hallPlot = town.findPlotById(guildHallPlotId);
+                if (hallPlot == null || hallPlot.getState() != PlotInstanceState.COMPLETE) {
+                    return;
+                }
+                String gameplayId =
+                    plugin.getConstructionCatalog().resolveGameplayConstructionId(hallPlot.getConstructionId());
+                if (!AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)) {
+                    return;
+                }
+                if (!GuildHallStaffing.hasGuildMasterAssigned(store, town.getTownId(), guildHallPlotId)) {
+                    return;
+                }
+                ConstructionDefinition hallDef = plugin.getConstructionCatalog().get(hallPlot.getConstructionId());
+                if (hallDef == null) {
+                    return;
+                }
+                List<AdventurerSpawnSlot> spawnSlots = AdventurerSpawnMarkerLocator.resolveSpawnSlots(store, hallPlot, hallDef);
+                if (spawnSlots.isEmpty()) {
+                    return;
+                }
+                if (!isManagementChunkLoaded(world, hallPlot, hallDef)) {
+                    return;
+                }
+                WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
+                if (wtr == null) {
+                    return;
+                }
+                long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
+                ensureTodayAdventurerSlotsRolled(town, tm, spawnSlots.size(), epochDay);
+                fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr);
+            }
+        );
+    }
+
     private static void morningRefreshIfDue(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
@@ -259,24 +329,78 @@ public final class GuildHallAdventurerPoolService {
         if (lastDay != null && lastDay >= epochDay) {
             return;
         }
-        if (!AetherhavenMorningWindow.isGameMorning(wtr, morningStart, morningEndEx)) {
+        boolean morning = AetherhavenMorningWindow.isGameMorning(wtr, morningStart, morningEndEx);
+        boolean firstRoll = lastDay == null;
+        boolean newDayCatchUp = lastDay != null && lastDay < epochDay;
+        if (!morning && !firstRoll && !newDayCatchUp) {
             return;
         }
 
-        despawnGuildHallAdventurersInPlot(world, plugin, town, store, hallPlot);
+        if (newDayCatchUp) {
+            despawnGuildHallAdventurersInPlot(world, plugin, town, store, hallPlot);
+            town.getGuildHallAdventurerNpcIds().clear();
+            town.getGuildHallAdventurerSlotByNpcId().clear();
+        }
 
-        town.getGuildHallAdventurerNpcIds().clear();
-        town.getGuildHallAdventurerSlotByNpcId().clear();
+        rollTodayAdventurerSlots(town, tm, spawnSlots.size(), epochDay);
+    }
+
+    /**
+     * Prefer the guild hall where a guild master is actually assigned (e.g. a plot-creator variant). Falling back to the
+     * first complete hall avoids targeting an older {@code plot_guild_hall} plot when the master works at a variant.
+     */
+    @Nullable
+    private static PlotInstance resolveGuildHallPlot(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nonnull Store<EntityStore> store
+    ) {
+        String gameplayId = AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL;
+        PlotInstance fallback = null;
+        for (PlotInstance p : town.getPlotInstances()) {
+            if (p.getState() != PlotInstanceState.COMPLETE) {
+                continue;
+            }
+            if (!gameplayId.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
+                continue;
+            }
+            if (fallback == null) {
+                fallback = p;
+            }
+            if (GuildHallStaffing.hasGuildMasterAssigned(store, town.getTownId(), p.getPlotId())) {
+                return p;
+            }
+        }
+        return fallback;
+    }
+
+    private static void ensureTodayAdventurerSlotsRolled(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        int slotCount,
+        long epochDay
+    ) {
+        Long lastDay = town.getGuildHallLastMorningEpochDay();
+        if (lastDay != null && lastDay == epochDay) {
+            return;
+        }
+        rollTodayAdventurerSlots(town, tm, slotCount, epochDay);
+    }
+
+    private static void rollTodayAdventurerSlots(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        int slotCount,
+        long epochDay
+    ) {
         town.getGuildHallAdventurerFilledSlots().clear();
-
         long seed = town.getTownId().getLeastSignificantBits() ^ epochDay * 0x9E3779B97F4A7C15L;
         Random slotRandom = new Random(seed);
-        for (int slot = 0; slot < spawnSlots.size(); slot++) {
+        for (int slot = 0; slot < slotCount; slot++) {
             if (slotRandom.nextFloat() < ADVENTURER_FILL_CHANCE) {
                 town.getGuildHallAdventurerFilledSlots().add(slot);
             }
         }
-
         town.setGuildHallLastMorningEpochDay(epochDay);
         tm.updateTown(town);
     }
@@ -410,7 +534,9 @@ public final class GuildHallAdventurerPoolService {
                 continue;
             }
             AdventurerSpawnSlot spawnSlot = spawnSlots.get(slot);
-            Vector3d pos = spawnSlot.position();
+            Vector3d markerPos = spawnSlot.position();
+            Vector3d pos =
+                com.hexvane.aetherhaven.autonomy.VillagerBlockUtil.resolveGuildHallAdventurerFeetPosition(world, markerPos);
 
             long seed =
                 town.getTownId().getLeastSignificantBits()
@@ -428,7 +554,8 @@ public final class GuildHallAdventurerPoolService {
                     null,
                     new Random(seed),
                     new Rotation3f(0.0F, spawnSlot.yawRadians(), 0.0F),
-                    spawnSlot.yawRadians()
+                    spawnSlot.yawRadians(),
+                    markerPos
                 );
             if (result.isEmpty()) {
                 continue;

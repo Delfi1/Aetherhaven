@@ -1,0 +1,40 @@
+$C = "../Common.ui";
+
+Group #PlotCreatorStatusRoot {
+  LayoutMode: Top;
+
+  $C.@DecoratedContainer {
+    Anchor: (Top: 88, Left: 20, Width: 440);
+
+    #Title {
+      Label #PlotCreatorHudTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 12);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Left: 14, Right: 14, Top: 10, Bottom: 14);
+
+      Label #HintLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 14, Wrap: true);
+        Anchor: (Bottom: 8);
+      }
+
+      Label #DetailLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, FontSize: 13, Wrap: true);
+        Anchor: (Bottom: 8);
+        Visible: false;
+      }
+
+      Label #HotkeyLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #98a0a8, FontSize: 13, Wrap: true);
+      }
+    }
+  }
+}

@@ -152,8 +152,8 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
                 commandBuilder.set(p + "Prog.Value", 0f);
             } else {
                 long lineCap = entry.maxStorageForItem(itemId);
-                ItemStack iconStack = new ItemStack(itemId, 1);
-                commandBuilder.set(iconGrid + ".Slots", new ItemGridSlot[] {new ItemGridSlot(iconStack)});
+                ItemStack iconStack = AetherhavenUiItemGrids.plainStackForUi(itemId, 1);
+                commandBuilder.set(iconGrid + ".Slots", new ItemGridSlot[] {AetherhavenUiItemGrids.plainSlotForUi(itemId)});
                 Item it = iconStack.getItem();
                 Message nameMsg =
                     it != null && it.getTranslationKey() != null && !it.getTranslationKey().isBlank()

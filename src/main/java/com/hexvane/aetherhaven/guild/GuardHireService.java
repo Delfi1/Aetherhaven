@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolCheckoutRecord;
+import java.util.List;
 import com.hexvane.aetherhaven.villager.NpcModelSpawnUtil;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
@@ -144,7 +145,18 @@ public final class GuardHireService {
         UUID jobPlot = guildPlot != null ? guildPlot.getPlotId() : null;
 
         GuardHireCleanup.prepareForGuardDuty(npcRef, store);
-        Ref<EntityStore> guardRef = spawnHiredGuard(world, plugin, store, profile, tb, town, spawnPos, spawnRot, jobPlot, guildPlot);
+        Ref<EntityStore> guardRef = spawnHiredGuard(
+            world,
+            plugin,
+            store,
+            profile,
+            townsfolkBindingForGuard(tb),
+            town,
+            spawnPos,
+            spawnRot,
+            jobPlot,
+            guildPlot
+        );
         if (guardRef == null) {
             LOGGER.atWarning().log("Failed to spawn hired guard for townsfolk %s in town %s", tb.getCharacterId(), town.getTownId());
             return false;
@@ -178,6 +190,96 @@ public final class GuardHireService {
 
         LOGGER.atInfo().log("Hired guard %s for town %s", tb.getCharacterId(), town.getTownId());
         return true;
+    }
+
+    /**
+     * Respawns a hired guard near {@code spawnPos} (e.g. after {@code /ah villager reset}). Keeps character identity,
+     * equipment, and display name. Updates the townsfolk ledger when a checkout row exists.
+     *
+     * @return new entity uuid, or null on failure
+     */
+    @Nullable
+    public static UUID respawnHiredGuardAtPosition(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String characterId,
+        @Nonnull String equipmentProfileId,
+        @Nonnull TownsfolkCharacterBinding characterBinding,
+        @Nonnull Vector3d spawnPos,
+        @Nullable UUID jobPlotId
+    ) {
+        String profileId = equipmentProfileId.trim();
+        if (profileId.isEmpty()) {
+            profileId = "guard_knight";
+        }
+        EquipmentProfileDefinition profile = plugin.getEquipmentProfileCatalog().byId(profileId);
+        if (profile == null) {
+            LOGGER.atWarning().log("Cannot respawn guard %s: unknown equipment profile %s", characterId, profileId);
+            return null;
+        }
+        PlotInstance guildPlot = town.findCompletePlotWithConstruction(
+            plugin.getConstructionCatalog(),
+            AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL
+        );
+        if (jobPlotId == null && guildPlot != null) {
+            jobPlotId = guildPlot.getPlotId();
+        }
+        Ref<EntityStore> guardRef = spawnHiredGuard(
+            world,
+            plugin,
+            store,
+            profile,
+            characterBinding,
+            town,
+            spawnPos,
+            new Rotation3f(),
+            jobPlotId,
+            guildPlot
+        );
+        if (guardRef == null) {
+            return null;
+        }
+        UUIDComponent uc = store.getComponent(guardRef, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return null;
+        }
+        UUID newUuid = uc.getUuid();
+        if (!TownsfolkExistenceService.transferInstanceOnHire(world, plugin, characterId, newUuid, town.getTownId())) {
+            LOGGER.atFine().log("Respawned guard %s without townsfolk ledger checkout update", characterId);
+        }
+        return newUuid;
+    }
+
+    @Nonnull
+    private static TownsfolkCharacterBinding townsfolkBindingForGuard(@Nonnull TownsfolkCharacterBinding tb) {
+        return new TownsfolkCharacterBinding(
+            tb.getCharacterId(),
+            tb.getActivePersonalityId(),
+            TownsfolkAssignmentKinds.GUARD,
+            tb.getModelAssetId(),
+            tb.getPersonalityIds()
+        );
+    }
+
+    @Nonnull
+    public static TownsfolkCharacterBinding characterBindingFromCatalog(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String characterId
+    ) {
+        String cid = characterId.trim();
+        TownsfolkCharacterDefinition character = plugin.getTownsfolkCharacterCatalog().byId(cid);
+        if (character == null) {
+            return new TownsfolkCharacterBinding(cid, "", TownsfolkAssignmentKinds.GUARD, "", List.of());
+        }
+        return new TownsfolkCharacterBinding(
+            cid,
+            "",
+            TownsfolkAssignmentKinds.GUARD,
+            character.getModelAssetId(),
+            character.getPersonalityIds()
+        );
     }
 
     @Nullable
@@ -241,17 +343,7 @@ public final class GuardHireService {
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_GUARD, jobPlot, jobPlot)
         );
-        store.putComponent(
-            guardRef,
-            TownsfolkCharacterBinding.getComponentType(),
-            new TownsfolkCharacterBinding(
-                tb.getCharacterId(),
-                tb.getActivePersonalityId(),
-                TownsfolkAssignmentKinds.GUARD,
-                tb.getModelAssetId(),
-                tb.getPersonalityIds()
-            )
-        );
+        store.putComponent(guardRef, TownsfolkCharacterBinding.getComponentType(), tb);
 
         NPCEntity npc = store.getComponent(guardRef, NPCEntity.getComponentType());
         if (npc != null) {

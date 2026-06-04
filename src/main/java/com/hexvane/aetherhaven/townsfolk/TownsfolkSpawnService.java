@@ -65,7 +65,19 @@ public final class TownsfolkSpawnService {
         @Nullable String preferredCharacterId,
         @Nonnull Random random
     ) {
-        return trySpawn(world, plugin, town, store, position, assignmentKind, preferredCharacterId, random, new Rotation3f(0.0F, 0.0F, 0.0F), null);
+        return trySpawn(
+            world,
+            plugin,
+            town,
+            store,
+            position,
+            assignmentKind,
+            preferredCharacterId,
+            random,
+            new Rotation3f(0.0F, 0.0F, 0.0F),
+            null,
+            null
+        );
     }
 
     @Nonnull
@@ -79,7 +91,8 @@ public final class TownsfolkSpawnService {
         @Nullable String preferredCharacterId,
         @Nonnull Random random,
         @Nonnull Rotation3f rotation,
-        @Nullable Float displayAnchorYawRadians
+        @Nullable Float displayAnchorYawRadians,
+        @Nullable Vector3d guildHallSpawnMarkerPosition
     ) {
         String kind = assignmentKind.trim().toLowerCase();
         TownsfolkCharacterCatalog catalog = plugin.getTownsfolkCharacterCatalog();
@@ -182,13 +195,10 @@ public final class TownsfolkSpawnService {
 
         if (TownsfolkAssignmentKinds.isGuildHallAdventurer(kind)) {
             float anchorYaw = displayAnchorYawRadians != null ? displayAnchorYawRadians : rotation.yaw();
+            Vector3d markerPos = guildHallSpawnMarkerPosition != null ? guildHallSpawnMarkerPosition : position;
             GuildHallDisplayAnchor displayAnchor = new GuildHallDisplayAnchor(position, anchorYaw);
-            displayAnchor.setDisplayStateApplied(true);
+            displayAnchor.setSpawnMarkerPosition(markerPos);
             store.putComponent(ref, GuildHallDisplayAnchor.getComponentType(), displayAnchor);
-            NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
-            if (npc != null && npc.getRole() != null) {
-                npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUILD_HALL_DISPLAY, null, store);
-            }
         }
 
         UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());

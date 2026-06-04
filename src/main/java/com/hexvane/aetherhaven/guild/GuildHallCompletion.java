@@ -37,6 +37,9 @@ public final class GuildHallCompletion {
         @Nonnull UUID plotId,
         @Nonnull TownManager tm
     ) {
+        town.setGuildHallActive(true);
+        tm.updateTown(town);
+
         if (!town.hasQuestActiveOrCompleted(AetherhavenConstants.QUEST_BUILD_GUILD_HALL)) {
             return;
         }
@@ -67,31 +70,25 @@ public final class GuildHallCompletion {
             existingBinding != null
                 && TownVillagerBinding.KIND_GUILD_MASTER.equals(existingBinding.getKind())
                 && plotId.equals(existingBinding.getJobPlotId());
-        TransformComponent tc = store.getComponent(masterRef, TransformComponent.getComponentType());
-        if (tc != null && !alreadyAtHall) {
-            Vector3d p = tc.getPosition();
-            if (work.hasInteractionTarget()) {
-                Double tx = work.getInteractionTargetX();
-                Double ty = work.getInteractionTargetY();
-                Double tz = work.getInteractionTargetZ();
-                if (tx != null && ty != null && tz != null) {
-                    p.x = tx;
-                    p.y = ty;
-                    p.z = tz;
-                } else {
-                    p.x = work.getX() + 0.5;
-                    p.y = work.getY() + 0.02;
-                    p.z = work.getZ() + 0.5;
-                }
-            } else {
-                p.x = work.getX() + 0.5;
-                p.y = work.getY() + 0.02;
-                p.z = work.getZ() + 0.5;
-            }
-            store.putComponent(masterRef, TransformComponent.getComponentType(), tc);
-        }
         UUIDComponent uuidComp = store.getComponent(masterRef, UUIDComponent.getComponentType());
         UUID masterUuid = uuidComp != null ? uuidComp.getUuid() : null;
+        double targetX = work.getX() + 0.5;
+        double targetY = work.getY() + 0.02;
+        double targetZ = work.getZ() + 0.5;
+        if (work.hasInteractionTarget()) {
+            Double tx = work.getInteractionTargetX();
+            Double ty = work.getInteractionTargetY();
+            Double tz = work.getInteractionTargetZ();
+            if (tx != null && ty != null && tz != null) {
+                targetX = tx;
+                targetY = ty;
+                targetZ = tz;
+            }
+        }
+        final double moveX = targetX;
+        final double moveY = targetY;
+        final double moveZ = targetZ;
+        final boolean moveTransform = !alreadyAtHall;
         if (masterUuid != null) {
             town.getInnPoolNpcIds().removeIf(s -> {
                 try {
@@ -101,11 +98,23 @@ public final class GuildHallCompletion {
                 }
             });
         }
-        store.putComponent(
-            masterRef,
-            TownVillagerBinding.getComponentType(),
-            new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_GUILD_MASTER, plotId, plotId)
-        );
+        if (masterUuid != null) {
+            final UUID masterEntityUuid = masterUuid;
+            final UUID townId = town.getTownId();
+            world.execute(
+                () ->
+                    applyGuildMasterEntityComponents(
+                        world,
+                        masterEntityUuid,
+                        townId,
+                        plotId,
+                        moveTransform,
+                        moveX,
+                        moveY,
+                        moveZ
+                    )
+            );
+        }
         town.addInnVisitorPoolExcludedRoleId(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID);
         if (masterUuid != null) {
             ResidentRegistryService.upsert(
@@ -117,13 +126,46 @@ public final class GuildHallCompletion {
                 masterUuid
             );
         }
-        town.setGuildHallActive(true);
-        tm.updateTown(town);
         LOGGER.atInfo().log(
             "Moved guild master to guild hall at %s,%s,%s",
             work.hasInteractionTarget() ? work.getInteractionTargetX() : work.getX() + 0.5,
             work.hasInteractionTarget() ? work.getInteractionTargetY() : work.getY() + 0.02,
             work.hasInteractionTarget() ? work.getInteractionTargetZ() : work.getZ() + 0.5
+        );
+    }
+
+    private static void applyGuildMasterEntityComponents(
+        @Nonnull World world,
+        @Nonnull UUID masterEntityUuid,
+        @Nonnull UUID townId,
+        @Nonnull UUID plotId,
+        boolean moveTransform,
+        double targetX,
+        double targetY,
+        double targetZ
+    ) {
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        if (store == null) {
+            return;
+        }
+        Ref<EntityStore> masterRef = store.getExternalData().getRefFromUUID(masterEntityUuid);
+        if (masterRef == null || !masterRef.isValid()) {
+            return;
+        }
+        if (moveTransform) {
+            TransformComponent tc = store.getComponent(masterRef, TransformComponent.getComponentType());
+            if (tc != null) {
+                Vector3d p = tc.getPosition();
+                p.x = targetX;
+                p.y = targetY;
+                p.z = targetZ;
+                store.putComponent(masterRef, TransformComponent.getComponentType(), tc);
+            }
+        }
+        store.putComponent(
+            masterRef,
+            TownVillagerBinding.getComponentType(),
+            new TownVillagerBinding(townId, TownVillagerBinding.KIND_GUILD_MASTER, plotId, plotId)
         );
     }
 

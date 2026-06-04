@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -133,6 +134,11 @@ public final class ConstructionDefinition {
     @Nullable
     private int[][] adventurerSpawnLocals;
 
+    /** Body yaw (radians) per {@link #adventurerSpawnLocals} entry, in prefab-local axes. */
+    @SerializedName("adventurerSpawnYaws")
+    @Nullable
+    private float[] adventurerSpawnYaws;
+
     /** Prefab-local position of the treasury block (town-shared gold storage); optional. */
     @SerializedName("treasuryLocalPos")
     @Nullable
@@ -175,6 +181,13 @@ public final class ConstructionDefinition {
     /** Town wall segment: journal excluded, overlap rules differ, completion moves to {@link com.hexvane.aetherhaven.town.WallSegmentRecord}. */
     @SerializedName("wallSegment")
     private boolean wallSegment;
+
+    /**
+     * Plot level tags for schedule and leisure targeting (e.g. amenity, nature, fun). Villagers can prefer plots whose
+     * tags match personality leisure weights when multiple plots qualify.
+     */
+    @SerializedName("tags")
+    private List<String> buildingTags = Collections.emptyList();
 
     public String getId() {
         return id;
@@ -337,6 +350,12 @@ public final class ConstructionDefinition {
         return adventurerSpawnLocals;
     }
 
+    /** @return prefab-local body yaw per adventurer spawn, or null */
+    @Nullable
+    public float[] getAdventurerSpawnYaws() {
+        return adventurerSpawnYaws;
+    }
+
     /** @return prefab-local x,y,z of treasury block, or null */
     @Nullable
     public int[] getTreasuryLocalPos() {
@@ -373,5 +392,21 @@ public final class ConstructionDefinition {
 
     public boolean isWallSegment() {
         return wallSegment;
+    }
+
+    /** @return normalized plot level tags (lowercase trim); empty when unset */
+    @Nonnull
+    public Set<String> getBuildingTags() {
+        List<String> raw = buildingTags;
+        if (raw == null || raw.isEmpty()) {
+            return Set.of();
+        }
+        LinkedHashSet<String> out = new LinkedHashSet<>();
+        for (String t : raw) {
+            if (t != null && !t.isBlank()) {
+                out.add(t.trim().toLowerCase(Locale.ROOT));
+            }
+        }
+        return Collections.unmodifiableSet(out);
     }
 }

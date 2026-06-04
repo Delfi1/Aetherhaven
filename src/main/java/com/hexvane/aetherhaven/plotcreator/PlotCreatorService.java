@@ -1,0 +1,513 @@
+package com.hexvane.aetherhaven.plotcreator;
+
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.placement.PlotFootprintOverlayRefresh;
+import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
+import com.hexvane.aetherhaven.plot.PlotTokenInventory;
+import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import org.joml.Vector3i;
+
+public final class PlotCreatorService {
+    private static final ConcurrentHashMap<UUID, Boolean> PLOT_CREATOR_WIREFRAME_ACTIVE = new ConcurrentHashMap<>();
+    private PlotCreatorService() {}
+
+    public static boolean hasPermission(@Nonnull PlayerRef playerRef) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null && plugin.getConfig().get().isGrantPlotCreatorPermissionToEveryone()) {
+            return true;
+        }
+        return playerRef.hasPermission(com.hexvane.aetherhaven.AetherhavenConstants.PERMISSION_PLOT_CREATOR);
+    }
+
+    public static void startEditSession(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String constructionId
+    ) {
+        if (!hasPermission(playerRef)) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.noPermission"));
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        String id = constructionId.trim();
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
+        if (!catalog.isCustomConstruction(id)) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.editNotCustom"));
+            return;
+        }
+        ConstructionDefinition def = catalog.get(id);
+        if (def == null) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.editUnknown").param("id", id)
+            );
+            return;
+        }
+        UUID uuid = playerRef.getUuid();
+        PlotCreatorSessions.remove(uuid);
+        World world = store.getExternalData().getWorld();
+        PlotCreatorSession session = new PlotCreatorSession(uuid, world);
+        PlotCreatorDraftLoader.loadIntoDraft(session.getDraft(), def);
+        session.getDraft().setStep(PlotCreatorStep.REVIEW);
+        PlotCreatorSessions.put(session);
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.edit.loaded").param("id", id)
+        );
+        showSessionHud(playerRef, ref, store, session);
+        playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.session.started"));
+    }
+
+    public static void startSession(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (!hasPermission(playerRef)) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.noPermission"));
+            return;
+        }
+        UUID uuid = playerRef.getUuid();
+        PlotCreatorSessions.remove(uuid);
+        World world = store.getExternalData().getWorld();
+        PlotCreatorSession session = new PlotCreatorSession(uuid, world);
+        PlotCreatorSessions.put(session);
+        showSessionHud(playerRef, ref, store, session);
+        playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.session.started"));
+    }
+
+    private static void showSessionHud(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotCreatorSession session
+    ) {
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player != null && session.getDraft().getStep() != PlotCreatorStep.DONE) {
+            PlotCreatorHudSupport.obtainHud(player, playerRef).refresh(session);
+        }
+    }
+
+    public static void cancelSession(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PlotCreatorSession session = PlotCreatorSessions.remove(playerRef.getUuid());
+        if (session == null) {
+            return;
+        }
+        PlotCreatorSubstepGrants.revokeAllIfPresent(session, ref, store);
+        PlotCreatorCleanup.endSession(session, playerRef, true);
+    }
+
+    /** Opens a short form for the current text step (identity, tags, variant). */
+    public static void openConfigPanel(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotCreatorSession session
+    ) {
+        PlotCreatorInteractions.openConfigPanel(playerRef, ref, store, session);
+    }
+
+    public static void refreshWireframe(@Nonnull PlotCreatorSession session, @Nonnull PlayerRef playerRef) {
+        PlotCreatorDraft draft = session.getDraft();
+        World world = session.getWorld();
+        if (draft.getCornerFirst() == null || draft.getCornerSecond() == null) {
+            clearPlotCreatorWireframe(playerRef, world);
+            return;
+        }
+        Vector3i min = draft.boundsMin();
+        Vector3i max = draft.boundsMax();
+        PlotFootprintRecord fp = new PlotFootprintRecord(min.x, min.y, min.z, max.x, max.y, max.z);
+        UUID uuid = playerRef.getUuid();
+        if (PLOT_CREATOR_WIREFRAME_ACTIVE.containsKey(uuid)) {
+            PlotPlacementWireframeOverlay.clearFor(playerRef);
+            restoreOtherDebugOverlays(playerRef, world);
+        }
+        PlotPlacementWireframeOverlay.sendWithoutClear(playerRef, fp, true, null);
+        PLOT_CREATOR_WIREFRAME_ACTIVE.put(uuid, Boolean.TRUE);
+        refreshSpawnMarkers(session, playerRef);
+    }
+
+    public static void refreshSpawnMarkers(@Nonnull PlotCreatorSession session, @Nonnull PlayerRef playerRef) {
+        PlotCreatorSpawnMarkerOverlay.refresh(session, playerRef);
+    }
+
+    private static void restoreOtherDebugOverlays(@Nonnull PlayerRef playerRef, @Nullable World world) {
+        if (world == null || world.getEntityStore() == null) {
+            return;
+        }
+        Ref<EntityStore> ref = world.getEntityStore().getStore().getExternalData().getRefFromUUID(playerRef.getUuid());
+        if (ref != null && ref.isValid()) {
+            PlotFootprintOverlayRefresh.afterClearDebugShapes(ref, world.getEntityStore().getStore());
+        }
+    }
+
+    /**
+     * Clears only the plot creator bounds wireframe once. Does not call {@link ClearDebugShapes} unless this session
+     * had sent a creator wireframe (avoids wiping build staff / plot placement overlays).
+     */
+    public static void clearPlotCreatorWireframe(@Nullable PlayerRef playerRef, @Nullable World world) {
+        if (playerRef == null || PLOT_CREATOR_WIREFRAME_ACTIVE.remove(playerRef.getUuid()) == null) {
+            return;
+        }
+        PlotPlacementWireframeOverlay.clearFor(playerRef);
+        restoreOtherDebugOverlays(playerRef, world);
+    }
+
+    @Nonnull
+    public static List<PlotCreatorStep> stepOrder(@Nonnull PlotCreatorDraft draft) {
+        List<PlotCreatorStep> steps = new ArrayList<>();
+        steps.add(PlotCreatorStep.WELCOME);
+        steps.add(PlotCreatorStep.CORNER_FIRST);
+        steps.add(PlotCreatorStep.CORNER_SECOND);
+        steps.add(PlotCreatorStep.ANCHOR);
+        steps.add(PlotCreatorStep.KIND);
+        if (draft.getKind() == PlotBuildingKind.VARIANT) {
+            steps.add(PlotCreatorStep.VARIANT);
+        }
+        List<PlotBuildingKindRequirements.SubstepRequirement> subs =
+            PlotBuildingKindRequirements.forDraft(draft, AetherhavenPlugin.get());
+        if (!subs.isEmpty()) {
+            steps.add(PlotCreatorStep.SUBSTEP);
+        }
+        steps.add(PlotCreatorStep.IDENTITY);
+        steps.add(PlotCreatorStep.TAGS);
+        steps.add(PlotCreatorStep.PREFAB_SAVE);
+        steps.add(PlotCreatorStep.MATERIALS);
+        steps.add(PlotCreatorStep.CONFIGURE);
+        steps.add(PlotCreatorStep.REVIEW);
+        steps.add(PlotCreatorStep.DONE);
+        return steps;
+    }
+
+    public static void advance(@Nonnull PlotCreatorSession session) {
+        advance(session, null, null);
+    }
+
+    public static void advance(
+        @Nonnull PlotCreatorSession session,
+        @Nullable Ref<EntityStore> ref,
+        @Nullable Store<EntityStore> store
+    ) {
+        List<PlotCreatorStep> order = stepOrder(session.getDraft());
+        PlotCreatorStep current = session.getDraft().getStep();
+        int idx = order.indexOf(current);
+        if (idx < 0 || idx >= order.size() - 1) {
+            return;
+        }
+        Player player = playerFrom(ref, store);
+        if (current == PlotCreatorStep.SUBSTEP && player != null) {
+            PlotCreatorSubstepGrants.revokeAll(session, player);
+        }
+        if (current == PlotCreatorStep.MATERIALS && player != null && ref != null && store != null) {
+            PlotCreatorMaterialsHelper.snapshotAndReturnMaterials(session, player, ref, store);
+        }
+        PlotCreatorStep next = order.get(idx + 1);
+        if (next == PlotCreatorStep.SUBSTEP) {
+            session.getDraft().setSubstepIndex(0);
+        }
+        if (next == PlotCreatorStep.MATERIALS) {
+            PlotCreatorMaterialsHelper.ensureMaterialsContainer(session);
+        }
+        session.getDraft().setStep(next);
+        onStepEntered(session, ref, store, next);
+    }
+
+    public static void back(@Nonnull PlotCreatorSession session) {
+        back(session, null, null);
+    }
+
+    public static void back(
+        @Nonnull PlotCreatorSession session,
+        @Nullable Ref<EntityStore> ref,
+        @Nullable Store<EntityStore> store
+    ) {
+        List<PlotCreatorStep> order = stepOrder(session.getDraft());
+        PlotCreatorStep current = session.getDraft().getStep();
+        int idx = order.indexOf(current);
+        if (idx <= 0) {
+            return;
+        }
+        Player player = playerFrom(ref, store);
+        if (current == PlotCreatorStep.SUBSTEP && session.getDraft().getSubstepIndex() > 0) {
+            int leaving = session.getDraft().getSubstepIndex();
+            session.getDraft().setSubstepIndex(leaving - 1);
+            if (player != null) {
+                PlotCreatorSubstepGrants.revokeSubstepIndex(session, player, leaving);
+            }
+            return;
+        }
+        PlotCreatorStep prev = order.get(idx - 1);
+        if (current == PlotCreatorStep.MATERIALS && player != null && ref != null && store != null) {
+            PlotCreatorMaterialsHelper.snapshotAndReturnMaterials(session, player, ref, store);
+        }
+        if (current == PlotCreatorStep.SUBSTEP && player != null) {
+            PlotCreatorSubstepGrants.revokeAll(session, player);
+        }
+        if (prev == PlotCreatorStep.SUBSTEP) {
+            List<PlotBuildingKindRequirements.SubstepRequirement> subs =
+                PlotBuildingKindRequirements.forDraft(session.getDraft(), AetherhavenPlugin.get());
+            session.getDraft().setSubstepIndex(Math.max(0, subs.size() - 1));
+        }
+        session.getDraft().setStep(prev);
+        onStepEntered(session, ref, store, prev);
+    }
+
+    private static void onStepEntered(
+        @Nonnull PlotCreatorSession session,
+        @Nullable Ref<EntityStore> ref,
+        @Nullable Store<EntityStore> store,
+        @Nonnull PlotCreatorStep step
+    ) {
+        if (ref == null || store == null) {
+            return;
+        }
+        Player player = playerFrom(ref, store);
+        PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+        if (player == null || playerRef == null) {
+            return;
+        }
+        if (step == PlotCreatorStep.SUBSTEP) {
+            PlotCreatorSubstepGrants.grantCurrentSubstep(session, player, ref, store);
+        }
+        if (step == PlotCreatorStep.KIND) {
+            PlotCreatorInteractions.openKindPanel(playerRef, ref, store, session);
+        }
+        if (step == PlotCreatorStep.CONFIGURE) {
+            PlotCreatorInteractions.openConfigurePanel(playerRef, ref, store, session);
+        }
+    }
+
+    @Nullable
+    private static Player playerFrom(@Nullable Ref<EntityStore> ref, @Nullable Store<EntityStore> store) {
+        if (ref == null || store == null) {
+            return null;
+        }
+        return store.getComponent(ref, Player.getComponentType());
+    }
+
+    @Nullable
+    public static PlotBuildingKindRequirements.SubstepRequirement currentSubstep(@Nonnull PlotCreatorDraft draft) {
+        List<PlotBuildingKindRequirements.SubstepRequirement> subs =
+            PlotBuildingKindRequirements.forDraft(draft, AetherhavenPlugin.get());
+        int i = draft.getSubstepIndex();
+        if (i < 0 || i >= subs.size()) {
+            return null;
+        }
+        return subs.get(i);
+    }
+
+    public static boolean advanceSubstepOrStep(@Nonnull PlotCreatorSession session) {
+        return advanceSubstepOrStep(session, null, null);
+    }
+
+    public static boolean advanceSubstepOrStep(
+        @Nonnull PlotCreatorSession session,
+        @Nullable Ref<EntityStore> ref,
+        @Nullable Store<EntityStore> store
+    ) {
+        List<PlotBuildingKindRequirements.SubstepRequirement> subs =
+            PlotBuildingKindRequirements.forDraft(session.getDraft(), AetherhavenPlugin.get());
+        if (session.getDraft().getStep() == PlotCreatorStep.SUBSTEP
+            && session.getDraft().getSubstepIndex() + 1 < subs.size()) {
+            int leaving = session.getDraft().getSubstepIndex();
+            session.getDraft().setSubstepIndex(leaving + 1);
+            Player player = playerFrom(ref, store);
+            if (player != null) {
+                PlotCreatorSubstepGrants.revokeSubstepIndex(session, player, leaving);
+                PlotCreatorSubstepGrants.grantCurrentSubstep(session, player, ref, store);
+            }
+            return true;
+        }
+        advance(session, ref, store);
+        return false;
+    }
+
+    public static boolean saveAndFinish(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        applyConfigureInput(draft);
+        if (draft.getPlotAnchor() != null) {
+            PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
+        }
+        String err = PlotCreatorValidator.validateBeforeSave(draft, plugin);
+        if (err != null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error." + err));
+            return false;
+        }
+        Path buildingFile = CustomBuildingsPaths.buildingFile(plugin.getDataDirectory(), draft.getConstructionId().trim());
+        try {
+            PlotCreatorJsonWriter.writeBuilding(buildingFile, draft);
+        } catch (Exception e) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));
+            return false;
+        }
+        plugin.reloadConfigsAndAssetCatalogs();
+        World world = session.getWorld();
+        String registerErr = PlotCreatorWorldRegistrar.registerInTown(world, plugin, playerRef.getUuid(), draft, store);
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (registerErr == null) {
+            draft.setStep(PlotCreatorStep.DONE);
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.registered")
+                    .param("id", draft.getConstructionId())
+            );
+            if (player != null) {
+                PlotTokenInventory.giveToPlayer(player, draft.getConstructionId().trim(), 1, draft.getDisplayName(), ref, store);
+            }
+            endSessionAfterSave(playerRef, session);
+            return true;
+        }
+        if ("noTown".equals(registerErr)) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.noTown"));
+        } else if ("signBlocked".equals(registerErr)) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.signBlocked"));
+        } else if ("incomplete".equals(registerErr) || "unknownConstruction".equals(registerErr)) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error." + registerErr));
+        } else {
+            playerRef.sendMessage(Message.raw(registerErr));
+        }
+        if (player != null) {
+            PlotTokenInventory.giveToPlayer(player, draft.getConstructionId().trim(), 1, draft.getDisplayName(), ref, store);
+        }
+        draft.setStep(PlotCreatorStep.DONE);
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.savedTokenFallback")
+                .param("id", draft.getConstructionId())
+        );
+        endSessionAfterSave(playerRef, session);
+        return true;
+    }
+
+    private static void endSessionAfterSave(@Nonnull PlayerRef playerRef, @Nonnull PlotCreatorSession session) {
+        PlotCreatorSessions.remove(playerRef.getUuid());
+        PlotCreatorCleanup.endSession(session, playerRef, false);
+    }
+
+    public static void applyDefaultTagsForKind(@Nonnull PlotCreatorDraft draft) {
+        if (!draft.getBuildingTags().isEmpty() || draft.getBuildingTagsInput() != null) {
+            return;
+        }
+        PlotBuildingKind kind = draft.getKind();
+        if (kind == null) {
+            return;
+        }
+        switch (kind) {
+            case AMENITY -> {
+                draft.getBuildingTags().add("amenity");
+                draft.getBuildingTags().add("fun");
+                draft.setScheduleSharedUtilityPick(true);
+            }
+            case HOME -> draft.getBuildingTags().add("home");
+            case WORK -> draft.getBuildingTags().add("work");
+            case SHOP -> {
+                draft.getBuildingTags().add("shop");
+                draft.getBuildingTags().add("work");
+            }
+            case INN, TOWN_HALL, GUILD_HALL -> draft.getBuildingTags().add("civic");
+            case DECORATION -> draft.getBuildingTags().add("decoration");
+            default -> {}
+        }
+        if (!draft.getBuildingTags().isEmpty()) {
+            draft.setBuildingTagsInput(String.join(", ", draft.getBuildingTags()));
+        }
+    }
+
+    public static void suggestIdFromDisplayName(@Nonnull PlotCreatorDraft draft) {
+        if (draft.getDisplayName() == null || draft.getDisplayName().isBlank()) {
+            return;
+        }
+        String slug =
+            draft.getDisplayName()
+                .trim()
+                .toLowerCase(Locale.ROOT)
+                .replaceAll("[^a-z0-9]+", "_")
+                .replaceAll("_+", "_");
+        if (slug.startsWith("_")) {
+            slug = slug.substring(1);
+        }
+        if (slug.endsWith("_")) {
+            slug = slug.substring(0, slug.length() - 1);
+        }
+        if (!slug.isEmpty()) {
+            draft.setConstructionId("plot_" + slug);
+            syncPrefabFileNameFromConstructionId(draft);
+        }
+    }
+
+    /** Sets the export file name from the building id (used after identity, before prefab save). */
+    public static void syncPrefabFileNameFromConstructionId(@Nonnull PlotCreatorDraft draft) {
+        String file = PlotCreatorPrefabExporter.prefabPathKeyFromConstructionId(draft.getConstructionId());
+        if (file != null) {
+            draft.setPrefabFileName(file);
+        }
+    }
+
+    /** Parses {@link PlotCreatorDraft#getSelfBuildDaysInput()} into {@link PlotCreatorDraft#getSelfBuildGameDays()}. */
+    public static boolean applyConfigureInput(@Nonnull PlotCreatorDraft draft) {
+        String raw = draft.getSelfBuildDaysInput();
+        if (raw == null || raw.isBlank()) {
+            return draft.getSelfBuildGameDays() > 0.0;
+        }
+        try {
+            double days = Double.parseDouble(raw.trim());
+            if (days <= 0.0) {
+                return false;
+            }
+            draft.setSelfBuildGameDays(days);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    @Nonnull
+    public static String formatSelfBuildDaysForField(double days) {
+        if (days == Math.rint(days) && days >= 0.0 && days <= Long.MAX_VALUE) {
+            return String.valueOf((long) days);
+        }
+        return String.valueOf(days);
+    }
+
+    /** Parses {@link PlotCreatorDraft#getBuildingTagsInput()} into {@link PlotCreatorDraft#getBuildingTags()}. */
+    public static void applyTagsInput(@Nonnull PlotCreatorDraft draft) {
+        draft.getBuildingTags().clear();
+        String raw = draft.getBuildingTagsInput();
+        if (raw == null || raw.isBlank()) {
+            return;
+        }
+        for (String part : raw.split(",")) {
+            String t = part.trim().toLowerCase(Locale.ROOT);
+            if (!t.isEmpty()) {
+                draft.getBuildingTags().add(t);
+            }
+        }
+    }
+}

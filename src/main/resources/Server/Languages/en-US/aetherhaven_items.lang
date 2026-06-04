@@ -213,25 +213,33 @@ aetherhaven.patrolWand.toastCleared=Guard removed
 aetherhaven.patrolWand.toastNewRoute=New route
 
 items.Aetherhaven_Plot_Token_Inn.name=Inn plot token
-items.Aetherhaven_Plot_Token_Inn.description=<color is="#ffa726">Required</color> in inventory to use the plot placement staff for the inn footprint.
+items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the plot placement staff for the inn footprint.
 
 items.Aetherhaven_Plot_Token_Market_Stall.name=Market stall plot token
-items.Aetherhaven_Plot_Token_Market_Stall.description=<color is="#ffa726">Required</color> to place the market stall footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Market_Stall.description=Required to place the market stall footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_Farm.name=Farm plot token
-items.Aetherhaven_Plot_Token_Farm.description=<color is="#ffa726">Required</color> to place the farm plot footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Farm.description=Required to place the farm plot footprint from the plot placement staff.
+
+items.Aetherhaven_Plot_Token.name=Plot token
+items.Aetherhaven_Plot_Token.description=Places a custom town building from the plot placement staff. Each token is tied to one building type.
+items.Aetherhaven_Plot_Token.instance.name={building} plot token
+items.Aetherhaven_Plot_Token.instance.description=Required to place the {building} footprint from the plot placement staff.
+
+items.Aetherhaven_Plot_Creator_Staff.name=Plot creator staff
+items.Aetherhaven_Plot_Creator_Staff.description=Turn a build into a custom town building. See the town journal Guide. F starts or acts on the current step. Primary-click blocks for bounds and spots. Q/E previous/next. R cancels.
 
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Blacksmith shop plot token
-items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=<color is="#ffa726">Required</color> to place the blacksmith shop footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Required to place the blacksmith shop footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_Park.name=Park plot token
-items.Aetherhaven_Plot_Token_Park.description=<color is="#ffa726">Required</color> to place the park footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Park.description=Required to place the park footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_House.name=House plot token
-items.Aetherhaven_Plot_Token_House.description=<color is="#ffa726">Required</color> to place the shared house footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_House.description=Required to place the shared house footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_Town_Hall.name=Town hall plot token
-items.Aetherhaven_Plot_Token_Town_Hall.description=<color is="#ffa726">Required</color> to place the town hall footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Town_Hall.description=Required to place the town hall footprint from the plot placement staff.
 
 items.Aetherhaven_Gold_Coin.name=Gold coin
 items.Aetherhaven_Gold_Coin.description=Town currency stored in the treasury.

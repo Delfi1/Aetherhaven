@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
 import com.hexvane.aetherhaven.asset.ClasspathResourceScanner;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingsLoader;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.InputStream;
@@ -30,18 +31,28 @@ public final class ConstructionCatalog {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private final Map<String, ConstructionDefinition> byId;
+    private final Set<String> customConstructionIds;
 
-    private ConstructionCatalog(Map<String, ConstructionDefinition> byId) {
+    private ConstructionCatalog(Map<String, ConstructionDefinition> byId, Set<String> customConstructionIds) {
         this.byId = byId;
+        this.customConstructionIds = customConstructionIds;
     }
 
     @Nonnull
     public static ConstructionCatalog empty() {
-        return new ConstructionCatalog(Collections.emptyMap());
+        return new ConstructionCatalog(Collections.emptyMap(), Set.of());
     }
 
     @Nonnull
     public static ConstructionCatalog loadFromAssetPacksOrClasspath(@Nonnull ClassLoader classLoader) {
+        return loadFromAssetPacksOrClasspath(classLoader, null);
+    }
+
+    @Nonnull
+    public static ConstructionCatalog loadFromAssetPacksOrClasspath(
+        @Nonnull ClassLoader classLoader,
+        @Nullable Path dataDirectory
+    ) {
         Gson gson = new GsonBuilder().create();
         Map<String, ConstructionDefinition> map = new LinkedHashMap<>();
         List<PackJsonFile> packFiles = AetherhavenPackAssetScanner.listJsonFilesUnderAllPacks(AetherhavenAssetPaths.BUILDINGS);
@@ -61,8 +72,21 @@ public final class ConstructionCatalog {
             }
             LOGGER.atInfo().log("Loaded %s construction(s) from classpath %s", map.size(), AetherhavenAssetPaths.buildingsPrefix());
         }
+        Set<String> customIds = Set.of();
+        if (dataDirectory != null) {
+            customIds = CustomBuildingsLoader.overlayBuildingsFromDataDirectory(gson, dataDirectory, map);
+        }
         validateCountsAsAliases(map);
-        return new ConstructionCatalog(Collections.unmodifiableMap(map));
+        return new ConstructionCatalog(Collections.unmodifiableMap(map), customIds);
+    }
+
+    public boolean isCustomConstruction(@Nullable String id) {
+        return id != null && customConstructionIds.contains(id);
+    }
+
+    @Nonnull
+    public Set<String> customConstructionIds() {
+        return customConstructionIds;
     }
 
     private static void validateCountsAsAliases(@Nonnull Map<String, ConstructionDefinition> map) {

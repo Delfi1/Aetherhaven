@@ -1054,6 +1054,35 @@ public final class TownRecord {
         setQuestTargetEntityUuid(com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_GUARD, uuid);
     }
 
+    /**
+     * Updates quest target entity uuid references after villager reset or revival.
+     *
+     * @return true when any reference was updated
+     */
+    public boolean replaceEntityUuidInQuestTargets(@Nonnull UUID oldUuid, @Nonnull UUID newUuid) {
+        if (oldUuid.equals(newUuid)) {
+            return false;
+        }
+        migrateLegacyGuardHouseQuestTarget();
+        String oldS = oldUuid.toString();
+        String newS = newUuid.toString();
+        boolean changed = false;
+        if (questTargetEntityUuidByQuestId != null) {
+            for (Map.Entry<String, String> e : new ArrayList<>(questTargetEntityUuidByQuestId.entrySet())) {
+                String v = e.getValue();
+                if (v != null && oldS.equalsIgnoreCase(v.trim())) {
+                    questTargetEntityUuidByQuestId.put(e.getKey(), newS);
+                    changed = true;
+                }
+            }
+        }
+        if (guardHouseQuestTargetEntityUuid != null && oldS.equalsIgnoreCase(guardHouseQuestTargetEntityUuid.trim())) {
+            guardHouseQuestTargetEntityUuid = newS;
+            changed = true;
+        }
+        return changed;
+    }
+
     @Nonnull
     public List<PlotInstance> getPlotInstances() {
         if (plotInstances == null) {

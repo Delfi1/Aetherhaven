@@ -44,6 +44,16 @@ public final class PlotPlacementWireframeOverlay {
         @Nullable TownRecord town
     ) {
         clearFor(player);
+        sendWithoutClear(player, placementFootprint, placementValid, town);
+    }
+
+    /** Adds footprint wireframes without {@link ClearDebugShapes} so other tools' debug overlays stay visible. */
+    public static void sendWithoutClear(
+        @Nonnull PlayerRef player,
+        @Nonnull PlotFootprintRecord placementFootprint,
+        boolean placementValid,
+        @Nullable TownRecord town
+    ) {
         Vector3f placeColor = placementValid ? DebugUtils.COLOR_WHITE : DebugUtils.COLOR_RED;
         addBoxEdges(player, placementFootprint, placeColor);
         if (town == null) {

@@ -158,6 +158,16 @@ public final class ResidentRegistryService {
                 changed = true;
             }
         }
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            UUID u = rec.getEntityUuid();
+            if (u != null && u.equals(oldUuid)) {
+                rec.setEntityUuid(newUuid);
+                changed = true;
+            }
+        }
+        if (town.replaceEntityUuidInQuestTargets(oldUuid, newUuid)) {
+            changed = true;
+        }
         if (changed) {
             tm.updateTown(town);
         }

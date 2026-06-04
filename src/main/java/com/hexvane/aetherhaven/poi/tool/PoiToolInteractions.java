@@ -55,10 +55,7 @@ public final class PoiToolInteractions {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        PoiToolPlayerComponent existing = commandBuffer.getComponent(playerRef, PoiToolPlayerComponent.getComponentType());
-        if (existing == null) {
-            commandBuffer.addComponent(playerRef, PoiToolPlayerComponent.getComponentType(), new PoiToolPlayerComponent());
-        }
+        commandBuffer.ensureComponent(playerRef, PoiToolPlayerComponent.getComponentType());
     }
 
     @Nullable

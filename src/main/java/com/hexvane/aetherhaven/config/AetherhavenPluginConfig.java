@@ -436,6 +436,16 @@ public final class AetherhavenPluginConfig {
             "If true, logs [PathNav] lines when a villager skips placed-path routing (see PathNav findRoute skip codes)."
         )
         .add()
+        .append(
+            new KeyedCodec<>("GrantPlotCreatorPermissionToEveryone", Codec.BOOLEAN),
+            (o, v) -> o.grantPlotCreatorPermissionToEveryone = v != null ? v : true,
+            o -> o.grantPlotCreatorPermissionToEveryone
+        )
+        .documentation(
+            "When true (default), every player may use the plot creator staff and related commands without assigning "
+                + "aetherhaven.plot.creator. Set false to require that permission (or operator) explicitly."
+        )
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -454,6 +464,9 @@ public final class AetherhavenPluginConfig {
 
     private boolean villagerScheduleEnabled = true;
     private boolean villagerScheduleDebugLog = false;
+
+    /** When true, plot creator staff and commands do not require explicit aetherhaven.plot.creator grants. */
+    private boolean grantPlotCreatorPermissionToEveryone = true;
 
     /** Max gold coins per resident per morning tax tick (needs-scaled). */
     private int treasuryMaxGoldTaxPerVillagerPerDay = 10;
@@ -760,6 +773,10 @@ public final class AetherhavenPluginConfig {
      * Multiplier applied to catalog production tick counts (below 1 = faster, above 1 = slower). Clamped to the range
      * 0.05–100; NaN and non-positive stored values fall back to 1.0.
      */
+    public boolean isGrantPlotCreatorPermissionToEveryone() {
+        return grantPlotCreatorPermissionToEveryone;
+    }
+
     public int getShopSpotPlayerListingPricePercent() {
         int p = shopSpotPlayerListingPricePercent;
         if (p < 1) {
@@ -1230,6 +1247,7 @@ public final class AetherhavenPluginConfig {
         this.innPoolMorningEndHour = o.innPoolMorningEndHour;
         this.villagerScheduleEnabled = o.villagerScheduleEnabled;
         this.villagerScheduleDebugLog = o.villagerScheduleDebugLog;
+        this.grantPlotCreatorPermissionToEveryone = o.grantPlotCreatorPermissionToEveryone;
         this.treasuryMaxGoldTaxPerVillagerPerDay = o.treasuryMaxGoldTaxPerVillagerPerDay;
         this.geodeDropChancePerOreBreak = o.geodeDropChancePerOreBreak;
         this.geodeOreUseBlocksOresCategory = o.geodeOreUseBlocksOresCategory;

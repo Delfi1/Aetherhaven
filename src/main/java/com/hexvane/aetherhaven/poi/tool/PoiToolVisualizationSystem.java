@@ -131,10 +131,6 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         PoiToolInteractions.ensureState(playerRef, commandBuffer);
         PoiToolPlayerComponent state = commandBuffer.getComponent(playerRef, PoiToolPlayerComponent.getComponentType());
         if (state == null) {
-            commandBuffer.addComponent(playerRef, PoiToolPlayerComponent.getComponentType(), new PoiToolPlayerComponent());
-            state = commandBuffer.getComponent(playerRef, PoiToolPlayerComponent.getComponentType());
-        }
-        if (state == null) {
             return;
         }
         UUID playerUuid = pr.getUuid();

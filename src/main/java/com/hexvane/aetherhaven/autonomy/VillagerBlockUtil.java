@@ -4,6 +4,7 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.mountpoints.BlockMountPoint;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DoorInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -204,28 +205,75 @@ public final class VillagerBlockUtil {
         return blockType.getSeats() != null || blockType.getBeds() != null;
     }
 
+    /** True when the chunk for an adventurer spawn marker column is loaded (seat lookup and mount need this). */
+    public static boolean isGuildHallSpawnColumnLoaded(@Nonnull World world, @Nonnull Vector3d spawnAnchor) {
+        int bx = (int) Math.floor(spawnAnchor.x);
+        int bz = (int) Math.floor(spawnAnchor.z);
+        return world.getChunkIfInMemory(com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(bx, bz)) != null;
+    }
+
     /**
-     * Lowest seat/bed block directly under a guild hall adventurer spawn anchor (marker sits at {@code block.y + 1}).
+     * Lowest seat block with a resolvable mount point under a guild hall adventurer spawn anchor (marker is above the
+     * chair). Scans down so stacked chair voxels pick the base block BlockMountAPI can use.
      */
     @Nullable
     public static Vector3i findGuildHallSeatBelowSpawn(@Nonnull World world, @Nonnull Vector3d spawnAnchor) {
         int bx = (int) Math.floor(spawnAnchor.x);
         int bz = (int) Math.floor(spawnAnchor.z);
         int anchorBlockY = (int) Math.floor(spawnAnchor.y);
-        Vector3i lowest = null;
-        for (int dy = 1; dy <= 4; dy++) {
+        Vector3i lowestWithSeat = null;
+        for (int dy = 1; dy <= 6; dy++) {
             int by = anchorBlockY - dy;
-            if (isBlockMountSeat(world, bx, by, bz)) {
-                lowest = new Vector3i(bx, by, bz);
+            if (by < 0) {
+                break;
+            }
+            if (!isBlockMountSeat(world, bx, by, bz)) {
+                continue;
+            }
+            Vector3i candidate = new Vector3i(bx, by, bz);
+            if (seatWorldPosition(world, candidate) != null) {
+                lowestWithSeat = candidate;
             }
         }
-        if (lowest != null) {
-            return lowest;
+        if (lowestWithSeat != null) {
+            return lowestWithSeat;
         }
         if (isBlockMountSeat(world, bx, anchorBlockY, bz)) {
-            return new Vector3i(bx, anchorBlockY, bz);
+            Vector3i sameCell = new Vector3i(bx, anchorBlockY, bz);
+            if (seatWorldPosition(world, sameCell) != null) {
+                return sameCell;
+            }
         }
         return null;
+    }
+
+    /** World-space seat point for a chair/stool block, or null when the block has no seat mount points. */
+    @Nullable
+    public static Vector3d seatWorldPosition(@Nonnull World world, @Nonnull Vector3i mountBlock) {
+        BlockType blockType = world.getBlockType(mountBlock.x, mountBlock.y, mountBlock.z);
+        if (blockType == null || blockType.getSeats() == null) {
+            return null;
+        }
+        int rotationIndex = blockRotationIndexNoLoad(world, mountBlock.x, mountBlock.y, mountBlock.z);
+        BlockMountPoint[] points = blockType.getSeats().getRotated(rotationIndex);
+        if (points == null || points.length == 0) {
+            return null;
+        }
+        return points[0].computeWorldSpacePosition(mountBlock);
+    }
+
+    /**
+     * Feet position for a guild hall display adventurer: chair seat under the spawn marker when present, otherwise the
+     * marker anchor (standing cell center).
+     */
+    @Nonnull
+    public static Vector3d resolveGuildHallAdventurerFeetPosition(@Nonnull World world, @Nonnull Vector3d spawnMarker) {
+        Vector3i seatBlock = findGuildHallSeatBelowSpawn(world, spawnMarker);
+        if (seatBlock == null) {
+            return new Vector3d(spawnMarker);
+        }
+        Vector3d seatPos = seatWorldPosition(world, seatBlock);
+        return seatPos != null ? new Vector3d(seatPos) : new Vector3d(spawnMarker);
     }
 
     @Nullable
