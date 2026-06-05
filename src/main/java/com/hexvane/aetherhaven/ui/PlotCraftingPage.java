@@ -1,0 +1,387 @@
+package com.hexvane.aetherhaven.ui;
+
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
+import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.GroupEntry;
+import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.Tab;
+import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.VariantEntry;
+import com.hexvane.aetherhaven.plot.PlotCraftingPrefabPreview;
+import com.hexvane.aetherhaven.plot.PlotTokenInventory;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
+import com.hypixel.hytale.codec.Codec;
+import com.hypixel.hytale.codec.KeyedCodec;
+import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
+import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
+import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
+import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
+import com.hypixel.hytale.server.core.ui.builder.EventData;
+import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
+import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
+import com.hypixel.hytale.server.core.util.NotificationUtil;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<PlotCraftingPage.PageData> {
+    private static final String ROWS = "#Content #BuildingListScroll #BuildingRows";
+    private static final String TAB_CORE = "Core";
+    private static final String TAB_DECORATIONS = "Decorations";
+    private static final long CRAFT_COST = AetherhavenConstants.PLOT_TOKEN_CRAFT_GOLD_COST;
+
+    private Tab activeTab = Tab.CORE;
+    private boolean openSoundPlayed;
+    @Nullable
+    private String selectedGroupKey;
+    private int variantIndex;
+
+    public PlotCraftingPage(@Nonnull PlayerRef playerRef) {
+        super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
+    }
+
+    @Override
+    public void build(
+        @Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder, @Nonnull Store<EntityStore> store
+    ) {
+        commandBuilder.append("Aetherhaven/PlotCraftingPage.ui");
+        AetherhavenUiLocalization.applyPlotCraftingPage(commandBuilder);
+
+        if (!openSoundPlayed) {
+            UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_WORKBENCH_OPEN);
+            openSoundPlayed = true;
+        }
+
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
+
+        List<GroupEntry> groups = PlotCraftingCatalog.groupsForTab(catalog, activeTab, plugin.getClass().getClassLoader());
+        ensureSelection(groups);
+
+        commandBuilder.set("#PlotCraftTabs.SelectedTab", activeTab == Tab.CORE ? TAB_CORE : TAB_DECORATIONS);
+
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.SelectedTabChanged,
+            "#PlotCraftTabs",
+            EventData.of("Action", "TabChange"),
+            false
+        );
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#VariantPrev", EventData.of("Action", "VariantPrev"), false);
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#VariantNext", EventData.of("Action", "VariantNext"), false);
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CraftButton", EventData.of("Action", "Craft"), false);
+
+        commandBuilder.clear(ROWS);
+        for (int i = 0; i < groups.size(); i++) {
+            GroupEntry group = groups.get(i);
+            commandBuilder.append(ROWS, "Aetherhaven/PlotCraftingBuildingRow.ui");
+            String row = ROWS + "[" + i + "]";
+            boolean selected = group.groupKey().equals(selectedGroupKey);
+            commandBuilder.set(row + " #SelectHilite.Visible", selected);
+            commandBuilder.set(row + " #BuildingName.TextSpans", Message.raw(group.displayName()));
+            commandBuilder.set(row + " #IconBox #BuildingIcon.AssetPath", iconPathForGroup(catalog, group, plugin));
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #Select",
+                new EventData().append("Action", "SelectGroup").append("GroupKey", group.groupKey()),
+                false
+            );
+        }
+
+        GroupEntry selectedGroup = findGroup(groups, selectedGroupKey);
+        VariantEntry variant = selectedVariant(selectedGroup);
+        int variantCount = selectedGroup != null ? selectedGroup.variants().size() : 0;
+        int variantDisplayIndex = selectedVariantIndex(selectedGroup);
+        if (variant != null) {
+            commandBuilder.set("#VariantName.TextSpans", Message.raw(variant.displayName()));
+            commandBuilder.set(
+                "#VariantIndex.TextSpans",
+                Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantIndex")
+                    .param("current", Message.raw(String.valueOf(variantDisplayIndex)))
+                    .param("total", Message.raw(String.valueOf(variantCount)))
+            );
+            commandBuilder.set("#VariantPrev.Disabled", variantCount <= 1);
+            commandBuilder.set("#VariantNext.Disabled", variantCount <= 1);
+            PlotCraftingPrefabPreview.send(playerRef, variant.prefabPathKey());
+        } else {
+            commandBuilder.set("#VariantName.TextSpans", Message.raw(""));
+            commandBuilder.set("#VariantIndex.TextSpans", Message.raw(""));
+            commandBuilder.set("#VariantPrev.Disabled", true);
+            commandBuilder.set("#VariantNext.Disabled", true);
+            PlotCraftingPrefabPreview.clear(playerRef);
+        }
+
+        Player player = store.getComponent(ref, Player.getComponentType());
+        CombinedItemContainer inv =
+            player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE) : null;
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        TownRecord town = uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
+        boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
+
+        long invCoins = inv != null ? GoldCoinPayment.totalAvailable(null, inv) : 0L;
+        long treasuryCoins = town != null ? town.getTreasuryGoldCoinCount() : 0L;
+
+        commandBuilder.set(
+            "#CostLine.TextSpans",
+            Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.costLine")
+                .param("cost", Message.raw(String.valueOf(CRAFT_COST)))
+        );
+        commandBuilder.set(
+            "#FundsLine.TextSpans",
+            Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.fundsLine")
+                .param("inv", Message.raw(String.valueOf(invCoins)))
+                .param("treasury", Message.raw(String.valueOf(treasuryCoins)))
+        );
+
+        boolean canCraft = variant != null && inv != null && GoldCoinPayment.canAfford(town, inv, CRAFT_COST, allowTreasury);
+        commandBuilder.set("#CraftButton.Disabled", !canCraft);
+    }
+
+    @Override
+    public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.action == null) {
+            return;
+        }
+        switch (data.action) {
+            case "TabChange" -> {
+                if (TAB_DECORATIONS.equals(data.selectedTab)) {
+                    activeTab = Tab.DECORATIONS;
+                } else {
+                    activeTab = Tab.CORE;
+                }
+                selectedGroupKey = null;
+                variantIndex = 0;
+            }
+            case "SelectGroup" -> {
+                if (data.groupKey != null && !data.groupKey.isBlank()) {
+                    selectedGroupKey = data.groupKey.trim();
+                    variantIndex = 0;
+                }
+            }
+            case "VariantPrev" -> variantIndex--;
+            case "VariantNext" -> variantIndex++;
+            case "Craft" -> {
+                tryCraft(ref, store);
+                return;
+            }
+            default -> {
+                return;
+            }
+        }
+        refresh(ref, store);
+    }
+
+    @Override
+    public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        PlotCraftingPrefabPreview.clear(playerRef);
+        super.onDismiss(ref, store);
+    }
+
+    private void tryCraft(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        Player player = store.getComponent(ref, Player.getComponentType());
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        if (plugin == null || player == null || pr == null) {
+            return;
+        }
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
+        List<GroupEntry> groups = PlotCraftingCatalog.groupsForTab(catalog, activeTab, plugin.getClass().getClassLoader());
+        GroupEntry group = findGroup(groups, selectedGroupKey);
+        VariantEntry variant = selectedVariant(group);
+        if (variant == null) {
+            refresh(ref, store);
+            return;
+        }
+
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
+        if (inv == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        TownRecord town = uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
+        boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
+
+        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, CRAFT_COST, allowTreasury);
+        if (paid == null) {
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.insufficientGold"),
+                NotificationStyle.Danger
+            );
+            refresh(ref, store);
+            return;
+        }
+
+        ConstructionDefinition def = catalog.get(variant.constructionId());
+        String displayName = def != null && def.getDisplayName() != null ? def.getDisplayName() : variant.displayName();
+        ItemStack token = PlotTokenInventory.createTokenStack(variant.constructionId(), 1, displayName, pr.getLanguage());
+        if (!inv.canAddItemStack(token)) {
+            GoldCoinPayment.refund(town, player, ref, store, paid);
+            if (town != null) {
+                tm.updateTown(town);
+            }
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.noSpace"),
+                NotificationStyle.Warning
+            );
+            refresh(ref, store);
+            return;
+        }
+
+        ItemStackTransaction giveTx = player.giveItem(token, ref, store);
+        if (!giveTx.succeeded()) {
+            GoldCoinPayment.refund(town, player, ref, store, paid);
+            if (town != null) {
+                tm.updateTown(town);
+            }
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.noSpace"),
+                NotificationStyle.Warning
+            );
+            refresh(ref, store);
+            return;
+        }
+
+        if (town != null && paid.fromTreasury() > 0L) {
+            tm.updateTown(town);
+        }
+
+        UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_WORKBENCH_CRAFT);
+
+        NotificationUtil.sendNotification(
+            pr.getPacketHandler(),
+            Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.crafted").param("name", Message.raw(displayName)),
+            NotificationStyle.Success
+        );
+        refresh(ref, store);
+    }
+
+    private void ensureSelection(@Nonnull List<GroupEntry> groups) {
+        if (groups.isEmpty()) {
+            selectedGroupKey = null;
+            variantIndex = 0;
+            return;
+        }
+        if (selectedGroupKey == null || findGroup(groups, selectedGroupKey) == null) {
+            selectedGroupKey = groups.get(0).groupKey();
+            variantIndex = 0;
+        }
+        GroupEntry group = findGroup(groups, selectedGroupKey);
+        if (group != null) {
+            int n = group.variants().size();
+            if (n <= 0) {
+                variantIndex = 0;
+            } else if (variantIndex < 0) {
+                variantIndex = n - 1;
+            } else if (variantIndex >= n) {
+                variantIndex = 0;
+            }
+        }
+    }
+
+    @Nullable
+    private static GroupEntry findGroup(@Nonnull List<GroupEntry> groups, @Nullable String groupKey) {
+        if (groupKey == null) {
+            return null;
+        }
+        for (GroupEntry g : groups) {
+            if (groupKey.equals(g.groupKey())) {
+                return g;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private VariantEntry selectedVariant(@Nullable GroupEntry group) {
+        if (group == null || group.variants().isEmpty()) {
+            return null;
+        }
+        int idx = variantIndex;
+        if (idx < 0) {
+            idx = 0;
+        }
+        if (idx >= group.variants().size()) {
+            idx = group.variants().size() - 1;
+        }
+        return group.variants().get(idx);
+    }
+
+    /** 1-based index for UI, or 0 when there is no valid selection. */
+    private int selectedVariantIndex(@Nullable GroupEntry group) {
+        if (group == null || group.variants().isEmpty()) {
+            return 0;
+        }
+        int idx = variantIndex;
+        if (idx < 0) {
+            idx = 0;
+        }
+        if (idx >= group.variants().size()) {
+            idx = group.variants().size() - 1;
+        }
+        return idx + 1;
+    }
+
+    @Nonnull
+    private static String iconPathForGroup(@Nonnull ConstructionCatalog catalog, @Nonnull GroupEntry group, @Nonnull AetherhavenPlugin plugin) {
+        for (VariantEntry v : group.variants()) {
+            ConstructionDefinition def = catalog.get(v.constructionId());
+            if (def != null) {
+                return ConstructionTokenIconPath.forConstruction(def, plugin.getDataDirectory());
+            }
+        }
+        ConstructionDefinition canon = catalog.get(group.groupKey());
+        if (canon != null) {
+            return ConstructionTokenIconPath.forConstruction(canon, plugin.getDataDirectory());
+        }
+        return CustomBuildingsPaths.iconAssetPath(group.groupKey());
+    }
+
+    private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        rebuild();
+    }
+
+    public static final class PageData {
+        public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
+            .append(new KeyedCodec<>("Action", Codec.STRING), (d, a) -> d.action = a, d -> d.action)
+            .add()
+            .append(new KeyedCodec<>("GroupKey", Codec.STRING), (d, v) -> d.groupKey = v, d -> d.groupKey)
+            .add()
+            .append(new KeyedCodec<>("SelectedTab", Codec.STRING), (d, v) -> d.selectedTab = v, d -> d.selectedTab)
+            .add()
+            .build();
+
+        @Nullable
+        private String action;
+        @Nullable
+        private String groupKey;
+        @Nullable
+        private String selectedTab;
+    }
+}

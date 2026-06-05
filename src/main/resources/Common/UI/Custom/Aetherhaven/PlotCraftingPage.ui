@@ -1,0 +1,209 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@PlotTabAnchor = Anchor(Width: 82, Height: 62, Right: 5, Bottom: -14);
+
+@PlotCraftTabsStyle = TabNavigationStyle(
+  TabStyle: (
+    Default: (...$C.@TopTabStyle, Anchor: (...@PlotTabAnchor, Bottom: -8)),
+    Hovered: (...$C.@TopTabStyle, Anchor: (...@PlotTabAnchor, Bottom: -3)),
+    Pressed: (...$C.@TopTabStyle, Anchor: (...@PlotTabAnchor, Bottom: -6))
+  ),
+  SelectedTabStyle: (
+    Default: (
+      ...$C.@TopTabStyle,
+      Anchor: (...@PlotTabAnchor, Bottom: 0),
+      IconAnchor: (Width: 44, Height: 44),
+      Overlay: "../Common/TabSelectedOverlay.png"
+    )
+  )
+);
+
+@PlotPanelHeight = 600;
+@PlotCraftContentPadding = 30;
+@PlotCraftFooterHeight = 96;
+@PlotListFooterGap = 8;
+@PlotListHeight = @PlotPanelHeight - $C.@TitleHeight - @PlotCraftContentPadding - @PlotCraftFooterHeight - @PlotListFooterGap;
+
+@SectionTitle = (FontSize: 12, TextColor: #7a8e9c, RenderBold: true, RenderUppercase: true, HorizontalAlignment: Start);
+
+@ArrowBackStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #ffffff), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Disabled: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #5c6a78(0.45)), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@ArrowForwardStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #ffffff), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Disabled: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #5c6a78(0.45)), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  Group #PlotCraftRoot {
+    LayoutMode: Center;
+
+    Group #PanelsRow {
+      LayoutMode: Left;
+
+      Group #LeftColumn {
+        LayoutMode: Top;
+        Anchor: (Width: 500, Right: 10);
+
+        TabNavigation #PlotCraftTabs {
+          Anchor: (Height: 66, Left: 2, Right: 0);
+          Style: @PlotCraftTabsStyle;
+          SelectedTab: "Core";
+
+          TabButton {
+            Icon: "../star.png";
+            TooltipText: "Core buildings";
+            Id: "Core";
+          }
+
+          TabButton {
+            Icon: "../decoration.png";
+            TooltipText: "Decorations";
+            Id: "Decorations";
+          }
+        }
+
+        $C.@DecoratedContainer {
+          Anchor: (Width: 500, Height: @PlotPanelHeight, Top: -10);
+
+          #Title {
+            Label #PlotCraftTitleText {
+              Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+              Padding: (Horizontal: 19);
+              Text: "";
+            }
+          }
+
+          #Content {
+            LayoutMode: Top;
+            Padding: (Full: 14);
+
+            Group #BuildingListScroll {
+              LayoutMode: TopScrolling;
+              ScrollbarStyle: $C.@DefaultScrollbarStyle;
+              Anchor: (Height: @PlotListHeight, Bottom: @PlotListFooterGap);
+              Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.55));
+
+              Group #BuildingRows {
+                LayoutMode: Top;
+                Padding: (Horizontal: 4, Vertical: 4);
+              }
+            }
+
+            Label #CostLine {
+              Style: (...$C.@DefaultLabelStyle, TextColor: #c8a060, Wrap: true, FontSize: 16);
+              Anchor: (Bottom: 6);
+              Text: "";
+            }
+
+            Label #FundsLine {
+              Style: (...$C.@DefaultLabelStyle, TextColor: #8a8070, Wrap: true, FontSize: 15);
+              Anchor: (Bottom: 10);
+              Text: "";
+            }
+
+            $C.@TextButton #CraftButton {
+              Anchor: (Height: 36);
+              Text: "";
+            }
+          }
+        }
+      }
+
+      $C.@Container #PreviewBackdrop {
+        Anchor: (Width: 580, Height: @PlotPanelHeight, Top: 56);
+
+        #Title {
+          Label #PreviewTitle {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 19);
+            Text: "";
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+
+          Group #PreviewFrame {
+            LayoutMode: Full;
+            FlexWeight: 1;
+            Anchor: (Bottom: 10);
+
+            PrefabPreviewComponent #PrefabPreview {
+              Anchor: (Full: 0);
+              AllowDragYaw: true;
+              AllowDragPitch: true;
+              AllowZoom: true;
+              AllowPan: true;
+              ShowAnchor: true;
+            }
+          }
+
+          Group #VariantSection {
+            LayoutMode: Top;
+            Anchor: (Bottom: 4);
+            Padding: (Horizontal: 10, Vertical: 8);
+            Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.55));
+
+            Group #VariantHeader {
+              LayoutMode: Left;
+              Anchor: (Bottom: 8);
+
+              Label #VariantSectionTitle {
+                Style: (...@SectionTitle);
+                Text: "";
+              }
+
+              Group {
+                FlexWeight: 1;
+              }
+
+              Label #VariantIndex {
+                Style: (...$C.@DefaultLabelStyle, TextColor: #96a9be, FontSize: 14, RenderBold: true, HorizontalAlignment: End);
+                Text: "";
+              }
+            }
+
+            Group #VariantRow {
+              LayoutMode: Left;
+
+              TextButton #VariantPrev {
+                Style: @ArrowBackStyle;
+                Anchor: (Width: 40, Height: 40, Right: 8);
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Text: " ";
+              }
+
+              Label #VariantName {
+                Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center, TextColor: #e8dcc8, FontSize: 17, Wrap: true);
+                FlexWeight: 1;
+                Anchor: (Vertical: 0);
+                Text: "";
+              }
+
+              TextButton #VariantNext {
+                Style: @ArrowForwardStyle;
+                Anchor: (Width: 40, Height: 40, Left: 8);
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Text: " ";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

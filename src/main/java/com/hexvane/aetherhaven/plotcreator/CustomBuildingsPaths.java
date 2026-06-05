@@ -46,7 +46,7 @@ public final class CustomBuildingsPaths {
 
     @Nonnull
     public static String iconAssetPath(@Nonnull String constructionId) {
-        return ICONS_RELATIVE.replace('\\', '/') + "/" + iconFileName(constructionId);
+        return "Icons/ItemsGenerated/" + iconFileName(constructionId);
     }
 
     @Nonnull

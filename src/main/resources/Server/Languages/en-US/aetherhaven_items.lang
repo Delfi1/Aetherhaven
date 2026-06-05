@@ -19,13 +19,15 @@ items.Aetherhaven_Wood_Scaffold.legendUse=Use (F): extend tower / branch from to
 
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
 items.Aetherhaven_Plot_Sign.name=Plot sign
-items.Aetherhaven_Plot_Sign.description=Marks where a building can be placed. Craft plot tokens at your town planning desk.
+items.Aetherhaven_Plot_Sign.description=Marks where a building can be placed. Craft plot tokens at a plot crafting bench.
 
 items.Aetherhaven_Charter.name=Town charter
 items.Aetherhaven_Charter.description=Place to found a town. Each player may have one town per world. Use to open town info.
 
 items.Aetherhaven_Town_Planning_Desk.name=Town planning desk
-items.Aetherhaven_Town_Planning_Desk.description=Town planning bench. Charters, plot tokens, tiered building staves, and related recipes. Craft at a workbench.
+items.Aetherhaven_Town_Planning_Desk.description=Town planning bench. Charters, building staves, the plot crafting bench, and related recipes. Craft at a workbench.
+items.Aetherhaven_Plot_Crafting_Bench.name=Plot crafting bench
+items.Aetherhaven_Plot_Crafting_Bench.description=Craft plot tokens for buildings and decorations. Use to pick a building, preview it, and pay gold to get a token. Craft at your town planning desk.
 items.Aetherhaven_Charter_Amendments_Table.name=Charter amendments table
 items.Aetherhaven_Charter_Amendments_Table.description=Records how the town's tithe is counted and what trade the charter favors. Use to open amendments once your population supports it. Craft at your town planning desk; <color is="#ffa726">you must know the schematic</color>.
 items.Aetherhaven_Banquet_Table.name=Banquet table

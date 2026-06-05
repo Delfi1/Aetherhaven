@@ -59,6 +59,7 @@ import com.hexvane.aetherhaven.pathtool.PathToolStyleCycleInteraction;
 import com.hexvane.aetherhaven.pathtool.PathToolUseInteraction;
 import com.hexvane.aetherhaven.pathtool.PathToolWidthCycleInteraction;
 import com.hexvane.aetherhaven.pathtool.PathNavViz;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorBlockInteraction;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorBreakAllowSystem;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorCancelInteraction;
@@ -181,6 +182,7 @@ import com.hexvane.aetherhaven.ui.ShopSpotConfigPage;
 import com.hexvane.aetherhaven.ui.OpenHandMirrorUiInteraction;
 import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
 import com.hexvane.aetherhaven.ui.JewelryCraftingPage;
+import com.hexvane.aetherhaven.ui.PlotCraftingPage;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.ui.DifficultyPage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
@@ -1008,6 +1010,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
         );
         OpenCustomUIInteraction.registerSimple(
             this,
+            PlotCraftingPage.class,
+            AetherhavenConstants.PAGE_PLOT_CRAFTING_BENCH,
+            PlotCraftingPage::new
+        );
+        OpenCustomUIInteraction.registerSimple(
+            this,
             GeodeOpenPage.class,
             AetherhavenConstants.PAGE_GEODE_ANVIL,
             pr -> new GeodeOpenPage(pr, false)
@@ -1094,6 +1102,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         if (module == null) {
             return event;
         }
+        CustomBuildingIconAssetRegistry.syncFromDataDirectory(this);
         String packId = new PluginIdentifier(this.getManifest()).toString();
         List<CommonAsset> packAssets = CommonAssetRegistry.getCommonAssetsStartingWith(packId, "");
         if (packAssets.isEmpty()) {
@@ -1134,6 +1143,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             this.questCatalog.all().keySet(),
             this.villagerDefinitionCatalog.allByNpcRoleId().keySet()
         );
+        CustomBuildingIconAssetRegistry.syncFromDataDirectory(this);
     }
 
     private void registerJewelryNativeTooltipHooks() {

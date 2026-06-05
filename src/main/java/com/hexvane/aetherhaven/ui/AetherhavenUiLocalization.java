@@ -328,4 +328,13 @@ public final class AetherhavenUiLocalization {
     ) {
         b.set(scoped.apply("#PoiToolHudTitleText.TextSpans"), t("aetherhaven_items.aetherhaven.poiTool.hudTitle"));
     }
+
+    public static void applyPlotCraftingPage(@Nonnull UICommandBuilder b) {
+        b.set("#PlotCraftTitleText.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.title"));
+        b.set("#PreviewTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.previewTitle"));
+        b.set("#VariantSectionTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantSectionTitle"));
+        b.set("#VariantPrev.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantPrevTooltip"));
+        b.set("#VariantNext.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantNextTooltip"));
+        b.set("#CraftButton.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.craftButton"));
+    }
 }

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator.icon;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
@@ -35,6 +37,10 @@ public final class PlotCreatorIconExporter {
             Files.createDirectories(out.getParent());
             ImageIO.write(image, "png", out.toFile());
             LOGGER.atInfo().log("Plot creator icon saved: %s", out);
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin != null) {
+                CustomBuildingIconAssetRegistry.registerIconFile(plugin, out);
+            }
             return true;
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Plot creator icon export failed for %s", constructionId);

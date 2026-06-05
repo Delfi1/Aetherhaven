@@ -175,6 +175,10 @@ public final class AetherhavenConstants {
     /** Vanilla bench upgrade complete; Gaia's Draught shard / Verdant catalyst tier upgrades (dialogue). */
     public static final String SFX_WORKBENCH_UPGRADE_COMPLETE = "SFX_Workbench_Upgrade_Complete_Default";
 
+    /** Vanilla survival workbench open/close/craft ({@code Bench_Workbench.json}). */
+    public static final String SFX_WORKBENCH_OPEN = "SFX_Workbench_Open";
+    public static final String SFX_WORKBENCH_CRAFT = "SFX_Workbench_Craft";
+
     /** One-shot green sparkle along staff→preview for “material” feedback (no item entities). */
     public static final String BUILDING_STAFF_MATERIAL_BEAD_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_MaterialBead";
 
@@ -437,6 +441,13 @@ public final class AetherhavenConstants {
 
     /** OpenCustomUI id; must match block interaction in {@code Aetherhaven_Jewelry_Crafting_Bench.json}. */
     public static final String PAGE_JEWELRY_CRAFTING_BENCH = "AetherhavenJewelryCraftingBench";
+
+    public static final String PAGE_PLOT_CRAFTING_BENCH = "AetherhavenPlotCraftingBench";
+
+    public static final String PLOT_CRAFTING_BENCH_ITEM_ID = "Aetherhaven_Plot_Crafting_Bench";
+
+    /** Gold coins spent to craft one plot token at the plot crafting bench. */
+    public static final long PLOT_TOKEN_CRAFT_GOLD_COST = 5L;
 
     public static final String PAGE_TREASURY = "AetherhavenTreasury";
 
