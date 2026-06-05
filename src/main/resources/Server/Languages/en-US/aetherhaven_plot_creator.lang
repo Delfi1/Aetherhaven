@@ -21,6 +21,14 @@ aetherhaven.plotcreator.error.editNotCustom = Only custom buildings saved in you
 aetherhaven.plotcreator.error.editUnknown = No custom building found with id {id}.
 aetherhaven.plotcreator.edit.loaded = Loaded {id} for editing. Go back to change details or save to update the file.
 
+aetherhaven.plotcreator.generateicon.error.empty = Enter a building id or prefab path.
+aetherhaven.plotcreator.generateicon.error.noPrefab = No prefab path for {id}.
+aetherhaven.plotcreator.generateicon.error.noOutputId = Could not determine an output id; pass one as the second argument.
+aetherhaven.plotcreator.generateicon.error.notFound = Prefab not found: {prefab}
+aetherhaven.plotcreator.generateicon.error.loadFailed = Could not load prefab: {prefab}
+aetherhaven.plotcreator.generateicon.error.renderFailed = Icon render failed for {id}.
+aetherhaven.plotcreator.generateicon.ok = Icon saved for {id} at {path} (asset path: {asset})
+
 aetherhaven.plotcreator.hint.cornerFirstSet = First corner set. Mark the opposite corner next.
 aetherhaven.plotcreator.hint.cornerSecondSet = Bounds set. Next, mark the outside-corner plot sign, then choose the building type and place any required blocks before saving the shape.
 aetherhaven.plotcreator.hint.anchorSet = Plot sign spot set.

@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 /** Paths under the plugin data directory ({@code mods/Hexvane_Aetherhaven}) for player authored buildings. */
 public final class CustomBuildingsPaths {
     public static final String PREFABS_RELATIVE = "Server/Prefabs";
+    public static final String ICONS_RELATIVE = "Common/Icons/ItemsGenerated";
+    private static final String ICON_FILE_PREFIX = "Aetherhaven_Token_";
 
     private CustomBuildingsPaths() {}
 
@@ -25,6 +27,26 @@ public final class CustomBuildingsPaths {
     @Nonnull
     public static Path prefabsDirectory(@Nonnull Path dataDirectory) {
         return dataDirectory.resolve(PREFABS_RELATIVE);
+    }
+
+    @Nonnull
+    public static Path iconsDirectory(@Nonnull Path dataDirectory) {
+        return dataDirectory.resolve(ICONS_RELATIVE);
+    }
+
+    @Nonnull
+    public static Path iconFile(@Nonnull Path dataDirectory, @Nonnull String constructionId) {
+        return iconsDirectory(dataDirectory).resolve(iconFileName(constructionId));
+    }
+
+    @Nonnull
+    public static String iconFileName(@Nonnull String constructionId) {
+        return ICON_FILE_PREFIX + constructionId.trim() + ".png";
+    }
+
+    @Nonnull
+    public static String iconAssetPath(@Nonnull String constructionId) {
+        return ICONS_RELATIVE.replace('\\', '/') + "/" + iconFileName(constructionId);
     }
 
     @Nonnull

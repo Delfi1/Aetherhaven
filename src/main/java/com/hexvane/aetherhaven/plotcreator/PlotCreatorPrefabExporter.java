@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plotcreator.icon.PlotCreatorIconExporter;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.builtin.buildertools.BuilderToolsPlugin;
 import com.hypixel.hytale.builtin.buildertools.prefabeditor.saving.PrefabSaveContributor;
@@ -137,6 +139,10 @@ public final class PlotCreatorPrefabExporter {
         try {
             Files.createDirectories(outputFile.getParent());
             BlockSelection prefab = selection.relativize();
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin != null) {
+                PlotCreatorIconExporter.tryExportIcon(prefab, draft.getConstructionId(), plugin.getDataDirectory());
+            }
             PrefabStore.get().savePrefab(outputFile, prefab, overwrite);
             return true;
         } catch (Exception e) {

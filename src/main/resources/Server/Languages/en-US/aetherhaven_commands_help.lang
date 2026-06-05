@@ -134,6 +134,9 @@ commands.aetherhaven.plotcreator.start.desc=Open the plot creator guide
 commands.aetherhaven.plotcreator.cancel.desc=Cancel the plot creator session
 commands.aetherhaven.plotcreator.edit.desc=Edit a custom building saved on this server
 commands.aetherhaven.plotcreator.edit.constructionId=Building id (plot_my_building)
+commands.aetherhaven.plotcreator.generateicon.desc=Generate a plot token icon PNG from an existing prefab
+commands.aetherhaven.plotcreator.generateicon.idOrPrefab=Building id (plot_my_house) or prefab key (Guild_Hall.prefab.json)
+commands.aetherhaven.plotcreator.generateicon.outputId=Output id for the icon file (defaults to building id or prefab name)
 
 commands.aetherhaven.plottoken.desc=Give and list plot tokens for buildings
 commands.aetherhaven.plottoken.give.desc=Give a plot token for a building id
