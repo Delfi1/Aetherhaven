@@ -1,10 +1,10 @@
 {
   "entries": [
-    { "itemId": "Aetherhaven_Plot_Token_Barn_Hytiny", "weight": 5 },
-    { "itemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage", "weight": 5 },
-    { "itemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper", "weight": 5 },
-    { "itemId": "Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House", "weight": 5 },
-    { "itemId": "Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse", "weight": 5 },
+    { "itemId": "Aetherhaven_Plot_Token_Unlock_Page", "constructionId": "plot_barn_hytiny", "weight": 5 },
+    { "itemId": "Aetherhaven_Plot_Token_Unlock_Page", "constructionId": "plot_house_hytiny_cozy_cottage", "weight": 5 },
+    { "itemId": "Aetherhaven_Plot_Token_Unlock_Page", "constructionId": "plot_house_hytiny_cozy_camper", "weight": 5 },
+    { "itemId": "Aetherhaven_Plot_Token_Unlock_Page", "constructionId": "plot_house_hytiny_japanese_tea_house", "weight": 5 },
+    { "itemId": "Aetherhaven_Plot_Token_Unlock_Page", "constructionId": "plot_decoration_hytiny_potted_treehouse", "weight": 5 },
     { "itemId": "Furniture_Royal_Magic_Table", "weight": 5 },
     { "itemId": "Furniture_Royal_Magic_Couch", "weight": 5 },
     { "itemId": "Furniture_Royal_Magic_Wardrobe", "weight": 5 },

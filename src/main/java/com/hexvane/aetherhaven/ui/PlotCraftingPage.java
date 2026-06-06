@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.Tab;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.VariantEntry;
 import com.hexvane.aetherhaven.plot.PlotCraftingPrefabPreview;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
+import com.hexvane.aetherhaven.plot.PlotTokenUnlockService;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -112,7 +113,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         VariantEntry variant = selectedVariant(selectedGroup);
         int variantCount = selectedGroup != null ? selectedGroup.variants().size() : 0;
         int variantDisplayIndex = selectedVariantIndex(selectedGroup);
+        boolean variantLocked = false;
         if (variant != null) {
+            variantLocked = !PlotTokenUnlockService.isUnlocked(ref, store, variant.constructionId());
             commandBuilder.set("#VariantName.TextSpans", Message.raw(variant.displayName()));
             commandBuilder.set(
                 "#VariantIndex.TextSpans",
@@ -122,12 +125,16 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             );
             commandBuilder.set("#VariantPrev.Disabled", variantCount <= 1);
             commandBuilder.set("#VariantNext.Disabled", variantCount <= 1);
+            commandBuilder.set("#PreviewLockOverlay.Visible", variantLocked);
+            commandBuilder.set("#PreviewLockIconWrap.Visible", variantLocked);
             PlotCraftingPrefabPreview.send(playerRef, variant.prefabPathKey());
         } else {
             commandBuilder.set("#VariantName.TextSpans", Message.raw(""));
             commandBuilder.set("#VariantIndex.TextSpans", Message.raw(""));
             commandBuilder.set("#VariantPrev.Disabled", true);
             commandBuilder.set("#VariantNext.Disabled", true);
+            commandBuilder.set("#PreviewLockOverlay.Visible", false);
+            commandBuilder.set("#PreviewLockIconWrap.Visible", false);
             PlotCraftingPrefabPreview.clear(playerRef);
         }
 
@@ -155,7 +162,11 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 .param("treasury", Message.raw(String.valueOf(treasuryCoins)))
         );
 
-        boolean canCraft = variant != null && inv != null && GoldCoinPayment.canAfford(town, inv, CRAFT_COST, allowTreasury);
+        boolean canCraft =
+            variant != null
+                && !variantLocked
+                && inv != null
+                && GoldCoinPayment.canAfford(town, inv, CRAFT_COST, allowTreasury);
         commandBuilder.set("#CraftButton.Disabled", !canCraft);
     }
 

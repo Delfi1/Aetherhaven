@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.floatinggift;
 
+import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageMetadata;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -19,10 +20,17 @@ import javax.annotation.Nullable;
 public final class FloatingGiftLootTable {
     public static final class Entry {
         private final String itemId;
+        @Nullable
+        private final String constructionId;
         private final int weight;
 
         public Entry(@Nonnull String itemId, int weight) {
+            this(itemId, null, weight);
+        }
+
+        public Entry(@Nonnull String itemId, @Nullable String constructionId, int weight) {
             this.itemId = itemId;
+            this.constructionId = constructionId != null && !constructionId.isBlank() ? constructionId.trim() : null;
             this.weight = Math.max(0, weight);
         }
     }
@@ -61,9 +69,10 @@ public final class FloatingGiftLootTable {
             }
             JsonObject row = el.getAsJsonObject();
             String itemId = row.has("itemId") ? row.get("itemId").getAsString() : "";
+            String constructionId = row.has("constructionId") ? row.get("constructionId").getAsString() : null;
             int weight = row.has("weight") ? row.get("weight").getAsInt() : 1;
             if (itemId != null && !itemId.isBlank() && weight > 0) {
-                list.add(new Entry(itemId.trim(), weight));
+                list.add(new Entry(itemId.trim(), constructionId, weight));
             }
         }
         return new FloatingGiftLootTable(list);
@@ -94,10 +103,17 @@ public final class FloatingGiftLootTable {
         for (Entry e : entries) {
             acc += e.weight;
             if (roll < acc) {
-                return new ItemStack(e.itemId, 1);
+                return toStack(e);
             }
         }
-        Entry last = entries.get(entries.size() - 1);
-        return new ItemStack(last.itemId, 1);
+        return toStack(entries.get(entries.size() - 1));
+    }
+
+    @Nonnull
+    private static ItemStack toStack(@Nonnull Entry e) {
+        if (e.constructionId != null) {
+            return PlotTokenUnlockPageMetadata.createStack(e.constructionId);
+        }
+        return new ItemStack(e.itemId, 1);
     }
 }

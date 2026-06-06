@@ -6,6 +6,7 @@
   "countsAsConstructionId": "plot_house",
   "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage",
+  "plotTokenLockedByDefault": true,
   "plotAnchorOffset": [4, 0, 4],
   "managementBlockLocalPos": [4, 2, 6],
   "rotationYaw": "None",

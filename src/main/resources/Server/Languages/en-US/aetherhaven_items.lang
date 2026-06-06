@@ -228,6 +228,11 @@ items.Aetherhaven_Plot_Token.description=Places a custom town building from the 
 items.Aetherhaven_Plot_Token.instance.name={building} plot token
 items.Aetherhaven_Plot_Token.instance.description=Required to place the {building} footprint from the plot placement staff.
 
+items.Aetherhaven_Plot_Token_Unlock_Page.name=Plot blueprint
+items.Aetherhaven_Plot_Token_Unlock_Page.description=A special blueprint page. Use it to learn a new plot at your plot crafting bench.
+items.Aetherhaven_Plot_Token_Unlock_Page.instance.name=Plot blueprint: {building}
+items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=Read this to permanently unlock the {building} plot at your plot crafting bench.
+
 items.Aetherhaven_Plot_Creator_Staff.name=Plot creator staff
 items.Aetherhaven_Plot_Creator_Staff.description=Turn a build into a custom town building. See the town journal Guide. F starts or acts on the current step. Primary-click blocks for bounds and spots. Q/E previous/next. R cancels.
 

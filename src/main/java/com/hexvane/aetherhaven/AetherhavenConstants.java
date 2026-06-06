@@ -91,6 +91,9 @@ public final class AetherhavenConstants {
     /** Unified plot token item; {@link com.hexvane.aetherhaven.plot.PlotTokenMetadata} holds the construction id. */
     public static final String PLOT_TOKEN_UNIFIED = "Aetherhaven_Plot_Token";
 
+    /** Plot blueprint page; {@link com.hexvane.aetherhaven.plot.PlotTokenUnlockPageMetadata} holds the construction id. */
+    public static final String PLOT_TOKEN_UNLOCK_PAGE = "Aetherhaven_Plot_Token_Unlock_Page";
+
     public static final String PLOT_CREATOR_STAFF_ITEM_ID = "Aetherhaven_Plot_Creator_Staff";
 
     public static final String PLOT_CREATOR_HUD_KEY = "AetherhavenPlotCreator";

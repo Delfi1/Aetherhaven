@@ -148,6 +148,26 @@ $C.@PageOverlay {
               AllowPan: true;
               ShowAnchor: true;
             }
+
+            Group #PreviewLockOverlay {
+              Visible: false;
+              LayoutMode: Full;
+              Anchor: (Full: 0);
+              Background: #0a0d12(0.78);
+              HitTestVisible: false;
+            }
+
+            Group #PreviewLockIconWrap {
+              Visible: false;
+              LayoutMode: Center;
+              Anchor: (Full: 0);
+              HitTestVisible: false;
+
+              AssetImage #PreviewLockIcon {
+                Anchor: (Width: 64, Height: 64);
+                AssetPath: "UI/Custom/padlock.png";
+              }
+            }
           }
 
           Group #VariantSection {

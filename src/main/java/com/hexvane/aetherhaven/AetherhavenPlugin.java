@@ -33,6 +33,9 @@ import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.plot.SprinklerBlock;
 import com.hexvane.aetherhaven.plot.FounderMonumentBlock;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
+import com.hexvane.aetherhaven.plot.PlayerPlotTokenUnlockState;
+import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageUseInteraction;
+import com.hexvane.aetherhaven.plot.PlotTokenUnlockPlayerInitSystem;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchor;
 import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchorSystem;
@@ -458,9 +461,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
         VillagerNeeds.register(this.getEntityStoreRegistry());
         PlayerJewelryLoadout.register(this.getEntityStoreRegistry());
         PlayerTownJournalState.register(this.getEntityStoreRegistry());
+        PlayerPlotTokenUnlockState.register(this.getEntityStoreRegistry());
         this.getEntityStoreRegistry().registerSystem(new JewelryPlayerInitSystem());
         this.getEntityStoreRegistry().registerSystem(new JewelryInventoryTooltipSyncSystem());
         this.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
+        this.getEntityStoreRegistry().registerSystem(new PlotTokenUnlockPlayerInitSystem());
         this.getEntityStoreRegistry().registerSystem(new JewelryLoadoutEffectSyncSystem());
         LootChestWorldLootPending.register(this.getChunkStoreRegistry());
         LootrChestProcessedPlayers.register(this.getChunkStoreRegistry());
@@ -586,6 +591,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 "AetherhavenGrowthSerumUse",
                 GrowthSerumUseInteraction.class,
                 GrowthSerumUseInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotTokenUnlockPageUse",
+                PlotTokenUnlockPageUseInteraction.class,
+                PlotTokenUnlockPageUseInteraction.CODEC
             );
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenGaiasDraughtConsume", GaiasDraughtConsumeInteraction.class, GaiasDraughtConsumeInteraction.CODEC);

@@ -174,6 +174,10 @@ public final class ConstructionDefinition {
     @SerializedName("consumesPlotToken")
     private boolean consumesPlotToken = true;
 
+    /** When true, the plot crafting bench requires a per player unlock before this variant can be crafted. */
+    @SerializedName("plotTokenLockedByDefault")
+    private boolean plotTokenLockedByDefault;
+
     /** When true, the town journal plot list omits this construction. */
     @SerializedName("excludeFromTownJournal")
     private boolean excludeFromTownJournal;
@@ -384,6 +388,10 @@ public final class ConstructionDefinition {
 
     public boolean consumesPlotToken() {
         return consumesPlotToken;
+    }
+
+    public boolean isPlotTokenLockedByDefault() {
+        return plotTokenLockedByDefault;
     }
 
     public boolean isExcludeFromTownJournal() {

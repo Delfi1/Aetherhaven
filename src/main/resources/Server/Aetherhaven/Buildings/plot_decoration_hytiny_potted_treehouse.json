@@ -5,6 +5,7 @@
   "prefabPath": "Hytinys_Potted_Treehouse.prefab.json",
   "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse",
+  "plotTokenLockedByDefault": true,
   "plotAnchorOffset": [6, 0, 6],
   "assemblyDeferredBlockIds": [
     "Plant_Leaves_Windwillow",
