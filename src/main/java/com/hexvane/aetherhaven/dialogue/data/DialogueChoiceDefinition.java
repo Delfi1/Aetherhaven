@@ -73,4 +73,17 @@ public final class DialogueChoiceDefinition {
     public List<JsonObject> getActions() {
         return actions != null ? actions : Collections.emptyList();
     }
+
+    /** True when this choice closes the dialogue (goodbye / leave). */
+    public boolean closesDialogue() {
+        for (JsonObject action : getActions()) {
+            if (action == null) {
+                continue;
+            }
+            if (action.has("type") && "close".equalsIgnoreCase(action.get("type").getAsString())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

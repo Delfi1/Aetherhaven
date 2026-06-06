@@ -1,0 +1,834 @@
+{
+  "schemaVersion": 1,
+  "slotCount": 3,
+  "ranks": [
+    { "id": "E", "xpRequired": 0, "xpReward": 5, "icon": "UI/Custom/e.png" },
+    { "id": "D", "xpRequired": 30, "xpReward": 8, "icon": "UI/Custom/d.png" },
+    { "id": "C", "xpRequired": 80, "xpReward": 12, "icon": "UI/Custom/c.png" },
+    { "id": "B", "xpRequired": 160, "xpReward": 18, "icon": "UI/Custom/b.png" },
+    { "id": "A", "xpRequired": 300, "xpReward": 25, "icon": "UI/Custom/a.png" },
+    { "id": "S", "xpRequired": 500, "xpReward": 35, "icon": "UI/Custom/s.png" },
+    { "id": "SS", "xpRequired": 750, "xpReward": 50, "icon": "UI/Custom/ss.png" },
+    { "id": "SSS", "xpRequired": 1200, "xpReward": 70, "icon": "UI/Custom/sss.png" }
+  ],
+  "questTypes": {
+    "fetch": { "weight": 100 }
+  },
+  "villagers": {
+    "Aetherhaven_Miner": {
+      "fetchEntries": [
+        {
+          "id": "stone_haul",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 12,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.stone_haul.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.stone_haul.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Rock_Stone", "count": 24 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 8, "grantTo": "player" }]
+        },
+        {
+          "id": "copper_ore",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "B",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.copper_ore.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.copper_ore.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ore_Copper", "count": 16 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 14, "grantTo": "player" }]
+        },
+        {
+          "id": "iron_ore",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "A",
+          "weight": 8,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.iron_ore.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.iron_ore.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ore_Iron", "count": 20 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 22, "grantTo": "player" }]
+        },
+        {
+          "id": "silver_ore",
+          "rank": "S",
+          "minRank": "S",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.silver_ore.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.silver_ore.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ore_Silver", "count": 16 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 38, "grantTo": "player" }]
+        },
+        {
+          "id": "gold_ore",
+          "rank": "SS",
+          "minRank": "SS",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.gold_ore.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.miner.gold_ore.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ore_Gold", "count": 12 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 52, "grantTo": "player" }]
+        }
+      ]
+    },
+    "Aetherhaven_Farmer": {
+      "fetchEntries": [
+        {
+          "id": "wheat_bundle",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 12,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.farmer.wheat_bundle.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.farmer.wheat_bundle.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Plant_Crop_Wheat_Item", "count": 32 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 8, "grantTo": "player" }]
+        },
+        {
+          "id": "carrot_crate",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "B",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.farmer.carrot_crate.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.farmer.carrot_crate.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Plant_Crop_Carrot_Item", "count": 24 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 12, "grantTo": "player" }]
+        },
+        {
+          "id": "potato_sack",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "A",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.farmer.potato_sack.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.farmer.potato_sack.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Plant_Crop_Potato_Item", "count": 28 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 16, "grantTo": "player" }]
+        },
+        {
+          "id": "harvest_feast",
+          "rank": "B",
+          "minRank": "B",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.farmer.harvest_feast.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.farmer.harvest_feast.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Plant_Crop_Wheat_Item", "count": 20 },
+                { "itemId": "Plant_Crop_Carrot_Item", "count": 16 },
+                { "itemId": "Plant_Crop_Potato_Item", "count": 16 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 22, "grantTo": "player" }]
+        }
+      ]
+    },
+    "Aetherhaven_Blacksmith": {
+      "fetchEntries": [
+        {
+          "id": "iron_bars",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "A",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.iron_bars.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.iron_bars.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ingredient_Bar_Iron", "count": 12 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 16, "grantTo": "player" }]
+        },
+        {
+          "id": "coal_fuel",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 12,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.coal_fuel.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.coal_fuel.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ingredient_Charcoal", "count": 20 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 10, "grantTo": "player" }]
+        },
+        {
+          "id": "gold_bars",
+          "rank": "A",
+          "minRank": "A",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.gold_bars.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.gold_bars.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ingredient_Bar_Gold", "count": 8 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 30, "grantTo": "player" }]
+        },
+        {
+          "id": "master_smithing",
+          "rank": "SSS",
+          "minRank": "SSS",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.master_smithing.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.blacksmith.master_smithing.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ingredient_Bar_Iron", "count": 16 },
+                { "itemId": "Ingredient_Bar_Gold", "count": 6 },
+                { "itemId": "Ingredient_Charcoal", "count": 24 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 70, "grantTo": "player" }]
+        }
+      ]
+    },
+    "Aetherhaven_Logger": {
+      "fetchEntries": [
+        {
+          "id": "oak_logs",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 12,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.logger.oak_logs.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.logger.oak_logs.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Wood_Oak_Trunk", "count": 32 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 8, "grantTo": "player" }]
+        },
+        {
+          "id": "pine_logs",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "B",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.logger.pine_logs.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.logger.pine_logs.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Wood_Pine_Trunk", "count": 28 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 12, "grantTo": "player" }]
+        },
+        {
+          "id": "timber_contract",
+          "rank": "S",
+          "minRank": "S",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.logger.timber_contract.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.logger.timber_contract.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Wood_Oak_Trunk", "count": 24 },
+                { "itemId": "Wood_Pine_Trunk", "count": 24 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 38, "grantTo": "player" }]
+        }
+      ]
+    },
+    "Aetherhaven_Rancher": {
+      "fetchEntries": [
+        {
+          "id": "raw_meat",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 12,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.rancher.raw_meat.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.rancher.raw_meat.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Food_Meat_Raw", "count": 16 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 10, "grantTo": "player" }]
+        },
+        {
+          "id": "leather_hide",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "A",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.rancher.leather_hide.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.rancher.leather_hide.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ingredient_Leather_Light", "count": 12 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 14, "grantTo": "player" }]
+        },
+        {
+          "id": "ranch_provisions",
+          "rank": "SS",
+          "minRank": "SS",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.rancher.ranch_provisions.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.rancher.ranch_provisions.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Food_Meat_Raw", "count": 20 },
+                { "itemId": "Ingredient_Leather_Light", "count": 10 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 52, "grantTo": "player" }]
+        }
+      ]
+    },
+    "Aetherhaven_Priestess": {
+      "fetchEntries": [
+        {
+          "id": "life_essence",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "S",
+          "weight": 8,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.life_essence.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.life_essence.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ingredient_Essence_Life", "count": 8 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 20, "grantTo": "player" }]
+        },
+        {
+          "id": "sacred_offering",
+          "rank": "SS",
+          "minRank": "SS",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.sacred_offering.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.sacred_offering.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ingredient_Essence_Life", "count": 12 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 52, "grantTo": "player" }]
+        }
+      ]
+    },
+    "Aetherhaven_Innkeeper": {
+      "fetchEntries": [
+        {
+          "id": "bread_loaves",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "B",
+          "weight": 12,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.bread_loaves.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.bread_loaves.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Food_Bread", "count": 12 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 8, "grantTo": "player" }]
+        },
+        {
+          "id": "traveler_rations",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.traveler_rations.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.traveler_rations.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Food_Wildmeat_Raw", "count": 12 },
+                { "itemId": "Food_Bread", "count": 8 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 11, "grantTo": "player" }]
+        },
+        {
+          "id": "hearty_stew",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.hearty_stew.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.hearty_stew.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Plant_Crop_Potato_Item", "count": 16 },
+                { "itemId": "Food_Meat_Raw", "count": 10 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 15, "grantTo": "player" }]
+        },
+        {
+          "id": "inn_feast",
+          "rank": "B",
+          "minRank": "B",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.inn_feast.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.inn_feast.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Food_Bread", "count": 16 },
+                { "itemId": "Plant_Crop_Wheat_Item", "count": 20 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 20, "grantTo": "player" }]
+        },
+        {
+          "id": "noble_banquet",
+          "rank": "A",
+          "minRank": "A",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.noble_banquet.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.noble_banquet.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Food_Bread", "count": 20 },
+                { "itemId": "Food_Meat_Raw", "count": 16 },
+                { "itemId": "Ingredient_Bar_Gold", "count": 2 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 28, "grantTo": "player" }]
+        },
+        {
+          "id": "grand_hospitality",
+          "rank": "S",
+          "minRank": "S",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.grand_hospitality.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.grand_hospitality.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Food_Bread", "count": 24 },
+                { "itemId": "Plant_Crop_Carrot_Item", "count": 20 },
+                { "itemId": "Food_Meat_Raw", "count": 20 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 38, "grantTo": "player" }]
+        },
+        {
+          "id": "royal_table",
+          "rank": "SS",
+          "minRank": "SS",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.royal_table.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.royal_table.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ingredient_Bar_Gold", "count": 4 },
+                { "itemId": "Ingredient_Essence_Life", "count": 4 },
+                { "itemId": "Food_Bread", "count": 16 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 52, "grantTo": "player" }]
+        },
+        {
+          "id": "legendary_feast",
+          "rank": "SSS",
+          "minRank": "SSS",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.legendary_feast.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.innkeeper.legendary_feast.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ingredient_Bar_Gold", "count": 6 },
+                { "itemId": "Ore_Gold", "count": 8 },
+                { "itemId": "Food_Bread", "count": 20 },
+                { "itemId": "Food_Meat_Raw", "count": 24 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 70, "grantTo": "player" }]
+        }
+      ]
+    },
+    "Aetherhaven_Elder_Lyren": {
+      "fetchEntries": [
+        {
+          "id": "foundation_stones",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.foundation_stones.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.foundation_stones.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Rock_Stone", "count": 32 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 8, "grantTo": "player" }]
+        },
+        {
+          "id": "village_timber",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.village_timber.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.village_timber.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Wood_Oak_Trunk", "count": 28 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 11, "grantTo": "player" }]
+        },
+        {
+          "id": "community_grain",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.community_grain.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.community_grain.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Plant_Crop_Wheat_Item", "count": 24 },
+                { "itemId": "Plant_Crop_Carrot_Item", "count": 16 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 15, "grantTo": "player" }]
+        },
+        {
+          "id": "town_supplies",
+          "rank": "B",
+          "minRank": "B",
+          "maxRank": "SS",
+          "weight": 6,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.town_supplies.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.town_supplies.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Rock_Stone", "count": 16 },
+                { "itemId": "Wood_Oak_Trunk", "count": 16 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 28, "grantTo": "player" }]
+        },
+        {
+          "id": "iron_tribute",
+          "rank": "A",
+          "minRank": "A",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.iron_tribute.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.iron_tribute.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ore_Iron", "count": 16 },
+                { "itemId": "Ingredient_Bar_Iron", "count": 8 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 28, "grantTo": "player" }]
+        },
+        {
+          "id": "silver_tribute",
+          "rank": "S",
+          "minRank": "S",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.silver_tribute.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.silver_tribute.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ore_Silver", "count": 14 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 38, "grantTo": "player" }]
+        },
+        {
+          "id": "gold_tribute",
+          "rank": "SS",
+          "minRank": "SS",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.gold_tribute.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.gold_tribute.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ore_Gold", "count": 10 },
+                { "itemId": "Ingredient_Bar_Gold", "count": 4 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 52, "grantTo": "player" }]
+        },
+        {
+          "id": "elder_legacy",
+          "rank": "SSS",
+          "minRank": "SSS",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.elder_legacy.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.elder_legacy.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ore_Gold", "count": 12 },
+                { "itemId": "Ingredient_Bar_Gold", "count": 6 },
+                { "itemId": "Ingredient_Essence_Life", "count": 6 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 70, "grantTo": "player" }]
+        }
+      ]
+    },
+    "Aetherhaven_Guild_Master": {
+      "fetchEntries": [
+        {
+          "id": "recruit_gear",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.recruit_gear.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.recruit_gear.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Rock_Stone", "count": 16 },
+                { "itemId": "Ingredient_Charcoal", "count": 12 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 8, "grantTo": "player" }]
+        },
+        {
+          "id": "apprentice_tools",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.apprentice_tools.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.apprentice_tools.description",
+          "itemSets": [
+            { "weight": 1, "items": [{ "itemId": "Ore_Copper", "count": 14 }] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 11, "grantTo": "player" }]
+        },
+        {
+          "id": "journeyman_armor",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.journeyman_armor.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.journeyman_armor.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ingredient_Bar_Iron", "count": 10 },
+                { "itemId": "Ingredient_Leather_Light", "count": 8 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 15, "grantTo": "player" }]
+        },
+        {
+          "id": "veteran_weapons",
+          "rank": "B",
+          "minRank": "B",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.veteran_weapons.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.veteran_weapons.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ingredient_Bar_Iron", "count": 12 },
+                { "itemId": "Ingredient_Leather_Light", "count": 10 },
+                { "itemId": "Wood_Pine_Trunk", "count": 16 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 20, "grantTo": "player" }]
+        },
+        {
+          "id": "adventurer_gear",
+          "rank": "A",
+          "minRank": "A",
+          "maxRank": "SSS",
+          "weight": 5,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.adventurer_gear.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.adventurer_gear.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ingredient_Bar_Iron", "count": 8 },
+                { "itemId": "Ingredient_Leather_Light", "count": 6 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 36, "grantTo": "player" }]
+        },
+        {
+          "id": "elite_contract",
+          "rank": "S",
+          "minRank": "S",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.elite_contract.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.elite_contract.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ore_Silver", "count": 12 },
+                { "itemId": "Ingredient_Leather_Light", "count": 12 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 38, "grantTo": "player" }]
+        },
+        {
+          "id": "master_gear",
+          "rank": "SS",
+          "minRank": "SS",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 6,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.master_gear.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.master_gear.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ore_Gold", "count": 8 },
+                { "itemId": "Ingredient_Bar_Gold", "count": 4 },
+                { "itemId": "Ingredient_Bar_Iron", "count": 10 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 52, "grantTo": "player" }]
+        },
+        {
+          "id": "legendary_contract",
+          "rank": "SSS",
+          "minRank": "SSS",
+          "maxRank": "SSS",
+          "weight": 10,
+          "daysLimit": 7,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.legendary_contract.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.legendary_contract.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                { "itemId": "Ingredient_Bar_Gold", "count": 8 },
+                { "itemId": "Ingredient_Essence_Life", "count": 6 },
+                { "itemId": "Ingredient_Leather_Light", "count": 14 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 70, "grantTo": "player" }]
+        }
+      ]
+    }
+  }
+}

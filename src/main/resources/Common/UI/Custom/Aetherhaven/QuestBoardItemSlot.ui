@@ -1,0 +1,17 @@
+$C = "../Common.ui";
+
+Group #QuestBoardItemSlot {
+  LayoutMode: Top;
+  Anchor: (Width: 58, Right: 8);
+
+  ItemSlot #ItemIcon {
+    Anchor: (Width: 52, Height: 52);
+    ShowQualityBackground: true;
+  }
+
+  Label #ItemCount {
+    Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #c8bca8, HorizontalAlignment: Center);
+    Anchor: (Top: 3);
+    Text: "";
+  }
+}

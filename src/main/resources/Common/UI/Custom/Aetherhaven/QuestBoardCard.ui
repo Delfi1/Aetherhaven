@@ -1,0 +1,133 @@
+$C = "../Common.ui";
+
+@SectionLabelStyle = (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #7a8e9c, RenderBold: true, RenderUppercase: true, HorizontalAlignment: Start);
+@QuestCardHeight = 430;
+@QuestCardWidth = 300;
+@QuestCardOuter = (TexturePath: "../Common/ContainerFullPatch.png", Border: 20);
+@RankBadgeBg = (TexturePath: "../Common/InputBoxSelected.png", Border: 12, Color: #ffffff);
+
+Group #QuestBoardCard {
+  LayoutMode: Top;
+  Anchor: (Width: @QuestCardWidth, Height: @QuestCardHeight, Right: 12);
+  Background: @QuestCardOuter;
+  Padding: (Full: 4);
+
+  Group #CardInner {
+    LayoutMode: Top;
+    FlexWeight: 1;
+    Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 10, Color: #141c28(0.97));
+    Padding: (Full: 12);
+
+    Group #CompletedOnly {
+      LayoutMode: Middle;
+      FlexWeight: 1;
+      Visible: false;
+
+      Label #CompletedBanner {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 20, TextColor: #a8b8a0, RenderBold: true, HorizontalAlignment: Center, Wrap: true);
+        Padding: (Horizontal: 12);
+        Text: "";
+      }
+    }
+
+    Group #CardBody {
+      LayoutMode: Top;
+      FlexWeight: 1;
+
+      Group #CardHeader {
+        LayoutMode: Left;
+        Anchor: (Bottom: 8, Height: 60);
+
+        AssetImage #Portrait {
+          Anchor: (Width: 52, Height: 52, Right: 10, Vertical: 0);
+        }
+
+        Group #TitleWrap {
+          LayoutMode: Middle;
+          FlexWeight: 1;
+          Anchor: (Vertical: 0);
+
+          Label #QuestTitle {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 21, TextColor: #f4e8c8, RenderBold: true, Wrap: true, HorizontalAlignment: Center);
+            Padding: (Horizontal: 8);
+            Text: "";
+          }
+        }
+
+        Group #RankBadgeFrame {
+          LayoutMode: Middle;
+          Anchor: (Width: 52, Height: 52, Vertical: 0);
+          Background: @RankBadgeBg;
+
+          AssetImage #QuestRankIcon {
+            Anchor: (Width: 32, Height: 32);
+          }
+        }
+      }
+
+      Label #QuestDescription {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #b8b0a0, Wrap: true);
+        Anchor: (Bottom: 8, Height: 52);
+        Text: "";
+      }
+
+      Label #RequestedLabel {
+        Style: @SectionLabelStyle;
+        Anchor: (Bottom: 4);
+        Text: "";
+      }
+
+      Group #ItemRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 12, Height: 62);
+      }
+
+      Label #RewardLabelHeader {
+        Style: @SectionLabelStyle;
+        Anchor: (Bottom: 4, Top: 6);
+        Text: "";
+      }
+
+      Group #RewardRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 6, Height: 44);
+        Visible: false;
+
+        ItemSlot #RewardSlot {
+          Anchor: (Width: 40, Height: 40, Right: 8);
+          ShowQualityBackground: true;
+        }
+
+        Label #RewardLabel {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #a8c8a0, Wrap: true);
+          FlexWeight: 1;
+          Anchor: (Vertical: 0);
+          Text: "";
+        }
+      }
+    }
+
+    Group #CardFooter {
+      LayoutMode: Top;
+      Anchor: (Height: 72);
+
+      Label #DaysLeft {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #8a9eb0, HorizontalAlignment: Start);
+        Anchor: (Bottom: 6);
+        Text: "";
+      }
+
+      $C.@TextButton #ActionButton {
+        Anchor: (Height: 40);
+        Text: "";
+      }
+    }
+  }
+
+  Label #EmptyHint {
+    Style: (...$C.@DefaultLabelStyle, FontSize: 20, TextColor: #6a7580, Wrap: true, HorizontalAlignment: Center);
+    Anchor: (Vertical: 0);
+    Visible: false;
+    Text: "";
+  }
+}

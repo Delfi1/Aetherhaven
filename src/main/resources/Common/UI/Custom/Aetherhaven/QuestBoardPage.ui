@@ -1,0 +1,139 @@
+$C = "../Common.ui";
+
+@BoardPanelHeight = 620;
+@BoardPanelWidth = 980;
+@BoardContentHeight = @BoardPanelHeight - $C.@TitleHeight - 32;
+@BoardRankBarHeight = 72;
+@BoardCardRowHeight = @BoardContentHeight - @BoardRankBarHeight - 12;
+@XpBarHeight = 30;
+@XpBarInsetH = 10;
+@XpBarInsetV = 9;
+
+@XpBarBorderPatch = (TexturePath: "../XpBarBorder.png", Border: 8, Color: #ffffff);
+
+@RankXpFillPatch = (TexturePath: "../XpBar.png", Border: 0, Color: #ffffff);
+@RankXpTrackPatch = #121820(0.95);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  Group #QuestBoardRoot {
+    LayoutMode: Center;
+
+    $C.@DecoratedContainer {
+      Anchor: (Width: @BoardPanelWidth, Height: @BoardPanelHeight);
+
+      #Title {
+        Label #QuestBoardTitleText {
+          Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+          Padding: (Horizontal: 19);
+          Text: "";
+        }
+      }
+
+      #Content {
+        LayoutMode: Top;
+        Padding: (Full: 16);
+
+        Group #RankBar {
+          LayoutMode: Left;
+          Anchor: (Bottom: 12, Height: @BoardRankBarHeight);
+
+          Group #TownRankBlock {
+            LayoutMode: Top;
+            Anchor: (Width: 96, Right: 20, Vertical: 0);
+
+            Label #TownRankLabel {
+              Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #8a9eb0, RenderBold: true, RenderUppercase: true, HorizontalAlignment: Center, Wrap: true);
+              Anchor: (Bottom: 4);
+              Text: "";
+            }
+
+            Group {
+              LayoutMode: Middle;
+              Anchor: (Width: 96, Height: 36);
+
+              AssetImage #TownRankIcon {
+                Anchor: (Width: 36, Height: 36);
+              }
+            }
+          }
+
+          Group #RankXpTrack {
+            LayoutMode: Top;
+            FlexWeight: 1;
+            Anchor: (Vertical: 0);
+
+            Label #RankXpTitle {
+              Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #8a9eb0, RenderBold: true, RenderUppercase: true, HorizontalAlignment: Start);
+              Anchor: (Bottom: 4);
+              Text: "";
+            }
+
+            Group #RankXpBarStack {
+              LayoutMode: Full;
+              Anchor: (Height: @XpBarHeight, Left: 0, Right: 0);
+
+              Group #RankXpFillTrack {
+                LayoutMode: Left;
+                Anchor: (Left: @XpBarInsetH, Right: @XpBarInsetH, Top: @XpBarInsetV, Bottom: @XpBarInsetV);
+                Background: @RankXpTrackPatch;
+
+                Group #RankXpFill {
+                  FlexWeight: 1;
+                  Anchor: (Top: 0, Bottom: 0);
+                  Background: @RankXpFillPatch;
+                }
+
+                Group #RankXpFillRemainder {
+                  FlexWeight: 999;
+                }
+              }
+
+              Group #RankXpSeparators {
+                LayoutMode: Left;
+                Anchor: (Left: @XpBarInsetH, Right: @XpBarInsetH, Top: @XpBarInsetV, Bottom: @XpBarInsetV);
+              }
+
+              Group #RankXpBorder {
+                LayoutMode: Full;
+                Anchor: (Full: 0);
+                Background: @XpBarBorderPatch;
+              }
+
+              Label #RankXpText {
+                Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #f0e8d8, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center);
+                Anchor: (Full: 0);
+                Text: "";
+              }
+            }
+          }
+        }
+
+        Group #CardRowScroll {
+          LayoutMode: Left;
+          Anchor: (Left: 0, Right: 0, Height: @BoardCardRowHeight);
+
+          Group #CardRowSpacerL {
+            FlexWeight: 1;
+          }
+
+          Group #CardRow {
+            LayoutMode: Left;
+          }
+
+          Group #CardRowSpacerR {
+            FlexWeight: 1;
+          }
+        }
+
+        Label #BlockedMessage {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 23, TextColor: #c8b0a0, Wrap: true, HorizontalAlignment: Center);
+          Anchor: (Vertical: 0);
+          Visible: false;
+          Text: "";
+        }
+      }
+    }
+  }
+}

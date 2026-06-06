@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotDailyRerollService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRefreshSystem;
+import com.hexvane.aetherhaven.questboard.QuestBoardOnlineDawnService;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -46,6 +47,7 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         FeastService.checkGatherTimeoutsForWorld(world, plugin);
         ShopSpotDailyRerollService.scheduleTickFromHub(world, plugin, wtr);
         ShopSpotRefreshSystem.onGameMinute(world, store, plugin, wtr);
+        QuestBoardOnlineDawnService.tickWorld(world, store, plugin, wtr);
     }
 
     @Override
@@ -72,5 +74,6 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         FeastService.checkGatherTimeoutsForWorld(world, plugin);
         ShopSpotDailyRerollService.scheduleTickFromHub(world, plugin, wtr);
         ShopSpotRefreshSystem.onGameMinute(world, store, plugin, wtr);
+        QuestBoardOnlineDawnService.tickWorld(world, store, plugin, wtr);
     }
 }

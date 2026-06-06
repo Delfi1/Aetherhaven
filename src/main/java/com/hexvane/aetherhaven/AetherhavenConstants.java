@@ -447,6 +447,10 @@ public final class AetherhavenConstants {
 
     public static final String PAGE_PLOT_CRAFTING_BENCH = "AetherhavenPlotCraftingBench";
 
+    public static final String PAGE_QUEST_BOARD = "AetherhavenQuestBoard";
+
+    public static final String QUEST_BOARD_ITEM_ID = "Aetherhaven_Quest_Board";
+
     public static final String PLOT_CRAFTING_BENCH_ITEM_ID = "Aetherhaven_Plot_Crafting_Bench";
 
     /** Gold coins spent to craft one plot token at the plot crafting bench. */

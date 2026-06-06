@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.map;
 
 import com.hypixel.hytale.protocol.packets.worldmap.MapImage;
 import com.hypixel.hytale.server.core.universe.world.chunk.palette.BitFieldArr;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -10,6 +11,10 @@ import javax.annotation.Nullable;
 /** Unpacks and repacks palette-based {@link MapImage} tiles for per-player border overlays. */
 public final class TownMapImagePixels {
     public static final int MAP_CHUNK_BLOCK_SIZE = 32;
+
+    private static final int MAX_PALETTE_4BIT = 16;
+    private static final int MAX_PALETTE_8BIT = 256;
+    private static final int MAX_PALETTE_12BIT = 4096;
 
     private TownMapImagePixels() {}
 
@@ -36,6 +41,115 @@ public final class TownMapImagePixels {
         copy.bitsPerIndex = source.bitsPerIndex;
         copy.packedIndices = source.packedIndices.clone();
         return copy;
+    }
+
+    /**
+     * Clones {@code base} and writes border colors at sparse pixel positions.
+     * Falls back to full repack when the palette would exceed the current bit width.
+     */
+    @Nullable
+    public static MapImage applySparsePixelColors(
+        @Nonnull MapImage base,
+        @Nonnull int[] pixelIndices,
+        @Nonnull int[] colors
+    ) {
+        if (pixelIndices.length == 0) {
+            return cloneImage(base);
+        }
+        if (pixelIndices.length != colors.length) {
+            return null;
+        }
+        if (!hasPixelData(base)) {
+            return null;
+        }
+
+        MapImage copy = cloneImage(base);
+        if (copy == null) {
+            return null;
+        }
+
+        int bits = Byte.toUnsignedInt(copy.bitsPerIndex);
+        int pixelCount = copy.width * copy.height;
+        int[] palette = copy.palette.clone();
+        BitFieldArr indices = new BitFieldArr(bits, pixelCount);
+        indices.set(copy.packedIndices);
+
+        int paletteSize = palette.length;
+
+        for (int i = 0; i < pixelIndices.length; i++) {
+            int pixelIndex = pixelIndices[i];
+            if (pixelIndex < 0 || pixelIndex >= pixelCount) {
+                continue;
+            }
+            int color = colors[i];
+            int paletteIndex = findPaletteIndex(palette, paletteSize, color);
+            if (paletteIndex < 0) {
+                if (!canAppendColor(paletteSize)) {
+                    return applySparseViaFullRepack(base, pixelIndices, colors);
+                }
+                palette = Arrays.copyOf(palette, paletteSize + 1);
+                palette[paletteSize] = color;
+                paletteIndex = paletteSize;
+                paletteSize++;
+            }
+            indices.set(pixelIndex, paletteIndex);
+        }
+
+        int requiredBits = calculateBitsRequired(Math.max(1, paletteSize));
+        if (requiredBits > bits) {
+            return applySparseViaFullRepack(base, pixelIndices, colors);
+        }
+
+        copy.palette = paletteSize == palette.length ? palette : Arrays.copyOf(palette, paletteSize);
+        copy.bitsPerIndex = (byte) requiredBits;
+        if (requiredBits != bits) {
+            BitFieldArr resized = new BitFieldArr(requiredBits, pixelCount);
+            for (int p = 0; p < pixelCount; p++) {
+                resized.set(p, indices.get(p));
+            }
+            copy.packedIndices = resized.get();
+        } else {
+            copy.packedIndices = indices.get();
+        }
+        return copy;
+    }
+
+    @Nullable
+    private static MapImage applySparseViaFullRepack(
+        @Nonnull MapImage base,
+        @Nonnull int[] pixelIndices,
+        @Nonnull int[] colors
+    ) {
+        int[] pixels = unpackToArgb(base);
+        if (pixels == null) {
+            return null;
+        }
+        for (int i = 0; i < pixelIndices.length; i++) {
+            int idx = pixelIndices[i];
+            if (idx >= 0 && idx < pixels.length) {
+                pixels[idx] = colors[i];
+            }
+        }
+        MapImage copy = cloneImage(base);
+        if (copy == null) {
+            return null;
+        }
+        repackFromArgb(copy, pixels);
+        return copy;
+    }
+
+    private static boolean canAppendColor(int paletteSize) {
+        int next = paletteSize + 1;
+        return next <= MAX_PALETTE_4BIT || next <= MAX_PALETTE_8BIT || next <= MAX_PALETTE_12BIT;
+    }
+
+    private static int findPaletteIndex(@Nonnull int[] palette, int paletteSize, int color) {
+        for (int i = 0; i < paletteSize; i++) {
+            if (palette[i] == color) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Nullable
@@ -88,13 +202,13 @@ public final class TownMapImagePixels {
     }
 
     private static int calculateBitsRequired(int colorCount) {
-        if (colorCount <= 16) {
+        if (colorCount <= MAX_PALETTE_4BIT) {
             return 4;
         }
-        if (colorCount <= 256) {
+        if (colorCount <= MAX_PALETTE_8BIT) {
             return 8;
         }
-        if (colorCount <= 4096) {
+        if (colorCount <= MAX_PALETTE_12BIT) {
             return 12;
         }
         return 16;

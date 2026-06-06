@@ -20,6 +20,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -110,12 +111,12 @@ public final class WorkplacePlotAssignment {
         @Nonnull UUID workplacePlotId,
         @Nonnull String residentKind
     ) {
-        final Ref<EntityStore>[] found = new Ref[1];
+        AtomicReference<Ref<EntityStore>> found = new AtomicReference<>();
         Query<EntityStore> q = Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType());
         store.forEachChunk(
             q,
             (com.hypixel.hytale.component.ArchetypeChunk<EntityStore> chunk, com.hypixel.hytale.component.CommandBuffer<EntityStore> commandBuffer) -> {
-                if (found[0] != null) {
+                if (found.get() != null) {
                     return;
                 }
                 for (int i = 0; i < chunk.size(); i++) {
@@ -127,12 +128,12 @@ public final class WorkplacePlotAssignment {
                     if (jobPlot == null || !jobPlot.equals(workplacePlotId)) {
                         continue;
                     }
-                    found[0] = chunk.getReferenceTo(i);
+                    found.set(chunk.getReferenceTo(i));
                     return;
                 }
             }
         );
-        return found[0];
+        return found.get();
     }
 
     /**

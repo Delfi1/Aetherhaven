@@ -155,7 +155,7 @@ npcRoles.Aetherhaven_Guild_Master.name=Lyra Fairhollow
 npcRoles.Aetherhaven_Guard.name=Town guard
 
 items.Aetherhaven_Quest_Board.name=Quest board
-items.Aetherhaven_Quest_Board.description=A wooden board for posting work and bounties. Decorative for now.
+items.Aetherhaven_Quest_Board.description=A wooden board where townsfolk post fetch work and bounties. Use it to pick up jobs for your town.
 
 items.Aetherhaven_Plot_Token_Guild_Hall.name=Guild hall plot token
 items.Aetherhaven_Plot_Token_Guild_Hall.description=Marks where the guild hall prefab can be built. Craft at the town planning desk.

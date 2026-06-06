@@ -8,10 +8,6 @@
     "Furniture.Signs"
   ],
   "Set": "Aetherhaven",
-  "Interactions": {
-    "Primary": "Block_Primary",
-    "Secondary": "Block_Secondary"
-  },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Quest_Board.png",
   "BlockType": {
     "BlockParticleSetId": "Wood",
@@ -24,7 +20,9 @@
       }
     ],
     "DrawType": "Model",
-    "Flags": {},
+    "Flags": {
+      "IsUsable": true
+    },
     "Gathering": {
       "Breaking": {
         "GatherType": "Unbreakable"
@@ -37,7 +35,19 @@
     "PlacementSettings": {
       "RotationMode": "BlockNormal"
     },
-    "VariantRotation": "NESW"
+    "VariantRotation": "NESW",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AetherhavenQuestBoard"
+            }
+          }
+        ]
+      }
+    }
   },
   "Tags": {
     "Type": [

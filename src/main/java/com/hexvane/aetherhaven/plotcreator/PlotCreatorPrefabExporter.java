@@ -16,8 +16,8 @@ import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
-import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.nio.file.Files;
@@ -84,6 +84,8 @@ public final class PlotCreatorPrefabExporter {
         int bottom = Math.min(yMin, yMax);
         int blockCount = 0;
 
+        ChunkStore chunkStoreAccessor = world.getChunkStore();
+
         for (int x = xMin; x <= xMax; x++) {
             for (int z = zMin; z <= zMax; z++) {
                 WorldChunk chunk = accessor.getChunk(ChunkUtil.indexChunkFromBlock(x, z));
@@ -91,17 +93,26 @@ public final class PlotCreatorPrefabExporter {
                     continue;
                 }
                 Store<ChunkStore> chunkStore = chunk.getReference().getStore();
-                ChunkColumn chunkColumn = chunkStore.getComponent(chunk.getReference(), ChunkColumn.getComponentType());
                 int lastSection = -1;
+                Ref<ChunkStore> sectionRef = null;
                 BlockPhysics blockPhysics = null;
 
                 for (int y = top; y >= bottom; y--) {
                     int block = chunk.getBlock(x, y, z);
-                    int fluid = chunk.getFluidId(x, y, z);
-                    if (chunkColumn != null && lastSection != ChunkUtil.chunkCoordinate(y)) {
-                        lastSection = ChunkUtil.chunkCoordinate(y);
-                        Ref<ChunkStore> section = chunkColumn.getSection(lastSection);
-                        blockPhysics = section != null ? chunkStore.getComponent(section, BlockPhysics.getComponentType()) : null;
+                    if (lastSection != ChunkUtil.indexSection(y)) {
+                        lastSection = ChunkUtil.indexSection(y);
+                        sectionRef = chunkStoreAccessor.getChunkSectionReferenceAtBlock(x, y, z);
+                        blockPhysics = sectionRef != null && sectionRef.isValid()
+                            ? chunkStore.getComponent(sectionRef, BlockPhysics.getComponentType())
+                            : null;
+                    }
+
+                    int fluid = 0;
+                    if (sectionRef != null && sectionRef.isValid()) {
+                        FluidSection fluidSection = chunkStore.getComponent(sectionRef, FluidSection.getComponentType());
+                        if (fluidSection != null) {
+                            fluid = fluidSection.getFluidId(x, y, z);
+                        }
                     }
 
                     if ((block != 0 || fluid != 0) && (!skipEditorBlock || block != editorBlock)) {

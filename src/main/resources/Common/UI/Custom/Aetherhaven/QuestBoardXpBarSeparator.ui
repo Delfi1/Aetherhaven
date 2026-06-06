@@ -1,0 +1,9 @@
+Group {
+  LayoutMode: Middle;
+  Anchor: (Width: 4, Height: 10);
+
+  AssetImage #SepImage {
+    Anchor: (Width: 4, Height: 10);
+    AssetPath: "UI/Custom/XpBarSeperator.png";
+  }
+}

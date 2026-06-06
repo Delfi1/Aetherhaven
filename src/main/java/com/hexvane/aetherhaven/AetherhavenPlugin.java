@@ -20,6 +20,8 @@ import com.hexvane.aetherhaven.dialogue.AetherhavenDialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestKillProgressSystem;
+import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
+import com.hexvane.aetherhaven.questboard.QuestBoardOnlineDawnService;
 import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
@@ -188,6 +190,7 @@ import com.hexvane.aetherhaven.ui.JewelryCraftingPage;
 import com.hexvane.aetherhaven.ui.PlotCraftingPage;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.ui.DifficultyPage;
+import com.hexvane.aetherhaven.ui.QuestBoardPage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.TownJournalPlayerInitSystem;
@@ -257,6 +260,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private PrefabMaterialsCatalog prefabMaterialsCatalog = PrefabMaterialsCatalog.empty();
     private DialogueCatalog dialogueCatalog = DialogueCatalog.empty();
     private QuestCatalog questCatalog = QuestCatalog.empty();
+    private QuestBoardCatalog questBoardCatalog = QuestBoardCatalog.empty();
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
     private TownsfolkPersonalityCatalog townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.empty();
@@ -325,6 +329,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public QuestCatalog getQuestCatalog() {
         return questCatalog;
+    }
+
+    @Nonnull
+    public QuestBoardCatalog getQuestBoardCatalog() {
+        return questBoardCatalog;
     }
 
     @Nonnull
@@ -1006,6 +1015,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             (ref, componentAccessor, playerRef, context) -> null
         );
         OpenCustomUIInteraction.registerSimple(this, QuestJournalPage.class, AetherhavenConstants.PAGE_QUEST_JOURNAL, QuestJournalPage::new);
+        OpenCustomUIInteraction.registerSimple(this, QuestBoardPage.class, AetherhavenConstants.PAGE_QUEST_BOARD, QuestBoardPage::new);
         OpenCustomUIInteraction.registerSimple(this, DifficultyPage.class, AetherhavenConstants.PAGE_DIFFICULTY, DifficultyPage::new);
         OpenCustomUIInteraction.registerSimple(
             this,
@@ -1143,6 +1153,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.prefabMaterialsCatalog = PrefabMaterialsCatalog.loadFromAssetPacksOrClasspath(cl, customData);
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
+        this.questBoardCatalog = QuestBoardCatalog.loadFromAssetPacksOrClasspath(cl);
         this.villagerScheduleRegistry = VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl);
         this.townNameCatalog = TownNameCatalog.loadFromClasspath();
         this.productionCatalog = ProductionCatalog.loadFromClasspath(cl);
@@ -1177,8 +1188,19 @@ public final class AetherhavenPlugin extends JavaPlugin {
                                 }
                                 JewelryInventoryTooltipSync.syncPlayerInventory(ref, store);
                                 JewelryNativeTooltipManager.refreshPlayer(playerRef);
+                                QuestBoardOnlineDawnService.onPlayerReady(ref, store, AetherhavenPlugin.get());
                             });
                 });
+        this.getEventRegistry()
+            .registerGlobal(
+                PlayerDisconnectEvent.class,
+                event -> {
+                    if (this.jewelryTooltipPacketAdapter != null) {
+                        this.jewelryTooltipPacketAdapter.onPlayerLeave(event.getPlayerRef().getUuid());
+                    }
+                    QuestBoardOnlineDawnService.clearPlayer(event.getPlayerRef().getUuid());
+                }
+            );
         LOGGER.atInfo().log("Jewelry tooltips use native ItemDisplay metadata (per-stack descriptions)");
     }
 
@@ -1191,15 +1213,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.jewelryVirtualItemRegistry = new JewelryVirtualItemRegistry();
         this.jewelryTooltipPacketAdapter = new JewelryTooltipPacketAdapter(this.jewelryVirtualItemRegistry);
         this.jewelryTooltipPacketAdapter.register();
-        this.getEventRegistry()
-            .registerGlobal(
-                PlayerDisconnectEvent.class,
-                event -> {
-                    if (this.jewelryTooltipPacketAdapter != null) {
-                        this.jewelryTooltipPacketAdapter.onPlayerLeave(event.getPlayerRef().getUuid());
-                    }
-                }
-            );
     }
 
     @Override

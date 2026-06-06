@@ -292,6 +292,25 @@ public final class TownRecord {
     @SerializedName("feastGatherDeadlineEpochMs")
     private long feastGatherDeadlineEpochMs;
 
+    /** Cumulative XP from completed quest board quests; town rank tier is derived from this. */
+    @SerializedName("questBoardRankXp")
+    private int questBoardRankXp;
+
+    /** Last online dawn epoch day when unaccepted board slots were refreshed for this town. */
+    @Nullable
+    @SerializedName("questBoardLastRefreshOnlineDawnDay")
+    private Long questBoardLastRefreshOnlineDawnDay;
+
+    /** Up to three procedural quest board slot offers (see {@link com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord}). */
+    @SerializedName("questBoardSlots")
+    @Nullable
+    private List<com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord> questBoardSlots;
+
+    /** Remaining quest entry keys for shuffle bag board generation (roleId:entryId). */
+    @SerializedName("questBoardDrawPool")
+    @Nullable
+    private List<String> questBoardDrawPool;
+
     /**
      * Workplace plot production storage: key plot UUID string, value slot cursors + item amounts
      * (see {@link com.hexvane.aetherhaven.production.ProductionTickSystem}).
@@ -395,6 +414,19 @@ public final class TownRecord {
         migrateFeastFieldsIfNeeded();
         migratePlotProductionIfNeeded();
         migrateSharedRecipeUnlockFieldsIfNeeded();
+        migrateQuestBoardFieldsIfNeeded();
+    }
+
+    private void migrateQuestBoardFieldsIfNeeded() {
+        if (questBoardRankXp < 0) {
+            questBoardRankXp = 0;
+        }
+        if (questBoardSlots == null) {
+            questBoardSlots = new ArrayList<>();
+        }
+        if (questBoardDrawPool == null) {
+            questBoardDrawPool = new ArrayList<>();
+        }
     }
 
     private void migrateSharedRecipeUnlockFieldsIfNeeded() {
@@ -1568,6 +1600,97 @@ public final class TownRecord {
 
     public void setFeastGatherDeadlineEpochMs(long feastGatherDeadlineEpochMs) {
         this.feastGatherDeadlineEpochMs = feastGatherDeadlineEpochMs;
+    }
+
+    public int getQuestBoardRankXp() {
+        migrateQuestBoardFieldsIfNeeded();
+        return questBoardRankXp;
+    }
+
+    public void setQuestBoardRankXp(int questBoardRankXp) {
+        migrateQuestBoardFieldsIfNeeded();
+        this.questBoardRankXp = Math.max(0, questBoardRankXp);
+    }
+
+    public void addQuestBoardRankXp(int amount) {
+        if (amount <= 0) {
+            return;
+        }
+        setQuestBoardRankXp(getQuestBoardRankXp() + amount);
+    }
+
+    @Nullable
+    public Long getQuestBoardLastRefreshOnlineDawnDay() {
+        return questBoardLastRefreshOnlineDawnDay;
+    }
+
+    public void setQuestBoardLastRefreshOnlineDawnDay(long epochDay) {
+        this.questBoardLastRefreshOnlineDawnDay = epochDay;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord> getQuestBoardSlots() {
+        migrateQuestBoardFieldsIfNeeded();
+        return questBoardSlots;
+    }
+
+    public void ensureQuestBoardSlotCount(int count) {
+        migrateQuestBoardFieldsIfNeeded();
+        while (questBoardSlots.size() < count) {
+            questBoardSlots.add(com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord.empty());
+        }
+        while (questBoardSlots.size() > count) {
+            questBoardSlots.remove(questBoardSlots.size() - 1);
+        }
+    }
+
+    @Nonnull
+    public List<String> getQuestBoardDrawPool() {
+        migrateQuestBoardFieldsIfNeeded();
+        return questBoardDrawPool;
+    }
+
+    public void setQuestBoardDrawPool(@Nonnull List<String> keys) {
+        migrateQuestBoardFieldsIfNeeded();
+        this.questBoardDrawPool = new ArrayList<>(keys);
+    }
+
+    @Nullable
+    public com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord findAcceptedBoardQuestForGiver(@Nonnull UUID giverEntityUuid) {
+        migrateQuestBoardFieldsIfNeeded();
+        String id = giverEntityUuid.toString();
+        for (com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord slot : questBoardSlots) {
+            if (slot.isAccepted() && id.equals(slot.getGiverEntityUuid())) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord findBoardSlotByInstanceId(@Nonnull String instanceId) {
+        migrateQuestBoardFieldsIfNeeded();
+        if (instanceId.isBlank()) {
+            return null;
+        }
+        for (com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord slot : questBoardSlots) {
+            if (instanceId.equals(slot.instanceIdOrEmpty())) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord> acceptedBoardQuestsSnapshot() {
+        migrateQuestBoardFieldsIfNeeded();
+        List<com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord> out = new ArrayList<>();
+        for (com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord slot : questBoardSlots) {
+            if (slot.isAccepted()) {
+                out.add(slot);
+            }
+        }
+        return out;
     }
 
     @Nonnull

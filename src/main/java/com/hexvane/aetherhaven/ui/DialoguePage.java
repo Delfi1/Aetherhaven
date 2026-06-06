@@ -397,69 +397,157 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         @Nonnull DialogueNodeDefinition node
     ) {
         commandBuilder.clear(CHOICES_ROOT);
+        QuestBoardTurnInRow turnIn = resolveQuestBoardTurnIn(ref, store);
+        boolean turnInInserted = false;
         int uiSlot = 0;
         for (int i = 0; i < node.getChoices().size(); i++) {
             DialogueChoiceDefinition ch = node.getChoices().get(i);
-            boolean baseOk = conditions.evaluate(ch.getCondition(), ref, store, npcRef);
-            String wf = ch.whenFalseOrDefault();
-            JsonObject visOnly = ch.getVisibilityCondition();
-            if (visOnly != null) {
-                if (!conditions.evaluate(visOnly, ref, store, npcRef)) {
-                    continue;
-                }
-            } else if (!baseOk && "hide".equalsIgnoreCase(wf)) {
-                continue;
+            if (ch.closesDialogue() && turnIn != null && !turnInInserted) {
+                uiSlot = appendQuestBoardTurnInRow(commandBuilder, eventBuilder, uiSlot, turnIn);
+                turnInInserted = true;
             }
-            boolean disabled =
-                visOnly != null ? !baseOk : !baseOk && "disabled".equalsIgnoreCase(wf);
-            if (ch.isGiftDisableWhenNotAllowed()) {
-                AetherhavenPlugin giftPlugin = AetherhavenPlugin.get();
-                if (giftPlugin == null
-                    || !VillagerBefriendableResolver.isBefriendable(store, npcRef, giftPlugin)) {
-                    continue;
-                }
-                if (baseOk && !dialogueWorldView.villagerGiftAllowed(ref, store, npcRef)) {
-                    disabled = true;
-                }
-            }
-            String text = ch.getText() != null ? ch.getText() : "";
-            Message choiceLine;
-            if (disabled) {
-                Message reasonMsg = ch.isGiftDisableWhenNotAllowed()
-                    ? dialogueWorldView.villagerGiftBlockMessage(ref, store, npcRef)
-                    : null;
-                if (reasonMsg == null) {
-                    String reason = ch.getDisabledReason();
-                    if (reason != null && !reason.isBlank()) {
-                        reasonMsg = dialogueMessage(reason);
-                    }
-                }
-                choiceLine =
-                    reasonMsg != null
-                        ? choiceTranslationMessage(ref, store, text).insert(Message.raw("  ")).insert(reasonMsg)
-                        : choiceTranslationMessage(ref, store, text);
-            } else {
-                choiceLine = choiceTranslationMessage(ref, store, text);
-            }
-            commandBuilder.append(CHOICES_ROOT, "Aetherhaven/DialogueChoiceRow.ui");
-            String sel = choiceRowSelector(uiSlot);
-            commandBuilder.set(sel + " #Text.TextSpans", choiceLine);
-            commandBuilder.set(sel + ".Disabled", disabled);
-            commandBuilder.set(sel + " #Text.Style.TextColor", disabled ? "#6d6658" : "#f0e6d2");
-            if (!disabled) {
-                eventBuilder.addEventBinding(
-                    CustomUIEventBindingType.Activating,
-                    sel,
-                    new EventData().append("Action", "Choice").append("ChoiceIndex", String.valueOf(i)),
-                    false
-                );
-            }
-            uiSlot++;
+            uiSlot = appendDialogueChoiceRow(ref, store, commandBuilder, eventBuilder, ch, i, uiSlot);
+        }
+        if (turnIn != null && !turnInInserted) {
+            appendQuestBoardTurnInRow(commandBuilder, eventBuilder, uiSlot, turnIn);
         }
     }
 
+    private int appendDialogueChoiceRow(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull DialogueChoiceDefinition ch,
+        int choiceIndex,
+        int uiSlot
+    ) {
+        boolean baseOk = conditions.evaluate(ch.getCondition(), ref, store, npcRef);
+        String wf = ch.whenFalseOrDefault();
+        JsonObject visOnly = ch.getVisibilityCondition();
+        if (visOnly != null) {
+            if (!conditions.evaluate(visOnly, ref, store, npcRef)) {
+                return uiSlot;
+            }
+        } else if (!baseOk && "hide".equalsIgnoreCase(wf)) {
+            return uiSlot;
+        }
+        boolean disabled =
+            visOnly != null ? !baseOk : !baseOk && "disabled".equalsIgnoreCase(wf);
+        if (ch.isGiftDisableWhenNotAllowed()) {
+            AetherhavenPlugin giftPlugin = AetherhavenPlugin.get();
+            if (giftPlugin == null
+                || !VillagerBefriendableResolver.isBefriendable(store, npcRef, giftPlugin)) {
+                return uiSlot;
+            }
+            if (baseOk && !dialogueWorldView.villagerGiftAllowed(ref, store, npcRef)) {
+                disabled = true;
+            }
+        }
+        String text = ch.getText() != null ? ch.getText() : "";
+        Message choiceLine;
+        if (disabled) {
+            Message reasonMsg = ch.isGiftDisableWhenNotAllowed()
+                ? dialogueWorldView.villagerGiftBlockMessage(ref, store, npcRef)
+                : null;
+            if (reasonMsg == null) {
+                String reason = ch.getDisabledReason();
+                if (reason != null && !reason.isBlank()) {
+                    reasonMsg = dialogueMessage(reason);
+                }
+            }
+            choiceLine =
+                reasonMsg != null
+                    ? choiceTranslationMessage(ref, store, text).insert(Message.raw("  ")).insert(reasonMsg)
+                    : choiceTranslationMessage(ref, store, text);
+        } else {
+            choiceLine = choiceTranslationMessage(ref, store, text);
+        }
+        commandBuilder.append(CHOICES_ROOT, "Aetherhaven/DialogueChoiceRow.ui");
+        String sel = choiceRowSelector(uiSlot);
+        commandBuilder.set(sel + " #Text.TextSpans", choiceLine);
+        commandBuilder.set(sel + ".Disabled", disabled);
+        commandBuilder.set(sel + " #Text.Style.TextColor", disabled ? "#6d6658" : "#f0e6d2");
+        if (!disabled) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                sel,
+                new EventData().append("Action", "Choice").append("ChoiceIndex", String.valueOf(choiceIndex)),
+                false
+            );
+        }
+        return uiSlot + 1;
+    }
+
+    @Nullable
+    private QuestBoardTurnInRow resolveQuestBoardTurnIn(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return null;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (nu == null || pu == null) {
+            return null;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownForPlayerInWorld(pu.getUuid());
+        if (town == null || !town.playerCanCompleteQuests(pu.getUuid())) {
+            return null;
+        }
+        com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord slot =
+            com.hexvane.aetherhaven.questboard.QuestBoardService.findAcceptedForGiver(town, nu.getUuid());
+        if (slot == null) {
+            return null;
+        }
+        com.hexvane.aetherhaven.questboard.QuestBoardQuestTypeHandler handler =
+            com.hexvane.aetherhaven.questboard.QuestBoardService.handlerFor(slot.getQuestType());
+        boolean hasItems = handler != null && handler.hasRequiredItems(ref, store, slot);
+        return new QuestBoardTurnInRow(hasItems);
+    }
+
+    private int appendQuestBoardTurnInRow(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        int uiSlot,
+        @Nonnull QuestBoardTurnInRow turnIn
+    ) {
+        Message choiceLine =
+            Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnIn");
+        if (!turnIn.hasItems()) {
+            choiceLine =
+                choiceLine
+                    .insert(Message.raw("  "))
+                    .insert(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInMissing"));
+        }
+        commandBuilder.append(CHOICES_ROOT, "Aetherhaven/DialogueChoiceRow.ui");
+        String sel = choiceRowSelector(uiSlot);
+        commandBuilder.set(sel + " #Text.TextSpans", choiceLine);
+        commandBuilder.set(sel + ".Disabled", !turnIn.hasItems());
+        commandBuilder.set(sel + " #Text.Style.TextColor", turnIn.hasItems() ? "#f0e6d2" : "#6d6658");
+        if (turnIn.hasItems()) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                sel,
+                new EventData().append("Action", "QuestBoardTurnIn"),
+                false
+            );
+        }
+        return uiSlot + 1;
+    }
+
+    private record QuestBoardTurnInRow(boolean hasItems) {}
+
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull DialogueEventData data) {
+        if (data.action != null && data.action.equalsIgnoreCase("QuestBoardTurnIn")) {
+            handleQuestBoardTurnIn(ref, store);
+            return;
+        }
         if (data.action == null || !data.action.equalsIgnoreCase("Choice") || data.choiceIndex == null) {
             return;
         }
@@ -489,6 +577,33 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         DialogueActionBatchResult batch = new DialogueActionBatchResult();
         actions.runBatch(choice.getActions(), ref, store, batch, npcRef);
         applyBatchNavigation(ref, store, batch, choice.getNext());
+    }
+
+    private void handleQuestBoardTurnIn(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (nu == null || pu == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownForPlayerInWorld(pu.getUuid());
+        if (town == null || !town.playerCanCompleteQuests(pu.getUuid())) {
+            return;
+        }
+        java.util.Random rng = new java.util.Random(nu.getUuid().getMostSignificantBits() ^ System.nanoTime());
+        if (com.hexvane.aetherhaven.questboard.QuestBoardService.completeFetchQuest(
+            town, tm, ref, store, nu.getUuid(), plugin.getQuestBoardCatalog(), rng
+        )) {
+            close();
+        }
     }
 
     private void applyBatchNavigation(

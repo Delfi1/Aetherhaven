@@ -4,6 +4,7 @@
 
 ### Added
 
+- **Quest board** Guild hall quest boards now open a three card work panel. Townsfolk post fetch jobs with rank tiers, rewards, and time limits. Complete jobs for rank XP, turn items in through villager dialogue, and track active board quests in the town journal.
 - **Plot Creator Staff** A new staff that allows the player to create and configure a building they've created as a fully working plot for villagers. It walks you through it step by step.
 - **POI debug staff overhaul** Three modes (Q): edit existing POIs, place new prefab-saveable POI markers via a configuration GUI (need type, capacity, mount toggle, work equipment), and adventurer spawn markers. JSON building POIs still register on construction and merge with prefab markers (markers win at the same local cell). Guild hall adventurers spawn facing their marker and stand still at the spot.
 - **Townsfolk** Non-essential npcs that are chosen from a large pool of hand-designed characters. They each have three personality traits assigned to them that determine what dialogue lines they use. This will be used for tourists, guards, and more.
@@ -16,6 +17,8 @@
 - **Growth Serum** Right click a young animal to help it grow up right away. Thalen Meadowrun shares the recipe at 50 reputation. Craft it at the alchemist's bench from life essence, bone fragments, and blood petals.
 - **Hunting Knife** A one handed blade with iron dagger damage and sword attacks. Kill animals with it to sometimes get extra raw meat, hide, and feathers. Thalen Meadowrun shares the recipe at 100 reputation. Craft it at the weapons bench from iron bars, light leather, and linen scraps.
 - **Shop spot** Creative-only stall block for finished building plots. NPC shops roll stock at dawn from loot tables. Use (F) opens a buy panel with ±1/±10/max quantity; look-at HUD shows item, price, and stock. Stall facing rotates the floating item display.
+- **Plot Crafting Bench** Plot tokens are now crafted at the plot crafting bench which has a 3D preview of the building.
+- **Plot Blueprints** Some buildings are now unlocked by finding and using plot blueprints. Plot tokens found in balloon gifts have been replaced with these blueprints. You will need to delete floating_gift_loot.json if upgrading from an old save to find them.
 
 ### Changed
 
