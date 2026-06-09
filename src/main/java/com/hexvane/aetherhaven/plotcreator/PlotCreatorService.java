@@ -14,6 +14,7 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -370,6 +371,10 @@ public final class PlotCreatorService {
             return false;
         }
         plugin.reloadConfigsAndAssetCatalogs();
+        Path iconFile = CustomBuildingsPaths.iconFile(plugin.getDataDirectory(), draft.getConstructionId().trim());
+        if (Files.isRegularFile(iconFile)) {
+            CustomBuildingIconAssetRegistry.registerIconFile(plugin, iconFile);
+        }
         World world = session.getWorld();
         String registerErr = PlotCreatorWorldRegistrar.registerInTown(world, plugin, playerRef.getUuid(), draft, store);
         Player player = store.getComponent(ref, Player.getComponentType());

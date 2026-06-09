@@ -106,6 +106,14 @@
           ]
         },
         {
+          "Sensor": { "Type": "State", "State": "RtsCommand", "IgnoreMissingSetState": true },
+          "Instructions": [
+            {
+              "Reference": "Component_Instruction_Aetherhaven_Guard_Patrol_Seek"
+            }
+          ]
+        },
+        {
           "Sensor": { "Type": "State", "State": "Combat" },
           "Instructions": [
             {

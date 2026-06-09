@@ -154,6 +154,10 @@ public final class PlotTokenInventory {
         if (playerRef != null && playerRef.getLanguage() != null && !playerRef.getLanguage().isBlank()) {
             language = playerRef.getLanguage();
         }
-        player.giveItem(createTokenStack(constructionId, amount, displayName, language), ref, store);
+        ItemStack stack = createTokenStack(constructionId, amount, displayName, language);
+        ItemStackTransaction tx = player.giveItem(stack, ref, store);
+        if (tx.succeeded()) {
+            PlotTokenIconSync.afterTokenGranted(playerRef);
+        }
     }
 }

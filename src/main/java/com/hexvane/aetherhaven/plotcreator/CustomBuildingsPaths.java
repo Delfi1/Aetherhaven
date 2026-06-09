@@ -49,6 +49,20 @@ public final class CustomBuildingsPaths {
         return "Icons/ItemsGenerated/" + iconFileName(constructionId);
     }
 
+    /** Inverse of {@link #iconFileName(String)} for runtime PNG files under {@link #iconsDirectory}. */
+    @Nullable
+    public static String constructionIdFromIconFileName(@Nonnull String fileName) {
+        String name = fileName.trim();
+        if (!name.toLowerCase(java.util.Locale.ROOT).endsWith(".png")) {
+            return null;
+        }
+        String base = name.substring(0, name.length() - 4);
+        if (!base.startsWith(ICON_FILE_PREFIX) || base.length() <= ICON_FILE_PREFIX.length()) {
+            return null;
+        }
+        return base.substring(ICON_FILE_PREFIX.length()).trim();
+    }
+
     @Nonnull
     public static Path buildingFile(@Nonnull Path dataDirectory, @Nonnull String constructionId) {
         return buildingsDirectory(dataDirectory).resolve(constructionId + ".json");

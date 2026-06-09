@@ -7,6 +7,7 @@ import com.hypixel.hytale.builtin.buildertools.BuilderToolsPlugin;
 import com.hypixel.hytale.builtin.buildertools.prefabeditor.saving.PrefabSaveContributor;
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -44,6 +45,16 @@ public final class PlotCreatorPrefabExporter {
         @Nonnull Path outputFile,
         boolean overwrite
     ) {
+        return export(world, draft, outputFile, overwrite, null);
+    }
+
+    public static boolean export(
+        @Nonnull World world,
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Path outputFile,
+        boolean overwrite,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
         Vector3i min = draft.boundsMin();
         Vector3i max = draft.boundsMax();
         Vector3i anchor = draft.getPlotAnchor();
@@ -55,7 +66,11 @@ public final class PlotCreatorPrefabExporter {
 
         Store<EntityStore> entityStore = world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
         if (entityStore != null && !draft.getAdventurerSpawns().isEmpty()) {
-            PlotCreatorAdventurerMarkers.syncAll(world, entityStore, draft);
+            if (commandBuffer != null) {
+                PlotCreatorAdventurerMarkers.syncAll(world, commandBuffer, draft);
+            } else {
+                PlotCreatorAdventurerMarkers.syncAll(world, entityStore, draft);
+            }
         }
 
         int xMin = min.x;

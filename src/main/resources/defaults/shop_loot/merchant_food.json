@@ -1,0 +1,16 @@
+{
+  "entries": [
+    { "itemId": "Food_Salad_Caesar", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Salad_Mushroom", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Salad_Berry", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Popcorn", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Pie_Meat", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Pie_Apple", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Pie_Pumpkin", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Kebab_Meat", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Kebab_Mushroom", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Kebab_Vegetable", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Kebab_Fruit", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Bread", "weight": 2, "stockMin": 5, "stockMax": 10 }
+  ]
+}

@@ -78,6 +78,40 @@ public final class PlotCreatorAdventurerMarkers {
      * Ensures one marker entity exists per draft entry inside the plot bounds, and removes stray markers that no longer
      * match a saved spot (e.g. after reload or before prefab export).
      */
+    public static void syncAll(
+        @Nonnull World world,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull PlotCreatorDraft draft
+    ) {
+        if (draft.getPlotAnchor() == null) {
+            return;
+        }
+        Store<EntityStore> store = commandBuffer.getStore();
+        List<MarkerRow> markers = collectMarkersInBounds(store, draft);
+        Set<Integer> matched = new HashSet<>();
+        for (PlotCreatorAdventurerSpawnEntry entry : draft.getAdventurerSpawns()) {
+            Vector3d expected = PlotCreatorSpawnLocations.standCenterWorld(draft, entry.localArray());
+            int idx = indexNearestUnmatched(markers, matched, expected);
+            if (idx < 0) {
+                spawnForEntry(world, commandBuffer, draft, entry);
+            } else {
+                matched.add(idx);
+            }
+        }
+        for (int i = 0; i < markers.size(); i++) {
+            if (!matched.contains(i)) {
+                Ref<EntityStore> ref = markers.get(i).ref;
+                if (ref.isValid()) {
+                    commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+                }
+            }
+        }
+    }
+
+    /**
+     * Ensures one marker entity exists per draft entry inside the plot bounds, and removes stray markers that no longer
+     * match a saved spot. Use only outside entity system / interaction ticks.
+     */
     public static void syncAll(@Nonnull World world, @Nonnull Store<EntityStore> store, @Nonnull PlotCreatorDraft draft) {
         if (draft.getPlotAnchor() == null) {
             return;

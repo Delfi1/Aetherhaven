@@ -42,4 +42,24 @@ public final class ConstructionTokenIconPath {
         Path dataDir = plugin != null ? plugin.getDataDirectory() : null;
         return forConstruction(def, dataDir);
     }
+
+    /** Resolves icon path from construction id alone (catalog lookup when available). */
+    @Nonnull
+    public static String forConstructionId(@Nonnull String constructionId, @Nullable Path dataDirectory) {
+        String id = constructionId.trim();
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            ConstructionDefinition def = plugin.getConstructionCatalog().get(id);
+            if (def != null) {
+                return forConstruction(def, dataDirectory);
+            }
+        }
+        if (dataDirectory != null) {
+            Path customIcon = CustomBuildingsPaths.iconFile(dataDirectory, id);
+            if (Files.isRegularFile(customIcon)) {
+                return CustomBuildingsPaths.iconAssetPath(id);
+            }
+        }
+        return CustomBuildingsPaths.iconAssetPath(id);
+    }
 }

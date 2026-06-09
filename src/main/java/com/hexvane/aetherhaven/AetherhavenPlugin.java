@@ -36,8 +36,10 @@ import com.hexvane.aetherhaven.plot.SprinklerBlock;
 import com.hexvane.aetherhaven.plot.FounderMonumentBlock;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
 import com.hexvane.aetherhaven.plot.PlayerPlotTokenUnlockState;
+import com.hexvane.aetherhaven.plot.PlotTokenIconPacketAdapter;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageUseInteraction;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPlayerInitSystem;
+import com.hexvane.aetherhaven.plot.PlotTokenVirtualItemRegistry;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchor;
 import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchorSystem;
@@ -74,6 +76,34 @@ import com.hexvane.aetherhaven.plotcreator.PlotCreatorStepForwardInteraction;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorUseInteraction;
 import com.hexvane.aetherhaven.patrol.GuardPatrolState;
 import com.hexvane.aetherhaven.patrol.GuardPatrolSystem;
+import com.hexvane.aetherhaven.rts.CommandPostBlock;
+import com.hexvane.aetherhaven.rts.CommandPostPlaceEventSystem;
+import com.hexvane.aetherhaven.rts.CommandPostUseInteraction;
+import com.hexvane.aetherhaven.rts.GuardRtsCommandState;
+import com.hexvane.aetherhaven.rts.GuardRtsCommandSystem;
+import com.hexvane.aetherhaven.rts.RtsCameraMousePollSystem;
+import com.hexvane.aetherhaven.rts.RtsMoveOrderVisualSystem;
+import com.hexvane.aetherhaven.rts.RtsCommanderCameraSystem;
+import com.hexvane.aetherhaven.rts.RtsExitMovementGuardSystem;
+import com.hexvane.aetherhaven.rts.RtsClientMovementPacketAdapter;
+import com.hexvane.aetherhaven.rts.RtsHotbarSlotSyncSystem;
+import com.hexvane.aetherhaven.rts.RtsCommandPlayerComponent;
+import com.hexvane.aetherhaven.rts.RtsCommandService;
+import com.hexvane.aetherhaven.rts.RtsExitInteraction;
+import com.hexvane.aetherhaven.rts.RtsFlagOrderCycleInteraction;
+import com.hexvane.aetherhaven.rts.RtsFlagStopInteraction;
+import com.hexvane.aetherhaven.rts.RtsHudRefreshSystem;
+import com.hexvane.aetherhaven.rts.RtsCommanderNpcDamageFilterSystem;
+import com.hexvane.aetherhaven.rts.RtsCommanderNpcStealthSystem;
+import com.hexvane.aetherhaven.rts.RtsNpcPlayerDetectionPatch;
+import com.hexvane.aetherhaven.rts.RtsOrphanedGuardRecoverySystem;
+import com.hexvane.aetherhaven.rts.RtsUncleanSessionRecoverySystem;
+import com.hexvane.aetherhaven.rts.RtsInputGuardListener;
+import com.hexvane.aetherhaven.rts.RtsMarkerVisualSystem;
+import com.hexvane.aetherhaven.rts.RtsMouseInputListener;
+import com.hexvane.aetherhaven.rts.RtsStanceCycleInteraction;
+import com.hexvane.aetherhaven.rts.RtsToolPrimaryInteraction;
+import com.hexvane.aetherhaven.rts.RtsToolSecondaryInteraction;
 import com.hexvane.aetherhaven.patrol.PatrolWandModeCycleInteraction;
 import com.hexvane.aetherhaven.patrol.PatrolWandNewRouteInteraction;
 import com.hexvane.aetherhaven.patrol.PatrolWandPlayerComponent;
@@ -289,6 +319,14 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private JewelryTooltipPacketAdapter jewelryTooltipPacketAdapter;
     @Nullable
     private ShopPriceTooltipPacketAdapter shopPriceTooltipPacketAdapter;
+    @Nullable
+    private RtsClientMovementPacketAdapter rtsClientMovementPacketAdapter;
+
+    @Nullable
+    private PlotTokenVirtualItemRegistry plotTokenVirtualItemRegistry;
+
+    @Nullable
+    private PlotTokenIconPacketAdapter plotTokenIconPacketAdapter;
 
     private ShopPriceCatalog shopPriceCatalog = ShopPriceCatalog.empty();
 
@@ -304,6 +342,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nullable
     public JewelryTooltipPacketAdapter getJewelryTooltipPacketAdapter() {
         return jewelryTooltipPacketAdapter;
+    }
+
+    @Nullable
+    public PlotTokenIconPacketAdapter getPlotTokenIconPacketAdapter() {
+        return plotTokenIconPacketAdapter;
     }
 
     @Nonnull
@@ -448,7 +491,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         registerModCommonAssetDelivery();
         registerJewelryNativeTooltipHooks();
         registerJewelryRarityBorderPackets();
+        registerPlotTokenIconPackets();
         registerShopPriceTooltipPackets();
+        registerRtsClientMovementPacketAdapter();
 
         this.gameTimeCursorResourceType =
             this.getEntityStoreRegistry()
@@ -465,6 +510,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         SprinklerBlock.register(this.getChunkStoreRegistry());
         FounderMonumentBlock.register(this.getChunkStoreRegistry());
         ShopSpotBlock.register(this.getChunkStoreRegistry());
+        CommandPostBlock.register(this.getChunkStoreRegistry());
         FounderMonumentStatueSkin.register(this.getEntityStoreRegistry());
 
         VillagerNeeds.register(this.getEntityStoreRegistry());
@@ -498,6 +544,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         PoiToolPlayerComponent.register(this.getEntityStoreRegistry());
         PathToolPlayerComponent.register(this.getEntityStoreRegistry());
         PatrolWandPlayerComponent.register(this.getEntityStoreRegistry());
+        RtsCommandPlayerComponent.register(this.getEntityStoreRegistry());
+        RtsNpcPlayerDetectionPatch.install();
+        GuardRtsCommandState.register(this.getEntityStoreRegistry());
         GuardPatrolState.register(this.getEntityStoreRegistry());
         PurificationPowderPlayerComponent.register(this.getEntityStoreRegistry());
         ShopSpotPlayerComponent.register(this.getEntityStoreRegistry());
@@ -711,6 +760,20 @@ public final class AetherhavenPlugin extends JavaPlugin {
             .register("AetherhavenShopSpotUse", ShopSpotUseInteraction.class, ShopSpotUseInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenShopSpotSecondary", ShopSpotSecondaryInteraction.class, ShopSpotSecondaryInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenCommandPostUse", CommandPostUseInteraction.class, CommandPostUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenRtsToolPrimary", RtsToolPrimaryInteraction.class, RtsToolPrimaryInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenRtsToolSecondary", RtsToolSecondaryInteraction.class, RtsToolSecondaryInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenRtsFlagOrderCycle", RtsFlagOrderCycleInteraction.class, RtsFlagOrderCycleInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenRtsFlagStop", RtsFlagStopInteraction.class, RtsFlagStopInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenRtsStanceCycle", RtsStanceCycleInteraction.class, RtsStanceCycleInteraction.CODEC);
+        this.getCodecRegistry(com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction.CODEC)
+            .register("AetherhavenRtsExit", RtsExitInteraction.class, RtsExitInteraction.CODEC);
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new BuildingStaffFrontierTracerTickSystem(this));
@@ -753,6 +816,22 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PathToolPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PatrolWandPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new GuardPatrolSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new GuardRtsCommandSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new RtsCommanderCameraSystem.Follow(this));
+        this.getEntityStoreRegistry().registerSystem(new RtsExitMovementGuardSystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsCameraMousePollSystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsHotbarSlotSyncSystem.SlotChangeHandler());
+        this.getEntityStoreRegistry().registerSystem(new RtsHotbarSlotSyncSystem.ActiveSlotRequestHandler());
+        this.getEntityStoreRegistry().registerSystem(new RtsHudRefreshSystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsUncleanSessionRecoverySystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsOrphanedGuardRecoverySystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsCommanderNpcStealthSystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsCommanderNpcDamageFilterSystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsMarkerVisualSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new RtsMoveOrderVisualSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new CommandPostPlaceEventSystem(this));
+        RtsMouseInputListener.register(this.getEventRegistry());
+        RtsInputGuardListener.register(this.getEventRegistry());
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftSchedulerSystem());
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftSystem());
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftDamagePopSystem());
@@ -1189,14 +1268,26 @@ public final class AetherhavenPlugin extends JavaPlugin {
                                 JewelryInventoryTooltipSync.syncPlayerInventory(ref, store);
                                 JewelryNativeTooltipManager.refreshPlayer(playerRef);
                                 QuestBoardOnlineDawnService.onPlayerReady(ref, store, AetherhavenPlugin.get());
+                                RtsCommandService.exit(ref, store);
                             });
                 });
         this.getEventRegistry()
             .registerGlobal(
                 PlayerDisconnectEvent.class,
                 event -> {
+                    Ref<EntityStore> ref = event.getPlayerRef().getReference();
+                    if (ref != null && ref.isValid()) {
+                        Store<EntityStore> store = ref.getStore();
+                        World world = store.getExternalData().getWorld();
+                        if (world != null) {
+                            world.execute(() -> RtsCommandService.exit(ref, store));
+                        }
+                    }
                     if (this.jewelryTooltipPacketAdapter != null) {
                         this.jewelryTooltipPacketAdapter.onPlayerLeave(event.getPlayerRef().getUuid());
+                    }
+                    if (this.plotTokenIconPacketAdapter != null) {
+                        this.plotTokenIconPacketAdapter.onPlayerLeave(event.getPlayerRef().getUuid());
                     }
                     QuestBoardOnlineDawnService.clearPlayer(event.getPlayerRef().getUuid());
                 }
@@ -1215,6 +1306,17 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.jewelryTooltipPacketAdapter.register();
     }
 
+    private void registerPlotTokenIconPackets() {
+        this.plotTokenVirtualItemRegistry = new PlotTokenVirtualItemRegistry();
+        this.plotTokenIconPacketAdapter = new PlotTokenIconPacketAdapter(this.plotTokenVirtualItemRegistry);
+        this.plotTokenIconPacketAdapter.register();
+    }
+
+    private void registerRtsClientMovementPacketAdapter() {
+        this.rtsClientMovementPacketAdapter = new RtsClientMovementPacketAdapter();
+        this.rtsClientMovementPacketAdapter.register();
+    }
+
     @Override
     protected void shutdown() {
         if (this.shopPriceTooltipPacketAdapter != null) {
@@ -1225,7 +1327,16 @@ public final class AetherhavenPlugin extends JavaPlugin {
             this.jewelryTooltipPacketAdapter.deregister();
             this.jewelryTooltipPacketAdapter = null;
         }
+        if (this.plotTokenIconPacketAdapter != null) {
+            this.plotTokenIconPacketAdapter.deregister();
+            this.plotTokenIconPacketAdapter = null;
+        }
+        if (this.rtsClientMovementPacketAdapter != null) {
+            this.rtsClientMovementPacketAdapter.deregister();
+            this.rtsClientMovementPacketAdapter = null;
+        }
         this.jewelryVirtualItemRegistry = null;
+        this.plotTokenVirtualItemRegistry = null;
         PathNavViz.shutdown();
         instance = null;
         AetherhavenWorldRegistries.saveAll();

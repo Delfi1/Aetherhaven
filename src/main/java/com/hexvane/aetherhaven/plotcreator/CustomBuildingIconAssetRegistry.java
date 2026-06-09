@@ -1,16 +1,20 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
+import com.hypixel.hytale.common.plugin.PluginIdentifier;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.asset.common.CommonAsset;
 import com.hypixel.hytale.server.core.asset.common.CommonAssetModule;
 import com.hypixel.hytale.server.core.asset.common.asset.FileCommonAsset;
-import com.hypixel.hytale.common.plugin.PluginIdentifier;
+import com.hypixel.hytale.server.core.universe.Universe;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Registers plot-creator token thumbnails from the plugin data folder ({@code Common/Icons/ItemsGenerated}) so
@@ -46,10 +50,18 @@ public final class CustomBuildingIconAssetRegistry {
             return;
         }
         String packId = new PluginIdentifier(plugin.getManifest()).toString();
-        registerIconFile(module, packId, iconFile, true);
+        CommonAsset asset = registerIconFile(module, packId, iconFile, true);
+        if (asset == null) {
+            return;
+        }
+        String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(iconFile.getFileName().toString());
+        if (constructionId != null) {
+            PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
+        }
     }
 
-    private static void registerIconFile(
+    @Nullable
+    private static CommonAsset registerIconFile(
         @Nonnull CommonAssetModule module,
         @Nonnull String packId,
         @Nonnull Path iconFile,
@@ -58,9 +70,16 @@ public final class CustomBuildingIconAssetRegistry {
         String assetName = "Icons/ItemsGenerated/" + iconFile.getFileName();
         try {
             byte[] bytes = Files.readAllBytes(iconFile);
-            module.addCommonAsset(packId, new FileCommonAsset(iconFile, assetName, bytes), log);
+            FileCommonAsset asset = new FileCommonAsset(iconFile, assetName, bytes);
+            module.addCommonAsset(packId, asset, log);
+            if (log && Universe.get().getPlayerCount() > 0) {
+                // Force item-icon atlas rebuild so inventory slots pick up runtime PNGs.
+                module.sendAsset(asset, true);
+            }
+            return asset;
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to register custom building icon %s", iconFile);
+            return null;
         }
     }
 }

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.patrol;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.rts.GuardRtsCommandState;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -80,6 +81,9 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
             return;
         }
         Ref<EntityStore> ref = chunk.getReferenceTo(index);
+        if (chunk.getComponent(index, GuardRtsCommandState.getComponentType()) != null) {
+            return;
+        }
         World world = store.getExternalData().getWorld();
         PatrolRouteRegistry reg = AetherhavenWorldRegistries.getOrCreatePatrolRouteRegistry(world, plugin);
         List<PatrolRouteRecord> assigned = reg.routesForGuard(uc.getUuid());

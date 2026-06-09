@@ -578,5 +578,52 @@ public final class AetherhavenConstants {
     public static final String SHOP_LOOT_TABLE_GIFTS = "gifts";
     public static final String SHOP_LOOT_TABLE_MERCHANT = "merchant";
 
+    /** RTS guard command mode — command post block/item id. */
+    public static final String COMMAND_POST_ITEM_ID = "Aetherhaven_Command_Post";
+    public static final String COMMAND_POST_BLOCK_TYPE_ID = "Aetherhaven_Command_Post";
+
+    public static final String RTS_FLAG_ITEM_ID = "Aetherhaven_Rts_Flag";
+    public static final String RTS_SWORD_ITEM_ID = "Aetherhaven_Rts_Sword";
+    public static final String RTS_SELECT_ALL_ITEM_ID = "Aetherhaven_Rts_Select_All";
+    public static final String RTS_SELECT_KNIGHT_ITEM_ID = "Aetherhaven_Rts_Select_Knight";
+    public static final String RTS_SELECT_ARCHER_ITEM_ID = "Aetherhaven_Rts_Select_Archer";
+    public static final String RTS_SELECT_MAGE_ITEM_ID = "Aetherhaven_Rts_Select_Mage";
+    public static final String RTS_STANCE_BANNER_ITEM_ID = "Aetherhaven_Rts_Stance_Banner";
+    public static final String RTS_FREE_ITEM_ID = "Aetherhaven_Rts_Free";
+    public static final String RTS_EXIT_ITEM_ID = "Aetherhaven_Rts_Exit";
+
+    public static final String RTS_COMMAND_HUD_KEY = "AetherhavenRtsCommand";
+    public static final String RTS_BOX_SELECT_HUD_KEY = "AetherhavenRtsBoxSelect";
+    /** NPC role state while under RTS command (Java-driven seek/aggro). */
+    public static final String NPC_STATE_GUARD_RTS_COMMAND = "RtsCommand";
+
+    /** Detection/aggro radius from hold point or guard body while traveling. */
+    public static final double RTS_DEFEND_RADIUS = 24.0;
+    public static final double RTS_DEFENSIVE_LEASH_RADIUS = 12.0;
+    public static final double RTS_AGGRESSIVE_LEASH_RADIUS = 20.0;
+    public static final double RTS_STAND_GROUND_LEASH_RADIUS = 0.0;
+    public static final double RTS_STAND_GROUND_RANGE = 8.0;
+    public static final double RTS_ARRIVE_RADIUS = 4.0;
+    /** Attack-move: auto-engage hostiles this close to the guard while traveling to a order point. */
+    public static final double RTS_TRAVEL_ENGAGE_RADIUS = 14.0;
+    /** Attack-move: max horizontal chase distance from the order point while still traveling. */
+    public static final double RTS_ATTACK_MOVE_CHASE_RADIUS = 28.0;
+    /** Melee guards begin RTS combat when a hostile is within this horizontal distance. */
+    public static final double RTS_MELEE_ENGAGE_RANGE = 3.5;
+    /** Ranged guards begin RTS combat when a hostile is within this horizontal distance. */
+    public static final double RTS_RANGED_ENGAGE_RANGE = 15.0;
+    /** Extra blocks beyond town territory chunk radius for camera pan clamp. */
+    public static final int RTS_TERRITORY_OVERLAP_BLOCKS = 16;
+
+    public static final String RTS_MARKER_BLUE_PARTICLE = "Aetherhaven_Rts_Marker_Blue";
+    public static final String RTS_MARKER_GREY_PARTICLE = "Aetherhaven_Rts_Marker_Grey";
+    public static final String RTS_MARKER_RED_PARTICLE = "Aetherhaven_Rts_Marker_Red";
+    /** Model-attached static orbs that follow guards while in command view. */
+    public static final String RTS_MARKER_ORB_BLUE_PARTICLE = "Aetherhaven_Rts_Orb_Blue";
+    public static final String RTS_MARKER_ORB_GREY_PARTICLE = "Aetherhaven_Rts_Orb_Grey";
+    public static final String RTS_MARKER_ORB_RED_PARTICLE = "Aetherhaven_Rts_Orb_Red";
+    public static final String RTS_SELECT_BOX_DOT_PARTICLE = "Aetherhaven_Rts_SelectBox_Dot";
+    public static final String RTS_MOVE_ORDER_MARKER_PARTICLE = "Aetherhaven_Rts_Move_Marker";
+
     private AetherhavenConstants() {}
 }

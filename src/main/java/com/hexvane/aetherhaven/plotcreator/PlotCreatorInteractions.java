@@ -113,7 +113,7 @@ public final class PlotCreatorInteractions {
             context.getState().state = InteractionState.Finished;
             return;
         }
-        if (!runStepUseAction(session, playerRef, ref, store)) {
+        if (!runStepUseAction(session, playerRef, ref, commandBuffer)) {
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -296,8 +296,9 @@ public final class PlotCreatorInteractions {
         @Nonnull PlotCreatorSession session,
         @Nonnull PlayerRef playerRef,
         @Nonnull Ref<EntityStore> ref,
-        @Nonnull Store<EntityStore> store
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
+        Store<EntityStore> store = commandBuffer.getStore();
         PlotCreatorDraft d = session.getDraft();
         return switch (d.getStep()) {
             case WELCOME -> {
@@ -308,7 +309,7 @@ public final class PlotCreatorInteractions {
                 playerRef.sendMessage(Message.translation(MSG + ".hint.clickBlock"));
                 yield true;
             }
-            case PREFAB_SAVE -> exportPrefab(session, playerRef);
+            case PREFAB_SAVE -> exportPrefab(session, playerRef, commandBuffer);
             case KIND -> {
                 openKindPanel(playerRef, ref, store, session);
                 yield true;
@@ -334,6 +335,23 @@ public final class PlotCreatorInteractions {
     }
 
     public static boolean exportPrefab(@Nonnull PlotCreatorSession session, @Nonnull PlayerRef playerRef) {
+        session.getWorld().execute(() -> doExportPrefab(session, playerRef, null));
+        return true;
+    }
+
+    public static boolean exportPrefab(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        return doExportPrefab(session, playerRef, commandBuffer);
+    }
+
+    private static boolean doExportPrefab(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
             return false;
@@ -345,7 +363,14 @@ public final class PlotCreatorInteractions {
             return false;
         }
         Path out = CustomBuildingsPaths.prefabsDirectory(plugin.getDataDirectory()).resolve(fileName);
-        boolean ok = PlotCreatorPrefabExporter.export(session.getWorld(), d, out, d.getEditingConstructionId() != null);
+        boolean ok =
+            PlotCreatorPrefabExporter.export(
+                session.getWorld(),
+                d,
+                out,
+                d.getEditingConstructionId() != null,
+                commandBuffer
+            );
         if (!ok) {
             playerRef.sendMessage(Message.translation(MSG + ".error.prefabExport"));
             return false;
