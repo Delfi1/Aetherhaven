@@ -46,7 +46,10 @@
         "AetherhavenShopSpotBlock": {
           "SpotId": "",
           "TownId": "",
-          "PlotId": ""
+          "PlotId": "",
+          "PlayerControlled": false,
+          "LootTableId": "",
+          "Configured": false
         }
       }
     },

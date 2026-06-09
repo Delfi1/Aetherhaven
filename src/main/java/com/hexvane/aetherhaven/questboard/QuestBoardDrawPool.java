@@ -12,11 +12,15 @@ import javax.annotation.Nullable;
 
 /** Shuffle bag for quest board offers: pick without replacement until empty, then refill. */
 public final class QuestBoardDrawPool {
+    public static final String TYPE_FETCH = "fetch";
+    public static final String TYPE_HUNT = "hunt";
+    public static final String TYPE_RAID = "raid";
+
     private QuestBoardDrawPool() {}
 
     @Nonnull
-    public static String entryKey(@Nonnull String roleId, @Nonnull String entryId) {
-        return roleId.trim() + ":" + entryId.trim();
+    public static String entryKey(@Nonnull String roleId, @Nonnull String questType, @Nonnull String entryId) {
+        return roleId.trim() + ":" + questType.trim() + ":" + entryId.trim();
     }
 
     @Nullable
@@ -24,11 +28,20 @@ public final class QuestBoardDrawPool {
         if (key == null || key.isBlank()) {
             return null;
         }
-        int sep = key.indexOf(':');
-        if (sep <= 0 || sep >= key.length() - 1) {
+        String trimmed = key.trim();
+        int first = trimmed.indexOf(':');
+        if (first <= 0 || first >= trimmed.length() - 1) {
             return null;
         }
-        return new ParsedEntryKey(key.substring(0, sep).trim(), key.substring(sep + 1).trim());
+        int second = trimmed.indexOf(':', first + 1);
+        if (second > 0 && second < trimmed.length() - 1) {
+            return new ParsedEntryKey(
+                trimmed.substring(0, first).trim(),
+                trimmed.substring(first + 1, second).trim(),
+                trimmed.substring(second + 1).trim()
+            );
+        }
+        return new ParsedEntryKey(trimmed.substring(0, first).trim(), TYPE_FETCH, trimmed.substring(first + 1).trim());
     }
 
     @Nonnull
@@ -40,8 +53,10 @@ public final class QuestBoardDrawPool {
             }
             String role = slot.getGiverRoleId();
             String entry = slot.getConfigEntryId();
+            String type = slot.getQuestType();
             if (role != null && !role.isBlank() && entry != null && !entry.isBlank()) {
-                out.add(entryKey(role, entry));
+                String questType = type != null && !type.isBlank() ? type.trim() : TYPE_FETCH;
+                out.add(entryKey(role, questType, entry));
             }
         }
         return out;
@@ -87,11 +102,28 @@ public final class QuestBoardDrawPool {
         Set<String> eligibleSet = new HashSet<>(eligible);
         List<String> out = new ArrayList<>();
         for (String key : pool) {
-            if (eligibleSet.contains(key) && !excludeKeys.contains(key)) {
-                out.add(key);
+            String normalized = normalizePoolKey(key, eligibleSet);
+            if (normalized != null && eligibleSet.contains(normalized) && !excludeKeys.contains(normalized)) {
+                out.add(normalized);
             }
         }
         return out;
+    }
+
+    @Nullable
+    private static String normalizePoolKey(@Nonnull String key, @Nonnull Set<String> eligibleSet) {
+        ParsedEntryKey parsed = parseEntryKey(key);
+        if (parsed == null) {
+            return null;
+        }
+        String normalized = entryKey(parsed.roleId(), parsed.questType(), parsed.entryId());
+        if (eligibleSet.contains(normalized)) {
+            return normalized;
+        }
+        if (eligibleSet.contains(key)) {
+            return key;
+        }
+        return normalized;
     }
 
     private static void refillPool(@Nonnull TownRecord town, @Nonnull List<String> eligibleKeys, @Nonnull Random rng) {
@@ -100,5 +132,5 @@ public final class QuestBoardDrawPool {
         town.setQuestBoardDrawPool(next);
     }
 
-    public record ParsedEntryKey(@Nonnull String roleId, @Nonnull String entryId) {}
+    public record ParsedEntryKey(@Nonnull String roleId, @Nonnull String questType, @Nonnull String entryId) {}
 }

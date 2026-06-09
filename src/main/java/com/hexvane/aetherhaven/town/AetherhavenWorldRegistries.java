@@ -16,6 +16,7 @@ import com.hexvane.aetherhaven.patrol.PatrolRouteRegistry;
 import com.hexvane.aetherhaven.pathtool.PathToolPersistence;
 import com.hexvane.aetherhaven.pathtool.PathToolRegistry;
 import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
+import com.hexvane.aetherhaven.map.RaidQuestMarkerProvider;
 import com.hexvane.aetherhaven.map.TownMapMarkerProvider;
 import com.hexvane.aetherhaven.map.TownSharedMapMarkerService;
 import com.hexvane.aetherhaven.poi.PoiPersistence;
@@ -235,6 +236,7 @@ public final class AetherhavenWorldRegistries {
         com.hexvane.aetherhaven.shopspot.ShopSpotBootstrap.reconcileAfterWorldLoad(world, plugin);
         TownBorderMapOverlayService.startWorld(world);
         world.getWorldMapManager().addMarkerProvider("aetherhaven-towns", TownMapMarkerProvider.INSTANCE);
+        world.getWorldMapManager().addMarkerProvider("aetherhaven-raid-quests", RaidQuestMarkerProvider.INSTANCE);
         TownSharedMapMarkerService.purgeLegacyStoredMarkers(world);
     }
 }

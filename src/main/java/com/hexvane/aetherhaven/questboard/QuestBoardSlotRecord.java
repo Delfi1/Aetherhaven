@@ -69,6 +69,46 @@ public final class QuestBoardSlotRecord {
     @SerializedName("generationSeed")
     private long generationSeed;
 
+    @SerializedName("huntEntityTagsAny")
+    @Nullable
+    private List<String> huntEntityTagsAny;
+
+    @SerializedName("huntTargetLabelLangKey")
+    @Nullable
+    private String huntTargetLabelLangKey;
+
+    @SerializedName("huntKillRequired")
+    private int huntKillRequired;
+
+    @SerializedName("huntKillProgress")
+    private int huntKillProgress;
+
+    @SerializedName("raidTargetLabelLangKey")
+    @Nullable
+    private String raidTargetLabelLangKey;
+
+    @SerializedName("raidKillRequired")
+    private int raidKillRequired;
+
+    @SerializedName("raidKillProgress")
+    private int raidKillProgress;
+
+    @SerializedName("raidSpawnedEntityUuids")
+    @Nullable
+    private List<String> raidSpawnedEntityUuids;
+
+    @SerializedName("raidMarchMarkerUuid")
+    @Nullable
+    private String raidMarchMarkerUuid;
+
+    @SerializedName("raidMobRoleIds")
+    @Nullable
+    private List<String> raidMobRoleIds;
+
+    @SerializedName("raidApproachDirection")
+    @Nullable
+    private String raidApproachDirection;
+
     @Nonnull
     public static QuestBoardSlotRecord empty() {
         QuestBoardSlotRecord r = new QuestBoardSlotRecord();
@@ -83,6 +123,17 @@ public final class QuestBoardSlotRecord {
 
     public void setState(@Nonnull QuestBoardSlotState s) {
         this.state = s.name();
+    }
+
+    /** Restores an accepted slot back to offer state after a failed accept (e.g. raid spawn failure). */
+    public void revertAcceptance() {
+        state = QuestBoardSlotState.OFFER.name();
+        acceptedByPlayerUuid = null;
+        onlineDaysElapsed = 0;
+        huntKillProgress = 0;
+        raidKillProgress = 0;
+        raidSpawnedEntityUuids = null;
+        raidMarchMarkerUuid = null;
     }
 
     public void clearToEmpty() {
@@ -102,6 +153,17 @@ public final class QuestBoardSlotRecord {
         acceptedByPlayerUuid = null;
         onlineDaysElapsed = 0;
         generationSeed = 0L;
+        huntEntityTagsAny = null;
+        huntTargetLabelLangKey = null;
+        huntKillRequired = 0;
+        huntKillProgress = 0;
+        raidTargetLabelLangKey = null;
+        raidKillRequired = 0;
+        raidKillProgress = 0;
+        raidSpawnedEntityUuids = null;
+        raidMarchMarkerUuid = null;
+        raidMobRoleIds = null;
+        raidApproachDirection = null;
     }
 
     @Nullable
@@ -244,6 +306,124 @@ public final class QuestBoardSlotRecord {
 
     public void setGenerationSeed(long generationSeed) {
         this.generationSeed = generationSeed;
+    }
+
+    @Nonnull
+    public List<String> huntEntityTagsAnyOrEmpty() {
+        if (huntEntityTagsAny == null) {
+            huntEntityTagsAny = new ArrayList<>();
+        }
+        return huntEntityTagsAny;
+    }
+
+    public void setHuntEntityTagsAny(@Nonnull List<String> tags) {
+        this.huntEntityTagsAny = new ArrayList<>(tags);
+    }
+
+    @Nullable
+    public String getHuntTargetLabelLangKey() {
+        return huntTargetLabelLangKey;
+    }
+
+    public void setHuntTargetLabelLangKey(@Nullable String huntTargetLabelLangKey) {
+        this.huntTargetLabelLangKey = huntTargetLabelLangKey;
+    }
+
+    public int getHuntKillRequired() {
+        return Math.max(0, huntKillRequired);
+    }
+
+    public void setHuntKillRequired(int huntKillRequired) {
+        this.huntKillRequired = Math.max(0, huntKillRequired);
+    }
+
+    public int getHuntKillProgress() {
+        return Math.max(0, huntKillProgress);
+    }
+
+    public void setHuntKillProgress(int huntKillProgress) {
+        this.huntKillProgress = Math.max(0, huntKillProgress);
+    }
+
+    public boolean isHuntQuest() {
+        return questType != null && "hunt".equalsIgnoreCase(questType.trim());
+    }
+
+    public boolean isRaidQuest() {
+        return questType != null && "raid".equalsIgnoreCase(questType.trim());
+    }
+
+    @Nullable
+    public String getRaidTargetLabelLangKey() {
+        return raidTargetLabelLangKey;
+    }
+
+    public void setRaidTargetLabelLangKey(@Nullable String raidTargetLabelLangKey) {
+        this.raidTargetLabelLangKey = raidTargetLabelLangKey;
+    }
+
+    public int getRaidKillRequired() {
+        return Math.max(0, raidKillRequired);
+    }
+
+    public void setRaidKillRequired(int raidKillRequired) {
+        this.raidKillRequired = Math.max(0, raidKillRequired);
+    }
+
+    public int getRaidKillProgress() {
+        return Math.max(0, raidKillProgress);
+    }
+
+    public void setRaidKillProgress(int raidKillProgress) {
+        this.raidKillProgress = Math.max(0, raidKillProgress);
+    }
+
+    @Nonnull
+    public List<String> raidSpawnedEntityUuidsOrEmpty() {
+        if (raidSpawnedEntityUuids == null) {
+            raidSpawnedEntityUuids = new ArrayList<>();
+        }
+        return raidSpawnedEntityUuids;
+    }
+
+    public void setRaidSpawnedEntityUuids(@Nonnull List<String> uuids) {
+        this.raidSpawnedEntityUuids = new ArrayList<>(uuids);
+    }
+
+    @Nullable
+    public String getRaidMarchMarkerUuid() {
+        return raidMarchMarkerUuid;
+    }
+
+    public void setRaidMarchMarkerUuid(@Nullable String raidMarchMarkerUuid) {
+        this.raidMarchMarkerUuid = raidMarchMarkerUuid;
+    }
+
+    @Nonnull
+    public List<String> raidMobRoleIdsOrEmpty() {
+        if (raidMobRoleIds == null) {
+            raidMobRoleIds = new ArrayList<>();
+        }
+        return raidMobRoleIds;
+    }
+
+    public void setRaidMobRoleIds(@Nonnull List<String> roleIds) {
+        this.raidMobRoleIds = new ArrayList<>(roleIds);
+    }
+
+    @Nullable
+    public String getRaidApproachDirection() {
+        return raidApproachDirection;
+    }
+
+    public void setRaidApproachDirection(@Nullable String raidApproachDirection) {
+        this.raidApproachDirection = raidApproachDirection;
+    }
+
+    @Nonnull
+    public RaidApproachDirection raidApproachDirectionEnum() {
+        RaidApproachDirection parsed = RaidApproachDirection.fromId(raidApproachDirection);
+        return parsed != null ? parsed : RaidApproachDirection.NORTH;
     }
 
     public boolean isAccepted() {

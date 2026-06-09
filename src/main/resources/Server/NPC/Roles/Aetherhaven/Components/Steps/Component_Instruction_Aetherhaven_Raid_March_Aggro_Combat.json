@@ -1,0 +1,24 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "$Comment": "While marching, break off for hostile players or NPCs in line of sight.",
+  "Parameters": {
+    "_ImportStates": ["Combat"],
+    "DetectRange": {
+      "Value": 20,
+      "Description": "Range to spot hostile targets while marching toward town."
+    }
+  },
+  "Content": {
+    "Sensor": {
+      "Type": "Mob",
+      "Range": { "Compute": "DetectRange" },
+      "LockOnTarget": true,
+      "GetPlayers": true,
+      "GetNPCs": true,
+      "Filters": [{ "Type": "LineOfSight" }],
+      "Prioritiser": { "Type": "Attitude", "AttitudesByPriority": ["Hostile"] }
+    },
+    "Actions": [{ "Type": "ParentState", "State": "Combat" }]
+  }
+}

@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.questboard;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardFetchEntryJson;
+import com.hexvane.aetherhaven.questboard.data.QuestBoardHuntEntryJson;
+import com.hexvane.aetherhaven.questboard.data.QuestBoardRaidEntryJson;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -14,6 +16,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +36,8 @@ public final class QuestBoardService {
 
     static {
         register(new FetchQuestBoardHandler());
+        register(new HuntQuestBoardHandler());
+        register(new RaidQuestBoardHandler());
     }
 
     private QuestBoardService() {}
@@ -65,6 +70,26 @@ public final class QuestBoardService {
 
     public static boolean isBoardJournalRow(@Nullable String rowId) {
         return parseJournalInstanceId(rowId) != null;
+    }
+
+    /** Whether {@code rowId} is an active quest in the town journal (dialogue or board slot). */
+    public static boolean isActiveJournalQuest(@Nonnull TownRecord town, @Nonnull String rowId) {
+        String id = rowId.trim();
+        if (id.isEmpty()) {
+            return false;
+        }
+        if (town.getActiveQuestIdsSnapshot().contains(id)) {
+            return true;
+        }
+        if (!isBoardJournalRow(id)) {
+            return false;
+        }
+        String instanceId = parseJournalInstanceId(id);
+        if (instanceId == null) {
+            return false;
+        }
+        QuestBoardSlotRecord slot = town.findBoardSlotByInstanceId(instanceId);
+        return slot != null && slot.isAccepted();
     }
 
     public static void ensureBoardInitialized(
@@ -123,8 +148,10 @@ public final class QuestBoardService {
         if (current != null && current.stateEnum() != QuestBoardSlotState.EMPTY) {
             String role = current.getGiverRoleId();
             String entry = current.getConfigEntryId();
+            String type = current.getQuestType();
             if (role != null && entry != null) {
-                exclude.remove(QuestBoardDrawPool.entryKey(role, entry));
+                String questType = type != null && !type.isBlank() ? type.trim() : QuestBoardDrawPool.TYPE_FETCH;
+                exclude.remove(QuestBoardDrawPool.entryKey(role, questType, entry));
             }
         }
         return generateOffer(town, store, catalog, slotIndex, rng, exclude);
@@ -149,7 +176,11 @@ public final class QuestBoardService {
 
         int townRankIndex = TownQuestBoardRank.rankIndex(TownQuestBoardRank.tierIdForXp(town.getQuestBoardRankXp(), catalog));
         List<String> eligibleKeys = buildEligibleEntryKeys(town, store, catalog, townRankIndex);
-        String pickedKey = QuestBoardDrawPool.pickEntryKey(town, eligibleKeys, excludeKeys, rng);
+        List<String> typeFiltered = filterEligibleByQuestType(eligibleKeys, excludeKeys, catalog, rng);
+        if (typeFiltered.isEmpty()) {
+            typeFiltered = eligibleKeys.stream().filter(k -> !excludeKeys.contains(k)).distinct().toList();
+        }
+        String pickedKey = QuestBoardDrawPool.pickEntryKey(town, typeFiltered, excludeKeys, rng);
         if (pickedKey == null) {
             slot.clearToEmpty();
             return false;
@@ -160,11 +191,6 @@ public final class QuestBoardService {
             slot.clearToEmpty();
             return false;
         }
-        QuestBoardFetchEntryJson entry = findFetchEntry(catalog, parsed.roleId(), parsed.entryId());
-        if (entry == null) {
-            slot.clearToEmpty();
-            return false;
-        }
         List<TownVillagerRow> givers = giversForRole(town, store, parsed.roleId());
         if (givers.isEmpty()) {
             slot.clearToEmpty();
@@ -172,23 +198,63 @@ public final class QuestBoardService {
         }
         TownVillagerRow giver = givers.get(rng.nextInt(givers.size()));
 
-        QuestBoardQuestTypeHandler handler = handlerFor(FetchQuestBoardHandler.TYPE_ID);
-        if (handler == null) {
-            slot.clearToEmpty();
-            return false;
-        }
         slot.clearToEmpty();
-        boolean ok =
-            handler.populateSlot(
-                slot,
-                town,
-                store,
-                giver.roleId(),
-                giver.entityUuid().toString(),
-                entry,
-                catalog,
-                rng
-            );
+        boolean ok = false;
+        if (QuestBoardDrawPool.TYPE_HUNT.equalsIgnoreCase(parsed.questType())) {
+            QuestBoardHuntEntryJson huntEntry = findHuntEntry(catalog, parsed.roleId(), parsed.entryId());
+            if (huntEntry != null) {
+                QuestBoardQuestTypeHandler handler = handlerFor(HuntQuestBoardHandler.TYPE_ID);
+                if (handler instanceof HuntQuestBoardHandler huntHandler) {
+                    ok =
+                        huntHandler.populateSlot(
+                            slot,
+                            town,
+                            store,
+                            giver.roleId(),
+                            giver.entityUuid().toString(),
+                            huntEntry,
+                            catalog,
+                            rng
+                        );
+                }
+            }
+        } else if (QuestBoardDrawPool.TYPE_RAID.equalsIgnoreCase(parsed.questType())) {
+            QuestBoardRaidEntryJson raidEntry = findRaidEntry(catalog, parsed.roleId(), parsed.entryId());
+            if (raidEntry != null) {
+                QuestBoardQuestTypeHandler handler = handlerFor(RaidQuestBoardHandler.TYPE_ID);
+                if (handler instanceof RaidQuestBoardHandler raidHandler) {
+                    ok =
+                        raidHandler.populateSlot(
+                            slot,
+                            town,
+                            store,
+                            giver.roleId(),
+                            giver.entityUuid().toString(),
+                            raidEntry,
+                            catalog,
+                            rng
+                        );
+                }
+            }
+        } else {
+            QuestBoardFetchEntryJson fetchEntry = findFetchEntry(catalog, parsed.roleId(), parsed.entryId());
+            if (fetchEntry != null) {
+                QuestBoardQuestTypeHandler handler = handlerFor(FetchQuestBoardHandler.TYPE_ID);
+                if (handler != null) {
+                    ok =
+                        handler.populateSlot(
+                            slot,
+                            town,
+                            store,
+                            giver.roleId(),
+                            giver.entityUuid().toString(),
+                            fetchEntry,
+                            catalog,
+                            rng
+                        );
+                }
+            }
+        }
         if (!ok) {
             slot.clearToEmpty();
         }
@@ -202,8 +268,65 @@ public final class QuestBoardService {
         String role = slot.getGiverRoleId();
         String entry = slot.getConfigEntryId();
         if (role != null && !role.isBlank() && entry != null && !entry.isBlank()) {
-            excludeKeys.add(QuestBoardDrawPool.entryKey(role, entry));
+            String questType = slot.getQuestType() != null && !slot.getQuestType().isBlank()
+                ? slot.getQuestType().trim()
+                : QuestBoardDrawPool.TYPE_FETCH;
+            excludeKeys.add(QuestBoardDrawPool.entryKey(role, questType, entry));
         }
+    }
+
+    @Nonnull
+    private static List<String> filterEligibleByQuestType(
+        @Nonnull List<String> eligibleKeys,
+        @Nonnull Set<String> excludeKeys,
+        @Nonnull QuestBoardCatalog catalog,
+        @Nonnull Random rng
+    ) {
+        Map<String, List<String>> byType = new HashMap<>();
+        for (String key : eligibleKeys) {
+            if (excludeKeys.contains(key)) {
+                continue;
+            }
+            QuestBoardDrawPool.ParsedEntryKey parsed = QuestBoardDrawPool.parseEntryKey(key);
+            if (parsed == null) {
+                continue;
+            }
+            byType.computeIfAbsent(parsed.questType(), t -> new ArrayList<>()).add(key);
+        }
+        if (byType.isEmpty()) {
+            return List.of();
+        }
+        String pickedType = rollQuestType(catalog, byType.keySet(), rng);
+        List<String> filtered = byType.get(pickedType);
+        return filtered != null ? filtered : List.of();
+    }
+
+    @Nonnull
+    private static String rollQuestType(@Nonnull QuestBoardCatalog catalog, @Nonnull Set<String> availableTypes, @Nonnull Random rng) {
+        int total = 0;
+        List<String> types = new ArrayList<>();
+        List<Integer> weights = new ArrayList<>();
+        for (String type : availableTypes) {
+            int w = catalog.questTypeWeight(type);
+            if (w <= 0) {
+                w = QuestBoardDrawPool.TYPE_FETCH.equals(type) ? 100 : 1;
+            }
+            types.add(type);
+            weights.add(w);
+            total += w;
+        }
+        if (total <= 0) {
+            return types.get(rng.nextInt(types.size()));
+        }
+        int roll = rng.nextInt(total);
+        int acc = 0;
+        for (int i = 0; i < types.size(); i++) {
+            acc += weights.get(i);
+            if (roll < acc) {
+                return types.get(i);
+            }
+        }
+        return types.get(types.size() - 1);
     }
 
     @Nonnull
@@ -224,13 +347,65 @@ public final class QuestBoardService {
                 if (entry.id() == null || entry.id().isBlank()) {
                     continue;
                 }
-                String key = QuestBoardDrawPool.entryKey(roleId, entry.id());
+                String key = QuestBoardDrawPool.entryKey(roleId, QuestBoardDrawPool.TYPE_FETCH, entry.id());
+                if (seen.add(key)) {
+                    out.add(key);
+                }
+            }
+            for (QuestBoardHuntEntryJson entry : catalog.huntEntriesForRole(roleId)) {
+                if (!TownQuestBoardRank.townRankWithinWindow(townRankIndex, entry.minRank(), entry.maxRank())) {
+                    continue;
+                }
+                if (entry.id() == null || entry.id().isBlank()) {
+                    continue;
+                }
+                String key = QuestBoardDrawPool.entryKey(roleId, QuestBoardDrawPool.TYPE_HUNT, entry.id());
+                if (seen.add(key)) {
+                    out.add(key);
+                }
+            }
+            for (QuestBoardRaidEntryJson entry : catalog.raidEntriesForRole(roleId)) {
+                if (!TownQuestBoardRank.townRankWithinWindow(townRankIndex, entry.minRank(), entry.maxRank())) {
+                    continue;
+                }
+                if (entry.id() == null || entry.id().isBlank()) {
+                    continue;
+                }
+                String key = QuestBoardDrawPool.entryKey(roleId, QuestBoardDrawPool.TYPE_RAID, entry.id());
                 if (seen.add(key)) {
                     out.add(key);
                 }
             }
         }
         return out;
+    }
+
+    @Nullable
+    private static QuestBoardHuntEntryJson findHuntEntry(
+        @Nonnull QuestBoardCatalog catalog,
+        @Nonnull String roleId,
+        @Nonnull String entryId
+    ) {
+        for (QuestBoardHuntEntryJson entry : catalog.huntEntriesForRole(roleId)) {
+            if (entryId.equalsIgnoreCase(entry.id())) {
+                return entry;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static QuestBoardRaidEntryJson findRaidEntry(
+        @Nonnull QuestBoardCatalog catalog,
+        @Nonnull String roleId,
+        @Nonnull String entryId
+    ) {
+        for (QuestBoardRaidEntryJson entry : catalog.raidEntriesForRole(roleId)) {
+            if (entryId.equalsIgnoreCase(entry.id())) {
+                return entry;
+            }
+        }
+        return null;
     }
 
     @Nullable
@@ -262,7 +437,14 @@ public final class QuestBoardService {
         return out;
     }
 
-    public static boolean acceptOffer(@Nonnull TownRecord town, @Nonnull UUID playerUuid, int slotIndex, @Nonnull QuestBoardCatalog catalog) {
+    public static boolean acceptOffer(
+        @Nonnull TownRecord town,
+        @Nonnull UUID playerUuid,
+        int slotIndex,
+        @Nonnull QuestBoardCatalog catalog,
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store
+    ) {
         town.ensureQuestBoardSlotCount(catalog.slotCount());
         if (slotIndex < 0 || slotIndex >= catalog.slotCount()) {
             return false;
@@ -277,10 +459,29 @@ public final class QuestBoardService {
         slot.setState(QuestBoardSlotState.ACCEPTED);
         slot.setAcceptedByPlayerUuid(playerUuid.toString());
         slot.setOnlineDaysElapsed(0);
+        if (slot.isHuntQuest()) {
+            slot.setHuntKillProgress(0);
+        }
+        if (slot.isRaidQuest()) {
+            slot.setRaidKillProgress(0);
+            slot.setRaidSpawnedEntityUuids(new ArrayList<>());
+            if (!RaidQuestSpawnService.startRaid(town, slot, world, store, playerUuid)) {
+                RaidQuestSpawnService.cleanupRaid(slot, world, store, town.getTownId());
+                slot.revertAcceptance();
+                return false;
+            }
+        }
         return true;
     }
 
-    public static boolean abandonOffer(@Nonnull TownRecord town, @Nonnull UUID playerUuid, int slotIndex, @Nonnull QuestBoardCatalog catalog) {
+    public static boolean abandonOffer(
+        @Nonnull TownRecord town,
+        @Nonnull UUID playerUuid,
+        int slotIndex,
+        @Nonnull QuestBoardCatalog catalog,
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store
+    ) {
         town.ensureQuestBoardSlotCount(catalog.slotCount());
         if (slotIndex < 0 || slotIndex >= catalog.slotCount()) {
             return false;
@@ -292,7 +493,10 @@ public final class QuestBoardService {
         if (slot.stateEnum() != QuestBoardSlotState.ACCEPTED) {
             return false;
         }
-        slot.clearToEmpty();
+        if (slot.isRaidQuest()) {
+            RaidQuestSpawnService.cleanupRaid(slot, world, store, town.getTownId());
+        }
+        slot.markCompleted();
         return true;
     }
 
@@ -300,7 +504,9 @@ public final class QuestBoardService {
         @Nonnull TownRecord town,
         @Nonnull UUID playerUuid,
         @Nonnull String instanceId,
-        @Nonnull QuestBoardCatalog catalog
+        @Nonnull QuestBoardCatalog catalog,
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store
     ) {
         town.ensureQuestBoardSlotCount(catalog.slotCount());
         for (int i = 0; i < town.getQuestBoardSlots().size(); i++) {
@@ -309,7 +515,10 @@ public final class QuestBoardService {
                 if (!town.playerCanAbandonQuests(playerUuid)) {
                     return false;
                 }
-                slot.clearToEmpty();
+                if (slot.isRaidQuest()) {
+                    RaidQuestSpawnService.cleanupRaid(slot, world, store, town.getTownId());
+                }
+                slot.markCompleted();
                 return true;
             }
         }
@@ -340,11 +549,23 @@ public final class QuestBoardService {
         @Nonnull QuestBoardCatalog catalog,
         @Nonnull Random rng
     ) {
+        return completeBoardQuest(town, tm, playerRef, store, giverEntityUuid, catalog, rng);
+    }
+
+    public static boolean completeBoardQuest(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID giverEntityUuid,
+        @Nonnull QuestBoardCatalog catalog,
+        @Nonnull Random rng
+    ) {
         QuestBoardSlotRecord slot = town.findAcceptedBoardQuestForGiver(giverEntityUuid);
-        if (slot == null || !FetchQuestBoardHandler.TYPE_ID.equals(slot.getQuestType())) {
+        if (slot == null || slot.getQuestType() == null || slot.getQuestType().isBlank()) {
             return false;
         }
-        QuestBoardQuestTypeHandler handler = handlerFor(FetchQuestBoardHandler.TYPE_ID);
+        QuestBoardQuestTypeHandler handler = handlerFor(slot.getQuestType());
         if (handler == null || !handler.consumeRequiredItems(playerRef, store, slot)) {
             return false;
         }
@@ -360,6 +581,9 @@ public final class QuestBoardService {
         String oldTier = TownQuestBoardRank.tierIdForXp(oldXp, catalog);
         String newTier = TownQuestBoardRank.tierIdForXp(newXp, catalog);
 
+        if (slot.isRaidQuest()) {
+            RaidQuestSpawnService.cleanupRaid(slot, store.getExternalData().getWorld(), store, town.getTownId());
+        }
         slot.markCompleted();
         tm.updateTown(town);
 
@@ -409,6 +633,9 @@ public final class QuestBoardService {
     ) {
         if (!slot.isAccepted()) {
             return;
+        }
+        if (slot.isRaidQuest()) {
+            RaidQuestSpawnService.cleanupRaid(slot, store.getExternalData().getWorld(), store, town.getTownId());
         }
         int slotIndex = slotIndexForInstanceId(town, slot.instanceIdOrEmpty());
         slot.clearToEmpty();

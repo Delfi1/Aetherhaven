@@ -44,6 +44,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -398,17 +399,17 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     ) {
         commandBuilder.clear(CHOICES_ROOT);
         QuestBoardTurnInRow turnIn = resolveQuestBoardTurnIn(ref, store);
-        boolean turnInInserted = false;
         int uiSlot = 0;
-        for (int i = 0; i < node.getChoices().size(); i++) {
-            DialogueChoiceDefinition ch = node.getChoices().get(i);
-            if (ch.closesDialogue() && turnIn != null && !turnInInserted) {
+        List<DialogueChoiceDefinition> choices = node.getChoices();
+        int lastChoiceIndex = choices.isEmpty() ? -1 : choices.size() - 1;
+        for (int i = 0; i < choices.size(); i++) {
+            if (i == lastChoiceIndex && turnIn != null) {
                 uiSlot = appendQuestBoardTurnInRow(commandBuilder, eventBuilder, uiSlot, turnIn);
-                turnInInserted = true;
             }
-            uiSlot = appendDialogueChoiceRow(ref, store, commandBuilder, eventBuilder, ch, i, uiSlot);
+            uiSlot =
+                appendDialogueChoiceRow(ref, store, commandBuilder, eventBuilder, choices.get(i), i, uiSlot);
         }
-        if (turnIn != null && !turnInInserted) {
+        if (turnIn != null && lastChoiceIndex < 0) {
             appendQuestBoardTurnInRow(commandBuilder, eventBuilder, uiSlot, turnIn);
         }
     }
@@ -506,8 +507,8 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         com.hexvane.aetherhaven.questboard.QuestBoardQuestTypeHandler handler =
             com.hexvane.aetherhaven.questboard.QuestBoardService.handlerFor(slot.getQuestType());
-        boolean hasItems = handler != null && handler.hasRequiredItems(ref, store, slot);
-        return new QuestBoardTurnInRow(hasItems);
+        boolean ready = handler != null && handler.hasRequiredItems(ref, store, slot);
+        return new QuestBoardTurnInRow(ready, slot.isHuntQuest(), slot.isRaidQuest());
     }
 
     private int appendQuestBoardTurnInRow(
@@ -517,19 +518,33 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         @Nonnull QuestBoardTurnInRow turnIn
     ) {
         Message choiceLine =
-            Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnIn");
-        if (!turnIn.hasItems()) {
+            Message.translation(
+                turnIn.raidQuest()
+                    ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInRaid"
+                    : turnIn.huntQuest()
+                        ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInHunt"
+                        : "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnIn"
+            );
+        if (!turnIn.ready()) {
             choiceLine =
                 choiceLine
                     .insert(Message.raw("  "))
-                    .insert(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInMissing"));
+                    .insert(
+                        Message.translation(
+                            turnIn.raidQuest()
+                                ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInRaidMissing"
+                                : turnIn.huntQuest()
+                                    ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInHuntMissing"
+                                    : "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInMissing"
+                        )
+                    );
         }
         commandBuilder.append(CHOICES_ROOT, "Aetherhaven/DialogueChoiceRow.ui");
         String sel = choiceRowSelector(uiSlot);
         commandBuilder.set(sel + " #Text.TextSpans", choiceLine);
-        commandBuilder.set(sel + ".Disabled", !turnIn.hasItems());
-        commandBuilder.set(sel + " #Text.Style.TextColor", turnIn.hasItems() ? "#f0e6d2" : "#6d6658");
-        if (turnIn.hasItems()) {
+        commandBuilder.set(sel + ".Disabled", !turnIn.ready());
+        commandBuilder.set(sel + " #Text.Style.TextColor", turnIn.ready() ? "#f0e6d2" : "#6d6658");
+        if (turnIn.ready()) {
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 sel,
@@ -540,7 +555,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         return uiSlot + 1;
     }
 
-    private record QuestBoardTurnInRow(boolean hasItems) {}
+    private record QuestBoardTurnInRow(boolean ready, boolean huntQuest, boolean raidQuest) {}
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull DialogueEventData data) {
@@ -599,7 +614,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return;
         }
         java.util.Random rng = new java.util.Random(nu.getUuid().getMostSignificantBits() ^ System.nanoTime());
-        if (com.hexvane.aetherhaven.questboard.QuestBoardService.completeFetchQuest(
+        if (com.hexvane.aetherhaven.questboard.QuestBoardService.completeBoardQuest(
             town, tm, ref, store, nu.getUuid(), plugin.getQuestBoardCatalog(), rng
         )) {
             close();

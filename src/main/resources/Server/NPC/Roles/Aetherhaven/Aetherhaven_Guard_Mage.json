@@ -19,7 +19,7 @@
   "DefaultNPCAttitude": "Neutral",
   "DefaultPlayerAttitude": "Neutral",
   "Appearance": "Male_Human_01",
-  "MaxHealth": 90,
+  "MaxHealth": 180,
   "IsMemory": false,
   "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },
   "DisableDamageGroups": ["Self", "Player", "Aetherhaven_Townsfolk", "Friendly"],

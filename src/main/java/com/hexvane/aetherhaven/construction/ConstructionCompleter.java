@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.inn.MinerHutCompletion;
 import com.hexvane.aetherhaven.guild.GuildHallCompletion;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
+import com.hexvane.aetherhaven.shopspot.ShopSpotExtractor;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
@@ -127,6 +128,7 @@ public final class ConstructionCompleter {
                     prefabAnchorWorld,
                     prefabYaw
                 );
+                ShopSpotExtractor.registerForCompletedBuild(world, plugin, entityStore, town, plotId, plot);
             }
             stampManagementBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
             stampTreasuryBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);

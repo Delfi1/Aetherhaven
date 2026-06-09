@@ -1,0 +1,24 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "$Comment": "March aggro for roles that enter Chase rather than Combat (e.g. void spectres and eyes).",
+  "Parameters": {
+    "_ImportStates": ["Chase"],
+    "DetectRange": {
+      "Value": 20,
+      "Description": "Range to spot hostile targets while marching toward town."
+    }
+  },
+  "Content": {
+    "Sensor": {
+      "Type": "Mob",
+      "Range": { "Compute": "DetectRange" },
+      "LockOnTarget": true,
+      "GetPlayers": true,
+      "GetNPCs": true,
+      "Filters": [{ "Type": "LineOfSight" }],
+      "Prioritiser": { "Type": "Attitude", "AttitudesByPriority": ["Hostile"] }
+    },
+    "Actions": [{ "Type": "ParentState", "State": "Chase" }]
+  }
+}

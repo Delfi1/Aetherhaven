@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.shopspot;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorSessions;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
@@ -14,7 +15,9 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
+import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.ecs.PlaceBlockEvent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -50,41 +53,57 @@ public final class ShopSpotPlaceEventSystem extends EntityEventSystem<EntityStor
         }
         Vector3i pos = new Vector3i(event.getTargetBlock());
         World world = store.getExternalData().getWorld();
+        Ref<EntityStore> playerRef = archetypeChunk.getReferenceTo(index);
+        Player player = store.getComponent(playerRef, Player.getComponentType());
+        UUIDComponent uc = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        boolean creative = player != null && player.getGameMode() == GameMode.Creative;
+        boolean plotCreatorBounds = false;
+        if (uc != null) {
+            var session = PlotCreatorSessions.get(uc.getUuid());
+            plotCreatorBounds = session != null && session.getDraft().isInsideBounds(pos);
+        }
+
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.findTownContainingBlock(world.getName(), pos.x(), pos.z());
-        if (town == null) {
+        PlotInstance plot = town != null ? town.findCompletePlotContaining(pos.x(), pos.y(), pos.z()) : null;
+        boolean inCompletePlot = plot != null && plot.getState() == PlotInstanceState.COMPLETE;
+
+        if (!inCompletePlot && !plotCreatorBounds && !creative) {
             event.setCancelled(true);
-            send(archetypeChunk, commandBuffer, index, Message.translation(MSG + ".notInTown"));
+            if (town == null) {
+                send(archetypeChunk, commandBuffer, index, Message.translation(MSG + ".notInTown"));
+            } else {
+                send(archetypeChunk, commandBuffer, index, Message.translation(MSG + ".notInPlot"));
+            }
             return;
         }
-        PlotInstance plot = town.findCompletePlotContaining(pos.x(), pos.y(), pos.z());
-        if (plot == null || plot.getState() != PlotInstanceState.COMPLETE) {
-            event.setCancelled(true);
-            send(archetypeChunk, commandBuffer, index, Message.translation(MSG + ".notInPlot"));
-            return;
-        }
-        Ref<EntityStore> playerRef = archetypeChunk.getReferenceTo(index);
+
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr == null) {
             event.setCancelled(true);
             return;
         }
+
         UUID spotId = UUID.randomUUID();
-        if (!ShopSpotBlockUtil.writeBlockComponent(world, pos, spotId.toString(), town.getTownId().toString(), plot.getPlotId().toString())) {
-            world.execute(() ->
-                finishPlacementDeferred(world, pos, spotId, town, plot, playerRef, pr)
-            );
+        String townId = town != null ? town.getTownId().toString() : "";
+        String plotId = inCompletePlot && plot != null ? plot.getPlotId().toString() : "";
+        ShopSpotBlock block =
+            new ShopSpotBlock(spotId.toString(), townId, plotId, false, AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS, false);
+
+        if (!ShopSpotBlockUtil.writeBlockComponent(world, pos, block)) {
+            world.execute(() -> finishPlacementDeferred(world, pos, spotId, town, plot, inCompletePlot, playerRef, pr));
             return;
         }
-        finishPlacement(world, pos, spotId, town, plot, playerRef, pr, commandBuffer);
+        finishPlacement(world, pos, spotId, town, plot, inCompletePlot, playerRef, pr, commandBuffer);
     }
 
     private void finishPlacement(
         @Nonnull World world,
         @Nonnull Vector3i pos,
         @Nonnull UUID spotId,
-        @Nonnull TownRecord town,
-        @Nonnull PlotInstance plot,
+        @Nullable TownRecord town,
+        @Nullable PlotInstance plot,
+        boolean inCompletePlot,
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull PlayerRef playerRefComp,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
@@ -94,8 +113,12 @@ public final class ShopSpotPlaceEventSystem extends EntityEventSystem<EntityStor
         record.setSpotId(spotId);
         record.setWorldName(world.getName());
         record.setBlockPosition(pos);
-        record.setTownId(town.getTownId());
-        record.setPlotId(plot.getPlotId());
+        if (town != null) {
+            record.setTownId(town.getTownId());
+        }
+        if (inCompletePlot && plot != null) {
+            record.setPlotId(plot.getPlotId());
+        }
         record.setLootTableId(AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS);
         record.setDisplayYawRadians(ShopSpotDisplayRotation.yawFromBlockAt(world, pos));
         registry.put(record);
@@ -105,7 +128,9 @@ public final class ShopSpotPlaceEventSystem extends EntityEventSystem<EntityStor
         if (st == null) {
             st = new ShopSpotPlayerComponent();
         }
-        st.setPendingPlacement(spotId, town.getTownId(), plot.getPlotId(), pos);
+        UUID townId = town != null ? town.getTownId() : new UUID(0L, 0L);
+        UUID plotId = inCompletePlot && plot != null ? plot.getPlotId() : new UUID(0L, 0L);
+        st.setPendingPlacement(spotId, townId, plotId, pos);
         commandBuffer.putComponent(playerRef, ShopSpotPlayerComponent.getComponentType(), st);
 
         Player player = commandBuffer.getComponent(playerRef, Player.getComponentType());
@@ -118,13 +143,18 @@ public final class ShopSpotPlaceEventSystem extends EntityEventSystem<EntityStor
         @Nonnull World world,
         @Nonnull Vector3i pos,
         @Nonnull UUID spotId,
-        @Nonnull TownRecord town,
-        @Nonnull PlotInstance plot,
+        @Nullable TownRecord town,
+        @Nullable PlotInstance plot,
+        boolean inCompletePlot,
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull PlayerRef playerRefComp
     ) {
+        String townId = town != null ? town.getTownId().toString() : "";
+        String plotId = inCompletePlot && plot != null ? plot.getPlotId().toString() : "";
         ShopSpotBlockUtil.writeBlockComponent(
-            world, pos, spotId.toString(), town.getTownId().toString(), plot.getPlotId().toString()
+            world,
+            pos,
+            new ShopSpotBlock(spotId.toString(), townId, plotId, false, AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS, false)
         );
         Store<EntityStore> store = world.getEntityStore().getStore();
         if (store == null) {
@@ -135,8 +165,12 @@ public final class ShopSpotPlaceEventSystem extends EntityEventSystem<EntityStor
         record.setSpotId(spotId);
         record.setWorldName(world.getName());
         record.setBlockPosition(pos);
-        record.setTownId(town.getTownId());
-        record.setPlotId(plot.getPlotId());
+        if (town != null) {
+            record.setTownId(town.getTownId());
+        }
+        if (inCompletePlot && plot != null) {
+            record.setPlotId(plot.getPlotId());
+        }
         record.setLootTableId(AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS);
         record.setDisplayYawRadians(ShopSpotDisplayRotation.yawFromBlockAt(world, pos));
         registry.put(record);
@@ -146,7 +180,9 @@ public final class ShopSpotPlaceEventSystem extends EntityEventSystem<EntityStor
         if (st == null) {
             st = new ShopSpotPlayerComponent();
         }
-        st.setPendingPlacement(spotId, town.getTownId(), plot.getPlotId(), pos);
+        UUID pendingTownId = town != null ? town.getTownId() : new UUID(0L, 0L);
+        UUID pendingPlotId = inCompletePlot && plot != null ? plot.getPlotId() : new UUID(0L, 0L);
+        st.setPendingPlacement(spotId, pendingTownId, pendingPlotId, pos);
         store.putComponent(playerRef, ShopSpotPlayerComponent.getComponentType(), st);
 
         Player player = store.getComponent(playerRef, Player.getComponentType());

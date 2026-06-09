@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 public final class PrefabIsometricIconRenderer {
     public static final int ICON_SIZE = 64;
     private static final float CANVAS_FILL = 0.92f;
-
     private PrefabIsometricIconRenderer() {}
 
     @Nullable
@@ -80,9 +79,9 @@ public final class PrefabIsometricIconRenderer {
     private static List<Voxel> buildSortedVoxels(@Nonnull List<BlockCell> cells, @Nonnull TileGrid grid) {
         List<Voxel> voxels = new ArrayList<>(cells.size());
         for (BlockCell cell : cells) {
-            int cx = grid.originX() + (cell.x - cell.z) * grid.tileHalfW();
-            int cy = grid.originY() - (cell.x + cell.z) * grid.groundSlope() - cell.y * grid.vertStep();
-            voxels.add(new Voxel(cell.x, cell.y, cell.z, cx, cy, cell.faces()));
+            int cx = projectScreenX(cell.x, cell.z, grid);
+            int cy = projectScreenY(cell.x, cell.y, cell.z, grid);
+            voxels.add(new Voxel(cell.x, cell.y, cell.z, cx, cy, viewFaces(cell.faces())));
         }
 
         // One Y level at a time (bottom to top); within each level, back-to-front by x+z diagonal.
@@ -93,6 +92,31 @@ public final class PrefabIsometricIconRenderer {
                 .thenComparingInt(Voxel::z)
         );
         return voxels;
+    }
+
+    private static int projectScreenX(int x, int z, @Nonnull TileGrid grid) {
+        return projectScreenX(x, z, grid.tileHalfW(), grid.originX());
+    }
+
+    private static int projectScreenY(int x, int y, int z, @Nonnull TileGrid grid) {
+        return projectScreenY(x, y, z, grid.groundSlope(), grid.vertStep(), grid.originY());
+    }
+
+    /**
+     * Prefab-local axes are read as-is from the relativized buffer. {@code (z - x, x + z)} places the building front
+     * toward the bottom-right of the icon (door down-right), matching in-game plot facing.
+     */
+    private static int projectScreenX(int x, int z, int tileHalfW, int originX) {
+        return originX + (z - x) * tileHalfW;
+    }
+
+    private static int projectScreenY(int x, int y, int z, int groundSlope, int vertStep, int originY) {
+        return originY + (x + z) * groundSlope - y * vertStep;
+    }
+
+    @Nonnull
+    private static BlockColorResolver.FaceColors viewFaces(@Nonnull BlockColorResolver.FaceColors faces) {
+        return new BlockColorResolver.FaceColors(faces.top(), faces.right(), faces.left());
     }
 
     private static void paintVoxels(
@@ -299,8 +323,8 @@ public final class PrefabIsometricIconRenderer {
         int minY = Integer.MAX_VALUE;
         int maxY = Integer.MIN_VALUE;
         for (BlockCell cell : cells) {
-            int cx = originX + (cell.x - cell.z) * tileHalfW;
-            int cy = originY - (cell.x + cell.z) * groundSlope - cell.y * vertStep;
+            int cx = projectScreenX(cell.x, cell.z, tileHalfW, originX);
+            int cy = projectScreenY(cell.x, cell.y, cell.z, groundSlope, vertStep, originY);
             minX = Math.min(minX, cx - renderHalfW);
             maxX = Math.max(maxX, cx + renderHalfW);
             minY = Math.min(minY, cy - renderHalfH);

@@ -127,6 +127,11 @@ public final class VillagerBlockUtil {
         return BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z));
     }
 
+    /** True when an NPC can stand at feet Y in this column (passable feet/head, solid ground below). */
+    public static boolean isNpcStandColumn(@Nonnull World world, int bx, int feetY, int bz) {
+        return walkableColumn(world, bx, feetY, bz);
+    }
+
     private static boolean walkableColumn(@Nonnull World world, int bx, int by, int bz) {
         BlockType feet = blockTypeNoLoad(world, bx, by, bz);
         BlockType head = blockTypeNoLoad(world, bx, by + 1, bz);

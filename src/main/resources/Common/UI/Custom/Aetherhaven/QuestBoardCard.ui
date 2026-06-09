@@ -36,7 +36,7 @@ Group #QuestBoardCard {
 
       Group #CardHeader {
         LayoutMode: Left;
-        Anchor: (Bottom: 8, Height: 60);
+        Anchor: (Bottom: 14, Height: 64);
 
         AssetImage #Portrait {
           Anchor: (Width: 52, Height: 52, Right: 10, Vertical: 0);
@@ -67,19 +67,26 @@ Group #QuestBoardCard {
 
       Label #QuestDescription {
         Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #b8b0a0, Wrap: true);
-        Anchor: (Bottom: 8, Height: 52);
+        Anchor: (Bottom: 14, Height: 48);
         Text: "";
       }
 
       Label #RequestedLabel {
         Style: @SectionLabelStyle;
-        Anchor: (Bottom: 4);
+        Anchor: (Bottom: 6, Top: 8);
         Text: "";
       }
 
       Group #ItemRow {
         LayoutMode: Left;
         Anchor: (Bottom: 12, Height: 62);
+      }
+
+      Label #ObjectiveText {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 17, TextColor: #c8b8a0, Wrap: true);
+        Anchor: (Bottom: 12, Height: 44);
+        Visible: false;
+        Text: "";
       }
 
       Label #RewardLabelHeader {

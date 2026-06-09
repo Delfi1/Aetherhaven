@@ -3,11 +3,13 @@ package com.hexvane.aetherhaven.shopspot;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
@@ -34,7 +36,7 @@ public final class ShopSpotStatusHud extends CustomUIHud {
         UICommandBuilder b = new UICommandBuilder();
         b.set("#ShopSpotHudTitle.TextSpans", Message.translation(MSG + ".title"));
         applyHint(b, record, town, viewerUuid, gameDay);
-        if (!gameDay) {
+        if (!gameDay && !record.isPlayerControlled()) {
             showClosed(b, Message.translation(MSG + ".closedNight"));
             this.update(false, b);
             return;
@@ -42,6 +44,12 @@ public final class ShopSpotStatusHud extends CustomUIHud {
         if (!record.hasStock()) {
             String emptyKey = record.isPlayerControlled() ? MSG + ".emptyListing" : MSG + ".soldOut";
             showClosed(b, Message.translation(emptyKey));
+            this.update(false, b);
+            return;
+        }
+        Store<EntityStore> store = world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
+        if (!record.isPlayerControlled() && store != null && !ShopSpotOpenService.hasStaffedWorkplace(record, town, store)) {
+            showClosed(b, Message.translation(MSG + ".closed"));
             this.update(false, b);
             return;
         }

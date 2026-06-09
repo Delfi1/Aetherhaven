@@ -1,0 +1,18 @@
+﻿{
+  "Type": "Variant",
+  "Reference": "Spectre_Void",
+  "Instructions": [
+    {
+      "Sensor": { "Type": "State", "State": "AetherhavenRaidMarch" },
+      "Instructions": [
+        {
+          "Reference": "Component_Instruction_Aetherhaven_Raid_March_Aggro_Chase",
+          "Modify": { "DetectRange": 20 }
+        },
+        {
+          "Reference": "Component_Instruction_Aetherhaven_Raid_March_Travel"
+        }
+      ]
+    }
+  ]
+}

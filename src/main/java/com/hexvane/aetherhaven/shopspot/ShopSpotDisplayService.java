@@ -43,6 +43,16 @@ public final class ShopSpotDisplayService {
 
     private ShopSpotDisplayService() {}
 
+    /** Runtime-only floating item props spawned above configured stalls; never save these into prefabs. */
+    public static boolean isDisplayPropEntity(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        if (!ref.isValid()) {
+            return false;
+        }
+        return store.getComponent(ref, ItemComponent.getComponentType()) != null
+            && store.getComponent(ref, PreventPickup.getComponentType()) != null
+            && store.getComponent(ref, PreventItemMerging.getComponentType()) != null;
+    }
+
     public static void syncDisplay(
         @Nonnull World world,
         @Nonnull Store<EntityStore> store,
@@ -63,25 +73,30 @@ public final class ShopSpotDisplayService {
         @Nonnull ShopSpotRecord record,
         @Nonnull TownRecord town
     ) {
-        // Look-at / interaction ticks pass a CommandBuffer; entity add/remove must run after the store finishes processing.
-        if (commandBuffer != null) {
-            world.execute(() -> {
-                Store<EntityStore> deferred = world.getEntityStore().getStore();
-                if (deferred != null) {
-                    syncDisplay(world, deferred, null, plugin, registry, record, town);
-                }
-            });
-            return;
-        }
-        EntityWriter writer = new EntityWriter(store, null);
-        boolean open = ShopSpotOpenService.isOpen(record, town, world, store);
-        if (!open || !record.hasStock()) {
-            removeDisplay(world, store, commandBuffer, plugin, registry, record);
+        scheduleEntityMutation(world, () -> {
+            Store<EntityStore> deferred = world.getEntityStore().getStore();
+            if (deferred != null) {
+                syncDisplayNow(world, deferred, plugin, registry, record, town);
+            }
+        });
+    }
+
+    private static void syncDisplayNow(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ShopSpotRegistry registry,
+        @Nonnull ShopSpotRecord record,
+        @Nonnull TownRecord town
+    ) {
+        EntityWriter writer = new EntityWriter(store);
+        if (!ShopSpotOpenService.shouldShowDisplay(record, town, world, store)) {
+            removeDisplayNow(world, store, plugin, registry, record);
             return;
         }
         String itemId = record.getItemId();
         if (itemId == null) {
-            removeDisplay(world, store, commandBuffer, plugin, registry, record);
+            removeDisplayNow(world, store, plugin, registry, record);
             return;
         }
         if (!isSpotChunkLoaded(world, record)) {
@@ -99,7 +114,7 @@ public final class ShopSpotDisplayService {
             }
         }
         purgeOrphanDisplayEntities(world, store, registry, record);
-        removeDisplay(world, store, commandBuffer, plugin, registry, record);
+        removeDisplayNow(world, store, plugin, registry, record);
         Ref<EntityStore> spawned = spawnDisplay(writer, world, record, itemId, pos);
         if (spawned != null && spawned.isValid()) {
             record.setListingDisplaySignature(signature);
@@ -144,16 +159,22 @@ public final class ShopSpotDisplayService {
         @Nonnull ShopSpotRegistry registry,
         @Nonnull ShopSpotRecord record
     ) {
-        if (commandBuffer != null) {
-            world.execute(() -> {
-                Store<EntityStore> deferred = world.getEntityStore().getStore();
-                if (deferred != null) {
-                    removeDisplay(world, deferred, null, plugin, registry, record);
-                }
-            });
-            return;
-        }
-        EntityWriter writer = new EntityWriter(store, null);
+        scheduleEntityMutation(world, () -> {
+            Store<EntityStore> deferred = world.getEntityStore().getStore();
+            if (deferred != null) {
+                removeDisplayNow(world, deferred, plugin, registry, record);
+            }
+        });
+    }
+
+    private static void removeDisplayNow(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ShopSpotRegistry registry,
+        @Nonnull ShopSpotRecord record
+    ) {
+        EntityWriter writer = new EntityWriter(store);
         purgeOrphanDisplayEntities(world, store, registry, record);
         UUID id = record.getDisplayEntityUuid();
         record.setDisplayEntityUuid(null);
@@ -165,6 +186,11 @@ public final class ShopSpotDisplayService {
         if (ref != null && ref.isValid()) {
             writer.removeEntity(ref);
         }
+    }
+
+    /** Entity add/remove must not run while the store is processing a system tick. */
+    private static void scheduleEntityMutation(@Nonnull World world, @Nonnull Runnable task) {
+        world.execute(task);
     }
 
     /** Removes stale floating item props at this stall (e.g. after server restart). */
@@ -213,7 +239,7 @@ public final class ShopSpotDisplayService {
         if (toRemove.isEmpty()) {
             return;
         }
-        EntityWriter writer = new EntityWriter(store, null);
+        EntityWriter writer = new EntityWriter(store);
         for (UUID id : toRemove) {
             Ref<EntityStore> ref = findEntityByUuid(store, id);
             if (ref != null && ref.isValid()) {
@@ -332,30 +358,20 @@ public final class ShopSpotDisplayService {
 
     private static final class EntityWriter {
         private final Store<EntityStore> store;
-        @Nullable
-        private final CommandBuffer<EntityStore> commandBuffer;
 
-        private EntityWriter(@Nonnull Store<EntityStore> store, @Nullable CommandBuffer<EntityStore> commandBuffer) {
+        private EntityWriter(@Nonnull Store<EntityStore> store) {
             this.store = store;
-            this.commandBuffer = commandBuffer;
         }
 
         void removeEntity(@Nonnull Ref<EntityStore> ref) {
             if (!ref.isValid()) {
                 return;
             }
-            if (commandBuffer != null) {
-                commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
-            } else {
-                store.removeEntity(ref, RemoveReason.REMOVE);
-            }
+            store.removeEntity(ref, RemoveReason.REMOVE);
         }
 
         @Nullable
         Ref<EntityStore> addEntity(@Nonnull Holder<EntityStore> holder) {
-            if (commandBuffer != null) {
-                return commandBuffer.addEntity(holder, AddReason.SPAWN);
-            }
             return store.addEntity(holder, AddReason.SPAWN);
         }
     }

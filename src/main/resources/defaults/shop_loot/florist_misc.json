@@ -1,0 +1,22 @@
+{
+  "entries": [
+    { "itemId": "Plant_Cactus_Flower", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Poisoned_Orange", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Orchid_Blue", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Orchid_Cyan", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Flax_Blue", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Flax_Orange", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Flax_White", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Flax_Yellow", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Flax_Purple", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Flax_Pink", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Tall_Yellow", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Tall_Cyan", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Tall_Blue", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Tall_Purple", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Tall_Pink", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Tall_Cyan2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Tall_Violet", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Tall_Red", "weight": 2, "stockMin": 25, "stockMax": 50 }
+  ]
+}

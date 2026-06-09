@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBlock;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBlockUtil;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -123,6 +125,26 @@ public final class PlotCreatorSubstepHandler {
                 }
                 draft.setTreasuryLocalPos(local);
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.blockRecorded"));
+                yield true;
+            }
+            case SHOP_SPOT -> {
+                if (!AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(blockId)) {
+                    playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
+                    yield true;
+                }
+                ShopSpotBlock blockComp = ShopSpotBlockUtil.getBlockComponent(session.getWorld(), targetBlock);
+                if (blockComp == null || !blockComp.isConfigured()) {
+                    playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.shopSpotNotConfigured"));
+                    yield true;
+                }
+                for (Vector3i recorded : draft.getPlacedSpecialBlocks()) {
+                    if (recorded.x == targetBlock.x && recorded.y == targetBlock.y && recorded.z == targetBlock.z) {
+                        playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded"));
+                        yield true;
+                    }
+                }
+                draft.getPlacedSpecialBlocks().add(new Vector3i(targetBlock));
+                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.shopSpotRecorded"));
                 yield true;
             }
             case INNKEEPER_SPAWN -> {

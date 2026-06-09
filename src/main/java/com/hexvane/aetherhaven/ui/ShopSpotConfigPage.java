@@ -178,6 +178,7 @@ public final class ShopSpotConfigPage extends AetherhavenInteractiveCustomUIPage
             record.setSellerUuid(null);
         }
         registry.put(record);
+        ShopSpotBlockUtil.syncConfigToBlock(world, block, record);
         ShopSpotPersistence.save(world, plugin, registry);
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(record.getTownId());
         if (town != null) {

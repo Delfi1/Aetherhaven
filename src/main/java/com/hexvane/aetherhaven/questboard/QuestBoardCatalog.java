@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardDefinitionJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardFetchEntryJson;
+import com.hexvane.aetherhaven.questboard.data.QuestBoardHuntEntryJson;
+import com.hexvane.aetherhaven.questboard.data.QuestBoardRaidEntryJson;
+import com.hexvane.aetherhaven.questboard.data.QuestBoardQuestTypeWeightJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardRankTierJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardVillagerJson;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -102,6 +105,28 @@ public final class QuestBoardCatalog {
     public List<QuestBoardFetchEntryJson> fetchEntriesForRole(@Nonnull String npcRoleId) {
         QuestBoardVillagerJson v = villager(npcRoleId);
         return v != null ? v.fetchEntriesOrEmpty() : List.of();
+    }
+
+    @Nonnull
+    public List<QuestBoardHuntEntryJson> huntEntriesForRole(@Nonnull String npcRoleId) {
+        QuestBoardVillagerJson v = villager(npcRoleId);
+        return v != null ? v.huntEntriesOrEmpty() : List.of();
+    }
+
+    @Nonnull
+    public List<QuestBoardRaidEntryJson> raidEntriesForRole(@Nonnull String npcRoleId) {
+        QuestBoardVillagerJson v = villager(npcRoleId);
+        return v != null ? v.raidEntriesOrEmpty() : List.of();
+    }
+
+    @Nonnull
+    public Map<String, QuestBoardQuestTypeWeightJson> questTypes() {
+        return definition.questTypesOrEmpty();
+    }
+
+    public int questTypeWeight(@Nonnull String typeId) {
+        QuestBoardQuestTypeWeightJson w = questTypes().get(typeId.trim());
+        return w != null ? w.weight() : 0;
     }
 
     @Nullable

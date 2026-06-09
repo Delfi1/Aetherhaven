@@ -19,6 +19,19 @@ import javax.annotation.Nullable;
 public final class QuestEntityKillMatcher {
     private QuestEntityKillMatcher() {}
 
+    public static boolean matchesTags(
+        @Nonnull Ref<EntityStore> victimRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<String> entityTagsAny
+    ) {
+        if (entityTagsAny.isEmpty()) {
+            return false;
+        }
+        NPCEntity npc = store.getComponent(victimRef, NPCEntity.getComponentType());
+        int roleIndex = npc != null ? npc.getRoleIndex() : Integer.MIN_VALUE;
+        return passesEntityTagsAny(entityTagsAny, roleIndex);
+    }
+
     public static boolean matches(
         @Nonnull Ref<EntityStore> victimRef,
         @Nonnull Store<EntityStore> store,

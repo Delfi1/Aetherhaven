@@ -110,7 +110,8 @@ public final class ShopSpotLookAtSystem extends EntityTickingSystem<EntityStore>
             return;
         }
         boolean gameDay = ShopSpotOpenService.isGameDay(store);
-        int sig = st.hudSignature(record, gameDay, pr.getUuid(), town);
+        boolean staffed = ShopSpotOpenService.hasStaffedWorkplace(record, town, store);
+        int sig = st.hudSignature(record, gameDay, pr.getUuid(), town, staffed);
         Integer prev = LAST_SIG.get(pr.getUuid());
         if (prev != null && prev == sig && ShopSpotHudSupport.isActive(player)) {
             return;

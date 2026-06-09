@@ -72,6 +72,7 @@ public final class PlotCreatorValidator {
             case MANAGEMENT_BLOCK -> draft.getManagementBlockLocalPos() != null ? 1 : 0;
             case PRODUCTION_STORAGE -> draft.getProductionStorageLocalPos() != null ? 1 : 0;
             case TREASURY_BLOCK -> draft.getTreasuryLocalPos() != null ? 1 : 0;
+            case SHOP_SPOT -> draft.getPlacedSpecialBlocks().size();
             case PLANNING_DESK_POI, WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI -> countPoiSubstep(draft, type);
             case INNKEEPER_SPAWN -> draft.getInnkeeperSpawnLocal() != null ? 1 : 0;
             case VISITOR_SPAWN -> draft.getVisitorSpawnLocals().size();

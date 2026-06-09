@@ -27,7 +27,7 @@
   "DefaultNPCAttitude": "Neutral",
   "DefaultPlayerAttitude": "Neutral",
   "Appearance": "Innkeep",
-  "MaxHealth": 100,
+  "MaxHealth": 200,
   "IsMemory": true,
   "MemoriesCategory": "Aetherhaven",
   "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },

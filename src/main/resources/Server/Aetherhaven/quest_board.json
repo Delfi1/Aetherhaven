@@ -12,7 +12,9 @@
     { "id": "SSS", "xpRequired": 1200, "xpReward": 70, "icon": "UI/Custom/sss.png" }
   ],
   "questTypes": {
-    "fetch": { "weight": 100 }
+    "fetch": { "weight": 65 },
+    "hunt": { "weight": 45 },
+    "raid": { "weight": 20 }
   },
   "villagers": {
     "Aetherhaven_Miner": {
@@ -357,6 +359,89 @@
           ],
           "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 52, "grantTo": "player" }]
         }
+      ],
+      "huntEntries": [
+        {
+          "id": "cull_undead",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.cull_undead.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.cull_undead.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.undead",
+          "killSets": [
+            { "weight": 1, "killCount": 5, "entityTagsAny": ["Undead"] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 8, "grantTo": "player" }]
+        },
+        {
+          "id": "purge_undead",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "B",
+          "weight": 8,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.purge_undead.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.purge_undead.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.undead",
+          "killSets": [
+            { "weight": 1, "killCount": 10, "entityTagsAny": ["Undead"] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 22, "grantTo": "player" }]
+        }
+      ],
+      "raidEntries": [
+        {
+          "id": "undead_raid",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "B",
+          "weight": 8,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.undead_raid.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.undead_raid.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.undead",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": { "D": 6, "C": 8, "B": 10 },
+              "mobPool": [
+                { "roleId": "Skeleton_Soldier_Wander", "weight": 3 },
+                { "roleId": "Skeleton_Archer_Wander", "weight": 2 },
+                { "roleId": "Wraith", "weight": 2 },
+                { "roleId": "Skeleton_Sand_Soldier_Wander", "weight": 2 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 18, "grantTo": "player" }]
+        },
+        {
+          "id": "void_raid",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "A",
+          "weight": 8,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.void_raid.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.priestess.void_raid.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.void",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": { "C": 6, "B": 8, "A": 10 },
+              "mobPool": [
+                { "roleId": "Crawler_Void", "weight": 3 },
+                { "roleId": "Larva_Void", "weight": 2 },
+                { "roleId": "Eye_Void", "weight": 2 },
+                { "roleId": "Spectre_Void", "weight": 2 },
+                { "roleId": "Spawn_Void", "weight": 1 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 24, "grantTo": "player" }]
+        }
       ]
     },
     "Aetherhaven_Innkeeper": {
@@ -667,6 +752,48 @@
           ],
           "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 70, "grantTo": "player" }]
         }
+      ],
+      "huntEntries": [
+        {
+          "id": "vermin_clear",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.vermin_clear.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.vermin_clear.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.vermin",
+          "killSets": [
+            { "weight": 1, "killCount": 6, "entityTagsAny": ["Vermin"] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 8, "grantTo": "player" }]
+        }
+      ],
+      "raidEntries": [
+        {
+          "id": "vermin_raid",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 8,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.vermin_raid.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.elder.vermin_raid.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.vermin",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": { "E": 4, "D": 6, "C": 8 },
+              "mobPool": [
+                { "roleId": "Rat", "weight": 3 },
+                { "roleId": "Spider", "weight": 2 },
+                { "roleId": "Scorpion", "weight": 2 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 10, "grantTo": "player" }]
+        }
       ]
     },
     "Aetherhaven_Guild_Master": {
@@ -827,6 +954,127 @@
             }
           ],
           "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 70, "grantTo": "player" }]
+        }
+      ],
+      "huntEntries": [
+        {
+          "id": "goblin_trouble",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "B",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.goblin_trouble.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.goblin_trouble.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.goblin",
+          "killSets": [
+            { "weight": 1, "killCount": 5, "entityTagsAny": ["Goblin"] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 14, "grantTo": "player" }]
+        },
+        {
+          "id": "trork_patrol",
+          "rank": "D",
+          "minRank": "D",
+          "maxRank": "A",
+          "weight": 10,
+          "daysLimit": 4,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.trork_patrol.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.trork_patrol.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.trork",
+          "killSets": [
+            { "weight": 1, "killCount": 5, "entityTagsAny": ["Trork"] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 14, "grantTo": "player" }]
+        },
+        {
+          "id": "outlander_raid",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "A",
+          "weight": 8,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.outlander_raid.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.outlander_raid.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.outlander",
+          "killSets": [
+            { "weight": 1, "killCount": 6, "entityTagsAny": ["Outlander"] }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 22, "grantTo": "player" }]
+        }
+      ],
+      "raidEntries": [
+        {
+          "id": "goblin_raid",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "A",
+          "weight": 8,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.goblin_raid.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.goblin_raid.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.goblin",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": { "C": 8, "B": 10, "A": 12 },
+              "mobPool": [
+                { "roleId": "Goblin_Scrapper", "weight": 3 },
+                { "roleId": "Goblin_Miner", "weight": 2 },
+                { "roleId": "Goblin_Lobber", "weight": 2 },
+                { "roleId": "Goblin_Scavenger", "weight": 2 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 28, "grantTo": "player" }]
+        },
+        {
+          "id": "trork_raid",
+          "rank": "C",
+          "minRank": "C",
+          "maxRank": "A",
+          "weight": 8,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.trork_raid.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.trork_raid.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.trork",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": { "C": 8, "B": 10, "A": 12 },
+              "mobPool": [
+                { "roleId": "Trork_Warrior", "weight": 3 },
+                { "roleId": "Trork_Hunter", "weight": 2 },
+                { "roleId": "Trork_Shaman", "weight": 2 },
+                { "roleId": "Trork_Mauler", "weight": 2 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 28, "grantTo": "player" }]
+        },
+        {
+          "id": "outlander_assault",
+          "rank": "B",
+          "minRank": "B",
+          "maxRank": "A",
+          "weight": 6,
+          "daysLimit": 5,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.outlander_assault.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.guild_master.outlander_assault.description",
+          "targetLabelLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.targets.outlander",
+          "raidSets": [
+            {
+              "weight": 1,
+              "mobCountsByRank": { "B": 10, "A": 12 },
+              "mobPool": [
+                { "roleId": "Outlander_Peon", "weight": 3 },
+                { "roleId": "Outlander_Marauder", "weight": 2 },
+                { "roleId": "Outlander_Hunter", "weight": 2 },
+                { "roleId": "Outlander_Brute", "weight": 2 }
+              ]
+            }
+          ],
+          "rewards": [{ "kind": "item", "itemId": "Aetherhaven_Gold_Coin", "count": 32, "grantTo": "player" }]
         }
       ]
     }

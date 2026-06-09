@@ -54,6 +54,11 @@ public final class ShopSpotBlockUtil {
         @Nonnull String townId,
         @Nonnull String plotId
     ) {
+        return writeBlockComponent(world, pos, new ShopSpotBlock(spotId, townId, plotId, false, "", false));
+    }
+
+    /** @return false if the chunk or block entity is not ready yet (caller may retry on the world thread). */
+    public static boolean writeBlockComponent(@Nonnull World world, @Nonnull Vector3i pos, @Nonnull ShopSpotBlock block) {
         WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
         if (chunk == null) {
             return false;
@@ -63,8 +68,39 @@ public final class ShopSpotBlockUtil {
             return false;
         }
         Store<ChunkStore> cs = blockRef.getStore();
-        cs.putComponent(blockRef, ShopSpotBlock.getComponentType(), new ShopSpotBlock(spotId, townId, plotId));
+        cs.putComponent(blockRef, ShopSpotBlock.getComponentType(), copyBlock(block));
         return true;
+    }
+
+    @Nonnull
+    private static ShopSpotBlock copyBlock(@Nonnull ShopSpotBlock block) {
+        return new ShopSpotBlock(
+            block.getSpotId(),
+            block.getTownId(),
+            block.getPlotId(),
+            block.isPlayerControlled(),
+            block.getLootTableId(),
+            block.isConfigured()
+        );
+    }
+
+    public static void syncConfigToBlock(@Nonnull World world, @Nonnull Vector3i pos, @Nonnull ShopSpotRecord record) {
+        ShopSpotBlock existing = getBlockComponent(world, pos);
+        ShopSpotBlock block =
+            existing != null
+                ? copyBlock(existing)
+                : new ShopSpotBlock(
+                    record.getSpotId().toString(),
+                    record.getTownId().toString(),
+                    record.getPlotId().toString(),
+                    false,
+                    "",
+                    false
+                );
+        block.applyRecord(record);
+        if (!writeBlockComponent(world, pos, block)) {
+            world.execute(() -> writeBlockComponent(world, pos, block));
+        }
     }
 
     public static void breakBlock(@Nonnull World world, @Nonnull Vector3i pos) {

@@ -24,6 +24,10 @@ public final class QuestBoardDefinitionJson {
     @Nullable
     private Map<String, QuestBoardVillagerJson> villagers;
 
+    @SerializedName("questTypes")
+    @Nullable
+    private Map<String, QuestBoardQuestTypeWeightJson> questTypes;
+
     public int schemaVersion() {
         return schemaVersion;
     }
@@ -40,5 +44,10 @@ public final class QuestBoardDefinitionJson {
     @Nonnull
     public Map<String, QuestBoardVillagerJson> villagersOrEmpty() {
         return villagers != null ? villagers : Map.of();
+    }
+
+    @Nonnull
+    public Map<String, QuestBoardQuestTypeWeightJson> questTypesOrEmpty() {
+        return questTypes != null ? questTypes : Map.of();
     }
 }

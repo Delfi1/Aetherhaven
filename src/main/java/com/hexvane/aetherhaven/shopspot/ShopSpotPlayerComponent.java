@@ -140,7 +140,8 @@ public final class ShopSpotPlayerComponent implements Component<EntityStore> {
         @Nullable ShopSpotRecord record,
         boolean gameDay,
         @Nonnull UUID viewerUuid,
-        @Nonnull TownRecord town
+        @Nonnull TownRecord town,
+        boolean staffedWorkplace
     ) {
         if (record == null) {
             return 0;
@@ -150,6 +151,7 @@ public final class ShopSpotPlayerComponent implements Component<EntityStore> {
         h = 31 * h + record.getStock();
         h = 31 * h + (gameDay ? 1 : 0);
         h = 31 * h + (record.isPlayerControlled() ? 1 : 0);
+        h = 31 * h + (staffedWorkplace ? 1 : 0);
         h = 31 * h + viewerUuid.hashCode();
         h = 31 * h + (town.playerCanUseShopSpots(viewerUuid) ? 1 : 0);
         UUID seller = record.getSellerUuid();

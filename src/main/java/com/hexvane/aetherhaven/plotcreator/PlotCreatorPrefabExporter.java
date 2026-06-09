@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.plotcreator.icon.PlotCreatorIconExporter;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.builtin.buildertools.BuilderToolsPlugin;
 import com.hypixel.hytale.builtin.buildertools.prefabeditor.saving.PrefabSaveContributor;
+import com.hexvane.aetherhaven.shopspot.ShopSpotDisplayService;
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -142,6 +143,9 @@ public final class PlotCreatorPrefabExporter {
 
         if (entityStore != null) {
             BuilderToolsPlugin.forEachCopyableInSelection(world, xMin, yMin, zMin, width, height, depth, e -> {
+                if (ShopSpotDisplayService.isDisplayPropEntity(entityStore, e)) {
+                    return;
+                }
                 Holder<EntityStore> holder = entityStore.copyEntity(e);
                 selection.addEntityFromWorld(holder);
             });

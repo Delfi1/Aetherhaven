@@ -1,0 +1,18 @@
+﻿{
+  "Type": "Variant",
+  "Reference": "Spider",
+  "Instructions": [
+    {
+      "Sensor": { "Type": "State", "State": "AetherhavenRaidMarch" },
+      "Instructions": [
+        {
+          "Reference": "Component_Instruction_Aetherhaven_Raid_March_Aggro_Combat",
+          "Modify": { "DetectRange": 20 }
+        },
+        {
+          "Reference": "Component_Instruction_Aetherhaven_Raid_March_Travel"
+        }
+      ]
+    }
+  ]
+}

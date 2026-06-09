@@ -184,11 +184,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         boolean abandonModalBlocking = false;
         if (abandonConfirmOpen && pendingAbandonQuestId != null && plugin != null && uc != null) {
             TownRecord townModal = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-            List<String> activeModal =
-                townModal != null ? new ArrayList<>(townModal.getActiveQuestIdsSnapshot()) : List.of();
             if (townModal != null
                 && townModal.playerCanAbandonQuests(uc.getUuid())
-                && activeModal.contains(pendingAbandonQuestId)) {
+                && QuestBoardService.isActiveJournalQuest(townModal, pendingAbandonQuestId)) {
                 abandonModalBlocking = true;
             } else {
                 abandonConfirmOpen = false;
@@ -1626,15 +1624,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (town == null || !town.playerCanAbandonQuests(uc.getUuid())) {
                 return;
             }
-            if (!town.getActiveQuestIdsSnapshot().contains(selectedQuestId)
-                && !QuestBoardService.isBoardJournalRow(selectedQuestId)) {
+            if (!QuestBoardService.isActiveJournalQuest(town, selectedQuestId)) {
                 return;
-            }
-            if (QuestBoardService.isBoardJournalRow(selectedQuestId)) {
-                String instanceId = QuestBoardService.parseJournalInstanceId(selectedQuestId);
-                if (instanceId == null || town.findBoardSlotByInstanceId(instanceId) == null) {
-                    return;
-                }
             }
             pendingAbandonQuestId = selectedQuestId;
             abandonConfirmOpen = true;
@@ -2111,12 +2102,17 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (QuestBoardService.isBoardJournalRow(qid.trim())) {
                 String instanceId = QuestBoardService.parseJournalInstanceId(qid.trim());
                 TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-                if (instanceId != null && QuestBoardService.abandonByInstanceId(town, uc.getUuid(), instanceId, plugin.getQuestBoardCatalog())) {
-                    int slotIndex = QuestBoardService.slotIndexForInstanceId(town, instanceId);
-                    if (slotIndex >= 0) {
-                        java.util.Random rng = new java.util.Random(town.getTownId().hashCode() ^ slotIndex);
-                        QuestBoardService.generateOffer(town, store, plugin.getQuestBoardCatalog(), slotIndex, rng);
-                    }
+                if (
+                    instanceId != null
+                        && QuestBoardService.abandonByInstanceId(
+                            town,
+                            uc.getUuid(),
+                            instanceId,
+                            plugin.getQuestBoardCatalog(),
+                            world,
+                            store
+                        )
+                ) {
                     tm.updateTown(town);
                 }
             } else {

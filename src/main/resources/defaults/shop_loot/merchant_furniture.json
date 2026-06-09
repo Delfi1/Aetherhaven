@@ -199,12 +199,12 @@
     { "itemId": "Furniture_Temple_Scarak_Platform", "weight": 2, "stockMin": 5, "stockMax": 10 },
     { "itemId": "Furniture_Temple_Scarak_Lantern", "weight": 2, "stockMin": 5, "stockMax": 10 },
     { "itemId": "Furniture_Temple_Scarak_Lamp", "weight": 2, "stockMin": 5, "stockMax": 10 },
-    { "itemId": "Furniture_Temple_Scarak_Ladder", "weight": 2, "stockMin": 25, "stockMax": 50 },,
-    { "itemId": "Furniture_Temple_Scarak_Brazier", "weight": 2, "stockMin": 5, "stockMax": 10 }
+    { "itemId": "Furniture_Temple_Scarak_Ladder", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Furniture_Temple_Scarak_Brazier", "weight": 2, "stockMin": 5, "stockMax": 10 },
     { "itemId": "Furniture_Scarak_Hive_Lamp", "weight": 2, "stockMin": 5, "stockMax": 10 },
     { "itemId": "Furniture_Scarak_Hive_Platform", "weight": 2, "stockMin": 25, "stockMax": 100 },
-    { "itemId": "Furniture_Scarak_Hive_Window", "weight": 2, "stockMin": 5, "stockMax": 10 },,
-    { "itemId": "Furniture_Scarak_Hive_Chest_Small", "weight": 2, "stockMin": 5, "stockMax": 10 }
+    { "itemId": "Furniture_Scarak_Hive_Window", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Furniture_Scarak_Hive_Chest_Small", "weight": 2, "stockMin": 5, "stockMax": 10 },
     { "itemId": "Furniture_Goblin_Chest_Small", "weight": 2, "stockMin": 5, "stockMax": 10 },
     { "itemId": "Furniture_Christmas_Chest_Small_White", "weight": 2, "stockMin": 5, "stockMax": 10 },
     { "itemId": "Furniture_Christmas_Chest_Small_RedDotted", "weight": 2, "stockMin": 5, "stockMax": 10 },

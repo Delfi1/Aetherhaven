@@ -3,7 +3,8 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
 import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
-import com.hexvane.aetherhaven.questboard.QuestBoardDrawPool;
+import com.hexvane.aetherhaven.questboard.HuntQuestBoardHandler;
+import com.hexvane.aetherhaven.questboard.RaidQuestBoardHandler;
 import com.hexvane.aetherhaven.questboard.QuestBoardGiverDisplay;
 import com.hexvane.aetherhaven.questboard.QuestBoardItemRequirement;
 import com.hexvane.aetherhaven.questboard.QuestBoardService;
@@ -31,7 +32,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -174,10 +174,21 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
             cmd.set(card + " #RewardLabelHeader.Visible", true);
             cmd.set(card + " #DaysLeft.Visible", true);
             cmd.set(card + " #ActionButton.Visible", true);
-            cmd.set(
-                card + " #RequestedLabel.TextSpans",
-                Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.requestedLabel")
-            );
+            if (slot.isHuntQuest() || slot.isRaidQuest()) {
+                cmd.set(
+                    card + " #RequestedLabel.TextSpans",
+                    Message.translation(
+                        slot.isRaidQuest()
+                            ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.requestedRaidLabel"
+                            : "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.requestedHuntLabel"
+                    )
+                );
+            } else {
+                cmd.set(
+                    card + " #RequestedLabel.TextSpans",
+                    Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.requestedLabel")
+                );
+            }
             cmd.set(
                 card + " #RewardLabelHeader.TextSpans",
                 Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.rewardLabel")
@@ -189,7 +200,7 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
             cmd.set(card + " #QuestTitle.TextSpans", QuestBoardService.displayTitle(slot, town, store, catalog));
             cmd.set(card + " #QuestDescription.TextSpans", QuestBoardService.displayDescription(slot, town, store, catalog));
 
-            applyItemRow(cmd, card, slot);
+            applyObjectiveRow(cmd, card, slot);
             applyRewardRow(cmd, card, slot);
 
             if (state == QuestBoardSlotState.ACCEPTED) {
@@ -204,6 +215,7 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
                     Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.abandonButton")
                 );
                 if (town.playerCanAbandonQuests(playerUuid)) {
+                    cmd.set(card + " #ActionButton.Disabled", false);
                     evt.addEventBinding(
                         CustomUIEventBindingType.Activating,
                         card + " #ActionButton",
@@ -239,7 +251,21 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
         }
     }
 
-    private static void applyItemRow(@Nonnull UICommandBuilder cmd, @Nonnull String card, @Nonnull QuestBoardSlotRecord slot) {
+    private static void applyObjectiveRow(@Nonnull UICommandBuilder cmd, @Nonnull String card, @Nonnull QuestBoardSlotRecord slot) {
+        if (slot.isRaidQuest()) {
+            cmd.set(card + " #ItemRow.Visible", false);
+            cmd.set(card + " #ObjectiveText.Visible", true);
+            cmd.set(card + " #ObjectiveText.TextSpans", RaidQuestBoardHandler.raidObjectiveCardText(slot));
+            return;
+        }
+        if (slot.isHuntQuest()) {
+            cmd.set(card + " #ItemRow.Visible", false);
+            cmd.set(card + " #ObjectiveText.Visible", true);
+            cmd.set(card + " #ObjectiveText.TextSpans", HuntQuestBoardHandler.huntObjectiveCardText(slot));
+            return;
+        }
+        cmd.set(card + " #ItemRow.Visible", true);
+        cmd.set(card + " #ObjectiveText.Visible", false);
         cmd.clear(card + " #ItemRow");
         List<QuestBoardItemRequirement> items = slot.requiredItemsOrEmpty();
         int count = Math.min(items.size(), MAX_ITEMS);
@@ -298,19 +324,28 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
         int slotIndex = parseSlotIndex(data.slotIndex);
 
         if ("AcceptSlot".equalsIgnoreCase(data.action)) {
-            if (QuestBoardService.acceptOffer(town, uc.getUuid(), slotIndex, catalog)) {
-                tm.updateTown(town);
-                PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-                if (pr != null) {
+            QuestBoardSlotRecord slotBefore = town.getQuestBoardSlots().get(slotIndex);
+            boolean wasRaidOffer = slotBefore.stateEnum() == QuestBoardSlotState.OFFER && slotBefore.isRaidQuest();
+            boolean accepted = QuestBoardService.acceptOffer(town, uc.getUuid(), slotIndex, catalog, world, store);
+            tm.updateTown(town);
+            PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+            if (pr != null) {
+                if (accepted) {
                     pr.sendMessage(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.acceptedToast"));
+                } else if (wasRaidOffer) {
+                    pr.sendMessage(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.raidSpawnFailedToast"));
                 }
             }
         } else if ("AbandonSlot".equalsIgnoreCase(data.action)) {
-            if (QuestBoardService.abandonOffer(town, uc.getUuid(), slotIndex, catalog)) {
-                Random rng = new Random(town.getTownId().hashCode() ^ slotIndex);
-                Set<String> exclude = QuestBoardDrawPool.occupiedBoardEntryKeys(town);
-                QuestBoardService.generateOffer(town, store, catalog, slotIndex, rng, exclude);
-                tm.updateTown(town);
+            boolean abandoned = QuestBoardService.abandonOffer(town, uc.getUuid(), slotIndex, catalog, world, store);
+            tm.updateTown(town);
+            PlayerRef abandonPr = store.getComponent(ref, PlayerRef.getComponentType());
+            if (abandonPr != null) {
+                if (abandoned) {
+                    abandonPr.sendMessage(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.abandonedToast"));
+                } else {
+                    abandonPr.sendMessage(Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.abandonFailedToast"));
+                }
             }
         } else {
             return;

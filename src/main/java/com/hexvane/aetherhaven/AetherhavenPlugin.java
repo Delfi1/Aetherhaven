@@ -145,6 +145,8 @@ import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityCatalog;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import com.hexvane.aetherhaven.villager.NpcPersistentModelResyncSystem;
+import com.hexvane.aetherhaven.questboard.RaidQuestMarchSystem;
+import com.hexvane.aetherhaven.questboard.RaidQuestMobBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerNpcWorldSpawnSanitizeSystems;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -533,6 +535,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
+        RaidQuestMobBinding.register(this.getEntityStoreRegistry());
         TownsfolkCharacterBinding.register(this.getEntityStoreRegistry());
         GuildHallDisplayAnchor.register(this.getEntityStoreRegistry());
         PoiMarkerDataComponent.register(this.getEntityStoreRegistry());
@@ -807,6 +810,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderVisualizationSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderPlayerRemoveSystem());
         this.getEntityStoreRegistry().registerSystem(new QuestKillProgressSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new RaidQuestMarchSystem(this));
         this.getEntityStoreRegistry().registerSystem(new HuntingKnifeBonusDropSystem());
         GaiaDraughtCraftSystem gaiaDraughtCraftSystem = new GaiaDraughtCraftSystem(this);
         this.getEntityStoreRegistry().registerSystem(gaiaDraughtCraftSystem);

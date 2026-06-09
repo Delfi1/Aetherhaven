@@ -506,6 +506,9 @@ public final class AetherhavenConstants {
     /** Guild hall display pool: stand still at spawn anchor (no rect wander). */
     public static final String NPC_STATE_GUILD_HALL_DISPLAY = "GuildHallDisplay";
 
+    /** Quest-board raid mobs: timed march toward town charter via staged leash waypoints. */
+    public static final String NPC_STATE_RAID_MARCH = "AetherhavenRaidMarch";
+
     /**
      * Synthetic autonomy target: path to the scheduled plot's footprint (no POI interaction). Vanilla wander rects are
      * centered on the NPC, so off-plot idles (e.g. after Gaia revival) must commute here first.
@@ -569,6 +572,7 @@ public final class AetherhavenConstants {
 
     public static final String SHOP_SPOT_ITEM_ID = "Aetherhaven_Shop_Spot";
     public static final String SHOP_SPOT_BLOCK_TYPE_ID = "Aetherhaven_Shop_Spot";
+    public static final int SHOP_SPOT_ITEM_MAX_STACK = 25;
     public static final String PAGE_SHOP_SPOT_CONFIG = "AetherhavenShopSpotConfig";
     public static final String SHOP_SPOT_HUD_KEY = "AetherhavenShopSpot";
     public static final int SHOP_SPOT_DEFAULT_GOLD_PRICE = 5;

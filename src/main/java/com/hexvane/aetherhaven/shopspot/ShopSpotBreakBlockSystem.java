@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.shopspot;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorSessions;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -10,6 +11,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.protocol.GameMode;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -54,8 +56,14 @@ public final class ShopSpotBreakBlockSystem extends EntityEventSystem<EntityStor
 
         Ref<EntityStore> playerRef = archetypeChunk.getReferenceTo(index);
         Player player = archetypeChunk.getComponent(index, Player.getComponentType());
+        UUIDComponent uc = archetypeChunk.getComponent(index, UUIDComponent.getComponentType());
         boolean creative = player != null && player.getGameMode() == GameMode.Creative;
-        if (creative) {
+        boolean plotCreatorBounds = false;
+        if (uc != null) {
+            var session = PlotCreatorSessions.get(uc.getUuid());
+            plotCreatorBounds = session != null && session.getDraft().isInsideBounds(pos);
+        }
+        if (creative || plotCreatorBounds) {
             ShopSpotInteractionCleanup.healLegacyQuantityOverlay(playerRef, commandBuffer);
             if (record != null) {
                 ShopSpotDisplayService.removeDisplay(world, store, commandBuffer, plugin, registry, record);

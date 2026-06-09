@@ -24,7 +24,7 @@ public final class PlotCreatorSubstepGrants {
         @Nonnull PlotCreatorSubstepType type,
         @Nonnull PlotBuildingKindRequirements.SubstepRequirement requirement
     ) {
-        int qty = grantQuantity(requirement);
+        int qty = grantQuantity(type, requirement);
         if (qty <= 0) {
             return List.of();
         }
@@ -33,13 +33,23 @@ public final class PlotCreatorSubstepGrants {
             case PRODUCTION_STORAGE -> List.of(new ItemStack(AetherhavenConstants.BLOCK_PRODUCTION_STORAGE, qty));
             case TREASURY_BLOCK -> List.of(new ItemStack(AetherhavenConstants.TREASURY_BLOCK_TYPE_ID, qty));
             case PLANNING_DESK_POI -> List.of(new ItemStack("Aetherhaven_Town_Planning_Desk", qty));
+            case SHOP_SPOT -> List.of(new ItemStack(AetherhavenConstants.SHOP_SPOT_ITEM_ID, qty));
             default -> List.of();
         };
     }
 
     /** One placeable block per required substep; optional substeps (minCount 0) grant nothing. */
-    private static int grantQuantity(@Nonnull PlotBuildingKindRequirements.SubstepRequirement requirement) {
-        return requirement.minCount() > 0 ? 1 : 0;
+    private static int grantQuantity(
+        @Nonnull PlotCreatorSubstepType type,
+        @Nonnull PlotBuildingKindRequirements.SubstepRequirement requirement
+    ) {
+        if (requirement.minCount() <= 0) {
+            return 0;
+        }
+        if (type == PlotCreatorSubstepType.SHOP_SPOT) {
+            return AetherhavenConstants.SHOP_SPOT_ITEM_MAX_STACK;
+        }
+        return 1;
     }
 
     public static void grantCurrentSubstep(
