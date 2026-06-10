@@ -13,7 +13,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Blocks NPC damage against RTS commanders who are hidden from mob AI. */
+/** Blocks NPC damage against players in active RTS command mode. */
 public final class RtsCommanderNpcDamageFilterSystem extends DamageEventSystem {
     @Nullable
     @Override
@@ -35,7 +35,7 @@ public final class RtsCommanderNpcDamageFilterSystem extends DamageEventSystem {
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull Damage damage
     ) {
-        if (RtsCommanderNpcDetection.isHiddenFromNpcs(archetypeChunk.getReferenceTo(index), commandBuffer)) {
+        if (RtsCommanderNpcDetection.isCommandModeActive(archetypeChunk.getReferenceTo(index), commandBuffer)) {
             damage.setCancelled(true);
         }
     }

@@ -187,6 +187,13 @@ public final class ConstructionDefinition {
     private boolean wallSegment;
 
     /**
+     * Decorative build: uses plot placement and assembly, but on completion is removed from town data and left as world
+     * blocks only (no management block, journal entry, or villager systems).
+     */
+    @SerializedName("decorationPlot")
+    private boolean decorationPlot;
+
+    /**
      * Plot level tags for schedule and leisure targeting (e.g. amenity, nature, fun). Villagers can prefer plots whose
      * tags match personality leisure weights when multiple plots qualify.
      */
@@ -400,6 +407,13 @@ public final class ConstructionDefinition {
 
     public boolean isWallSegment() {
         return wallSegment;
+    }
+
+    public boolean isDecorationPlot() {
+        if (decorationPlot) {
+            return true;
+        }
+        return id != null && id.startsWith("plot_decoration");
     }
 
     /** @return normalized plot level tags (lowercase trim); empty when unset */

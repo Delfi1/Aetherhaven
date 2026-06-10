@@ -108,6 +108,13 @@ public final class ConstructionCompleter {
             return;
         }
 
+        if (def != null && def.isDecorationPlot()) {
+            stripManagementBlocksInFootprint(world, plot.toFootprint());
+            town.removePlotInstance(plotId);
+            tm.updateTown(town);
+            return;
+        }
+
         plot.setState(PlotInstanceState.COMPLETE);
         plot.setLastStateChangeEpochMs(now);
         tm.updateTown(town);
@@ -510,5 +517,18 @@ public final class ConstructionCompleter {
             TreasuryBlock.getComponentType(),
             new TreasuryBlock(plotId.toString(), town.getTownId().toString())
         );
+    }
+
+    private static void stripManagementBlocksInFootprint(@Nonnull World world, @Nonnull PlotFootprintRecord fp) {
+        for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
+            for (int y = fp.getMinY(); y <= fp.getMaxY(); y++) {
+                for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
+                    BlockType bt = world.getBlockType(x, y, z);
+                    if (bt != null && AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID.equals(bt.getId())) {
+                        world.breakBlock(x, y, z, MANAGEMENT_PLACE_SETTINGS);
+                    }
+                }
+            }
+        }
     }
 }

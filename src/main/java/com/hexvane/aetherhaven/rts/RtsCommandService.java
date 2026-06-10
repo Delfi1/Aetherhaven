@@ -138,7 +138,6 @@ public final class RtsCommandService {
         session.clearCameraDirty();
         store.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
         RtsMovementSupport.applyCommandModeProfile(pr, playerRef, store);
-        RtsCommanderNpcVisibility.apply(playerRef, store);
     }
 
     public static void exit(@Nonnull Ref<EntityStore> playerRef, @Nonnull ComponentAccessor<EntityStore> accessor) {
@@ -170,8 +169,6 @@ public final class RtsCommandService {
         session.setActive(false);
         session.clearSelection();
         accessor.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
-
-        RtsCommanderNpcVisibility.restore(playerRef, store);
 
         RtsEntityViewSupport.restore(playerRef, accessor, session);
         RtsCommanderVisibility.showCommander(world, playerRef);

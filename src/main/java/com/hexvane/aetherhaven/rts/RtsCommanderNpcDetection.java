@@ -5,11 +5,11 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 
-/** True while the player is commanding in RTS and should be ignored by NPC sensors (creative-style stealth). */
+/** True while the player has an active RTS command session. */
 public final class RtsCommanderNpcDetection {
     private RtsCommanderNpcDetection() {}
 
-    public static boolean isHiddenFromNpcs(
+    public static boolean isCommandModeActive(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull ComponentAccessor<EntityStore> accessor
     ) {

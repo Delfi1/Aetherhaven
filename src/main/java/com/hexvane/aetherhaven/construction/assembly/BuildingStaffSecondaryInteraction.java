@@ -33,6 +33,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import java.util.ArrayList;
@@ -57,6 +58,8 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
     /** Short creative brush ticks while charging (non-looping — stops when RMB releases). */
     private static final ConcurrentHashMap<UUID, Long> LAST_BRUSH_AMBIENT_NS = new ConcurrentHashMap<>();
     private static final long BRUSH_AMBIENT_INTERVAL_NS = 200_000_000L;
+    private static final ConcurrentHashMap<UUID, Long> LAST_NO_MANA_HINT_NS = new ConcurrentHashMap<>();
+    private static final long NO_MANA_HINT_INTERVAL_NS = 2_000_000_000L;
 
     @Nonnull
     public static final BuilderCodec<BuildingStaffSecondaryInteraction> CODEC =
@@ -178,6 +181,10 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         if (elapsed < BuildingStaffAssemblyChannelComponent.CHANNEL_DURATION_NS) {
             return;
         }
+        if (!BuildingStaffMana.canAffordBlock(playerRef, store)) {
+            maybeNotifyNoMana(playerRef, store, uuid, nowNs);
+            return;
+        }
         IntArrayList batch =
             PlotAssemblyService.frontierPlacementIndicesNearChebyshev(
                 world,
@@ -188,9 +195,16 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
             );
         boolean anyPlaced = false;
         for (int bi = 0; bi < batch.size(); bi++) {
+            if (!BuildingStaffMana.canAffordBlock(playerRef, store)) {
+                maybeNotifyNoMana(playerRef, store, uuid, nowNs);
+                break;
+            }
             int idx = batch.getInt(bi);
             if (!PlotAssemblyService.advancePlacementAtIndex(world, plugin, store, town, plot, job, idx, true, uuid, true)) {
                 continue;
+            }
+            if (!BuildingStaffMana.consumeForBlock(playerRef, commandBuffer)) {
+                break;
             }
             anyPlaced = true;
             if (plot.getState() != PlotInstanceState.ASSEMBLING) {
@@ -202,6 +216,23 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
             spawnTracerBeadsAlongBeam(playerRef, store, activeCell);
             Vector3d p = new Vector3d(activeCell.x + 0.5, activeCell.y + 0.5, activeCell.z + 0.5);
             ParticleUtil.spawnParticleEffect(AetherhavenConstants.BUILDING_STAFF_STEP_PARTICLE_SYSTEM_ID, p, store);
+        }
+    }
+
+    private static void maybeNotifyNoMana(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID playerUuid,
+        long nowNs
+    ) {
+        Long prev = LAST_NO_MANA_HINT_NS.get(playerUuid);
+        if (prev != null && nowNs - prev < NO_MANA_HINT_INTERVAL_NS) {
+            return;
+        }
+        LAST_NO_MANA_HINT_NS.put(playerUuid, nowNs);
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr != null) {
+            pr.sendMessage(Message.translation("aetherhaven_misc.aetherhaven.assembly.staff.no_mana"));
         }
     }
 

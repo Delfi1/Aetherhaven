@@ -13,6 +13,8 @@ import com.hexvane.aetherhaven.construction.assembly.BuildingStaffAssemblyChanne
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerInteraction;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerTickSystem;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerComponent;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffHotbarManaHudSystem;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffManaRegenSystem;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffSecondaryInteraction;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyTickSystem;
@@ -86,6 +88,7 @@ import com.hexvane.aetherhaven.rts.RtsMoveOrderVisualSystem;
 import com.hexvane.aetherhaven.rts.RtsCommanderCameraSystem;
 import com.hexvane.aetherhaven.rts.RtsExitMovementGuardSystem;
 import com.hexvane.aetherhaven.rts.RtsClientMovementPacketAdapter;
+import com.hexvane.aetherhaven.rts.RtsHotbarSlotPacketAdapter;
 import com.hexvane.aetherhaven.rts.RtsHotbarSlotSyncSystem;
 import com.hexvane.aetherhaven.rts.RtsCommandPlayerComponent;
 import com.hexvane.aetherhaven.rts.RtsCommandService;
@@ -94,8 +97,6 @@ import com.hexvane.aetherhaven.rts.RtsFlagOrderCycleInteraction;
 import com.hexvane.aetherhaven.rts.RtsFlagStopInteraction;
 import com.hexvane.aetherhaven.rts.RtsHudRefreshSystem;
 import com.hexvane.aetherhaven.rts.RtsCommanderNpcDamageFilterSystem;
-import com.hexvane.aetherhaven.rts.RtsCommanderNpcStealthSystem;
-import com.hexvane.aetherhaven.rts.RtsNpcPlayerDetectionPatch;
 import com.hexvane.aetherhaven.rts.RtsOrphanedGuardRecoverySystem;
 import com.hexvane.aetherhaven.rts.RtsUncleanSessionRecoverySystem;
 import com.hexvane.aetherhaven.rts.RtsInputGuardListener;
@@ -323,6 +324,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private ShopPriceTooltipPacketAdapter shopPriceTooltipPacketAdapter;
     @Nullable
     private RtsClientMovementPacketAdapter rtsClientMovementPacketAdapter;
+    @Nullable
+    private RtsHotbarSlotPacketAdapter rtsHotbarSlotPacketAdapter;
 
     @Nullable
     private PlotTokenVirtualItemRegistry plotTokenVirtualItemRegistry;
@@ -496,6 +499,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         registerPlotTokenIconPackets();
         registerShopPriceTooltipPackets();
         registerRtsClientMovementPacketAdapter();
+        registerRtsHotbarSlotPacketAdapter();
 
         this.gameTimeCursorResourceType =
             this.getEntityStoreRegistry()
@@ -548,7 +552,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
         PathToolPlayerComponent.register(this.getEntityStoreRegistry());
         PatrolWandPlayerComponent.register(this.getEntityStoreRegistry());
         RtsCommandPlayerComponent.register(this.getEntityStoreRegistry());
-        RtsNpcPlayerDetectionPatch.install();
         GuardRtsCommandState.register(this.getEntityStoreRegistry());
         GuardPatrolState.register(this.getEntityStoreRegistry());
         PurificationPowderPlayerComponent.register(this.getEntityStoreRegistry());
@@ -780,6 +783,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new BuildingStaffFrontierTracerTickSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new BuildingStaffManaRegenSystem());
+        this.getEntityStoreRegistry().registerSystem(new BuildingStaffHotbarManaHudSystem.SlotChangeHandler());
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new BlockMountDeathCleanupSystem());
@@ -825,11 +830,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new RtsExitMovementGuardSystem());
         this.getEntityStoreRegistry().registerSystem(new RtsCameraMousePollSystem());
         this.getEntityStoreRegistry().registerSystem(new RtsHotbarSlotSyncSystem.SlotChangeHandler());
-        this.getEntityStoreRegistry().registerSystem(new RtsHotbarSlotSyncSystem.ActiveSlotRequestHandler());
         this.getEntityStoreRegistry().registerSystem(new RtsHudRefreshSystem());
         this.getEntityStoreRegistry().registerSystem(new RtsUncleanSessionRecoverySystem());
         this.getEntityStoreRegistry().registerSystem(new RtsOrphanedGuardRecoverySystem());
-        this.getEntityStoreRegistry().registerSystem(new RtsCommanderNpcStealthSystem());
         this.getEntityStoreRegistry().registerSystem(new RtsCommanderNpcDamageFilterSystem());
         this.getEntityStoreRegistry().registerSystem(new RtsMarkerVisualSystem(this));
         this.getEntityStoreRegistry().registerSystem(new RtsMoveOrderVisualSystem(this));
@@ -1321,6 +1324,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.rtsClientMovementPacketAdapter.register();
     }
 
+    private void registerRtsHotbarSlotPacketAdapter() {
+        this.rtsHotbarSlotPacketAdapter = new RtsHotbarSlotPacketAdapter();
+        this.rtsHotbarSlotPacketAdapter.register();
+    }
+
     @Override
     protected void shutdown() {
         if (this.shopPriceTooltipPacketAdapter != null) {
@@ -1338,6 +1346,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
         if (this.rtsClientMovementPacketAdapter != null) {
             this.rtsClientMovementPacketAdapter.deregister();
             this.rtsClientMovementPacketAdapter = null;
+        }
+        if (this.rtsHotbarSlotPacketAdapter != null) {
+            this.rtsHotbarSlotPacketAdapter.deregister();
+            this.rtsHotbarSlotPacketAdapter = null;
         }
         this.jewelryVirtualItemRegistry = null;
         this.plotTokenVirtualItemRegistry = null;

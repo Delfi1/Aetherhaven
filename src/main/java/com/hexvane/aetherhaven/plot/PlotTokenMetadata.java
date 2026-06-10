@@ -23,6 +23,8 @@ public final class PlotTokenMetadata {
 
     private static final String LANG_NAME = "aetherhaven_items.items.Aetherhaven_Plot_Token.instance.name";
     private static final String LANG_DESC = "aetherhaven_items.items.Aetherhaven_Plot_Token.instance.description";
+    private static final String LANG_DESC_DECORATION =
+        "aetherhaven_items.items.Aetherhaven_Plot_Token.instance.descriptionDecoration";
 
     private PlotTokenMetadata() {}
 
@@ -47,7 +49,7 @@ public final class PlotTokenMetadata {
         BsonDocument meta = new BsonDocument();
         meta.put(BSON_KEY, root);
         ItemStack stack = base.withMetadata(meta);
-        return applyInstanceTooltip(stack, resolvedName, language);
+        return applyInstanceTooltip(stack, resolvedName, constructionId.trim(), language);
     }
 
     @Nullable
@@ -87,6 +89,7 @@ public final class PlotTokenMetadata {
     private static ItemStack applyInstanceTooltip(
         @Nonnull ItemStack stack,
         @Nullable String buildingLabel,
+        @Nonnull String constructionId,
         @Nullable String language
     ) {
         if (buildingLabel == null || buildingLabel.isBlank()) {
@@ -95,7 +98,8 @@ public final class PlotTokenMetadata {
         String label = buildingLabel.trim();
         String lang = language != null && !language.isBlank() ? language : "en-US";
         String namePlain = resolveLang(lang, LANG_NAME, label);
-        String descPlain = resolveLang(lang, LANG_DESC, label);
+        String descKey = isDecorationPlotConstruction(constructionId) ? LANG_DESC_DECORATION : LANG_DESC;
+        String descPlain = resolveLang(lang, descKey, label);
 
         BsonDocument tp = new BsonDocument();
         tp.put("Name", new BsonString(namePlain));
@@ -115,6 +119,15 @@ public final class PlotTokenMetadata {
             text = key;
         }
         return text.replace("{building}", buildingLabel);
+    }
+
+    private static boolean isDecorationPlotConstruction(@Nonnull String constructionId) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return constructionId.startsWith("plot_decoration");
+        }
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(constructionId.trim());
+        return def != null && def.isDecorationPlot();
     }
 
     @Nullable

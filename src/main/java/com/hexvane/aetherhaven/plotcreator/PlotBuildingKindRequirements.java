@@ -24,9 +24,7 @@ public final class PlotBuildingKindRequirements {
             return List.of();
         }
         return switch (kind) {
-            case DECORATION -> List.of(
-                new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 0)
-            );
+            case DECORATION -> List.of();
             case HOME -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
                 new SubstepRequirement(PlotCreatorSubstepType.SLEEP_POI, 1)
