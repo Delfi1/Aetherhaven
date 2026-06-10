@@ -1,7 +1,10 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.rts.ui.RtsCommandHudSupport;
 import com.hexvane.aetherhaven.rts.ui.RtsCommandStatusHud;
+import com.hexvane.aetherhaven.rts.ui.RtsGuardRosterSupport;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -20,7 +23,14 @@ import javax.annotation.Nonnull;
 
 public final class RtsHudRefreshSystem extends EntityTickingSystem<EntityStore> {
     @Nonnull
+    private final AetherhavenPlugin plugin;
+
+    @Nonnull
     private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
+
+    public RtsHudRefreshSystem(@Nonnull AetherhavenPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Nonnull
     @Override
@@ -55,5 +65,9 @@ public final class RtsHudRefreshSystem extends EntityTickingSystem<EntityStore> 
         ItemStack hand = InventoryComponent.getItemInHand(store, playerRef);
         RtsCommandStatusHud hud = RtsCommandHudSupport.obtainHud(player, pr);
         hud.refresh(session, RtsInteractions.toolHelpKey(hand));
+        TownRecord town = RtsSelectionService.townForSession(store, store.getExternalData().getWorld(), plugin, session);
+        if (town != null) {
+            RtsGuardRosterSupport.refreshActive(playerRef, store, session, town, plugin);
+        }
     }
 }

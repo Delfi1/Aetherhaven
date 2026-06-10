@@ -19,8 +19,7 @@ import org.joml.Vector3f;
  * uses orthographic ground math in {@link com.hexvane.aetherhaven.rts.RtsScreenPickUtil}.
  */
 public final class TopDownCameraService {
-    public static final float MIN_DISTANCE = 12f;
-    public static final float MAX_DISTANCE = 96f;
+    /** Fixed pull-back sent in the top-down camera packet; altitude zoom is flight height only. */
     public static final float DEFAULT_DISTANCE = 20f;
 
     private TopDownCameraService() {}
@@ -49,10 +48,6 @@ public final class TopDownCameraService {
 
     public static void reset(@Nonnull PlayerRef playerRef) {
         playerRef.getPacketHandler().writeNoCache(new SetServerCamera(ClientCameraView.Custom, false, null));
-    }
-
-    public static float clampDistance(float distance) {
-        return Math.max(MIN_DISTANCE, Math.min(MAX_DISTANCE, distance));
     }
 
     /** Initial commander altitude above ground focus when entering command mode. */

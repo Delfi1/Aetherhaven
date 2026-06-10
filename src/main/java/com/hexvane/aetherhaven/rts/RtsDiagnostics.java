@@ -35,13 +35,12 @@ public final class RtsDiagnostics {
         double wishZ,
         double forwardAxis,
         boolean sprintHeld,
-        boolean zoomHeld,
         boolean hadInput
     ) {
         int tick = wishTick.merge(playerRef.getUuid(), 1, Integer::sum);
         if (hadInput || tick % PERIODIC_TICKS == 0) {
             LOGGER.atInfo().log(
-                "[RTS-WASD] player=%s queue=%d wish=%d rel=%d abs=%d states=%d wish=(%.2f,%.2f) fwd=%.3f sprint=%s zoom=%s hadInput=%s",
+                "[RTS-WASD] player=%s queue=%d wish=%d rel=%d abs=%d states=%d wish=(%.2f,%.2f) fwd=%.3f sprint=%s hadInput=%s",
                 playerRef.getUsername(),
                 queueSize,
                 wishCount,
@@ -52,25 +51,9 @@ public final class RtsDiagnostics {
                 wishZ,
                 forwardAxis,
                 sprintHeld,
-                zoomHeld,
                 hadInput
             );
         }
-    }
-
-    public static void zoomApplied(
-        @Nonnull PlayerRef playerRef,
-        float before,
-        float after,
-        double wishZ
-    ) {
-        LOGGER.atInfo().log(
-            "[RTS-ZOOM] player=%s dist %.1f -> %.1f wishZ=%.2f",
-            playerRef.getUsername(),
-            before,
-            after,
-            wishZ
-        );
     }
 
     public static void panApplied(

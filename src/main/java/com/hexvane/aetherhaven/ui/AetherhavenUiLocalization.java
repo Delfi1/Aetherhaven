@@ -242,9 +242,9 @@ public final class AetherhavenUiLocalization {
         b.set("#TabSettings.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.settings"));
         b.set("#TownVillagersHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.townVillagersHeading"));
         b.set("#TownPlotsHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.townPlotsHeading"));
-        b.set("#TownShowBordersLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.showTownBorders"));
+        b.set("#SettingsShowBordersLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.showTownBorders"));
         b.set(
-            "#TownShowBordersLabel.TooltipTextSpans",
+            "#SettingsShowBordersLabel.TooltipTextSpans",
             t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.showTownBordersTooltip")
         );
         b.set(
@@ -290,6 +290,27 @@ public final class AetherhavenUiLocalization {
         b.set("#SettingsGiftDaysMaxLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.giftDaysMaxLabel"));
         b.set("#SettingsSaveButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.saveButton"));
         b.set("#SettingsResetDefaultsButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.resetDefaultsButton"));
+        b.set("#SettingsTabPersonal.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.tab.personal"));
+        b.set("#SettingsTabServer.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.tab.server"));
+        b.set("#SettingsPersonalHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalHeading"));
+        b.set("#SettingsPersonalHint.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalHint"));
+        b.set("#SettingsRtsPickHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.rtsPickHeading"));
+        b.set(
+            "#SettingsRtsPickFovLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.rtsPickFovLabel")
+        );
+        b.set(
+            "#SettingsRtsPickAspectLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.rtsPickAspectLabel")
+        );
+        b.set(
+            "#SettingsPersonalSaveButton.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalSaveButton")
+        );
+        b.set(
+            "#SettingsPersonalResetButton.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalResetButton")
+        );
         b.set("#JournalSettingsResetModalTitle.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.resetModalTitle"));
         b.set("#JournalSettingsResetModalText.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.resetModalBody"));
         b.set("#JournalSettingsResetModalConfirm.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.resetModalConfirm"));

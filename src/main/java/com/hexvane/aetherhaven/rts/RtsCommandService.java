@@ -5,9 +5,11 @@ import com.hexvane.aetherhaven.rts.camera.TopDownCameraService;
 import com.hexvane.aetherhaven.rts.debug.RtsBoxSelectDebug;
 import com.hexvane.aetherhaven.rts.ui.RtsBoxSelectHudSupport;
 import com.hexvane.aetherhaven.rts.ui.RtsCommandHudSupport;
+import com.hexvane.aetherhaven.rts.ui.RtsGuardRosterSupport;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
@@ -15,7 +17,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.CameraManager;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.PendingTeleport;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
@@ -47,6 +48,10 @@ public final class RtsCommandService {
         World world = store.getExternalData().getWorld();
         RtsCommandPlayerComponent existing = accessor.getComponent(playerRef, RtsCommandPlayerComponent.getComponentType());
         if (existing != null && existing.isActive()) {
+            PlayerRef activeRef = accessor.getComponent(playerRef, PlayerRef.getComponentType());
+            if (activeRef != null) {
+                RtsCommandingSessionIndex.markActive(activeRef.getUuid());
+            }
             return true;
         }
         if (!RtsGuardDirectory.townHasLivingGuard(town, store)) {
@@ -84,23 +89,22 @@ public final class RtsCommandService {
         double groundY = postY + 1.0;
         double startX = postX + 0.5;
         double startZ = postZ + 0.5;
-        session.setDistance(TopDownCameraService.DEFAULT_DISTANCE);
         session.setFocus(startX, groundY, startZ);
         session.setOrderMode(RtsOrderMode.ATTACK_MOVE);
         session.setStanceMode(RtsCombatStance.DEFENSIVE);
         session.clearSelection();
-        session.clearPanWish();
         session.clearLastAbsSample();
-        session.setShiftModifierHeld(false);
-        session.setSprintModifierHeld(false);
         session.setBoxSelectDebug(RtsBoxSelectDebug.isEnabled(pr.getUuid()));
-        session.markCameraDirty();
+        PlayerTownJournalState journalState = accessor.getComponent(playerRef, PlayerTownJournalState.getComponentType());
+        session.setPickTuning(RtsPickTuning.fromJournal(journalState));
+        RtsScreenPickUtil.refreshPickViewHeight(session, store);
         session.setSavedHotbarJson(RtsInventorySwap.saveHotbar(playerRef, accessor));
         session.setSessionExitedSafely(false);
         accessor.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
+        RtsCommandingSessionIndex.markActive(pr.getUuid());
         RtsInventorySwap.equipCommandTools(playerRef, accessor);
         TransformComponent tc = accessor.getComponent(playerRef, TransformComponent.getComponentType());
-        double bodyY = TopDownCameraService.commanderBodyY(groundY, session.getDistance());
+        double bodyY = TopDownCameraService.commanderBodyY(groundY, TopDownCameraService.DEFAULT_DISTANCE);
         if (tc != null) {
             org.joml.Vector3d aerial = new org.joml.Vector3d(startX, bodyY, startZ);
             var rot = tc.getRotation();
@@ -108,10 +112,6 @@ public final class RtsCommandService {
         }
         RtsCommanderVisibility.hideCommander(world, playerRef);
         RtsDiagnostics.enter(pr);
-        InventoryComponent.Hotbar equippedHotbar = accessor.getComponent(playerRef, InventoryComponent.Hotbar.getComponentType());
-        if (equippedHotbar != null) {
-            RtsHotbarSync.syncToClient(playerRef, pr, equippedHotbar);
-        }
         RtsHudVisibility.showGameplayHud(player, pr);
         RtsCommandHudSupport.obtainHud(player, pr).show();
         RtsBoxSelectHudSupport.obtainHud(player, pr).ensureShown();
@@ -134,16 +134,36 @@ public final class RtsCommandService {
         if (live == null || !live.isActive()) {
             return;
         }
-        TopDownCameraService.apply(pr, session.getDistance());
-        session.clearCameraDirty();
+        TopDownCameraService.apply(pr, TopDownCameraService.DEFAULT_DISTANCE);
         store.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
         RtsMovementSupport.applyCommandModeProfile(pr, playerRef, store);
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            try {
+                TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(
+                    store.getExternalData().getWorld(),
+                    plugin
+                ).getTown(UUID.fromString(session.getTownId()));
+                if (town != null) {
+                    RtsGuardRosterSupport.open(player, playerRef, store, pr, town.getTownId(), plugin, session, town);
+                }
+            } catch (IllegalArgumentException ignored) {
+                // invalid town id
+            }
+        }
     }
 
     public static void exit(@Nonnull Ref<EntityStore> playerRef, @Nonnull ComponentAccessor<EntityStore> accessor) {
+        if (!playerRef.isValid()) {
+            return;
+        }
         Store<EntityStore> store = playerRef.getStore();
         RtsCommandPlayerComponent session = accessor.getComponent(playerRef, RtsCommandPlayerComponent.getComponentType());
         if (session == null || !session.isActive()) {
+            PlayerRef pr = accessor.getComponent(playerRef, PlayerRef.getComponentType());
+            if (pr != null) {
+                RtsCommandingSessionIndex.unmarkActive(pr.getUuid());
+            }
             return;
         }
         World world = store.getExternalData().getWorld();
@@ -165,16 +185,22 @@ public final class RtsCommandService {
         PlayerRef pr = accessor.getComponent(playerRef, PlayerRef.getComponentType());
 
         RtsMoveOrderVisuals.clearCommander(playerRef, store);
+        RtsFocusTargetVisuals.clearCommander(playerRef, store);
 
         session.setActive(false);
         session.clearSelection();
+        session.clearCameraFollow();
         accessor.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
 
         RtsEntityViewSupport.restore(playerRef, accessor, session);
         RtsCommanderVisibility.showCommander(world, playerRef);
         teleportCommanderToExit(playerRef, accessor, plan);
 
+        if (pr != null) {
+            RtsCommandingSessionIndex.unmarkActive(pr.getUuid());
+        }
         if (player != null && pr != null) {
+            RtsGuardRosterSupport.close(player, pr);
             RtsCommandHudSupport.removeHud(player, pr);
             RtsBoxSelectHudSupport.removeHud(player, pr);
             RtsHudVisibility.showGameplayHud(player, pr);
@@ -341,7 +367,29 @@ public final class RtsCommandService {
      */
     public static boolean recoverUncleanSession(
         @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nullable PlayerRef pr
+    ) {
+        return recoverUncleanSession(playerRef, commandBuffer, commandBuffer, pr);
+    }
+
+    /**
+     * Auto-recovery after login when the last RTS session did not exit cleanly.
+     *
+     * @return true if hotbar was restored
+     */
+    public static boolean recoverUncleanSession(
+        @Nonnull Ref<EntityStore> playerRef,
         @Nonnull ComponentAccessor<EntityStore> accessor,
+        @Nullable PlayerRef pr
+    ) {
+        return recoverUncleanSession(playerRef, accessor, null, pr);
+    }
+
+    private static boolean recoverUncleanSession(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull ComponentAccessor<EntityStore> accessor,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
         @Nullable PlayerRef pr
     ) {
         RtsCommandPlayerComponent session = accessor.getComponent(playerRef, RtsCommandPlayerComponent.getComponentType());
@@ -353,8 +401,9 @@ public final class RtsCommandService {
         session.setSavedHotbarJson("");
         session.setSessionExitedSafely(true);
         accessor.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
-        releaseOrphanedTownGuards(accessor, session);
+        releaseOrphanedTownGuards(accessor, commandBuffer, session);
         if (pr != null) {
+            RtsCommandingSessionIndex.unmarkActive(pr.getUuid());
             RtsMovementSupport.restore(pr, playerRef, accessor);
             CameraManager camera = accessor.getComponent(playerRef, CameraManager.getComponentType());
             if (camera != null) {
@@ -444,13 +493,14 @@ public final class RtsCommandService {
 
     private static void releaseOrphanedTownGuards(
         @Nonnull ComponentAccessor<EntityStore> accessor,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
         @Nonnull RtsCommandPlayerComponent session
     ) {
         String townId = session.getTownId();
         if (townId == null || townId.isBlank()) {
             return;
         }
-        Store<EntityStore> store = accessor instanceof Store<EntityStore> s ? s : null;
+        Store<EntityStore> store = storeFromAccessor(accessor);
         if (store == null) {
             return;
         }
@@ -462,10 +512,25 @@ public final class RtsCommandService {
         try {
             TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(UUID.fromString(townId));
             if (town != null) {
-                freeAllCommandedGuardsInTown(accessor, store, town);
+                for (Ref<EntityStore> ref : RtsGuardDirectory.livingGuardRefs(town, store)) {
+                    if (accessor.getComponent(ref, GuardRtsCommandState.getComponentType()) != null) {
+                        freeGuard(ref, accessor, commandBuffer);
+                    }
+                }
             }
         } catch (IllegalArgumentException ignored) {
         }
+    }
+
+    @Nullable
+    private static Store<EntityStore> storeFromAccessor(@Nonnull ComponentAccessor<EntityStore> accessor) {
+        if (accessor instanceof Store<EntityStore> store) {
+            return store;
+        }
+        if (accessor instanceof CommandBuffer<EntityStore> buffer) {
+            return buffer.getStore();
+        }
+        return null;
     }
 
     private static void notify(

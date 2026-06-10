@@ -57,7 +57,7 @@ public final class RtsUncleanSessionRecoverySystem extends EntityTickingSystem<E
             return;
         }
         Ref<EntityStore> playerRef = chunk.getReferenceTo(index);
-        if (!RtsCommandService.recoverUncleanSession(playerRef, store, pr)) {
+        if (!RtsCommandService.recoverUncleanSession(playerRef, commandBuffer, pr)) {
             return;
         }
         NotificationUtil.sendNotification(

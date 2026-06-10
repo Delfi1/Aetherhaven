@@ -1,0 +1,6 @@
+{
+  "CullDistance": 96,
+  "BoundingRadius": 4,
+  "LifeSpan": 40,
+  "Spawners": [{ "SpawnerId": "Aetherhaven_Rts_Focus_Target_Spawner" }]
+}

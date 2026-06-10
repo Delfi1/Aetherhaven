@@ -1,0 +1,59 @@
+$C = "../Common.ui";
+
+@PortraitSize = 56;
+@HealthBarHeight = 8;
+@HealthInsetH = 2;
+@HealthInsetV = 1;
+@HealthFillPatch = (TexturePath: "../XpBar.png", Border: 0, Color: #6ec86e);
+@HealthTrackPatch = #121820(0.95);
+@GoldBorderPatch = (TexturePath: "../Common/InputBoxSelected.png", Border: 8, Color: #d4a832);
+
+Group #GuardCell {
+  LayoutMode: Top;
+  Anchor: (Width: 68, Right: 8);
+  HitTestVisible: false;
+
+  Group #PortraitButton {
+    LayoutMode: Full;
+    Anchor: (Width: 56, Height: 56, Top: 4);
+    HitTestVisible: false;
+
+    Group #SelectedBorder {
+      LayoutMode: Full;
+      Anchor: (Full: 0);
+      Visible: false;
+      Background: @GoldBorderPatch;
+    }
+
+    Group #PortraitFrame {
+      LayoutMode: Middle;
+      Anchor: (Left: 4, Right: 4, Top: 4, Bottom: 4);
+
+      AssetImage #Portrait {
+        Anchor: (Width: 50, Height: 50);
+        FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+      }
+    }
+
+    Group #HealthBarStack {
+      LayoutMode: Full;
+      Anchor: (Left: 4, Right: 4, Bottom: 2, Height: @HealthBarHeight);
+
+      Group #HealthFillTrack {
+        LayoutMode: Left;
+        Anchor: (Left: @HealthInsetH, Right: @HealthInsetH, Top: @HealthInsetV, Bottom: @HealthInsetV);
+        Background: @HealthTrackPatch;
+
+        Group #HealthFill {
+          FlexWeight: 1;
+          Anchor: (Top: 0, Bottom: 0);
+          Background: @HealthFillPatch;
+        }
+
+        Group #HealthFillRemainder {
+          FlexWeight: 999;
+        }
+      }
+    }
+  }
+}

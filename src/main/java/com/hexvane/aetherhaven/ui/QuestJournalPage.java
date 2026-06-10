@@ -24,6 +24,9 @@ import com.hexvane.aetherhaven.questboard.QuestBoardService;
 import com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
+import com.hexvane.aetherhaven.rts.RtsCommandPlayerComponent;
+import com.hexvane.aetherhaven.rts.RtsPickTuning;
+import com.hexvane.aetherhaven.rts.RtsScreenPickUtil;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -122,6 +125,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
      */
     @Nullable
     private AetherhavenPluginConfig journalSettingsFormSnapshot;
+    @Nullable
+    private Message journalSettingsPersonalStatus;
 
     public QuestJournalPage(@Nonnull PlayerRef playerRef) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
@@ -148,10 +153,11 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         }
         boolean journalSettingsAllowed = JournalSettingsAccess.canOpen(store, ref);
         PlayerTownJournalState.JournalTab currentTab = stateForTabs.getLastTab();
-        if (!journalSettingsAllowed && currentTab == PlayerTownJournalState.JournalTab.SETTINGS) {
-            currentTab = PlayerTownJournalState.JournalTab.QUESTS;
+        PlayerTownJournalState.SettingsSubTab settingsSubTab = stateForTabs.getLastSettingsSubTab();
+        if (!journalSettingsAllowed && settingsSubTab == PlayerTownJournalState.SettingsSubTab.SERVER) {
+            settingsSubTab = PlayerTownJournalState.SettingsSubTab.PERSONAL;
             if (journalState != null) {
-                scheduleCoerceJournalTabFromSettingsIfStillIllegal(world);
+                scheduleCoerceSettingsSubTabFromServerIfStillIllegal(world);
             }
         }
         if (!journalSettingsAllowed) {
@@ -159,9 +165,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             journalSettingsVillagerModalOpen = false;
             journalSettingsResetConfirmOpen = false;
             journalSettingsFormSnapshot = null;
+            journalSettingsPersonalStatus = null;
         }
 
-        commandBuilder.set("#TabSettings.Visible", journalSettingsAllowed);
+        commandBuilder.set("#TabSettings.Visible", true);
 
         commandBuilder.set("#TabTown.Disabled", currentTab == PlayerTownJournalState.JournalTab.TOWN);
         commandBuilder.set("#TabGuide.Disabled", currentTab == PlayerTownJournalState.JournalTab.GUIDE);
@@ -200,6 +207,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             journalSettingsVillagerModalOpen = false;
             journalSettingsResetConfirmOpen = false;
             journalSettingsFormSnapshot = null;
+            journalSettingsPersonalStatus = null;
         }
 
         boolean plotModalBlocking = false;
@@ -227,6 +235,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             journalSettingsVillagerModalOpen = false;
             journalSettingsResetConfirmOpen = false;
             journalSettingsFormSnapshot = null;
+            journalSettingsPersonalStatus = null;
         }
 
         boolean journalSettingsResetModalBlocking =
@@ -338,22 +347,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             new EventData().append("Action", "Tab").append("TabId", "QUESTS"),
             false
         );
-        if (journalSettingsAllowed) {
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#TabSettings",
-                new EventData().append("Action", "Tab").append("TabId", "SETTINGS"),
-                false
-            );
-        }
-
-        commandBuilder.set("#TownShowBordersCheck #CheckBox.Value", stateForTabs.isShowTownBordersOnMap());
         eventBuilder.addEventBinding(
-            CustomUIEventBindingType.ValueChanged,
-            "#TownShowBordersCheck #CheckBox",
-            new EventData()
-                .append("Action", "TownShowBordersToggle")
-                .append("@Checked", "#TownShowBordersCheck #CheckBox.Value"),
+            CustomUIEventBindingType.Activating,
+            "#TabSettings",
+            new EventData().append("Action", "Tab").append("TabId", "SETTINGS"),
             false
         );
 
@@ -375,6 +372,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             journalSettingsVillagerModalOpen = false;
             journalSettingsResetConfirmOpen = false;
             journalSettingsFormSnapshot = null;
+            journalSettingsPersonalStatus = null;
         }
 
         if (currentTab == PlayerTownJournalState.JournalTab.QUESTS) {
@@ -520,8 +518,19 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             return;
         }
 
-        if (currentTab == PlayerTownJournalState.JournalTab.SETTINGS && journalSettingsAllowed) {
-            buildJournalSettingsTab(commandBuilder, eventBuilder, plugin, store, ref, uc, world);
+        if (currentTab == PlayerTownJournalState.JournalTab.SETTINGS) {
+            buildJournalSettingsTab(
+                commandBuilder,
+                eventBuilder,
+                plugin,
+                store,
+                ref,
+                uc,
+                world,
+                journalSettingsAllowed,
+                settingsSubTab,
+                stateForTabs
+            );
             return;
         }
 
@@ -697,6 +706,90 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     }
 
     private void buildJournalSettingsTab(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> ref,
+        @Nullable UUIDComponent uc,
+        @Nonnull World world,
+        boolean serverSettingsAllowed,
+        @Nonnull PlayerTownJournalState.SettingsSubTab settingsSubTab,
+        @Nonnull PlayerTownJournalState journalPrefs
+    ) {
+        boolean personalActive =
+            settingsSubTab == PlayerTownJournalState.SettingsSubTab.PERSONAL || !serverSettingsAllowed;
+        commandBuilder.set("#SettingsSubTabStrip.Visible", serverSettingsAllowed);
+        commandBuilder.set("#SettingsTabServer.Visible", serverSettingsAllowed);
+        commandBuilder.set("#SettingsTabPersonal.Disabled", personalActive);
+        commandBuilder.set("#SettingsTabServer.Disabled", serverSettingsAllowed && !personalActive);
+        commandBuilder.set("#SettingsPersonalPage.Visible", personalActive);
+        commandBuilder.set("#SettingsServerPage.Visible", serverSettingsAllowed && !personalActive);
+
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#SettingsTabPersonal",
+            new EventData().append("Action", "SettingsSubTab").append("SubTabId", "PERSONAL"),
+            false
+        );
+        if (serverSettingsAllowed) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#SettingsTabServer",
+                new EventData().append("Action", "SettingsSubTab").append("SubTabId", "SERVER"),
+                false
+            );
+        }
+
+        if (personalActive) {
+            buildJournalSettingsPersonalTab(commandBuilder, eventBuilder, journalPrefs);
+        } else {
+            buildJournalSettingsServerTab(commandBuilder, eventBuilder, plugin, store, ref, uc, world);
+        }
+    }
+
+    private void buildJournalSettingsPersonalTab(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull PlayerTownJournalState journalPrefs
+    ) {
+        commandBuilder.set("#SettingsPersonalStatus.TextSpans", journalSettingsPersonalStatus != null ? journalSettingsPersonalStatus : Message.raw(""));
+        commandBuilder.set(
+            "#SettingsRtsPickFovField.Value",
+            String.format(Locale.US, "%.1f", journalPrefs.effectiveRtsPickVerticalFovDeg())
+        );
+        commandBuilder.set(
+            "#SettingsRtsPickAspectField.Value",
+            String.format(Locale.US, "%.3f", journalPrefs.effectiveRtsPickAspectRatio())
+        );
+        commandBuilder.set("#SettingsShowBordersCheck #CheckBox.Value", journalPrefs.isShowTownBordersOnMap());
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#SettingsShowBordersCheck #CheckBox",
+            new EventData()
+                .append("Action", "TownShowBordersToggle")
+                .append("@Checked", "#SettingsShowBordersCheck #CheckBox.Value"),
+            false
+        );
+
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#SettingsPersonalSaveButton",
+            new EventData()
+                .append("Action", "PersonalSettingsSave")
+                .append("@RtsFov", "#SettingsRtsPickFovField.Value")
+                .append("@RtsAspect", "#SettingsRtsPickAspectField.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#SettingsPersonalResetButton",
+            new EventData().append("Action", "PersonalSettingsReset"),
+            false
+        );
+    }
+
+    private void buildJournalSettingsServerTab(
         @Nonnull UICommandBuilder commandBuilder,
         @Nonnull UIEventBuilder eventBuilder,
         @Nullable AetherhavenPlugin plugin,
@@ -1519,9 +1612,6 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         if (action.equalsIgnoreCase("Tab")) {
             String tabId = data.tabId;
             PlayerTownJournalState.JournalTab tab = parseTab(tabId);
-            if (tab == PlayerTownJournalState.JournalTab.SETTINGS && !JournalSettingsAccess.canOpen(store, ref)) {
-                return;
-            }
             PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
             if (st == null) {
                 st = new PlayerTownJournalState();
@@ -1537,6 +1627,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             journalSettingsVillagerModalOpen = false;
             journalSettingsResetConfirmOpen = false;
             journalSettingsFormSnapshot = null;
+            journalSettingsPersonalStatus = null;
             if (tab != PlayerTownJournalState.JournalTab.GUIDE) {
                 guideGiftSpoilerOpen = false;
                 guideScheduleSpoilerOpen = false;
@@ -1735,6 +1826,61 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             tm.updateTown(town);
             plotRemoveConfirmOpen = false;
             pendingRemovePlotId = null;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("SettingsSubTab")) {
+            PlayerTownJournalState.SettingsSubTab subTab = parseSettingsSubTab(data.subTabId);
+            if (subTab == PlayerTownJournalState.SettingsSubTab.SERVER && !JournalSettingsAccess.canOpen(store, ref)) {
+                return;
+            }
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) {
+                st = new PlayerTownJournalState();
+                store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            }
+            st.setLastSettingsSubTab(subTab);
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            journalSettingsPersonalStatus = null;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("PersonalSettingsSave")) {
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) {
+                st = new PlayerTownJournalState();
+            }
+            float fovDef = st.effectiveRtsPickVerticalFovDeg();
+            float aspectDef = st.effectiveRtsPickAspectRatio();
+            float fov = (float) parseDoubleSafe(data.rtsFov, 30.0, 120.0, fovDef);
+            float aspect = (float) parseDoubleSafe(data.rtsAspect, 0.5, 3.0, aspectDef);
+            st.setRtsPickOverrides(fov, aspect);
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            refreshActiveRtsPickTuning(ref, store);
+            journalSettingsPersonalStatus =
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalSaveOk");
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("PersonalSettingsReset")) {
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) {
+                st = new PlayerTownJournalState();
+            }
+            st.clearRtsPickOverrides();
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            refreshActiveRtsPickTuning(ref, store);
+            journalSettingsPersonalStatus =
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalResetOk");
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
@@ -2186,7 +2332,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         });
     }
 
-    private void scheduleCoerceJournalTabFromSettingsIfStillIllegal(@Nonnull World world) {
+    private void scheduleCoerceSettingsSubTabFromServerIfStillIllegal(@Nonnull World world) {
         world.execute(() -> {
             Ref<EntityStore> pref = this.playerRef.getReference();
             if (pref == null || !pref.isValid()) {
@@ -2197,15 +2343,35 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (js == null) {
                 return;
             }
-            if (js.getLastTab() != PlayerTownJournalState.JournalTab.SETTINGS) {
+            if (js.getLastSettingsSubTab() != PlayerTownJournalState.SettingsSubTab.SERVER) {
                 return;
             }
             if (JournalSettingsAccess.canOpen(st, pref)) {
                 return;
             }
-            js.setLastTab(PlayerTownJournalState.JournalTab.QUESTS);
+            js.setLastSettingsSubTab(PlayerTownJournalState.SettingsSubTab.PERSONAL);
             st.putComponent(pref, PlayerTownJournalState.getComponentType(), js);
         });
+    }
+
+    private static void refreshActiveRtsPickTuning(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        RtsCommandPlayerComponent session = store.getComponent(ref, RtsCommandPlayerComponent.getComponentType());
+        if (session == null || !session.isActive()) {
+            return;
+        }
+        PlayerTownJournalState journal = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+        session.setPickTuning(RtsPickTuning.fromJournal(journal));
+        RtsScreenPickUtil.refreshPickViewHeight(session, store);
+        session.clearOrthoCalibration();
+        store.putComponent(ref, RtsCommandPlayerComponent.getComponentType(), session);
+    }
+
+    @Nonnull
+    private static PlayerTownJournalState.SettingsSubTab parseSettingsSubTab(@Nullable String subTabId) {
+        if (subTabId == null || subTabId.isBlank()) {
+            return PlayerTownJournalState.SettingsSubTab.PERSONAL;
+        }
+        return PlayerTownJournalState.SettingsSubTab.fromPersisted(subTabId);
     }
 
     @Nonnull
@@ -2273,6 +2439,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             .add()
             .append(new KeyedCodec<>("@VillagerPick", Codec.STRING), (d, v) -> d.villagerPick = v, d -> d.villagerPick)
             .add()
+            .append(new KeyedCodec<>("SubTabId", Codec.STRING), (d, v) -> d.subTabId = v, d -> d.subTabId)
+            .add()
+            .append(new KeyedCodec<>("@RtsFov", Codec.STRING), (d, v) -> d.rtsFov = v, d -> d.rtsFov)
+            .add()
+            .append(new KeyedCodec<>("@RtsAspect", Codec.STRING), (d, v) -> d.rtsAspect = v, d -> d.rtsAspect)
+            .add()
             .append(new KeyedCodec<>("@Checked", Codec.BOOLEAN), (d, v) -> d.checked = v, d -> d.checked)
             .add()
             .build();
@@ -2323,6 +2495,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private String plotPick;
         @Nullable
         private String villagerPick;
+        @Nullable
+        private String subTabId;
+        @Nullable
+        private String rtsFov;
+        @Nullable
+        private String rtsAspect;
         @Nullable
         private Boolean checked;
     }

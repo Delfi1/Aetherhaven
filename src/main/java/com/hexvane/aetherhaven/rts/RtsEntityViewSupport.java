@@ -35,7 +35,7 @@ public final class RtsEntityViewSupport {
         if (base <= 0) {
             return;
         }
-        viewer.viewRadiusBlocks = base + (int) Math.ceil(session.getDistance());
+        viewer.viewRadiusBlocks = base + (int) Math.ceil(RtsScreenPickUtil.viewHeightAboveGround(session));
     }
 
     public static void restore(

@@ -251,27 +251,11 @@ $C.@PageOverlay {
               }
               }
 
-              Group #TownPage {
+                Group #TownPage {
                 LayoutMode: Top;
                 FlexWeight: 1;
                 Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
                 Visible: false;
-
-                Group #TownMapBorderRow {
-                  LayoutMode: Left;
-                  Anchor: (Bottom: 10);
-
-                  Group #TownShowBordersCheck {
-                    LayoutMode: Left;
-                    $C.@CheckBox #CheckBox {}
-                  }
-
-                  Label #TownShowBordersLabel {
-                    Anchor: (Left: 10, Top: 4);
-                    Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
-                    Text: "";
-                  }
-                }
 
                 Label #TownBlocked {
                   Visible: false;
@@ -432,6 +416,119 @@ $C.@PageOverlay {
                 FlexWeight: 1;
                 Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
                 Visible: false;
+
+                Group #SettingsSubTabStrip {
+                  LayoutMode: Left;
+                  Anchor: (Bottom: 10, Left: 0, Right: 0);
+
+                  $C.@SecondaryTextButton #SettingsTabPersonal {
+                    Text: "";
+                    Anchor: (Right: 10, Width: 200, Height: 36);
+                  }
+
+                  $C.@SecondaryTextButton #SettingsTabServer {
+                    Text: "";
+                    Anchor: (Width: 200, Height: 36);
+                  }
+                }
+
+                Group #SettingsPersonalPage {
+                  LayoutMode: Top;
+                  FlexWeight: 1;
+                  Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+                  Visible: false;
+
+                  Group #SettingsPersonalScroll {
+                    LayoutMode: TopScrolling;
+                    FlexWeight: 1;
+                    Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+                    ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+                    Group #SettingsPersonalInner {
+                      LayoutMode: Top;
+                      Padding: (Bottom: 12);
+
+                      Label #SettingsPersonalHeading {
+                        Anchor: (Bottom: 6);
+                        Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 16);
+                        Text: "";
+                      }
+
+                      Label #SettingsPersonalHint {
+                        Anchor: (Bottom: 14);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                        Text: "";
+                      }
+
+                      Group #SettingsMapBorderRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 14);
+
+                        Group #SettingsShowBordersCheck {
+                          LayoutMode: Left;
+                          $C.@CheckBox #CheckBox {}
+                        }
+
+                        Label #SettingsShowBordersLabel {
+                          Anchor: (Left: 10, Top: 4);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+                      }
+
+                      Label #SettingsRtsPickHeading {
+                        Anchor: (Bottom: 6);
+                        Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #c8c2b0, FontSize: 13);
+                        Text: "";
+                      }
+
+                      Label #SettingsRtsPickFovLabel {
+                        Anchor: (Bottom: 4);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                        Text: "";
+                      }
+                      $C.@TextField #SettingsRtsPickFovField {
+                        Anchor: (Bottom: 8, Height: 40, Left: 0, Right: 0);
+                      }
+
+                      Label #SettingsRtsPickAspectLabel {
+                        Anchor: (Bottom: 4);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                        Text: "";
+                      }
+                      $C.@TextField #SettingsRtsPickAspectField {
+                        Anchor: (Bottom: 10, Height: 40, Left: 0, Right: 0);
+                      }
+
+                      Group #SettingsPersonalSaveRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 12);
+
+                        $C.@TextButton #SettingsPersonalSaveButton {
+                          Text: "";
+                          Anchor: (Width: 200, Height: 40);
+                        }
+
+                        $C.@SecondaryTextButton #SettingsPersonalResetButton {
+                          Text: "";
+                          Anchor: (Left: 14, Width: 220, Height: 40);
+                        }
+                      }
+
+                      Label #SettingsPersonalStatus {
+                        Anchor: (Top: 6);
+                        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #a8c8a8);
+                        Text: "";
+                      }
+                    }
+                  }
+                }
+
+                Group #SettingsServerPage {
+                  LayoutMode: Top;
+                  FlexWeight: 1;
+                  Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+                  Visible: false;
 
                 Group #SettingsScroll {
                   LayoutMode: TopScrolling;
@@ -721,6 +818,7 @@ $C.@PageOverlay {
                       Text: "";
                     }
                   }
+                }
                 }
               }
             }

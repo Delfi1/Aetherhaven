@@ -17,12 +17,99 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector2fc;
 import org.joml.Vector3d;
+import org.joml.Vector3i;
 
 public final class RtsHostileQuery {
     private static final String AGGRESSIVE_GROUP = "Aggressive";
 
+    /** Radius around a ground click to pick a hostile under the RTS cursor. */
+    private static final double FOCUS_PICK_RADIUS = 6.0;
+    /** Max normalized screen distance (0..1) to match cursor to a hostile icon. */
+    private static final float HOSTILE_SCREEN_PICK_RADIUS = 0.035f;
+    private static final float HOSTILE_SCREEN_PICK_RADIUS_SQ =
+        HOSTILE_SCREEN_PICK_RADIUS * HOSTILE_SCREEN_PICK_RADIUS;
+
     private RtsHostileQuery() {}
+
+    /**
+     * Resolves the hostile for a command-sword click: direct entity hit first, then screen-space
+     * pick (tracks camera pan), then nearest hostile near the ground pick.
+     */
+    @Nullable
+    public static Ref<EntityStore> resolveFocusTarget(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull RtsCommandPlayerComponent session,
+        @Nullable Vector3i targetBlock,
+        @Nullable Vector2fc screen,
+        @Nullable Ref<EntityStore> directTarget
+    ) {
+        if (directTarget != null && directTarget.isValid() && isAggressiveNpc(directTarget, store)) {
+            return directTarget;
+        }
+        if (screen != null) {
+            Ref<EntityStore> atScreen = pickHostileAtScreen(store, session, screen.x(), screen.y());
+            if (atScreen != null) {
+                return atScreen;
+            }
+        }
+        RtsScreenPickUtil.GroundPick pick = RtsScreenPickUtil.resolveCommandGroundPick(
+            playerRef,
+            store,
+            session,
+            targetBlock,
+            screen
+        );
+        if (pick == null) {
+            return null;
+        }
+        Ref<EntityStore> atPick = nearestHostile(store, pick.x(), pick.y(), pick.z(), FOCUS_PICK_RADIUS);
+        if (atPick != null) {
+            return atPick;
+        }
+        return nearestHostile(store, pick.x(), pick.y() + 2.0, pick.z(), FOCUS_PICK_RADIUS + 2.0);
+    }
+
+    @Nullable
+    public static Ref<EntityStore> pickHostileAtScreen(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull RtsCommandPlayerComponent session,
+        float rawScreenX,
+        float rawScreenY
+    ) {
+        float cursorNx = RtsScreenPickUtil.cameraRawToNormalizedX(rawScreenX);
+        float cursorNy = RtsScreenPickUtil.cameraRawToNormalizedY(rawScreenY);
+        double cx = session.getFocusX();
+        double cz = session.getFocusZ();
+        double viewRadius = Math.max(64.0, session.getSavedViewRadiusBlocks() + RtsScreenPickUtil.viewHeightAboveGround(session) + 16.0);
+        List<Ref<EntityStore>> hostiles = new ArrayList<>();
+        collectHostilesInBox(store, cx - viewRadius, cx + viewRadius, cz - viewRadius, cz + viewRadius, hostiles);
+
+        Ref<EntityStore> best = null;
+        double bestDistSq = Double.MAX_VALUE;
+        for (Ref<EntityStore> ref : hostiles) {
+            if (!ref.isValid()) {
+                continue;
+            }
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tc == null) {
+                continue;
+            }
+            Vector3d pos = tc.getPosition();
+            float sx = RtsScreenPickUtil.worldToNormalizedScreenX(pos.x, session);
+            float sy = RtsScreenPickUtil.worldToNormalizedScreenY(pos.z, session);
+            double dx = sx - cursorNx;
+            double dy = sy - cursorNy;
+            double distSq = dx * dx + dy * dy;
+            if (distSq <= HOSTILE_SCREEN_PICK_RADIUS_SQ && distSq < bestDistSq) {
+                bestDistSq = distSq;
+                best = ref;
+            }
+        }
+        return best;
+    }
 
     public static boolean isAggressiveNpc(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());

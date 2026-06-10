@@ -100,7 +100,7 @@ public final class RtsCameraMousePollSystem extends EntityTickingSystem<EntitySt
         if (right == MouseButtonState.Pressed && track.right != MouseButtonState.Pressed) {
             RtsDiagnostics.mouseClick(pr, "camera-right-press", targetBlock, screen);
             RtsClickService.handleSecondaryClick(
-                playerRef, store, commandBuffer, session, targetBlock, screen
+                playerRef, store, commandBuffer, session, targetBlock, screen, null
             );
         }
         track.right = right;

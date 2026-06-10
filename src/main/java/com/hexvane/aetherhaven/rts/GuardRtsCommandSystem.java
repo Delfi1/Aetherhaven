@@ -84,6 +84,10 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
+        if (cmd.isFocusFire() && cmd.getTargetEntityUuid() != null) {
+            tickFocusFireTravel(ref, npc, cmd, pos, store, commandBuffer);
+            return;
+        }
         if (arrived(pos, cmd)) {
             cmd.setPhase(RtsCommandPhase.HOLDING);
             return;
@@ -98,7 +102,23 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
             }
         }
 
-        suppressOutOfRangeCombatDuringTravel(ref, npc, pos, store, commandBuffer);
+        resumeTravelMotion(ref, npc, cmd, pos, store, commandBuffer);
+    }
+
+    /** Breaks stale combat while pathing to a new order point, then resumes RTS seek. */
+    private void resumeTravelMotion(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull NPCEntity npc,
+        @Nonnull GuardRtsCommandState cmd,
+        @Nonnull Vector3d pos,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        if (cmd.getTargetEntityUuid() == null && !cmd.isFocusFire()) {
+            clearStaleTravelCombat(ref, npc, store, commandBuffer);
+        } else {
+            suppressOutOfRangeCombatDuringTravel(ref, npc, cmd, pos, store, commandBuffer);
+        }
         ensureRtsCommandMotion(ref, npc, commandBuffer);
     }
 
@@ -122,7 +142,13 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         if (cmd.isFocusFire() && cmd.getTargetEntityUuid() != null) {
             Ref<EntityStore> target = RtsGuardDirectory.findByUuid(store, cmd.getTargetEntityUuid());
             if (target != null && target.isValid() && RtsHostileQuery.isAggressiveNpc(target, store)) {
-                beginEngage(ref, npc, cmd, target, store, commandBuffer);
+                syncFocusHold(cmd, target, store);
+                npc.setLeashPoint(new Vector3d(cmd.getHoldX(), cmd.getHoldY(), cmd.getHoldZ()));
+                if (isWithinHorizontalRange(store, pos, target, RtsGuardCombatRanges.attackEngageRange(npc) * 1.1)) {
+                    beginEngage(ref, npc, cmd, target, store, commandBuffer);
+                } else {
+                    cmd.setPhase(RtsCommandPhase.TRAVELING);
+                }
             } else {
                 cmd.setFocusFire(false);
                 cmd.setTargetEntityUuid(null);
@@ -154,18 +180,25 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         }
 
         if (!withinEngagementLimits(cmd, pos, target, store)) {
-            if (atOrderDestination(pos, cmd)) {
+            if (cmd.isFocusFire()) {
+                cmd.setPhase(RtsCommandPhase.TRAVELING);
+            } else if (atOrderDestination(pos, cmd)) {
                 cmd.setPhase(RtsCommandPhase.RETURNING);
             }
             endEngagement(ref, npc, cmd, pos, store, commandBuffer);
             return;
         }
 
-        if (!atOrderDestination(pos, cmd)
+        if (!cmd.isFocusFire()
+            && !atOrderDestination(pos, cmd)
             && cmd.getOrderMode() == RtsOrderMode.ATTACK_MOVE
-            && !isWithinHorizontalRange(store, pos, target, RtsGuardCombatRanges.attackEngageRange(npc))) {
+            && !isWithinHorizontalRange(store, pos, target, RtsGuardCombatRanges.disengageRange(npc))) {
             endEngagement(ref, npc, cmd, pos, store, commandBuffer);
             return;
+        }
+
+        if (cmd.isFocusFire()) {
+            syncFocusHold(cmd, target, store);
         }
 
         RtsGuardCombatSupport.lockCombatTarget(npc, target, store);
@@ -218,9 +251,8 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
         cmd.setTargetEntityUuid(null);
-        if (!cmd.isFocusFire()) {
-            cmd.setPhase(atOrderDestination(pos, cmd) ? RtsCommandPhase.HOLDING : RtsCommandPhase.TRAVELING);
-        }
+        cmd.setFocusFire(false);
+        cmd.setPhase(atOrderDestination(pos, cmd) ? RtsCommandPhase.HOLDING : RtsCommandPhase.TRAVELING);
         Role role = npc.getRole();
         RtsGuardCombatSupport.clearCombatTarget(npc, store);
         String state = role.getStateSupport().getStateName();
@@ -236,13 +268,13 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         @Nonnull Vector3d pos,
         @Nonnull NPCEntity npc
     ) {
-        double engageRange = RtsGuardCombatRanges.attackEngageRange(npc);
+        double acquireRange = AetherhavenConstants.RTS_TRAVEL_ENGAGE_RADIUS;
         Ref<EntityStore> hostile = RtsHostileQuery.nearestHostile(
             store,
             pos.x,
             pos.y,
             pos.z,
-            engageRange
+            acquireRange
         );
         if (hostile == null) {
             return null;
@@ -253,7 +285,10 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         }
         Vector3d hp = htc.getPosition();
         double dist = RtsHostileQuery.horizontalDistance(pos.x, pos.z, hp.x, hp.z);
-        if (dist > engageRange) {
+        if (dist > acquireRange) {
+            return null;
+        }
+        if (!isWithinHorizontalRange(store, pos, hostile, RtsGuardCombatRanges.attackEngageRange(npc))) {
             return null;
         }
         if (cmd.getCombatStance() == RtsCombatStance.STAND_GROUND) {
@@ -264,10 +299,26 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         return hostile;
     }
 
+    /** Clears combat when traveling without an RTS engagement target (e.g. after a move order). */
+    private static void clearStaleTravelCombat(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull NPCEntity npc,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        Role role = npc.getRole();
+        if (role == null || !role.getStateSupport().getStateName().contains("Combat")) {
+            return;
+        }
+        RtsGuardCombatSupport.clearCombatTarget(npc, store);
+        role.getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
+    }
+
     /** Keep traveling to the order point until a hostile is actually in weapon range. */
     private static void suppressOutOfRangeCombatDuringTravel(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull NPCEntity npc,
+        @Nonnull GuardRtsCommandState cmd,
         @Nonnull Vector3d pos,
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
@@ -275,6 +326,10 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         Role role = npc.getRole();
         String state = role.getStateSupport().getStateName();
         if (!state.contains("Combat")) {
+            return;
+        }
+        if (cmd.getTargetEntityUuid() == null && !cmd.isFocusFire()) {
+            clearStaleTravelCombat(ref, npc, store, commandBuffer);
             return;
         }
         double engageRange = RtsGuardCombatRanges.attackEngageRange(npc);
@@ -378,6 +433,16 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
         @Nonnull Ref<EntityStore> target,
         @Nonnull Store<EntityStore> store
     ) {
+        if (cmd.isFocusFire()) {
+            TransformComponent htc = store.getComponent(target, TransformComponent.getComponentType());
+            if (htc == null) {
+                return true;
+            }
+            Vector3d hp = htc.getPosition();
+            double dist = RtsHostileQuery.horizontalDistance(pos.x, pos.z, hp.x, hp.z);
+            return dist <= AetherhavenConstants.RTS_ATTACK_MOVE_CHASE_RADIUS;
+        }
+
         double guardToHold = RtsHostileQuery.horizontalDistance(pos.x, pos.z, cmd.getHoldX(), cmd.getHoldZ());
 
         if (cmd.getOrderMode() == RtsOrderMode.ATTACK_MOVE && !atOrderDestination(pos, cmd)) {
@@ -435,5 +500,43 @@ public final class GuardRtsCommandSystem extends EntityTickingSystem<EntityStore
                 .getStateSupport()
                 .setState(ref, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, commandBuffer);
         }
+    }
+
+    private void tickFocusFireTravel(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull NPCEntity npc,
+        @Nonnull GuardRtsCommandState cmd,
+        @Nonnull Vector3d pos,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        Ref<EntityStore> target = RtsGuardDirectory.findByUuid(store, cmd.getTargetEntityUuid());
+        if (target == null || !target.isValid() || !RtsHostileQuery.isAggressiveNpc(target, store)) {
+            cmd.setFocusFire(false);
+            cmd.setTargetEntityUuid(null);
+            cmd.setPhase(RtsCommandPhase.HOLDING);
+            return;
+        }
+        syncFocusHold(cmd, target, store);
+        npc.setLeashPoint(new Vector3d(cmd.getHoldX(), cmd.getHoldY(), cmd.getHoldZ()));
+        if (isWithinHorizontalRange(store, pos, target, RtsGuardCombatRanges.attackEngageRange(npc) * 1.1)) {
+            beginEngage(ref, npc, cmd, target, store, commandBuffer);
+            return;
+        }
+        suppressOutOfRangeCombatDuringTravel(ref, npc, cmd, pos, store, commandBuffer);
+        ensureRtsCommandMotion(ref, npc, commandBuffer);
+    }
+
+    private static void syncFocusHold(
+        @Nonnull GuardRtsCommandState cmd,
+        @Nonnull Ref<EntityStore> target,
+        @Nonnull Store<EntityStore> store
+    ) {
+        TransformComponent htc = store.getComponent(target, TransformComponent.getComponentType());
+        if (htc == null) {
+            return;
+        }
+        Vector3d hp = htc.getPosition();
+        cmd.setHold(hp.x, hp.y, hp.z);
     }
 }

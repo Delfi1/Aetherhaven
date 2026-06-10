@@ -13,8 +13,8 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 /**
- * Town Journal Settings tab: operators or {@link AetherhavenConstants#PERMISSION_JOURNAL_SETTINGS} may open server
- * tuning and repair tools.
+ * Town Journal Settings server tab: operators or {@link AetherhavenConstants#PERMISSION_JOURNAL_SETTINGS} may save world
+ * config and use repair tools. The Settings tab itself is open to all players (personal sub-tab).
  */
 public final class JournalSettingsAccess {
     private JournalSettingsAccess() {}

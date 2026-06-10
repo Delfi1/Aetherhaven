@@ -36,7 +36,8 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
         NONE,
         GREY,
         BLUE,
-        RED
+        RED,
+        FOCUS
     }
 
     private static final class ActiveMarker {
@@ -104,6 +105,7 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
         Set<UUID> selected = Set.copyOf(session.getSelectedGuardUuids());
         Set<UUID> visibleThisTick = new HashSet<>();
         Map<UUID, ActiveMarker> guardMarkers = markersByCommander.computeIfAbsent(commanderId, id -> new HashMap<>());
+        UUID focusTargetId = resolveActiveFocusTarget(commanderId, store);
 
         if (selectionChanged(commanderId, selected)) {
             invalidateAllMarkerTracks(guardMarkers);
@@ -144,7 +146,8 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
             }
             UUID hostileId = uc.getUuid();
             visibleThisTick.add(hostileId);
-            ensureMarker(hostile, MarkerKind.RED, audience, store, guardMarkers.computeIfAbsent(hostileId, id -> new ActiveMarker()));
+            MarkerKind kind = hostileId.equals(focusTargetId) ? MarkerKind.FOCUS : MarkerKind.RED;
+            ensureMarker(hostile, kind, audience, store, guardMarkers.computeIfAbsent(hostileId, id -> new ActiveMarker()));
         }
 
         pruneMarkers(guardMarkers, visibleThisTick, audience, store);
@@ -220,6 +223,7 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
     ) {
         Map<UUID, ActiveMarker> guardMarkers = markersByCommander.remove(commanderId);
         lastSelectedByCommander.remove(commanderId);
+        RtsFocusTargetVisuals.clear(commanderId);
         if (guardMarkers == null || guardMarkers.isEmpty()) {
             return;
         }
@@ -232,11 +236,26 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
     }
 
     @Nullable
+    private static UUID resolveActiveFocusTarget(@Nonnull UUID commanderId, @Nonnull Store<EntityStore> store) {
+        UUID focusTargetId = RtsFocusTargetVisuals.getActive(commanderId);
+        if (focusTargetId == null) {
+            return null;
+        }
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(focusTargetId);
+        if (ref == null || !ref.isValid() || !RtsHostileQuery.isAggressiveNpc(ref, store)) {
+            RtsFocusTargetVisuals.clear(commanderId);
+            return null;
+        }
+        return focusTargetId;
+    }
+
+    @Nullable
     private static String particleFor(@Nonnull MarkerKind kind) {
         return switch (kind) {
             case BLUE -> AetherhavenConstants.RTS_MARKER_BLUE_PARTICLE;
             case GREY -> AetherhavenConstants.RTS_MARKER_GREY_PARTICLE;
             case RED -> AetherhavenConstants.RTS_MARKER_RED_PARTICLE;
+            case FOCUS -> AetherhavenConstants.RTS_FOCUS_TARGET_PARTICLE;
             case NONE -> null;
         };
     }
@@ -247,12 +266,13 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
             case GREY -> "AetherhavenRtsMarker_grey";
             case BLUE -> "AetherhavenRtsMarker_blue";
             case RED -> "AetherhavenRtsMarker_red";
+            case FOCUS -> "AetherhavenRtsMarker_red";
             case NONE -> null;
         };
     }
 
     private static double viewRadiusBlocks(@Nonnull RtsCommandPlayerComponent session) {
-        return Math.max(MIN_VIEW_RADIUS, session.getSavedViewRadiusBlocks() + session.getDistance() + 16.0);
+        return Math.max(MIN_VIEW_RADIUS, session.getSavedViewRadiusBlocks() + RtsScreenPickUtil.viewHeightAboveGround(session) + 16.0);
     }
 
     private static boolean nearFocus(@Nonnull Vector3d pos, double cx, double cz, double radius) {

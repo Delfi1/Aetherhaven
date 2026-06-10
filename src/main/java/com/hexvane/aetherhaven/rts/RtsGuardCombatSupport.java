@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.builtin.npccombatactionevaluator.memory.TargetMemory;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -11,6 +12,7 @@ import com.hypixel.hytale.server.npc.role.support.MarkedEntitySupport;
 import it.unimi.dsi.fastutil.ints.Int2FloatOpenHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3d;
 
 /** Bridges Java RTS engage logic to guard role combat (LockedTarget + hostile memory). */
 public final class RtsGuardCombatSupport {
@@ -18,6 +20,24 @@ public final class RtsGuardCombatSupport {
     public static final String LOCKED_TARGET_SLOT = "LockedTarget";
 
     private RtsGuardCombatSupport() {}
+
+    /** Clears combat targeting and resumes RTS pathing toward a new hold point. */
+    public static void resumeTravel(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull NPCEntity npc,
+        @Nonnull ComponentAccessor<EntityStore> accessor,
+        double holdX,
+        double holdY,
+        double holdZ
+    ) {
+        clearCombatTarget(npc, accessor);
+        npc.setLeashPoint(new Vector3d(holdX, holdY, holdZ));
+        Role role = npc.getRole();
+        if (role != null && role.getStateSupport().getStateName().contains("Combat")) {
+            role.getStateSupport().setState(guardRef, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, accessor);
+        }
+        accessor.putComponent(guardRef, NPCEntity.getComponentType(), npc);
+    }
 
     public static void lockCombatTarget(
         @Nonnull NPCEntity npc,

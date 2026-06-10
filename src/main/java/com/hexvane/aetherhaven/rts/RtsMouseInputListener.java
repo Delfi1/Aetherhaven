@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.rts;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.rts.ui.RtsBoxSelectHudSupport;
 import com.hexvane.aetherhaven.rts.ui.RtsCommandHudSupport;
+import com.hexvane.aetherhaven.rts.ui.RtsGuardRosterInput;
 import com.hexvane.aetherhaven.rts.debug.RtsBoxSelectDebugOverlay;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -75,7 +76,8 @@ public final class RtsMouseInputListener {
                 null,
                 session,
                 event.getTargetBlock(),
-                event.getScreenPoint()
+                event.getScreenPoint(),
+                event.getTargetEntityRef()
             );
         }
     }
@@ -114,6 +116,12 @@ public final class RtsMouseInputListener {
         logHotbarOnClick(playerRef, store, state == MouseButtonState.Pressed ? "press" : "release");
 
         if (state == MouseButtonState.Pressed) {
+            if (RtsGuardRosterInput.tryConsumeRosterClick(
+                playerRef, store, commandBuffer, session, town, plugin, screen
+            )) {
+                persistSession(playerRef, store, commandBuffer, session);
+                return;
+            }
             beginBoxSelect(playerRef, store, session, targetBlock, screen);
             persistSession(playerRef, store, commandBuffer, session);
             refreshBoxHud(playerRef, store, session);
@@ -134,6 +142,7 @@ public final class RtsMouseInputListener {
         @Nullable Vector2fc screen
     ) {
         screen = resolveScreen(playerRef, store, screen);
+        session.clearCameraFollow();
         session.setBoxSelectActive(true);
         session.setBoxWorldAnchorReady(false);
         session.clearOrthoCalibration();
@@ -198,7 +207,15 @@ public final class RtsMouseInputListener {
             applyCompletedBoxSelection(playerRef, store, session, town);
             persistSession(playerRef, store, commandBuffer, session);
         } else {
-            handleToolClickWithoutDrag(playerRef, store, commandBuffer, session, town, targetBlock, releaseScreen);
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null
+                || !RtsGuardRosterInput.tryConsumeRosterClick(
+                    playerRef, store, commandBuffer, session, town, plugin, screen
+                )) {
+                handleToolClickWithoutDrag(playerRef, store, commandBuffer, session, town, targetBlock, releaseScreen);
+            } else {
+                persistSession(playerRef, store, commandBuffer, session);
+            }
         }
 
         refreshSelectionOverlay(playerRef, store, session);
@@ -245,6 +262,9 @@ public final class RtsMouseInputListener {
                 column,
                 session.getSelectedGuardUuids().size()
             );
+        }
+        if (!session.getSelectedGuardUuids().isEmpty()) {
+            RtsCommandFeedback.playBoxSelect(playerRef, store);
         }
         refreshStatusHud(playerRef, store, session);
     }

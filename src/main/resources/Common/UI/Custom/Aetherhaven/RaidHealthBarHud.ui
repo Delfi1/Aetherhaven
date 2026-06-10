@@ -1,0 +1,76 @@
+$C = "../Common.ui";
+
+@RaidBarWidth = 480;
+@RaidBarHeight = 30;
+@RaidBarInsetH = 5;
+@RaidBarInsetV = 4;
+
+@RaidBarBorderPatch = (TexturePath: "../XpBarBorder.png", Border: 8, Color: #ffffff);
+@RaidBarFillPatch = (TexturePath: "../RaidHealthBar.png", Border: 0, Color: #ffffff);
+@RaidBarTrackPatch = #121820(0.95);
+
+Group #RaidHealthBarHudRoot {
+  LayoutMode: Top;
+  Anchor: (Top: 46);
+
+  Group {
+    LayoutMode: Left;
+
+    Group {
+      FlexWeight: 1;
+    }
+
+    Group #RaidHudPanel {
+      LayoutMode: Top;
+      Anchor: (Width: @RaidBarWidth);
+
+      Label #RaidTitle {
+        Style: (...$C.@DefaultLabelStyle, FontSize: 18, TextColor: #f4e8c8, RenderBold: true, RenderUppercase: true, HorizontalAlignment: Center);
+        Anchor: (Bottom: 6);
+        Text: "";
+      }
+
+      Group #RaidBarStack {
+        LayoutMode: Full;
+        Anchor: (Height: @RaidBarHeight, Left: 0, Right: 0);
+
+        Group #RaidBarFillTrack {
+          LayoutMode: Left;
+          Anchor: (Left: @RaidBarInsetH, Right: @RaidBarInsetH, Top: @RaidBarInsetV, Bottom: @RaidBarInsetV);
+          Background: @RaidBarTrackPatch;
+
+          Group #RaidBarFill {
+            FlexWeight: 1;
+            Anchor: (Top: 0, Bottom: 0);
+            Background: @RaidBarFillPatch;
+          }
+
+          Group #RaidBarFillRemainder {
+            FlexWeight: 999;
+          }
+        }
+
+        Group #RaidBarSeparators {
+          LayoutMode: Left;
+          Anchor: (Left: @RaidBarInsetH, Right: @RaidBarInsetH, Top: @RaidBarInsetV, Bottom: @RaidBarInsetV);
+        }
+
+        Group #RaidBarBorder {
+          LayoutMode: Full;
+          Anchor: (Full: 0);
+          Background: @RaidBarBorderPatch;
+        }
+
+        Label #RaidBarText {
+          Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #f0e8d8, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center);
+          Anchor: (Full: 0);
+          Text: "";
+        }
+      }
+    }
+
+    Group {
+      FlexWeight: 1;
+    }
+  }
+}

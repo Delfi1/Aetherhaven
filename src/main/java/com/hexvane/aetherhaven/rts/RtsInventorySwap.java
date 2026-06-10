@@ -60,7 +60,7 @@ public final class RtsInventorySwap {
         accessor.putComponent(playerRef, InventoryComponent.Hotbar.getComponentType(), hotbar);
         PlayerRef pr = accessor.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
-            RtsHotbarSync.syncToClient(playerRef, pr, hotbar);
+            RtsHotbarSync.syncHotbarRewriteToClient(pr, hotbar);
         }
     }
 
@@ -118,7 +118,7 @@ public final class RtsInventorySwap {
         accessor.putComponent(playerRef, InventoryComponent.Hotbar.getComponentType(), hotbar);
         PlayerRef pr = accessor.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
-            RtsHotbarSync.syncToClient(playerRef, pr, hotbar);
+            RtsHotbarSync.syncHotbarRewriteToClient(pr, hotbar);
         }
     }
 

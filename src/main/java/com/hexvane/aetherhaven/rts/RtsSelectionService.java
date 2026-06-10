@@ -10,6 +10,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -137,6 +138,19 @@ public final class RtsSelectionService {
         }
     }
 
+    public static void toggleGuard(@Nonnull RtsCommandPlayerComponent session, @Nonnull UUID guardUuid) {
+        List<UUID> selected = session.getSelectedGuardUuids();
+        if (selected.contains(guardUuid)) {
+            selected.remove(guardUuid);
+        } else {
+            selected.add(guardUuid);
+        }
+    }
+
+    public static boolean isSelected(@Nonnull RtsCommandPlayerComponent session, @Nonnull UUID guardUuid) {
+        return session.getSelectedGuardUuids().contains(guardUuid);
+    }
+
     /** Resolve a ground pick from session focus and optional client block. */
     @Nullable
     public static RtsScreenPickUtil.GroundPick resolveClickPick(
@@ -154,22 +168,6 @@ public final class RtsSelectionService {
         @Nullable org.joml.Vector2dc screenPoint
     ) {
         return RtsScreenPickUtil.resolve(session, clientBlock, screenPoint);
-    }
-
-    public static boolean isZoomHeld(
-        @Nonnull RtsCommandPlayerComponent session,
-        @Nonnull Ref<EntityStore> playerRef,
-        @Nonnull Store<EntityStore> store
-    ) {
-        if (session.isShiftModifierHeld()) {
-            return true;
-        }
-        var ms = store.getComponent(playerRef, com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent.getComponentType());
-        if (ms == null) {
-            return false;
-        }
-        var states = ms.getMovementStates();
-        return states.crouching || states.forcedCrouching;
     }
 
     public static boolean isSprinting(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {

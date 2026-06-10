@@ -18,8 +18,6 @@ import org.joml.Vector3d;
 
 /** Ground move-destination marker (ring + rising motes) until guards arrive. */
 public final class RtsMoveOrderVisuals {
-    /** Tiny lift so the flat ring clears z-fighting; rise spawner adds its own offset. */
-    private static final double SURFACE_LIFT = 0.02;
     private static final Map<UUID, ActiveDestination> ACTIVE = new ConcurrentHashMap<>();
 
     private RtsMoveOrderVisuals() {}
@@ -104,7 +102,7 @@ public final class RtsMoveOrderVisuals {
         double y,
         double z
     ) {
-        double markerY = y + SURFACE_LIFT;
+        double markerY = y + AetherhavenConstants.RTS_MOVE_ORDER_MARKER_SURFACE_LIFT;
         ParticleUtil.spawnParticleEffect(
             AetherhavenConstants.RTS_MOVE_ORDER_MARKER_PARTICLE,
             new Vector3d(x, markerY, z),

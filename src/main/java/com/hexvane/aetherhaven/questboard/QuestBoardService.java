@@ -589,6 +589,7 @@ public final class QuestBoardService {
 
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
+            QuestBoardCompletionEffects.notifyCompleted(pr, playerRef, store, completedName);
             pr.sendMessage(
                 Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.completedToast")
                     .param("name", completedName)

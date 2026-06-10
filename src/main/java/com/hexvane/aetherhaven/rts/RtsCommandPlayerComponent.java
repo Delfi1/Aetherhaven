@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.rts.camera.TopDownCameraService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -36,8 +38,6 @@ public final class RtsCommandPlayerComponent implements Component<EntityStore> {
         .append(new KeyedCodec<>("FocusY", Codec.DOUBLE), (c, v) -> c.focusY = v != null ? v : 0, c -> c.focusY)
         .add()
         .append(new KeyedCodec<>("FocusZ", Codec.DOUBLE), (c, v) -> c.focusZ = v != null ? v : 0, c -> c.focusZ)
-        .add()
-        .append(new KeyedCodec<>("Distance", Codec.FLOAT), (c, v) -> c.distance = v != null ? v : 20f, c -> c.distance)
         .add()
         .append(new KeyedCodec<>("PostX", Codec.DOUBLE), (c, v) -> c.postX = v != null ? v : 0, c -> c.postX)
         .add()
@@ -106,7 +106,6 @@ public final class RtsCommandPlayerComponent implements Component<EntityStore> {
     private double focusX;
     private double focusY;
     private double focusZ;
-    private float distance = 20f;
     private double postX;
     private double postY;
     private double postZ;
@@ -140,20 +139,33 @@ public final class RtsCommandPlayerComponent implements Component<EntityStore> {
     private boolean boxScreenAnchorReady;
     /** True once box world endpoints came from a client {@code LookAtPlane} hit. */
     private boolean boxWorldAnchorReady;
-    /** Calibrated orthographic half-width on ground (blocks); 0 = use distance default. */
+    /** Width calibration multiplier relative to distance-based default; 0 = uncalibrated (1.0). */
     private double orthoHalfWidth;
-    /** Calibrated orthographic half-height on ground (blocks); 0 = use distance default. */
+    /** Height calibration multiplier relative to distance-based default; 0 = uncalibrated (1.0). */
     private double orthoHalfHeight;
+    /**
+     * Cached vertical extent for pick frustum: altitude above terrain under focus + camera rig offset.
+     * Refreshed each tick in {@link RtsCommanderCameraSystem}; 0 = fall back to default spawn altitude.
+     */
+    private float pickViewHeight;
     /** Draw world-space selection column wireframe after box drags. */
     private boolean boxSelectDebug;
     /** Entity view radius before command mode; restored on exit. */
     private int savedViewRadiusBlocks;
-    /** Latest movement wish from client packets; used for smooth camera pan while keys are held. */
-    private double panWishX;
-    private double panWishZ;
     /** Per-tick relative displacement captured before locomotion is stripped. */
     private double panDeltaX;
     private double panDeltaZ;
+    /** Guard UUID the commander camera follows until manual pan or box drag. */
+    @Nullable
+    private UUID cameraFollowGuardUuid;
+    private double cameraFollowSnapCommanderX;
+    private double cameraFollowSnapCommanderZ;
+    private double cameraFollowSnapGuardX;
+    private double cameraFollowSnapGuardZ;
+    private boolean cameraFollowSnapReady;
+    @Nullable
+    private UUID lastRosterClickGuardUuid;
+    private long lastRosterClickMs;
     /** Camera-aligned axes from absolute movement (forward ≈ +Z with top-down rig). */
     private double moveForward;
     private double moveStrafe;
@@ -161,14 +173,10 @@ public final class RtsCommandPlayerComponent implements Component<EntityStore> {
     private double lastAbsX;
     private double lastAbsZ;
     private boolean hasLastAbs;
-    /** Set when focus or zoom distance changes; gates Teleport to reduce rubberbanding. */
+    /** Set when focus changes; gates Teleport to reduce rubberbanding. */
     private boolean commanderMoved;
-    /** True while Ctrl/crouch held — zoom via W/S. */
-    private boolean shiftModifierHeld;
-    /** True while Shift/sprint held — add-to-selection. */
-    private boolean sprintModifierHeld;
-    /** Set when focus or distance changes; camera packet sent only while dirty. */
-    private boolean cameraDirty;
+    @Nonnull
+    private RtsPickTuning pickTuning = RtsPickTuning.defaults();
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         componentType = registry.registerComponent(
@@ -193,30 +201,6 @@ public final class RtsCommandPlayerComponent implements Component<EntityStore> {
 
     public void setActive(boolean active) {
         this.active = active;
-        if (!active) {
-            clearPanWish();
-            shiftModifierHeld = false;
-            sprintModifierHeld = false;
-            cameraDirty = false;
-        }
-    }
-
-    public double getPanWishX() {
-        return panWishX;
-    }
-
-    public double getPanWishZ() {
-        return panWishZ;
-    }
-
-    public void setPanWish(double x, double z) {
-        this.panWishX = x;
-        this.panWishZ = z;
-    }
-
-    public void clearPanWish() {
-        this.panWishX = 0;
-        this.panWishZ = 0;
     }
 
     public double getPanDeltaX() {
@@ -283,32 +267,25 @@ public final class RtsCommandPlayerComponent implements Component<EntityStore> {
         return moveStrafe;
     }
 
-    public boolean isShiftModifierHeld() {
-        return shiftModifierHeld;
+    @Nonnull
+    public RtsPickTuning getPickTuning() {
+        return pickTuning;
     }
 
-    public void setShiftModifierHeld(boolean shiftModifierHeld) {
-        this.shiftModifierHeld = shiftModifierHeld;
+    public void setPickTuning(@Nonnull RtsPickTuning pickTuning) {
+        this.pickTuning = pickTuning;
     }
 
-    public boolean isSprintModifierHeld() {
-        return sprintModifierHeld;
+    /** See {@link RtsScreenPickUtil#refreshPickViewHeight}. */
+    public float getPickViewHeight() {
+        if (pickViewHeight > 0f) {
+            return pickViewHeight;
+        }
+        return TopDownCameraService.DEFAULT_DISTANCE + AetherhavenConstants.RTS_COMMAND_PICK_CAMERA_EYE_OFFSET_Y;
     }
 
-    public void setSprintModifierHeld(boolean sprintModifierHeld) {
-        this.sprintModifierHeld = sprintModifierHeld;
-    }
-
-    public boolean isCameraDirty() {
-        return cameraDirty;
-    }
-
-    public void markCameraDirty() {
-        this.cameraDirty = true;
-    }
-
-    public void clearCameraDirty() {
-        this.cameraDirty = false;
+    public void setPickViewHeight(float pickViewHeight) {
+        this.pickViewHeight = pickViewHeight;
     }
 
     @Nonnull
@@ -343,17 +320,6 @@ public final class RtsCommandPlayerComponent implements Component<EntityStore> {
         this.focusX = x;
         this.focusY = y;
         this.focusZ = z;
-    }
-
-    public float getDistance() {
-        return distance;
-    }
-
-    public void setDistance(float distance) {
-        if (this.distance != distance) {
-            this.distance = distance;
-            this.cameraDirty = true;
-        }
     }
 
     public double getPostX() {
@@ -456,6 +422,67 @@ public final class RtsCommandPlayerComponent implements Component<EntityStore> {
 
     public void clearSelection() {
         selectedGuardUuids.clear();
+    }
+
+    @Nullable
+    public UUID getCameraFollowGuardUuid() {
+        return cameraFollowGuardUuid;
+    }
+
+    public void setCameraFollowGuardUuid(@Nullable UUID guardUuid) {
+        this.cameraFollowGuardUuid = guardUuid;
+        this.cameraFollowSnapReady = false;
+    }
+
+    public void clearCameraFollow() {
+        this.cameraFollowGuardUuid = null;
+        this.cameraFollowSnapReady = false;
+    }
+
+    public boolean isFollowingGuard() {
+        return cameraFollowGuardUuid != null;
+    }
+
+    public void setCameraFollowSnap(double commanderX, double commanderZ, double guardX, double guardZ) {
+        this.cameraFollowSnapCommanderX = commanderX;
+        this.cameraFollowSnapCommanderZ = commanderZ;
+        this.cameraFollowSnapGuardX = guardX;
+        this.cameraFollowSnapGuardZ = guardZ;
+        this.cameraFollowSnapReady = true;
+    }
+
+    public boolean hasCameraFollowSnap() {
+        return cameraFollowSnapReady;
+    }
+
+    /** True when the commander moved independently of the followed guard since the last follow snap. */
+    public boolean cameraFollowManualOverride(double commanderX, double commanderZ, double guardX, double guardZ) {
+        if (!cameraFollowSnapReady) {
+            return false;
+        }
+        double commanderDx = commanderX - cameraFollowSnapCommanderX;
+        double commanderDz = commanderZ - cameraFollowSnapCommanderZ;
+        double guardDx = guardX - cameraFollowSnapGuardX;
+        double guardDz = guardZ - cameraFollowSnapGuardZ;
+        double driftX = commanderDx - guardDx;
+        double driftZ = commanderDz - guardDz;
+        return Math.hypot(driftX, driftZ) > 0.75;
+    }
+
+    public void recordRosterClick(@Nonnull UUID guardUuid, long nowMs) {
+        this.lastRosterClickGuardUuid = guardUuid;
+        this.lastRosterClickMs = nowMs;
+    }
+
+    public void clearRosterClickTracking() {
+        this.lastRosterClickGuardUuid = null;
+        this.lastRosterClickMs = 0L;
+    }
+
+    public boolean matchesRosterDoubleClick(@Nonnull UUID guardUuid, long nowMs, long windowMs) {
+        return lastRosterClickGuardUuid != null
+            && lastRosterClickGuardUuid.equals(guardUuid)
+            && nowMs - lastRosterClickMs <= windowMs;
     }
 
     public void setSelection(@Nonnull List<UUID> uuids) {
@@ -658,7 +685,6 @@ public final class RtsCommandPlayerComponent implements Component<EntityStore> {
         c.focusX = focusX;
         c.focusY = focusY;
         c.focusZ = focusZ;
-        c.distance = distance;
         c.postX = postX;
         c.postY = postY;
         c.postZ = postZ;
@@ -686,6 +712,16 @@ public final class RtsCommandPlayerComponent implements Component<EntityStore> {
         c.orthoHalfWidth = orthoHalfWidth;
         c.orthoHalfHeight = orthoHalfHeight;
         c.boxSelectDebug = boxSelectDebug;
+        c.pickTuning = pickTuning;
+        c.pickViewHeight = pickViewHeight;
+        c.cameraFollowGuardUuid = cameraFollowGuardUuid;
+        c.cameraFollowSnapCommanderX = cameraFollowSnapCommanderX;
+        c.cameraFollowSnapCommanderZ = cameraFollowSnapCommanderZ;
+        c.cameraFollowSnapGuardX = cameraFollowSnapGuardX;
+        c.cameraFollowSnapGuardZ = cameraFollowSnapGuardZ;
+        c.cameraFollowSnapReady = cameraFollowSnapReady;
+        c.lastRosterClickGuardUuid = lastRosterClickGuardUuid;
+        c.lastRosterClickMs = lastRosterClickMs;
         return c;
     }
 }

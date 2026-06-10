@@ -88,8 +88,7 @@ import com.hexvane.aetherhaven.rts.RtsMoveOrderVisualSystem;
 import com.hexvane.aetherhaven.rts.RtsCommanderCameraSystem;
 import com.hexvane.aetherhaven.rts.RtsExitMovementGuardSystem;
 import com.hexvane.aetherhaven.rts.RtsClientMovementPacketAdapter;
-import com.hexvane.aetherhaven.rts.RtsHotbarSlotPacketAdapter;
-import com.hexvane.aetherhaven.rts.RtsHotbarSlotSyncSystem;
+import com.hexvane.aetherhaven.rts.RtsCommandHotbarSlotInboundAdapter;
 import com.hexvane.aetherhaven.rts.RtsCommandPlayerComponent;
 import com.hexvane.aetherhaven.rts.RtsCommandService;
 import com.hexvane.aetherhaven.rts.RtsExitInteraction;
@@ -146,6 +145,7 @@ import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityCatalog;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import com.hexvane.aetherhaven.villager.NpcPersistentModelResyncSystem;
+import com.hexvane.aetherhaven.questboard.RaidHealthBarHudRefreshSystem;
 import com.hexvane.aetherhaven.questboard.RaidQuestMarchSystem;
 import com.hexvane.aetherhaven.questboard.RaidQuestMobBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -325,7 +325,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nullable
     private RtsClientMovementPacketAdapter rtsClientMovementPacketAdapter;
     @Nullable
-    private RtsHotbarSlotPacketAdapter rtsHotbarSlotPacketAdapter;
+    private RtsCommandHotbarSlotInboundAdapter rtsCommandHotbarSlotInboundAdapter;
 
     @Nullable
     private PlotTokenVirtualItemRegistry plotTokenVirtualItemRegistry;
@@ -499,7 +499,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         registerPlotTokenIconPackets();
         registerShopPriceTooltipPackets();
         registerRtsClientMovementPacketAdapter();
-        registerRtsHotbarSlotPacketAdapter();
+        registerRtsCommandHotbarSlotInboundAdapter();
 
         this.gameTimeCursorResourceType =
             this.getEntityStoreRegistry()
@@ -816,6 +816,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderPlayerRemoveSystem());
         this.getEntityStoreRegistry().registerSystem(new QuestKillProgressSystem(this));
         this.getEntityStoreRegistry().registerSystem(new RaidQuestMarchSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new RaidHealthBarHudRefreshSystem(this));
         this.getEntityStoreRegistry().registerSystem(new HuntingKnifeBonusDropSystem());
         GaiaDraughtCraftSystem gaiaDraughtCraftSystem = new GaiaDraughtCraftSystem(this);
         this.getEntityStoreRegistry().registerSystem(gaiaDraughtCraftSystem);
@@ -829,8 +830,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new RtsCommanderCameraSystem.Follow(this));
         this.getEntityStoreRegistry().registerSystem(new RtsExitMovementGuardSystem());
         this.getEntityStoreRegistry().registerSystem(new RtsCameraMousePollSystem());
-        this.getEntityStoreRegistry().registerSystem(new RtsHotbarSlotSyncSystem.SlotChangeHandler());
-        this.getEntityStoreRegistry().registerSystem(new RtsHudRefreshSystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsHudRefreshSystem(this));
         this.getEntityStoreRegistry().registerSystem(new RtsUncleanSessionRecoverySystem());
         this.getEntityStoreRegistry().registerSystem(new RtsOrphanedGuardRecoverySystem());
         this.getEntityStoreRegistry().registerSystem(new RtsCommanderNpcDamageFilterSystem());
@@ -1324,9 +1324,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.rtsClientMovementPacketAdapter.register();
     }
 
-    private void registerRtsHotbarSlotPacketAdapter() {
-        this.rtsHotbarSlotPacketAdapter = new RtsHotbarSlotPacketAdapter();
-        this.rtsHotbarSlotPacketAdapter.register();
+    private void registerRtsCommandHotbarSlotInboundAdapter() {
+        this.rtsCommandHotbarSlotInboundAdapter = new RtsCommandHotbarSlotInboundAdapter();
+        this.rtsCommandHotbarSlotInboundAdapter.register();
     }
 
     @Override
@@ -1347,9 +1347,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
             this.rtsClientMovementPacketAdapter.deregister();
             this.rtsClientMovementPacketAdapter = null;
         }
-        if (this.rtsHotbarSlotPacketAdapter != null) {
-            this.rtsHotbarSlotPacketAdapter.deregister();
-            this.rtsHotbarSlotPacketAdapter = null;
+        if (this.rtsCommandHotbarSlotInboundAdapter != null) {
+            this.rtsCommandHotbarSlotInboundAdapter.deregister();
+            this.rtsCommandHotbarSlotInboundAdapter = null;
         }
         this.jewelryVirtualItemRegistry = null;
         this.plotTokenVirtualItemRegistry = null;

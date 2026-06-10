@@ -598,6 +598,10 @@ public final class AetherhavenConstants {
 
     public static final String RTS_COMMAND_HUD_KEY = "AetherhavenRtsCommand";
     public static final String RTS_BOX_SELECT_HUD_KEY = "AetherhavenRtsBoxSelect";
+    public static final String RTS_GUARD_ROSTER_HUD_KEY = "AetherhavenRtsGuardRoster";
+
+    /** Key for the raid quest health bar overlay on {@link com.hypixel.hytale.server.core.entity.entities.player.hud.HudManager}. */
+    public static final String RAID_HEALTH_BAR_HUD_KEY = "AetherhavenRaidHealthBar";
     /** NPC role state while under RTS command (Java-driven seek/aggro). */
     public static final String NPC_STATE_GUARD_RTS_COMMAND = "RtsCommand";
 
@@ -626,8 +630,22 @@ public final class AetherhavenConstants {
     public static final String RTS_MARKER_ORB_BLUE_PARTICLE = "Aetherhaven_Rts_Orb_Blue";
     public static final String RTS_MARKER_ORB_GREY_PARTICLE = "Aetherhaven_Rts_Orb_Grey";
     public static final String RTS_MARKER_ORB_RED_PARTICLE = "Aetherhaven_Rts_Orb_Red";
+    /** Spiked impact ring for command-sword focus targets (distinct from circle/orb markers). */
+    public static final String RTS_FOCUS_TARGET_PARTICLE = "Aetherhaven_Rts_Focus_Target";
     public static final String RTS_SELECT_BOX_DOT_PARTICLE = "Aetherhaven_Rts_SelectBox_Dot";
     public static final String RTS_MOVE_ORDER_MARKER_PARTICLE = "Aetherhaven_Rts_Move_Marker";
+
+    /**
+     * Vertical FOV (degrees) for deriving ortho half-height from commander altitude above terrain.
+     * Pick drift that worsens when flying higher often means this does not match the client camera.
+     */
+    public static final float RTS_COMMAND_PICK_VERTICAL_FOV_DEG = 75f;
+    /** Viewport width:height ratio for ortho half-width (e.g. {@code 16f / 9f}, {@code 21f / 9f}). */
+    public static final float RTS_COMMAND_PICK_ASPECT_RATIO = 16f / 10f;
+    /** Fixed camera rig offset in the view-height formula (matches top-down {@code positionOffset Y}). */
+    public static final float RTS_COMMAND_PICK_CAMERA_EYE_OFFSET_Y = 3.0f;
+    /** Vertical lift for the move-destination particle ring (reduces ground z-fighting). */
+    public static final double RTS_MOVE_ORDER_MARKER_SURFACE_LIFT = 0.1;
 
     private AetherhavenConstants() {}
 }

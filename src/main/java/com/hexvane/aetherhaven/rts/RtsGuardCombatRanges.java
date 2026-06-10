@@ -17,4 +17,10 @@ public final class RtsGuardCombatRanges {
         }
         return AetherhavenConstants.RTS_MELEE_ENGAGE_RANGE;
     }
+
+    /** Wider than {@link #attackEngageRange} so guards do not flip combat/travel every tick at the edge. */
+    public static double disengageRange(@Nonnull NPCEntity npc) {
+        double attack = attackEngageRange(npc);
+        return Math.max(attack * 1.35, attack + 1.5);
+    }
 }

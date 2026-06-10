@@ -5,6 +5,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -27,8 +28,9 @@ public final class RtsOrderService {
         if (selected.isEmpty()) {
             return;
         }
-        List<Vector3d> offsets = RtsFormationMath.lineOffsets(selected.size());
         UUID commander = commanderUuid(playerRef, accessor);
+        RtsFocusTargetVisuals.clear(commander);
+        List<Vector3d> offsets = RtsFormationMath.lineOffsets(selected.size());
         for (int i = 0; i < selected.size(); i++) {
             Ref<EntityStore> guardRef = RtsGuardDirectory.findByUuid(store, selected.get(i));
             if (guardRef == null) {
@@ -47,6 +49,17 @@ public final class RtsOrderService {
             cmd.setTargetEntityUuid(null);
             cmd.setCommanderPlayerUuid(commander);
             accessor.putComponent(guardRef, GuardRtsCommandState.getComponentType(), cmd);
+            NPCEntity guardNpc = accessor.getComponent(guardRef, NPCEntity.getComponentType());
+            if (guardNpc != null) {
+                RtsGuardCombatSupport.resumeTravel(
+                    guardRef,
+                    guardNpc,
+                    accessor,
+                    cmd.getHoldX(),
+                    cmd.getHoldY(),
+                    cmd.getHoldZ()
+                );
+            }
         }
         RtsMoveOrderVisuals.spawn(
             store,
@@ -57,44 +70,77 @@ public final class RtsOrderService {
             selected,
             store.getExternalData().getWorld().getTick()
         );
+        RtsCommandFeedback.playMoveOrder(playerRef, accessor, groundX, groundY, groundZ);
     }
 
-    public static void issueFocusAttack(
+    public static boolean issueFocusAttack(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull ComponentAccessor<EntityStore> accessor,
         @Nonnull RtsCommandPlayerComponent session,
         @Nonnull Ref<EntityStore> targetRef
     ) {
         Store<EntityStore> store = playerRef.getStore();
+        List<UUID> selected = new ArrayList<>(session.getSelectedGuardUuids());
+        if (selected.isEmpty()) {
+            return false;
+        }
         if (!RtsHostileQuery.isAggressiveNpc(targetRef, store)) {
-            return;
+            return false;
         }
         UUID targetUuid = RtsHostileQuery.entityUuid(targetRef, store);
         if (targetUuid == null) {
-            return;
+            return false;
         }
+        var targetTc = accessor.getComponent(
+            targetRef,
+            com.hypixel.hytale.server.core.modules.entity.component.TransformComponent.getComponentType()
+        );
+        if (targetTc == null) {
+            return false;
+        }
+        Vector3d targetPos = targetTc.getPosition();
         UUID commander = commanderUuid(playerRef, accessor);
-        for (UUID guardId : session.getSelectedGuardUuids()) {
-            Ref<EntityStore> guardRef = RtsGuardDirectory.findByUuid(store, guardId);
+        List<Vector3d> offsets = RtsFormationMath.lineOffsets(selected.size());
+        int issued = 0;
+        for (int i = 0; i < selected.size(); i++) {
+            Ref<EntityStore> guardRef = RtsGuardDirectory.findByUuid(store, selected.get(i));
             if (guardRef == null) {
                 continue;
             }
+            NPCEntity guardNpc = accessor.getComponent(guardRef, com.hypixel.hytale.server.npc.entities.NPCEntity.getComponentType());
+            if (guardNpc == null) {
+                continue;
+            }
+            Vector3d off = i < offsets.size() ? offsets.get(i) : new Vector3d();
             GuardRtsCommandState cmd = accessor.getComponent(guardRef, GuardRtsCommandState.getComponentType());
             if (cmd == null) {
                 cmd = new GuardRtsCommandState();
-                var tc = accessor.getComponent(guardRef, com.hypixel.hytale.server.core.modules.entity.component.TransformComponent.getComponentType());
-                if (tc != null) {
-                    var p = tc.getPosition();
-                    cmd.setHold(p.x, p.y, p.z);
-                }
             }
+            var guardTc = accessor.getComponent(
+                guardRef,
+                com.hypixel.hytale.server.core.modules.entity.component.TransformComponent.getComponentType()
+            );
+            cmd.setOrderMode(RtsOrderMode.ATTACK_MOVE);
+            cmd.setCombatStance(RtsCombatStance.AGGRESSIVE);
             cmd.setFocusFire(true);
             cmd.setTargetEntityUuid(targetUuid);
-            cmd.setPhase(RtsCommandPhase.ENGAGING);
-            cmd.setCombatStance(RtsCombatStance.AGGRESSIVE);
+            cmd.setHold(targetPos.x + off.x, targetPos.y, targetPos.z + off.z);
             cmd.setCommanderPlayerUuid(commander);
+            double engageRange = RtsGuardCombatRanges.attackEngageRange(guardNpc);
+            if (guardTc != null && withinHorizontalRange(guardTc.getPosition(), targetPos, engageRange * 1.25)) {
+                cmd.setPhase(RtsCommandPhase.ENGAGING);
+            } else {
+                cmd.setPhase(RtsCommandPhase.TRAVELING);
+            }
             accessor.putComponent(guardRef, GuardRtsCommandState.getComponentType(), cmd);
+            issued++;
         }
+        if (issued == 0) {
+            return false;
+        }
+        RtsFocusTargetVisuals.register(commander, targetUuid);
+        RtsCommandFeedback.playFocusAttack(playerRef, targetRef, accessor);
+        return true;
     }
 
     public static void stopSelected(
@@ -104,6 +150,7 @@ public final class RtsOrderService {
     ) {
         Store<EntityStore> store = playerRef.getStore();
         UUID commander = commanderUuid(playerRef, accessor);
+        RtsFocusTargetVisuals.clear(commander);
         for (UUID guardId : session.getSelectedGuardUuids()) {
             Ref<EntityStore> guardRef = RtsGuardDirectory.findByUuid(store, guardId);
             if (guardRef == null) {
@@ -169,5 +216,15 @@ public final class RtsOrderService {
     ) {
         UUIDComponent uc = accessor.getComponent(playerRef, UUIDComponent.getComponentType());
         return uc != null ? uc.getUuid() : new UUID(0L, 0L);
+    }
+
+    private static boolean withinHorizontalRange(
+        @Nonnull Vector3d from,
+        @Nonnull Vector3d to,
+        double range
+    ) {
+        double dx = from.x - to.x;
+        double dz = from.z - to.z;
+        return dx * dx + dz * dz <= range * range;
     }
 }

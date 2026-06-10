@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.rts;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.rts.ui.RtsGuardRosterInput;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -44,6 +45,19 @@ public final class RtsClickService {
         if (pr != null) {
             RtsDiagnostics.mouseClick(pr, "single-click", targetBlock, screen);
         }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        Vector2fc pickScreen = screen != null ? screen : RtsScreenPickUtil.latestCameraScreenPoint(playerRef, store);
+        if (plugin != null
+            && RtsGuardRosterInput.tryConsumeRosterClick(
+                playerRef, store, commandBuffer, session, town, plugin, pickScreen
+            )) {
+            if (commandBuffer != null) {
+                commandBuffer.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
+            } else {
+                store.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
+            }
+            return;
+        }
         applyToolClick(playerRef, commandBuffer != null ? commandBuffer : store, session, town, hand, targetBlock, screen);
         if (commandBuffer != null) {
             commandBuffer.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
@@ -58,7 +72,8 @@ public final class RtsClickService {
         @Nullable CommandBuffer<EntityStore> commandBuffer,
         @Nonnull RtsCommandPlayerComponent session,
         @Nullable Vector3i targetBlock,
-        @Nullable Vector2fc screen
+        @Nullable Vector2fc screen,
+        @Nullable Ref<EntityStore> targetEntity
     ) {
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         InventoryComponent.Hotbar hotbar = store.getComponent(playerRef, InventoryComponent.Hotbar.getComponentType());
@@ -78,7 +93,7 @@ public final class RtsClickService {
             hand,
             targetBlock,
             screen,
-            null
+            targetEntity
         );
         if (handled && commandBuffer != null) {
             commandBuffer.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
@@ -112,6 +127,15 @@ public final class RtsClickService {
             }
             markFinished(context);
             return false;
+        }
+
+        Vector2fc screen = RtsScreenPickUtil.latestCameraScreenPoint(playerRef, store);
+        if (plugin != null
+            && RtsGuardRosterInput.tryConsumeRosterClick(
+                playerRef, store, commandBuffer, session, town, plugin, screen
+            )) {
+            markFinished(context);
+            return true;
         }
 
         if (RtsPrimaryDragTracker.onPrimaryPulse(playerRef, commandBuffer, store, session, block, hand)) {
@@ -148,24 +172,28 @@ public final class RtsClickService {
 
         if (AetherhavenConstants.RTS_SELECT_ALL_ITEM_ID.equals(itemId)) {
             RtsSelectionService.selectAllGuards(store, session, town);
+            RtsCommandFeedback.playProfileSelect(playerRef, accessor);
             return true;
         }
         if (AetherhavenConstants.RTS_SELECT_KNIGHT_ITEM_ID.equals(itemId)) {
             RtsSelectionService.selectOnlyByProfile(
                 store, store.getExternalData().getWorld(), plugin, session, town, RtsSelectionService.ProfileFilter.KNIGHT
             );
+            RtsCommandFeedback.playProfileSelect(playerRef, accessor);
             return true;
         }
         if (AetherhavenConstants.RTS_SELECT_ARCHER_ITEM_ID.equals(itemId)) {
             RtsSelectionService.selectOnlyByProfile(
                 store, store.getExternalData().getWorld(), plugin, session, town, RtsSelectionService.ProfileFilter.ARCHER
             );
+            RtsCommandFeedback.playProfileSelect(playerRef, accessor);
             return true;
         }
         if (AetherhavenConstants.RTS_SELECT_MAGE_ITEM_ID.equals(itemId)) {
             RtsSelectionService.selectOnlyByProfile(
                 store, store.getExternalData().getWorld(), plugin, session, town, RtsSelectionService.ProfileFilter.MAGE
             );
+            RtsCommandFeedback.playProfileSelect(playerRef, accessor);
             return true;
         }
         if (AetherhavenConstants.RTS_EXIT_ITEM_ID.equals(itemId)) {

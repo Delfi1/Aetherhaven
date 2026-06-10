@@ -152,12 +152,24 @@ public final class RtsInteractions {
             return true;
         }
         if (AetherhavenConstants.RTS_SWORD_ITEM_ID.equals(itemId)) {
-            if (targetEntity != null && targetEntity.isValid()) {
-                if (!RtsHostileQuery.isAggressiveNpc(targetEntity, store)) {
-                    notify(playerRef, accessor, P + ".errorNotEnemy");
-                    return false;
-                }
-                RtsOrderService.issueFocusAttack(playerRef, accessor, session, targetEntity);
+            if (session.getSelectedGuardUuids().isEmpty()) {
+                notify(playerRef, accessor, P + ".errorNoSelection");
+                return false;
+            }
+            Ref<EntityStore> target = RtsHostileQuery.resolveFocusTarget(
+                playerRef,
+                store,
+                session,
+                targetBlock,
+                screen,
+                targetEntity
+            );
+            if (target == null) {
+                notify(playerRef, accessor, P + ".errorNotEnemy");
+                return false;
+            }
+            if (RtsOrderService.issueFocusAttack(playerRef, accessor, session, target)) {
+                notify(playerRef, accessor, P + ".orderFocusAttack");
                 return true;
             }
             return false;
@@ -165,6 +177,7 @@ public final class RtsInteractions {
         if (AetherhavenConstants.RTS_FREE_ITEM_ID.equals(itemId)) {
             RtsOrderService.freeSelected(accessor, playerRef, session);
             session.clearSelection();
+            RtsCommandFeedback.playFreeGuards(playerRef, accessor);
             accessor.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
             return true;
         }
@@ -192,6 +205,7 @@ public final class RtsInteractions {
             return;
         }
         session.cycleOrderMode();
+        RtsCommandFeedback.playProfileSelect(playerRef, commandBuffer);
         commandBuffer.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
     }
 
@@ -208,6 +222,7 @@ public final class RtsInteractions {
         }
         session.cycleStanceMode();
         RtsOrderService.applyStanceToSelected(commandBuffer, playerRef, session);
+        RtsCommandFeedback.playStanceChange(playerRef, commandBuffer);
         commandBuffer.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
         notify(playerRef, commandBuffer, stanceKey(session));
     }
@@ -224,6 +239,7 @@ public final class RtsInteractions {
             return;
         }
         RtsOrderService.stopSelected(playerRef, commandBuffer, session);
+        RtsCommandFeedback.playFreeGuards(playerRef, commandBuffer);
     }
 
     public static void handleCommandPostUse(

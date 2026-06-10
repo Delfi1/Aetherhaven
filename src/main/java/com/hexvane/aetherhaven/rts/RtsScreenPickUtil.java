@@ -1,7 +1,12 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.pathtool.PathGrounding;
+import com.hexvane.aetherhaven.rts.camera.TopDownCameraService;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.entities.player.CameraManager;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,13 +22,8 @@ import org.joml.Vector3i;
  * calibrated from client {@code targetBlock} hits when available.
  */
 public final class RtsScreenPickUtil {
-    /** Default vertical field of view when inferring ortho scale without calibration (degrees). */
-    private static final float VERTICAL_FOV_DEG = 75f;
-    private static final float ASPECT_RATIO = 16f / 9f;
     private static final float REF_WIDTH = 1920f;
     private static final float REF_HEIGHT = 1080f;
-    /** Matches {@link com.hexvane.aetherhaven.rts.camera.TopDownCameraService} positionOffset Y. */
-    private static final float CAMERA_EYE_OFFSET_Y = 3.0f;
     /** Hytale custom-camera mouse packets use NDC in roughly -1..1 (center = 0). */
     private static final float CAMERA_NDC_MAX = 1.01f;
     private static final float RAW_SCREEN_EPS = 0.004f;
@@ -117,10 +117,56 @@ public final class RtsScreenPickUtil {
         return resolve(session, block, screen);
     }
 
+    /** Max horizontal drift (blocks) before we treat {@code targetBlock} as stale (e.g. after WASD pan). */
+    private static final double BLOCK_CALIBRATION_MAX_DRIFT_SQ = 36.0;
+
+    /**
+     * Recompute {@link RtsCommandPlayerComponent#getPickViewHeight()} from body altitude above terrain
+     * under the commander focus (Space / Ctrl flight).
+     */
+    public static void refreshPickViewHeight(
+        @Nonnull RtsCommandPlayerComponent session,
+        @Nonnull Store<EntityStore> store
+    ) {
+        session.setPickViewHeight(computePickViewHeight(session, store));
+    }
+
+    /**
+     * Vertical extent for ortho frustum math: altitude above terrain under focus plus the fixed
+     * {@link TopDownCameraService} rig offset ({@link AetherhavenConstants#RTS_COMMAND_PICK_CAMERA_EYE_OFFSET_Y}).
+     */
+    public static float computePickViewHeight(
+        @Nonnull RtsCommandPlayerComponent session,
+        @Nonnull Store<EntityStore> store
+    ) {
+        double terrainTopY = terrainTopYUnderFocus(store, session);
+        double heightAboveTerrain = session.getFocusY() - terrainTopY;
+        if (!Double.isFinite(heightAboveTerrain) || heightAboveTerrain < 1.0) {
+            heightAboveTerrain = TopDownCameraService.DEFAULT_DISTANCE;
+        }
+        return (float) (heightAboveTerrain + AetherhavenConstants.RTS_COMMAND_PICK_CAMERA_EYE_OFFSET_Y);
+    }
+
+    private static double terrainTopYUnderFocus(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull RtsCommandPlayerComponent session
+    ) {
+        World world = store.getExternalData().getWorld();
+        int bx = (int) Math.floor(session.getFocusX());
+        int bz = (int) Math.floor(session.getFocusZ());
+        int startY = Math.min(319, (int) Math.ceil(session.getFocusY()) + 4);
+        Integer support = PathGrounding.findSupportY(world, bx, bz, startY, 96, 1);
+        if (support != null) {
+            return support + 1.0;
+        }
+        return session.getFocusY() - TopDownCameraService.DEFAULT_DISTANCE;
+    }
+
     /**
      * Ground pick for RTS move orders and other single-point commands.
-     * Uses orthographic screen projection (same as box select) instead of a stale {@code targetBlock}
-     * from the command-post entry point.
+     * Uses orthographic screen projection tied to the commander focus (updates when you pan).
+     * Client {@code targetBlock} is only used to calibrate ortho scale when it matches the cursor —
+     * it is stale after camera pan until the mouse moves again.
      */
     @Nullable
     public static GroundPick resolveCommandGroundPick(
@@ -134,35 +180,77 @@ public final class RtsScreenPickUtil {
         if (screen == null) {
             screen = latestCameraScreenPoint(playerRef, store);
         }
-        if (screen != null && isUsableCommandScreenPoint(screen)) {
-            float nx = cameraRawToNormalizedX(screen.x());
-            float ny = cameraRawToNormalizedY(screen.y());
-            GroundPick ortho = pickOrthographicGround(session, nx, ny);
-            if (ortho != null) {
-                double groundY = commandSurfaceY(session, targetBlock, ortho.y());
-                return new GroundPick(ortho.x(), groundY, ortho.z());
-            }
+        if (screen == null || !isUsableCommandScreenPoint(screen)) {
+            GroundPick fallback = fromClientBlockTop(resolveClientTargetBlock(playerRef, store, targetBlock));
+            return fallback != null ? snapPickToTerrain(store, fallback) : null;
         }
-        return fromClientBlockTop(targetBlock);
+
+        float nx = cameraRawToNormalizedX(screen.x());
+        float ny = cameraRawToNormalizedY(screen.y());
+        refreshPickViewHeight(session, store);
+        maybeCalibrateOrthoFromFreshBlock(session, nx, ny, resolveClientTargetBlock(playerRef, store, targetBlock));
+
+        GroundPick ortho = pickOrthographicGround(session, nx, ny);
+        if (ortho == null) {
+            return null;
+        }
+        return snapPickToTerrain(store, ortho);
+    }
+
+    private static void maybeCalibrateOrthoFromFreshBlock(
+        @Nonnull RtsCommandPlayerComponent session,
+        float normalizedX,
+        float normalizedY,
+        @Nullable Vector3i block
+    ) {
+        if (block == null) {
+            return;
+        }
+        GroundPick probe = pickOrthographicGround(session, normalizedX, normalizedY);
+        if (probe == null) {
+            return;
+        }
+        double bx = block.x() + 0.5;
+        double bz = block.z() + 0.5;
+        double dx = bx - probe.x();
+        double dz = bz - probe.z();
+        if (dx * dx + dz * dz <= BLOCK_CALIBRATION_MAX_DRIFT_SQ) {
+            calibrateOrthoFromSample(session, normalizedX, normalizedY, bx, bz);
+        }
+    }
+
+    @Nullable
+    private static Vector3i resolveClientTargetBlock(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull com.hypixel.hytale.component.Store<EntityStore> store,
+        @Nullable Vector3i targetBlock
+    ) {
+        if (targetBlock != null) {
+            return targetBlock;
+        }
+        CameraManager camera = store.getComponent(playerRef, CameraManager.getComponentType());
+        return camera != null ? camera.getLastTargetBlock() : null;
+    }
+
+    @Nullable
+    private static GroundPick snapPickToTerrain(
+        @Nonnull com.hypixel.hytale.component.Store<EntityStore> store,
+        @Nonnull GroundPick pick
+    ) {
+        World world = store.getExternalData().getWorld();
+        int bx = (int) Math.floor(pick.x());
+        int bz = (int) Math.floor(pick.z());
+        int startY = Math.min(319, (int) Math.ceil(pick.y()) + 4);
+        Integer support = PathGrounding.findSupportY(world, bx, bz, startY, 96, 1);
+        if (support != null) {
+            return new GroundPick(pick.x(), support + 1.0, pick.z());
+        }
+        return pick;
     }
 
     /** Top face of a clicked block (block min-Y + 1). */
     public static double blockTopY(int blockY) {
         return blockY + 1.0;
-    }
-
-    private static double commandSurfaceY(
-        @Nonnull RtsCommandPlayerComponent session,
-        @Nullable Vector3i targetBlock,
-        double fallback
-    ) {
-        if (targetBlock != null) {
-            return blockTopY(targetBlock.y());
-        }
-        if (session.getBoxGroundY() != 0.0) {
-            return session.getBoxGroundY() + 0.5;
-        }
-        return fallback;
     }
 
     @Nullable
@@ -246,7 +334,7 @@ public final class RtsScreenPickUtil {
             session.getFocusX(),
             groundY,
             session.getFocusZ(),
-            session.getDistance()
+            session.getPickViewHeight()
         );
         if (hit == null) {
             return null;
@@ -284,14 +372,14 @@ public final class RtsScreenPickUtil {
     ) {
         float ndcX = (clampNormalized(normalizedX) - 0.5f) * 2f;
         float ndcY = (clampNormalized(normalizedY) - 0.5f) * 2f;
-        double halfW = orthoHalfWidth(session);
-        double halfH = orthoHalfHeight(session);
+        double halfW = effectiveOrthoHalfWidth(session);
+        double halfH = effectiveOrthoHalfHeight(session);
         double worldX = session.getFocusX() + ndcX * halfW;
         double worldZ = session.getFocusZ() + ndcY * halfH;
         return new GroundPick(worldX, groundPlaneY(session), worldZ);
     }
 
-    /** Infer ortho scale from a client ground hit and matching normalized screen sample. */
+    /** Infer ortho calibration multipliers from a client ground hit and matching normalized screen sample. */
     public static void calibrateOrthoFromSample(
         @Nonnull RtsCommandPlayerComponent session,
         float normalizedX,
@@ -301,34 +389,82 @@ public final class RtsScreenPickUtil {
     ) {
         float ndcX = (clampNormalized(normalizedX) - 0.5f) * 2f;
         float ndcY = (clampNormalized(normalizedY) - 0.5f) * 2f;
+        float viewHeight = session.getPickViewHeight();
+        double scaleW = 1.0;
+        double scaleH = 1.0;
+        boolean gotW = false;
+        boolean gotH = false;
         if (Math.abs(ndcX) > 0.08f) {
-            session.setOrthoHalfWidth(Math.abs((worldX - session.getFocusX()) / ndcX));
+            double measuredHalfW = Math.abs((worldX - session.getFocusX()) / ndcX);
+            double defaultHalfW = defaultOrthoHalfWidth(viewHeight, session.getPickTuning());
+            if (defaultHalfW > 1e-6) {
+                scaleW = measuredHalfW / defaultHalfW;
+                gotW = true;
+            }
         }
         if (Math.abs(ndcY) > 0.08f) {
-            session.setOrthoHalfHeight(Math.abs((worldZ - session.getFocusZ()) / ndcY));
+            double measuredHalfH = Math.abs((worldZ - session.getFocusZ()) / ndcY);
+            double defaultHalfH = defaultOrthoHalfHeight(viewHeight, session.getPickTuning());
+            if (defaultHalfH > 1e-6) {
+                scaleH = measuredHalfH / defaultHalfH;
+                gotH = true;
+            }
         }
+        double uniform;
+        if (gotW && gotH) {
+            uniform = Math.sqrt(scaleW * scaleH);
+        } else if (gotW) {
+            uniform = scaleW;
+        } else if (gotH) {
+            uniform = scaleH;
+        } else {
+            return;
+        }
+        session.setOrthoHalfWidth(uniform);
+        session.setOrthoHalfHeight(uniform);
     }
 
     public static double orthoHalfWidth(@Nonnull RtsCommandPlayerComponent session) {
-        if (session.getOrthoHalfWidth() > 0.0) {
-            return session.getOrthoHalfWidth();
-        }
-        return defaultOrthoHalfWidth(session.getDistance());
+        return defaultOrthoHalfWidth(session.getPickViewHeight(), session.getPickTuning()) * orthoWidthCalibration(session);
+    }
+
+    public static double effectiveOrthoHalfWidth(@Nonnull RtsCommandPlayerComponent session) {
+        return orthoHalfWidth(session);
+    }
+
+    /** Applied for picks and screen projection. */
+    public static double effectiveOrthoHalfHeight(@Nonnull RtsCommandPlayerComponent session) {
+        return orthoHalfHeight(session);
     }
 
     public static double orthoHalfHeight(@Nonnull RtsCommandPlayerComponent session) {
-        if (session.getOrthoHalfHeight() > 0.0) {
-            return session.getOrthoHalfHeight();
-        }
-        return defaultOrthoHalfHeight(session.getDistance());
+        return defaultOrthoHalfHeight(session.getPickViewHeight(), session.getPickTuning()) * orthoHeightCalibration(session);
     }
 
-    public static double defaultOrthoHalfWidth(float cameraDistance) {
-        return defaultOrthoHalfHeight(cameraDistance) * ASPECT_RATIO;
+    private static double orthoWidthCalibration(@Nonnull RtsCommandPlayerComponent session) {
+        double cal = session.getOrthoHalfWidth();
+        return cal > 0.0 ? cal : 1.0;
     }
 
-    public static double defaultOrthoHalfHeight(float cameraDistance) {
-        return cameraDistance * Math.tan(Math.toRadians(VERTICAL_FOV_DEG * 0.5));
+    private static double orthoHeightCalibration(@Nonnull RtsCommandPlayerComponent session) {
+        double cal = session.getOrthoHalfHeight();
+        return cal > 0.0 ? cal : 1.0;
+    }
+
+    public static double defaultOrthoHalfWidth(float viewHeight) {
+        return defaultOrthoHalfWidth(viewHeight, RtsPickTuning.defaults());
+    }
+
+    public static double defaultOrthoHalfWidth(float viewHeight, @Nonnull RtsPickTuning tuning) {
+        return defaultOrthoHalfHeight(viewHeight, tuning) * tuning.aspectRatio();
+    }
+
+    public static double defaultOrthoHalfHeight(float viewHeight) {
+        return defaultOrthoHalfHeight(viewHeight, RtsPickTuning.defaults());
+    }
+
+    public static double defaultOrthoHalfHeight(float viewHeight, @Nonnull RtsPickTuning tuning) {
+        return viewHeight * Math.tan(Math.toRadians(tuning.verticalFovDeg() * 0.5));
     }
 
     /** @deprecated use {@link #pickHudRectWorldColumn} */
@@ -421,19 +557,16 @@ public final class RtsScreenPickUtil {
         if (session.getBoxGroundY() != 0.0) {
             return session.getBoxGroundY();
         }
-        return session.getFocusY() - session.getDistance();
+        return session.getFocusY() - viewHeightAboveGround(session);
     }
 
     public static double viewHeightAboveGround(@Nonnull RtsCommandPlayerComponent session) {
-        return session.getDistance() + CAMERA_EYE_OFFSET_Y;
+        return session.getPickViewHeight() - AetherhavenConstants.RTS_COMMAND_PICK_CAMERA_EYE_OFFSET_Y;
     }
 
-    private static void groundFrustumHalfExtents(float cameraDistance, @Nonnull double[] outHalfWidthHalfHeight) {
-        double viewHeight = cameraDistance + CAMERA_EYE_OFFSET_Y;
-        double halfTan = Math.tan(Math.toRadians(VERTICAL_FOV_DEG * 0.5));
-        double halfHeight = viewHeight * halfTan;
-        outHalfWidthHalfHeight[0] = halfHeight * ASPECT_RATIO;
-        outHalfWidthHalfHeight[1] = halfHeight;
+    private static void groundFrustumHalfExtents(float viewHeight, @Nonnull double[] outHalfWidthHalfHeight) {
+        outHalfWidthHalfHeight[0] = defaultOrthoHalfWidth(viewHeight);
+        outHalfWidthHalfHeight[1] = defaultOrthoHalfHeight(viewHeight);
     }
 
     @Nullable
@@ -462,13 +595,13 @@ public final class RtsScreenPickUtil {
         double focusX,
         double groundPlaneY,
         double focusZ,
-        float cameraDistance
+        float cameraViewHeight
     ) {
         float ndcX = (clampNormalized(normalizedX) - 0.5f) * 2f;
         float ndcY = (clampNormalized(normalizedY) - 0.5f) * 2f;
 
         double[] half = new double[2];
-        groundFrustumHalfExtents(cameraDistance, half);
+        groundFrustumHalfExtents(cameraViewHeight, half);
 
         double worldX = focusX + ndcX * half[0];
         double worldZ = focusZ + ndcY * half[1];
@@ -525,22 +658,20 @@ public final class RtsScreenPickUtil {
     }
 
     public static float worldToNormalizedScreenX(double worldX, @Nonnull RtsCommandPlayerComponent session) {
-        double[] half = new double[2];
-        groundFrustumHalfExtents(session.getDistance(), half);
-        if (half[0] < 1e-6) {
+        double halfW = effectiveOrthoHalfWidth(session);
+        if (halfW < 1e-6) {
             return 0.5f;
         }
-        double ndcX = (worldX - session.getFocusX()) / half[0];
+        double ndcX = (worldX - session.getFocusX()) / halfW;
         return clampNormalized((float) (ndcX * 0.5 + 0.5));
     }
 
     public static float worldToNormalizedScreenY(double worldZ, @Nonnull RtsCommandPlayerComponent session) {
-        double[] half = new double[2];
-        groundFrustumHalfExtents(session.getDistance(), half);
-        if (half[1] < 1e-6) {
+        double halfH = effectiveOrthoHalfHeight(session);
+        if (halfH < 1e-6) {
             return 0.5f;
         }
-        double ndcY = (worldZ - session.getFocusZ()) / half[1];
+        double ndcY = (worldZ - session.getFocusZ()) / halfH;
         return clampNormalized((float) (ndcY * 0.5 + 0.5));
     }
 

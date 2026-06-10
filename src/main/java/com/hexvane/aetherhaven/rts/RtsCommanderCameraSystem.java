@@ -1,7 +1,6 @@
 package com.hexvane.aetherhaven.rts;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.rts.camera.TopDownCameraService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -11,25 +10,18 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
-import com.hypixel.hytale.protocol.MovementStates;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.modules.entity.player.PlayerInput;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
 /**
  * RTS commander: vanilla creative flight for WASD pan + top-down camera.
- * Does not strip locomotion, apply abs deltas, or snap the body each tick.
+ * Zoom is flight altitude only (Space / Ctrl); the camera packet uses a fixed pull-back distance.
  */
 public final class RtsCommanderCameraSystem {
-    private static final float ZOOM_UNITS_PER_SEC = 28f;
-    private static final double ZOOM_WISH_THRESHOLD = 0.05;
-
     private RtsCommanderCameraSystem() {}
 
     public static final class Follow extends EntityTickingSystem<EntityStore> {
@@ -65,91 +57,58 @@ public final class RtsCommanderCameraSystem {
             }
             Ref<EntityStore> playerRef = chunk.getReferenceTo(index);
             TransformComponent tc = chunk.getComponent(index, TransformComponent.getComponentType());
-            PlayerRef pr = chunk.getComponent(index, PlayerRef.getComponentType());
-            if (tc == null || pr == null) {
+            if (tc == null) {
                 return;
             }
 
-            readModifiers(session, chunk, index, pr);
-            applyZoomFromWish(session, dt, pr);
             RtsMovementSupport.ensureFlying(playerRef, store);
 
             var pos = tc.getPosition();
+            applyCameraFollow(session, playerRef, tc, store, commandBuffer);
+
+            pos = tc.getPosition();
             session.trackFocus(pos.x, pos.y, pos.z);
+            RtsScreenPickUtil.refreshPickViewHeight(session, store);
 
             clampPlayerToTerritory(session, playerRef, tc, store, commandBuffer);
+        }
 
-            if (session.isCameraDirty()) {
-                TopDownCameraService.apply(pr, session.getDistance());
-                session.clearCameraDirty();
+        private static void applyCameraFollow(
+            @Nonnull RtsCommandPlayerComponent session,
+            @Nonnull Ref<EntityStore> playerRef,
+            @Nonnull TransformComponent tc,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer
+        ) {
+            UUID followId = session.getCameraFollowGuardUuid();
+            if (followId == null) {
+                return;
+            }
+            Ref<EntityStore> guardRef = RtsGuardDirectory.findByUuid(store, followId);
+            if (guardRef == null) {
+                session.clearCameraFollow();
                 commandBuffer.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
-            }
-        }
-
-        private void readModifiers(
-            @Nonnull RtsCommandPlayerComponent session,
-            @Nonnull ArchetypeChunk<EntityStore> chunk,
-            int index,
-            @Nonnull PlayerRef pr
-        ) {
-            RtsClientMovementPacketAdapter.Snapshot inbound =
-                RtsClientMovementPacketAdapter.poll(pr.getUuid());
-            if (inbound != null && inbound.hasMovementStates) {
-                session.setShiftModifierHeld(inbound.crouching);
-                session.setSprintModifierHeld(inbound.sprinting);
-            }
-            PlayerInput input = chunk.getComponent(index, PlayerInput.getComponentType());
-            if (input != null) {
-                List<PlayerInput.InputUpdate> queue = input.getMovementUpdateQueue();
-                double wishX = session.getPanWishX();
-                double wishZ = session.getPanWishZ();
-                for (PlayerInput.InputUpdate update : queue) {
-                    if (update instanceof PlayerInput.SetMovementStates setStates) {
-                        MovementStates states = setStates.movementStates();
-                        session.setShiftModifierHeld(states.crouching || states.forcedCrouching);
-                        session.setSprintModifierHeld(states.sprinting);
-                    } else if (update instanceof PlayerInput.WishMovement wish) {
-                        wishX = wish.getX();
-                        wishZ = wish.getZ();
-                    }
-                }
-                session.setPanWish(wishX, wishZ);
-            }
-            MovementStatesComponent liveStates =
-                chunk.getComponent(index, MovementStatesComponent.getComponentType());
-            if (liveStates != null) {
-                MovementStates states = liveStates.getMovementStates();
-                if (states.crouching || states.forcedCrouching) {
-                    session.setShiftModifierHeld(true);
-                }
-                if (states.sprinting) {
-                    session.setSprintModifierHeld(true);
-                }
-            }
-        }
-
-        private void applyZoomFromWish(
-            @Nonnull RtsCommandPlayerComponent session,
-            float dt,
-            @Nonnull PlayerRef pr
-        ) {
-            if (!session.isShiftModifierHeld()) {
                 return;
             }
-            double wz = session.getPanWishZ();
-            if (Math.abs(wz) < ZOOM_WISH_THRESHOLD) {
+            TransformComponent guardTc = store.getComponent(guardRef, TransformComponent.getComponentType());
+            if (guardTc == null) {
+                session.clearCameraFollow();
+                commandBuffer.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
                 return;
             }
-            float before = session.getDistance();
-            float dist = before - (float) (wz * ZOOM_UNITS_PER_SEC * dt);
-            session.setDistance(TopDownCameraService.clampDistance(dist));
-            if (Math.abs(session.getDistance() - before) >= 0.01f) {
-                session.markCameraDirty();
-                if (session.isBoxSelectActive()) {
-                    session.clearOrthoCalibration();
-                }
-                RtsDiagnostics.zoomApplied(pr, before, session.getDistance(), wz);
+            org.joml.Vector3d guardPos = guardTc.getPosition();
+            org.joml.Vector3d commanderPos = tc.getPosition();
+            if (session.cameraFollowManualOverride(commanderPos.x, commanderPos.z, guardPos.x, guardPos.z)) {
+                session.clearCameraFollow();
+                commandBuffer.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
+                return;
             }
+            tc.getPosition().x = guardPos.x;
+            tc.getPosition().z = guardPos.z;
+            session.trackFocus(guardPos.x, commanderPos.y, guardPos.z);
+            session.setCameraFollowSnap(commanderPos.x, commanderPos.z, guardPos.x, guardPos.z);
+            commandBuffer.putComponent(playerRef, TransformComponent.getComponentType(), tc);
+            commandBuffer.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
         }
 
         private void clampPlayerToTerritory(
