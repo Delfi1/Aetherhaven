@@ -52,9 +52,9 @@ Open your **town journal → Guide → Mechanics → Plot creator staff** (this 
 3. Place **important spots** (blocks are given one at a time per substep).
 4. Enter **name and id** (prefab filename follows the id).
 5. Edit **tags** if needed.
-6. **Export prefab** with F on the save-shape step.
-7. Set **build materials** (virtual chest; items return to you when you continue).
-8. Open **building settings** (F): treasury gold cost and self-build days.
+6. Open **building settings** (F): treasury gold cost, self-build days, empty-space prefab option, and assembly sections.
+7. **Export prefab** with F on the save-shape step (uses settings from step 6).
+8. Set **build materials** (virtual chest; items return to you when you continue).
 9. Review and save.
 
 ## Permissions

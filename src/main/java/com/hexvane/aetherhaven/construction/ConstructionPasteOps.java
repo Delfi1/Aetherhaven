@@ -202,6 +202,27 @@ public final class ConstructionPasteOps {
      * Does not place final prefab solids, fluids, or entities — prefab fluids are written when each cell is built
      * ({@link #placeOne}) or at completion ({@link #finishFluidsAndEntities}).
      */
+    /**
+     * Clears world fluids in footprint cells whose prefab has no fluid, so interiors are not left flooded after the
+     * manual clearing phase.
+     */
+    public static void clearNonPrefabFluidsInFootprint(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull List<PendingBlock> footprint,
+        @Nonnull LocalCachedChunkAccessor chunkAccessor
+    ) {
+        for (PendingBlock pb : footprint) {
+            if (pb.fluidId() != 0) {
+                continue;
+            }
+            int bx = origin.x + pb.x();
+            int by = origin.y + pb.y();
+            int bz = origin.z + pb.z();
+            applyPrefabFluidForCell(world, bx, by, bz, 0, 0, chunkAccessor);
+        }
+    }
+
     public static void prepAssemblySite(
         @Nonnull World world,
         @Nonnull Vector3i origin,

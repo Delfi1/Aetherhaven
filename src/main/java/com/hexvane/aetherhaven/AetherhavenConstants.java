@@ -131,6 +131,12 @@ public final class AetherhavenConstants {
     public static final int BUILDING_STAFF_ASSEMBLY_BRUSH_CHEBYSHEV_RADIUS_DEFAULT = 1;
 
     /**
+     * Caps per-player clearing obstruction markers ({@link PlotAssemblyPreviewSystem}). Uses three debug shapes per cell;
+     * keep high enough that typical prefab footprints show every obstructed cell in range.
+     */
+    public static final int BUILDING_STAFF_CLEARING_PREVIEW_MAX_GHOST_CELLS = 1024;
+
+    /**
      * Caps per-player assembly frontier ghost cubes ({@link PlotAssemblyPreviewSystem}) so huge shells do not emit tens
      * of thousands of debug draws per tick.
      */

@@ -162,6 +162,61 @@ public final class PathDebugPreviewUtil {
         add(pr, DebugShape.Cube, m, color, opacity, FLAG_ASSEMBLY_FRONTIER, PATH_TOOL_DEBUG_HOLD_SECONDS);
     }
 
+    /** Path-tool blocked tint for assembly clearing markers. */
+    public static final Vector3f COLOR_OBSTRUCTION_MARKER = new Vector3f(0.72f, 0.12f, 0.12f);
+
+    private static final double OBSTRUCTION_NUB_HALF_MIN = 0.06;
+    private static final double OBSTRUCTION_NUB_HALF_MAX = 0.11;
+    private static final double OBSTRUCTION_NUB_OFFSET_MIN = 0.54;
+    private static final double OBSTRUCTION_NUB_OFFSET_MAX = 0.62;
+
+    /**
+     * Six face nubs protruding outside the block on every side so markers stay visible on opaque terrain such as
+     * {@code Soil_Grass} (not only transparent {@code Plant_Grass} foliage).
+     */
+    public static void drawObstructionCellMarkers(
+        @Nonnull PlayerRef pr,
+        int x,
+        int y,
+        int z,
+        @Nonnull Vector3f color,
+        @Nonnull com.hypixel.hytale.server.core.universe.world.World w,
+        double grow01
+    ) {
+        if (w.getChunkIfInMemory(com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)) == null) {
+            return;
+        }
+        double g = Math.min(1.0, Math.max(0.0, grow01));
+        double nubHalf = OBSTRUCTION_NUB_HALF_MIN + (OBSTRUCTION_NUB_HALF_MAX - OBSTRUCTION_NUB_HALF_MIN) * g;
+        double offset = OBSTRUCTION_NUB_OFFSET_MIN + (OBSTRUCTION_NUB_OFFSET_MAX - OBSTRUCTION_NUB_OFFSET_MIN) * g;
+        double cx = x + 0.5;
+        double cy = y + 0.5;
+        double cz = z + 0.5;
+        float opacity = (float) (0.76 + 0.16 * g);
+        drawObstructionNub(pr, cx + offset, cy, cz, nubHalf, color, opacity);
+        drawObstructionNub(pr, cx - offset, cy, cz, nubHalf, color, opacity);
+        drawObstructionNub(pr, cx, cy + offset, cz, nubHalf, color, opacity);
+        drawObstructionNub(pr, cx, cy - offset, cz, nubHalf, color, opacity);
+        drawObstructionNub(pr, cx, cy, cz + offset, nubHalf, color, opacity);
+        drawObstructionNub(pr, cx, cy, cz - offset, nubHalf, color, opacity);
+    }
+
+    private static void drawObstructionNub(
+        @Nonnull PlayerRef pr,
+        double cx,
+        double cy,
+        double cz,
+        double half,
+        @Nonnull Vector3f color,
+        float opacity
+    ) {
+        Matrix4d m = new Matrix4d();
+        m.identity();
+        m.translate(cx, cy, cz);
+        m.scale(half, half, half);
+        add(pr, DebugShape.Cube, m, color, opacity, FLAG_SOLID_OVERLAY, PATH_TOOL_DEBUG_HOLD_SECONDS);
+    }
+
     public static float previewSeconds() {
         return PREVIEW_SECONDS;
     }

@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 public final class BlockColorResolver {
     private static final int FALLBACK_GRAY = 0xFF808080;
     private static final int EDITOR_BLOCK_INDEX = BlockType.getAssetMap().getIndex("Editor_Block");
+    private static final int EDITOR_EMPTY_INDEX = BlockType.getAssetMap().getIndex("Editor_Empty");
 
     /** Non-greyscale reference colors for biome-tinted grass (Soil_Grass_Sunny / Soil_Dirt). */
     private static final int GRASS_TOP_ARGB = referenceArgb("Soil_Grass_Sunny", 0xFF709D2C);
@@ -23,6 +24,9 @@ public final class BlockColorResolver {
             return false;
         }
         if (EDITOR_BLOCK_INDEX != Integer.MIN_VALUE && blockId == EDITOR_BLOCK_INDEX) {
+            return false;
+        }
+        if (EDITOR_EMPTY_INDEX != Integer.MIN_VALUE && blockId == EDITOR_EMPTY_INDEX) {
             return false;
         }
         return true;

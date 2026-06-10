@@ -13,12 +13,15 @@ import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
 import com.hypixel.hytale.server.core.prefab.event.PrefabPasteEvent;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
@@ -144,8 +147,8 @@ public final class PlotAssemblyService {
     }
 
     /**
-     * Starts assembly on the world thread: paste begin, prep footprint, break plot sign, persist ASSEMBLING, register job.
-     * Caller must have consumed materials/treasury already.
+     * Starts assembly on the world thread: paste begin, optional clearing phase, break plot sign, persist ASSEMBLING,
+     * register job. Caller must have consumed materials/treasury already.
      */
     public static void startFromBuildClick(
         @Nonnull AetherhavenPlugin plugin,
@@ -173,8 +176,8 @@ public final class PlotAssemblyService {
             return;
         }
         ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
-        ConstructionPasteOps.prepAssemblySite(world, anchor, seq.pendingBlocks(), true, seq.prefabRotation(), buffer);
-        List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
+        List<PendingBlock> footprintCells = seq.pendingBlocks();
+        List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
         ConstructionPasteOps.AssemblyDeferredPartition split =
             ConstructionPasteOps.partitionAssemblyDeferredBlocks(
                 nonAirCells,
@@ -190,8 +193,6 @@ public final class PlotAssemblyService {
         plot.setPrefabWorldPlacement(anchor.x, anchor.y, anchor.z, yaw);
         plot.setState(PlotInstanceState.ASSEMBLING);
         plot.setLastStateChangeEpochMs(wallNow);
-        Instant assemblySimStart = entityStore.getResource(TimeResource.getResourceType()).getNow();
-        plot.setAssemblyStartEpochMs(assemblySimStart.toEpochMilli());
         plot.resetAssemblyPlacementProgress();
         int sectionAxis = def.getAssemblyPrefabSectionsPerAxis();
         if (sectionAxis > 1) {
@@ -204,7 +205,6 @@ public final class PlotAssemblyService {
         plot.setAssemblyPrefabId(prefabId);
         plot.setAssemblyOwnerUuid(assemblyOwnerUuid);
         long slot = computeSlotWallMs(world, plugin, def, placementOrder.size());
-        plot.setAssemblyNextPassiveDueSimMs(assemblySimStart.toEpochMilli() + slot);
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         tm.updateTown(town);
 
@@ -214,6 +214,7 @@ public final class PlotAssemblyService {
                 assemblyOwnerUuid,
                 anchor,
                 yaw,
+                footprintCells,
                 placementOrder,
                 assemblyDeferredBlocks,
                 seq.prefabEntitiesInOrder(),
@@ -223,9 +224,20 @@ public final class PlotAssemblyService {
                 slot,
                 def.getId()
             );
-        PlotAssemblyFrontierRuntime assemblyRt =
-            PlotAssemblyFrontierRuntime.create(placementOrder, plot, assemblySectionsPerAxisForPlot(plot));
-        AssemblyWorldRegistry.put(world, plotId, job, assemblyRt);
+        if (AssemblyObstructionUtil.hasObstructionsInLoadedChunks(world, job)) {
+            registerClearingJob(world, plotId, job);
+        } else {
+            beginPlacingPhase(world, plugin, entityStore, tm, town, plot, job);
+        }
+    }
+
+    private static void registerClearingJob(
+        @Nonnull World world,
+        @Nonnull UUID plotId,
+        @Nonnull PlotAssemblyJob job
+    ) {
+        PlotAssemblyClearingRuntime clearingRt = PlotAssemblyClearingRuntime.scanLoadedFootprint(world, job);
+        AssemblyWorldRegistry.put(world, plotId, job, PlotAssemblyPhase.CLEARING, null, clearingRt);
     }
 
     private static boolean tryRegisterJob(
@@ -247,7 +259,8 @@ public final class PlotAssemblyService {
         }
         int prefabId = start.getPrefabId();
         ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
-        List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
+        List<PendingBlock> footprintCells = seq.pendingBlocks();
+        List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
         ConstructionPasteOps.AssemblyDeferredPartition split =
             ConstructionPasteOps.partitionAssemblyDeferredBlocks(
                 nonAirCells,
@@ -266,6 +279,7 @@ public final class PlotAssemblyService {
                 ownerUuid,
                 anchor,
                 yaw,
+                footprintCells,
                 placementOrder,
                 assemblyDeferredBlocks,
                 seq.prefabEntitiesInOrder(),
@@ -275,10 +289,76 @@ public final class PlotAssemblyService {
                 slot,
                 def.getId()
             );
-        PlotAssemblyFrontierRuntime assemblyRt =
-            PlotAssemblyFrontierRuntime.create(placementOrder, plot, assemblySectionsPerAxisForPlot(plot));
-        AssemblyWorldRegistry.put(world, plot.getPlotId(), job, assemblyRt);
+        if (AssemblyObstructionUtil.hasObstructionsInLoadedChunks(world, job)) {
+            registerClearingJob(world, plot.getPlotId(), job);
+        } else {
+            PlotAssemblyFrontierRuntime assemblyRt =
+                PlotAssemblyFrontierRuntime.create(placementOrder, plot, assemblySectionsPerAxisForPlot(plot));
+            AssemblyWorldRegistry.put(world, plot.getPlotId(), job, PlotAssemblyPhase.PLACING, assemblyRt, null);
+            if (plot.getAssemblyStartEpochMs() == 0L) {
+                Instant simNow = entityStore.getResource(TimeResource.getResourceType()).getNow();
+                plot.setAssemblyStartEpochMs(simNow.toEpochMilli());
+                plot.setAssemblyNextPassiveDueSimMs(simNow.toEpochMilli() + slot);
+                tm.updateTown(town);
+            }
+        }
         return true;
+    }
+
+    /**
+     * Transitions a job from {@link PlotAssemblyPhase#CLEARING} to {@link PlotAssemblyPhase#PLACING}: clears stray
+     * fluids, starts the passive assembly clock, and registers the frontier runtime.
+     */
+    public static void beginPlacingPhase(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job
+    ) {
+        if (AssemblyWorldRegistry.phase(world, job.plotId()) == PlotAssemblyPhase.PLACING) {
+            return;
+        }
+        LocalCachedChunkAccessor chunkAccessor =
+            ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
+        ConstructionPasteOps.prepAssemblySite(
+            world,
+            job.anchor(),
+            job.footprintCells(),
+            false,
+            job.prefabRotation(),
+            job.buffer()
+        );
+        ConstructionPasteOps.clearNonPrefabFluidsInFootprint(world, job.anchor(), job.footprintCells(), chunkAccessor);
+        if (plot.getAssemblyStartEpochMs() == 0L) {
+            Instant assemblySimStart = entityStore.getResource(TimeResource.getResourceType()).getNow();
+            plot.setAssemblyStartEpochMs(assemblySimStart.toEpochMilli());
+            plot.setAssemblyNextPassiveDueSimMs(assemblySimStart.toEpochMilli() + job.slotWallMs());
+            tm.updateTown(town);
+        }
+        PlotAssemblyFrontierRuntime assemblyRt =
+            PlotAssemblyFrontierRuntime.create(job.pendingBlocks(), plot, assemblySectionsPerAxisForPlot(plot));
+        AssemblyWorldRegistry.transitionToPlacing(world, job.plotId(), assemblyRt);
+    }
+
+    private static void maybeBeginPlacingAfterClear(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job
+    ) {
+        if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.CLEARING) {
+            return;
+        }
+        PlotAssemblyClearingRuntime clearingRt = AssemblyWorldRegistry.clearingRuntime(world, job.plotId());
+        if (clearingRt == null || clearingRt.isEmpty()) {
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            beginPlacingPhase(world, plugin, entityStore, tm, town, plot, job);
+        }
     }
 
     /**
@@ -320,6 +400,24 @@ public final class PlotAssemblyService {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         Instant simNow = entityStore.getResource(TimeResource.getResourceType()).getNow();
         for (PlotAssemblyJob job : AssemblyWorldRegistry.jobs(world)) {
+            if (AssemblyWorldRegistry.phase(world, job.plotId()) == PlotAssemblyPhase.CLEARING) {
+                TownRecord clearingTown = tm.findTownOwningPlot(job.plotId());
+                if (clearingTown == null) {
+                    AssemblyWorldRegistry.remove(world, job.plotId());
+                    continue;
+                }
+                PlotInstance clearingPlot = clearingTown.findPlotById(job.plotId());
+                if (clearingPlot == null || clearingPlot.getState() != PlotInstanceState.ASSEMBLING) {
+                    AssemblyWorldRegistry.remove(world, job.plotId());
+                    continue;
+                }
+                PlotAssemblyClearingRuntime clearingRt = AssemblyWorldRegistry.clearingRuntime(world, job.plotId());
+                if (clearingRt != null) {
+                    clearingRt.pruneStaleIfDue(world, job);
+                }
+                maybeBeginPlacingAfterClear(world, plugin, entityStore, clearingTown, clearingPlot, job);
+                continue;
+            }
             TownRecord town = tm.findTownOwningPlot(job.plotId());
             if (town == null) {
                 AssemblyWorldRegistry.remove(world, job.plotId());
@@ -394,6 +492,9 @@ public final class PlotAssemblyService {
         boolean deferCompletionWhenFullyPlaced
     ) {
         if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+            return false;
+        }
+        if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.PLACING) {
             return false;
         }
         if (fromStaff && staffActor != null && !town.playerCanManageConstructions(staffActor)) {
@@ -543,7 +644,7 @@ public final class PlotAssemblyService {
         if (rt == null) {
             int ax = assemblySectionsPerAxisForPlot(plot);
             rt = PlotAssemblyFrontierRuntime.create(pending, plot, ax);
-            AssemblyWorldRegistry.put(world, job.plotId(), job, rt);
+            AssemblyWorldRegistry.transitionToPlacing(world, job.plotId(), rt);
         }
         return rt;
     }
@@ -738,11 +839,133 @@ public final class PlotAssemblyService {
             if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
                 continue;
             }
+            if (AssemblyWorldRegistry.phase(world, job.plotId()) == PlotAssemblyPhase.CLEARING) {
+                if (AssemblyObstructionUtil.footprintContainsWorldCell(job, cellWorld)) {
+                    return job;
+                }
+                continue;
+            }
             if (resolveFrontierPlacementIndex(world, job, plot, cellWorld) >= 0) {
                 return job;
             }
         }
         return null;
+    }
+
+    @Nullable
+    public static PlotAssemblyJob findClearingJobForObstructedCell(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Vector3i cellWorld
+    ) {
+        PlotAssemblyJob job = findJobContainingPreview(world, plugin, cellWorld);
+        if (job == null || AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.CLEARING) {
+            return null;
+        }
+        PlotAssemblyClearingRuntime clearingRt = AssemblyWorldRegistry.clearingRuntime(world, job.plotId());
+        if (clearingRt == null || !clearingRt.containsWorldCell(cellWorld.x, cellWorld.y, cellWorld.z)) {
+            return null;
+        }
+        return job;
+    }
+
+    /**
+     * @return true if one obstructing block was broken (or placing phase was entered when the last obstruction cleared).
+     */
+    public static boolean advanceClearingAtCell(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job,
+        @Nonnull Vector3i cellWorld,
+        @Nullable UUID staffActor
+    ) {
+        if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+            return false;
+        }
+        if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.CLEARING) {
+            return false;
+        }
+        if (staffActor != null && !town.playerCanManageConstructions(staffActor)) {
+            return false;
+        }
+        PlotAssemblyClearingRuntime clearingRt = AssemblyWorldRegistry.clearingRuntime(world, job.plotId());
+        if (clearingRt == null || !clearingRt.containsWorldCell(cellWorld.x, cellWorld.y, cellWorld.z)) {
+            maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
+            return false;
+        }
+        if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cellWorld)) {
+            clearingRt.removeCell(cellWorld.x, cellWorld.y, cellWorld.z);
+            maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
+            return false;
+        }
+        if (!AssemblyStaffClearBreak.breakWithLoot(world, cellWorld, commandBuffer)) {
+            if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cellWorld)) {
+                clearingRt.removeCell(cellWorld.x, cellWorld.y, cellWorld.z);
+                maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
+            }
+            return false;
+        }
+        clearingRt.removeCell(cellWorld.x, cellWorld.y, cellWorld.z);
+        if (staffActor != null) {
+            PlotAssemblyPreviewSystem.markStaffAssemblyBlockPlaced(staffActor);
+        }
+        maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
+        return true;
+    }
+
+    /**
+     * Obstructed footprint world cells within Chebyshev {@code radius} of {@code centerWorld}, nearest first.
+     */
+    @Nonnull
+    public static ArrayList<Vector3i> obstructionCellsNearChebyshev(
+        @Nonnull World world,
+        @Nonnull PlotAssemblyJob job,
+        @Nonnull Vector3i centerWorld,
+        int radius
+    ) {
+        ArrayList<Vector3i> matches = new ArrayList<>();
+        if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.CLEARING) {
+            return matches;
+        }
+        PlotAssemblyClearingRuntime clearingRt = AssemblyWorldRegistry.clearingRuntime(world, job.plotId());
+        if (clearingRt == null) {
+            return matches;
+        }
+        clearingRt.appendVisibleNearChebyshev(world, job, centerWorld, radius, matches);
+        if (matches.size() <= 1) {
+            return matches;
+        }
+        int cx = centerWorld.x;
+        int cy = centerWorld.y;
+        int cz = centerWorld.z;
+        matches.sort(
+            (a, b) -> {
+                int da = chebyshevDistWorld(a, cx, cy, cz);
+                int db = chebyshevDistWorld(b, cx, cy, cz);
+                if (da != db) {
+                    return Integer.compare(da, db);
+                }
+                if (a.y != b.y) {
+                    return Integer.compare(a.y, b.y);
+                }
+                if (a.x != b.x) {
+                    return Integer.compare(a.x, b.x);
+                }
+                return Integer.compare(a.z, b.z);
+            }
+        );
+        return matches;
+    }
+
+    private static int chebyshevDistWorld(@Nonnull Vector3i cell, int cx, int cy, int cz) {
+        return Math.max(
+            Math.max(Math.abs(cell.x - cx), Math.abs(cell.y - cy)),
+            Math.abs(cell.z - cz)
+        );
     }
 
     /**
@@ -766,6 +989,18 @@ public final class PlotAssemblyService {
         PlotAssemblyJob registered = AssemblyWorldRegistry.get(world, plot.getPlotId());
         if (registered != job) {
             return false;
+        }
+        if (AssemblyWorldRegistry.phase(world, job.plotId()) == PlotAssemblyPhase.CLEARING) {
+            ConstructionPasteOps.prepAssemblySite(
+                world,
+                job.anchor(),
+                job.footprintCells(),
+                true,
+                job.prefabRotation(),
+                job.buffer()
+            );
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            beginPlacingPhase(world, plugin, entityStore, tm, town, plot, job);
         }
         List<PendingBlock> pending = job.pendingBlocks();
         if (plot.getAssemblyPlacedBlockCount() >= pending.size()) {

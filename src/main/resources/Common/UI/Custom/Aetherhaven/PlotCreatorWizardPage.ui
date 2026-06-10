@@ -89,6 +89,37 @@ $C.@PageOverlay {
         PlaceholderText: "";
       }
 
+      Group #SaveEmptySpacesRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+
+        $C.@CheckBox #SaveEmptySpacesToggle {}
+
+        Label #SaveEmptySpacesLabel {
+          Text: "";
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+          Anchor: (Left: 11);
+        }
+      }
+
+      Label #SaveEmptySpacesHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+      }
+
+      Label #AssemblySectionsLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@TextField #AssemblySectionsField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+      }
+
       $C.@TextButton #OpenMaterialsButton {
         Anchor: (Bottom: 12, Height: 40);
         Text: "";

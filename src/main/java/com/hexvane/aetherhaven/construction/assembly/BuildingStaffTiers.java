@@ -17,7 +17,7 @@ public final class BuildingStaffTiers {
     public static final float MANA_COST_PER_BLOCK = 1f;
 
     /** After this long without holding secondary, held-staff mana regen increases further. */
-    public static final long IDLE_MANA_REGEN_DELAY_NS = 2_000_000_000L;
+    public static final long IDLE_MANA_REGEN_DELAY_NS = 1_000_000_000L;
 
     private BuildingStaffTiers() {}
 
@@ -92,19 +92,19 @@ public final class BuildingStaffTiers {
             return 0f;
         }
         if (AetherhavenConstants.BUILDING_STAFF_ITEM_ID.equals(itemId)) {
-            return 15f;
-        }
-        if (STAFF_ITEM_ID_IRON.equals(itemId)) {
-            return 24f;
-        }
-        if (STAFF_ITEM_ID_THORIUM.equals(itemId)) {
             return 30f;
         }
+        if (STAFF_ITEM_ID_IRON.equals(itemId)) {
+            return 48f;
+        }
+        if (STAFF_ITEM_ID_THORIUM.equals(itemId)) {
+            return 60f;
+        }
         if (STAFF_ITEM_ID_COBALT.equals(itemId)) {
-            return 45f;
+            return 90f;
         }
         if (STAFF_ITEM_ID_ADAMANTITE.equals(itemId)) {
-            return 60f;
+            return 120f;
         }
         return 0f;
     }

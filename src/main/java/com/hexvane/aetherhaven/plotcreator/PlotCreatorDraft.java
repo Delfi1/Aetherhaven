@@ -70,6 +70,11 @@ public final class PlotCreatorDraft {
     private double selfBuildGameDays = 3.0;
     @Nullable
     private String selfBuildDaysInput;
+    /** When true, natural air in the footprint is saved as empty cells in the prefab. */
+    private boolean saveEmptySpaces;
+    private int assemblyPrefabSectionsPerAxis = 1;
+    @Nullable
+    private String assemblySectionsInput;
     private boolean scheduleSharedUtilityPick;
     private boolean excludeFromTownJournal;
 
@@ -327,6 +332,31 @@ public final class PlotCreatorDraft {
 
     public void setSelfBuildDaysInput(@Nullable String selfBuildDaysInput) {
         this.selfBuildDaysInput = selfBuildDaysInput;
+    }
+
+    public boolean isSaveEmptySpaces() {
+        return saveEmptySpaces;
+    }
+
+    public void setSaveEmptySpaces(boolean saveEmptySpaces) {
+        this.saveEmptySpaces = saveEmptySpaces;
+    }
+
+    public int getAssemblyPrefabSectionsPerAxis() {
+        return assemblyPrefabSectionsPerAxis;
+    }
+
+    public void setAssemblyPrefabSectionsPerAxis(int assemblyPrefabSectionsPerAxis) {
+        this.assemblyPrefabSectionsPerAxis = assemblyPrefabSectionsPerAxis;
+    }
+
+    @Nullable
+    public String getAssemblySectionsInput() {
+        return assemblySectionsInput;
+    }
+
+    public void setAssemblySectionsInput(@Nullable String assemblySectionsInput) {
+        this.assemblySectionsInput = assemblySectionsInput;
     }
 
     public boolean isScheduleSharedUtilityPick() {

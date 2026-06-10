@@ -45,6 +45,9 @@ public final class PlotCreatorJsonWriter {
         if (draft.getTreasuryGoldCoinCost() > 0L) {
             root.put("treasuryGoldCoinCost", draft.getTreasuryGoldCoinCost());
         }
+        if (draft.getAssemblyPrefabSectionsPerAxis() > 1) {
+            root.put("assemblyPrefabSectionsPerAxis", draft.getAssemblyPrefabSectionsPerAxis());
+        }
         if (!draft.getMaterials().isEmpty()) {
             root.put("materials", materialMaps(draft.getMaterials()));
         }

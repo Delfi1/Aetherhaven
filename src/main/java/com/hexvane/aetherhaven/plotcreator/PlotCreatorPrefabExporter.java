@@ -95,6 +95,8 @@ public final class PlotCreatorPrefabExporter {
 
         int editorBlock = BlockType.getAssetMap().getIndex("Editor_Block");
         boolean skipEditorBlock = editorBlock != Integer.MIN_VALUE;
+        int editorBlockPrefabAir = BlockType.getAssetMap().getIndex("Editor_Empty");
+        boolean includeEmpty = draft.isSaveEmptySpaces();
 
         int top = Math.max(yMin, yMax);
         int bottom = Math.min(yMin, yMax);
@@ -131,8 +133,12 @@ public final class PlotCreatorPrefabExporter {
                         }
                     }
 
-                    if ((block != 0 || fluid != 0) && (!skipEditorBlock || block != editorBlock)) {
-                        selection.copyFromAtWorld(x, y, z, chunk, blockPhysics);
+                    if ((block != 0 || fluid != 0 || includeEmpty) && (!skipEditorBlock || block != editorBlock)) {
+                        if (block == editorBlockPrefabAir || (block == 0 && fluid == 0)) {
+                            selection.addBlockAtWorldPos(x, y, z, 0, 0, 0, 0);
+                        } else {
+                            selection.copyFromAtWorld(x, y, z, chunk, blockPhysics);
+                        }
                         blockCount++;
                     }
                 }

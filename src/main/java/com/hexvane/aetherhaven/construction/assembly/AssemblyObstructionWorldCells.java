@@ -14,19 +14,15 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 /**
- * Collects world-space frontier cells for active assembly jobs, deduped and filtered by distance from an observer.
- * Shared by {@link PlotAssemblyPreviewSystem} and {@link BuildingStaffFrontierTracerInteraction}.
+ * Collects obstructed footprint world cells for jobs in {@link PlotAssemblyPhase#CLEARING}, deduped and filtered by
+ * distance from an observer. Shared by preview and tracer systems.
  */
-public final class AssemblyFrontierWorldCells {
-    public static final double DEFAULT_RANGE = 96.0;
+public final class AssemblyObstructionWorldCells {
+    public static final double DEFAULT_RANGE = AssemblyFrontierWorldCells.DEFAULT_RANGE;
     private static final double DEFAULT_RANGE_SQ = DEFAULT_RANGE * DEFAULT_RANGE;
 
-    private AssemblyFrontierWorldCells() {}
+    private AssemblyObstructionWorldCells() {}
 
-    /**
-     * Fills {@code out} with frontier cells within {@link #DEFAULT_RANGE} blocks of {@code observerPos}, sorted by
-     * {@code (x, y, z)} for stable signatures. Duplicates across plots are skipped.
-     */
     public static void collectWithinDefaultRange(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
@@ -46,11 +42,10 @@ public final class AssemblyFrontierWorldCells {
         out.clear();
         List<PlotAssemblyJob> jobs = new ArrayList<>(AssemblyWorldRegistry.jobs(world));
         jobs.sort(Comparator.comparing(PlotAssemblyJob::plotId));
-        ArrayList<Vector3i> frontierScratch = new ArrayList<>(256);
-        double ox = observerPos.x();
-        double oy = observerPos.y();
-        double oz = observerPos.z();
         for (PlotAssemblyJob job : jobs) {
+            if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.CLEARING) {
+                continue;
+            }
             TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(job.plotId());
             if (town == null) {
                 continue;
@@ -59,24 +54,11 @@ public final class AssemblyFrontierWorldCells {
             if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
                 continue;
             }
-            if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.PLACING) {
+            PlotAssemblyClearingRuntime clearingRt = AssemblyWorldRegistry.clearingRuntime(world, job.plotId());
+            if (clearingRt == null || clearingRt.isEmpty()) {
                 continue;
             }
-            frontierScratch.clear();
-            PlotAssemblyService.appendFrontierWorldCells(world, job, plot, frontierScratch);
-            for (int fi = 0; fi < frontierScratch.size(); fi++) {
-                Vector3i cell = frontierScratch.get(fi);
-                double cx = cell.x + 0.5;
-                double cy = cell.y + 0.5;
-                double cz = cell.z + 0.5;
-                double dx = cx - ox;
-                double dy = cy - oy;
-                double dz = cz - oz;
-                if (dx * dx + dy * dy + dz * dz > rangeSq) {
-                    continue;
-                }
-                out.add(cell);
-            }
+            clearingRt.appendVisibleWithinRangeSq(world, job, observerPos, rangeSq, out);
         }
         out.sort(
             Comparator
@@ -87,7 +69,6 @@ public final class AssemblyFrontierWorldCells {
         dedupeSortedByBlockCoords(out);
     }
 
-    /** {@link Vector3i} may not implement value equality; collapse identical block coords after sort for stable hashes. */
     private static void dedupeSortedByBlockCoords(@Nonnull List<Vector3i> sorted) {
         int w = 0;
         for (int r = 0; r < sorted.size(); r++) {

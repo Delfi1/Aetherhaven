@@ -24,6 +24,12 @@ public final class PlotCreatorDraftLoader {
         draft.setTreasuryGoldCoinCost(def.getTreasuryGoldCoinCost());
         draft.setSelfBuildGameDays(def.getSelfBuildGameDays());
         draft.setSelfBuildDaysInput(PlotCreatorService.formatSelfBuildDaysForField(def.getSelfBuildGameDays()));
+        draft.setAssemblyPrefabSectionsPerAxis(def.getAssemblyPrefabSectionsPerAxis());
+        draft.setAssemblySectionsInput(
+            def.getAssemblyPrefabSectionsPerAxis() > 1
+                ? String.valueOf(def.getAssemblyPrefabSectionsPerAxis())
+                : null
+        );
         draft.setScheduleSharedUtilityPick(def.isScheduleSharedUtilityPick());
         draft.setExcludeFromTownJournal(def.isExcludeFromTownJournal());
         draft.getBuildingTags().clear();

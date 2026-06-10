@@ -120,11 +120,13 @@ aetherhaven.plotcreator.step.TAGS.title = Building tags
 aetherhaven.plotcreator.step.TAGS.hint = Press F to edit tags (comma separated). Example: amenity, nature, fun. Finish the line before pressing E.
 
 aetherhaven.plotcreator.step.PREFAB_SAVE.title = Save shape
-aetherhaven.plotcreator.step.PREFAB_SAVE.hint = Press F to export everything inside the bounds to your building prefab file, then E for the next step.
+aetherhaven.plotcreator.step.PREFAB_SAVE.hint = Press F to export everything inside the bounds using your building settings from the previous step, then E for the next step.
 
 aetherhaven.plotcreator.error.needIdentity = Set a display name and building id before exporting the prefab.
 
 aetherhaven.plotcreator.error.selfBuildDays = Self-build days must be greater than zero.
+
+aetherhaven.plotcreator.error.assemblySections = Assembly sections per axis must be a whole number from 1 to 16 (1 disables sectioned assembly).
 
 aetherhaven.plotcreator.step.VARIANT.title = Variant of
 aetherhaven.plotcreator.step.VARIANT.hint = Press F to pick which main building type this variant counts as, then E.
@@ -138,11 +140,15 @@ aetherhaven.plotcreator.step.MATERIALS.hint = Press F to open material storage. 
 aetherhaven.plotcreator.step.MATERIALS.detail = Virtual chest for this building only — not placed in the world.
 
 aetherhaven.plotcreator.step.CONFIGURE.title = Building settings
-aetherhaven.plotcreator.step.CONFIGURE.hint = Press F to open settings: treasury gold cost and self-build days. Close the panel, then E when done.
+aetherhaven.plotcreator.step.CONFIGURE.hint = Press F to open settings: treasury gold cost, self-build days, prefab empty spaces, and assembly sections. Close the panel, then E when done.
 
-aetherhaven.plotcreator.step.CONFIGURE.detail = Gold is paid from the town treasury when the plot is built. Self-build days is how long the plot takes to finish without a building staff.
+aetherhaven.plotcreator.step.CONFIGURE.detail = Gold is paid from the town treasury when the plot is built. Self-build days is how long the plot takes to finish without a building staff. Save empty spaces controls whether air in your footprint is saved to clear blocks when built. Assembly sections splits the build into an N×N×N grid (1 = off).
 
 aetherhaven.plotcreator.field.selfBuildDays = Self-build days (game days)
+
+aetherhaven.plotcreator.field.saveEmptySpaces = Save empty spaces in prefab
+aetherhaven.plotcreator.field.saveEmptySpaces.hint = When on, air in your footprint is saved and clears those blocks when the building is assembled. When off, only solid blocks are saved and existing terrain is kept. Editor empty markers always clear blocks.
+aetherhaven.plotcreator.field.assemblySections = Assembly sections per axis (1–16)
 
 aetherhaven.plotcreator.step.REVIEW.title = Review
 aetherhaven.plotcreator.step.REVIEW.hint = Press F to save the building. You will get a plot token to place it in town.

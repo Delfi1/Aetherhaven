@@ -274,8 +274,9 @@ public final class PlotCreatorInteractions {
             return true;
         }
         if (step == PlotCreatorStep.CONFIGURE) {
-            if (!PlotCreatorService.applyConfigureInput(d)) {
-                playerRef.sendMessage(Message.translation(MSG + ".error.selfBuildDays"));
+            String configureErr = PlotCreatorService.applyConfigureInput(d);
+            if (configureErr != null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error." + configureErr));
                 return false;
             }
             PlotCreatorService.advance(session, ref, store);

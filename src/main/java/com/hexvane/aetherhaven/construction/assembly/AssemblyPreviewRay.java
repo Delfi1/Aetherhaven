@@ -66,6 +66,9 @@ public final class AssemblyPreviewRay {
             if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
                 continue;
             }
+            if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.PLACING) {
+                continue;
+            }
             frontierScratch.clear();
             PlotAssemblyService.appendFrontierWorldCells(world, job, plot, frontierScratch);
             for (int i = 0; i < frontierScratch.size(); i++) {
@@ -81,10 +84,73 @@ public final class AssemblyPreviewRay {
     }
 
     /**
+     * @return world cell of a cached clearing-phase obstruction whose unit cube the ray hits; when several are hit,
+     *         prefers the closest hit along the ray (smallest entry distance {@code t}).
+     */
+    @Nullable
+    public static Vector3i findPenetratingObstructionCellHit(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        double maxDistance,
+        @Nonnull Store<EntityStore> store
+    ) {
+        Transform look = TargetUtil.getLook(playerRef, store);
+        Vector3d o = look.getPosition();
+        Vector3d d = look.getDirection();
+        double dx = d.x();
+        double dy = d.y();
+        double dz = d.z();
+        double len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (len < 1.0e-6) {
+            return null;
+        }
+        dx /= len;
+        dy /= len;
+        dz /= len;
+        double ox = o.x();
+        double oy = o.y();
+        double oz = o.z();
+
+        double bestT = Double.POSITIVE_INFINITY;
+        Vector3i bestCell = null;
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        ArrayList<Vector3i> obstructionScratch = new ArrayList<>(256);
+        for (PlotAssemblyJob job : AssemblyWorldRegistry.jobs(world)) {
+            if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.CLEARING) {
+                continue;
+            }
+            TownRecord town = tm.findTownOwningPlot(job.plotId());
+            if (town == null) {
+                continue;
+            }
+            PlotInstance plot = town.findPlotById(job.plotId());
+            if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
+                continue;
+            }
+            PlotAssemblyClearingRuntime clearingRt = AssemblyWorldRegistry.clearingRuntime(world, job.plotId());
+            if (clearingRt == null || clearingRt.isEmpty()) {
+                continue;
+            }
+            obstructionScratch.clear();
+            clearingRt.appendAllVisibleObstructedCells(world, job, obstructionScratch);
+            for (int i = 0; i < obstructionScratch.size(); i++) {
+                Vector3i cell = obstructionScratch.get(i);
+                Double t = rayEnterUnitCube(ox, oy, oz, dx, dy, dz, cell.x, cell.y, cell.z, maxDistance);
+                if (t != null && t < bestT) {
+                    bestT = t;
+                    bestCell = cell;
+                }
+            }
+        }
+        return bestCell;
+    }
+
+    /**
      * Slab method: entry distance along normalized ray for unit cube [cx,cx+1]³, clamped to {@code maxDistance}.
      */
     @Nullable
-    private static Double rayEnterUnitCube(
+    static Double rayEnterUnitCube(
         double ox,
         double oy,
         double oz,

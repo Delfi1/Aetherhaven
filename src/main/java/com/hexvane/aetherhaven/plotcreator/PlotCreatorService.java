@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.construction.assembly.AssemblySectionMapper;
 import com.hexvane.aetherhaven.placement.PlotFootprintOverlayRefresh;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
@@ -195,9 +196,9 @@ public final class PlotCreatorService {
         }
         steps.add(PlotCreatorStep.IDENTITY);
         steps.add(PlotCreatorStep.TAGS);
+        steps.add(PlotCreatorStep.CONFIGURE);
         steps.add(PlotCreatorStep.PREFAB_SAVE);
         steps.add(PlotCreatorStep.MATERIALS);
-        steps.add(PlotCreatorStep.CONFIGURE);
         steps.add(PlotCreatorStep.REVIEW);
         steps.add(PlotCreatorStep.DONE);
         return steps;
@@ -475,22 +476,41 @@ public final class PlotCreatorService {
         }
     }
 
-    /** Parses {@link PlotCreatorDraft#getSelfBuildDaysInput()} into {@link PlotCreatorDraft#getSelfBuildGameDays()}. */
-    public static boolean applyConfigureInput(@Nonnull PlotCreatorDraft draft) {
+    /** Parses configure-panel fields into the draft. Returns an error message key, or null on success. */
+    @Nullable
+    public static String applyConfigureInput(@Nonnull PlotCreatorDraft draft) {
         String raw = draft.getSelfBuildDaysInput();
         if (raw == null || raw.isBlank()) {
-            return draft.getSelfBuildGameDays() > 0.0;
-        }
-        try {
-            double days = Double.parseDouble(raw.trim());
-            if (days <= 0.0) {
-                return false;
+            if (draft.getSelfBuildGameDays() <= 0.0) {
+                return "selfBuildDays";
             }
-            draft.setSelfBuildGameDays(days);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
+        } else {
+            try {
+                double days = Double.parseDouble(raw.trim());
+                if (days <= 0.0) {
+                    return "selfBuildDays";
+                }
+                draft.setSelfBuildGameDays(days);
+            } catch (NumberFormatException e) {
+                return "selfBuildDays";
+            }
         }
+
+        String sectionsRaw = draft.getAssemblySectionsInput();
+        if (sectionsRaw == null || sectionsRaw.isBlank()) {
+            draft.setAssemblyPrefabSectionsPerAxis(1);
+        } else {
+            try {
+                int sections = Integer.parseInt(sectionsRaw.trim());
+                if (sections < 1 || sections > 16) {
+                    return "assemblySections";
+                }
+                draft.setAssemblyPrefabSectionsPerAxis(AssemblySectionMapper.clampAxisDivisions(sections));
+            } catch (NumberFormatException e) {
+                return "assemblySections";
+            }
+        }
+        return null;
     }
 
     @Nonnull

@@ -120,7 +120,17 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
     }
 
     private void wireEvents(@Nonnull UIEventBuilder eventBuilder) {
-        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#NextButton", EventData.of("Action", "Next"), false);
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#NextButton",
+            new EventData()
+                .append("Action", "Next")
+                .append("@GoldCost", "#GoldCostField.Value")
+                .append("@SelfBuildDays", "#SelfBuildDaysField.Value")
+                .append("@SaveEmptySpaces", "#SaveEmptySpacesToggle.Value")
+                .append("@AssemblySections", "#AssemblySectionsField.Value"),
+            false
+        );
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#BackButton", EventData.of("Action", "Back"), false);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CancelButton", EventData.of("Action", "Cancel"), false);
         eventBuilder.addEventBinding(
@@ -183,6 +193,18 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             EventData.of("@SelfBuildDays", "#SelfBuildDaysField.Value"),
             false
         );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#SaveEmptySpacesToggle",
+            EventData.of("@SaveEmptySpaces", "#SaveEmptySpacesToggle.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#AssemblySectionsField",
+            EventData.of("@AssemblySections", "#AssemblySectionsField.Value"),
+            false
+        );
     }
 
     private void applyLabels(@Nonnull UICommandBuilder b) {
@@ -210,6 +232,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#GoldCostField.PlaceholderText", Message.translation(MSG + ".field.goldCost"));
         b.set("#SelfBuildDaysLabel.TextSpans", Message.translation(MSG + ".field.selfBuildDays"));
         b.set("#SelfBuildDaysField.PlaceholderText", Message.translation(MSG + ".field.selfBuildDays"));
+        b.set("#SaveEmptySpacesLabel.TextSpans", Message.translation(MSG + ".field.saveEmptySpaces"));
+        b.set("#SaveEmptySpacesHint.TextSpans", Message.translation(MSG + ".field.saveEmptySpaces.hint"));
+        b.set("#AssemblySectionsLabel.TextSpans", Message.translation(MSG + ".field.assemblySections"));
+        b.set("#AssemblySectionsField.PlaceholderText", Message.translation(MSG + ".field.assemblySections"));
         ObjectArrayList<DropdownEntryInfo> kinds = new ObjectArrayList<>();
         for (PlotBuildingKind k : PlotBuildingKind.values()) {
             kinds.add(new DropdownEntryInfo(LocalizableString.fromString(k.name()), k.name()));
@@ -241,6 +267,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#GoldCostField.Visible", false);
             b.set("#SelfBuildDaysLabel.Visible", false);
             b.set("#SelfBuildDaysField.Visible", false);
+            b.set("#SaveEmptySpacesRow.Visible", false);
+            b.set("#SaveEmptySpacesHint.Visible", false);
+            b.set("#AssemblySectionsLabel.Visible", false);
+            b.set("#AssemblySectionsField.Visible", false);
             b.set("#OpenMaterialsButton.Visible", false);
             b.set("#ReviewSummary.Visible", false);
             b.set("#DetailHint.Visible", false);
@@ -258,6 +288,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#GoldCostField.Visible", true);
             b.set("#SelfBuildDaysLabel.Visible", true);
             b.set("#SelfBuildDaysField.Visible", true);
+            b.set("#SaveEmptySpacesRow.Visible", true);
+            b.set("#SaveEmptySpacesHint.Visible", true);
+            b.set("#AssemblySectionsLabel.Visible", true);
+            b.set("#AssemblySectionsField.Visible", true);
             b.set("#OpenMaterialsButton.Visible", false);
             b.set("#ReviewSummary.Visible", false);
             b.set("#DetailHint.Visible", false);
@@ -274,6 +308,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#GoldCostField.Visible", false);
         b.set("#SelfBuildDaysLabel.Visible", false);
         b.set("#SelfBuildDaysField.Visible", false);
+        b.set("#SaveEmptySpacesRow.Visible", false);
+        b.set("#SaveEmptySpacesHint.Visible", false);
+        b.set("#AssemblySectionsLabel.Visible", false);
+        b.set("#AssemblySectionsField.Visible", false);
         b.set("#OpenMaterialsButton.Visible", step == PlotCreatorStep.MATERIALS);
         b.set("#ReviewSummary.Visible", step == PlotCreatorStep.REVIEW || step == PlotCreatorStep.DONE);
         b.set("#DetailHint.Visible", step == PlotCreatorStep.SUBSTEP || step == PlotCreatorStep.MATERIALS);
@@ -319,6 +357,14 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#SelfBuildDaysField.Value", d.getSelfBuildDaysInput());
         } else {
             b.set("#SelfBuildDaysField.Value", PlotCreatorService.formatSelfBuildDaysForField(d.getSelfBuildGameDays()));
+        }
+        b.set("#SaveEmptySpacesToggle.Value", d.isSaveEmptySpaces());
+        if (d.getAssemblySectionsInput() != null) {
+            b.set("#AssemblySectionsField.Value", d.getAssemblySectionsInput());
+        } else if (d.getAssemblyPrefabSectionsPerAxis() > 1) {
+            b.set("#AssemblySectionsField.Value", String.valueOf(d.getAssemblyPrefabSectionsPerAxis()));
+        } else {
+            b.set("#AssemblySectionsField.Value", "1");
         }
     }
 
@@ -424,8 +470,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
     }
 
     private boolean applyConfigurePanelAndClose(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
-        if (!PlotCreatorService.applyConfigureInput(session.getDraft())) {
-            playerRef.sendMessage(Message.translation(MSG + ".error.selfBuildDays"));
+        String err = PlotCreatorService.applyConfigureInput(session.getDraft());
+        if (err != null) {
+            playerRef.sendMessage(Message.translation(MSG + ".error." + err));
             return false;
         }
         PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
@@ -528,6 +575,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.selfBuildDays != null) {
             d.setSelfBuildDaysInput(data.selfBuildDays);
         }
+        if (data.saveEmptySpaces != null) {
+            d.setSaveEmptySpaces(data.saveEmptySpaces);
+        }
+        if (data.assemblySections != null) {
+            d.setAssemblySectionsInput(data.assemblySections);
+        }
     }
 
     private void handleNext(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -573,8 +626,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         if (step == PlotCreatorStep.CONFIGURE) {
-            if (!PlotCreatorService.applyConfigureInput(d)) {
-                playerRef.sendMessage(Message.translation(MSG + ".error.selfBuildDays"));
+            String configureErr = PlotCreatorService.applyConfigureInput(d);
+            if (configureErr != null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error." + configureErr));
                 return;
             }
             PlotCreatorService.advance(session, ref, store);
@@ -618,6 +672,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             .add()
             .append(new KeyedCodec<>("@SelfBuildDays", Codec.STRING), (d, v) -> d.selfBuildDays = v, d -> d.selfBuildDays)
             .add()
+            .append(new KeyedCodec<>("@SaveEmptySpaces", Codec.BOOLEAN), (d, v) -> d.saveEmptySpaces = v, d -> d.saveEmptySpaces)
+            .add()
+            .append(new KeyedCodec<>("@AssemblySections", Codec.STRING), (d, v) -> d.assemblySections = v, d -> d.assemblySections)
+            .add()
             .build();
 
         @Nullable
@@ -640,5 +698,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private String goldCost;
         @Nullable
         private String selfBuildDays;
+        @Nullable
+        private Boolean saveEmptySpaces;
+        @Nullable
+        private String assemblySections;
     }
 }
