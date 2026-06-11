@@ -128,6 +128,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 .append("@GoldCost", "#GoldCostField.Value")
                 .append("@SelfBuildDays", "#SelfBuildDaysField.Value")
                 .append("@SaveEmptySpaces", "#SaveEmptySpacesToggle.Value")
+                .append("@TouristDestination", "#TouristDestinationToggle.Value")
                 .append("@AssemblySections", "#AssemblySectionsField.Value"),
             false
         );
@@ -234,6 +235,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#SelfBuildDaysField.PlaceholderText", Message.translation(MSG + ".field.selfBuildDays"));
         b.set("#SaveEmptySpacesLabel.TextSpans", Message.translation(MSG + ".field.saveEmptySpaces"));
         b.set("#SaveEmptySpacesHint.TextSpans", Message.translation(MSG + ".field.saveEmptySpaces.hint"));
+        b.set("#TouristDestinationLabel.TextSpans", Message.translation(MSG + ".field.touristDestination"));
+        b.set("#TouristDestinationHint.TextSpans", Message.translation(MSG + ".field.touristDestination.hint"));
         b.set("#AssemblySectionsLabel.TextSpans", Message.translation(MSG + ".field.assemblySections"));
         b.set("#AssemblySectionsField.PlaceholderText", Message.translation(MSG + ".field.assemblySections"));
         ObjectArrayList<DropdownEntryInfo> kinds = new ObjectArrayList<>();
@@ -269,6 +272,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#SelfBuildDaysField.Visible", false);
             b.set("#SaveEmptySpacesRow.Visible", false);
             b.set("#SaveEmptySpacesHint.Visible", false);
+            b.set("#TouristDestinationRow.Visible", false);
+            b.set("#TouristDestinationHint.Visible", false);
             b.set("#AssemblySectionsLabel.Visible", false);
             b.set("#AssemblySectionsField.Visible", false);
             b.set("#OpenMaterialsButton.Visible", false);
@@ -277,6 +282,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         if (configurePanelOnly) {
+            boolean showTourist = PlotCreatorService.showsTouristDestinationToggle(session.getDraft().getKind());
             b.set("#DisplayNameField.Visible", false);
             b.set("#DescriptionField.Visible", false);
             b.set("#ConstructionIdField.Visible", false);
@@ -290,6 +296,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#SelfBuildDaysField.Visible", true);
             b.set("#SaveEmptySpacesRow.Visible", true);
             b.set("#SaveEmptySpacesHint.Visible", true);
+            b.set("#TouristDestinationRow.Visible", showTourist);
+            b.set("#TouristDestinationHint.Visible", showTourist);
             b.set("#AssemblySectionsLabel.Visible", true);
             b.set("#AssemblySectionsField.Visible", true);
             b.set("#OpenMaterialsButton.Visible", false);
@@ -310,6 +318,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#SelfBuildDaysField.Visible", false);
         b.set("#SaveEmptySpacesRow.Visible", false);
         b.set("#SaveEmptySpacesHint.Visible", false);
+        b.set("#TouristDestinationRow.Visible", false);
+        b.set("#TouristDestinationHint.Visible", false);
         b.set("#AssemblySectionsLabel.Visible", false);
         b.set("#AssemblySectionsField.Visible", false);
         b.set("#OpenMaterialsButton.Visible", step == PlotCreatorStep.MATERIALS);
@@ -359,6 +369,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#SelfBuildDaysField.Value", PlotCreatorService.formatSelfBuildDaysForField(d.getSelfBuildGameDays()));
         }
         b.set("#SaveEmptySpacesToggle.Value", d.isSaveEmptySpaces());
+        b.set("#TouristDestinationToggle.Value", d.isTouristDestination());
         if (d.getAssemblySectionsInput() != null) {
             b.set("#AssemblySectionsField.Value", d.getAssemblySectionsInput());
         } else if (d.getAssemblyPrefabSectionsPerAxis() > 1) {
@@ -578,6 +589,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.saveEmptySpaces != null) {
             d.setSaveEmptySpaces(data.saveEmptySpaces);
         }
+        if (data.touristDestination != null) {
+            d.setTouristDestination(data.touristDestination);
+        }
         if (data.assemblySections != null) {
             d.setAssemblySectionsInput(data.assemblySections);
         }
@@ -674,6 +688,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             .add()
             .append(new KeyedCodec<>("@SaveEmptySpaces", Codec.BOOLEAN), (d, v) -> d.saveEmptySpaces = v, d -> d.saveEmptySpaces)
             .add()
+            .append(new KeyedCodec<>("@TouristDestination", Codec.BOOLEAN), (d, v) -> d.touristDestination = v, d -> d.touristDestination)
+            .add()
             .append(new KeyedCodec<>("@AssemblySections", Codec.STRING), (d, v) -> d.assemblySections = v, d -> d.assemblySections)
             .add()
             .build();
@@ -700,6 +716,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private String selfBuildDays;
         @Nullable
         private Boolean saveEmptySpaces;
+        @Nullable
+        private Boolean touristDestination;
         @Nullable
         private String assemblySections;
     }

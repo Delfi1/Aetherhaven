@@ -36,5 +36,6 @@ public final class AetherhavenCommand extends AbstractCommandCollection {
         this.addSubCommand(new AetherhavenGuildCommand());
         this.addSubCommand(new AetherhavenPlotTokenCommand());
         this.addSubCommand(new AetherhavenPlotCreatorCommand());
+        this.addSubCommand(new AetherhavenTouristDebugCommand());
     }
 }

@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestObjective;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.gift.VillagerGiftService;
 import com.hypixel.hytale.component.ComponentType;
@@ -566,6 +567,36 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
         TownRecord town = townFor(playerRef, store);
         return nu != null && town != null && GuardHireService.isUnhousedHiredGuard(town, nu.getUuid());
+    }
+
+    @Override
+    public boolean npcIsActiveTourist(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        TownRecord town = townFor(playerRef, store);
+        return nu != null && town != null && TouristPortalTickService.isActivePortalTourist(town, nu.getUuid());
+    }
+
+    @Override
+    public boolean npcIsInvitedUnhousedTownsfolk(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        TownRecord town = townFor(playerRef, store);
+        return nu != null
+            && town != null
+            && TouristPortalTickService.isInvitedUnhousedTourist(town, nu.getUuid(), plugin);
     }
 
     @Override

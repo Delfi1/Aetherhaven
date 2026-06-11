@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.town.HiredGuardRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownResidentDisplay;
+import com.hexvane.aetherhaven.tourist.TouristRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -57,6 +58,21 @@ public final class QuestAssigneeDisplay {
                 }
             }
         }
+        if (AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK.equals(qid)) {
+            for (TouristRecord rec : town.getTouristRecords()) {
+                UUID u = rec.getEntityUuid();
+                if (u != null && u.equals(target)) {
+                    TownResidentDisplay.Resolved offline =
+                        TownResidentDisplay.resolveOffline(
+                            plugin,
+                            AetherhavenConstants.NPC_TOWNSFOLK,
+                            rec.getCharacterId(),
+                            null
+                        );
+                    return offline.displayName();
+                }
+            }
+        }
         return null;
     }
 
@@ -88,7 +104,11 @@ public final class QuestAssigneeDisplay {
             .replace("this guard", name)
             .replace("This guard", name)
             .replace("the guard", name)
-            .replace("The guard", name);
+            .replace("The guard", name)
+            .replace("this visitor", name)
+            .replace("This visitor", name)
+            .replace("the visitor", name)
+            .replace("The visitor", name);
     }
 
     @Nonnull

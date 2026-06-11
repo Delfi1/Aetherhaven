@@ -24,6 +24,7 @@ import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestKillProgressSystem;
 import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
 import com.hexvane.aetherhaven.questboard.QuestBoardOnlineDawnService;
+import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
@@ -167,6 +168,10 @@ import com.hexvane.aetherhaven.shopspot.ShopSpotPlaceEventSystem;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPlayerComponent;
 import com.hexvane.aetherhaven.shopspot.ShopSpotSecondaryInteraction;
 import com.hexvane.aetherhaven.shopspot.ShopSpotUseInteraction;
+import com.hexvane.aetherhaven.tourist.TouristAutonomyState;
+import com.hexvane.aetherhaven.tourist.TouristAutonomySystem;
+import com.hexvane.aetherhaven.tourist.TouristPortalBlock;
+import com.hexvane.aetherhaven.tourist.TouristPortalPlaceEventSystem;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftComponent;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftLootFiles;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftSchedulerSystem;
@@ -516,6 +521,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         SprinklerBlock.register(this.getChunkStoreRegistry());
         FounderMonumentBlock.register(this.getChunkStoreRegistry());
         ShopSpotBlock.register(this.getChunkStoreRegistry());
+        TouristPortalBlock.register(this.getChunkStoreRegistry());
         CommandPostBlock.register(this.getChunkStoreRegistry());
         FounderMonumentStatueSkin.register(this.getEntityStoreRegistry());
 
@@ -546,6 +552,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.OnAdd());
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.EachTick());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
+        TouristAutonomyState.register(this.getEntityStoreRegistry());
         VillagerScheduleTickState.register(this.getEntityStoreRegistry());
         VillagerAutonomyDebugTag.register(this.getEntityStoreRegistry());
         PoiToolPlayerComponent.register(this.getEntityStoreRegistry());
@@ -789,6 +796,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new BlockMountDeathCleanupSystem());
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new TouristAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new PendingEntityRemovalSystem());
         this.getEntityStoreRegistry().registerSystem(new TownsfolkAssignmentSystem());
         this.getEntityStoreRegistry().registerSystem(new VillagerDeathHandlerSystem(this));
@@ -799,6 +807,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PlotCreatorPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotBlockPreviewCleanupSystem());
         this.getEntityStoreRegistry().registerSystem(new ShopSpotPlaceEventSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new TouristPortalPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new ShopSpotBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new ShopSpotDisplayTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new ShopSpotLookAtSystem(this));
@@ -1275,6 +1284,14 @@ public final class AetherhavenPlugin extends JavaPlugin {
                                 JewelryInventoryTooltipSync.syncPlayerInventory(ref, store);
                                 JewelryNativeTooltipManager.refreshPlayer(playerRef);
                                 QuestBoardOnlineDawnService.onPlayerReady(ref, store, AetherhavenPlugin.get());
+                                UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+                                if (uc != null) {
+                                    TouristReconcileService.onTownMemberPlayerReady(
+                                        player.getWorld(),
+                                        AetherhavenPlugin.get(),
+                                        uc.getUuid()
+                                    );
+                                }
                                 RtsCommandService.exit(ref, store);
                             });
                 });

@@ -242,6 +242,8 @@ items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Required to place the b
 
 items.Aetherhaven_Plot_Token_Park.name=Park plot token
 items.Aetherhaven_Plot_Token_Park.description=Required to place the park footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Tourist_Portal.name=Tourist portal plot token
+items.Aetherhaven_Plot_Token_Tourist_Portal.description=Required to place the tourist portal footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_House.name=House plot token
 items.Aetherhaven_Plot_Token_House.description=Required to place the shared house footprint from the plot placement staff.

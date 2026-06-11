@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.quest;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.guild.GuardHireService;
+import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestPrerequisites;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -93,6 +94,11 @@ public final class QuestDialogueEntry {
             if (AetherhavenConstants.QUEST_HOUSE_GUARD.equals(qid)
                 && entityUuid != null
                 && !GuardHireService.isUnhousedHiredGuard(town, entityUuid)) {
+                return false;
+            }
+            if (AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK.equals(qid)
+                && entityUuid != null
+                && !TouristPortalTickService.isActivePortalTourist(town, entityUuid)) {
                 return false;
             }
         } else {

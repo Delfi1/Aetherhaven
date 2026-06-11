@@ -91,6 +91,9 @@ public final class PlotCreatorJsonWriter {
         if (draft.isScheduleSharedUtilityPick()) {
             root.put("scheduleSharedUtilityPick", true);
         }
+        if (draft.isTouristDestination()) {
+            root.put("touristDestination", true);
+        }
         if (draft.isExcludeFromTownJournal()) {
             root.put("excludeFromTownJournal", true);
         }

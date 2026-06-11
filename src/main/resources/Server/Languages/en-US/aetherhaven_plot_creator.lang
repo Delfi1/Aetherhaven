@@ -36,6 +36,8 @@ aetherhaven.plotcreator.hint.anchorSet = Plot sign spot set.
 aetherhaven.plotcreator.hint.blockRecorded = Spot saved.
 aetherhaven.plotcreator.hint.shopSpotRecorded = Shop stall saved.
 aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded = That shop stall is already saved for this step.
+aetherhaven.plotcreator.hint.touristPortalRecorded = Tourist portal saved.
+aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded = That tourist portal is already saved for this step.
 aetherhaven.plotcreator.hint.spawnRecorded = Spawn spot saved.
 aetherhaven.plotcreator.hint.spawnRemoved = Adventurer spawn spot removed.
 aetherhaven.plotcreator.hint.poiRecorded = Activity spot saved.
@@ -86,6 +88,7 @@ aetherhaven.plotcreator.mainType.plot_market_stall = Market stall
 aetherhaven.plotcreator.mainType.plot_miners_hut = Miners hut
 aetherhaven.plotcreator.mainType.plot_park = Park
 aetherhaven.plotcreator.mainType.plot_town_hall = Town hall
+aetherhaven.plotcreator.mainType.plot_tourist_portal = Tourist portal
 
 aetherhaven.plotcreator.cancelConfirm.title = Cancel plot creator?
 aetherhaven.plotcreator.cancelConfirm.body = Your progress in this session will be lost. Bounds, prefab export, and draft data are discarded.
@@ -148,6 +151,8 @@ aetherhaven.plotcreator.field.selfBuildDays = Self-build days (game days)
 
 aetherhaven.plotcreator.field.saveEmptySpaces = Save empty spaces in prefab
 aetherhaven.plotcreator.field.saveEmptySpaces.hint = When on, air in your footprint is saved and clears those blocks when the building is assembled. When off, only solid blocks are saved and existing terrain is kept. Editor empty markers always clear blocks.
+aetherhaven.plotcreator.field.touristDestination = Visitors may stop here
+aetherhaven.plotcreator.field.touristDestination.hint = When on, portal visitors may walk to this building during the day.
 aetherhaven.plotcreator.field.assemblySections = Assembly sections per axis (1–16)
 
 aetherhaven.plotcreator.step.REVIEW.title = Review
@@ -166,6 +171,8 @@ aetherhaven.plotcreator.substep.EAT_POI = Click an eating spot.
 aetherhaven.plotcreator.substep.FUN_POI = Click a fun spot (bench to sit).
 aetherhaven.plotcreator.substep.SHOP_SPOT = Place shop stalls from your inventory, confirm each setup, then click each stall with the plot creator staff.
 aetherhaven.plotcreator.substep.SHOP_POI = Click the shop counter work spot.
+aetherhaven.plotcreator.substep.TOURIST_VISIT_POI = Click where visitors should stand in front of the shop.
+aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK = Place the portal platform from your inventory, then click it with the plot creator staff.
 aetherhaven.plotcreator.substep.INNKEEPER_SPAWN = Click where the innkeeper should stand.
 aetherhaven.plotcreator.substep.VISITOR_SPAWN = Click a visitor spawn spot.
 aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN = Click where the guild master should stand.

@@ -284,6 +284,8 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_BUILD_TOWN_HALL = "q_build_town_hall";
 
+    public static final String QUEST_TOURIST_PORTAL = "q_tourist_portal";
+
     public static final String QUEST_BUILD_GUILD_HALL = "q_build_guild_hall";
 
     public static final String QUEST_HOUSE_GUARD = "q_house_guard";
@@ -652,6 +654,33 @@ public final class AetherhavenConstants {
     public static final float RTS_COMMAND_PICK_CAMERA_EYE_OFFSET_Y = 3.0f;
     /** Vertical lift for the move-destination particle ring (reduces ground z-fighting). */
     public static final double RTS_MOVE_ORDER_MARKER_SURFACE_LIFT = 0.1;
+
+    public static final String TOURIST_PORTAL_ITEM_ID = "Aetherhaven_Tourist_Portal";
+    public static final String TOURIST_PORTAL_BLOCK_TYPE_ID = "Aetherhaven_Tourist_Portal";
+    public static final int TOURIST_PORTAL_ITEM_MAX_STACK = 1;
+
+    public static final String CONSTRUCTION_PLOT_TOURIST_PORTAL = "plot_tourist_portal";
+    public static final String QUEST_HOUSE_TOWNSFOLK = "q_house_townsfolk";
+
+    public static final String POI_TAG_TOURIST_VISIT = "TOURIST_VISIT";
+
+    public static final int TOURIST_DESPAWN_HOUR_MIN = 19;
+    public static final int TOURIST_DESPAWN_HOUR_MAX = 22;
+    public static final int TOURIST_SPAWN_DAY_END_HOUR_EXCLUSIVE = 12;
+    public static final int TOURIST_MIN_DAILY_SPAWNS = 2;
+    public static final int TOURIST_MAX_DAILY_SPAWNS = 5;
+
+    public static final String TOURIST_PORTAL_IDLE_PARTICLE = "Aetherhaven_Tourist_Portal_Idle";
+    public static final String TOURIST_PORTAL_SPAWN_BURST_PARTICLE = "Aetherhaven_Tourist_Portal_Burst";
+    public static final String TOURIST_PORTAL_SPAWN_SOUND = "SFX_Portal_Neutral_Open";
+
+    /** Synthetic POI id for tourist return travel to portal block. */
+    public static final UUID TOURIST_PORTAL_RETURN_POI_ID =
+        UUID.fromString("00000000-0000-4000-8000-0000000000a1");
+
+    public static boolean isTouristPortalReturnPoi(@Nullable UUID poiId) {
+        return TOURIST_PORTAL_RETURN_POI_ID.equals(poiId);
+    }
 
     private AetherhavenConstants() {}
 }

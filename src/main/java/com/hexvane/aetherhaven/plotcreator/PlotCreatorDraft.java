@@ -77,6 +77,8 @@ public final class PlotCreatorDraft {
     private String assemblySectionsInput;
     private boolean scheduleSharedUtilityPick;
     private boolean excludeFromTownJournal;
+    /** When true, portal tourists may path here during the day. */
+    private boolean touristDestination;
 
     @Nullable
     private Vector3i stagingChestWorldPos;
@@ -373,6 +375,14 @@ public final class PlotCreatorDraft {
 
     public void setExcludeFromTownJournal(boolean excludeFromTownJournal) {
         this.excludeFromTownJournal = excludeFromTownJournal;
+    }
+
+    public boolean isTouristDestination() {
+        return touristDestination;
+    }
+
+    public void setTouristDestination(boolean touristDestination) {
+        this.touristDestination = touristDestination;
     }
 
     @Nullable

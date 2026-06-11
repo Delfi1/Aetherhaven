@@ -133,7 +133,7 @@ def first_matching_multiplier(item_id: str, rules: list[dict[str, Any]]) -> floa
 
 
 def default_building_block_batch_size(cfg: dict[str, Any]) -> int:
-    return max(1, int(cfg.get("buildingBlockBatchSize", 16)))
+    return max(1, int(cfg.get("buildingBlockBatchSize", 10)))
 
 
 def first_matching_material_rule(
@@ -213,7 +213,20 @@ def resolve_hytale_items_root(cfg: dict[str, Any]) -> Path | None:
 
 
 def building_block_prefixes(cfg: dict[str, Any]) -> list[str]:
-    return list(cfg.get("buildingBlockPrefixes", ["Rock_", "Wood_", "Soil_", "Cloth_", "Rubble_", "Prototype_"]))
+    return list(
+        cfg.get("buildingBlockPrefixes", ["Rock_", "Wood_", "Soil_", "Cloth_", "Metal_", "Rubble_", "Prototype_"])
+    )
+
+
+def normalize_block_item_id(item_id: str) -> str:
+    """Normalize legacy Metal-Copper ids to Metal_Copper."""
+    if item_id.startswith("Metal-"):
+        return "Metal_" + item_id[len("Metal-") :]
+    return item_id
+
+
+def is_mushroom_trunk_block(item_id: str) -> bool:
+    return item_id.startswith("Plant_Crop_Mushroom_Block_") and item_id.endswith("_Trunk")
 
 
 def discover_building_block_ids(items_root: Path, cfg: dict[str, Any]) -> set[str]:
@@ -281,8 +294,11 @@ def resolve_block_type_multiplier(type_suffix: str, cfg: dict[str, Any]) -> floa
 
 
 def is_building_block_item(item_id: str, cfg: dict[str, Any], catalog: set[str]) -> bool:
+    item_id = normalize_block_item_id(item_id)
     if item_id.startswith("Rock_Gem_"):
         return False
+    if is_mushroom_trunk_block(item_id):
+        return True
     if item_id in catalog:
         return True
     return any(item_id.startswith(prefix) for prefix in building_block_prefixes(cfg))
@@ -531,6 +547,7 @@ def price_building_block(
     block_catalog = catalog or set()
     if not is_building_block_item(item_id, cfg, block_catalog):
         return None
+    item_id = normalize_block_item_id(item_id)
     type_keys = building_block_type_keys(cfg)
     material_id, type_suffix = parse_block_material_type(item_id, type_keys)
     mat_base, batch = resolve_material_pricing(material_id, cfg)
@@ -543,8 +560,8 @@ def price_plant(item_id: str, cfg: dict[str, Any]) -> PriceEntry | None:
     if not item_id.startswith("Plant_"):
         return None
     rules = cfg.get("plantBatchRules", {})
-    batch = int(rules.get("batchSize", 16))
-    base = float(rules.get("baseGoldPerBatch", 8))
+    batch = int(rules.get("batchSize", 5))
+    base = float(rules.get("baseGoldPerBatch", 10))
     mult = float(rules.get("cropMultiplier", 1.0))
     if "Plant_Seeds_" in item_id:
         mult = float(rules.get("seedMultiplier", 1.0))

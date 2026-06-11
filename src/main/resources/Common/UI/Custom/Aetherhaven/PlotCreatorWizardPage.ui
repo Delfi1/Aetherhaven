@@ -108,6 +108,27 @@ $C.@PageOverlay {
         Anchor: (Bottom: 10);
       }
 
+      Group #TouristDestinationRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+        Visible: false;
+
+        $C.@CheckBox #TouristDestinationToggle {}
+
+        Label #TouristDestinationLabel {
+          Text: "";
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+          Anchor: (Left: 11);
+        }
+      }
+
+      Label #TouristDestinationHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+        Visible: false;
+      }
+
       Label #AssemblySectionsLabel {
         Style: $C.@DefaultLabelStyle;
         Text: "";

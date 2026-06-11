@@ -430,14 +430,21 @@ public final class PlotCreatorService {
                 draft.getBuildingTags().add("amenity");
                 draft.getBuildingTags().add("fun");
                 draft.setScheduleSharedUtilityPick(true);
+                draft.setTouristDestination(true);
             }
             case HOME -> draft.getBuildingTags().add("home");
             case WORK -> draft.getBuildingTags().add("work");
             case SHOP -> {
                 draft.getBuildingTags().add("shop");
                 draft.getBuildingTags().add("work");
+                draft.setTouristDestination(true);
             }
-            case INN, TOWN_HALL, GUILD_HALL -> draft.getBuildingTags().add("civic");
+            case INN -> {
+                draft.getBuildingTags().add("civic");
+                draft.setTouristDestination(true);
+            }
+            case TOWN_HALL, GUILD_HALL -> draft.getBuildingTags().add("civic");
+            case TOURIST_PORTAL -> draft.getBuildingTags().add("civic");
             case DECORATION -> draft.getBuildingTags().add("decoration");
             default -> {}
         }
@@ -477,6 +484,10 @@ public final class PlotCreatorService {
     }
 
     /** Parses configure-panel fields into the draft. Returns an error message key, or null on success. */
+    public static boolean showsTouristDestinationToggle(@Nullable PlotBuildingKind kind) {
+        return kind == PlotBuildingKind.SHOP || kind == PlotBuildingKind.INN || kind == PlotBuildingKind.AMENITY;
+    }
+
     @Nullable
     public static String applyConfigureInput(@Nonnull PlotCreatorDraft draft) {
         String raw = draft.getSelfBuildDaysInput();

@@ -13,7 +13,6 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingD
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.HarvestingDropType;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -44,11 +43,19 @@ final class AssemblyStaffClearBreak {
         if (chunkRef == null || !chunkRef.isValid()) {
             return false;
         }
-        BlockChunk blockChunk = chunkStore.getComponent(chunkRef, BlockChunk.getComponentType());
-        if (blockChunk == null) {
+        if (cellWorld.y < ChunkUtil.MIN_Y || cellWorld.y > ChunkUtil.HEIGHT_MINUS_1) {
             return false;
         }
-        BlockSection section = blockChunk.getSectionAtBlockY(cellWorld.y);
+        Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(
+            cellWorld.x, cellWorld.y, cellWorld.z
+        );
+        if (sectionRef == null || !sectionRef.isValid()) {
+            return false;
+        }
+        BlockSection section = chunkStore.getComponent(sectionRef, BlockSection.getComponentType());
+        if (section == null) {
+            return false;
+        }
         int filler = section.getFiller(cellWorld.x, cellWorld.y, cellWorld.z);
         DropInfo drops = resolveDrops(blockType);
         BlockHarvestUtils.naturallyRemoveBlock(

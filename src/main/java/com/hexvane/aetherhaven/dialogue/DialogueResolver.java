@@ -43,6 +43,8 @@ public final class DialogueResolver {
 
     public static final String KIND_TOWNSFOLK = "townsfolk";
     public static final String TREE_TOWNSFOLK_GENERIC = "aetherhaven_townsfolk_generic";
+    public static final String KIND_TOURIST = "tourist";
+    public static final String TREE_TOURIST = "aetherhaven_tourist";
     public static final String KIND_GUARD = "guard";
     public static final String TREE_GUARD = "aetherhaven_guard";
 
@@ -129,6 +131,10 @@ public final class DialogueResolver {
                         townsfolkBinding.getAssignmentKind()
                     )) {
                         kind = KIND_GUILD_ADVENTURER;
+                    } else if (com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds.TOURIST.equals(
+                        townsfolkBinding.getAssignmentKind()
+                    )) {
+                        kind = KIND_TOURIST;
                     } else {
                         kind = KIND_TOWNSFOLK;
                     }
@@ -142,6 +148,8 @@ public final class DialogueResolver {
             tree = TREE_GUILD_ADVENTURER;
         } else if (KIND_TOWNSFOLK.equals(kind)) {
             tree = TREE_TOWNSFOLK_GENERIC;
+        } else if (KIND_TOURIST.equals(kind)) {
+            tree = TREE_TOURIST;
         } else if (KIND_GUARD.equals(kind)) {
             tree = TREE_GUARD;
         } else {

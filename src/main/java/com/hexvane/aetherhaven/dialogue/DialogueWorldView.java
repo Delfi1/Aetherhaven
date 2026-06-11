@@ -225,6 +225,22 @@ public interface DialogueWorldView {
         return false;
     }
 
+    default boolean npcIsActiveTourist(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        return false;
+    }
+
+    default boolean npcIsInvitedUnhousedTownsfolk(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        return false;
+    }
+
     default boolean npcIsQuestTarget(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,

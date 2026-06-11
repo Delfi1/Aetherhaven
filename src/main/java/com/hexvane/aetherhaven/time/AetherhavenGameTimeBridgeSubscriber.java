@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.farming.SprinklerWateringService;
 import com.hexvane.aetherhaven.feast.FeastService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
+import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotDailyRerollService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRefreshSystem;
@@ -42,6 +43,7 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         VillagerScheduleService.applyForWorld(world, store, plugin, false);
         InnPoolService.scheduleTickFromHub(world, plugin, wtr);
         GuildHallAdventurerPoolService.scheduleTickFromHub(world, plugin, wtr);
+        TouristPortalTickService.scheduleTickFromHub(world, plugin, wtr);
         SprinklerWateringService.scheduleFromHub(world, store, plugin);
         FeastService.pruneExpiredForWorld(world, plugin, store);
         FeastService.checkGatherTimeoutsForWorld(world, plugin);
@@ -64,11 +66,13 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
             InnPoolService.catchUpAfterTimeJump(world, plugin, store, wtr, from, to);
             SprinklerWateringService.catchUpAfterTimeJump(world, store, plugin, from, to);
             ShopSpotDailyRerollService.catchUpAfterTimeJump(world, plugin, store, wtr, from, to);
+            TouristPortalTickService.catchUpLeaveAfterTimeJump(world, plugin, store, wtr);
             TownEconomyTimeService.onGameTimeFromHub(world, plugin, wtr, store);
         }
         VillagerScheduleService.applyForWorld(world, store, plugin, true);
         InnPoolService.scheduleTickFromHub(world, plugin, wtr);
         GuildHallAdventurerPoolService.scheduleTickFromHub(world, plugin, wtr);
+        TouristPortalTickService.scheduleTickFromHub(world, plugin, wtr);
         SprinklerWateringService.scheduleFromHub(world, store, plugin);
         FeastService.pruneExpiredForWorld(world, plugin, store);
         FeastService.checkGatherTimeoutsForWorld(world, plugin);

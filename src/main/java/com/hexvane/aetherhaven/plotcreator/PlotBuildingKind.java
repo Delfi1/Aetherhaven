@@ -12,7 +12,8 @@ public enum PlotBuildingKind {
     SHOP,
     INN,
     TOWN_HALL,
-    GUILD_HALL;
+    GUILD_HALL,
+    TOURIST_PORTAL;
 
     @Nullable
     public static PlotBuildingKind fromSerialized(@Nullable String raw) {

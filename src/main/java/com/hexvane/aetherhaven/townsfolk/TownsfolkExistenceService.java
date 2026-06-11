@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -143,6 +144,10 @@ public final class TownsfolkExistenceService {
                 continue;
             }
             if (TownsfolkAssignmentKinds.GUARD.equalsIgnoreCase(rec.getAssignmentKind().trim())) {
+                continue;
+            }
+            if (TownsfolkAssignmentKinds.TOURIST.equalsIgnoreCase(rec.getAssignmentKind().trim())
+                && TouristReconcileService.isActiveTouristCharacter(world, plugin, characterId)) {
                 continue;
             }
             if (live.containsKey(characterId)) {

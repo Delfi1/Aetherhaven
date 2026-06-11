@@ -9,6 +9,8 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
+import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
+import com.hexvane.aetherhaven.tourist.TouristRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -77,7 +79,56 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
                 );
             }
             tm.updateTown(town);
+            return;
         }
+
+        if (entityUuid != null && TouristPortalTickService.findTouristRecord(town, entityUuid) != null) {
+            handleTouristDeath(world, plugin, town, tm, victimRef, store, entityUuid);
+        }
+    }
+
+    private static void handleTouristDeath(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Ref<EntityStore> victimRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID entityUuid
+    ) {
+        TownsfolkCharacterBinding tb = store.getComponent(victimRef, TownsfolkCharacterBinding.getComponentType());
+        String characterId = tb != null ? tb.getCharacterId() : null;
+
+        Iterator<TouristRecord> it = town.getTouristRecords().iterator();
+        while (it.hasNext()) {
+            TouristRecord rec = it.next();
+            if (entityUuid.equals(rec.getEntityUuid())) {
+                it.remove();
+                if (characterId == null) {
+                    characterId = rec.getCharacterId();
+                }
+                break;
+            }
+        }
+
+        if (characterId != null && !characterId.isBlank()) {
+            TownsfolkExistenceService.releaseCharacter(
+                world, plugin, characterId, TownsfolkExistenceService.ReleaseReason.DEATH
+            );
+        }
+
+        for (var plot : town.getPlotInstances()) {
+            if (entityUuid.equals(plot.getHomeResidentEntityUuid())) {
+                plot.setHomeResidentEntityUuid(null);
+            }
+        }
+        town.getResidentNpcRecords().removeIf(r -> entityUuid.equals(r.getLastEntityUuid()));
+        UUID questTarget = town.getQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK);
+        if (entityUuid.equals(questTarget)
+            || (questTarget == null && town.hasQuestActive(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK))) {
+            town.clearActiveQuest(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK);
+        }
+        tm.updateTown(town);
     }
 
     private static void handleGuardDeath(

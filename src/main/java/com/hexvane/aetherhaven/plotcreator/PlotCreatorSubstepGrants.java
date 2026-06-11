@@ -34,6 +34,7 @@ public final class PlotCreatorSubstepGrants {
             case TREASURY_BLOCK -> List.of(new ItemStack(AetherhavenConstants.TREASURY_BLOCK_TYPE_ID, qty));
             case PLANNING_DESK_POI -> List.of(new ItemStack("Aetherhaven_Town_Planning_Desk", qty));
             case SHOP_SPOT -> List.of(new ItemStack(AetherhavenConstants.SHOP_SPOT_ITEM_ID, qty));
+            case TOURIST_PORTAL_BLOCK -> List.of(new ItemStack(AetherhavenConstants.TOURIST_PORTAL_ITEM_ID, qty));
             default -> List.of();
         };
     }
@@ -48,6 +49,9 @@ public final class PlotCreatorSubstepGrants {
         }
         if (type == PlotCreatorSubstepType.SHOP_SPOT) {
             return AetherhavenConstants.SHOP_SPOT_ITEM_MAX_STACK;
+        }
+        if (type == PlotCreatorSubstepType.TOURIST_PORTAL_BLOCK) {
+            return AetherhavenConstants.TOURIST_PORTAL_ITEM_MAX_STACK;
         }
         return 1;
     }

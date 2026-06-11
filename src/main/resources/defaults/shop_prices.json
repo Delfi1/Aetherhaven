@@ -43,61 +43,61 @@
     "Aetherhaven_Ring_Silver_Voidstone": 114,
     "Aetherhaven_Ring_Silver_Zephyr": 68,
     "Aetherhaven_Town_Planning_Desk": 1,
-    "Armor_Adamantite_Chest": 294,
-    "Armor_Adamantite_Hands": 126,
-    "Armor_Adamantite_Head": 158,
-    "Armor_Adamantite_Legs": 231,
-    "Armor_Bronze_Chest": 42,
-    "Armor_Bronze_Hands": 14,
-    "Armor_Bronze_Head": 21,
-    "Armor_Bronze_Legs": 28,
-    "Armor_Bronze_Ornate_Chest": 50,
-    "Armor_Bronze_Ornate_Hands": 17,
-    "Armor_Bronze_Ornate_Head": 25,
-    "Armor_Cobalt_Chest": 168,
-    "Armor_Cobalt_Hands": 56,
-    "Armor_Cobalt_Head": 84,
-    "Armor_Cobalt_Legs": 126,
-    "Armor_Copper_Chest": 33,
-    "Armor_Copper_Hands": 15,
-    "Armor_Copper_Head": 18,
-    "Armor_Copper_Legs": 27,
-    "Armor_Diving_Crude_Chest": 20,
-    "Armor_Diving_Crude_Hands": 9,
-    "Armor_Diving_Crude_Head": 11,
-    "Armor_Diving_Crude_Legs": 16,
-    "Armor_Iron_Chest": 64,
-    "Armor_Iron_Hands": 28,
-    "Armor_Iron_Head": 36,
-    "Armor_Iron_Legs": 52,
-    "Armor_Mithril_Chest": 600,
-    "Armor_Mithril_Hands": 200,
-    "Armor_Mithril_Head": 300,
-    "Armor_Mithril_Legs": 450,
-    "Armor_Onyxium_Chest": 400,
-    "Armor_Onyxium_Hands": 175,
-    "Armor_Onyxium_Head": 225,
-    "Armor_Onyxium_Legs": 325,
-    "Armor_Prisma_Chest": 400,
-    "Armor_Prisma_Hands": 175,
-    "Armor_Prisma_Head": 225,
-    "Armor_Prisma_Legs": 325,
-    "Armor_Steel_Ancient_Chest": 48,
-    "Armor_Steel_Ancient_Hands": 16,
-    "Armor_Steel_Ancient_Head": 24,
-    "Armor_Steel_Ancient_Legs": 32,
-    "Armor_Steel_Chest": 112,
-    "Armor_Steel_Hands": 49,
-    "Armor_Steel_Head": 63,
-    "Armor_Steel_Legs": 91,
-    "Armor_Thorium_Chest": 140,
-    "Armor_Thorium_Hands": 63,
-    "Armor_Thorium_Head": 77,
-    "Armor_Thorium_Legs": 105,
-    "Armor_Wood_Chest": 20,
-    "Armor_Wood_Hands": 9,
-    "Armor_Wood_Head": 11,
-    "Armor_Wood_Legs": 16,
+    "Armor_Adamantite_Chest": 235,
+    "Armor_Adamantite_Hands": 101,
+    "Armor_Adamantite_Head": 126,
+    "Armor_Adamantite_Legs": 185,
+    "Armor_Bronze_Chest": 34,
+    "Armor_Bronze_Hands": 11,
+    "Armor_Bronze_Head": 17,
+    "Armor_Bronze_Legs": 22,
+    "Armor_Bronze_Ornate_Chest": 40,
+    "Armor_Bronze_Ornate_Hands": 13,
+    "Armor_Bronze_Ornate_Head": 20,
+    "Armor_Cobalt_Chest": 134,
+    "Armor_Cobalt_Hands": 45,
+    "Armor_Cobalt_Head": 67,
+    "Armor_Cobalt_Legs": 101,
+    "Armor_Copper_Chest": 26,
+    "Armor_Copper_Hands": 12,
+    "Armor_Copper_Head": 14,
+    "Armor_Copper_Legs": 22,
+    "Armor_Diving_Crude_Chest": 16,
+    "Armor_Diving_Crude_Hands": 7,
+    "Armor_Diving_Crude_Head": 9,
+    "Armor_Diving_Crude_Legs": 13,
+    "Armor_Iron_Chest": 51,
+    "Armor_Iron_Hands": 22,
+    "Armor_Iron_Head": 29,
+    "Armor_Iron_Legs": 42,
+    "Armor_Mithril_Chest": 480,
+    "Armor_Mithril_Hands": 160,
+    "Armor_Mithril_Head": 240,
+    "Armor_Mithril_Legs": 360,
+    "Armor_Onyxium_Chest": 320,
+    "Armor_Onyxium_Hands": 140,
+    "Armor_Onyxium_Head": 180,
+    "Armor_Onyxium_Legs": 260,
+    "Armor_Prisma_Chest": 320,
+    "Armor_Prisma_Hands": 140,
+    "Armor_Prisma_Head": 180,
+    "Armor_Prisma_Legs": 260,
+    "Armor_Steel_Ancient_Chest": 39,
+    "Armor_Steel_Ancient_Hands": 13,
+    "Armor_Steel_Ancient_Head": 19,
+    "Armor_Steel_Ancient_Legs": 26,
+    "Armor_Steel_Chest": 90,
+    "Armor_Steel_Hands": 39,
+    "Armor_Steel_Head": 50,
+    "Armor_Steel_Legs": 73,
+    "Armor_Thorium_Chest": 112,
+    "Armor_Thorium_Hands": 50,
+    "Armor_Thorium_Head": 62,
+    "Armor_Thorium_Legs": 84,
+    "Armor_Wood_Chest": 16,
+    "Armor_Wood_Hands": 7,
+    "Armor_Wood_Head": 9,
+    "Armor_Wood_Legs": 13,
     "Bench_Armory": 5,
     "Bench_Builders": 5,
     "Bench_Campfire": 5,
@@ -213,6 +213,14 @@
       "batchSize": 10
     },
     "Cloth_Block_Wool_Green_Stairs": {
+      "gold": 14,
+      "batchSize": 10
+    },
+    "Cloth_Block_Wool_Grey": {
+      "gold": 14,
+      "batchSize": 10
+    },
+    "Cloth_Block_Wool_Grey_Light": {
       "gold": 14,
       "batchSize": 10
     },
@@ -775,6 +783,45 @@
     "Furniture_Desert_Wardrobe": 60,
     "Furniture_Desert_Window": 30,
     "Furniture_Dungeon_Chest_Epic": 22,
+    "Furniture_Feran_Bed": 69,
+    "Furniture_Feran_Bench": 38,
+    "Furniture_Feran_Bookshelf": 50,
+    "Furniture_Feran_Candle": 15,
+    "Furniture_Feran_Chandelier": 56,
+    "Furniture_Feran_Chest_Small": 48,
+    "Furniture_Feran_Door": 45,
+    "Furniture_Feran_Ladder": 25,
+    "Furniture_Feran_Planter": 25,
+    "Furniture_Feran_Platform": 25,
+    "Furniture_Feran_Pot": 20,
+    "Furniture_Feran_Pot_Secondary": 18,
+    "Furniture_Feran_Shelf": 30,
+    "Furniture_Feran_Sign": 22,
+    "Furniture_Feran_Stool": 22,
+    "Furniture_Feran_Table": 40,
+    "Furniture_Feran_Torch": 12,
+    "Furniture_Feran_Torch_Tall": 28,
+    "Furniture_Feran_Trapdoor": 28,
+    "Furniture_Feran_Wardrobe": 60,
+    "Furniture_Feran_Window": 30,
+    "Furniture_Frozen_Castle_Bed": 72,
+    "Furniture_Frozen_Castle_Bench": 39,
+    "Furniture_Frozen_Castle_Chair": 36,
+    "Furniture_Frozen_Castle_Chest_Small": 49,
+    "Furniture_Frozen_Castle_Door": 47,
+    "Furniture_Frozen_Castle_Ladder": 26,
+    "Furniture_Frozen_Castle_Lamp": 29,
+    "Furniture_Frozen_Castle_Platform": 26,
+    "Furniture_Frozen_Castle_Pot": 21,
+    "Furniture_Frozen_Castle_Secondary_Lamp": 29,
+    "Furniture_Frozen_Castle_Secondary_Pot": 21,
+    "Furniture_Frozen_Castle_Shelf": 31,
+    "Furniture_Frozen_Castle_Sign": 23,
+    "Furniture_Frozen_Castle_Table": 42,
+    "Furniture_Frozen_Castle_Trapdoor": 29,
+    "Furniture_Frozen_Castle_Wardrobe": 62,
+    "Furniture_Frozen_Castle_Window": 31,
+    "Furniture_Goblin_Chest_Small": 42,
     "Furniture_Human_Ruins_Banner": 51,
     "Furniture_Human_Ruins_Banner_Double": 65,
     "Furniture_Human_Ruins_Banner_Triple": 80,
@@ -785,6 +832,7 @@
     "Furniture_Human_Ruins_Candle": 17,
     "Furniture_Human_Ruins_Chair": 41,
     "Furniture_Human_Ruins_Chest_Small": 55,
+    "Furniture_Human_Ruins_Coffin": 55,
     "Furniture_Human_Ruins_Desk": 49,
     "Furniture_Human_Ruins_Door": 52,
     "Furniture_Human_Ruins_Door_Large": 70,
@@ -807,6 +855,7 @@
     "Furniture_Human_Ruins_Window": 35,
     "Furniture_Jungle_Bed": 74,
     "Furniture_Jungle_Bench": 40,
+    "Furniture_Jungle_Bookshelf": 54,
     "Furniture_Jungle_Brazier": 24,
     "Furniture_Jungle_Candle": 16,
     "Furniture_Jungle_Chair": 38,
@@ -824,7 +873,22 @@
     "Furniture_Jungle_Trapdoor": 30,
     "Furniture_Jungle_Wardrobe": 65,
     "Furniture_Jungle_Window": 32,
+    "Furniture_Kweebec_Bed": 72,
+    "Furniture_Kweebec_Candle": 16,
+    "Furniture_Kweebec_Chest_Small": 49,
+    "Furniture_Kweebec_Door": 47,
+    "Furniture_Kweebec_Ladder": 26,
+    "Furniture_Kweebec_Lantern": 21,
+    "Furniture_Kweebec_Painting": 34,
+    "Furniture_Kweebec_Platform": 26,
+    "Furniture_Kweebec_Shelf": 31,
+    "Furniture_Kweebec_Sign": 23,
     "Furniture_Kweebec_Statue": 78,
+    "Furniture_Kweebec_Stool": 23,
+    "Furniture_Kweebec_Table": 42,
+    "Furniture_Kweebec_Trapdoor": 29,
+    "Furniture_Kweebec_Wardrobe": 62,
+    "Furniture_Kweebec_Window": 31,
     "Furniture_Lumberjack_Bed": 63,
     "Furniture_Lumberjack_Chair": 32,
     "Furniture_Lumberjack_Chest_Small": 44,
@@ -847,13 +911,70 @@
     "Furniture_Royal_Magic_Couch": 117,
     "Furniture_Royal_Magic_Medium_Door": 81,
     "Furniture_Royal_Magic_Pot": 36,
+    "Furniture_Royal_Magic_Potion_Glow": 50,
     "Furniture_Royal_Magic_Table": 72,
     "Furniture_Royal_Magic_Wardrobe": 108,
     "Furniture_Royal_Magic_Window": 54,
+    "Furniture_Scarak_Hive_Chest_Small": 76,
+    "Furniture_Scarak_Hive_Door_Large": 96,
+    "Furniture_Scarak_Hive_Door_Medium": 84,
+    "Furniture_Scarak_Hive_Lamp": 44,
+    "Furniture_Scarak_Hive_Platform": 40,
+    "Furniture_Scarak_Hive_Window": 48,
+    "Furniture_Tavern_Barrel": 31,
     "Furniture_Tavern_Bed": 66,
+    "Furniture_Tavern_Bench": 36,
+    "Furniture_Tavern_Candle": 14,
+    "Furniture_Tavern_Chair": 34,
+    "Furniture_Tavern_Chandelier": 54,
+    "Furniture_Tavern_Chest_Small": 46,
+    "Furniture_Tavern_Door": 43,
+    "Furniture_Tavern_Ladder": 24,
+    "Furniture_Tavern_Painting": 31,
+    "Furniture_Tavern_Planter": 24,
+    "Furniture_Tavern_Platform": 24,
+    "Furniture_Tavern_Shelf": 29,
+    "Furniture_Tavern_Sign": 22,
+    "Furniture_Tavern_Stool": 22,
+    "Furniture_Tavern_Table": 38,
+    "Furniture_Tavern_Trapdoor": 26,
+    "Furniture_Tavern_Wardrobe": 58,
+    "Furniture_Tavern_Window": 29,
+    "Furniture_Temple_Dark_Bed": 107,
+    "Furniture_Temple_Dark_Brazier": 35,
+    "Furniture_Temple_Dark_Candle": 23,
+    "Furniture_Temple_Dark_Chest_Small": 74,
+    "Furniture_Temple_Dark_Coffin": 74,
+    "Furniture_Temple_Dark_Door": 70,
+    "Furniture_Temple_Dark_Door_Large": 94,
+    "Furniture_Temple_Dark_Door_Medium": 82,
+    "Furniture_Temple_Dark_Ladder": 39,
+    "Furniture_Temple_Dark_Platform": 39,
+    "Furniture_Temple_Dark_Pot": 31,
+    "Furniture_Temple_Dark_Shelf": 47,
+    "Furniture_Temple_Dark_Sign": 35,
     "Furniture_Temple_Dark_Statue": 117,
     "Furniture_Temple_Dark_Statue_Gaia": 166,
+    "Furniture_Temple_Dark_Stool": 35,
+    "Furniture_Temple_Dark_Table": 62,
+    "Furniture_Temple_Dark_Trapdoor": 43,
+    "Furniture_Temple_Dark_Wardrobe": 94,
+    "Furniture_Temple_Dark_Window": 47,
+    "Furniture_Temple_Emerald_Bed": 110,
+    "Furniture_Temple_Emerald_Chest_Small": 76,
+    "Furniture_Temple_Emerald_Door": 72,
+    "Furniture_Temple_Emerald_Door_Medium": 84,
+    "Furniture_Temple_Emerald_Ladder": 40,
+    "Furniture_Temple_Emerald_Platform": 40,
+    "Furniture_Temple_Emerald_Shelf": 48,
+    "Furniture_Temple_Emerald_Sign": 36,
     "Furniture_Temple_Emerald_Statue": 120,
+    "Furniture_Temple_Emerald_Stool": 36,
+    "Furniture_Temple_Emerald_Table": 64,
+    "Furniture_Temple_Emerald_Torch": 20,
+    "Furniture_Temple_Emerald_Trapdoor": 44,
+    "Furniture_Temple_Emerald_Wardrobe": 96,
+    "Furniture_Temple_Emerald_Window": 48,
     "Furniture_Temple_Light_Bed": 96,
     "Furniture_Temple_Light_Bench": 52,
     "Furniture_Temple_Light_Brazier": 32,
@@ -873,7 +994,19 @@
     "Furniture_Temple_Light_Trapdoor": 38,
     "Furniture_Temple_Light_Wardrobe": 84,
     "Furniture_Temple_Light_Window": 42,
+    "Furniture_Temple_Scarak_Brazier": 37,
+    "Furniture_Temple_Scarak_Chest_Small": 78,
+    "Furniture_Temple_Scarak_Door_Large": 98,
+    "Furniture_Temple_Scarak_Door_Medium": 86,
+    "Furniture_Temple_Scarak_Ladder": 41,
+    "Furniture_Temple_Scarak_Lamp": 45,
+    "Furniture_Temple_Scarak_Lantern": 33,
+    "Furniture_Temple_Scarak_Planter": 41,
+    "Furniture_Temple_Scarak_Platform": 41,
+    "Furniture_Temple_Scarak_Pot": 33,
+    "Furniture_Temple_Scarak_Secondary_Pot": 33,
     "Furniture_Temple_Scarak_Statue": 123,
+    "Furniture_Temple_Scarak_Window": 49,
     "Furniture_Temple_Wind_Candle": 22,
     "Furniture_Temple_Wind_Chandelier": 83,
     "Furniture_Temple_Wind_Chest_Large": 120,
@@ -892,9 +1025,13 @@
     "Furniture_Temple_Wind_Trapdoor": 41,
     "Furniture_Temple_Wind_Wardrobe": 89,
     "Furniture_Temple_Wind_Window": 44,
+    "Furniture_Village_Bed": 63,
+    "Furniture_Village_Bench": 34,
     "Furniture_Village_Bookcase": 48,
+    "Furniture_Village_Brazier": 21,
     "Furniture_Village_Chair": 32,
     "Furniture_Village_Chest_Small": 44,
+    "Furniture_Village_Coffin": 44,
     "Furniture_Village_Counter": 39,
     "Furniture_Village_Crate": 28,
     "Furniture_Village_Door": 41,
@@ -904,12 +1041,15 @@
     "Furniture_Village_Painting_2x1": 32,
     "Furniture_Village_Painting_2x2": 37,
     "Furniture_Village_Painting_3x2": 44,
+    "Furniture_Village_Planter": 23,
+    "Furniture_Village_Platform": 23,
     "Furniture_Village_Pot": 18,
     "Furniture_Village_Shelf_Full": 25,
     "Furniture_Village_Sign": 21,
     "Furniture_Village_Statue": 69,
     "Furniture_Village_Stool": 21,
     "Furniture_Village_Table": 37,
+    "Furniture_Village_Tombstone": 25,
     "Furniture_Village_Trapdoor": 25,
     "Furniture_Village_Wardrobe": 55,
     "Furniture_Village_Window": 28,
@@ -919,47 +1059,47 @@
     "Halloween_Wagon": 5,
     "Ingredient_Bar_Adamantite": {
       "gold": 42,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ingredient_Bar_Bronze": {
       "gold": 28,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ingredient_Bar_Cobalt": {
       "gold": 28,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ingredient_Bar_Copper": {
       "gold": 12,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ingredient_Bar_Gold": {
       "gold": 24,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ingredient_Bar_Iron": {
       "gold": 16,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ingredient_Bar_Mithril": {
       "gold": 100,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ingredient_Bar_Onyxium": {
       "gold": 100,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ingredient_Bar_Prisma": {
       "gold": 100,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ingredient_Bar_Silver": {
       "gold": 24,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ingredient_Bar_Thorium": {
       "gold": 28,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ingredient_Charcoal": 5,
     "Ingredient_Chitin_Sturdy": 5,
@@ -984,594 +1124,1214 @@
     "Lobby_Wall_Poster01": 5,
     "Lobby_Wall_Poster_Small01": 5,
     "Media_RemoteControl": 5,
-    "Metal_Bronze": 5,
-    "Metal_Copper": 5,
-    "Metal_Iron": 5,
-    "Metal_Zinc": 5,
+    "Metal_Bronze": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Decorative": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Fence": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Half": {
+      "gold": 14,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Ornate": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Pipe_Chimney": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Pipe_Corner": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Pipe_Large": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Pipe_Large_Corner": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Pipe_Large_Mouthpiece": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Pipe_Long": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Pipe_Short": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Roof": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Roof_Flat": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Roof_Shallow": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Roof_Steep": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Smooth": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Smooth_Half": {
+      "gold": 14,
+      "batchSize": 10
+    },
+    "Metal_Bronze_Stairs": {
+      "gold": 28,
+      "batchSize": 10
+    },
+    "Metal_Copper": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Decorative": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Fence": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Half": {
+      "gold": 6,
+      "batchSize": 10
+    },
+    "Metal_Copper_Ornate": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Pipe_Chimney": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Pipe_Corner": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Pipe_Large": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Pipe_Large_Corner": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Pipe_Large_Mouthpiece": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Pipe_Long": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Pipe_Short": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Roof": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Roof_Flat": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Roof_Shallow": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Roof_Steep": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Smooth": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Copper_Smooth_Half": {
+      "gold": 6,
+      "batchSize": 10
+    },
+    "Metal_Copper_Stairs": {
+      "gold": 12,
+      "batchSize": 10
+    },
+    "Metal_Gold_Pipe_Chimney": {
+      "gold": 24,
+      "batchSize": 10
+    },
+    "Metal_Gold_Pipe_Corner": {
+      "gold": 24,
+      "batchSize": 10
+    },
+    "Metal_Gold_Pipe_Large": {
+      "gold": 24,
+      "batchSize": 10
+    },
+    "Metal_Gold_Pipe_Large_Corner": {
+      "gold": 24,
+      "batchSize": 10
+    },
+    "Metal_Gold_Pipe_Large_Mouthpiece": {
+      "gold": 24,
+      "batchSize": 10
+    },
+    "Metal_Gold_Pipe_Long": {
+      "gold": 24,
+      "batchSize": 10
+    },
+    "Metal_Gold_Pipe_Short": {
+      "gold": 24,
+      "batchSize": 10
+    },
+    "Metal_Iron": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Decorative": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Fence": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Gutter": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Half": {
+      "gold": 8,
+      "batchSize": 10
+    },
+    "Metal_Iron_Ornate": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Pipe_Chimney": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Pipe_Corner": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Pipe_Large": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Pipe_Large_Corner": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Pipe_Large_Mouthpiece": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Pipe_Long": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Pipe_Short": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Roof": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Roof_Flat": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Roof_Shallow": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Roof_Steep": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Smooth": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Iron_Smooth_Half": {
+      "gold": 8,
+      "batchSize": 10
+    },
+    "Metal_Iron_Stairs": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Decorative": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Fence": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Half": {
+      "gold": 8,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Ornate": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Pipe_Chimney": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Pipe_Corner": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Pipe_Large": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Pipe_Large_Corner": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Pipe_Large_Mouthpiece": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Pipe_Long": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Pipe_Short": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Roof": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Roof_Flat": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Roof_Shallow": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Roof_Steep": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Smooth": {
+      "gold": 16,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Smooth_Half": {
+      "gold": 8,
+      "batchSize": 10
+    },
+    "Metal_Zinc_Stairs": {
+      "gold": 16,
+      "batchSize": 10
+    },
     "Objective_Treasure_Map": 5,
     "Ore_Adamantite": {
       "gold": 42,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ore_Cobalt": {
       "gold": 28,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ore_Copper": {
       "gold": 12,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ore_Gold": {
       "gold": 24,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ore_Iron": {
       "gold": 16,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ore_Mithril": {
       "gold": 100,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ore_Onyxium": {
       "gold": 100,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ore_Prisma": {
       "gold": 100,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ore_Silver": {
       "gold": 24,
-      "batchSize": 4
+      "batchSize": 5
     },
     "Ore_Thorium": {
       "gold": 28,
-      "batchSize": 4
+      "batchSize": 5
+    },
+    "Plant_Bush": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Arid": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Arid_Palm": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Arid_Red": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Arid_Sharp": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Bramble": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Crystal": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Dead": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Dead_Hanging": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Dead_Tall": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Dead_Twisted": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Green": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Hanging": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Jungle": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Lush": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Wet": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Winter": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Winter_Red": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Winter_Sharp": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Bush_Winter_Snow": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Cactus_Flower": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Crop_Berry_Block": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Crop_Berry_Wet_Block": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Crop_Berry_Winter_Block": {
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Crop_Cauliflower_Item": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Crop_Chilli_Item": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Crop_Health1": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Crop_Health2": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Crop_Health3": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Crop_Mushroom_Block_Blue_Trunk": {
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Mushroom_Block_Brown_Trunk": {
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Mushroom_Block_Green_Trunk": {
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Mushroom_Block_Purple_Trunk": {
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Mushroom_Block_Red_Trunk": {
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Mushroom_Block_White_Trunk": {
+      "gold": 1,
+      "batchSize": 10
+    },
+    "Plant_Crop_Mushroom_Block_Yellow_Trunk": {
+      "gold": 1,
+      "batchSize": 10
     },
     "Plant_Crop_Wheat_Item": {
+      "gold": 10,
+      "batchSize": 5
+    },
+    "Plant_Flower_Bushy_Blue": {
       "gold": 8,
-      "batchSize": 4
+      "batchSize": 5
+    },
+    "Plant_Flower_Bushy_Cyan": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Bushy_Green": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Bushy_Grey": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Bushy_Orange": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Bushy_Poisoned": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Bushy_Purple": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Bushy_Red": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Bushy_Violet": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Bushy_Yellow": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Common_Blue": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Common_Blue2": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Common_Cyan": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Common_Cyan2": {
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Grey": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Grey2": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Lime": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Lime2": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Orange": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Orange2": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Pink": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Pink2": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Poisoned": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Poisoned2": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Purple": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Purple2": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Red": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Red2": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Violet": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Violet2": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_White": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_White2": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Yellow": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Common_Yellow2": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Flax_Blue": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Flax_Orange": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Flower_Flax_Pink": {
-      "gold": 6,
-      "batchSize": 4
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Flax_Purple": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Flax_White": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Flax_Yellow": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Orchid_Blue": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Orchid_Cyan": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Orchid_Orange": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Orchid_Pink": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Orchid_Poisoned": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Orchid_Purple": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Orchid_Red": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Orchid_White": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Orchid_Yellow": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Poisoned_Orange": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Tall_Blue": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Tall_Cyan": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Tall_Cyan2": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Tall_Pink": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Tall_Purple": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Tall_Red": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Tall_Violet": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Tall_Yellow": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Water_Blue": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Water_Duckweed": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Water_Green": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Water_Purple": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Water_Red": {
+      "gold": 8,
+      "batchSize": 5
+    },
+    "Plant_Flower_Water_White": {
+      "gold": 8,
+      "batchSize": 5
     },
     "Plant_Fruit_Apple": {
-      "gold": 10,
-      "batchSize": 4
+      "gold": 12,
+      "batchSize": 5
     },
     "Plant_Fruit_Coconut": {
-      "gold": 10,
-      "batchSize": 4
+      "gold": 12,
+      "batchSize": 5
     },
     "Plant_Fruit_Mango": {
-      "gold": 10,
-      "batchSize": 4
+      "gold": 12,
+      "batchSize": 5
     },
     "Plant_Sapling_Ash": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Aspen": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Azure": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Bamboo": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Banyan": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Beech": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Birch": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Bottletree": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Camphor": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Cedar": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Crystal": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Dry": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Fig_Blue": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Fire": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Gumboab": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Ice": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Jungle": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Maple": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Oak": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Palm": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Palo": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Petrified": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Poisoned": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Redwood": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Sallow": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Spiral": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Spruce": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Spruce_Frozen": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Stormbark": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Windwillow": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Sapling_Wisteria_Wild": {
-      "gold": 12,
-      "batchSize": 4
+      "gold": 15,
+      "batchSize": 5
     },
     "Plant_Seeds_Amber": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Apple": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Ash": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Aspen": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Aubergine": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Aubergine_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Azure": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Bamboo": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Banyan": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Beans_Purple": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Beech": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Birch": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Bottletree": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Camphor": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Carrot": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Carrot_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Cauliflower": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Cauliflower_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Cedar": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Chilli": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Chilli_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Corn": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Corn_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Cotton": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Cotton_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Crystal": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Dry": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Fig_Blue": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Fir": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Fire": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Frostwood": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Gumboab": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Health1": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Health2": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Health3": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Jungle": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Lettuce": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Lettuce_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Mana1": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Mana2": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Mana3": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Maple": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Mushroom": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Oak": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Onion": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Onion_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Palm": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Palo": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Petrified": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Pine": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Potato": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Potato_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Pumpkin": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Pumpkin_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Redwood": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Rice": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Rice_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Sallow": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Spiral": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Stamina1": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Stamina2": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Stamina3": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Stormbark": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Sunflower": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Tomato": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Tomato_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Turnip": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Turnip_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Wheat": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Wheat_Eternal": {
-      "gold": 20,
-      "batchSize": 4
+      "gold": 25,
+      "batchSize": 5
     },
     "Plant_Seeds_Wild": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Willow": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Plant_Seeds_Wisteria_Wild": {
-      "gold": 8,
-      "batchSize": 4
+      "gold": 10,
+      "batchSize": 5
     },
     "Potion_Antidote": 25,
     "Potion_Health": 30,
@@ -2860,8 +3620,16 @@
       "gold": 2,
       "batchSize": 10
     },
+    "Rock_Gold_Brick_Flat": {
+      "gold": 2,
+      "batchSize": 10
+    },
     "Rock_Gold_Brick_Half": {
       "gold": 1,
+      "batchSize": 10
+    },
+    "Rock_Gold_Brick_Hollow": {
+      "gold": 2,
       "batchSize": 10
     },
     "Rock_Gold_Brick_Ornate": {
@@ -2896,6 +3664,10 @@
       "gold": 2,
       "batchSize": 10
     },
+    "Rock_Gold_Brick_Shallow": {
+      "gold": 2,
+      "batchSize": 10
+    },
     "Rock_Gold_Brick_Smooth": {
       "gold": 2,
       "batchSize": 10
@@ -2905,6 +3677,10 @@
       "batchSize": 10
     },
     "Rock_Gold_Brick_Stairs": {
+      "gold": 2,
+      "batchSize": 10
+    },
+    "Rock_Gold_Brick_Steep": {
       "gold": 2,
       "batchSize": 10
     },
@@ -5671,56 +6447,56 @@
     "Tool_Feedbag": 28,
     "Tool_Fertilizer": 40,
     "Tool_Fertilizer_Crystal": 70,
-    "Tool_Hammer_Crude": 8,
-    "Tool_Hammer_Iron": 24,
-    "Tool_Hatchet_Adamantite": 84,
-    "Tool_Hatchet_Cobalt": 49,
-    "Tool_Hatchet_Copper": 9,
-    "Tool_Hatchet_Crude": 6,
-    "Tool_Hatchet_Iron": 20,
-    "Tool_Hatchet_Mithril": 225,
-    "Tool_Hatchet_Onyxium": 125,
-    "Tool_Hatchet_Thorium": 42,
-    "Tool_Hatchet_Wood": 6,
-    "Tool_Hoe_Copper": 9,
-    "Tool_Hoe_Crude": 4,
-    "Tool_Hoe_Iron": 12,
-    "Tool_Hoe_Thorium": 21,
+    "Tool_Hammer_Crude": 6,
+    "Tool_Hammer_Iron": 19,
+    "Tool_Hatchet_Adamantite": 67,
+    "Tool_Hatchet_Cobalt": 39,
+    "Tool_Hatchet_Copper": 7,
+    "Tool_Hatchet_Crude": 5,
+    "Tool_Hatchet_Iron": 16,
+    "Tool_Hatchet_Mithril": 180,
+    "Tool_Hatchet_Onyxium": 100,
+    "Tool_Hatchet_Thorium": 34,
+    "Tool_Hatchet_Wood": 5,
+    "Tool_Hoe_Copper": 7,
+    "Tool_Hoe_Crude": 3,
+    "Tool_Hoe_Iron": 10,
+    "Tool_Hoe_Thorium": 17,
     "Tool_Map": 45,
-    "Tool_Pickaxe_Adamantite": 84,
-    "Tool_Pickaxe_Cobalt": 49,
-    "Tool_Pickaxe_Copper": 9,
-    "Tool_Pickaxe_Crude": 6,
-    "Tool_Pickaxe_Iron": 20,
-    "Tool_Pickaxe_Mithril": 225,
-    "Tool_Pickaxe_Onyxium": 125,
-    "Tool_Pickaxe_Scrap": 6,
-    "Tool_Pickaxe_Thorium": 42,
-    "Tool_Pickaxe_Wood": 6,
+    "Tool_Pickaxe_Adamantite": 67,
+    "Tool_Pickaxe_Cobalt": 39,
+    "Tool_Pickaxe_Copper": 7,
+    "Tool_Pickaxe_Crude": 5,
+    "Tool_Pickaxe_Iron": 16,
+    "Tool_Pickaxe_Mithril": 180,
+    "Tool_Pickaxe_Onyxium": 100,
+    "Tool_Pickaxe_Scrap": 5,
+    "Tool_Pickaxe_Thorium": 34,
+    "Tool_Pickaxe_Wood": 5,
     "Tool_Repair_Kit_Iron": 36,
-    "Tool_Shovel_Cobalt": 42,
-    "Tool_Shovel_Copper": 18,
-    "Tool_Shovel_Crude": 8,
-    "Tool_Shovel_Iron": 24,
-    "Tool_Shovel_Thorium": 42,
-    "Tool_Sickle_Copper": 3,
+    "Tool_Shovel_Cobalt": 34,
+    "Tool_Shovel_Copper": 14,
+    "Tool_Shovel_Crude": 6,
+    "Tool_Shovel_Iron": 19,
+    "Tool_Shovel_Thorium": 34,
+    "Tool_Sickle_Copper": 2,
     "Tool_Sickle_Crude": 2,
-    "Tool_Sickle_Iron": 8,
-    "Tool_Sickle_Steel_Rusty": 12,
+    "Tool_Sickle_Iron": 6,
+    "Tool_Sickle_Steel_Rusty": 10,
     "Tool_Watering_Can": 32,
     "Utility_Bag_Seed": 35,
     "Vehicle_Wood_Boat": 5,
-    "Weapon_Battleaxe_Adamantite": 168,
-    "Weapon_Battleaxe_Cobalt": 98,
-    "Weapon_Battleaxe_Copper": 18,
-    "Weapon_Battleaxe_Crude": 12,
-    "Weapon_Battleaxe_Iron": 40,
-    "Weapon_Battleaxe_Mithril": 250,
-    "Weapon_Battleaxe_Onyxium": 250,
-    "Weapon_Battleaxe_Steel_Rusty": 60,
-    "Weapon_Battleaxe_Stone_Trork": 12,
-    "Weapon_Battleaxe_Thorium": 84,
-    "Weapon_Battleaxe_Wood_Fence": 12,
+    "Weapon_Battleaxe_Adamantite": 134,
+    "Weapon_Battleaxe_Cobalt": 78,
+    "Weapon_Battleaxe_Copper": 14,
+    "Weapon_Battleaxe_Crude": 10,
+    "Weapon_Battleaxe_Iron": 32,
+    "Weapon_Battleaxe_Mithril": 200,
+    "Weapon_Battleaxe_Onyxium": 200,
+    "Weapon_Battleaxe_Steel_Rusty": 48,
+    "Weapon_Battleaxe_Stone_Trork": 10,
+    "Weapon_Battleaxe_Thorium": 67,
+    "Weapon_Battleaxe_Wood_Fence": 10,
     "Weapon_Bomb": 5,
     "Weapon_Bomb_Continuous": 5,
     "Weapon_Bomb_Fire": 5,
@@ -5728,90 +6504,90 @@
     "Weapon_Bomb_Popberry": 5,
     "Weapon_Bomb_Potion_Poison": 5,
     "Weapon_Bomb_Stun": 5,
-    "Weapon_Club_Adamantite": 42,
-    "Weapon_Club_Cobalt": 28,
-    "Weapon_Club_Copper": 12,
-    "Weapon_Club_Crude": 5,
-    "Weapon_Club_Iron": 16,
-    "Weapon_Club_Iron_Rusty": 14,
-    "Weapon_Club_Mithril": 100,
-    "Weapon_Club_Onyxium": 100,
-    "Weapon_Club_Scrap": 5,
-    "Weapon_Club_Steel_Flail_Rusty": 24,
-    "Weapon_Club_Stone_Trork": 5,
-    "Weapon_Club_Thorium": 28,
-    "Weapon_Crossbow_Ancient_Steel": 48,
-    "Weapon_Crossbow_Iron": 24,
-    "Weapon_Daggers_Adamantite": 94,
-    "Weapon_Daggers_Adamantite_Saurian": 52,
-    "Weapon_Daggers_Bronze": 28,
-    "Weapon_Daggers_Bronze_Ancient": 32,
-    "Weapon_Daggers_Cobalt": 56,
-    "Weapon_Daggers_Copper": 12,
-    "Weapon_Daggers_Crude": 5,
-    "Weapon_Daggers_Iron": 16,
-    "Weapon_Daggers_Mithril": 250,
-    "Weapon_Daggers_Onyxium": 100,
-    "Weapon_Daggers_Stone_Trork": 5,
-    "Weapon_Daggers_Thorium": 42,
+    "Weapon_Club_Adamantite": 34,
+    "Weapon_Club_Cobalt": 22,
+    "Weapon_Club_Copper": 10,
+    "Weapon_Club_Crude": 4,
+    "Weapon_Club_Iron": 13,
+    "Weapon_Club_Iron_Rusty": 11,
+    "Weapon_Club_Mithril": 80,
+    "Weapon_Club_Onyxium": 80,
+    "Weapon_Club_Scrap": 4,
+    "Weapon_Club_Steel_Flail_Rusty": 19,
+    "Weapon_Club_Stone_Trork": 4,
+    "Weapon_Club_Thorium": 22,
+    "Weapon_Crossbow_Ancient_Steel": 39,
+    "Weapon_Crossbow_Iron": 19,
+    "Weapon_Daggers_Adamantite": 76,
+    "Weapon_Daggers_Adamantite_Saurian": 42,
+    "Weapon_Daggers_Bronze": 22,
+    "Weapon_Daggers_Bronze_Ancient": 26,
+    "Weapon_Daggers_Cobalt": 45,
+    "Weapon_Daggers_Copper": 10,
+    "Weapon_Daggers_Crude": 4,
+    "Weapon_Daggers_Iron": 13,
+    "Weapon_Daggers_Mithril": 200,
+    "Weapon_Daggers_Onyxium": 80,
+    "Weapon_Daggers_Stone_Trork": 4,
+    "Weapon_Daggers_Thorium": 34,
     "Weapon_Deployable_Healing_Totem": 5,
-    "Weapon_Longsword_Adamantite": 63,
-    "Weapon_Longsword_Adamantite_Saurian": 79,
-    "Weapon_Longsword_Cobalt": 42,
-    "Weapon_Longsword_Copper": 18,
-    "Weapon_Longsword_Crude": 8,
+    "Weapon_Longsword_Adamantite": 50,
+    "Weapon_Longsword_Adamantite_Saurian": 63,
+    "Weapon_Longsword_Cobalt": 34,
+    "Weapon_Longsword_Copper": 14,
+    "Weapon_Longsword_Crude": 6,
     "Weapon_Longsword_Flame": 5,
-    "Weapon_Longsword_Iron": 24,
+    "Weapon_Longsword_Iron": 19,
     "Weapon_Longsword_Katana": 5,
-    "Weapon_Longsword_Mithril": 150,
-    "Weapon_Longsword_Onyxium": 150,
+    "Weapon_Longsword_Mithril": 120,
+    "Weapon_Longsword_Onyxium": 120,
     "Weapon_Longsword_Praetorian": 5,
     "Weapon_Longsword_Scarab": 5,
     "Weapon_Longsword_Spectral": 5,
-    "Weapon_Longsword_Stone_Trork": 8,
-    "Weapon_Longsword_Thorium": 42,
+    "Weapon_Longsword_Stone_Trork": 6,
+    "Weapon_Longsword_Thorium": 34,
     "Weapon_Longsword_Tribal": 5,
     "Weapon_Longsword_Void": 5,
-    "Weapon_Mace_Adamantite": 168,
-    "Weapon_Mace_Cobalt": 98,
-    "Weapon_Mace_Copper": 18,
-    "Weapon_Mace_Crude": 12,
-    "Weapon_Mace_Iron": 40,
-    "Weapon_Mace_Mithril": 250,
-    "Weapon_Mace_Onyxium": 250,
-    "Weapon_Mace_Prisma": 250,
-    "Weapon_Mace_Scrap": 12,
-    "Weapon_Mace_Scrap_NPC": 12,
-    "Weapon_Mace_Stone_Trork": 12,
-    "Weapon_Mace_Thorium": 84,
-    "Weapon_Shortbow_Adamantite": 116,
+    "Weapon_Mace_Adamantite": 134,
+    "Weapon_Mace_Cobalt": 78,
+    "Weapon_Mace_Copper": 14,
+    "Weapon_Mace_Crude": 10,
+    "Weapon_Mace_Iron": 32,
+    "Weapon_Mace_Mithril": 200,
+    "Weapon_Mace_Onyxium": 200,
+    "Weapon_Mace_Prisma": 200,
+    "Weapon_Mace_Scrap": 10,
+    "Weapon_Mace_Scrap_NPC": 10,
+    "Weapon_Mace_Stone_Trork": 10,
+    "Weapon_Mace_Thorium": 67,
+    "Weapon_Shortbow_Adamantite": 92,
     "Weapon_Shortbow_Bomb": 5,
-    "Weapon_Shortbow_Bronze": 42,
-    "Weapon_Shortbow_Cobalt": 70,
-    "Weapon_Shortbow_Copper": 12,
-    "Weapon_Shortbow_Crude": 8,
-    "Weapon_Shortbow_Iron": 24,
-    "Weapon_Shortbow_Iron_Rusty": 20,
-    "Weapon_Shortbow_Mithril": 150,
-    "Weapon_Shortbow_Onyxium": 150,
-    "Weapon_Shortbow_Thorium": 56,
-    "Weapon_Sword_Adamantite": 116,
-    "Weapon_Sword_Bronze": 42,
-    "Weapon_Sword_Bronze_Ancient": 48,
-    "Weapon_Sword_Cobalt": 70,
-    "Weapon_Sword_Copper": 12,
-    "Weapon_Sword_Crude": 8,
-    "Weapon_Sword_Iron": 24,
-    "Weapon_Sword_Mithril": 150,
-    "Weapon_Sword_Onyxium": 150,
-    "Weapon_Sword_Scrap": 8,
-    "Weapon_Sword_Silversteel": 42,
-    "Weapon_Sword_Steel": 42,
-    "Weapon_Sword_Steel_Incandescent": 52,
-    "Weapon_Sword_Steel_Rusty": 36,
-    "Weapon_Sword_Stone_Trork": 8,
-    "Weapon_Sword_Thorium": 56,
-    "Weapon_Sword_Wood": 8,
+    "Weapon_Shortbow_Bronze": 34,
+    "Weapon_Shortbow_Cobalt": 56,
+    "Weapon_Shortbow_Copper": 10,
+    "Weapon_Shortbow_Crude": 6,
+    "Weapon_Shortbow_Iron": 19,
+    "Weapon_Shortbow_Iron_Rusty": 16,
+    "Weapon_Shortbow_Mithril": 120,
+    "Weapon_Shortbow_Onyxium": 120,
+    "Weapon_Shortbow_Thorium": 45,
+    "Weapon_Sword_Adamantite": 92,
+    "Weapon_Sword_Bronze": 34,
+    "Weapon_Sword_Bronze_Ancient": 39,
+    "Weapon_Sword_Cobalt": 56,
+    "Weapon_Sword_Copper": 10,
+    "Weapon_Sword_Crude": 6,
+    "Weapon_Sword_Iron": 19,
+    "Weapon_Sword_Mithril": 120,
+    "Weapon_Sword_Onyxium": 120,
+    "Weapon_Sword_Scrap": 6,
+    "Weapon_Sword_Silversteel": 34,
+    "Weapon_Sword_Steel": 34,
+    "Weapon_Sword_Steel_Incandescent": 42,
+    "Weapon_Sword_Steel_Rusty": 29,
+    "Weapon_Sword_Stone_Trork": 6,
+    "Weapon_Sword_Thorium": 45,
+    "Weapon_Sword_Wood": 6,
     "WinterHoliday_Cane": 5,
     "WinterHoliday_Garland": 5,
     "WinterHoliday_Lights": 5,
@@ -6196,35 +6972,35 @@
     },
     "Wood_Bottletree_Branch_Corner": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Bottletree_Branch_Long": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Bottletree_Branch_Short": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Bottletree_Roots": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Bottletree_Trunk": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Bottletree_Trunk_Full": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Bottletree_Trunk_Half": {
       "gold": 1,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Bottletree_Trunk_Stairs": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Burnt_Branch_Corner": {
       "gold": 2,
@@ -6292,35 +7068,35 @@
     },
     "Wood_Cedar_Branch_Corner": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Cedar_Branch_Long": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Cedar_Branch_Short": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Cedar_Roots": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Cedar_Trunk": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Cedar_Trunk_Full": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Cedar_Trunk_Half": {
       "gold": 1,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Cedar_Trunk_Stairs": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Crystal_Branch_Corner": {
       "gold": 2,
@@ -6356,55 +7132,55 @@
     },
     "Wood_Darkwood_Beam": {
       "gold": 1,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Decorative": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Fence": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Fence_Gate": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Ornate": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Planks": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Planks_Half": {
       "gold": 1,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Roof": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Roof_Flat": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Roof_Hollow": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Roof_Shallow": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Roof_Steep": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Darkwood_Stairs": {
       "gold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     "Wood_Deadwood_Beam": {
       "gold": 1,
@@ -6460,87 +7236,87 @@
     },
     "Wood_Dry_Branch_Corner": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Dry_Branch_Long": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Dry_Branch_Short": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Dry_Roots": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Dry_Trunk": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Dry_Trunk_Full": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Dry_Trunk_Half": {
       "gold": 1,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Dry_Trunk_Stairs": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Beam": {
       "gold": 1,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Decorative": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Fence": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Fence_Gate": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Ornate": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Planks": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Planks_Half": {
       "gold": 1,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Roof": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Roof_Flat": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Roof_Hollow": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Roof_Shallow": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Roof_Steep": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Drywood_Stairs": {
       "gold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     "Wood_Fig_Blue_Branch_Corner": {
       "gold": 1,

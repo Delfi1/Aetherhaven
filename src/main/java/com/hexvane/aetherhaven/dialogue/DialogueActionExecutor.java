@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
+import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtService;
@@ -288,10 +289,17 @@ public final class DialogueActionExecutor {
     ) {
         QuestDefinition def = plugin.getQuestCatalog().get(qid);
         UUID guardPromoteUuid = null;
+        UUID touristPromoteUuid = null;
         if (AetherhavenConstants.QUEST_HOUSE_GUARD.equals(qid.trim())) {
             guardPromoteUuid = town.getQuestTargetEntityUuid(qid);
             if (guardPromoteUuid == null && beneficiaryNpcUuid != null) {
                 guardPromoteUuid = beneficiaryNpcUuid;
+            }
+        }
+        if (AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK.equals(qid.trim())) {
+            touristPromoteUuid = town.getQuestTargetEntityUuid(qid);
+            if (touristPromoteUuid == null && beneficiaryNpcUuid != null) {
+                touristPromoteUuid = beneficiaryNpcUuid;
             }
         }
         if (def != null && def.repeatOrDefault().isPerEntity()) {
@@ -338,6 +346,9 @@ public final class DialogueActionExecutor {
         if (guardPromoteUuid != null && store != null) {
             VillagerDeathHandlerSystem.promoteGuardToCitizen(world, plugin, town, tm, guardPromoteUuid, store);
             tm.updateTown(town);
+        }
+        if (touristPromoteUuid != null) {
+            TouristPortalTickService.promoteTouristToCitizen(town, tm, touristPromoteUuid);
         }
         if (store != null && isInnVisitorJobQuestForResidentPromotion(qid)) {
             InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);

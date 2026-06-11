@@ -146,6 +146,8 @@ public final class DialogueConditionEvaluator {
                 npcRef,
                 stringOrEmpty(o, "questId")
             );
+            case "npc_is_active_tourist" -> worldView.npcIsActiveTourist(playerRef, store, npcRef);
+            case "npc_is_invited_unhoused_townsfolk" -> worldView.npcIsInvitedUnhousedTownsfolk(playerRef, store, npcRef);
             case "quest_target_entity_housed" -> worldView.questTargetEntityHoused(
                 playerRef,
                 store,

@@ -109,6 +109,10 @@ public final class ConstructionDefinition {
     @SerializedName("scheduleSharedUtilityPick")
     private boolean scheduleSharedUtilityPick;
 
+    /** When true, portal tourists may visit this plot. */
+    @SerializedName("touristDestination")
+    private boolean touristDestination;
+
     /** Prefab-local position (same space as prefab `blocks[].x/y/z`) of the management block voxel to stamp after build. */
     @SerializedName("managementBlockLocalPos")
     @Nullable
@@ -329,6 +333,10 @@ public final class ConstructionDefinition {
     /** True when this definition participates in multi-plot random schedule targeting (inn, park, Gaia altar, …). */
     public boolean isScheduleSharedUtilityPick() {
         return scheduleSharedUtilityPick;
+    }
+
+    public boolean isTouristDestination() {
+        return touristDestination;
     }
 
     /** @return prefab-local x,y,z of management block, or null if not configured */

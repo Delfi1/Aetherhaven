@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
+import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -62,6 +63,10 @@ public final class HouseResidentAssignment {
                 if (plugin != null) {
                     VillagerDeathHandlerSystem.promoteGuardToCitizen(world, plugin, town, tm, residentUuid, store);
                 }
+            }
+            if (town.hasQuestActive(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK)
+                && residentUuid.equals(town.getQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK))) {
+                TouristPortalTickService.promoteTouristToCitizen(town, tm, residentUuid);
             }
             ResidentRegistryService.syncHouseAssignment(town, tm, store, residentUuid);
         }

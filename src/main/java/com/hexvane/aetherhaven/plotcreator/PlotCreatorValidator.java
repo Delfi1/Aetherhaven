@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.plotcreator;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import java.nio.file.Files;
@@ -72,8 +73,8 @@ public final class PlotCreatorValidator {
             case MANAGEMENT_BLOCK -> draft.getManagementBlockLocalPos() != null ? 1 : 0;
             case PRODUCTION_STORAGE -> draft.getProductionStorageLocalPos() != null ? 1 : 0;
             case TREASURY_BLOCK -> draft.getTreasuryLocalPos() != null ? 1 : 0;
-            case SHOP_SPOT -> draft.getPlacedSpecialBlocks().size();
-            case PLANNING_DESK_POI, WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI -> countPoiSubstep(draft, type);
+            case SHOP_SPOT, TOURIST_PORTAL_BLOCK -> draft.getPlacedSpecialBlocks().size();
+            case PLANNING_DESK_POI, WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI -> countPoiSubstep(draft, type);
             case INNKEEPER_SPAWN -> draft.getInnkeeperSpawnLocal() != null ? 1 : 0;
             case VISITOR_SPAWN -> draft.getVisitorSpawnLocals().size();
             case GUILD_MASTER_SPAWN -> draft.getGuildMasterSpawnLocal() != null ? 1 : 0;
@@ -98,6 +99,7 @@ public final class PlotCreatorValidator {
             case EAT_POI -> p.getTags().contains("EAT");
             case FUN_POI -> p.getTags().contains("FUN") || p.getTags().contains("SIT");
             case SHOP_POI -> p.getTags().contains("SHOP");
+            case TOURIST_VISIT_POI -> p.getTags().contains(AetherhavenConstants.POI_TAG_TOURIST_VISIT);
             case PLANNING_DESK_POI -> "Aetherhaven_Town_Planning_Desk".equals(p.getBlockTypeId());
             default -> false;
         };

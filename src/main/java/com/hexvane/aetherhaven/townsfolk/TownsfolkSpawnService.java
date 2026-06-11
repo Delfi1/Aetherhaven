@@ -137,6 +137,37 @@ public final class TownsfolkSpawnService {
         if (character == null) {
             return Optional.empty();
         }
+        return spawnTownsfolkEntity(
+            world,
+            plugin,
+            town,
+            store,
+            position,
+            kind,
+            characterId,
+            character,
+            random,
+            rotation,
+            displayAnchorYawRadians,
+            guildHallSpawnMarkerPosition
+        );
+    }
+
+    @Nonnull
+    private static Optional<SpawnedTownsfolk> spawnTownsfolkEntity(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Vector3d position,
+        @Nonnull String kind,
+        @Nonnull String characterId,
+        @Nonnull TownsfolkCharacterDefinition character,
+        @Nonnull Random random,
+        @Nonnull Rotation3f rotation,
+        @Nullable Float displayAnchorYawRadians,
+        @Nullable Vector3d guildHallSpawnMarkerPosition
+    ) {
         List<String> personalities = character.getPersonalityIds();
 
         NPCPlugin npcPlugin = NPCPlugin.get();

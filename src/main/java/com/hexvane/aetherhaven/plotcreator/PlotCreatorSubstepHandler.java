@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlock;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlockUtil;
+import com.hexvane.aetherhaven.tourist.TouristPortalBlock;
+import com.hexvane.aetherhaven.tourist.TouristPortalBlockUtil;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -147,6 +149,29 @@ public final class PlotCreatorSubstepHandler {
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.shopSpotRecorded"));
                 yield true;
             }
+            case TOURIST_PORTAL_BLOCK -> {
+                if (!AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(blockId)) {
+                    playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
+                    yield true;
+                }
+                TouristPortalBlock blockComp = TouristPortalBlockUtil.getBlockComponent(session.getWorld(), targetBlock);
+                if (blockComp == null) {
+                    playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
+                    yield true;
+                }
+                for (Vector3i recorded : draft.getPlacedSpecialBlocks()) {
+                    if (recorded.x == targetBlock.x && recorded.y == targetBlock.y && recorded.z == targetBlock.z) {
+                        playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded"));
+                        yield true;
+                    }
+                }
+                TouristPortalBlock confirmed =
+                    new TouristPortalBlock(blockComp.getPortalId(), blockComp.getTownId(), blockComp.getPlotId(), true);
+                TouristPortalBlockUtil.writeBlockComponent(session.getWorld(), targetBlock, confirmed);
+                draft.getPlacedSpecialBlocks().add(new Vector3i(targetBlock));
+                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.touristPortalRecorded"));
+                yield true;
+            }
             case INNKEEPER_SPAWN -> {
                 draft.setInnkeeperSpawnLocal(local);
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.spawnRecorded"));
@@ -186,7 +211,7 @@ public final class PlotCreatorSubstepHandler {
                 }
                 yield true;
             }
-            case WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, PLANNING_DESK_POI -> addPoiForSubstep(
+            case WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI, PLANNING_DESK_POI -> addPoiForSubstep(
                 session.getWorld(),
                 draft,
                 targetBlock,
@@ -251,6 +276,10 @@ public final class PlotCreatorSubstepHandler {
                 poi.getTags().add("WORK");
                 poi.getTags().add("SHOP");
                 poi.setInteractionKind("WORK_SURFACE");
+            }
+            case TOURIST_VISIT_POI -> {
+                poi.getTags().add(AetherhavenConstants.POI_TAG_TOURIST_VISIT);
+                poi.setInteractionKind("SIT");
             }
             case PLANNING_DESK_POI -> {
                 poi.getTags().add("WORK");

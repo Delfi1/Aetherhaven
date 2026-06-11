@@ -2,21 +2,20 @@
   "nodes": [
     {
       "id": "1",
-      "name": "cube",
-      "position": {"x": 0, "y": 0, "z": 0},
+      "name": "Origin",
+      "position": {"x": 32, "y": 0, "z": 16},
       "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
       "shape": {
         "type": "box",
-        "offset": {"x": 0, "y": 1, "z": 0},
+        "offset": {"x": -16, "y": 1, "z": -16},
         "stretch": {"x": 1, "y": 1, "z": 1},
         "settings": {
           "isPiece": false,
-          "size": {"x": 64, "y": 2, "z": 24},
-          "isStaticBox": true
+          "size": {"x": 64, "y": 2, "z": 24}
         },
         "textureLayout": {
           "back": {
-            "offset": {"x": 8, "y": 24},
+            "offset": {"x": 0, "y": 24},
             "mirror": {"x": false, "y": false},
             "angle": 0
           },
@@ -26,7 +25,7 @@
             "angle": 0
           },
           "front": {
-            "offset": {"x": 8, "y": 24},
+            "offset": {"x": 0, "y": 24},
             "mirror": {"x": false, "y": false},
             "angle": 0
           },
@@ -50,7 +49,28 @@
         "visible": true,
         "doubleSided": false,
         "shadingMode": "flat"
-      }
+      },
+      "children": [
+        {
+          "id": "2",
+          "name": "PortalVFX",
+          "position": {"x": 0, "y": -3, "z": 0},
+          "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
+          "shape": {
+            "type": "none",
+            "offset": {"x": 0, "y": 0, "z": 0},
+            "stretch": {"x": 1, "y": 1, "z": 1},
+            "settings": {
+              "isPiece": false
+            },
+            "textureLayout": {},
+            "unwrapMode": "custom",
+            "visible": true,
+            "doubleSided": false,
+            "shadingMode": "flat"
+          }
+        }
+      ]
     }
   ],
   "format": "prop",

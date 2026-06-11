@@ -1,10 +1,10 @@
 {
-  "_comment": "Edit tiers and bases here, then run: python scripts/generate_shop_prices.py. ingotBaseGold is gold per ingotOreBatchSize (4). Gear price = ingotBaseGold × (recipeBarCount / ingotOreBatchSize) × typeMultiplier × variantMultiplier. Only Weapon_/Armor_/Tool_ with a configured gearTypes entry are auto-priced.",
+  "_comment": "Edit tiers and bases here, then run: python scripts/generate_shop_prices.py. Shop batches use 5-based sizes (5, 10, 15, 25, 50, 100). ingotBaseGold is gold per ingotOreBatchSize (5). Gear price = ingotBaseGold × (recipeBarCount / ingotOreBatchSize) × typeMultiplier × variantMultiplier. Only Weapon_/Armor_/Tool_ with a configured gearTypes entry are auto-priced.",
   "hytaleItemsRoot": "../HytaleSourceCode/Assets/Server/Item/Items",
   "discoverGearFromAssets": true,
   "defaultGoldPrice": 5,
   "defaultBatchSize": 1,
-  "ingotOreBatchSize": 4,
+  "ingotOreBatchSize": 5,
 
   "gearTiers": [
     {
@@ -215,7 +215,10 @@
     "Christmas": 1.1,
     "Frozen_Castle": 1.3,
     "Kweebec": 1.3,
-    "Bookshelf": 1.2
+    "Bookshelf": 1.2,
+    "Feran": 1.25,
+    "Goblin": 1.1,
+    "Scarak_Hive": 2.0
   },
 
   "furnitureTypeBaseGold": {
@@ -294,7 +297,7 @@
 
   "buildingBlockBatchSize": 10,
   "buildingBlockDefaultMaterialBaseGold": 12,
-  "_buildingBlockPriceFormula": "materialBaseGold × typeMultiplier per batch. Each buildingBlockMaterialRules entry may set batchSize; otherwise buildingBlockBatchSize (16) is used.",
+  "_buildingBlockPriceFormula": "materialBaseGold × typeMultiplier per batch. Each buildingBlockMaterialRules entry may set batchSize; otherwise buildingBlockBatchSize (10) is used.",
 
   "buildingBlockMaterialRules": [
     {
@@ -344,7 +347,7 @@
         "Wood_Cedar*"
       ],
       "baseGold": 2,
-      "batchSize": 18
+      "batchSize": 15
     },
     {
       "label": "Rare",
@@ -354,7 +357,7 @@
         "Wood_Bottletree*"
       ],
       "baseGold": 2,
-      "batchSize": 16
+      "batchSize": 15
     },
     {
       "label": "Extra Rare",
@@ -390,9 +393,46 @@
       "batchSize": 10
     },
     {
+      "label": "mushroom trunk blocks",
+      "patterns": ["Plant_Crop_Mushroom_Block_*"],
+      "baseGold": 1,
+      "batchSize": 10
+    },
+    {
       "label": "cloth blocks",
       "patterns": ["Cloth_*"],
-      "baseGold": 14
+      "baseGold": 14,
+      "batchSize": 10
+    },
+    {
+      "label": "metal copper",
+      "patterns": ["Metal_Copper*", "Metal-Copper"],
+      "baseGold": 12,
+      "batchSize": 10
+    },
+    {
+      "label": "metal iron",
+      "patterns": ["Metal_Iron*"],
+      "baseGold": 16,
+      "batchSize": 10
+    },
+    {
+      "label": "metal zinc",
+      "patterns": ["Metal_Zinc*"],
+      "baseGold": 16,
+      "batchSize": 10
+    },
+    {
+      "label": "metal bronze",
+      "patterns": ["Metal_Bronze*"],
+      "baseGold": 28,
+      "batchSize": 10
+    },
+    {
+      "label": "metal gold parts",
+      "patterns": ["Metal_Gold*"],
+      "baseGold": 24,
+      "batchSize": 10
     }
   ],
 
@@ -419,6 +459,19 @@
     "Brick_Roof_Shallow": 1.0,
     "Brick_Roof_Steep": 1.0,
     "Brick_Roof_Hollow": 1.0,
+    "Brick_Flat": 1.0,
+    "Brick_Hollow": 1.0,
+    "Brick_Shallow": 1.0,
+    "Brick_Steep": 1.0,
+    "Fence": 1.0,
+    "Pipe_Large_Corner": 1.0,
+    "Pipe_Large_Mouthpiece": 1.0,
+    "Pipe_Large": 1.0,
+    "Pipe_Chimney": 1.0,
+    "Pipe_Corner": 1.0,
+    "Pipe_Long": 1.0,
+    "Pipe_Short": 1.0,
+    "Smooth_Half": 0.5,
     "Brick_Pillar_Base": 1.0,
     "Brick_Pillar_Middle": 1.0,
     "Cobble": 1.0,
@@ -474,11 +527,11 @@
     "Flap": 1.0
   },
 
-  "buildingBlockPrefixes": ["Rock_", "Wood_", "Soil_", "Cloth_", "Rubble_", "Prototype_"],
+  "buildingBlockPrefixes": ["Rock_", "Wood_", "Soil_", "Cloth_", "Metal_", "Rubble_", "Prototype_"],
 
   "plantBatchRules": {
-    "batchSize": 4,
-    "baseGoldPerBatch": 8,
+    "batchSize": 5,
+    "baseGoldPerBatch": 10,
     "seedMultiplier": 1.0,
     "saplingMultiplier": 1.5,
     "flowerMultiplier": 0.8,

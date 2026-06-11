@@ -2,7 +2,7 @@
   "entries": [
     { "itemId": "Rock_Gold_Brick", "weight": 1, "stockMin": 25, "stockMax": 100 },
     { "itemId": "Metal_Bronze", "weight": 2, "stockMin": 25, "stockMax": 100 },
-    { "itemId": "Metal-Copper", "weight": 2, "stockMin": 25, "stockMax": 100 },
+    { "itemId": "Metal_Copper", "weight": 2, "stockMin": 25, "stockMax": 100 },
     { "itemId": "Metal_Iron", "weight": 2, "stockMin": 25, "stockMax": 100 },
     { "itemId": "Metal_Zinc", "weight": 2, "stockMin": 25, "stockMax": 100 },
     { "itemId": "Metal_Bronze_Pipe_Large_Corner", "weight": 2, "stockMin": 25, "stockMax": 100 },

@@ -11,6 +11,8 @@ public enum PlotCreatorSubstepType {
     EAT_POI,
     FUN_POI,
     SHOP_SPOT,
+    TOURIST_PORTAL_BLOCK,
+    TOURIST_VISIT_POI,
     SHOP_POI,
     INNKEEPER_SPAWN,
     VISITOR_SPAWN,

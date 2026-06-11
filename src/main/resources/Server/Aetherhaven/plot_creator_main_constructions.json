@@ -47,6 +47,10 @@
     {
       "id": "plot_town_hall",
       "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_town_hall"
+    },
+    {
+      "id": "plot_tourist_portal",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_tourist_portal"
     }
   ]
 }

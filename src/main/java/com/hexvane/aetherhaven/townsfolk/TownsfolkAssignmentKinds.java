@@ -17,7 +17,7 @@ public final class TownsfolkAssignmentKinds {
     /** True when POI autonomy should not run (non hired guard adventurers and phase 1 kinds). */
     public static boolean usesIdleStandAround(@Nonnull String assignmentKind) {
         String k = assignmentKind.trim().toLowerCase();
-        return IDLE.equals(k) || TOURIST.equals(k) || GUARD.equals(k) || GUILD_ADVENTURER.equals(k);
+        return IDLE.equals(k) || GUARD.equals(k) || GUILD_ADVENTURER.equals(k);
     }
 
     /** True when this townsfolk checkout is a cycling guild hall adventurer (not a hired guard). */

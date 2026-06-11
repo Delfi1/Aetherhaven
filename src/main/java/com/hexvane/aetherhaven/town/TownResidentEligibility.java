@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.town;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
+import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import java.util.UUID;
@@ -21,7 +22,8 @@ public final class TownResidentEligibility {
         if (TownVillagerBinding.isVisitorKind(binding.getKind())) {
             return true;
         }
-        return GuildHallAdventurerPoolService.isGuildHallAdventurer(town, entityUuid);
+        return GuildHallAdventurerPoolService.isGuildHallAdventurer(town, entityUuid)
+            || TouristPortalTickService.isActivePortalTourist(town, entityUuid);
     }
 
     public static boolean requiresHouseToAppear(
@@ -61,6 +63,9 @@ public final class TownResidentEligibility {
             return false;
         }
         if (GuildHallAdventurerPoolService.isGuildHallAdventurer(town, entityUuid)) {
+            return false;
+        }
+        if (TouristPortalTickService.isActivePortalTourist(town, entityUuid)) {
             return false;
         }
         if (requiresHouseToAppear(bindingKind, roleId, plugin)) {
@@ -106,6 +111,9 @@ public final class TownResidentEligibility {
             return false;
         }
         if (GuildHallAdventurerPoolService.isGuildHallAdventurer(town, entityUuid)) {
+            return false;
+        }
+        if (TouristPortalTickService.isActivePortalTourist(town, entityUuid)) {
             return false;
         }
         if (!isTownsfolkPoolKind(bindingKind, roleId, plugin)) {

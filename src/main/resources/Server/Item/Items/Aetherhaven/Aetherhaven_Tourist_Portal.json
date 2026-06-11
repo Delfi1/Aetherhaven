@@ -1,0 +1,87 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_tourist.items.Aetherhaven_Tourist_Portal.name",
+    "Description": "aetherhaven_tourist.items.Aetherhaven_Tourist_Portal.description"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Furniture.Decorative"
+  ],
+  "Set": "Aetherhaven",
+  "Creative": 6,
+  "Interactions": {
+    "Primary": "Block_Primary",
+    "Secondary": "Block_Secondary"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Tourist_Portal.png",
+  "BlockType": {
+    "AmbientSoundEventId": "SFX_Portal_Neutral",
+    "BlockParticleSetId": "Stone",
+    "BlockSoundSetId": "Stone",
+    "CustomModel": "Items/Aetherhaven/Tourist_Portal.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Aetherhaven/Tourist_Portal.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Woods"
+      }
+    },
+    "HitboxType": "Aetherhaven_Tourist_Portal",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "PlacementSettings": {
+      "RotationMode": "BlockNormal"
+    },
+    "VariantRotation": "NESW",
+    "BlockEntity": {
+      "Components": {
+        "AetherhavenTouristPortalBlock": {
+          "PortalId": "",
+          "TownId": "",
+          "PlotId": "",
+          "Configured": false
+        }
+      }
+    },
+    "Particles": [
+      {
+        "SystemId": "Aetherhaven_Tourist_Portal_Idle",
+        "TargetNodeName": "PortalVFX",
+        "PositionOffset": {
+          "Y": 2.5
+        },
+        "Scale": 0.8
+      }
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.4,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -1
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Stone",
+  "MaxStack": 1
+}

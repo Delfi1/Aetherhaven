@@ -154,6 +154,10 @@ public final class TownRecord {
     @SerializedName("hiredGuardRecords")
     private List<HiredGuardRecord> hiredGuardRecords = new ArrayList<>();
 
+    /** Portal tourists and invited residents from the tourist portal. */
+    @SerializedName("touristRecords")
+    private List<com.hexvane.aetherhaven.tourist.TouristRecord> touristRecords = new ArrayList<>();
+
     /** Entity UUID of guard targeted by active {@link com.hexvane.aetherhaven.AetherhavenConstants#QUEST_HOUSE_GUARD}. */
     @Nullable
     @SerializedName("guardHouseQuestTargetEntityUuid")
@@ -980,6 +984,14 @@ public final class TownRecord {
             hiredGuardRecords = new ArrayList<>();
         }
         return hiredGuardRecords;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.tourist.TouristRecord> getTouristRecords() {
+        if (touristRecords == null) {
+            touristRecords = new ArrayList<>();
+        }
+        return touristRecords;
     }
 
     private void migrateLegacyGuardHouseQuestTarget() {

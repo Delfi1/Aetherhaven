@@ -111,6 +111,12 @@ aetherhaven.debug.poi.listLine=  {x},{y},{z} kind={kind} blockTypeId={block} tag
 aetherhaven.debug.poi.dumpHeader=All POIs in world registry ({count}):
 aetherhaven.debug.poi.dumpLine=  town={town} {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} plot={plot}
 
+aetherhaven.debug.tourist.noTown=You have no town in this world.
+aetherhaven.debug.tourist.targetsHeader=Tourist visit targets for {town} ({count} plots):
+aetherhaven.debug.tourist.targetsEmpty=No completed plots with touristDestination enabled (check plot creator or building JSON).
+aetherhaven.debug.tourist.plotLine=  {building} plot={plot} entry=({entryX},{entryY},{entryZ}) preferred={preferred} visitPois={poiCount}
+aetherhaven.debug.tourist.poiLine=    poi {x},{y},{z} kind={kind} tags={tags}
+
 # Wall wand placement debug (/ah walldebug)
 aetherhaven.debug.wall.on=Wall wand debug ON (chat + server log).
 aetherhaven.debug.wall.off=Wall wand debug OFF.

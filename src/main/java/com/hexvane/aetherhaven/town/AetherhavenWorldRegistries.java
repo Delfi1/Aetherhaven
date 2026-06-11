@@ -24,6 +24,9 @@ import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.shopspot.ShopSpotDailyRerollService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPersistence;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
+import com.hexvane.aetherhaven.tourist.TouristPortalPersistence;
+import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
+import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,6 +40,8 @@ public final class AetherhavenWorldRegistries {
     private static final ConcurrentHashMap<String, PathNavGraphService> PATH_NAV_GRAPH_SERVICES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, PatrolRouteRegistry> PATROL_ROUTE_REGISTRIES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, ShopSpotRegistry> SHOP_SPOT_REGISTRIES = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, TouristPortalRegistry> TOURIST_PORTAL_REGISTRIES =
+        new ConcurrentHashMap<>();
 
     private AetherhavenWorldRegistries() {}
 
@@ -105,6 +110,18 @@ public final class AetherhavenWorldRegistries {
     }
 
     @Nonnull
+    public static TouristPortalRegistry getOrCreateTouristPortalRegistry(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        return TOURIST_PORTAL_REGISTRIES.computeIfAbsent(world.getName(), n -> {
+            TouristPortalRegistry r = new TouristPortalRegistry(world);
+            TouristPortalPersistence.load(world, plugin, r);
+            return r;
+        });
+    }
+
+    @Nonnull
     public static PatrolRouteRegistry getOrCreatePatrolRouteRegistry(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin
@@ -146,6 +163,7 @@ public final class AetherhavenWorldRegistries {
             PATH_NAV_GRAPH_SERVICES.remove(world.getName());
             PATROL_ROUTE_REGISTRIES.remove(world.getName());
             SHOP_SPOT_REGISTRIES.remove(world.getName());
+            TOURIST_PORTAL_REGISTRIES.remove(world.getName());
             WorldDifficultyPersistence.unloadWorld(world);
             TownsfolkPoolPersistence.unloadWorld(world);
             return;
@@ -183,6 +201,13 @@ public final class AetherhavenWorldRegistries {
                 ShopSpotPersistence.save(world, p4, shopReg);
             }
         }
+        TouristPortalRegistry touristReg = TOURIST_PORTAL_REGISTRIES.remove(world.getName());
+        if (touristReg != null) {
+            AetherhavenPlugin p5 = AetherhavenPlugin.get();
+            if (p5 != null) {
+                TouristPortalPersistence.save(world, p5, touristReg);
+            }
+        }
         WorldDifficultyPersistence.unloadWorld(world);
         TownsfolkPoolPersistence.unloadWorld(world);
     }
@@ -211,6 +236,10 @@ public final class AetherhavenWorldRegistries {
                 World w = e.getValue().getWorld();
                 ShopSpotPersistence.save(w, p, e.getValue());
             }
+            for (var e : TOURIST_PORTAL_REGISTRIES.entrySet()) {
+                World w = e.getValue().getWorld();
+                TouristPortalPersistence.save(w, p, e.getValue());
+            }
         }
         WorldDifficultyPersistence.saveAll();
         TownsfolkPoolPersistence.saveAll();
@@ -227,8 +256,10 @@ public final class AetherhavenWorldRegistries {
         getOrCreatePathToolRegistry(world, plugin);
         getOrCreatePatrolRouteRegistry(world, plugin);
         getOrCreateShopSpotRegistry(world, plugin);
+        getOrCreateTouristPortalRegistry(world, plugin);
         getOrCreatePathNavGraphService(world);
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
+        TouristReconcileService.scheduleAfterWorldLoad(world, plugin);
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
         InnPoolService.reconcileAfterWorldLoad(world, plugin);
         TownsfolkSpawnService.reconcileAfterWorldLoad(world, plugin);

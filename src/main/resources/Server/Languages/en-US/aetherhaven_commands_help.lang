@@ -127,6 +127,9 @@ commands.aetherhaven.guild.clearguards.desc=Despawn all hired guards in your tow
 commands.aetherhaven.guild.clearguards.ok=Removed {count} hired guard entities and cleared town guard records
 commands.aetherhaven.guild.status.desc=Show guild hall adventurer pool diagnostics for your town
 commands.aetherhaven.guild.status.ok=Guild hall active={active} epochDay={epochDay} lastMorning={lastMorning} filledSlots={filledSlots} trackedNpcIds={tracked} hiredGuards={hiredGuards} pool(total={poolTotal} guard={poolGuards} adventurer={poolAdventurers} other={poolOther})
+
+commands.aetherhaven.tourist.desc=Debug: tourist portal visit targets
+commands.aetherhaven.tourist.targets.desc=Debug: list tourist destination plots and optional POIs in your town
 commands.aetherhaven.guild.notActive=Your town does not have an active guild hall
 
 commands.aetherhaven.plotcreator.desc=Create custom town buildings
