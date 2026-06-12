@@ -126,6 +126,8 @@ import com.hexvane.aetherhaven.purification.PurificationPreviewEntity;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyDebugTag;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
+import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
+import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
 import com.hexvane.aetherhaven.autonomy.BlockMountDeathCleanupSystem;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockMountSafetySystem;
 import com.hexvane.aetherhaven.scaffold.ScaffoldBreakDebugSystem;
@@ -558,6 +560,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.OnAdd());
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.EachTick());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
+        BuilderConstructionAssistState.register(this.getEntityStoreRegistry());
         TouristAutonomyState.register(this.getEntityStoreRegistry());
         VillagerScheduleTickState.register(this.getEntityStoreRegistry());
         VillagerAutonomyDebugTag.register(this.getEntityStoreRegistry());
@@ -803,6 +806,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new BlockMountDeathCleanupSystem());
+        this.getEntityStoreRegistry().registerSystem(new BuilderConstructionAssistSystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new TouristAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new PendingEntityRemovalSystem());

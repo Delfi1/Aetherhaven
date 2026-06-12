@@ -266,6 +266,9 @@ public final class AetherhavenConstants {
     /** Miners hut workplace; definition in {@code Server/Aetherhaven/Buildings/plot_miners_hut.json}. */
     public static final String CONSTRUCTION_PLOT_MINERS_HUT = "plot_miners_hut";
 
+    /** Builder's hut workplace; definition in {@code Server/Aetherhaven/Buildings/plot_builders_hut.json}. */
+    public static final String CONSTRUCTION_PLOT_BUILDERS_HUT = "plot_builders_hut";
+
     /** Lumbermill workplace; definition in {@code Server/Aetherhaven/Buildings/plot_lumbermill.json}. */
     public static final String CONSTRUCTION_PLOT_LUMBERMILL = "plot_lumbermill";
 
@@ -363,6 +366,10 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_HOUSE_FLORIST = "q_house_florist";
 
+    public static final String QUEST_BUILDERS_HUT = "q_builders_hut";
+
+    public static final String QUEST_HOUSE_BUILDER = "q_house_builder";
+
     public static final String CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP = "plot_crystal_keepers_shop";
 
     public static final String CONSTRUCTION_PLOT_BOMB_SHOP = "plot_bomb_shop";
@@ -382,6 +389,8 @@ public final class AetherhavenConstants {
     public static final String NPC_PYROTECHNIC_RESCUE = "Aetherhaven_Pyrotechnic_Rescue";
 
     public static final String NPC_FLORIST = "Aetherhaven_Florist";
+
+    public static final String NPC_BUILDER = "Aetherhaven_Builder";
 
     public static final String NPC_MERCHANT = "Aetherhaven_Merchant";
     public static final String NPC_BLACKSMITH = "Aetherhaven_Blacksmith";
@@ -415,6 +424,8 @@ public final class AetherhavenConstants {
     public static final String PLOT_TOKEN_GAIA_ALTAR = "Aetherhaven_Plot_Token_Gaia_Altar";
 
     public static final String PLOT_TOKEN_MINERS_HUT = "Aetherhaven_Plot_Token_Miners_Hut";
+
+    public static final String PLOT_TOKEN_BUILDERS_HUT = "Aetherhaven_Plot_Token_Builders_Hut";
 
     public static final String PLOT_TOKEN_LUMBERMILL = "Aetherhaven_Plot_Token_Lumbermill";
 

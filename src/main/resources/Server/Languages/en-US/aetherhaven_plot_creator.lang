@@ -88,6 +88,7 @@ aetherhaven.plotcreator.mainType.plot_market_stall = Market stall
 aetherhaven.plotcreator.mainType.plot_player_shop = Player shop
 aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK = Click the shop safe you placed.
 aetherhaven.plotcreator.mainType.plot_miners_hut = Miners hut
+aetherhaven.plotcreator.mainType.plot_builders_hut = Builder's hut
 aetherhaven.plotcreator.mainType.plot_park = Park
 aetherhaven.plotcreator.mainType.plot_town_hall = Town hall
 aetherhaven.plotcreator.mainType.plot_tourist_portal = Tourist portal

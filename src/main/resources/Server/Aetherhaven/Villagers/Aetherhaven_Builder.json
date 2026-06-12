@@ -1,0 +1,60 @@
+{
+  "npcRoleId": "Aetherhaven_Builder",
+  "dialogueVillagerKind": "builder",
+  "residentTreeId": "aetherhaven_builder",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_builders_hut",
+  "workEquipmentProfileId": "work_builder",
+  "scheduleRoleId": "Aetherhaven_Builder",
+  "displayName": "Rowan Ridgecraft",
+  "portraitIcon": "Aetherhaven_Builder.png",
+  "uiSortOrder": 16,
+  "innPoolEligible": true,
+  "innPoolOrder": 11,
+  "visitorBindingKind": "visitor_builder",
+  "reputationMilestones": [],
+  "giftLoves": [
+    "Wood_Oak_Trunk",
+    "Wood_Oak_Branch",
+    "Rock_Stone_Cobble",
+    "Rock_Stone",
+    "Bench_Builders",
+    "Tool_Hammer_Iron",
+    "Tool_Hammer_Crude"
+  ],
+  "giftLikes": [
+    "Wood_Softwood_Roof",
+    "Wood_Beech_Trunk",
+    "Rock_Basalt_Cobble",
+    "Rock_Basalt",
+    "Ingredient_Fibre",
+    "Furniture_Crude_Table",
+    "Furniture_Crude_Stool",
+    "Furniture_Crude_Shelf"
+  ],
+  "giftDislikes": [
+    "Deco_Bone_Pile",
+    "Deco_Bone_Skulls",
+    "Deco_Trash",
+    "Deco_Trash_Pile_Large",
+    "Deco_Trash_Pile_Small",
+    "Ingredient_Poop",
+    "Ingredient_Void_Essence",
+    "Ingredient_Voidheart",
+    "Plant_Bush_Dead",
+    "Plant_Bush_Dead_Twisted",
+    "Plant_Bush_Dead_Tall"
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.0",
+    "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.1",
+    "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.2",
+    "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.3"
+  ],
+  "dialogueGiftHintLangKeys": [
+    "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.0",
+    "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.1",
+    "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.0",
+    "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.1"
+  ]
+}

@@ -4,7 +4,11 @@
 
 ### Added
 
+- **Command Post** A new block that when used puts the player in command mode which is a top down RTS view where you can command groups of guards.
 - **Quest board** Guild hall quest boards now open a three card work panel. Townsfolk post fetch jobs with rank tiers, rewards, and time limits. Complete jobs for rank XP, turn items in through villager dialogue, and track active board quests in the town journal.
+- **Hunt Quests** Daily quest type where the player must kill a certain amount of a mob.
+- **Fetch Quests** Daily quest type where the player must get a certain item for villager.
+- **Raid Quests** Daily quest type where a group of mobs of a certain type spawns on the outskirts of town and head towards the town. The player must kill all the mobs in the group to complete the quest. Map markers and a Raid Health bar indicate which mobs to kill.
 - **Plot Creator Staff** A new staff that allows the player to create and configure a building they've created as a fully working plot for villagers. It walks you through it step by step.
 - **POI debug staff overhaul** Three modes (Q): edit existing POIs, place new prefab-saveable POI markers via a configuration GUI (need type, capacity, mount toggle, work equipment), and adventurer spawn markers. JSON building POIs still register on construction and merge with prefab markers (markers win at the same local cell). Guild hall adventurers spawn facing their marker and stand still at the spot.
 - **Townsfolk** Non-essential npcs that are chosen from a large pool of hand-designed characters. They each have three personality traits assigned to them that determine what dialogue lines they use. This will be used for tourists, guards, and more.
@@ -19,6 +23,13 @@
 - **Shop spot** Creative-only stall block for finished building plots. NPC shops roll stock at dawn from loot tables. Use (F) opens a buy panel with ±1/±10/max quantity; look-at HUD shows item, price, and stock. Stall facing rotates the floating item display.
 - **Plot Crafting Bench** Plot tokens are now crafted at the plot crafting bench which has a 3D preview of the building.
 - **Plot Blueprints** Some buildings are now unlocked by finding and using plot blueprints. Plot tokens found in balloon gifts have been replaced with these blueprints. You will need to delete floating_gift_loot.json if upgrading from an old save to find them.
+- **Reworked Vex's Shop** Vex's store now sells items in world through shop spots. He is more of a general store now that sells furniture, blocks, and some consumables.
+- **Builder Villager** A new villager and building. The builder helps build out buildings in your town faster.
+- **Florist Villager** A new villager and shop that sells plants and flowers.
+- **Pyrotechnic Villager** A new villager and shop that sells explosives. The new villager must be found out in the world before he will show up in the Inn.
+- **Crystal Keeper Villager** A new villager and shop that sells crystals and gems. The new villager must be found out in the world before he will show up in the Inn.
+- **Tourist Portal** A new tourist portal building allows for tourists to come visit your town. They show up some time in the morning, walk around your town, and leave at night. They will buy items from player shops. They can also be invited to live in your town if you build them a house.
+- **Player Shop** Vex will now give a quest for the player to build their own shop. Players can put items up for sale and villagers and tourists will occasionally go shopping and buy stuff at player shops.
 
 ### Changed
 

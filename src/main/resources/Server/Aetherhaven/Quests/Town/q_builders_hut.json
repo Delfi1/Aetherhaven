@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "id": "q_builders_hut",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_builders_hut",
+  "title": "Rowan's Builder's Hut",
+  "description": "Give Rowan a proper hut where he can plan builds and help the town grow.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Take the builder's hut plot token from Rowan."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the builder's hut prefab."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Find Rowan at the hut and close the quest in dialogue."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Builder",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+    ],
+    "onComplete": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ],
+    "onAbandon": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ]
+  },
+  "repeat": { "mode": "none" }
+}

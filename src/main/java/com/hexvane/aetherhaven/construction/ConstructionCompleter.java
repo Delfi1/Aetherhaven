@@ -216,6 +216,21 @@ public final class ConstructionCompleter {
                     )
                 );
             }
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_BUILDERS_HUT.equals(gid)) {
+                InnVisitorShopCompletion.onShopBuilt(
+                    world,
+                    plugin,
+                    town,
+                    plotId,
+                    tm,
+                    new ShopPromotionConfig(
+                        AetherhavenConstants.QUEST_BUILDERS_HUT,
+                        AetherhavenConstants.NPC_BUILDER,
+                        TownVillagerBinding.KIND_BUILDER,
+                        "Builder"
+                    )
+                );
+            }
             if (ProductionCatalog.isProductionWorkplaceConstruction(gid)) {
                 PlotProductionState pps = town.getOrCreatePlotProduction(plotId);
                 ProductionCatalog.Entry eff =

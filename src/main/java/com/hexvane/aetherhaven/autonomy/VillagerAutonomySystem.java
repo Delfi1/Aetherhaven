@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
+import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
 import com.hexvane.aetherhaven.poi.PoiEffectTable;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
@@ -148,6 +150,12 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
         if (skipsPoiAutonomy(binding, npc)) {
+            return;
+        }
+
+        BuilderConstructionAssistState assist =
+            archetypeChunk.getComponent(index, BuilderConstructionAssistState.getComponentType());
+        if (BuilderConstructionAssistSystem.shouldSkipAutonomy(assist)) {
             return;
         }
 
@@ -792,7 +800,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         return !supportsAutonomyPoiRoleState(npc);
     }
 
-    static boolean supportsAutonomyPoiRoleState(@Nonnull NPCEntity npc) {
+    public static boolean supportsAutonomyPoiRoleState(@Nonnull NPCEntity npc) {
         if (npc.getRole() == null) {
             return false;
         }

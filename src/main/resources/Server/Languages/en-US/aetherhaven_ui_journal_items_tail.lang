@@ -168,6 +168,7 @@ npcRoles.Aetherhaven_Guild_Master.name=Lyra Fairhollow
 npcRoles.Aetherhaven_Crystal_Keeper.name=Vaelith Prismshade
 npcRoles.Aetherhaven_Pyrotechnic.name=Grubble Sparkmatch
 npcRoles.Aetherhaven_Florist.name=Ivy Bloomwell
+npcRoles.Aetherhaven_Builder.name=Rowan Ridgecraft
 npcRoles.Aetherhaven_Guard.name=Town guard
 
 items.Aetherhaven_Quest_Board.name=Quest board
@@ -180,6 +181,8 @@ items.Aetherhaven_Production_Storage.name=Workplace stores
 items.Aetherhaven_Production_Storage.description=Holds what your workers bring in. Open to set outputs and take stacks. Part of the building and <color is="#ffa726">cannot be picked up</color>.
 items.Aetherhaven_Plot_Token_Miners_Hut.name=Miners hut plot token
 items.Aetherhaven_Plot_Token_Miners_Hut.description=Marks where the miners hut prefab can be built. Craft at the town planning desk.
+items.Aetherhaven_Plot_Token_Builders_Hut.name=Builder's hut plot token
+items.Aetherhaven_Plot_Token_Builders_Hut.description=Marks where the builder's hut prefab can be built. Craft at the town planning desk.
 items.Aetherhaven_Plot_Token_Lumbermill.name=Lumbermill plot token
 items.Aetherhaven_Plot_Token_Lumbermill.description=Marks where the lumbermill prefab can be built. Craft at the town planning desk.
 items.Aetherhaven_Plot_Token_Barn.name=Barn plot token

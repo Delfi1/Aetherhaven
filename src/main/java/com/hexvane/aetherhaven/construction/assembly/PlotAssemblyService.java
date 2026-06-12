@@ -395,12 +395,18 @@ public final class PlotAssemblyService {
         return start;
     }
 
-    public static void tickPassive(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull Store<EntityStore> entityStore) {
+    public static void tickPassive(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
         if (!plugin.getConfig().get().isPassivePlotAssemblyEnabled()) {
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         Instant simNow = entityStore.getResource(TimeResource.getResourceType()).getNow();
+        long simNowMs = simNow.toEpochMilli();
         for (PlotAssemblyJob job : AssemblyWorldRegistry.jobs(world)) {
             if (AssemblyWorldRegistry.phase(world, job.plotId()) == PlotAssemblyPhase.CLEARING) {
                 TownRecord clearingTown = tm.findTownOwningPlot(job.plotId());
@@ -416,6 +422,56 @@ public final class PlotAssemblyService {
                 PlotAssemblyClearingRuntime clearingRt = AssemblyWorldRegistry.clearingRuntime(world, job.plotId());
                 if (clearingRt != null) {
                     clearingRt.pruneStaleIfDue(world, job);
+                }
+                if (clearingRt != null && !clearingRt.isEmpty()) {
+                    int boost = AssemblyPassiveBoostRegistry.boostFor(world, job.plotId());
+                    long slot = Math.max(1L, job.slotWallMs() / boost);
+                    int maxBlocks = PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB * boost;
+                    Instant assemblyStart = resolvePassiveAssemblyStart(clearingPlot, simNow, tm, clearingTown);
+                    long nextDue = clearingPlot.getAssemblyNextPassiveDueSimMs();
+                    if (nextDue == 0L) {
+                        nextDue = assemblyStart.toEpochMilli() + slot;
+                        clearingPlot.setAssemblyNextPassiveDueSimMs(nextDue);
+                        tm.updateTown(clearingTown);
+                    }
+                    if (simNowMs >= nextDue) {
+                        ArrayList<Vector3i> obstructed = new ArrayList<>();
+                        clearingRt.appendAllObstructedCells(world, job, obstructed);
+                        LocalCachedChunkAccessor chunkAccessor =
+                            ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
+                        ArrayList<Vector3i> frontier =
+                            AssemblyClearingFrontier.frontierWorldCellsLive(world, job, obstructed, chunkAccessor);
+                        int burst = 0;
+                        while (burst < maxBlocks && !frontier.isEmpty()) {
+                            Vector3i cell = frontier.get(0);
+                            if (!isChunkLoadedForWorldCell(world, cell.x, cell.z)) {
+                                break;
+                            }
+                            if (!advanceClearingAtCell(
+                                world,
+                                plugin,
+                                commandBuffer,
+                                entityStore,
+                                clearingTown,
+                                clearingPlot,
+                                job,
+                                cell,
+                                null
+                            )) {
+                                break;
+                            }
+                            clearingPlot.setAssemblyNextPassiveDueSimMs(simNowMs + slot);
+                            tm.updateTown(clearingTown);
+                            burst++;
+                            obstructed.clear();
+                            clearingRt.appendAllObstructedCells(world, job, obstructed);
+                            if (obstructed.isEmpty()) {
+                                break;
+                            }
+                            frontier =
+                                AssemblyClearingFrontier.frontierWorldCellsLive(world, job, obstructed, chunkAccessor);
+                        }
+                    }
                 }
                 maybeBeginPlacingAfterClear(world, plugin, entityStore, clearingTown, clearingPlot, job);
                 continue;
@@ -437,8 +493,9 @@ public final class PlotAssemblyService {
                 continue;
             }
             Instant assemblyStart = resolvePassiveAssemblyStart(plot, simNow, tm, town);
-            long slot = job.slotWallMs();
-            long simNowMs = simNow.toEpochMilli();
+            int boost = AssemblyPassiveBoostRegistry.boostFor(world, job.plotId());
+            long slot = Math.max(1L, job.slotWallMs() / boost);
+            int maxBlocks = PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB * boost;
             long nextDue = plot.getAssemblyNextPassiveDueSimMs();
             if (nextDue == 0L) {
                 nextDue = assemblyStart.toEpochMilli() + slot;
@@ -449,7 +506,7 @@ public final class PlotAssemblyService {
                 continue;
             }
             int burst = 0;
-            while (burst < PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB && placedCount < pending.size()) {
+            while (burst < maxBlocks && placedCount < pending.size()) {
                 PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
                 int pick = rt.smallestPlacementIndex();
                 if (pick < 0) {
@@ -683,7 +740,11 @@ public final class PlotAssemblyService {
     private static boolean isChunkLoadedForBlock(@Nonnull World world, @Nonnull Vector3i origin, @Nonnull PendingBlock pb) {
         int bx = origin.x + pb.x();
         int bz = origin.z + pb.z();
-        return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(bx, bz)) != null;
+        return isChunkLoadedForWorldCell(world, bx, bz);
+    }
+
+    private static boolean isChunkLoadedForWorldCell(@Nonnull World world, int wx, int wz) {
+        return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(wx, wz)) != null;
     }
 
     /** Appends world-space integer cells for every frontier placement (for previews / ray tests). */
