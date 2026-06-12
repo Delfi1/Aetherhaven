@@ -18,7 +18,7 @@ public final class ShopSpotHudHints {
         @Nonnull UUID viewerUuid,
         boolean gameDay
     ) {
-        if (!gameDay) {
+        if (!gameDay && !record.isPlayerControlled()) {
             return null;
         }
         if (!record.isPlayerControlled()) {

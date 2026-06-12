@@ -18,8 +18,12 @@ import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionWorkplaceKinds;
+import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades;
+import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades.Branch;
+import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades.PurchaseResult;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.HouseResidentAssignment;
 import com.hexvane.aetherhaven.town.WorkplacePlotAssignment;
@@ -36,7 +40,9 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.protocol.GameMode;
+import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
+import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
@@ -46,7 +52,6 @@ import com.hypixel.hytale.component.query.Query;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -65,6 +70,7 @@ import com.hypixel.hytale.server.core.ui.LocalizableString;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
+import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -107,6 +113,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
      * whole tree and breaks selectors (wrong title, orphan "Materials" label, empty tabs).
      */
     private boolean templateAppended;
+    private boolean productionUpgradeTreeAppended;
     /** House management: hide villagers who already have a home assigned on another completed house plot. */
     private boolean hideHouseResidentElsewhereHoused;
     /** House resident picker modal open. */
@@ -161,6 +168,10 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             templateAppended = true;
             AetherhavenUiLocalization.applyPlotConstructionPage(commandBuilder);
         }
+        if (!productionUpgradeTreeAppended) {
+            commandBuilder.append("#ProductionUpgradeTreeSlot", "Aetherhaven/ProductionUpgradeSkillTree.ui");
+            productionUpgradeTreeAppended = true;
+        }
         if (managementUi && pendingMoveBuildingModal) {
             moveBuildingConfirmOpen = true;
             pendingMoveBuildingModal = false;
@@ -199,6 +210,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set("#TreasuryRow.Visible", false);
             commandBuilder.set("#HouseResidentRow.Visible", false);
             commandBuilder.set("#WorkplaceAssignRow.Visible", false);
+            commandBuilder.set("#ProductionUpgradeTreeSlot.Visible", false);
             commandBuilder.set("#MaterialsHeader.Visible", false);
             commandBuilder.set("#MaterialsProgress.Visible", false);
             commandBuilder.set("#MaterialsScroll.Visible", false);
@@ -321,9 +333,15 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
         boolean showWorkplaceAssign =
             managementUi && completed && ProductionWorkplaceKinds.supportsWorkerAssignment(gameplayWorkplaceId);
+        boolean showProductionUpgrades =
+            managementUi
+                && completed
+                && plotTabActive
+                && ProductionCatalog.isProductionWorkplaceConstruction(gameplayWorkplaceId);
 
         commandBuilder.set("#HouseResidentRow.Visible", showHouseResident);
         commandBuilder.set("#WorkplaceAssignRow.Visible", showWorkplaceAssign);
+        commandBuilder.set("#ProductionUpgradeTreeSlot.Visible", showProductionUpgrades);
 
         Store<ChunkStore> csMb = blockRef.getStore();
         ManagementBlock mbHouse = csMb.getComponent(blockRef, ManagementBlock.getComponentType());
@@ -374,6 +392,20 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 new EventData().append("Action", "AssignWorkplace").append("@WorkplaceAssignUuid", "#WorkplaceAssignDropdown #Input.Value"),
                 false
             );
+        }
+
+        if (showProductionUpgrades && plotUuidMgmt != null && townUuidMgmt != null && plugWork != null) {
+            World worldPu = store.getExternalData().getWorld();
+            TownManager tmpu = AetherhavenWorldRegistries.getOrCreateTownManager(worldPu, plugWork);
+            TownRecord townPu = tmpu.getTown(townUuidMgmt);
+            CombinedItemContainer invPu =
+                player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
+            if (townPu != null && invPu != null && ucComp != null) {
+                PlotProductionState prodState = townPu.getOrCreatePlotProduction(plotUuidMgmt);
+                prodState.migrateIfNeeded();
+                boolean allowTreasury = townPu.playerCanSpendTreasuryGold(ucComp.getUuid());
+                ProductionUpgradeTreeUi.bind(commandBuilder, eventBuilder, prodState, townPu, invPu, allowTreasury);
+            }
         }
 
         if (showHouseResident && plotTabActive) {
@@ -1004,6 +1036,10 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
             sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("PurchaseProductionUpgrade")) {
+            handlePurchaseProductionUpgrade(ref, store, data.upgradeBranch);
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("AssignWorkplace")) {
@@ -1756,6 +1792,89 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
     }
 
+    private void handlePurchaseProductionUpgrade(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable String branchRaw
+    ) {
+        if (!managementUi) {
+            return;
+        }
+        Branch branch = ProductionUpgradeTreeUi.parseBranch(branchRaw);
+        if (branch == null) {
+            return;
+        }
+        PlotInstanceState st = resolvePlotState(store, ref);
+        if (st != PlotInstanceState.COMPLETE) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        Player player = store.getComponent(ref, Player.getComponentType());
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (plugin == null || player == null || pr == null || uc == null) {
+            return;
+        }
+        Store<ChunkStore> cs = blockRef.getStore();
+        ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
+        if (mb == null || mb.getPlotId().isBlank() || mb.getTownId().isBlank()) {
+            return;
+        }
+        UUID plotId;
+        UUID townId;
+        try {
+            plotId = UUID.fromString(mb.getPlotId().trim());
+            townId = UUID.fromString(mb.getTownId().trim());
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(townId);
+        if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
+            return;
+        }
+        PlotInstance plot = town.findPlotById(plotId);
+        String gid = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot != null ? plot.getConstructionId() : "");
+        if (plot == null || plot.getState() != PlotInstanceState.COMPLETE || !ProductionCatalog.isProductionWorkplaceConstruction(gid)) {
+            return;
+        }
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
+        if (inv == null) {
+            return;
+        }
+        PlotProductionState state = town.getOrCreatePlotProduction(plotId);
+        state.migrateIfNeeded();
+        boolean allowTreasury = town.playerCanSpendTreasuryGold(uc.getUuid());
+        PurchaseResult result = WorkplaceProductionUpgrades.tryPurchase(state, branch, town, inv, allowTreasury);
+        if (result == PurchaseResult.OK) {
+            tm.updateTown(town);
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.productionUpgrades.notify.purchased"),
+                NotificationStyle.Success
+            );
+        } else {
+            String notifyKey =
+                switch (result) {
+                    case NEED_INGOT -> "aetherhaven.ui.productionUpgrades.notify.needIngot";
+                    case NEED_GOLD -> "aetherhaven.ui.productionUpgrades.notify.needGold";
+                    case PREREQUISITES -> "aetherhaven.ui.productionUpgrades.notify.locked";
+                    case MAXED -> "aetherhaven.ui.productionUpgrades.notify.maxed";
+                    default -> "aetherhaven.ui.productionUpgrades.notify.failed";
+                };
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation("aetherhaven_ui_town." + notifyKey),
+                NotificationStyle.Warning
+            );
+        }
+        UICommandBuilder cmd = new UICommandBuilder();
+        UIEventBuilder ev = new UIEventBuilder();
+        build(ref, cmd, ev, store);
+        sendUpdate(cmd, ev, false);
+    }
+
     private record WorkplaceAssignRow(@Nonnull String label, @Nonnull UUID entityUuid) {}
 
     @Nonnull
@@ -1863,6 +1982,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             .add()
             .append(new KeyedCodec<>("MaterialIndex", Codec.INTEGER), (d, v) -> d.materialIndex = v, d -> d.materialIndex)
             .add()
+            .append(new KeyedCodec<>("UpgradeBranch", Codec.STRING), (d, v) -> d.upgradeBranch = v, d -> d.upgradeBranch)
+            .add()
             .build();
 
         private String action;
@@ -1877,5 +1998,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         private String workplaceAssignUuid;
         @Nullable
         private Integer materialIndex;
+        @Nullable
+        private String upgradeBranch;
     }
 }

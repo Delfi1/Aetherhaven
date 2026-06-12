@@ -53,6 +53,11 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private boolean openSoundPlayed;
     /** {@code append(ui)} must run only once per page instance; repeating it on every {@link #sendUpdate} duplicates the whole tree. */
     private boolean templateAppended;
+    /** When true, {@link #refresh} will call {@link #sendUpdate} and must own prefab preview scheduling. */
+    private boolean deferPreviewToSendUpdate;
+    private int prefabPreviewSendSerial;
+    @Nullable
+    private String pendingPreviewPrefabKey;
     @Nullable
     private String selectedGroupKey;
     private int variantIndex;
@@ -132,7 +137,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             commandBuilder.set("#VariantNext.Disabled", variantCount <= 1);
             commandBuilder.set("#PreviewLockOverlay.Visible", variantLocked);
             commandBuilder.set("#PreviewLockIconWrap.Visible", variantLocked);
-            PlotCraftingPrefabPreview.send(playerRef, variant.prefabPathKey());
+            pendingPreviewPrefabKey = variant.prefabPathKey();
         } else {
             commandBuilder.set("#VariantName.TextSpans", Message.raw(""));
             commandBuilder.set("#VariantIndex.TextSpans", Message.raw(""));
@@ -140,7 +145,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             commandBuilder.set("#VariantNext.Disabled", true);
             commandBuilder.set("#PreviewLockOverlay.Visible", false);
             commandBuilder.set("#PreviewLockIconWrap.Visible", false);
-            PlotCraftingPrefabPreview.clear(playerRef);
+            pendingPreviewPrefabKey = null;
         }
 
         Player player = store.getComponent(ref, Player.getComponentType());
@@ -173,6 +178,45 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 && inv != null
                 && GoldCoinPayment.canAfford(town, inv, CRAFT_COST, allowTreasury);
         commandBuilder.set("#CraftButton.Disabled", !canCraft);
+
+        if (!deferPreviewToSendUpdate) {
+            schedulePrefabPreviewAfterUi(ref, store);
+        }
+    }
+
+    @Override
+    protected void sendUpdate(@Nullable UICommandBuilder commandBuilder, @Nullable UIEventBuilder eventBuilder, boolean clear) {
+        super.sendUpdate(commandBuilder, eventBuilder, clear);
+        Ref<EntityStore> ref = playerRef.getReference();
+        if (ref != null) {
+            schedulePrefabPreviewAfterUi(ref, ref.getStore());
+        }
+    }
+
+    /** Send prefab preview data only after the client has mounted {@code #PrefabPreview} (avoids a UI packet race). */
+    private void schedulePrefabPreviewAfterUi(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        final int serial = ++prefabPreviewSendSerial;
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                if (serial != prefabPreviewSendSerial) {
+                    return;
+                }
+                Player player = store.getComponent(ref, Player.getComponentType());
+                if (player == null || player.getPageManager().getCustomPage() != this) {
+                    return;
+                }
+                String prefabKey = pendingPreviewPrefabKey;
+                if (prefabKey == null || prefabKey.isBlank()) {
+                    PlotCraftingPrefabPreview.clear(playerRef);
+                } else {
+                    PlotCraftingPrefabPreview.send(playerRef, prefabKey);
+                }
+            }
+        );
     }
 
     @Override
@@ -382,8 +426,13 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         UICommandBuilder cmd = new UICommandBuilder();
         UIEventBuilder ev = new UIEventBuilder();
-        build(ref, cmd, ev, store);
-        sendUpdate(cmd, ev, false);
+        deferPreviewToSendUpdate = true;
+        try {
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+        } finally {
+            deferPreviewToSendUpdate = false;
+        }
     }
 
     public static final class PageData {

@@ -117,7 +117,7 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
         batched = entry.isBatched();
         maxBatches = Math.max(1, entry.batchCountFromItemStock(record.getStock()));
         buyBatches = Math.max(1, Math.min(maxBatches, buyBatches));
-        Message itemName = Message.translation("server.items." + itemId + ".name");
+        Message itemName = UiMaterialLabels.itemNameMessage(itemId);
         b.set("#ItemLine.TextSpans", Message.translation(MSG + ".item").param("item", itemName));
         long gold = ShopSpotPricing.goldPerBatch(plugin, record, itemId);
         long total = ShopSpotPricing.totalCost(gold, buyBatches);
@@ -285,12 +285,6 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
             return false;
         }
         PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
-        if (!ShopSpotOpenService.isGameDay(store)) {
-            if (pr != null) {
-                pr.sendMessage(Message.translation("aetherhaven_shop.aetherhaven.shop.closedNight"));
-            }
-            return false;
-        }
         if (!record.hasStock()) {
             if (pr != null) {
                 if (record.isPlayerControlled()) {
@@ -301,6 +295,15 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
                 } else {
                     pr.sendMessage(Message.translation("aetherhaven_shop.aetherhaven.shop.closed"));
                 }
+            }
+            return false;
+        }
+        if (!ShopSpotOpenService.isOpen(record, town, world, store)) {
+            if (pr != null) {
+                String key = ShopSpotOpenService.isGameDay(store)
+                    ? "aetherhaven_shop.aetherhaven.shop.closed"
+                    : "aetherhaven_shop.aetherhaven.shop.closedNight";
+                pr.sendMessage(Message.translation(key));
             }
             return false;
         }

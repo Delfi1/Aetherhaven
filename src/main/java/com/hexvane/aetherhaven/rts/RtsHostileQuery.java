@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.builtin.tagset.config.NPCGroup;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -23,6 +24,7 @@ import org.joml.Vector3i;
 
 public final class RtsHostileQuery {
     private static final String AGGRESSIVE_GROUP = "Aggressive";
+    private static final String TOWNSFOLK_GROUP = "Aetherhaven_Townsfolk";
 
     /** Radius around a ground click to pick a hostile under the RTS cursor. */
     private static final double FOCUS_PICK_RADIUS = 6.0;
@@ -34,8 +36,8 @@ public final class RtsHostileQuery {
     private RtsHostileQuery() {}
 
     /**
-     * Resolves the hostile for a command-sword click: direct entity hit first, then screen-space
-     * pick (tracks camera pan), then nearest hostile near the ground pick.
+     * Resolves the focus target for a command-sword click: direct entity hit first, then screen-space
+     * pick (tracks camera pan), then nearest attackable NPC near the ground pick.
      */
     @Nullable
     public static Ref<EntityStore> resolveFocusTarget(
@@ -46,11 +48,11 @@ public final class RtsHostileQuery {
         @Nullable Vector2fc screen,
         @Nullable Ref<EntityStore> directTarget
     ) {
-        if (directTarget != null && directTarget.isValid() && isAggressiveNpc(directTarget, store)) {
+        if (directTarget != null && directTarget.isValid() && isGuardAttackableTarget(directTarget, store)) {
             return directTarget;
         }
         if (screen != null) {
-            Ref<EntityStore> atScreen = pickHostileAtScreen(store, session, screen.x(), screen.y());
+            Ref<EntityStore> atScreen = pickAttackableAtScreen(store, session, screen.x(), screen.y());
             if (atScreen != null) {
                 return atScreen;
             }
@@ -65,15 +67,15 @@ public final class RtsHostileQuery {
         if (pick == null) {
             return null;
         }
-        Ref<EntityStore> atPick = nearestHostile(store, pick.x(), pick.y(), pick.z(), FOCUS_PICK_RADIUS);
+        Ref<EntityStore> atPick = nearestAttackableTarget(store, pick.x(), pick.y(), pick.z(), FOCUS_PICK_RADIUS);
         if (atPick != null) {
             return atPick;
         }
-        return nearestHostile(store, pick.x(), pick.y() + 2.0, pick.z(), FOCUS_PICK_RADIUS + 2.0);
+        return nearestAttackableTarget(store, pick.x(), pick.y() + 2.0, pick.z(), FOCUS_PICK_RADIUS + 2.0);
     }
 
     @Nullable
-    public static Ref<EntityStore> pickHostileAtScreen(
+    public static Ref<EntityStore> pickAttackableAtScreen(
         @Nonnull Store<EntityStore> store,
         @Nonnull RtsCommandPlayerComponent session,
         float rawScreenX,
@@ -84,12 +86,12 @@ public final class RtsHostileQuery {
         double cx = session.getFocusX();
         double cz = session.getFocusZ();
         double viewRadius = Math.max(64.0, session.getSavedViewRadiusBlocks() + RtsScreenPickUtil.viewHeightAboveGround(session) + 16.0);
-        List<Ref<EntityStore>> hostiles = new ArrayList<>();
-        collectHostilesInBox(store, cx - viewRadius, cx + viewRadius, cz - viewRadius, cz + viewRadius, hostiles);
+        List<Ref<EntityStore>> attackable = new ArrayList<>();
+        collectAttackableInBox(store, cx - viewRadius, cx + viewRadius, cz - viewRadius, cz + viewRadius, attackable);
 
         Ref<EntityStore> best = null;
         double bestDistSq = Double.MAX_VALUE;
-        for (Ref<EntityStore> ref : hostiles) {
+        for (Ref<EntityStore> ref : attackable) {
             if (!ref.isValid()) {
                 continue;
             }
@@ -111,6 +113,7 @@ public final class RtsHostileQuery {
         return best;
     }
 
+    /** True when the NPC role is in Hytale's Aggressive group (hostile creatures for auto-engage). */
     public static boolean isAggressiveNpc(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
         if (npc == null || npc.getRole() == null) {
@@ -118,6 +121,24 @@ public final class RtsHostileQuery {
         }
         int roleIndex = npc.getRole().getRoleIndex();
         return roleIndex >= 0 && npcInAggressiveGroup(roleIndex);
+    }
+
+    /**
+     * True for any NPC guards may focus-fire except town villagers, tourists, guards, and other town staff.
+     */
+    public static boolean isGuardAttackableTarget(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (!ref.isValid()) {
+            return false;
+        }
+        NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+        if (npc == null || npc.getRole() == null) {
+            return false;
+        }
+        if (store.getComponent(ref, TownVillagerBinding.getComponentType()) != null) {
+            return false;
+        }
+        int roleIndex = npc.getRole().getRoleIndex();
+        return roleIndex < 0 || !npcInTownsfolkGroup(roleIndex);
     }
 
     @Nullable
@@ -136,6 +157,41 @@ public final class RtsHostileQuery {
         double bestSq = Double.MAX_VALUE;
         for (Ref<EntityStore> ref : hits) {
             if (!ref.isValid() || !isAggressiveNpc(ref, store)) {
+                continue;
+            }
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tc == null) {
+                continue;
+            }
+            Vector3d p = tc.getPosition();
+            double dx = p.x - centerX;
+            double dy = p.y - centerY;
+            double dz = p.z - centerZ;
+            double sq = dx * dx + dy * dy + dz * dz;
+            if (sq <= radius * radius && sq < bestSq) {
+                bestSq = sq;
+                best = ref;
+            }
+        }
+        return best;
+    }
+
+    @Nullable
+    public static Ref<EntityStore> nearestAttackableTarget(
+        @Nonnull Store<EntityStore> store,
+        double centerX,
+        double centerY,
+        double centerZ,
+        double radius
+    ) {
+        SpatialResource<Ref<EntityStore>, EntityStore> spatial =
+            store.getResource(EntityModule.get().getEntitySpatialResourceType());
+        List<Ref<EntityStore>> hits = SpatialResource.getThreadLocalReferenceList();
+        spatial.getSpatialStructure().collect(new Vector3d(centerX, centerY, centerZ), radius, hits);
+        Ref<EntityStore> best = null;
+        double bestSq = Double.MAX_VALUE;
+        for (Ref<EntityStore> ref : hits) {
+            if (!ref.isValid() || !isGuardAttackableTarget(ref, store)) {
                 continue;
             }
             TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
@@ -199,6 +255,17 @@ public final class RtsHostileQuery {
         double maxZ,
         @Nonnull List<Ref<EntityStore>> out
     ) {
+        collectAttackableInBox(store, minX, maxX, minZ, maxZ, out);
+    }
+
+    public static void collectAttackableInBox(
+        @Nonnull Store<EntityStore> store,
+        double minX,
+        double maxX,
+        double minZ,
+        double maxZ,
+        @Nonnull List<Ref<EntityStore>> out
+    ) {
         double cx = (minX + maxX) * 0.5;
         double cz = (minZ + maxZ) * 0.5;
         double radius = Math.max(Math.abs(maxX - minX), Math.abs(maxZ - minZ)) * 0.5 + 2.0;
@@ -208,7 +275,7 @@ public final class RtsHostileQuery {
         spatial.getSpatialStructure().collect(new Vector3d(cx, 0, cz), radius + ParticleUtil.DEFAULT_PARTICLE_DISTANCE, hits);
         hits.sort(Comparator.comparingInt(Ref::getIndex));
         for (Ref<EntityStore> ref : hits) {
-            if (!ref.isValid() || !isAggressiveNpc(ref, store)) {
+            if (!ref.isValid() || !isGuardAttackableTarget(ref, store)) {
                 continue;
             }
             TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
@@ -223,8 +290,16 @@ public final class RtsHostileQuery {
     }
 
     private static boolean npcInAggressiveGroup(int roleIndex) {
+        return npcInGroup(AGGRESSIVE_GROUP, roleIndex);
+    }
+
+    private static boolean npcInTownsfolkGroup(int roleIndex) {
+        return npcInGroup(TOWNSFOLK_GROUP, roleIndex);
+    }
+
+    private static boolean npcInGroup(@Nonnull String groupName, int roleIndex) {
         try {
-            int g = NPCGroup.getAssetMap().getIndex(AGGRESSIVE_GROUP);
+            int g = NPCGroup.getAssetMap().getIndex(groupName);
             if (g == Integer.MIN_VALUE) {
                 return false;
             }

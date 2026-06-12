@@ -130,3 +130,24 @@ aetherhaven.reputation.reward.miner.100=You know the weight of stone and the wor
 aetherhaven.reputation.reward.rancher.50=You have earned my trust with the herds. Here is a growth serum recipe. Mix it at the alchemist's bench from life essence, bone fragments, and blood petals.
 aetherhaven.reputation.reward.rancher.100=You know how to work a herd and read the land. I will show you how to forge a hunting knife at the weapons bench. It helps you pull more meat, hide, and feathers from the animals you hunt.
 
+# === Production building upgrades (town records shelf) ===
+aetherhaven.ui.productionUpgrades.heading=Building upgrades
+aetherhaven.ui.productionUpgrades.iron.name=Extra line
+aetherhaven.ui.productionUpgrades.iron.desc=Add another output line to this building.
+aetherhaven.ui.productionUpgrades.thorium.name=Faster output
+aetherhaven.ui.productionUpgrades.thorium.desc=Each step makes materials 20% faster.
+aetherhaven.ui.productionUpgrades.cobalt.name=More lines
+aetherhaven.ui.productionUpgrades.cobalt.desc=Add another output line to this building.
+aetherhaven.ui.productionUpgrades.adamantite.name=Bigger stores
+aetherhaven.ui.productionUpgrades.adamantite.desc=Each step doubles how much each line can hold.
+aetherhaven.ui.productionUpgrades.tooltip.maxed=Fully upgraded.
+aetherhaven.ui.productionUpgrades.tooltip.locked=Unlock the earlier upgrades first.
+aetherhaven.ui.productionUpgrades.tooltip.ingotNeed=Bars held: {held} / {need}
+aetherhaven.ui.productionUpgrades.tooltip.goldNeed=Gold held: {held} / {need}
+aetherhaven.ui.productionUpgrades.notify.purchased=Upgrade applied.
+aetherhaven.ui.productionUpgrades.notify.needIngot=You need more metal bars for this upgrade.
+aetherhaven.ui.productionUpgrades.notify.needGold=You need more gold for this upgrade.
+aetherhaven.ui.productionUpgrades.notify.locked=Unlock the earlier upgrades first.
+aetherhaven.ui.productionUpgrades.notify.maxed=This upgrade is already fully bought.
+aetherhaven.ui.productionUpgrades.notify.failed=Could not apply that upgrade.
+

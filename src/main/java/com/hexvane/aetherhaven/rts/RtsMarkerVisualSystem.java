@@ -51,6 +51,7 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
     private final AetherhavenPlugin plugin;
     private final Map<UUID, Map<UUID, ActiveMarker>> markersByCommander = new HashMap<>();
     private final Map<UUID, Set<UUID>> lastSelectedByCommander = new HashMap<>();
+    private final Map<UUID, UUID> lastFocusTargetByCommander = new HashMap<>();
     private int tickCounter;
 
     public RtsMarkerVisualSystem(@Nonnull AetherhavenPlugin plugin) {
@@ -106,6 +107,7 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
         Set<UUID> visibleThisTick = new HashSet<>();
         Map<UUID, ActiveMarker> guardMarkers = markersByCommander.computeIfAbsent(commanderId, id -> new HashMap<>());
         UUID focusTargetId = resolveActiveFocusTarget(commanderId, store);
+        clearStaleFocusMarker(commanderId, focusTargetId, audience, store, guardMarkers);
 
         if (selectionChanged(commanderId, selected)) {
             invalidateAllMarkerTracks(guardMarkers);
@@ -188,7 +190,12 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
             return;
         }
         if (kindChanged) {
-            RtsModelMarkerUtil.clearAttachedMarker(entityRef, audience, store);
+            if (track.kind == MarkerKind.FOCUS) {
+                RtsModelMarkerUtil.clearMarkerNode(entityRef, "AetherhavenRtsMarker_focus", audience, store);
+            }
+            if (desired == MarkerKind.FOCUS || track.kind == MarkerKind.RED || desired == MarkerKind.RED) {
+                RtsModelMarkerUtil.clearMarkerNode(entityRef, "AetherhavenRtsMarker_red", audience, store);
+            }
         }
         if (RtsModelMarkerUtil.spawnAttachedMarker(entityRef, particle, nodeName, audience, store)) {
             track.kind = desired;
@@ -223,6 +230,7 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
     ) {
         Map<UUID, ActiveMarker> guardMarkers = markersByCommander.remove(commanderId);
         lastSelectedByCommander.remove(commanderId);
+        lastFocusTargetByCommander.remove(commanderId);
         RtsFocusTargetVisuals.clear(commanderId);
         if (guardMarkers == null || guardMarkers.isEmpty()) {
             return;
@@ -235,6 +243,32 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
         }
     }
 
+    private void clearStaleFocusMarker(
+        @Nonnull UUID commanderId,
+        @Nullable UUID focusTargetId,
+        @Nonnull List<Ref<EntityStore>> audience,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Map<UUID, ActiveMarker> guardMarkers
+    ) {
+        UUID previousFocus = lastFocusTargetByCommander.get(commanderId);
+        if (previousFocus != null && (focusTargetId == null || !previousFocus.equals(focusTargetId))) {
+            Ref<EntityStore> previousRef = store.getExternalData().getRefFromUUID(previousFocus);
+            if (previousRef != null && previousRef.isValid()) {
+                RtsModelMarkerUtil.clearMarkerNode(previousRef, "AetherhavenRtsMarker_focus", audience, store);
+                ActiveMarker track = guardMarkers.get(previousFocus);
+                if (track != null) {
+                    track.kind = MarkerKind.NONE;
+                    track.lastSpawnTick = 0;
+                }
+            }
+        }
+        if (focusTargetId != null) {
+            lastFocusTargetByCommander.put(commanderId, focusTargetId);
+        } else {
+            lastFocusTargetByCommander.remove(commanderId);
+        }
+    }
+
     @Nullable
     private static UUID resolveActiveFocusTarget(@Nonnull UUID commanderId, @Nonnull Store<EntityStore> store) {
         UUID focusTargetId = RtsFocusTargetVisuals.getActive(commanderId);
@@ -242,7 +276,7 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
             return null;
         }
         Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(focusTargetId);
-        if (ref == null || !ref.isValid() || !RtsHostileQuery.isAggressiveNpc(ref, store)) {
+        if (ref == null || !ref.isValid() || !RtsHostileQuery.isGuardAttackableTarget(ref, store)) {
             RtsFocusTargetVisuals.clear(commanderId);
             return null;
         }
@@ -266,7 +300,7 @@ public final class RtsMarkerVisualSystem extends EntityTickingSystem<EntityStore
             case GREY -> "AetherhavenRtsMarker_grey";
             case BLUE -> "AetherhavenRtsMarker_blue";
             case RED -> "AetherhavenRtsMarker_red";
-            case FOCUS -> "AetherhavenRtsMarker_red";
+            case FOCUS -> "AetherhavenRtsMarker_focus";
             case NONE -> null;
         };
     }

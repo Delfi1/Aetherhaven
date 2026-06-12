@@ -23,8 +23,14 @@ $C.@PageOverlay {
         Style: (...$C.@DefaultLabelStyle, Wrap: true);
       }
 
-      Group #Rows {
-        LayoutMode: Top;
+      Group #ListScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Height: 320);
+
+        Group #Rows {
+          LayoutMode: Top;
+        }
       }
 
       Label #Footer {

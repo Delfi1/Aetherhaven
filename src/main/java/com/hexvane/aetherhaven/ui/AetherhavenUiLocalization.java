@@ -210,21 +210,28 @@ public final class AetherhavenUiLocalization {
 
     public static void applyProductionStorage(@Nonnull UICommandBuilder b) {
         b.set("#ProductionTitleText.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.production.title"));
-        Message prevTip = t("aetherhaven_feasts_production.aetherhaven.ui.production.prevTooltip");
-        Message nextTip = t("aetherhaven_feasts_production.aetherhaven.ui.production.nextTooltip");
+        Message pickTip = t("aetherhaven_feasts_production.aetherhaven.ui.production.pickTooltip");
         Message take1 = t("aetherhaven_feasts_production.aetherhaven.ui.production.take1");
         Message take10 = t("aetherhaven_feasts_production.aetherhaven.ui.production.take10");
         Message take100 = t("aetherhaven_feasts_production.aetherhaven.ui.production.take100");
-        for (int i = 0; i < 3; i++) {
-            String p = "#Slot" + i;
-            b.set(p + "Prev.TooltipTextSpans", prevTip);
-            b.set(p + "Next.TooltipTextSpans", nextTip);
-            b.set(p + "Take1.TextSpans", take1);
-            b.set(p + "Take10.TextSpans", take10);
-            b.set(p + "Take100.TextSpans", take100);
+        for (int i = 0; i < 5; i++) {
+            String base = "#SlotsRow #Slot" + i + "Host[0]";
+            b.set(base + " #Pick.TooltipTextSpans", pickTip);
+            b.set(base + " #Take1.TextSpans", take1);
+            b.set(base + " #Take10.TextSpans", take10);
+            b.set(base + " #Take100.TextSpans", take100);
         }
         b.set("#OpenUnlocks.TooltipTextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.production.unlockTooltip"));
         b.set("#OpenUnlocks.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.production.unlockButton"));
+        b.set("#CollectAll.TooltipTextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.production.collectAllTooltip"));
+        b.set("#CollectAll.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.production.collectAllButton"));
+    }
+
+    public static void applyProductionMaterialPicker(@Nonnull UICommandBuilder b) {
+        b.set("#MaterialPickerTitleText.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.materialPicker.title"));
+        b.set("#MaterialPickerIntro.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.materialPicker.intro"));
+        b.set("#NavToProduction.TooltipTextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.materialPicker.backTooltip"));
+        b.set("#NavToProduction.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.materialPicker.back"));
     }
 
     public static void applyProductionStorageUnlocks(@Nonnull UICommandBuilder b) {

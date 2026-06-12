@@ -143,10 +143,12 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
 
         AetherhavenPluginConfig cfg = plugin.getConfig().get();
         double timeMul = cfg.getProductionTimeMultiplier();
+        double speedMul = WorkplaceProductionUpgrades.speedMultiplier(state);
+        int slotCount = WorkplaceProductionUpgrades.slotCount(state);
 
         boolean amountsChanged = false;
         boolean accumChanged = false;
-        for (int slot = 0; slot < 3; slot++) {
+        for (int slot = 0; slot < slotCount; slot++) {
             int cursor = state.getSlotCursor(slot);
             String selected = entry.itemAtCursor(cursor);
             if (selected == null || selected.isBlank()) {
@@ -156,7 +158,7 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
                 }
                 continue;
             }
-            int ticksNeeded = ProductionTimeScaling.effectiveTicks(entry.ticksAtCursor(cursor), timeMul);
+            int ticksNeeded = ProductionTimeScaling.effectiveTicks(entry.ticksAtCursor(cursor), timeMul / speedMul);
             int acc = state.getSlotTickAccum(slot) + 1;
             if (acc < ticksNeeded) {
                 state.setSlotTickAccum(slot, acc);
@@ -165,7 +167,8 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
             }
             state.setSlotTickAccum(slot, 0);
             accumChanged = true;
-            state.addAmount(selected, 1, entry.maxStorageForItem(selected));
+            long maxForItem = WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, selected);
+            state.addAmount(selected, 1, maxForItem);
             amountsChanged = true;
         }
         if (amountsChanged || accumChanged) {

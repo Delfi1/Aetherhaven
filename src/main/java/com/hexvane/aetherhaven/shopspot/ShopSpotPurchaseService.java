@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.ui.UiMaterialLabels;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -409,7 +410,7 @@ public final class ShopSpotPurchaseService {
                     pr.getPacketHandler(),
                     Message.translation(MSG + ".soldNotify")
                         .param("buyer", buyerName)
-                        .param("item", Message.translation("server.items." + itemId + ".name"))
+                        .param("item", UiMaterialLabels.itemNameMessage(itemId))
                         .param("count", String.valueOf(itemQty))
                         .param("gold", String.valueOf(gold)),
                     NotificationStyle.Success

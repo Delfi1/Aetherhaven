@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.plotcreator.icon;
 
+import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.protocol.Color;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockTypeTextures;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.CustomModelTexture;
@@ -29,7 +31,36 @@ public final class BlockColorResolver {
         if (EDITOR_EMPTY_INDEX != Integer.MIN_VALUE && blockId == EDITOR_EMPTY_INDEX) {
             return false;
         }
-        return true;
+        BlockType blockType = BlockType.getAssetMap().getAsset(blockId);
+        return blockType == null || !isIconSkippedBlock(blockType);
+    }
+
+    /**
+     * Soft/decorative blocks that rasterize as white cubes in the thumbnail pass. Leaves are kept — they have usable
+     * green metadata even though gathering marks them soft like rubble and tall grass.
+     */
+    private static boolean isIconSkippedBlock(@Nonnull BlockType blockType) {
+        if (isLeavesBlock(blockType)) {
+            return false;
+        }
+        String id = blockType.getId();
+        if (id != null && id.contains("Plant_Grass")) {
+            return true;
+        }
+        if (blockType.getMaterial() == BlockMaterial.Empty) {
+            return true;
+        }
+        BlockGathering gathering = blockType.getGathering();
+        return gathering != null && gathering.getSoft() != null;
+    }
+
+    private static boolean isLeavesBlock(@Nonnull BlockType blockType) {
+        String group = blockType.getGroup();
+        if (group != null && "Leaves".equalsIgnoreCase(group)) {
+            return true;
+        }
+        String id = blockType.getId();
+        return id != null && (id.contains("Plant_Leaves") || id.contains("_Leaves"));
     }
 
     @Nonnull

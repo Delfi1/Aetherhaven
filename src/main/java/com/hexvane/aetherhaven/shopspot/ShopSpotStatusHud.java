@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.shopspot;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.ui.UiMaterialLabels;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
@@ -57,7 +58,7 @@ public final class ShopSpotStatusHud extends CustomUIHud {
         b.set("#ClosedPanel.Visible", false);
         String itemId = record.getItemId();
         if (itemId != null) {
-            Message itemName = Message.translation("server.items." + itemId + ".name");
+            Message itemName = UiMaterialLabels.itemNameMessage(itemId);
             b.set("#ItemLine.TextSpans", Message.translation(MSG + ".item").param("item", itemName));
             ShopPriceEntry entry = ShopSpotPricing.catalogEntry(plugin, itemId);
             long gold = ShopSpotPricing.goldPerBatch(plugin, record, itemId);

@@ -212,6 +212,12 @@ $C.@PageOverlay {
             }
           }
 
+          Group #ProductionUpgradeTreeSlot {
+            LayoutMode: Top;
+            Visible: false;
+            Anchor: (Bottom: 12);
+          }
+
           Group #HouseResidentRow {
             LayoutMode: Top;
             Visible: false;

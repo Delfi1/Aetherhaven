@@ -93,7 +93,7 @@ public final class GuildHallAdventurerPoolService {
             if (hallDef == null) {
                 continue;
             }
-            if (!GuildHallStaffing.hasGuildMasterAssigned(store, town.getTownId(), hallPlot.getPlotId())) {
+            if (!GuildHallStaffing.hasGuildMasterAssigned(town, store, town.getTownId(), hallPlot.getPlotId())) {
                 clearAdventurersForHall(world, plugin, town, tm, store, hallPlot);
                 continue;
             }
@@ -129,7 +129,7 @@ public final class GuildHallAdventurerPoolService {
         if (hallPlot == null) {
             return new ForceRespawnResult(0, 0, 0, 0, 0);
         }
-        if (!GuildHallStaffing.hasGuildMasterAssigned(store, town.getTownId(), hallPlot.getPlotId())) {
+        if (!GuildHallStaffing.hasGuildMasterAssigned(town, store, town.getTownId(), hallPlot.getPlotId())) {
             int cleared = clearAdventurersForHall(world, plugin, town, tm, store, hallPlot);
             return new ForceRespawnResult(0, cleared, 0, 0, availableGuardEligibleCount(world, plugin));
         }
@@ -287,7 +287,7 @@ public final class GuildHallAdventurerPoolService {
                 if (!AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)) {
                     return;
                 }
-                if (!GuildHallStaffing.hasGuildMasterAssigned(store, town.getTownId(), guildHallPlotId)) {
+                if (!GuildHallStaffing.hasGuildMasterAssigned(town, store, town.getTownId(), guildHallPlotId)) {
                     return;
                 }
                 ConstructionDefinition hallDef = plugin.getConstructionCatalog().get(hallPlot.getConstructionId());
@@ -367,7 +367,7 @@ public final class GuildHallAdventurerPoolService {
             if (fallback == null) {
                 fallback = p;
             }
-            if (GuildHallStaffing.hasGuildMasterAssigned(store, town.getTownId(), p.getPlotId())) {
+            if (GuildHallStaffing.hasGuildMasterAssigned(town, store, town.getTownId(), p.getPlotId())) {
                 return p;
             }
         }

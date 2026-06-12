@@ -1,0 +1,25 @@
+{
+  "id": "plot_hytinys_redwood_cottage",
+  "displayName": "Hytiny's Redwood Cottage",
+  "description": "By HytinyBuilds After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.",
+  "prefabPath": "plot_hytinys_redwood_cottage.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 50,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 1100 },
+    { "resourceTypeId": "Rock", "count": 330 }
+  ],
+  "tags": [
+    "decoration"
+  ],
+  "plotTokenLockedByDefault": true,
+  "excludeFromTownJournal": true,
+  "decorationPlot": true
+}

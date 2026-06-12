@@ -84,7 +84,7 @@ public final class RtsOrderService {
         if (selected.isEmpty()) {
             return false;
         }
-        if (!RtsHostileQuery.isAggressiveNpc(targetRef, store)) {
+        if (!RtsHostileQuery.isGuardAttackableTarget(targetRef, store)) {
             return false;
         }
         UUID targetUuid = RtsHostileQuery.entityUuid(targetRef, store);
@@ -129,10 +129,13 @@ public final class RtsOrderService {
             double engageRange = RtsGuardCombatRanges.attackEngageRange(guardNpc);
             if (guardTc != null && withinHorizontalRange(guardTc.getPosition(), targetPos, engageRange * 1.25)) {
                 cmd.setPhase(RtsCommandPhase.ENGAGING);
+                RtsGuardCombatSupport.lockCombatTarget(guardNpc, targetRef, accessor);
+                guardNpc.getRole().getStateSupport().setState(guardRef, "Combat", null, accessor);
             } else {
                 cmd.setPhase(RtsCommandPhase.TRAVELING);
             }
             accessor.putComponent(guardRef, GuardRtsCommandState.getComponentType(), cmd);
+            accessor.putComponent(guardRef, NPCEntity.getComponentType(), guardNpc);
             issued++;
         }
         if (issued == 0) {

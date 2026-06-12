@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
+import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades;
 import com.hexvane.aetherhaven.production.WorkplaceUnlockCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -514,7 +515,7 @@ public final class TownRecord {
             if (centry == null) {
                 continue;
             }
-            if (s.clampAmountsToCatalogEntry(centry)) {
+            if (s.clampAmountsToCatalogEntry(centry, WorkplaceProductionUpgrades.capacityMultiplier(s))) {
                 changed = true;
             }
         }

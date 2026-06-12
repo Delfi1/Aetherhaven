@@ -31,33 +31,17 @@ public final class PrefabIsometricIconRenderer {
             return null;
         }
 
-        TileGrid grid = chooseTileGrid(cells);
-        if (grid == null) {
-            return null;
-        }
-
         int maxCanvas = Math.round(ICON_SIZE * CANVAS_FILL);
-        ScreenBounds bounds = measureBounds(cells, grid);
-        int contentWidth = inclusiveSpan(bounds.minX(), bounds.maxX());
-        int contentHeight = inclusiveSpan(bounds.minY(), bounds.maxY());
-
-        if (contentWidth <= maxCanvas && contentHeight <= maxCanvas) {
-            List<Voxel> voxels = buildSortedVoxels(cells, grid);
-            BufferedImage image = new BufferedImage(ICON_SIZE, ICON_SIZE, BufferedImage.TYPE_INT_ARGB);
-            int[] pixels = new int[ICON_SIZE * ICON_SIZE];
-            paintVoxels(pixels, ICON_SIZE, voxels, grid);
-            image.setRGB(0, 0, ICON_SIZE, ICON_SIZE, pixels, 0, ICON_SIZE);
-            return image;
-        }
-
-        // Use one world-unit per block on every axis so tall builds stay tall before downscaling.
-        TileGrid uniformGrid = buildUniformProjectionGrid(grid.tileHalfW(), 0, 0);
+        // Always project with uniform world-unit spacing, then downscale. The old direct-render path
+        // compressed vertical spacing (groundSlope=1 vs tileHalfW horizontal) and squished some prefabs.
+        int tileHalfW = 5;
+        TileGrid uniformGrid = buildUniformProjectionGrid(tileHalfW, 0, 0);
         ScreenBounds uniformBounds = measureBounds(cells, uniformGrid);
         int scratchPad = 1;
         int scratchWidth = inclusiveSpan(uniformBounds.minX(), uniformBounds.maxX()) + scratchPad * 2;
         int scratchHeight = inclusiveSpan(uniformBounds.minY(), uniformBounds.maxY()) + scratchPad * 2;
         TileGrid scratchGrid = buildUniformProjectionGrid(
-            grid.tileHalfW(),
+            tileHalfW,
             scratchPad - uniformBounds.minX(),
             scratchPad - uniformBounds.minY()
         );
@@ -209,40 +193,6 @@ public final class PrefabIsometricIconRenderer {
         }
     }
 
-    @Nullable
-    private static TileGrid chooseTileGrid(@Nonnull List<BlockCell> cells) {
-        int maxCanvas = Math.round(ICON_SIZE * CANVAS_FILL);
-        for (int tileHalfW = 5; tileHalfW >= 1; tileHalfW--) {
-            int tileHalfH = Math.max(1, tileHalfW / 2);
-            int groundSlope = 1;
-            int vertStep = tileHalfH >= 2 ? tileHalfH * 2 - 1 : tileHalfH * 2;
-            int sideDepth = vertStep;
-            int renderHalfW = tileHalfW + (tileHalfW >= 4 ? 1 : 0);
-            int renderHalfH = tileHalfH + (tileHalfH >= 2 ? 1 : 0);
-            int renderSideDepth = sideDepth + 1;
-            ScreenBounds bounds = measureBounds(
-                cells,
-                renderHalfW,
-                renderHalfH,
-                tileHalfW,
-                groundSlope,
-                vertStep,
-                renderSideDepth,
-                0,
-                0
-            );
-            int width = inclusiveSpan(bounds.minX, bounds.maxX);
-            int height = inclusiveSpan(bounds.minY, bounds.maxY);
-            if (width <= maxCanvas && height <= maxCanvas) {
-                int originX = (ICON_SIZE - width) / 2 - bounds.minX;
-                int originY = (ICON_SIZE - height) / 2 - bounds.minY;
-                return buildTileGrid(tileHalfW, originX, originY);
-            }
-        }
-        // Nothing fits at native resolution; render at the largest tile size and downscale.
-        return buildTileGrid(5, 0, 0);
-    }
-
     /** Maps x, y, and z with the same world-unit step so height is not compressed before scaling. */
     @Nonnull
     private static TileGrid buildUniformProjectionGrid(int tileHalfW, int originX, int originY) {
@@ -251,29 +201,6 @@ public final class PrefabIsometricIconRenderer {
         int groundSlope = Math.max(1, unit / 2);
         int vertStep = unit;
         int sideDepth = unit;
-        int renderHalfW = tileHalfW + (tileHalfW >= 4 ? 1 : 0);
-        int renderHalfH = tileHalfH + (tileHalfH >= 2 ? 1 : 0);
-        int renderSideDepth = sideDepth + 1;
-        return new TileGrid(
-            tileHalfW,
-            tileHalfH,
-            groundSlope,
-            vertStep,
-            sideDepth,
-            renderHalfW,
-            renderHalfH,
-            renderSideDepth,
-            originX,
-            originY
-        );
-    }
-
-    @Nonnull
-    private static TileGrid buildTileGrid(int tileHalfW, int originX, int originY) {
-        int tileHalfH = Math.max(1, tileHalfW / 2);
-        int groundSlope = 1;
-        int vertStep = tileHalfH >= 2 ? tileHalfH * 2 - 1 : tileHalfH * 2;
-        int sideDepth = vertStep;
         int renderHalfW = tileHalfW + (tileHalfW >= 4 ? 1 : 0);
         int renderHalfH = tileHalfH + (tileHalfH >= 2 ? 1 : 0);
         int renderSideDepth = sideDepth + 1;

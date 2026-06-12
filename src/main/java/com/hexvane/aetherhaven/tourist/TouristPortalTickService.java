@@ -477,8 +477,8 @@ public final class TouristPortalTickService {
                 }
                 Ref<EntityStore> leaveRef = store.getExternalData().getRefFromUUID(entityUuid);
                 if (leaveRef == null || !leaveRef.isValid()) {
+                    // finalizeTouristRecord -> finalizeTouristDeparture already removes the row.
                     finalizeTouristRecord(world, plugin, town, tm, rec, store);
-                    it.remove();
                     changed = true;
                     continue;
                 }

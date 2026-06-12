@@ -86,6 +86,7 @@ import com.hexvane.aetherhaven.rts.CommandPostBlock;
 import com.hexvane.aetherhaven.rts.CommandPostPlaceEventSystem;
 import com.hexvane.aetherhaven.rts.CommandPostUseInteraction;
 import com.hexvane.aetherhaven.rts.GuardRtsCommandState;
+import com.hexvane.aetherhaven.rts.GuardCombatCounterAttackSystem;
 import com.hexvane.aetherhaven.rts.GuardRtsCommandSystem;
 import com.hexvane.aetherhaven.rts.RtsCameraMousePollSystem;
 import com.hexvane.aetherhaven.rts.RtsMoveOrderVisualSystem;
@@ -851,6 +852,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PatrolWandPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new GuardPatrolSystem(this));
         this.getEntityStoreRegistry().registerSystem(new GuardRtsCommandSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new GuardCombatCounterAttackSystem());
         this.getEntityStoreRegistry().registerSystem(new RtsCommanderCameraSystem.Follow(this));
         this.getEntityStoreRegistry().registerSystem(new RtsExitMovementGuardSystem());
         this.getEntityStoreRegistry().registerSystem(new RtsCameraMousePollSystem());

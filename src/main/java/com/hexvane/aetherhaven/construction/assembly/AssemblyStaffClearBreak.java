@@ -13,12 +13,11 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingD
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.HarvestingDropType;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
-
-/** Staff-driven obstruction breaks with normal block loot (not silent {@link World#breakBlock}). */
 final class AssemblyStaffClearBreak {
     /** Same basis as {@link BlockHarvestUtils#naturallyRemoveBlockByPhysics}. */
     private static final int NATURAL_BREAK_SETTINGS = 32;
@@ -33,7 +32,13 @@ final class AssemblyStaffClearBreak {
         @Nonnull Vector3i cellWorld,
         @Nonnull ComponentAccessor<EntityStore> entityAccessor
     ) {
-        BlockType blockType = world.getBlockType(cellWorld.x, cellWorld.y, cellWorld.z);
+        // Must not use World.getBlockType: it can loadChunkIfInMemory while the entity store is ticking
+        // (PlotAssemblyTickSystem), causing "Store is currently processing!".
+        WorldChunk worldChunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(cellWorld.x, cellWorld.z));
+        if (worldChunk == null) {
+            return false;
+        }
+        BlockType blockType = worldChunk.getBlockType(cellWorld.x, cellWorld.y, cellWorld.z);
         if (blockType == null || blockType == BlockType.EMPTY) {
             return false;
         }

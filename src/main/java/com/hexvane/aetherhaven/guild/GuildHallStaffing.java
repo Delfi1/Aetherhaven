@@ -1,5 +1,8 @@
 package com.hexvane.aetherhaven.guild;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.town.ResidentNpcRecord;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -15,12 +18,40 @@ import javax.annotation.Nullable;
 public final class GuildHallStaffing {
     private GuildHallStaffing() {}
 
+    /**
+     * True when the guild master is assigned to this hall plot (management block), regardless of schedule or whether
+     * their entity is loaded. Uses persisted {@link ResidentNpcRecord#getJobPlotId()} so adventurers stay when Lyra is
+     * off duty; falls back to a loaded entity with matching {@link TownVillagerBinding#getJobPlotId()}.
+     */
     public static boolean hasGuildMasterAssigned(
+        @Nonnull TownRecord town,
         @Nonnull Store<EntityStore> store,
         @Nonnull UUID townId,
         @Nonnull UUID guildHallPlotId
     ) {
+        if (hasGuildMasterAssignedInRegistry(town, guildHallPlotId)) {
+            return true;
+        }
         return findGuildMasterEntityUuid(store, townId, guildHallPlotId) != null;
+    }
+
+    private static boolean hasGuildMasterAssignedInRegistry(
+        @Nonnull TownRecord town,
+        @Nonnull UUID guildHallPlotId
+    ) {
+        for (ResidentNpcRecord record : town.getResidentNpcRecords()) {
+            if (!AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equalsIgnoreCase(record.getNpcRoleId().trim())) {
+                continue;
+            }
+            if (!TownVillagerBinding.KIND_GUILD_MASTER.equals(record.getKind())) {
+                continue;
+            }
+            UUID jobPlotId = record.getJobPlotId();
+            if (jobPlotId != null && jobPlotId.equals(guildHallPlotId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable
@@ -42,11 +73,11 @@ public final class GuildHallStaffing {
                     if (b == null || !townId.equals(b.getTownId())) {
                         continue;
                     }
-                    if (!TownVillagerBinding.KIND_GUILD_MASTER.equals(b.getKind())) {
-                        continue;
-                    }
                     UUID jobPlot = b.getJobPlotId();
                     if (jobPlot == null || !jobPlot.equals(guildHallPlotId)) {
+                        continue;
+                    }
+                    if (!TownVillagerBinding.KIND_GUILD_MASTER.equals(b.getKind())) {
                         continue;
                     }
                     UUIDComponent uc = chunk.getComponent(i, UUIDComponent.getComponentType());

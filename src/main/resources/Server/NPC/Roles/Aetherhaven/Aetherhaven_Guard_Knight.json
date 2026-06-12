@@ -148,7 +148,12 @@
                     "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
                     "Collector": { "Type": "CombatTargets" }
                   },
-                  { "Type": "HasHostileTargetMemory" }
+                  { "Type": "HasHostileTargetMemory" },
+                  {
+                    "Type": "Target",
+                    "TargetSlot": "LockedTarget",
+                    "Range": { "Compute": "ViewRange" }
+                  }
                 ]
               },
               "Instructions": [

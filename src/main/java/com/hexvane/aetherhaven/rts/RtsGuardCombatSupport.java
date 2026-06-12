@@ -2,9 +2,11 @@ package com.hexvane.aetherhaven.rts;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.builtin.npccombatactionevaluator.memory.TargetMemory;
+import com.hypixel.hytale.server.core.asset.type.attitude.Attitude;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
@@ -50,6 +52,15 @@ public final class RtsGuardCombatSupport {
         }
         role.getMarkedEntitySupport().setMarkedEntity(LOCKED_TARGET_SLOT, targetRef);
         rememberHostile(npc.getReference(), targetRef, accessor);
+        Ref<EntityStore> guardRef = npc.getReference();
+        Store<EntityStore> store = guardRef != null ? guardRef.getStore() : null;
+        if (store != null && !RtsHostileQuery.isAggressiveNpc(targetRef, store)) {
+            try {
+                role.getWorldSupport().overrideAttitude(targetRef, Attitude.HOSTILE, 300.0);
+            } catch (NullPointerException ignored) {
+                // Role build did not allocate attitude override memory.
+            }
+        }
     }
 
     public static void clearCombatTarget(@Nonnull NPCEntity npc, @Nonnull ComponentAccessor<EntityStore> accessor) {
@@ -98,7 +109,7 @@ public final class RtsGuardCombatSupport {
         memory.setClosestHostile(null);
     }
 
-    /** Marks the hostile so it will fight the engaging guard, not only flee the commander. */
+    /** Marks a hostile creature so it will fight the engaging guard. Skips passive prey without a combat state. */
     public static void promptCounterAttack(
         @Nonnull Ref<EntityStore> guardRef,
         @Nonnull Ref<EntityStore> hostileRef,
@@ -106,6 +117,10 @@ public final class RtsGuardCombatSupport {
         @Nullable CommandBuffer<EntityStore> commandBuffer
     ) {
         if (guardRef.equals(hostileRef)) {
+            return;
+        }
+        Store<EntityStore> store = guardRef.getStore();
+        if (!RtsHostileQuery.isAggressiveNpc(hostileRef, store)) {
             return;
         }
         NPCEntity hostile = accessor.getComponent(hostileRef, NPCEntity.getComponentType());

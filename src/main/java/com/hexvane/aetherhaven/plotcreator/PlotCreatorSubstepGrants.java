@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.component.Ref;
@@ -102,11 +104,30 @@ public final class PlotCreatorSubstepGrants {
             return;
         }
         for (Map.Entry<String, Integer> entry : granted.entrySet()) {
-            int remaining = entry.getValue();
-            if (remaining <= 0) {
+            removeGrantedItemId(inv, entry.getKey(), entry.getValue());
+        }
+    }
+
+    /** Removes plot-creator grant items by id (partial ok when blocks were placed from the stack). */
+    private static void removeGrantedItemId(
+        @Nonnull ItemContainer inv,
+        @Nonnull String itemId,
+        int quantity
+    ) {
+        if (quantity <= 0) {
+            return;
+        }
+        int remaining = quantity;
+        for (short i = 0; i < inv.getCapacity() && remaining > 0; i++) {
+            ItemStack stack = inv.getItemStack(i);
+            if (ItemStack.isEmpty(stack) || !itemId.equals(stack.getItemId())) {
                 continue;
             }
-            inv.removeItemStack(new ItemStack(entry.getKey(), remaining));
+            int take = Math.min(remaining, stack.getQuantity());
+            ItemStackSlotTransaction tx = inv.removeItemStackFromSlot(i, take);
+            if (tx.succeeded()) {
+                remaining -= take;
+            }
         }
     }
 

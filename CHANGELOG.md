@@ -30,6 +30,7 @@
 - **Crystal Keeper Villager** A new villager and shop that sells crystals and gems. The new villager must be found out in the world before he will show up in the Inn.
 - **Tourist Portal** A new tourist portal building allows for tourists to come visit your town. They show up some time in the morning, walk around your town, and leave at night. They will buy items from player shops. They can also be invited to live in your town if you build them a house.
 - **Player Shop** Vex will now give a quest for the player to build their own shop. Players can put items up for sale and villagers and tourists will occasionally go shopping and buy stuff at player shops.
+- **Production Building Upgrades** Production buildings can now be upgraded in the town recoreds shelf.
 
 ### Changed
 
