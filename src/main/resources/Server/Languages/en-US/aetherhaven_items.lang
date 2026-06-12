@@ -219,6 +219,8 @@ items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the pl
 
 items.Aetherhaven_Plot_Token_Market_Stall.name=Market stall plot token
 items.Aetherhaven_Plot_Token_Market_Stall.description=Required to place the market stall footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Player_Shop.name=Player shop plot token
+items.Aetherhaven_Plot_Token_Player_Shop.description=Required to place the player shop footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_Farm.name=Farm plot token
 items.Aetherhaven_Plot_Token_Farm.description=Required to place the farm plot footprint from the plot placement staff.
@@ -260,10 +262,14 @@ items.Aetherhaven_Geode.description=A hollow stone that may hold crystals, gems,
 items.Aetherhaven_Geode_Anvil.name=Geode anvil
 items.Aetherhaven_Geode_Anvil.description=Opens geodes without a smith's fee. Place and use; <color is="#ffa726">you must know the schematic</color> to craft it at your town planning desk.
 
+items.Aetherhaven_Crystallized_Person.name=Crystallized Person
+
 barter.aetherhaven_vex.title=Vex's daily stock
 
 items.Aetherhaven_Treasury.name=Town treasury
 items.Aetherhaven_Treasury.description=Holds the town's gold coins. Use to deposit or withdraw (town owner).
+items.Aetherhaven_Shop_Safe.name=Shop safe
+items.Aetherhaven_Shop_Safe.description=Holds gold from your player shop sales. Use to collect your earnings.
 
 items.Aetherhaven_Quest_Journal.name=Town Journal
 items.Aetherhaven_Quest_Journal.description=Secondary use: open your town journal. You can check quests here.

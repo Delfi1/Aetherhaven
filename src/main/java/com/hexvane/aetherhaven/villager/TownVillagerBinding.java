@@ -50,6 +50,27 @@ public final class TownVillagerBinding implements Component<EntityStore> {
 
     public static final String KIND_VISITOR_GUILD_MASTER = "visitor_guild_master";
 
+    public static final String KIND_VISITOR_CRYSTAL_KEEPER = "visitor_crystal_keeper";
+
+    /** Permanent crystal keeper at the crystal shop (after build). */
+    public static final String KIND_CRYSTAL_KEEPER = "crystal_keeper";
+
+    /** One-shot rescue spawn from a broken Crystallized Person block. */
+    public static final String KIND_RESCUE_CRYSTAL_KEEPER = "rescue_crystal_keeper";
+
+    public static final String KIND_VISITOR_PYROTECHNIC = "visitor_pyrotechnic";
+
+    /** Permanent pyrotechnic at the bomb shop (after build). */
+    public static final String KIND_PYROTECHNIC = "pyrotechnic";
+
+    /** One-shot rescue spawn from a broken spider cocoon. */
+    public static final String KIND_RESCUE_PYROTECHNIC = "rescue_pyrotechnic";
+
+    public static final String KIND_VISITOR_FLORIST = "visitor_florist";
+
+    /** Permanent florist at the flower shop (after build). */
+    public static final String KIND_FLORIST = "florist";
+
     /** Shared pool townsfolk (tourist, guard, idle test, etc.). */
     public static final String KIND_TOWNSFOLK = "townsfolk";
 
@@ -62,6 +83,16 @@ public final class TownVillagerBinding implements Component<EntityStore> {
     /** True for inn pool visitors only; permanent residents use {@link #KIND_MERCHANT}, {@link #KIND_ELDER}, etc. */
     public static boolean isVisitorKind(@Nonnull String kind) {
         return kind.startsWith("visitor_");
+    }
+
+    /** True for one-shot field rescue NPCs (before inn pool). */
+    public static boolean isRescueKind(@Nonnull String kind) {
+        return kind.startsWith("rescue_");
+    }
+
+    /** Visitors and one-shot rescue spawns skip weekly schedules and POI autonomy. */
+    public static boolean isScheduleSuppressedKind(@Nonnull String kind) {
+        return isVisitorKind(kind) || isRescueKind(kind);
     }
 
     @Nonnull

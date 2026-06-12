@@ -23,7 +23,12 @@ public final class ShopLootFiles {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final String LOOT_DIR = "shop_loot";
     private static final String EMBEDDED_LOOT_PREFIX = "defaults/shop_loot/";
-    private static final String EMBEDDED_LOOT_ANCHOR = EMBEDDED_LOOT_PREFIX + "gifts.json";
+    /** Any bundled table under {@code defaults/shop_loot/}; used to locate the folder in dev and in the jar. */
+    private static final String[] EMBEDDED_LOOT_ANCHORS = {
+        EMBEDDED_LOOT_PREFIX + "crystal_keeper_shards.json",
+        EMBEDDED_LOOT_PREFIX + "florist_common.json",
+        EMBEDDED_LOOT_PREFIX + "merchant_food.json",
+    };
 
     private ShopLootFiles() {}
 
@@ -155,10 +160,12 @@ public final class ShopLootFiles {
     private static List<String> listEmbeddedDefaultTableIds() {
         Set<String> ids = new LinkedHashSet<>();
         ClassLoader classLoader = ShopLootFiles.class.getClassLoader();
-        URL anchor = classLoader.getResource(EMBEDDED_LOOT_ANCHOR);
+        URL anchor = findEmbeddedLootAnchor(classLoader);
         if (anchor == null) {
-            ids.add("gifts");
-            ids.add("merchant");
+            LOGGER.atWarning().log(
+                "No bundled shop loot tables found under %s; dropdown will only list files in the plugin data folder",
+                EMBEDDED_LOOT_PREFIX
+            );
             return new ArrayList<>(ids);
         }
         try {
@@ -169,10 +176,19 @@ public final class ShopLootFiles {
             }
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to list embedded shop loot tables");
-            ids.add("gifts");
-            ids.add("merchant");
         }
         return new ArrayList<>(ids);
+    }
+
+    @Nonnull
+    private static URL findEmbeddedLootAnchor(@Nonnull ClassLoader classLoader) {
+        for (String resource : EMBEDDED_LOOT_ANCHORS) {
+            URL url = classLoader.getResource(resource);
+            if (url != null) {
+                return url;
+            }
+        }
+        return null;
     }
 
     private static void scanEmbeddedJar(@Nonnull URL anchorJarEntry, @Nonnull Set<String> ids) throws IOException {

@@ -51,6 +51,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
     private Tab activeTab = Tab.CORE;
     private boolean openSoundPlayed;
+    /** {@code append(ui)} must run only once per page instance; repeating it on every {@link #sendUpdate} duplicates the whole tree. */
+    private boolean templateAppended;
     @Nullable
     private String selectedGroupKey;
     private int variantIndex;
@@ -63,7 +65,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     public void build(
         @Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder, @Nonnull Store<EntityStore> store
     ) {
-        commandBuilder.append("Aetherhaven/PlotCraftingPage.ui");
+        if (!templateAppended) {
+            commandBuilder.append("Aetherhaven/PlotCraftingPage.ui");
+            templateAppended = true;
+        }
         AetherhavenUiLocalization.applyPlotCraftingPage(commandBuilder);
 
         if (!openSoundPlayed) {
@@ -375,7 +380,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     }
 
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
-        rebuild();
+        UICommandBuilder cmd = new UICommandBuilder();
+        UIEventBuilder ev = new UIEventBuilder();
+        build(ref, cmd, ev, store);
+        sendUpdate(cmd, ev, false);
     }
 
     public static final class PageData {

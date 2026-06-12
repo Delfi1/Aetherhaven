@@ -129,6 +129,15 @@ public final class PlotCreatorSubstepHandler {
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.blockRecorded"));
                 yield true;
             }
+            case SHOP_SAFE_BLOCK -> {
+                if (!AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID.equals(blockId)) {
+                    playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
+                    yield true;
+                }
+                draft.setShopSafeLocalPos(local);
+                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.blockRecorded"));
+                yield true;
+            }
             case SHOP_SPOT -> {
                 if (!AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(blockId)) {
                     playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));

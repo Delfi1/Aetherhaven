@@ -132,6 +132,24 @@ public final class VillagerBlockUtil {
         return walkableColumn(world, bx, feetY, bz);
     }
 
+    /**
+     * Snaps a spawn/travel target to a validated feet column when the requested position is floating or inside blocks.
+     */
+    @Nonnull
+    public static Vector3d snapNpcFeetToStand(@Nonnull World world, @Nonnull Vector3d feet) {
+        int bx = (int) Math.floor(feet.x);
+        int bz = (int) Math.floor(feet.z);
+        int probeFeetY = (int) Math.floor(feet.y);
+        if (isNpcStandColumn(world, bx, probeFeetY, bz)) {
+            return new Vector3d(bx + 0.5, probeFeetY, bz + 0.5);
+        }
+        int standY = findStandY(world, bx, bz, Math.min(319, probeFeetY + 4));
+        if (standY != Integer.MIN_VALUE) {
+            return new Vector3d(bx + 0.5, standY, bz + 0.5);
+        }
+        return feet;
+    }
+
     private static boolean walkableColumn(@Nonnull World world, int bx, int by, int bz) {
         BlockType feet = blockTypeNoLoad(world, bx, by, bz);
         BlockType head = blockTypeNoLoad(world, bx, by + 1, bz);

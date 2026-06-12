@@ -1,0 +1,71 @@
+# Pyrotechnic dialogue (Grubble Sparkmatch)
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.body=Ha! You popped the sticky bag! Grubble was stuck in there forever. Your town got an inn? Good. Maybe Grubble visits when he wants hot food and a dry bench.
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.c0=Take care.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.fallback=Grubble got bombs. Good bombs. Mostly legal bombs.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.0=Big boom today? Small boom? Grubble got both.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.1=Do not sneeze near the powder shelf. Grubble learned that lesson.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.2=Your town smells like wood smoke. Grubble likes that.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.3=Need something that goes pop? You came to right goblin.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.0=Bring Grubble boom powder or a nice round bomb.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.1=Popberry bombs make Grubble very happy.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.0=Grubble does not want trash or bones as gifts.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.1=Void stuff gives Grubble the shivers. Keep it away.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house=Ask about a home
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house_done=Finish the home quest
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house_remind=Check on the house quest
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_done=Talk about the shop
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_complete=Finish the shop quest
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_building=Check on the shop build
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_offer=Ask about opening a shop
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_goodbye=Goodbye
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=Grubble cannot sell boom things from pockets forever. Need real shop. Safe walls. Maybe a sign. Grubble gives you blueprint if you build it for town.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=Accept the quest
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1=Not now
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=Take blueprint. Learn it at plot bench. Craft token. Build shop where folk can find it without getting lost.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=Understood
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=Shop not built yet? Grubble waits. Powder gets restless when Grubble waits.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c0=Abandon the quest
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c1=Still working on it
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.body=No shop today? Fine. Grubble keeps bombs in bag. Talk again if you change mind.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.c0=Goodbye
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.body=Shop is up! Shelves ready! Grubble can sell boom things like proper businessman goblin. Thank you friend.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.c0=Happy to help
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.body=Even boom goblin needs bed. Quiet bed. Far from powder shelf. You stake house for Grubble?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c0=Accept the quest
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c1=Not now
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.body=Take house token. Build plot. Put Grubble name on management block when ready.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.c0=Understood
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.body=Grubble still needs house assigned on management block. No bed yet. Very sad.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.c0=I will take care of it
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.body=Nice walls. Good roof. Grubble can sleep without spider dreams. This will do.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.c0=Welcome home
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.confirm=You give Grubble something?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.love=Yes! This is boom stuff! Grubble loves you for this.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.like=Good gift. Grubble nods approval.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.neutral=Hmm. Not boom enough. But thanks anyway.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.dislike=Grubble does not want that. Take it back in your head.

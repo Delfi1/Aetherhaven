@@ -209,6 +209,79 @@
           "next": "vex_quest_stall"
         },
         {
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c10",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_completed",
+                "questId": "q_merchant_stall"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_player_shop"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_player_shop"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "vex_quest_player_shop"
+        },
+        {
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c11",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_player_shop"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_player_shop"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_player_shop"
+            }
+          ],
+          "next": "vex_player_shop_done"
+        },
+        {
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c12",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_player_shop"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_player_shop"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "vex_player_shop_building"
+        },
+        {
           "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c9",
           "next": null
         }
@@ -280,6 +353,76 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0",
+          "next": null
+        }
+      ]
+    },
+    "vex_quest_player_shop": {
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_player_shop.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_player_shop.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_player_shop.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_player_shop"
+            }
+          ],
+          "next": "vex_player_shop_accepted"
+        },
+        {
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_player_shop.c1",
+          "next": null
+        }
+      ]
+    },
+    "vex_player_shop_accepted": {
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_accepted.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "vex_player_shop_building": {
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_building.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_building.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_building.c0",
+          "actions": [
+            {
+              "type": "abandon_quest",
+              "id": "q_player_shop"
+            }
+          ],
+          "next": "vex_player_shop_abandoned"
+        },
+        {
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_building.c1",
+          "next": null
+        }
+      ]
+    },
+    "vex_player_shop_abandoned": {
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_abandoned.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_abandoned.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_abandoned.c0",
+          "next": null
+        }
+      ]
+    },
+    "vex_player_shop_done": {
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_done.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_done.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_done.c0",
           "next": null
         }
       ]

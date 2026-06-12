@@ -37,6 +37,10 @@
       "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_market_stall"
     },
     {
+      "id": "plot_player_shop",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_player_shop"
+    },
+    {
       "id": "plot_miners_hut",
       "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_miners_hut"
     },

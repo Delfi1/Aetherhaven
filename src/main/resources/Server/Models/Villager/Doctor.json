@@ -75,5 +75,18 @@
       "Model": "Cosmetics/Face_Accessories/Glasses.blockymodel",
       "Texture": "Cosmetics/Face_Accessories/Glasses_Textures/Glasses_Brown.png"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Doctor.png",
+  "IconProperties": {
+    "Scale": 0.4,
+    "Rotation": [
+      0,
+      33,
+      0
+    ],
+    "Translation": [
+      0,
+      -107
+    ]
+  }
 }

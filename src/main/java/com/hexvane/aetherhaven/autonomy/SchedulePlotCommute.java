@@ -51,7 +51,7 @@ public final class SchedulePlotCommute {
         if (tc == null) {
             return false;
         }
-        if (TownVillagerBinding.isVisitorKind(binding.getKind())) {
+        if (TownVillagerBinding.isScheduleSuppressedKind(binding.getKind())) {
             return false;
         }
         if (VillagerAutonomySystem.skipsPoiAutonomy(binding, npc)) {

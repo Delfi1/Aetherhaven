@@ -23,6 +23,8 @@ import org.joml.Vector3i;
 
 public final class TouristDestinationResolver {
     private static final int PLOT_EDGE_PADDING = 2;
+    /** When inn/town hall exist, they are picked this often; other {@code touristDestination} plots share the rest. */
+    private static final int CIVIC_PLOT_VISIT_WEIGHT_PERCENT = 30;
 
     private TouristDestinationResolver() {}
 
@@ -47,17 +49,16 @@ public final class TouristDestinationResolver {
         if (pool.isEmpty()) {
             pool = candidates;
         }
-        List<TouristPlotVisit> preferred = new ArrayList<>();
-        List<TouristPlotVisit> other = new ArrayList<>();
+        List<TouristPlotVisit> civic = new ArrayList<>();
         for (TouristPlotVisit plot : pool) {
             if (isPreferredPlot(town, catalog, plot.plotId())) {
-                preferred.add(plot);
-            } else {
-                other.add(plot);
+                civic.add(plot);
             }
         }
-        List<TouristPlotVisit> pickFrom = !preferred.isEmpty() ? preferred : other;
-        return pickFrom.get(random.nextInt(pickFrom.size()));
+        if (!civic.isEmpty() && random.nextInt(100) < CIVIC_PLOT_VISIT_WEIGHT_PERCENT) {
+            return civic.get(random.nextInt(civic.size()));
+        }
+        return pool.get(random.nextInt(pool.size()));
     }
 
     @Nonnull
@@ -169,6 +170,20 @@ public final class TouristDestinationResolver {
         return isPreferredPlot(town, catalog, plotId);
     }
 
+    /** Shop plots: tourists browse shop spots only (no POI wandering inside the building). */
+    public static boolean isTouristShopPlot(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull UUID plotId
+    ) {
+        PlotInstance plot = findVisitPlot(town, plotId);
+        if (plot == null) {
+            return false;
+        }
+        ConstructionDefinition def = catalog.get(plot.getConstructionId());
+        return def != null && def.getBuildingTags().contains("shop");
+    }
+
     private static boolean isPreferredPlot(
         @Nonnull TownRecord town,
         @Nonnull ConstructionCatalog catalog,
@@ -251,6 +266,9 @@ public final class TouristDestinationResolver {
         }
         ConstructionDefinition def = catalog.get(plot.getConstructionId());
         if (def == null || !def.isTouristDestination()) {
+            return false;
+        }
+        if (isTouristShopPlot(town, catalog, plotId)) {
             return false;
         }
         if (poi.getTags().contains("SLEEP") && !poi.getTags().contains("EAT") && !poi.getTags().contains("FUN")) {

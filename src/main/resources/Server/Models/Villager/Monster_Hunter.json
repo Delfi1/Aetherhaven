@@ -77,5 +77,18 @@
       "Model": "Cosmetics/Gloves/MiningGloves.blockymodel",
       "Texture": "Cosmetics/Gloves/MiningGloves_Brown.png"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Monster_Hunter.png",
+  "IconProperties": {
+    "Scale": 0.4,
+    "Rotation": [
+      0,
+      33,
+      0
+    ],
+    "Translation": [
+      0,
+      -107
+    ]
+  }
 }

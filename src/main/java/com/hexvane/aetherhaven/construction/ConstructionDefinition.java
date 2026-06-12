@@ -148,6 +148,11 @@ public final class ConstructionDefinition {
     @Nullable
     private int[] treasuryLocalPos;
 
+    /** Prefab-local position of the player shop safe block; optional. */
+    @SerializedName("shopSafeLocalPos")
+    @Nullable
+    private int[] shopSafeLocalPos;
+
     /** Prefab-local POI anchors for autonomy; listed in each construction JSON under {@code Server/Aetherhaven/Buildings/}. */
     @SerializedName("pois")
     private List<BuildingPoisDefinition.PoiRow> pois = new ArrayList<>();
@@ -379,6 +384,12 @@ public final class ConstructionDefinition {
     @Nullable
     public int[] getTreasuryLocalPos() {
         return treasuryLocalPos != null && treasuryLocalPos.length == 3 ? treasuryLocalPos : null;
+    }
+
+    /** @return prefab-local x,y,z of player shop safe block, or null */
+    @Nullable
+    public int[] getShopSafeLocalPos() {
+        return shopSafeLocalPos != null && shopSafeLocalPos.length == 3 ? shopSafeLocalPos : null;
     }
 
     @Nonnull

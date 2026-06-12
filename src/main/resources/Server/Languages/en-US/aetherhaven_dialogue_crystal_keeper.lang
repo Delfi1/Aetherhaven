@@ -1,0 +1,71 @@
+# Crystal Keeper dialogue (Vaelith Prismshade)
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.body=The crystal finally splinters. Thank you. I have been held inside that stone since before your town had a name. An inn, you say? Perhaps I will wander there when the paths are clear.
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.c0=Take care.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.fallback=The light in these stones remembers more than most folk care to hear.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.0=Each crystal hums with a memory older than your charter stone.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.1=I have catalogued prisms since the first caverns learned to glow.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.2=Your town carries a quiet resonance. I find it... pleasant.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.3=Do not tap the large blue one. It dreams.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.0=Bring me a gem that still remembers the deep places.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.1=Colored crystal shards would make my old heart brighten.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.0=I will not trade pleasantries over bones or refuse.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.1=Void taint and filth offend the lattice of light.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house=Ask about a home
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house_done=Finish the home quest
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house_remind=Check on the house quest
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_done=Talk about the shop
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_complete=Finish the shop quest
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_building=Check on the shop build
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_offer=Ask about opening a shop
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_goodbye=Goodbye
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.body=My collection cannot stay in satchels forever. I need a sanctum where others may admire what the earth has grown. I can share a blueprint for a crystal shop if you will raise it for the town.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c0=Accept the quest
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c1=Not now
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.body=Take this blueprint. Learn it at your plot crafting bench, then craft a token and build the shop where the town can reach it.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.c0=Understood
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.body=The stones wait. So do I. Have you learned the blueprint and begun the build?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c0=Abandon the quest
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c1=Still working on it
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.body=Perhaps the lattice was not ready. If you change your mind, speak to me again.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.c0=Goodbye
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.body=The shop glows properly now. My crystals may finally be seen. Thank you for giving them a home in your town.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.c0=Happy to help
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.body=Even keepers of light need a quiet corner to rest. Would you stake a house for me near the town?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c0=Accept the quest
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c1=Not now
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.body=Take the house token and build a plot. Assign me on the management block when it is ready.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.c0=Understood
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.body=I still need a house assigned to me on the management block.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.c0=I will take care of it
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.body=The walls hum softly. This will do nicely. I can watch the town's light from here.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.c0=Welcome home
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.confirm=Would you like to give me something?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.love=This stone sings. You understand what matters.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.like=A thoughtful gift. The lattice approves.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.neutral=Hmm. Not quite my taste, but thank you.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.dislike=That carries no light I care to keep.

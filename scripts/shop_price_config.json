@@ -158,13 +158,29 @@
   },
 
   "gems": {
-    "Topaz": 48,
-    "Zephyr": 52,
-    "Emerald": 68,
-    "Sapphire": 72,
-    "Ruby": 88,
-    "Voidstone": 98,
-    "Diamond": 125
+    "_comment": "Emerald cheapest; Topaz/Ruby/Sapphire mid; Zephyr/Diamond high; Voidstone top.",
+    "Emerald": 45,
+    "Topaz": 62,
+    "Ruby": 62,
+    "Sapphire": 62,
+    "Zephyr": 88,
+    "Diamond": 88,
+    "Voidstone": 115
+  },
+
+  "crystalPricing": {
+    "_comment": "Color-agnostic: baseGold × typeMultiplier. Shards sold in batches of 5; all other crystal sizes in batches of 1.",
+    "baseGold": 15,
+    "shardBatchSize": 5,
+    "sizeBatchSize": 1,
+    "blockBatchSize": 1,
+    "typeMultipliers": {
+      "Shard": 1.0,
+      "Small": 1.5,
+      "Medium": 2,
+      "Large": 3.0,
+      "Block": 3.0
+    }
   },
 
   "jewelryMetalPremium": {

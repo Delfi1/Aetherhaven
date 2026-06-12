@@ -6,7 +6,11 @@ import com.hexvane.aetherhaven.poi.PoiEffectTable;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiOccupancy;
+import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
+import com.hexvane.aetherhaven.shopspot.NpcShopSpotBuyerService;
+import com.hexvane.aetherhaven.shopspot.ShopSpotPurchaseService;
+import com.hexvane.aetherhaven.villager.AetherhavenRoleLabels;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -15,6 +19,7 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import java.util.ArrayList;
 import com.hypixel.hytale.builtin.mounts.MountedComponent;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -170,7 +175,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         List<PoiEntry> poisForScoring = filterPoisForAutonomyScoring(townRecord, pois);
 
         switch (autonomy.getPhase()) {
-            case VillagerAutonomyState.PHASE_USE -> tickUse(ref, store, commandBuffer, npc, reg, needs, autonomy, now, townRecord);
+            case VillagerAutonomyState.PHASE_USE ->
+                tickUse(ref, store, commandBuffer, npc, reg, needs, autonomy, now, townRecord, binding, world);
             case VillagerAutonomyState.PHASE_TRAVEL -> tickTravel(ref, store, commandBuffer, npc, reg, autonomy, now);
             default ->
                 tickIdle(
@@ -280,7 +286,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull AetherhavenPlugin plugin,
         @Nullable TransformComponent tc
     ) {
-        if (townRecord == null || TownVillagerBinding.isVisitorKind(binding.getKind())) {
+        if (townRecord == null || TownVillagerBinding.isScheduleSuppressedKind(binding.getKind())) {
             return false;
         }
         if (autonomy.getPhase() != VillagerAutonomyState.PHASE_IDLE) {
@@ -607,7 +613,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull VillagerNeeds needs,
         @Nonnull VillagerAutonomyState autonomy,
         long now,
-        @Nullable TownRecord townRecord
+        @Nullable TownRecord townRecord,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull World world
     ) {
         if (now < autonomy.getPhaseEndEpochMs()) {
             applyAutonomyRoleState(ref, npc, commandBuffer);
@@ -624,6 +632,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 && townRecord.getFeastGatherDeadlineEpochMs() > 0L) {
                 autonomy.setLastFeastGatherDeadlineAttended(townRecord.getFeastGatherDeadlineEpochMs());
             }
+            tryPlayerShopPurchase(ref, store, commandBuffer, npc, poi, townRecord, binding, world);
         }
         autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
         autonomy.setTargetPoiUuid(null);
@@ -633,6 +642,47 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         autonomy.setNextDecisionEpochMs(now + 2500L);
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         clearAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    private static void tryPlayerShopPurchase(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull PoiEntry poi,
+        @Nullable TownRecord townRecord,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull World world
+    ) {
+        if (townRecord == null || poi.getPlotId() == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null || !ShopSpotPurchaseService.isPlayerShopPlot(plugin, townRecord, poi.getPlotId())) {
+            return;
+        }
+        VillagerScheduleTickState sched = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
+        if (sched == null
+            || !VillagerScheduleResolver.LOC_SHOP.equals(sched.getLastAppliedScheduleSegment())
+            || sched.isShopSegmentPurchaseDone()
+            || !poi.getTags().contains("SHOP")) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return;
+        }
+        String roleId = npc.getRoleName();
+        String buyerName = roleId != null ? AetherhavenRoleLabels.displayNameForRoleId(roleId.trim()) : "A villager";
+        NpcShopSpotBuyerService.scheduleBuyOneListing(
+            world,
+            binding.getTownId(),
+            poi.getPlotId(),
+            buyerName,
+            uc.getUuid()
+        );
+        sched.setShopSegmentPurchaseDone(true);
+        commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), sched);
     }
 
     private static void applyAutonomyDebugOverlay(

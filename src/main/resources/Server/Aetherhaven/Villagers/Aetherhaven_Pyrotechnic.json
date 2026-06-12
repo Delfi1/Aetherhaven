@@ -1,0 +1,52 @@
+{
+  "npcRoleId": "Aetherhaven_Pyrotechnic",
+  "dialogueVillagerKind": "pyrotechnic",
+  "residentTreeId": "aetherhaven_pyrotechnic",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_bomb_shop",
+  "displayName": "Grubble Sparkmatch",
+  "portraitIcon": "Aetherhaven_Pyrotechnic.png",
+  "uiSortOrder": 14,
+  "innPoolEligible": true,
+  "innPoolOrder": 9,
+  "visitorBindingKind": "visitor_pyrotechnic",
+  "innPoolRequires": {
+    "completedQuestIds": ["q_pyrotechnic_rescue"]
+  },
+  "reputationMilestones": [],
+  "giftLoves": [
+    "Weapon_Bomb",
+    "Weapon_Bomb_Popberry",
+    "Weapon_Bomb_Potion_Poison",
+    "Weapon_Bomb_Stun",
+    "Ingredient_Powder_Boom"
+  ],
+  "giftLikes": [
+    "Weapon_Bomb_Fire",
+    "Ingredient_Charcoal",
+    "Rock_Coal",
+    "Tool_Hammer_Iron"
+  ],
+  "giftDislikes": [
+    "Deco_Bone_Pile",
+    "Deco_Bone_Skulls",
+    "Deco_Trash",
+    "Deco_Trash_Pile_Large",
+    "Deco_Trash_Pile_Small",
+    "Ingredient_Poop",
+    "Ingredient_Void_Essence",
+    "Ingredient_Voidheart"
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.0",
+    "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.1",
+    "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.2",
+    "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.3"
+  ],
+  "dialogueGiftHintLangKeys": [
+    "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.0",
+    "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.1",
+    "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.0",
+    "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.1"
+  ]
+}

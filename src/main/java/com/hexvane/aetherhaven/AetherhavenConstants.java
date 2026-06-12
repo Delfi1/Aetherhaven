@@ -77,6 +77,20 @@ public final class AetherhavenConstants {
 
     /** Vanilla undead despawn sound — generic “poof” close to common enemy death feedback. */
     public static final String PURIFICATION_DESPAWN_SOUND_EVENT_ID = "SFX_Zombie_Despawn";
+
+    /** One-shot smoke puff when the Crystal Keeper rescue NPC vanishes after dialogue. */
+    public static final String CRYSTAL_KEEPER_RESCUE_VANISH_PARTICLE_SYSTEM_ID = "Aetherhaven_Crystal_Keeper_Vanish";
+
+    /** Uses vanilla {@code Entity_Effect_Burn_02.ogg} for the rescue vanish poof. */
+    public static final String CRYSTAL_KEEPER_RESCUE_VANISH_SOUND_EVENT_ID = "Aetherhaven_Crystal_Keeper_Vanish";
+
+    /** Vanilla spider cocoon decor; breaking it may spawn the Pyrotechnic rescue NPC. */
+    public static final String DECO_SPIDER_COCOON_BLOCK_TYPE_ID = "Deco_Spider_Cocoon";
+
+    /** One-shot smoke puff when the Pyrotechnic rescue NPC vanishes after dialogue. */
+    public static final String PYROTECHNIC_RESCUE_VANISH_PARTICLE_SYSTEM_ID = "Explosion_Small";
+
+    public static final String PYROTECHNIC_RESCUE_VANISH_SOUND_EVENT_ID = "SFX_Bomb_Fire_Goblin_Death";
     /** Root interaction id used by preview proxy entities so F/use invokes purification. */
     public static final String ROOT_INTERACTION_PURIFY_SPAWN_USE = "AetherhavenPurifySpawnUse";
 
@@ -228,6 +242,8 @@ public final class AetherhavenConstants {
     /** Market stall plot construction id (Week 4). */
     public static final String CONSTRUCTION_PLOT_MARKET_STALL = "plot_market_stall";
 
+    public static final String CONSTRUCTION_PLOT_PLAYER_SHOP = "plot_player_shop";
+
     public static final String CONSTRUCTION_PLOT_FARM = "plot_farm";
 
     public static final String CONSTRUCTION_PLOT_PARK = "plot_park";
@@ -294,6 +310,8 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_MERCHANT_STALL = "q_merchant_stall";
 
+    public static final String QUEST_PLAYER_SHOP = "q_player_shop";
+
     public static final String QUEST_FARM_PLOT = "q_farm_plot";
 
     public static final String QUEST_BLACKSMITH_SHOP = "q_blacksmith_shop";
@@ -328,6 +346,42 @@ public final class AetherhavenConstants {
     public static final String QUEST_BARN = "q_barn";
 
     public static final String QUEST_PARK_PLOT = "q_park_plot";
+
+    public static final String QUEST_CRYSTAL_KEEPER_RESCUE = "q_crystal_keeper_rescue";
+
+    public static final String QUEST_CRYSTAL_KEEPERS_SHOP = "q_crystal_keepers_shop";
+
+    public static final String QUEST_HOUSE_CRYSTAL_KEEPER = "q_house_crystal_keeper";
+
+    public static final String QUEST_PYROTECHNIC_RESCUE = "q_pyrotechnic_rescue";
+
+    public static final String QUEST_PYROTECHNIC_SHOP = "q_pyrotechnic_shop";
+
+    public static final String QUEST_HOUSE_PYROTECHNIC = "q_house_pyrotechnic";
+
+    public static final String QUEST_FLORIST_SHOP = "q_florist_shop";
+
+    public static final String QUEST_HOUSE_FLORIST = "q_house_florist";
+
+    public static final String CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP = "plot_crystal_keepers_shop";
+
+    public static final String CONSTRUCTION_PLOT_BOMB_SHOP = "plot_bomb_shop";
+
+    public static final String CONSTRUCTION_PLOT_FLOWER_SHOP = "plot_flower_shop";
+
+    public static final String CRYSTALLIZED_PERSON_BLOCK_TYPE_ID = "Aetherhaven_Crystallized_Person";
+
+    public static final String NPC_CRYSTAL_KEEPER = "Aetherhaven_Crystal_Keeper";
+
+    /** One-shot rescue spawn; idle only (no wander) until rescue dialogue completes. */
+    public static final String NPC_CRYSTAL_KEEPER_RESCUE = "Aetherhaven_Crystal_Keeper_Rescue";
+
+    public static final String NPC_PYROTECHNIC = "Aetherhaven_Pyrotechnic";
+
+    /** One-shot rescue spawn from a broken spider cocoon. */
+    public static final String NPC_PYROTECHNIC_RESCUE = "Aetherhaven_Pyrotechnic_Rescue";
+
+    public static final String NPC_FLORIST = "Aetherhaven_Florist";
 
     public static final String NPC_MERCHANT = "Aetherhaven_Merchant";
     public static final String NPC_BLACKSMITH = "Aetherhaven_Blacksmith";
@@ -393,6 +447,10 @@ public final class AetherhavenConstants {
 
     /** Town treasury chest; visuals match vanilla {@code Furniture_Dungeon_Chest_Epic}; balance stored on the town record. */
     public static final String TREASURY_BLOCK_TYPE_ID = "Aetherhaven_Treasury";
+
+    public static final String SHOP_SAFE_BLOCK_TYPE_ID = "Aetherhaven_Shop_Safe";
+
+    public static final String SHOP_SAFE_ITEM_ID = "Aetherhaven_Shop_Safe";
 
     /** Currency item; visuals aligned with vanilla {@code Deco_Treasure}. */
     public static final String ITEM_GOLD_COIN = "Aetherhaven_Gold_Coin";
@@ -667,7 +725,7 @@ public final class AetherhavenConstants {
     public static final int TOURIST_DESPAWN_HOUR_MIN = 19;
     public static final int TOURIST_DESPAWN_HOUR_MAX = 22;
     public static final int TOURIST_SPAWN_DAY_END_HOUR_EXCLUSIVE = 12;
-    public static final int TOURIST_MIN_DAILY_SPAWNS = 2;
+    public static final int TOURIST_MIN_DAILY_SPAWNS = 3;
     public static final int TOURIST_MAX_DAILY_SPAWNS = 5;
 
     public static final String TOURIST_PORTAL_IDLE_PARTICLE = "Aetherhaven_Tourist_Portal_Idle";

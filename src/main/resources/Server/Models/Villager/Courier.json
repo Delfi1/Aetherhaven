@@ -81,5 +81,18 @@
       "GradientSet": "Faded_Leather",
       "GradientId": "Brown"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Courier.png",
+  "IconProperties": {
+    "Scale": 0.4,
+    "Rotation": [
+      0,
+      33,
+      0
+    ],
+    "Translation": [
+      0,
+      -107
+    ]
+  }
 }

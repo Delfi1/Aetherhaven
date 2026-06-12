@@ -25,5 +25,18 @@
       "Model": "Cosmetics/Head/WideGoggles.blockymodel",
       "Texture": "Cosmetics/Head/WideGoggles_Textures/WideGoggles_Texture.png"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Pyrotechnic.png",
+  "IconProperties": {
+    "Scale": 0.4,
+    "Rotation": [
+      0,
+      33,
+      0
+    ],
+    "Translation": [
+      -8,
+      -99
+    ]
+  }
 }

@@ -1,0 +1,31 @@
+{
+  "entries": [
+    { "itemId": "Rock_Crystal_Blue_Large", "weight": 2, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Blue_Medium", "weight": 4, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Blue_Small", "weight": 6, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Cyan_Large", "weight": 2, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Cyan_Medium", "weight": 4, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Cyan_Small", "weight": 6, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Green_Large", "weight": 2, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Green_Medium", "weight": 4, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Green_Small", "weight": 6, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Green_Large", "weight": 2, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Green_Medium", "weight": 4, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Green_Small", "weight": 6, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Pink_Large", "weight": 2, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Pink_Medium", "weight": 4, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Pink_Small", "weight": 6, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Purple_Large", "weight": 2, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Purple_Medium", "weight": 4, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Purple_Small", "weight": 6, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Red_Large", "weight": 2, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Red_Medium", "weight": 4, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Red_Small", "weight": 6, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_White_Large", "weight": 2, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_White_Medium", "weight": 4, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_White_Small", "weight": 6, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Yellow_Large", "weight": 2, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Yellow_Medium", "weight": 4, "stockMin": 5, "stockMax": 20 },
+    { "itemId": "Rock_Crystal_Yellow_Small", "weight": 6, "stockMin": 5, "stockMax": 20 }
+  ]
+}

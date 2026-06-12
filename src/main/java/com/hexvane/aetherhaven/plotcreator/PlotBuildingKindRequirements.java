@@ -40,6 +40,13 @@ public final class PlotBuildingKindRequirements {
                 new SubstepRequirement(PlotCreatorSubstepType.SHOP_POI, 1),
                 new SubstepRequirement(PlotCreatorSubstepType.TOURIST_VISIT_POI, 1)
             );
+            case PLAYER_SHOP -> List.of(
+                new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
+                new SubstepRequirement(PlotCreatorSubstepType.SHOP_SAFE_BLOCK, 1),
+                new SubstepRequirement(PlotCreatorSubstepType.SHOP_SPOT, 1),
+                new SubstepRequirement(PlotCreatorSubstepType.SHOP_POI, 1),
+                new SubstepRequirement(PlotCreatorSubstepType.TOURIST_VISIT_POI, 1)
+            );
             case TOURIST_PORTAL -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.TOURIST_PORTAL_BLOCK, 1)
             );
@@ -115,6 +122,9 @@ public final class PlotBuildingKindRequirements {
         if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(baseId)) {
             return PlotBuildingKind.SHOP;
         }
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_PLAYER_SHOP.equals(baseId)) {
+            return PlotBuildingKind.PLAYER_SHOP;
+        }
         if (AetherhavenConstants.CONSTRUCTION_PLOT_TOURIST_PORTAL.equals(baseId)) {
             return PlotBuildingKind.TOURIST_PORTAL;
         }
@@ -134,6 +144,7 @@ public final class PlotBuildingKindRequirements {
         return AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID.equals(blockTypeId)
             || AetherhavenConstants.BLOCK_PRODUCTION_STORAGE.equals(blockTypeId)
             || AetherhavenConstants.TREASURY_BLOCK_TYPE_ID.equals(blockTypeId)
+            || AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID.equals(blockTypeId)
             || AetherhavenConstants.SHOP_SPOT_BLOCK_TYPE_ID.equals(blockTypeId)
             || AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(blockTypeId)
             || "Aetherhaven_Town_Planning_Desk".equals(blockTypeId);

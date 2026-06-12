@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.construction.assembly;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
@@ -61,17 +62,57 @@ public final class AssemblyObstructionUtil {
         if (bt == null || bt == BlockType.EMPTY) {
             return false;
         }
-        if (isPlantGrassBlock(bt)) {
+        return !isSoftClearingSkippedBlock(bt);
+    }
+
+    /**
+     * Foliage the clearing frontier ignores ({@link #blocksClearingExposureAt}) — removed automatically before the
+     * manual clearing phase so they do not linger after solids are broken.
+     */
+    public static boolean isSoftClearingSkippedBlock(@Nullable BlockType bt) {
+        if (bt == null || bt == BlockType.EMPTY) {
             return false;
+        }
+        if (isPlantGrassBlock(bt)) {
+            return true;
         }
         if (bt.getMaterial() == BlockMaterial.Empty) {
-            return false;
+            return true;
         }
         BlockGathering gathering = bt.getGathering();
-        if (gathering != null && gathering.getSoft() != null) {
-            return false;
+        return gathering != null && gathering.getSoft() != null;
+    }
+
+    /** Silently clears {@link #isSoftClearingSkippedBlock} cells inside the loaded prefab footprint. */
+    public static void clearSoftSkippedBlocksInFootprint(@Nonnull World world, @Nonnull PlotAssemblyJob job) {
+        LocalCachedChunkAccessor chunkAccessor =
+            ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
+        Vector3i anchor = job.anchor();
+        List<PendingBlock> footprint = job.footprintCells();
+        for (int i = 0; i < footprint.size(); i++) {
+            PendingBlock pb = footprint.get(i);
+            int wx = anchor.x + pb.x();
+            int wy = anchor.y + pb.y();
+            int wz = anchor.z + pb.z();
+            WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(wx, wz));
+            if (chunk == null || !chunk.getReference().isValid()) {
+                continue;
+            }
+            BlockType bt = blockTypeAt(world, wx, wy, wz, chunkAccessor);
+            if (!isSoftClearingSkippedBlock(bt)) {
+                continue;
+            }
+            chunk.setBlock(
+                wx,
+                wy,
+                wz,
+                BlockType.EMPTY_ID,
+                BlockType.EMPTY,
+                0,
+                0,
+                ConstructionPasteOps.SET_BLOCK_SETTINGS_CLEAR
+            );
         }
-        return true;
     }
 
     /** Decorative/tall grass ({@code Plant_Grass_*}) — not the same as solid {@code Soil_Grass} ground blocks. */

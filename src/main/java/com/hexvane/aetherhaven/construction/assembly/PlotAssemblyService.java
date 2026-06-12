@@ -224,6 +224,7 @@ public final class PlotAssemblyService {
                 slot,
                 def.getId()
             );
+        AssemblyObstructionUtil.clearSoftSkippedBlocksInFootprint(world, job);
         if (AssemblyObstructionUtil.hasObstructionsInLoadedChunks(world, job)) {
             registerClearingJob(world, plotId, job);
         } else {
@@ -289,6 +290,7 @@ public final class PlotAssemblyService {
                 slot,
                 def.getId()
             );
+        AssemblyObstructionUtil.clearSoftSkippedBlocksInFootprint(world, job);
         if (AssemblyObstructionUtil.hasObstructionsInLoadedChunks(world, job)) {
             registerClearingJob(world, plot.getPlotId(), job);
         } else {

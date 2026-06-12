@@ -1,0 +1,12 @@
+{
+  "entries": [
+    { "itemId": "Rock_Crystal_Blue_Block", "weight": 2, "stockMin": 5, "stockMax": 25 },
+    { "itemId": "Rock_Crystal_Cyan_Block", "weight": 2, "stockMin": 5, "stockMax": 25 },
+    { "itemId": "Rock_Crystal_Green_Block", "weight": 2, "stockMin": 5, "stockMax": 25 },
+    { "itemId": "Rock_Crystal_Pink_Block", "weight": 2, "stockMin": 5, "stockMax": 25 },
+    { "itemId": "Rock_Crystal_Purple_Block", "weight": 2, "stockMin": 5, "stockMax": 25 },
+    { "itemId": "Rock_Crystal_Red_Block", "weight": 2, "stockMin": 5, "stockMax": 25 },
+    { "itemId": "Rock_Crystal_White_Block", "weight": 2, "stockMin": 5, "stockMax": 25 },
+    { "itemId": "Rock_Crystal_Yellow_Block", "weight": 2, "stockMin": 5, "stockMax": 25 }
+  ]
+}

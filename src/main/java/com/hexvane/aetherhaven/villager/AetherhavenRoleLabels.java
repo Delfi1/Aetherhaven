@@ -23,6 +23,9 @@ public final class AetherhavenRoleLabels {
         Map.entry(AetherhavenConstants.NPC_MINER, "Gorruk Stonevein"),
         Map.entry(AetherhavenConstants.NPC_LOGGER, "Seren Fairhollow"),
         Map.entry(AetherhavenConstants.NPC_RANCHER, "Thalen Meadowrun"),
+        Map.entry(AetherhavenConstants.NPC_CRYSTAL_KEEPER, "Vaelith Prismshade"),
+        Map.entry(AetherhavenConstants.NPC_PYROTECHNIC, "Grubble Sparkmatch"),
+        Map.entry(AetherhavenConstants.NPC_FLORIST, "Ivy Bloomwell"),
         Map.entry(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID, "Lyra Fairhollow")
     );
 
@@ -36,6 +39,9 @@ public final class AetherhavenRoleLabels {
         Map.entry(TownVillagerBinding.KIND_MINER, "Miner"),
         Map.entry(TownVillagerBinding.KIND_LOGGER, "Logger"),
         Map.entry(TownVillagerBinding.KIND_RANCHER, "Rancher"),
+        Map.entry(TownVillagerBinding.KIND_CRYSTAL_KEEPER, "Crystal Keeper"),
+        Map.entry(TownVillagerBinding.KIND_PYROTECHNIC, "Pyrotechnic"),
+        Map.entry(TownVillagerBinding.KIND_FLORIST, "Florist"),
         Map.entry(TownVillagerBinding.KIND_GUILD_MASTER, "Guild Master"),
         Map.entry(TownVillagerBinding.KIND_TOWNSFOLK, "Townsfolk")
     );
@@ -206,6 +212,15 @@ public final class AetherhavenRoleLabels {
         }
         if (AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
             return TownVillagerBinding.KIND_RANCHER;
+        }
+        if (AetherhavenConstants.NPC_CRYSTAL_KEEPER.equals(roleId)) {
+            return TownVillagerBinding.KIND_CRYSTAL_KEEPER;
+        }
+        if (AetherhavenConstants.NPC_PYROTECHNIC.equals(roleId)) {
+            return TownVillagerBinding.KIND_PYROTECHNIC;
+        }
+        if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
+            return TownVillagerBinding.KIND_FLORIST;
         }
         if (AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equals(roleId)) {
             return TownVillagerBinding.KIND_GUILD_MASTER;

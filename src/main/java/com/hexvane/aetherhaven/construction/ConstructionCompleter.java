@@ -8,6 +8,8 @@ import com.hexvane.aetherhaven.inn.GaiaAltarCompletion;
 import com.hexvane.aetherhaven.inn.BarnCompletion;
 import com.hexvane.aetherhaven.inn.LumbermillCompletion;
 import com.hexvane.aetherhaven.inn.InnPoolService;
+import com.hexvane.aetherhaven.inn.InnVisitorShopCompletion;
+import com.hexvane.aetherhaven.inn.ShopPromotionConfig;
 import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.inn.MinerHutCompletion;
 import com.hexvane.aetherhaven.guild.GuildHallCompletion;
@@ -17,8 +19,10 @@ import com.hexvane.aetherhaven.tourist.TouristPortalExtractor;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
+import com.hexvane.aetherhaven.plot.ShopSafeBlock;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
@@ -141,6 +145,7 @@ public final class ConstructionCompleter {
             }
             stampManagementBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
             stampTreasuryBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
+            stampShopSafeBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
             stampGaiaStatueBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
             if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(gid)) {
                 MerchantStallCompletion.onStallBuilt(world, plugin, town, plotId, tm);
@@ -165,6 +170,51 @@ public final class ConstructionCompleter {
             }
             if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gid)) {
                 GuildHallCompletion.onGuildHallBuilt(world, plugin, town, plotId, tm);
+            }
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP.equals(gid)) {
+                InnVisitorShopCompletion.onShopBuilt(
+                    world,
+                    plugin,
+                    town,
+                    plotId,
+                    tm,
+                    new ShopPromotionConfig(
+                        AetherhavenConstants.QUEST_CRYSTAL_KEEPERS_SHOP,
+                        AetherhavenConstants.NPC_CRYSTAL_KEEPER,
+                        TownVillagerBinding.KIND_CRYSTAL_KEEPER,
+                        "Crystal Keeper"
+                    )
+                );
+            }
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP.equals(gid)) {
+                InnVisitorShopCompletion.onShopBuilt(
+                    world,
+                    plugin,
+                    town,
+                    plotId,
+                    tm,
+                    new ShopPromotionConfig(
+                        AetherhavenConstants.QUEST_PYROTECHNIC_SHOP,
+                        AetherhavenConstants.NPC_PYROTECHNIC,
+                        TownVillagerBinding.KIND_PYROTECHNIC,
+                        "Pyrotechnic"
+                    )
+                );
+            }
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP.equals(gid)) {
+                InnVisitorShopCompletion.onShopBuilt(
+                    world,
+                    plugin,
+                    town,
+                    plotId,
+                    tm,
+                    new ShopPromotionConfig(
+                        AetherhavenConstants.QUEST_FLORIST_SHOP,
+                        AetherhavenConstants.NPC_FLORIST,
+                        TownVillagerBinding.KIND_FLORIST,
+                        "Florist"
+                    )
+                );
             }
             if (ProductionCatalog.isProductionWorkplaceConstruction(gid)) {
                 PlotProductionState pps = town.getOrCreatePlotProduction(plotId);
@@ -518,6 +568,115 @@ public final class ConstructionCompleter {
             blockRef,
             TreasuryBlock.getComponentType(),
             new TreasuryBlock(plotId.toString(), town.getTownId().toString())
+        );
+    }
+
+    private static void stampShopSafeBlock(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull UUID plotId,
+        @Nonnull ConstructionDefinition def,
+        @Nonnull Vector3i anchor,
+        @Nonnull Rotation yaw
+    ) {
+        int[] local = def.getShopSafeLocalPos();
+        if (local == null) {
+            return;
+        }
+        Vector3i d = PrefabLocalOffset.rotate(yaw, local[0], local[1], local[2]);
+        int wx = anchor.x + d.x;
+        int wy = anchor.y + d.y;
+        int wz = anchor.z + d.z;
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(wx, wz));
+        if (chunk == null) {
+            LOGGER.atWarning().log("Shop safe block chunk not loaded at %s,%s,%s", wx, wy, wz);
+            return;
+        }
+
+        Integer safeY = null;
+        for (int dy = -4; dy <= 4; dy++) {
+            int y = wy + dy;
+            if (y < 0 || y >= 320) {
+                continue;
+            }
+            BlockType bt = world.getBlockType(wx, y, wz);
+            if (bt != null && AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID.equals(bt.getId())) {
+                safeY = y;
+                break;
+            }
+        }
+        if (safeY == null) {
+            LOGGER.atWarning().log(
+                "No %s in column %s,*,%s near y=%s (prefab must place shop safe at shopSafeLocalPos)",
+                AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID,
+                wx,
+                wz,
+                wy
+            );
+            return;
+        }
+
+        Vector3i cell = new Vector3i(wx, safeY, wz);
+        Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
+        RotationTuple rt = RotationTuple.of(blockYaw, Rotation.None, Rotation.None);
+        int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
+
+        boolean placed =
+            chunk.placeBlock(
+                wx,
+                safeY,
+                wz,
+                AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID,
+                rt.yaw(),
+                rt.pitch(),
+                rt.roll(),
+                MANAGEMENT_PLACE_SETTINGS
+            );
+        if (!placed) {
+            world.breakBlock(wx, safeY, wz, MANAGEMENT_PLACE_SETTINGS);
+            placed =
+                chunk.placeBlock(
+                    wx,
+                    safeY,
+                    wz,
+                    AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID,
+                    rt.yaw(),
+                    rt.pitch(),
+                    rt.roll(),
+                    MANAGEMENT_PLACE_SETTINGS
+                );
+        }
+        if (!placed) {
+            BlockTypeAssetMap<String, BlockType> typeMap = BlockType.getAssetMap();
+            String blockId = AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID;
+            int indexKey = typeMap.getIndex(blockId);
+            BlockType blockType = typeMap.getAsset(indexKey);
+            chunk.setBlock(wx, safeY, wz, indexKey, blockType, rotationIndex, 0, MANAGEMENT_PLACE_SETTINGS);
+        }
+
+        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(wx, safeY, wz);
+        if (blockRef == null) {
+            for (int dy : new int[] {-1, 1, -2, 2}) {
+                int y = safeY + dy;
+                if (y < 0 || y >= 320) {
+                    continue;
+                }
+                Ref<ChunkStore> r = chunk.getBlockComponentEntity(wx, y, wz);
+                if (r != null) {
+                    blockRef = r;
+                    break;
+                }
+            }
+        }
+        if (blockRef == null) {
+            LOGGER.atWarning().log("No block entity after re-placing shop safe at %s,%s,%s", wx, safeY, wz);
+            return;
+        }
+        Store<ChunkStore> cs = blockRef.getStore();
+        cs.putComponent(
+            blockRef,
+            ShopSafeBlock.getComponentType(),
+            new ShopSafeBlock(plotId.toString(), town.getTownId().toString())
         );
     }
 

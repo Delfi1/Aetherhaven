@@ -264,6 +264,30 @@
       "hour": 20,
       "minute": 0,
       "location": "home"
+    },
+    {
+      "dayOfWeek": "THURSDAY",
+      "hour": 10,
+      "minute": 30,
+      "location": "shop"
+    },
+    {
+      "dayOfWeek": "THURSDAY",
+      "hour": 11,
+      "minute": 30,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "SATURDAY",
+      "hour": 11,
+      "minute": 55,
+      "location": "shop"
+    },
+    {
+      "dayOfWeek": "SATURDAY",
+      "hour": 12,
+      "minute": 55,
+      "location": "inn"
     }
   ]
 }

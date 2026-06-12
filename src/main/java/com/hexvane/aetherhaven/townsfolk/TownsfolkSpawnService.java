@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchor;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
+import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.NpcModelSpawnUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -185,10 +186,11 @@ public final class TownsfolkSpawnService {
             return Optional.empty();
         }
         float spawnScale = spawnModel.getScale();
+        Vector3d spawnPos = VillagerBlockUtil.snapNpcFeetToStand(world, position);
         var pair = npcPlugin.spawnEntity(
             store,
             roleIndex,
-            position,
+            spawnPos,
             rotation,
             spawnModel,
             (npcEntity, holder, st) -> npcEntity.setInitialModelScale(spawnScale),

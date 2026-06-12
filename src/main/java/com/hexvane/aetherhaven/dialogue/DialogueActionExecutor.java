@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.dialogue;
 
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.rescue.RescueVillagerDespawnEffects;
+import com.hexvane.aetherhaven.rescue.RescueVillagerTriggers;
 import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
@@ -11,12 +13,14 @@ import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtService;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.gaiadraught.PlayerHealUtil;
 import com.hexvane.aetherhaven.inn.InnPoolService;
-import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestLifecycleEffects;
+import com.hexvane.aetherhaven.quest.QuestPlotBlueprintOnStart;
 import com.hexvane.aetherhaven.quest.QuestPlotTokenOnStart;
 import com.hexvane.aetherhaven.quest.QuestRewardService;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.ui.UiMaterialLabels;
@@ -121,6 +125,7 @@ public final class DialogueActionExecutor {
             case "gaia_draught_upgrade_catalyst" -> gaiaDraughtUpgradeCatalyst(playerRef, store, npcRef);
             case "priestess_gold_heal" -> priestessGoldHeal(playerRef, store, npcRef);
             case "hire_guild_adventurer" -> hireGuildAdventurer(playerRef, store, npcRef, out);
+            case "despawn_npc" -> despawnNpc(playerRef, store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
     }
@@ -204,6 +209,7 @@ public final class DialogueActionExecutor {
             town.initQuestKillProgress(qid, qdef.entityKillObjectiveIds());
             QuestLifecycleEffects.runOnStart(world, plugin, town, tm, qdef, npcUuid);
             QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store);
+            QuestPlotBlueprintOnStart.grantIfConfigured(plugin, qdef, playerRef, store);
         }
         if (a.has("lockInnVisitor") && a.get("lockInnVisitor").isJsonPrimitive() && a.get("lockInnVisitor").getAsBoolean()
             && npcUuid != null) {
@@ -381,6 +387,9 @@ public final class DialogueActionExecutor {
             || q.equals(AetherhavenConstants.QUEST_MINERS_HUT)
             || q.equals(AetherhavenConstants.QUEST_LUMBERMILL)
             || q.equals(AetherhavenConstants.QUEST_BARN)
+            || q.equals(AetherhavenConstants.QUEST_CRYSTAL_KEEPERS_SHOP)
+            || q.equals(AetherhavenConstants.QUEST_PYROTECHNIC_SHOP)
+            || q.equals(AetherhavenConstants.QUEST_FLORIST_SHOP)
             || q.equals(AetherhavenConstants.QUEST_BUILD_GUILD_HALL);
     }
 
@@ -720,6 +729,33 @@ public final class DialogueActionExecutor {
         PlayerHealUtil.healToFull(playerRef, store);
         tm.updateTown(town);
         UiSoundEffects.play2dUi(playerRef, store, AetherhavenConstants.SFX_PRIESTESS_HEAL);
+    }
+
+    private static void despawnNpc(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        UUID npcUuid = npcUuidFromRef(store, npcRef);
+        if (npcUuid == null) {
+            return;
+        }
+        if (npcRef != null && npcRef.isValid()) {
+            TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+            if (binding != null) {
+                var trigger = RescueVillagerTriggers.byBindingKind(binding.getKind());
+                if (trigger != null) {
+                    RescueVillagerDespawnEffects.playAtNpc(
+                        npcRef,
+                        store,
+                        trigger.vanishParticleSystemId(),
+                        trigger.vanishSoundEventId()
+                    );
+                }
+            }
+        }
+        World world = store.getExternalData().getWorld();
+        PendingEntityRemovalService.schedule(world, npcUuid);
     }
 
     private static void giveItem(

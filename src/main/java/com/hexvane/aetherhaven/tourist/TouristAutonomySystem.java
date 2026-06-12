@@ -13,8 +13,13 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.shopspot.NpcShopSpotBuyerService;
+import com.hexvane.aetherhaven.shopspot.ShopSpotPurchaseService;
+import com.hexvane.aetherhaven.shopspot.ShopSpotRecord;
+import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -34,6 +39,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.movement.NavState;
 import com.hypixel.hytale.server.npc.movement.controllers.MotionController;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -49,10 +55,17 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
     private static final int BLOCKED_FAIL_TICKS = 100;
     private static final long VISIT_MIN_MS = 45_000L;
     private static final long VISIT_MAX_MS = 120_000L;
+    private static final long SHOP_VISIT_MIN_MS = 20_000L;
+    private static final long SHOP_VISIT_MAX_MS = 40_000L;
+    private static final int SHOP_SPOTS_PER_VISIT_MAX = 2;
     private static final long POI_USE_MIN_MS = 15_000L;
     private static final long POI_USE_MAX_MS = 35_000L;
+    private static final long SHOP_SPOT_BROWSE_MIN_MS = 5_000L;
+    private static final long SHOP_SPOT_BROWSE_MAX_MS = 12_000L;
     private static final long POI_PICK_MIN_DELAY_MS = 12_000L;
     private static final long POI_PICK_MAX_DELAY_MS = 28_000L;
+    private static final long SHOP_SPOT_PICK_MIN_DELAY_MS = 3_000L;
+    private static final long SHOP_SPOT_PICK_MAX_DELAY_MS = 7_000L;
 
     @Nonnull
     private final AetherhavenPlugin plugin;
@@ -103,9 +116,15 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         Ref<EntityStore> ref = chunk.getReferenceTo(index);
         long now = resolveNowMs(store);
         World world = store.getExternalData().getWorld();
+        if (!world.isAlive()) {
+            return;
+        }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(binding.getTownId());
         if (town == null) {
+            return;
+        }
+        if (tryLeaveIfDue(ref, store, commandBuffer, npc, autonomy, now, town, world, tb)) {
             return;
         }
         PoiRegistry poiRegistry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
@@ -119,12 +138,49 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             case TouristAutonomyState.PHASE_VISIT ->
                 tickPlotVisit(ref, store, commandBuffer, npc, autonomy, now, town, world, poiRegistry, catalog);
             case TouristAutonomyState.PHASE_POI ->
-                tickPlotPoi(ref, store, commandBuffer, npc, autonomy, now, poiRegistry);
+                tickPlotPoi(ref, store, commandBuffer, npc, autonomy, now, town, world, poiRegistry);
             default -> {
                 autonomy.setPhase(TouristAutonomyState.PHASE_IDLE);
                 commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
             }
         }
+    }
+
+    /** When their visit window has elapsed, stop shopping/wandering and walk back to the portal. */
+    private boolean tryLeaveIfDue(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull TouristAutonomyState autonomy,
+        long now,
+        @Nonnull TownRecord town,
+        @Nonnull World world,
+        @Nonnull TownsfolkCharacterBinding tb
+    ) {
+        if (isReturningTravel(autonomy)) {
+            return false;
+        }
+        TouristRecord rec = TouristPortalTickService.findTouristRecord(town, tb.getCharacterId());
+        if (rec == null || rec.isInvitedToStay() || rec.isCitizen()) {
+            return false;
+        }
+        if (!TouristPortalTickService.shouldTouristLeaveNow(rec, store)) {
+            return false;
+        }
+        UUID portalId = rec.getPortalId();
+        if (portalId != null) {
+            autonomy.setHomePortalId(portalId);
+        }
+        autonomy.clearVisitPlot();
+        autonomy.clearTravelWaypoints();
+        if (beginReturnToPortalOnStore(ref, store, plugin, npc, autonomy, now, town, world)) {
+            commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            return true;
+        }
+        return false;
     }
 
     private void tickIdle(
@@ -459,15 +515,27 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
                 return;
             }
 
-            PoiEntry poi = targetId != null ? poiRegistry.get(targetId) : null;
             UUID visitPlotId = autonomy.getVisitPlotUuid();
+            ShopSpotRegistry shopRegistry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
+            ShopSpotRecord shopSpot = targetId != null ? shopRegistry.get(targetId) : null;
+            if (shopSpot != null && visitPlotId != null && visitPlotId.equals(shopSpot.getPlotId())) {
+                beginShopSpotBrowse(ref, store, commandBuffer, npc, autonomy, now, shopSpot);
+                return;
+            }
+
+            PoiEntry poi = targetId != null ? poiRegistry.get(targetId) : null;
             if (poi != null && visitPlotId != null && visitPlotId.equals(poi.getPlotId())) {
+                ConstructionCatalog catalog = plugin.getConstructionCatalog();
+                if (TouristDestinationResolver.isTouristShopPlot(town, catalog, visitPlotId)) {
+                    beginPlotWanderVisit(ref, store, commandBuffer, npc, autonomy, now, ref.hashCode(), town, world);
+                    return;
+                }
                 beginPlotPoiUse(ref, store, commandBuffer, npc, autonomy, now, poi);
                 return;
             }
 
             if (visitPlotId != null && TouristPlotVisit.isPlotDestinationId(targetId, visitPlotId)) {
-                beginPlotWanderVisit(ref, commandBuffer, npc, autonomy, now, ref.hashCode());
+                beginPlotWanderVisit(ref, store, commandBuffer, npc, autonomy, now, ref.hashCode(), town, world);
                 return;
             }
 
@@ -484,19 +552,35 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
 
     private void beginPlotWanderVisit(
         @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull NPCEntity npc,
         @Nonnull TouristAutonomyState autonomy,
         long now,
-        int salt
+        int salt,
+        @Nonnull TownRecord town,
+        @Nonnull World world
     ) {
         autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
         autonomy.clearTravelWaypoints();
         autonomy.setTravelStuckTicks(0);
-        long dur = VISIT_MIN_MS + Math.abs((now + salt) % (VISIT_MAX_MS - VISIT_MIN_MS + 1));
+        UUID plotId = autonomy.getVisitPlotUuid();
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
+        boolean shopPlot = plotId != null && TouristDestinationResolver.isTouristShopPlot(town, catalog, plotId);
+        long dur = visitDurationMs(now, salt, shopPlot);
         autonomy.setPhaseEndEpochMs(now + dur);
-        scheduleNextPoiPick(autonomy, now, salt);
+        if (shopPlot) {
+            scheduleNextShopSpotPick(autonomy, now, salt);
+        } else {
+            scheduleNextPoiPick(autonomy, now, salt);
+        }
         commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+        if (shopPlot) {
+            autonomy.setLastPlotShopSpotId(null);
+            if (tryTravelToNextShopSpot(ref, store, commandBuffer, npc, autonomy, now, town, world)) {
+                return;
+            }
+        }
         clearAutonomyRoleState(ref, npc, commandBuffer);
     }
 
@@ -517,6 +601,83 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         PoiAutonomyVisuals.beginPoiUse(ref, store, commandBuffer, poi);
         applyAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    private void beginShopSpotBrowse(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull TouristAutonomyState autonomy,
+        long now,
+        @Nonnull ShopSpotRecord spot
+    ) {
+        autonomy.setPhase(TouristAutonomyState.PHASE_POI);
+        autonomy.clearTravelWaypoints();
+        autonomy.setLastPlotShopSpotId(spot.getSpotId());
+        autonomy.incrementShopSpotsBrowsedThisVisit();
+        long dur = shopSpotBrowseDurationMs(now);
+        autonomy.setPhaseEndEpochMs(now + dur);
+        commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+        TouristShopSpotBrowse.faceTowardShopSpot(ref, store, commandBuffer, spot);
+        applyAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    private void beginTravelToShopSpot(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull TouristAutonomyState autonomy,
+        long now,
+        @Nonnull TownRecord town,
+        @Nonnull World world,
+        @Nonnull ShopSpotRecord spot
+    ) {
+        double[] stand = TouristShopSpotBrowse.customerStandWorld(world, spot);
+        if (stand == null) {
+            return;
+        }
+        beginTravelTo(autonomy, now, stand[0], stand[1], stand[2], spot.getSpotId());
+        routeNpcToTarget(ref, store, plugin, npc, autonomy, town, world, new Vector3d(stand[0], stand[1], stand[2]));
+        commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+        commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+        applyAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    private boolean tryTravelToNextShopSpot(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull TouristAutonomyState autonomy,
+        long now,
+        @Nonnull TownRecord town,
+        @Nonnull World world
+    ) {
+        UUID plotId = autonomy.getVisitPlotUuid();
+        if (plotId == null) {
+            return false;
+        }
+        if (autonomy.getShopSpotsBrowsedThisVisit() >= SHOP_SPOTS_PER_VISIT_MAX) {
+            return false;
+        }
+        ShopSpotRegistry registry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
+        List<ShopSpotRecord> spots = TouristShopSpotBrowse.listOnPlot(registry, plotId);
+        if (spots.isEmpty()) {
+            return false;
+        }
+        Random random = new Random(now ^ ref.hashCode() ^ plotId.hashCode());
+        ShopSpotRecord spot = TouristShopSpotBrowse.pickNext(spots, autonomy.getLastPlotShopSpotUuid(), random);
+        if (spot == null) {
+            return false;
+        }
+        double[] stand = TouristShopSpotBrowse.customerStandWorld(world, spot);
+        if (stand == null) {
+            return false;
+        }
+        beginTravelToShopSpot(ref, store, commandBuffer, npc, autonomy, now, town, world, spot);
+        return true;
     }
 
     private void tickPlotVisit(
@@ -566,6 +727,18 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             return;
         }
 
+        if (TouristDestinationResolver.isTouristShopPlot(town, catalog, plotId)) {
+            if (now >= autonomy.getNextPoiPickEpochMs()) {
+                if (tryTravelToNextShopSpot(ref, store, commandBuffer, npc, autonomy, now, town, world)) {
+                    return;
+                }
+                scheduleNextShopSpotPick(autonomy, now, ref.hashCode());
+                commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+            }
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            return;
+        }
+
         if (now >= autonomy.getNextPoiPickEpochMs()) {
             Random random = new Random(now ^ ref.hashCode() ^ plotId.hashCode());
             PoiEntry poi =
@@ -595,13 +768,44 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         @Nonnull NPCEntity npc,
         @Nonnull TouristAutonomyState autonomy,
         long now,
+        @Nonnull TownRecord town,
+        @Nonnull World world,
         @Nonnull PoiRegistry poiRegistry
     ) {
         if (now < autonomy.getPhaseEndEpochMs()) {
             applyAutonomyRoleState(ref, npc, commandBuffer);
             return;
         }
-        UUID poiId = autonomy.getTargetPoiUuid();
+        UUID targetId = autonomy.getTargetPoiUuid();
+        ShopSpotRegistry shopRegistry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
+        ShopSpotRecord shopSpot = targetId != null ? shopRegistry.get(targetId) : null;
+        if (shopSpot != null) {
+            tryTouristPlayerShopPurchase(ref, store, autonomy, town, world, shopSpot.getPlotId(), now);
+            autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
+            commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+            if (tryTravelToNextShopSpot(ref, store, commandBuffer, npc, autonomy, now, town, world)) {
+                return;
+            }
+            scheduleNextShopSpotPick(autonomy, now, ref.hashCode());
+            commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            return;
+        }
+
+        UUID visitPlotId = autonomy.getVisitPlotUuid();
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
+        if (visitPlotId != null && TouristDestinationResolver.isTouristShopPlot(town, catalog, visitPlotId)) {
+            autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
+            scheduleNextShopSpotPick(autonomy, now, ref.hashCode());
+            commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+            if (tryTravelToNextShopSpot(ref, store, commandBuffer, npc, autonomy, now, town, world)) {
+                return;
+            }
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            return;
+        }
+
+        UUID poiId = targetId;
         if (poiId != null) {
             PoiEntry poi = poiRegistry.get(poiId);
             if (poi != null) {
@@ -612,6 +816,47 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         scheduleNextPoiPick(autonomy, now, ref.hashCode());
         commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         clearAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    private void tryTouristPlayerShopPurchase(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TouristAutonomyState autonomy,
+        @Nonnull TownRecord town,
+        @Nonnull World world,
+        @Nonnull UUID plotId,
+        long now
+    ) {
+        if (autonomy.isShopPurchaseDoneThisVisit()) {
+            return;
+        }
+        if (!ShopSpotPurchaseService.isPlayerShopPlot(plugin, town, plotId)) {
+            return;
+        }
+        Random random = new Random(now ^ ref.hashCode() ^ plotId.hashCode());
+        if (random.nextInt(100) >= 40) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return;
+        }
+        String buyerName = "A visitor";
+        TownsfolkCharacterBinding tb = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
+        if (tb != null && !tb.getCharacterId().isBlank()) {
+            TownsfolkCharacterDefinition ch = plugin.getTownsfolkCharacterCatalog().byId(tb.getCharacterId().trim());
+            if (ch != null && ch.getDisplayName() != null && !ch.getDisplayName().isBlank()) {
+                buyerName = ch.getDisplayName().trim();
+            }
+        }
+        NpcShopSpotBuyerService.scheduleBuyOneListing(
+            world,
+            town.getTownId(),
+            plotId,
+            buyerName,
+            uc.getUuid()
+        );
+        autonomy.setShopPurchaseDoneThisVisit(true);
     }
 
     @Nullable
@@ -629,9 +874,25 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         return null;
     }
 
+    private static long visitDurationMs(long now, int salt, boolean shopPlot) {
+        if (shopPlot) {
+            return SHOP_VISIT_MIN_MS + Math.abs((now + salt) % (SHOP_VISIT_MAX_MS - SHOP_VISIT_MIN_MS + 1));
+        }
+        return VISIT_MIN_MS + Math.abs((now + salt) % (VISIT_MAX_MS - VISIT_MIN_MS + 1));
+    }
+
+    private static long shopSpotBrowseDurationMs(long now) {
+        return SHOP_SPOT_BROWSE_MIN_MS + Math.abs(now % (SHOP_SPOT_BROWSE_MAX_MS - SHOP_SPOT_BROWSE_MIN_MS + 1));
+    }
+
     private static void scheduleNextPoiPick(@Nonnull TouristAutonomyState autonomy, long now, int salt) {
         long span = POI_PICK_MAX_DELAY_MS - POI_PICK_MIN_DELAY_MS + 1;
         autonomy.setNextPoiPickEpochMs(now + POI_PICK_MIN_DELAY_MS + Math.abs((now + salt) % span));
+    }
+
+    private static void scheduleNextShopSpotPick(@Nonnull TouristAutonomyState autonomy, long now, int salt) {
+        long span = SHOP_SPOT_PICK_MAX_DELAY_MS - SHOP_SPOT_PICK_MIN_DELAY_MS + 1;
+        autonomy.setNextPoiPickEpochMs(now + SHOP_SPOT_PICK_MIN_DELAY_MS + Math.abs((now + salt) % span));
     }
 
     private void finishReturnDespawn(

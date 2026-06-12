@@ -1130,6 +1130,15 @@ public final class InnPoolService {
         if (AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equals(roleId)) {
             return town.hasQuestActive(AetherhavenConstants.QUEST_BUILD_GUILD_HALL);
         }
+        if (AetherhavenConstants.NPC_CRYSTAL_KEEPER.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_CRYSTAL_KEEPERS_SHOP);
+        }
+        if (AetherhavenConstants.NPC_PYROTECHNIC.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_PYROTECHNIC_SHOP);
+        }
+        if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_FLORIST_SHOP);
+        }
         return false;
     }
 
@@ -1141,6 +1150,9 @@ public final class InnPoolService {
             || town.hasQuestActive(AetherhavenConstants.QUEST_MINERS_HUT)
             || town.hasQuestActive(AetherhavenConstants.QUEST_LUMBERMILL)
             || town.hasQuestActive(AetherhavenConstants.QUEST_BARN)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_CRYSTAL_KEEPERS_SHOP)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_PYROTECHNIC_SHOP)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_FLORIST_SHOP)
             || town.hasQuestActive(AetherhavenConstants.QUEST_BUILD_GUILD_HALL);
     }
 
@@ -1208,6 +1220,15 @@ public final class InnPoolService {
         }
         if (town.hasQuestActive(AetherhavenConstants.QUEST_BUILD_GUILD_HALL)) {
             out.add(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_CRYSTAL_KEEPERS_SHOP)) {
+            out.add(AetherhavenConstants.NPC_CRYSTAL_KEEPER);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_PYROTECHNIC_SHOP)) {
+            out.add(AetherhavenConstants.NPC_PYROTECHNIC);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_FLORIST_SHOP)) {
+            out.add(AetherhavenConstants.NPC_FLORIST);
         }
         if (town.hasQuestCompleted(AetherhavenConstants.QUEST_BUILD_TOWN_HALL)
             && !town.isGuildHallActive()
@@ -1277,6 +1298,32 @@ public final class InnPoolService {
         return removed;
     }
 
+    /**
+     * When an inn visitor NPC dies, drop it from the active pool so dawn fill and open-slot logic are not blocked
+     * by a stale UUID.
+     */
+    public static void onVisitorEntityDeath(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID entityUuid
+    ) {
+        boolean changed = removeVisitorFromPool(town, entityUuid);
+        if (changed) {
+            tm.updateTown(town);
+            tryFillOpenSlotsAfterTownStateChange(world, plugin, town);
+        }
+    }
+
+    /** @return true if the UUID was listed in {@link TownRecord#getInnPoolNpcIds()} */
+    public static boolean removeVisitorFromPool(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+        String sid = entityUuid.toString();
+        boolean removed = town.getInnPoolNpcIds().removeIf(s -> sid.equalsIgnoreCase(s != null ? s.trim() : ""));
+        town.removeInnLockedEntity(entityUuid);
+        return removed;
+    }
+
     private static int promoteEligibleVisitorsToResidents(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
@@ -1328,6 +1375,15 @@ public final class InnPoolService {
             } else if (AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equals(roleId)) {
                 constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL;
                 residentKind = TownVillagerBinding.KIND_GUILD_MASTER;
+            } else if (AetherhavenConstants.NPC_CRYSTAL_KEEPER.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP;
+                residentKind = TownVillagerBinding.KIND_CRYSTAL_KEEPER;
+            } else if (AetherhavenConstants.NPC_PYROTECHNIC.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP;
+                residentKind = TownVillagerBinding.KIND_PYROTECHNIC;
+            } else if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP;
+                residentKind = TownVillagerBinding.KIND_FLORIST;
             } else {
                 continue;
             }

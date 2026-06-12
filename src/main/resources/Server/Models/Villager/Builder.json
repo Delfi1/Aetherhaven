@@ -83,5 +83,18 @@
       "Model": "Cosmetics/Head/Hard_Hat.blockymodel",
       "Texture": "Cosmetics/Head/Head_Hard_Hat_Texture.png"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Builder.png",
+  "IconProperties": {
+    "Scale": 0.4,
+    "Rotation": [
+      0,
+      33,
+      0
+    ],
+    "Translation": [
+      0,
+      -107
+    ]
+  }
 }

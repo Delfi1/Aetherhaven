@@ -98,5 +98,6 @@ public final class TouristPortalRecord {
     public void clearDailyPlan() {
         plannedSpawnEpochMinutes.clear();
         executedSpawnEpochMinutes.clear();
+        plannedDayEpochDay = Long.MIN_VALUE;
     }
 }

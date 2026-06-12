@@ -63,6 +63,26 @@ public final class ShopSpotRegistry {
         return new ArrayList<>(byId.values());
     }
 
+    /** Player controlled listings with stock on a plot. */
+    @Nonnull
+    public List<ShopSpotRecord> listPlayerListingsOnPlot(@Nonnull UUID plotId) {
+        List<ShopSpotRecord> out = new ArrayList<>();
+        for (ShopSpotRecord r : byId.values()) {
+            if (!plotId.equals(r.getPlotId())) {
+                continue;
+            }
+            if (!r.isPlayerControlled() || !r.hasStock() || r.getSellerUuid() == null) {
+                continue;
+            }
+            String itemId = r.getItemId();
+            if (itemId == null || itemId.isBlank()) {
+                continue;
+            }
+            out.add(r);
+        }
+        return out;
+    }
+
     private static long blockKey(int x, int y, int z) {
         return ((long) x & 0x3FFFFFFL) | (((long) y & 0xFFFL) << 26) | (((long) z & 0x3FFFFFFL) << 38);
     }

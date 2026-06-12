@@ -62,11 +62,11 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         @Nonnull LocalDateTime toDateTime,
         boolean backward
     ) {
+        TouristPortalTickService.catchUpLeaveAfterTimeJump(world, plugin, store, wtr);
         if (!backward) {
             InnPoolService.catchUpAfterTimeJump(world, plugin, store, wtr, from, to);
             SprinklerWateringService.catchUpAfterTimeJump(world, store, plugin, from, to);
             ShopSpotDailyRerollService.catchUpAfterTimeJump(world, plugin, store, wtr, from, to);
-            TouristPortalTickService.catchUpLeaveAfterTimeJump(world, plugin, store, wtr);
             TownEconomyTimeService.onGameTimeFromHub(world, plugin, wtr, store);
         }
         VillagerScheduleService.applyForWorld(world, store, plugin, true);

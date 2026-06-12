@@ -10,6 +10,7 @@ public enum PlotBuildingKind {
     WORK,
     AMENITY,
     SHOP,
+    PLAYER_SHOP,
     INN,
     TOWN_HALL,
     GUILD_HALL,

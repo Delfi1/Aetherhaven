@@ -1,0 +1,26 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Crystal_Keeper_Vanish_Flash",
+      "PositionOffset": { "X": 0, "Y": 1.0, "Z": 0 }
+    },
+    {
+      "SpawnerId": "Aetherhaven_Crystal_Keeper_Vanish_SmokeMain",
+      "PositionOffset": { "X": 0, "Y": 0.95, "Z": 0 },
+      "StartDelay": 0.02
+    },
+    {
+      "SpawnerId": "Aetherhaven_Crystal_Keeper_Vanish_SmokeWisp",
+      "PositionOffset": { "X": 0, "Y": 1.0, "Z": 0 },
+      "StartDelay": 0.04
+    },
+    {
+      "SpawnerId": "Explosion_Small_Smoke_Side",
+      "PositionOffset": { "X": 0, "Y": 0.9, "Z": 0 },
+      "StartDelay": 0.06
+    }
+  ],
+  "BoundingRadius": 8.0,
+  "CullDistance": 48.0,
+  "IsImportant": true
+}

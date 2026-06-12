@@ -100,7 +100,7 @@ public final class VillagerScheduleService {
         if (binding == null || npc == null || uc == null) {
             return;
         }
-        if (TownVillagerBinding.isVisitorKind(binding.getKind())) {
+        if (TownVillagerBinding.isScheduleSuppressedKind(binding.getKind())) {
             return;
         }
         String roleId = npc.getRoleName();
@@ -160,7 +160,7 @@ public final class VillagerScheduleService {
                 personalityIds
             );
         UUID targetPlot = out.plotId();
-        if (targetPlot == null) {
+        if (targetPlot == null && !out.clearPreferredPlot()) {
             if (cfg.isVillagerScheduleDebugLog() && gameEpochHour != tickState.getLastUnresolvedDebugLogGameEpochHour()) {
                 tickState.setLastUnresolvedDebugLogGameEpochHour(gameEpochHour);
                 commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
@@ -200,7 +200,12 @@ public final class VillagerScheduleService {
         }
 
         UUID current = binding.getPreferredPlotId();
-        boolean needsApply = timeJump || newCalendarMinute || current == null || !targetPlot.equals(current);
+        boolean needsApply;
+        if (out.clearPreferredPlot()) {
+            needsApply = timeJump || newCalendarMinute || current != null;
+        } else {
+            needsApply = timeJump || newCalendarMinute || current == null || !targetPlot.equals(current);
+        }
         if (!needsApply) {
             tickState.setLastGameEpochMinute(epochMinute);
             commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
@@ -208,13 +213,21 @@ public final class VillagerScheduleService {
         }
 
         String prevSegment = tickState.getLastAppliedScheduleSegment();
-        boolean plotLocationChanged = current == null || !Objects.equals(targetPlot, current);
+        boolean plotLocationChanged =
+            out.clearPreferredPlot() ? current != null : current == null || !Objects.equals(targetPlot, current);
         boolean segmentLocationChanged = prevSegment.isEmpty() || !prevSegment.equals(loc);
+        if (segmentLocationChanged && !VillagerScheduleResolver.LOC_SHOP.equals(loc)) {
+            tickState.setShopSegmentPurchaseDone(false);
+        }
 
         if (out.jobPlotIdToPersist() != null) {
             binding.setJobPlotId(out.jobPlotIdToPersist());
         }
-        binding.setPreferredPlotId(targetPlot);
+        if (out.clearPreferredPlot()) {
+            binding.setPreferredPlotId(null);
+        } else {
+            binding.setPreferredPlotId(targetPlot);
+        }
         commandBuffer.putComponent(ref, TownVillagerBinding.getComponentType(), binding);
         tickState.setLastGameEpochMinute(epochMinute);
         tickState.setLastAppliedScheduleSegment(loc);
@@ -228,7 +241,7 @@ public final class VillagerScheduleService {
                 prevSegment.isEmpty() ? "(none)" : prevSegment,
                 loc,
                 current == null ? "(none)" : current,
-                targetPlot
+                out.clearPreferredPlot() ? "(browse town shops)" : targetPlot
             );
         }
     }

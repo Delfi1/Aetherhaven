@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.tourist;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownOnlinePresence;
@@ -28,6 +30,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +38,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -43,6 +47,8 @@ import org.joml.Vector3i;
 /** Daily tourist spawn and end of day return scheduling keyed to tourist portal blocks. */
 public final class TouristPortalTickService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    /** Last dawn-aligned game day we ran the morning overstays pass for each world. */
+    private static final ConcurrentHashMap<String, Long> LAST_DAWN_LEAVE_DAY_BY_WORLD = new ConcurrentHashMap<>();
 
     private TouristPortalTickService() {}
 
@@ -70,44 +76,113 @@ public final class TouristPortalTickService {
 
         dedupeTouristRecords(tm, world, plugin, store);
 
+        processDawnTouristLeave(world, plugin, tm, store, wtr, cfg);
         processTouristLeaveWindow(world, plugin, tm, store, wtr);
 
-        for (TouristPortalRecord portal : registry.allRecords()) {
-            if (!world.getName().equals(portal.getWorldName())) {
-                continue;
-            }
-            if (!isPortalChunkLoaded(world, portal)) {
-                continue;
-            }
-            TownRecord town = tm.getTown(portal.getTownId());
+        Map<UUID, List<TouristPortalRecord>> portalsByTown = groupPortalsByTown(registry, world.getName());
+        boolean portalRegistryDirty = false;
+        for (Map.Entry<UUID, List<TouristPortalRecord>> entry : portalsByTown.entrySet()) {
+            TownRecord town = tm.getTown(entry.getKey());
             if (town == null) {
                 continue;
             }
-            planDayIfNeeded(portal, epochDay, cfg, town.getTownId());
-            tryExecuteSpawn(world, plugin, tm, store, town, portal, epochMinute, epochDay);
+            List<TouristPortalRecord> townPortals = entry.getValue();
+            boolean townPlanChanged = migrateLegacyPortalSpawnPlanIfNeeded(town, townPortals, epochDay);
+            if (townPlanChanged) {
+                portalRegistryDirty = true;
+            }
+            if (planTownDayIfNeeded(town, epochDay, cfg)) {
+                clearLegacyPortalSpawnPlans(townPortals);
+                portalRegistryDirty = true;
+                townPlanChanged = true;
+            }
+            if (townPlanChanged) {
+                tm.updateTown(town);
+            }
+            if (tryExecuteTownSpawn(world, plugin, tm, store, town, townPortals, epochMinute, epochDay)) {
+                tm.updateTown(town);
+            }
         }
 
-        TouristPortalPersistence.save(world, plugin, registry);
+        if (portalRegistryDirty) {
+            TouristPortalPersistence.save(world, plugin, registry);
+        }
     }
 
-    private static void planDayIfNeeded(
-        @Nonnull TouristPortalRecord portal,
-        long epochDay,
-        @Nonnull AetherhavenPluginConfig cfg,
-        @Nonnull UUID townId
+    @Nonnull
+    private static Map<UUID, List<TouristPortalRecord>> groupPortalsByTown(
+        @Nonnull TouristPortalRegistry registry,
+        @Nonnull String worldName
     ) {
-        if (portal.getPlannedDayEpochDay() == epochDay && !portal.getPlannedSpawnEpochMinutes().isEmpty()) {
-            return;
+        Map<UUID, List<TouristPortalRecord>> byTown = new HashMap<>();
+        for (TouristPortalRecord portal : registry.allRecords()) {
+            if (!worldName.equals(portal.getWorldName())) {
+                continue;
+            }
+            byTown.computeIfAbsent(portal.getTownId(), ignored -> new ArrayList<>()).add(portal);
         }
-        portal.clearDailyPlan();
-        portal.setPlannedDayEpochDay(epochDay);
+        return byTown;
+    }
+
+    /** Merges per-portal spawn plans from older saves into the town-level plan for the current day. */
+    private static boolean migrateLegacyPortalSpawnPlanIfNeeded(
+        @Nonnull TownRecord town,
+        @Nonnull List<TouristPortalRecord> townPortals,
+        long epochDay
+    ) {
+        if (town.getTouristSpawnPlannedDayEpochDay() == epochDay
+            && !town.getTouristPlannedSpawnEpochMinutes().isEmpty()) {
+            return false;
+        }
+        boolean foundLegacy = false;
+        Set<Long> planned = new HashSet<>();
+        Set<Long> executed = new HashSet<>();
+        for (TouristPortalRecord portal : townPortals) {
+            if (portal.getPlannedDayEpochDay() != epochDay) {
+                continue;
+            }
+            foundLegacy = true;
+            planned.addAll(portal.getPlannedSpawnEpochMinutes());
+            executed.addAll(portal.getExecutedSpawnEpochMinutes());
+        }
+        if (!foundLegacy) {
+            return false;
+        }
+        town.clearTouristDailySpawnPlan();
+        town.setTouristSpawnPlannedDayEpochDay(epochDay);
+        town.getTouristPlannedSpawnEpochMinutes().addAll(planned);
+        town.getTouristPlannedSpawnEpochMinutes().sort(Long::compare);
+        town.getTouristExecutedSpawnEpochMinutes().addAll(executed);
+        clearLegacyPortalSpawnPlans(townPortals);
+        return true;
+    }
+
+    private static void clearLegacyPortalSpawnPlans(@Nonnull List<TouristPortalRecord> townPortals) {
+        for (TouristPortalRecord portal : townPortals) {
+            if (portal.getPlannedDayEpochDay() != Long.MIN_VALUE
+                || !portal.getPlannedSpawnEpochMinutes().isEmpty()
+                || !portal.getExecutedSpawnEpochMinutes().isEmpty()) {
+                portal.clearDailyPlan();
+            }
+        }
+    }
+
+    /** @return true when a new daily plan was generated */
+    private static boolean planTownDayIfNeeded(
+        @Nonnull TownRecord town,
+        long epochDay,
+        @Nonnull AetherhavenPluginConfig cfg
+    ) {
+        if (town.getTouristSpawnPlannedDayEpochDay() == epochDay
+            && !town.getTouristPlannedSpawnEpochMinutes().isEmpty()) {
+            return false;
+        }
+        town.clearTouristDailySpawnPlan();
+        town.setTouristSpawnPlannedDayEpochDay(epochDay);
+        UUID townId = town.getTownId();
         int count =
             AetherhavenConstants.TOURIST_MIN_DAILY_SPAWNS
-                + new Random(
-                    townId.getLeastSignificantBits()
-                        ^ portal.getPortalId().getLeastSignificantBits()
-                        ^ epochDay * 0x9E3779B97F4A7C15L
-                ).nextInt(
+                + new Random(townId.getLeastSignificantBits() ^ epochDay * 0x9E3779B97F4A7C15L).nextInt(
                     AetherhavenConstants.TOURIST_MAX_DAILY_SPAWNS
                         - AetherhavenConstants.TOURIST_MIN_DAILY_SPAWNS
                         + 1
@@ -119,11 +194,7 @@ public final class TouristPortalTickService {
             windowEndMinute = windowStartMinute + 360;
         }
         long dayBase = epochDay * 24L * 60L;
-        Random random =
-            new Random(
-                portal.getPortalId().getLeastSignificantBits()
-                    ^ epochDay * 0x517cc1b727220a95L
-            );
+        Random random = new Random(townId.getMostSignificantBits() ^ epochDay * 0x517cc1b727220a95L);
         Set<Long> used = new HashSet<>();
         for (int i = 0; i < count; i++) {
             int offset;
@@ -133,31 +204,63 @@ public final class TouristPortalTickService {
                 attempts++;
             } while (used.contains(dayBase + offset) && attempts < 32);
             used.add(dayBase + offset);
-            portal.getPlannedSpawnEpochMinutes().add(dayBase + offset);
+            town.getTouristPlannedSpawnEpochMinutes().add(dayBase + offset);
         }
-        portal.getPlannedSpawnEpochMinutes().sort(Long::compare);
+        town.getTouristPlannedSpawnEpochMinutes().sort(Long::compare);
+        return true;
     }
 
-    private static void tryExecuteSpawn(
+    /** @return true when a spawn was attempted */
+    private static boolean tryExecuteTownSpawn(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownManager tm,
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town,
-        @Nonnull TouristPortalRecord portal,
+        @Nonnull List<TouristPortalRecord> townPortals,
         long epochMinute,
         long epochDay
     ) {
-        for (Long planned : portal.getPlannedSpawnEpochMinutes()) {
+        for (Long planned : town.getTouristPlannedSpawnEpochMinutes()) {
             if (planned == null || planned != epochMinute) {
                 continue;
             }
-            if (portal.getExecutedSpawnEpochMinutes().contains(planned)) {
+            if (town.getTouristExecutedSpawnEpochMinutes().contains(planned)) {
                 continue;
             }
-            portal.getExecutedSpawnEpochMinutes().add(planned);
+            TouristPortalRecord portal = pickSpawnPortal(world, town, townPortals, planned);
+            if (portal == null) {
+                continue;
+            }
+            town.getTouristExecutedSpawnEpochMinutes().add(planned);
             spawnOneTourist(world, plugin, tm, store, town, portal, epochDay);
+            return true;
         }
+        return false;
+    }
+
+    @Nullable
+    private static TouristPortalRecord pickSpawnPortal(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull List<TouristPortalRecord> townPortals,
+        long plannedEpochMinute
+    ) {
+        List<TouristPortalRecord> loaded = new ArrayList<>();
+        for (TouristPortalRecord portal : townPortals) {
+            if (isPortalChunkLoaded(world, portal)) {
+                loaded.add(portal);
+            }
+        }
+        if (loaded.isEmpty()) {
+            return null;
+        }
+        Random random =
+            new Random(
+                town.getTownId().getLeastSignificantBits()
+                    ^ plannedEpochMinute * 0xD6E8FEB8665FC2B3L
+            );
+        return loaded.get(random.nextInt(loaded.size()));
     }
 
     private static void spawnOneTourist(
@@ -217,6 +320,7 @@ public final class TouristPortalTickService {
             TouristAutonomySystem.kickInitialVisitOnSpawn(ref, store, plugin, autonomy, town, world);
         }
 
+        long spawnDawnDay = VillagerReputationService.currentGameEpochDay(store);
         town.getTouristRecords().add(
             new TouristRecord(
                 characterId,
@@ -224,8 +328,8 @@ public final class TouristPortalTickService {
                 portal.getPortalId(),
                 false,
                 false,
-                epochDay,
-                rollLeaveHour(portal.getPortalId(), characterId, epochDay)
+                spawnDawnDay,
+                rollLeaveHour(portal.getPortalId(), characterId, spawnDawnDay)
             )
         );
         tm.updateTown(town);
@@ -302,6 +406,33 @@ public final class TouristPortalTickService {
         }
     }
 
+    /**
+     * Once per dawn-aligned game day during the morning window: send home tourists who overstayed from a prior visit day.
+     */
+    private static void processDawnTouristLeave(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull WorldTimeResource wtr,
+        @Nonnull AetherhavenPluginConfig cfg
+    ) {
+        long dawnDay = VillagerReputationService.currentGameEpochDay(store);
+        Long last = LAST_DAWN_LEAVE_DAY_BY_WORLD.get(world.getName());
+        if (last != null && last >= dawnDay) {
+            return;
+        }
+        if (!AetherhavenMorningWindow.isGameMorning(
+            wtr,
+            cfg.getGameMorningStartHour(),
+            cfg.getGameMorningEndHourExclusive()
+        )) {
+            return;
+        }
+        LAST_DAWN_LEAVE_DAY_BY_WORLD.put(world.getName(), dawnDay);
+        processTouristLeaveWindow(world, plugin, tm, store, wtr);
+    }
+
     /** Once per game minute: send tourists home when their visit window has elapsed (no exact-minute requirement). */
     private static void processTouristLeaveWindow(
         @Nonnull World world,
@@ -311,10 +442,7 @@ public final class TouristPortalTickService {
         @Nonnull WorldTimeResource wtr
     ) {
         LocalDateTime gameTime = wtr.getGameDateTime();
-        long currentEpochDay = gameTime.toLocalDate().toEpochDay();
-        if (gameTime.getHour() < AetherhavenConstants.TOURIST_DESPAWN_HOUR_MIN) {
-            return;
-        }
+        long dawnAlignedEpochDay = VillagerReputationService.currentGameEpochDay(store);
 
         Set<UUID> onlinePlayers = TownOnlinePresence.collectOnlinePlayerUuids(world);
 
@@ -332,12 +460,12 @@ public final class TouristPortalTickService {
                 if (rec.isInvitedToStay() || rec.isCitizen()) {
                     continue;
                 }
-                if (rec.getSpawnEpochDay() <= 0L) {
-                    rec.setSpawnEpochDay(currentEpochDay);
-                    changed = true;
-                }
                 ensureLeaveHour(rec);
-                if (!shouldTouristLeaveNow(rec, gameTime)) {
+                if (!shouldTouristLeaveNow(rec, gameTime, dawnAlignedEpochDay)) {
+                    if (rec.getSpawnEpochDay() == 0L) {
+                        rec.setSpawnEpochDay(dawnAlignedEpochDay);
+                        changed = true;
+                    }
                     continue;
                 }
                 UUID entityUuid = rec.getEntityUuid();
@@ -362,17 +490,59 @@ public final class TouristPortalTickService {
         }
     }
 
+    public static boolean shouldTouristLeaveNow(@Nonnull TouristRecord rec, @Nonnull Store<EntityStore> store) {
+        WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
+        if (wtr == null) {
+            return false;
+        }
+        return shouldTouristLeaveNow(
+            rec,
+            wtr.getGameDateTime(),
+            VillagerReputationService.currentGameEpochDay(store)
+        );
+    }
+
     public static boolean shouldTouristLeaveNow(@Nonnull TouristRecord rec, @Nonnull LocalDateTime gameTime) {
-        long spawnDay = rec.getSpawnEpochDay();
-        long currentDay = gameTime.toLocalDate().toEpochDay();
+        return shouldTouristLeaveNow(rec, gameTime, gameTime.toLocalDate().toEpochDay());
+    }
+
+    /**
+     * @param dawnAlignedEpochDay visit day id from {@link VillagerReputationService#currentGameEpochDay}; a new id
+     *     starts at dawn, not calendar midnight
+     */
+    public static boolean shouldTouristLeaveNow(
+        @Nonnull TouristRecord rec,
+        @Nonnull LocalDateTime gameTime,
+        long dawnAlignedEpochDay
+    ) {
         int leaveHour = ensureLeaveHour(rec);
-        if (spawnDay <= 0L) {
+        long spawnDay = rec.getSpawnEpochDay();
+        // 0 = legacy unset row only. Hytale game calendar epoch days are negative — never treat those as unset.
+        if (spawnDay == 0L) {
             return gameTime.getHour() >= leaveHour;
         }
-        if (currentDay > spawnDay) {
+        if (dawnAlignedEpochDay > spawnDay) {
             return true;
         }
-        return currentDay == spawnDay && gameTime.getHour() >= leaveHour;
+        if (dawnAlignedEpochDay == spawnDay && gameTime.getHour() >= leaveHour) {
+            return true;
+        }
+        // Pre-sunrise morning on a later calendar day (/time set dawn before dawn-aligned day advances).
+        long calendarDay = gameTime.toLocalDate().toEpochDay();
+        return calendarDay > spawnDay && gameTime.getHour() < leaveHour;
+    }
+
+    @Nullable
+    public static TouristRecord findTouristRecord(@Nonnull TownRecord town, @Nonnull String characterId) {
+        if (characterId.isBlank()) {
+            return null;
+        }
+        for (TouristRecord rec : town.getTouristRecords()) {
+            if (characterId.equals(rec.getCharacterId())) {
+                return rec;
+            }
+        }
+        return null;
     }
 
     public static int rollLeaveHour(@Nonnull UUID portalId, @Nonnull String characterId, long spawnEpochDay) {
@@ -393,7 +563,7 @@ public final class TouristPortalTickService {
             return rec.getLeaveHour();
         }
         UUID portalId = rec.getPortalId();
-        long day = rec.getSpawnEpochDay() > 0L ? rec.getSpawnEpochDay() : 0L;
+        long day = rec.getSpawnEpochDay() != 0L ? rec.getSpawnEpochDay() : 0L;
         int hour =
             rollLeaveHour(
                 portalId != null ? portalId : new UUID(0L, 0L),
@@ -487,6 +657,8 @@ public final class TouristPortalTickService {
         @Nonnull WorldTimeResource wtr
     ) {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        long dawnDay = VillagerReputationService.currentGameEpochDay(store);
+        LAST_DAWN_LEAVE_DAY_BY_WORLD.put(world.getName(), dawnDay - 1L);
         processTouristLeaveWindow(world, plugin, tm, store, wtr);
     }
 
@@ -543,7 +715,7 @@ public final class TouristPortalTickService {
     }
 
     public static void playPortalBurst(@Nonnull World world, @Nonnull Store<EntityStore> store, @Nonnull Vector3i blockPos) {
-        Vector3d center = TouristPortalBlockUtil.portalEffectCenter(blockPos);
+        Vector3d center = TouristPortalBlockUtil.portalEffectCenter(world, blockPos);
         world.execute(() -> {
             ParticleUtil.spawnParticleEffect(AetherhavenConstants.TOURIST_PORTAL_SPAWN_BURST_PARTICLE, center, store);
         });

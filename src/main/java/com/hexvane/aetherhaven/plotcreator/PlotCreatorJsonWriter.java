@@ -60,6 +60,9 @@ public final class PlotCreatorJsonWriter {
         if (draft.getTreasuryLocalPos() != null) {
             root.put("treasuryLocalPos", localPosList(draft.getTreasuryLocalPos()));
         }
+        if (draft.getShopSafeLocalPos() != null) {
+            root.put("shopSafeLocalPos", localPosList(draft.getShopSafeLocalPos()));
+        }
         if (draft.getProductionStorageLocalPos() != null) {
             root.put("productionStorageLocalPos", localPosList(draft.getProductionStorageLocalPos()));
         }
@@ -93,6 +96,9 @@ public final class PlotCreatorJsonWriter {
         }
         if (draft.isTouristDestination()) {
             root.put("touristDestination", true);
+        }
+        if (draft.isPlotTokenLockedByDefault()) {
+            root.put("plotTokenLockedByDefault", true);
         }
         if (draft.isExcludeFromTownJournal()) {
             root.put("excludeFromTownJournal", true);

@@ -158,6 +158,17 @@ public final class TownRecord {
     @SerializedName("touristRecords")
     private List<com.hexvane.aetherhaven.tourist.TouristRecord> touristRecords = new ArrayList<>();
 
+    /** Game epoch day for which {@link #touristPlannedSpawnEpochMinutes} was generated. */
+    @SerializedName("touristSpawnPlannedDayEpochDay")
+    private long touristSpawnPlannedDayEpochDay = Long.MIN_VALUE;
+
+    /** Planned tourist spawn times for the town (epoch minutes); shared across all portals in the town. */
+    @SerializedName("touristPlannedSpawnEpochMinutes")
+    private List<Long> touristPlannedSpawnEpochMinutes = new ArrayList<>();
+
+    @SerializedName("touristExecutedSpawnEpochMinutes")
+    private List<Long> touristExecutedSpawnEpochMinutes = new ArrayList<>();
+
     /** Entity UUID of guard targeted by active {@link com.hexvane.aetherhaven.AetherhavenConstants#QUEST_HOUSE_GUARD}. */
     @Nullable
     @SerializedName("guardHouseQuestTargetEntityUuid")
@@ -174,6 +185,11 @@ public final class TownRecord {
     /** Shared town treasury balance (gold coins); all treasury blocks in this town read/write this. */
     @SerializedName("treasuryGoldCoinCount")
     private long treasuryGoldCoinCount;
+
+    /** Per player gold stored in player shop safes from their listing sales. Key: player UUID string. */
+    @Nullable
+    @SerializedName("playerShopSafeGoldByPlayerUuid")
+    private Map<String, Long> playerShopSafeGoldByPlayerUuid;
 
     /** Dawn-aligned game epoch day when daily treasury tithe was last applied ({@link com.hexvane.aetherhaven.reputation.VillagerReputationService#currentGameEpochDay}). */
     @Nullable
@@ -994,6 +1010,35 @@ public final class TownRecord {
         return touristRecords;
     }
 
+    public long getTouristSpawnPlannedDayEpochDay() {
+        return touristSpawnPlannedDayEpochDay;
+    }
+
+    public void setTouristSpawnPlannedDayEpochDay(long touristSpawnPlannedDayEpochDay) {
+        this.touristSpawnPlannedDayEpochDay = touristSpawnPlannedDayEpochDay;
+    }
+
+    @Nonnull
+    public List<Long> getTouristPlannedSpawnEpochMinutes() {
+        if (touristPlannedSpawnEpochMinutes == null) {
+            touristPlannedSpawnEpochMinutes = new ArrayList<>();
+        }
+        return touristPlannedSpawnEpochMinutes;
+    }
+
+    @Nonnull
+    public List<Long> getTouristExecutedSpawnEpochMinutes() {
+        if (touristExecutedSpawnEpochMinutes == null) {
+            touristExecutedSpawnEpochMinutes = new ArrayList<>();
+        }
+        return touristExecutedSpawnEpochMinutes;
+    }
+
+    public void clearTouristDailySpawnPlan() {
+        getTouristPlannedSpawnEpochMinutes().clear();
+        getTouristExecutedSpawnEpochMinutes().clear();
+    }
+
     private void migrateLegacyGuardHouseQuestTarget() {
         if (guardHouseQuestTargetEntityUuid == null || guardHouseQuestTargetEntityUuid.isBlank()) {
             return;
@@ -1501,6 +1546,48 @@ public final class TownRecord {
         }
         long next = getTreasuryGoldCoinCount() + delta;
         this.treasuryGoldCoinCount = Math.max(0L, next);
+    }
+
+    @Nonnull
+    private Map<String, Long> playerShopSafeGoldMap() {
+        if (playerShopSafeGoldByPlayerUuid == null) {
+            playerShopSafeGoldByPlayerUuid = new LinkedHashMap<>();
+        }
+        return playerShopSafeGoldByPlayerUuid;
+    }
+
+    public long getPlayerShopSafeGold(@Nonnull UUID playerUuid) {
+        Long v = playerShopSafeGoldMap().get(playerUuid.toString());
+        return v != null ? Math.max(0L, v) : 0L;
+    }
+
+    public void addPlayerShopSafeGold(@Nonnull UUID playerUuid, long delta) {
+        if (delta <= 0L) {
+            return;
+        }
+        String key = playerUuid.toString();
+        long next = getPlayerShopSafeGold(playerUuid) + delta;
+        playerShopSafeGoldMap().put(key, next);
+    }
+
+    /** Removes up to {@code amount} from the player's safe balance; returns amount actually removed. */
+    public long withdrawPlayerShopSafeGold(@Nonnull UUID playerUuid, long amount) {
+        if (amount <= 0L) {
+            return 0L;
+        }
+        String key = playerUuid.toString();
+        long bal = getPlayerShopSafeGold(playerUuid);
+        long take = Math.min(bal, amount);
+        if (take <= 0L) {
+            return 0L;
+        }
+        long remain = bal - take;
+        if (remain <= 0L) {
+            playerShopSafeGoldMap().remove(key);
+        } else {
+            playerShopSafeGoldMap().put(key, remain);
+        }
+        return take;
     }
 
     @Nullable

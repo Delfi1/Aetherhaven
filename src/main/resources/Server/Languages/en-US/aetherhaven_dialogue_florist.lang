@@ -1,0 +1,67 @@
+# Florist dialogue (Ivy Bloomwell)
+
+aetherhaven.dialogue.aetherhaven_florist.root.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.main_hub.fallback=Every petal has something to say if you listen closely enough.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.0=Good morning. The leaves look happy today.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.1=I brought extra seeds in my pocket. Old habit.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.2=Your town has nice light for growing things.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.3=Sorry if I smell like soil. I was repotting before I came over.
+
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.0=Fresh flowers or orchids would make my whole day.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.1=Bring me something green and blooming if you want to see me smile.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.0=Please do not bring me trash or dead plants.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.1=Void stuff and bones have no place in a garden.
+
+aetherhaven.dialogue.aetherhaven_florist.root.c_house=Ask about a home
+aetherhaven.dialogue.aetherhaven_florist.root.c_house_done=Finish the home quest
+aetherhaven.dialogue.aetherhaven_florist.root.c_house_remind=Check on the house quest
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_done=Talk about the shop
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_complete=Finish the shop quest
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_building=Check on the shop build
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_offer=Ask about opening a shop
+aetherhaven.dialogue.aetherhaven_florist.root.c_goodbye=Goodbye
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=My little plants deserve more than crates and cart wheels. I need a real flower shop with room to grow and sell. I can share a blueprint if you will build it for the town.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c0=Accept the quest
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c1=Not now
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.body=Take this blueprint. Learn it at your plot crafting bench, then craft a token and build the shop where folks can find it.
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.c0=Understood
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.body=The seeds are waiting. Have you learned the blueprint and started the build yet?
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.c0=Abandon the quest
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.c1=Still working on it
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.body=That is alright. The plants can wait a little longer. Talk to me again if you change your mind.
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.c0=Goodbye
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.body=The shop looks wonderful. My plants finally have a proper home in your town. Thank you for helping them grow here.
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.c0=Happy to help
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.body=I would love a little house with a sunny window for my potted friends. Would you stake one for me?
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c0=Accept the quest
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c1=Not now
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.body=Take the house token and build a plot. Assign me on the management block when it is ready.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.c0=Understood
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.body=I still need a house assigned to me on the management block.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.c0=I will take care of it
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.body=Oh, this is lovely. Warm light, quiet walls, and just enough room for a few more pots. I am home.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.c0=Welcome home
+
+aetherhaven.dialogue.aetherhaven_florist.gift.confirm=Would you like to give me something?
+aetherhaven.dialogue.aetherhaven_florist.gift.love=Oh! This is perfect. You really know what a gardener loves.
+aetherhaven.dialogue.aetherhaven_florist.gift.like=How sweet. Thank you for thinking of me.
+aetherhaven.dialogue.aetherhaven_florist.gift.neutral=Hmm. Not quite my taste, but thank you anyway.
+aetherhaven.dialogue.aetherhaven_florist.gift.dislike=I would rather not keep that. Plants deserve better company.

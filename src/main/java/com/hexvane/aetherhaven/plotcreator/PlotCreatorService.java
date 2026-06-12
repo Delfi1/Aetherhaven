@@ -484,10 +484,6 @@ public final class PlotCreatorService {
     }
 
     /** Parses configure-panel fields into the draft. Returns an error message key, or null on success. */
-    public static boolean showsTouristDestinationToggle(@Nullable PlotBuildingKind kind) {
-        return kind == PlotBuildingKind.SHOP || kind == PlotBuildingKind.INN || kind == PlotBuildingKind.AMENITY;
-    }
-
     @Nullable
     public static String applyConfigureInput(@Nonnull PlotCreatorDraft draft) {
         String raw = draft.getSelfBuildDaysInput();

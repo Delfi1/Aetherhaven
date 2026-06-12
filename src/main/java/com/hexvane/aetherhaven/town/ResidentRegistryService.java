@@ -174,16 +174,14 @@ public final class ResidentRegistryService {
     }
 
     /**
-     * Rows suitable for Gaia revival UI: non-empty role, not inn visitors (stored kinds never use visitor_ prefix here).
+     * Rows suitable for Gaia revival UI: story villagers and citizen guards only — not generic pool townsfolk or inn
+     * visitors.
      */
     @Nonnull
     public static List<ResidentNpcRecord> revivalCandidates(@Nonnull TownRecord town) {
         List<ResidentNpcRecord> out = new ArrayList<>();
         for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
-            if (r.getNpcRoleId().isBlank()) {
-                continue;
-            }
-            if (TownVillagerBinding.isVisitorKind(r.getKind())) {
+            if (!isRevivalCandidate(r.getKind(), r.getNpcRoleId())) {
                 continue;
             }
             if (TownVillagerBinding.KIND_GUARD.equals(r.getKind()) && !isGuardCitizen(town, r)) {
@@ -216,14 +214,8 @@ public final class ResidentRegistryService {
             (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
                 for (int i = 0; i < archetypeChunk.size(); i++) {
                     TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
-                    if (b == null || !tid.equals(b.getTownId()) || TownVillagerBinding.isVisitorKind(b.getKind())) {
+                    if (b == null || !tid.equals(b.getTownId())) {
                         continue;
-                    }
-                    if (TownVillagerBinding.KIND_GUARD.equals(b.getKind())) {
-                        UUIDComponent guardUc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
-                        if (guardUc == null || !isGuardCitizenUuid(town, guardUc.getUuid())) {
-                            continue;
-                        }
                     }
                     UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
                     NPCEntity npc = archetypeChunk.getComponent(i, NPCEntity.getComponentType());
@@ -231,6 +223,12 @@ public final class ResidentRegistryService {
                         continue;
                     }
                     String roleId = npc.getRoleName().trim();
+                    if (!isRevivalCandidate(b.getKind(), roleId)) {
+                        continue;
+                    }
+                    if (TownVillagerBinding.KIND_GUARD.equals(b.getKind()) && !isGuardCitizenUuid(town, uc.getUuid())) {
+                        continue;
+                    }
                     byRole.put(
                         roleId.toLowerCase(Locale.ROOT),
                         new ResidentNpcRecord(roleId, b.getKind(), b.getJobPlotId(), uc.getUuid())
@@ -307,10 +305,30 @@ public final class ResidentRegistryService {
         if (b == null || npc == null || uc == null || npc.getRoleName() == null || npc.getRoleName().isBlank()) {
             return null;
         }
-        if (!town.getTownId().equals(b.getTownId()) || TownVillagerBinding.isVisitorKind(b.getKind())) {
+        if (!town.getTownId().equals(b.getTownId())) {
             return null;
         }
-        return new ResidentNpcRecord(npc.getRoleName().trim(), b.getKind(), b.getJobPlotId(), uc.getUuid());
+        String roleId = npc.getRoleName().trim();
+        if (!isRevivalCandidate(b.getKind(), roleId)) {
+            return null;
+        }
+        return new ResidentNpcRecord(roleId, b.getKind(), b.getJobPlotId(), uc.getUuid());
+    }
+
+    private static boolean isRevivalCandidate(@Nullable String kind, @Nonnull String roleId) {
+        if (roleId.isBlank()) {
+            return false;
+        }
+        if (kind != null && TownVillagerBinding.isVisitorKind(kind)) {
+            return false;
+        }
+        if (kind != null && TownVillagerBinding.KIND_TOWNSFOLK.equals(kind)) {
+            return false;
+        }
+        if (AetherhavenConstants.NPC_TOWNSFOLK.equalsIgnoreCase(roleId.trim())) {
+            return false;
+        }
+        return true;
     }
 
     private static int revivalRowSortOrder(@Nonnull ResidentNpcRecord r) {
@@ -353,7 +371,10 @@ public final class ResidentRegistryService {
             || AetherhavenConstants.NPC_PRIESTESS.equals(roleId)
             || AetherhavenConstants.NPC_MINER.equals(roleId)
             || AetherhavenConstants.NPC_LOGGER.equals(roleId)
-            || AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
+            || AetherhavenConstants.NPC_RANCHER.equals(roleId)
+            || AetherhavenConstants.NPC_CRYSTAL_KEEPER.equals(roleId)
+            || AetherhavenConstants.NPC_PYROTECHNIC.equals(roleId)
+            || AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
             return 2;
         }
         return 3;

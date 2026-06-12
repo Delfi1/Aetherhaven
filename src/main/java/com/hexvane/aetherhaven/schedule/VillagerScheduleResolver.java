@@ -28,6 +28,8 @@ public final class VillagerScheduleResolver {
     public static final String LOC_PARK = "park";
     /** Visits a completed {@link AetherhavenConstants#CONSTRUCTION_PLOT_GAIA_ALTAR} (skipped if not built). */
     public static final String LOC_GAIA_ALTAR = "gaia_altar";
+    /** Browses SHOP POIs on any complete plot tagged {@code shop}; purchases only at player shop spots. */
+    public static final String LOC_SHOP = "shop";
 
     private VillagerScheduleResolver() {}
 
@@ -146,7 +148,8 @@ public final class VillagerScheduleResolver {
                 describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef), constructionCatalog);
             case LOC_GAIA_ALTAR ->
                 describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef), constructionCatalog);
-            default -> "unsupported location '" + loc + "' (not home/work/inn/park/gaia_altar)";
+            case LOC_SHOP -> "no complete shop tagged building in town";
+            default -> "unsupported location '" + loc + "' (not home/work/inn/park/gaia_altar/shop)";
         };
     }
 
@@ -228,6 +231,7 @@ public final class VillagerScheduleResolver {
                     personalityCatalog,
                     personalityIds
                 );
+            case LOC_SHOP -> resolveShopBrowsing(town, constructionCatalog);
             default -> VillagerScheduleResolveOutcome.skip();
         };
     }
@@ -492,7 +496,34 @@ public final class VillagerScheduleResolver {
         if (picked == null) {
             picked = pickSharedPlot(complete, constructionCatalog, personalityCatalog, personalityIds);
         }
-        return new VillagerScheduleResolveOutcome(picked, null, g, normalizedScheduleSegment, picked);
+        return new VillagerScheduleResolveOutcome(picked, null, g, normalizedScheduleSegment, picked, false);
+    }
+
+    @Nonnull
+    private static VillagerScheduleResolveOutcome resolveShopBrowsing(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        if (!townHasCompleteShopBuilding(town, constructionCatalog)) {
+            return VillagerScheduleResolveOutcome.skip();
+        }
+        return VillagerScheduleResolveOutcome.browseTownWide();
+    }
+
+    private static boolean townHasCompleteShopBuilding(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        for (PlotInstance p : town.getPlotInstances()) {
+            if (p.getState() != PlotInstanceState.COMPLETE) {
+                continue;
+            }
+            ConstructionDefinition def = constructionCatalog.get(p.getConstructionId());
+            if (def != null && def.getBuildingTags().contains("shop")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nonnull

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "q_player_shop",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_player_shop",
+  "title": "Your Own Shop",
+  "description": "Build a shop where you can sell your goods to townsfolk and visitors.",
+  "prerequisites": {
+    "completedQuestIds": ["q_merchant_stall"],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Take the player shop plot token from Vex."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the player shop prefab."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Find Vex and close the quest in dialogue."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Merchant",
+      "amount": 10,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 10,
+      "grantTo": "player"
+    }
+  ],
+  "repeat": { "mode": "none" }
+}

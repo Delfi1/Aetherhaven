@@ -43,6 +43,8 @@ DEFAULT_HYTALE_ITEMS_ROOT = (
 JEWELRY_RE = re.compile(
     r"^Aetherhaven_(Ring|Necklace)_(Gold|Silver)_(Topaz|Zephyr|Emerald|Sapphire|Ruby|Voidstone|Diamond)$"
 )
+CRYSTAL_SHARD_RE = re.compile(r"^Ingredient_Crystal_")
+CRYSTAL_ROCK_RE = re.compile(r"^Rock_Crystal_[A-Za-z]+_(Small|Medium|Large|Block)$")
 
 
 @dataclass(frozen=True)
@@ -472,6 +474,34 @@ def price_gem_item(item_id: str, cfg: dict[str, Any]) -> PriceEntry | None:
     return PriceEntry(gold=int(gems[gem]), batch_size=1)
 
 
+def price_crystal_item(item_id: str, cfg: dict[str, Any]) -> PriceEntry | None:
+    """Shard and colored crystal blocks: one base price × size type (color ignored)."""
+    crystal_cfg = cfg.get("crystalPricing")
+    if not isinstance(crystal_cfg, dict):
+        return None
+
+    type_multipliers: dict[str, Any] = crystal_cfg.get("typeMultipliers", {})
+    base = float(crystal_cfg.get("baseGold", 12))
+    crystal_type: str | None = None
+    batch_size = int(crystal_cfg.get("shardBatchSize", 1))
+
+    if CRYSTAL_SHARD_RE.match(item_id):
+        crystal_type = "Shard"
+        batch_size = int(crystal_cfg.get("shardBatchSize", 1))
+    else:
+        match = CRYSTAL_ROCK_RE.match(item_id)
+        if not match:
+            return None
+        crystal_type = match.group(1)
+        if crystal_type == "Block":
+            batch_size = int(crystal_cfg.get("blockBatchSize", 10))
+        else:
+            batch_size = int(crystal_cfg.get("sizeBatchSize", 1))
+
+    multiplier = float(type_multipliers.get(crystal_type, 1.0))
+    return PriceEntry(gold=round_gold(base * multiplier), batch_size=max(1, batch_size))
+
+
 def price_furniture(item_id: str, cfg: dict[str, Any]) -> PriceEntry | None:
     if not item_id.startswith("Furniture_"):
         return None
@@ -599,6 +629,10 @@ def price_item(
     gem = price_gem_item(item_id, cfg)
     if gem:
         return gem, "gem"
+
+    crystal = price_crystal_item(item_id, cfg)
+    if crystal:
+        return crystal, "crystal"
 
     if item_id.startswith("Recipe_Book_"):
         return PriceEntry(gold=int(cfg.get("recipeBookGoldPrice", 45)), batch_size=1), "recipe"
@@ -751,6 +785,29 @@ def print_report(
     print("\nSample jewelry:")
     for sid in sorted(k for k in prices if k.startswith("Aetherhaven_Ring") or k.startswith("Aetherhaven_Necklace"))[:6]:
         print(f"  {sid}: {prices[sid]}")
+
+    crystal_cfg = cfg.get("crystalPricing", {})
+    crystal_base = crystal_cfg.get("baseGold", 12)
+    crystal_mults = crystal_cfg.get("typeMultipliers", {})
+    print(f"\nSample crystals (base {crystal_base}g × type multiplier; color ignored):")
+    for sid in [
+        "Ingredient_Crystal_Blue",
+        "Ingredient_Crystal_Red",
+        "Rock_Crystal_Purple_Small",
+        "Rock_Crystal_Green_Medium",
+        "Rock_Crystal_Yellow_Large",
+        "Rock_Crystal_Cyan_Block",
+    ]:
+        if sid in prices:
+            typ = "Shard" if sid.startswith("Ingredient_Crystal_") else sid.rsplit("_", 1)[-1]
+            mult = crystal_mults.get(typ, "?")
+            print(f"  {sid}: {prices[sid]}  [type={typ}, mult={mult}]")
+
+    print("\nGem prices:")
+    for gem in ["Emerald", "Topaz", "Ruby", "Sapphire", "Zephyr", "Diamond", "Voidstone"]:
+        sid = f"Rock_Gem_{gem}"
+        if sid in prices:
+            print(f"  {sid}: {prices[sid]}")
 
     block_batch = default_building_block_batch_size(cfg)
     type_keys = building_block_type_keys(cfg)

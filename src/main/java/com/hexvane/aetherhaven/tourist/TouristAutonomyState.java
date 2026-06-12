@@ -61,6 +61,20 @@ public final class TouristAutonomyState implements Component<EntityStore> {
             .add()
             .append(new KeyedCodec<>("LastPlotPoiId", Codec.STRING), (v, x) -> v.lastPlotPoiId = x, v -> v.lastPlotPoiId)
             .add()
+            .append(new KeyedCodec<>("LastPlotShopSpotId", Codec.STRING), (v, x) -> v.lastPlotShopSpotId = x, v -> v.lastPlotShopSpotId)
+            .add()
+            .append(
+                new KeyedCodec<>("ShopPurchaseDoneThisVisit", Codec.BOOLEAN),
+                (v, x) -> v.shopPurchaseDoneThisVisit = x != null && x,
+                v -> v.shopPurchaseDoneThisVisit
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("ShopSpotsBrowsedThisVisit", Codec.INTEGER),
+                (v, x) -> v.shopSpotsBrowsedThisVisit = x != null ? Math.max(0, x) : 0,
+                v -> v.shopSpotsBrowsedThisVisit
+            )
+            .add()
             .build();
 
     @Nullable
@@ -95,6 +109,10 @@ public final class TouristAutonomyState implements Component<EntityStore> {
     private long nextPoiPickEpochMs;
     @Nullable
     private String lastPlotPoiId;
+    @Nullable
+    private String lastPlotShopSpotId;
+    private boolean shopPurchaseDoneThisVisit;
+    private int shopSpotsBrowsedThisVisit;
 
     @Nonnull
     public static TouristAutonomyState fresh(long nowMs) {
@@ -166,6 +184,25 @@ public final class TouristAutonomyState implements Component<EntityStore> {
         visitPlotId = "";
         nextPoiPickEpochMs = 0L;
         lastPlotPoiId = null;
+        lastPlotShopSpotId = null;
+        shopPurchaseDoneThisVisit = false;
+        shopSpotsBrowsedThisVisit = 0;
+    }
+
+    public int getShopSpotsBrowsedThisVisit() {
+        return shopSpotsBrowsedThisVisit;
+    }
+
+    public void incrementShopSpotsBrowsedThisVisit() {
+        shopSpotsBrowsedThisVisit++;
+    }
+
+    public boolean isShopPurchaseDoneThisVisit() {
+        return shopPurchaseDoneThisVisit;
+    }
+
+    public void setShopPurchaseDoneThisVisit(boolean shopPurchaseDoneThisVisit) {
+        this.shopPurchaseDoneThisVisit = shopPurchaseDoneThisVisit;
     }
 
     public long getNextPoiPickEpochMs() {
@@ -190,6 +227,22 @@ public final class TouristAutonomyState implements Component<EntityStore> {
 
     public void setLastPlotPoiId(@Nullable UUID poiId) {
         this.lastPlotPoiId = poiId != null ? poiId.toString() : null;
+    }
+
+    @Nullable
+    public UUID getLastPlotShopSpotUuid() {
+        if (lastPlotShopSpotId == null || lastPlotShopSpotId.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(lastPlotShopSpotId.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public void setLastPlotShopSpotId(@Nullable UUID spotId) {
+        this.lastPlotShopSpotId = spotId != null ? spotId.toString() : null;
     }
 
     public double getTargetX() {
@@ -316,6 +369,9 @@ public final class TouristAutonomyState implements Component<EntityStore> {
         c.visitPlotId = visitPlotId;
         c.nextPoiPickEpochMs = nextPoiPickEpochMs;
         c.lastPlotPoiId = lastPlotPoiId;
+        c.lastPlotShopSpotId = lastPlotShopSpotId;
+        c.shopPurchaseDoneThisVisit = shopPurchaseDoneThisVisit;
+        c.shopSpotsBrowsedThisVisit = shopSpotsBrowsedThisVisit;
         return c;
     }
 }

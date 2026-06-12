@@ -93,5 +93,18 @@
   "Model": "Characters/Player.blockymodel",
   "Texture": "Characters/Player_Textures/Player_Greyscale.png",
   "GradientSet": "Skin",
-  "GradientId": "17"
+  "GradientId": "17",
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Bard.png",
+  "IconProperties": {
+    "Scale": 0.4,
+    "Rotation": [
+      0,
+      33,
+      0
+    ],
+    "Translation": [
+      0,
+      -107
+    ]
+  }
 }

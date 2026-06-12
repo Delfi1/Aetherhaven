@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.tourist;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownOnlinePresence;
@@ -18,7 +19,6 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -61,8 +61,7 @@ public final class TouristReconcileService {
         }
 
         WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
-        LocalDateTime gameTime = wtr != null ? wtr.getGameDateTime() : null;
-        long currentEpochDay = gameTime != null ? gameTime.toLocalDate().toEpochDay() : Long.MIN_VALUE;
+        long currentDawnEpochDay = wtr != null ? VillagerReputationService.currentGameEpochDay(store) : Long.MIN_VALUE;
 
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         Set<UUID> onlinePlayers = TownOnlinePresence.collectOnlinePlayerUuids(world);
@@ -105,13 +104,13 @@ public final class TouristReconcileService {
                     continue;
                 }
 
-                if (rec.getSpawnEpochDay() <= 0L && currentEpochDay != Long.MIN_VALUE) {
-                    rec.setSpawnEpochDay(currentEpochDay);
+                if (rec.getSpawnEpochDay() == 0L && currentDawnEpochDay != Long.MIN_VALUE) {
+                    rec.setSpawnEpochDay(currentDawnEpochDay);
                     changed = true;
                 }
                 TouristPortalTickService.ensureLeaveHour(rec);
 
-                if (gameTime != null && TouristPortalTickService.shouldTouristLeaveNow(rec, gameTime)) {
+                if (TouristPortalTickService.shouldTouristLeaveNow(rec, store)) {
                     UUID entityUuid = rec.getEntityUuid();
                     if (entityUuid != null && isLiveTouristEntity(town, store, liveByCharacter, rec)) {
                         TouristPortalTickService.sendTouristHomeOrFinalize(

@@ -13,35 +13,35 @@
     "Aetherhaven_Gold_Coin": 1,
     "Aetherhaven_Hand_Mirror": 40,
     "Aetherhaven_Jewelry_Crafting_Bench": 50,
-    "Aetherhaven_Necklace_Gold_Diamond": 159,
-    "Aetherhaven_Necklace_Gold_Emerald": 102,
-    "Aetherhaven_Necklace_Gold_Ruby": 122,
-    "Aetherhaven_Necklace_Gold_Sapphire": 106,
-    "Aetherhaven_Necklace_Gold_Topaz": 82,
-    "Aetherhaven_Necklace_Gold_Voidstone": 132,
-    "Aetherhaven_Necklace_Gold_Zephyr": 86,
-    "Aetherhaven_Necklace_Silver_Diamond": 155,
-    "Aetherhaven_Necklace_Silver_Emerald": 98,
-    "Aetherhaven_Necklace_Silver_Ruby": 118,
-    "Aetherhaven_Necklace_Silver_Sapphire": 102,
-    "Aetherhaven_Necklace_Silver_Topaz": 78,
-    "Aetherhaven_Necklace_Silver_Voidstone": 128,
-    "Aetherhaven_Necklace_Silver_Zephyr": 82,
+    "Aetherhaven_Necklace_Gold_Diamond": 122,
+    "Aetherhaven_Necklace_Gold_Emerald": 79,
+    "Aetherhaven_Necklace_Gold_Ruby": 96,
+    "Aetherhaven_Necklace_Gold_Sapphire": 96,
+    "Aetherhaven_Necklace_Gold_Topaz": 96,
+    "Aetherhaven_Necklace_Gold_Voidstone": 149,
+    "Aetherhaven_Necklace_Gold_Zephyr": 122,
+    "Aetherhaven_Necklace_Silver_Diamond": 118,
+    "Aetherhaven_Necklace_Silver_Emerald": 75,
+    "Aetherhaven_Necklace_Silver_Ruby": 92,
+    "Aetherhaven_Necklace_Silver_Sapphire": 92,
+    "Aetherhaven_Necklace_Silver_Topaz": 92,
+    "Aetherhaven_Necklace_Silver_Voidstone": 145,
+    "Aetherhaven_Necklace_Silver_Zephyr": 118,
     "Aetherhaven_Purification_Powder": 5,
-    "Aetherhaven_Ring_Gold_Diamond": 145,
-    "Aetherhaven_Ring_Gold_Emerald": 88,
-    "Aetherhaven_Ring_Gold_Ruby": 108,
-    "Aetherhaven_Ring_Gold_Sapphire": 92,
-    "Aetherhaven_Ring_Gold_Topaz": 68,
-    "Aetherhaven_Ring_Gold_Voidstone": 118,
-    "Aetherhaven_Ring_Gold_Zephyr": 72,
-    "Aetherhaven_Ring_Silver_Diamond": 141,
-    "Aetherhaven_Ring_Silver_Emerald": 84,
-    "Aetherhaven_Ring_Silver_Ruby": 104,
-    "Aetherhaven_Ring_Silver_Sapphire": 88,
-    "Aetherhaven_Ring_Silver_Topaz": 64,
-    "Aetherhaven_Ring_Silver_Voidstone": 114,
-    "Aetherhaven_Ring_Silver_Zephyr": 68,
+    "Aetherhaven_Ring_Gold_Diamond": 108,
+    "Aetherhaven_Ring_Gold_Emerald": 65,
+    "Aetherhaven_Ring_Gold_Ruby": 82,
+    "Aetherhaven_Ring_Gold_Sapphire": 82,
+    "Aetherhaven_Ring_Gold_Topaz": 82,
+    "Aetherhaven_Ring_Gold_Voidstone": 135,
+    "Aetherhaven_Ring_Gold_Zephyr": 108,
+    "Aetherhaven_Ring_Silver_Diamond": 104,
+    "Aetherhaven_Ring_Silver_Emerald": 61,
+    "Aetherhaven_Ring_Silver_Ruby": 78,
+    "Aetherhaven_Ring_Silver_Sapphire": 78,
+    "Aetherhaven_Ring_Silver_Topaz": 78,
+    "Aetherhaven_Ring_Silver_Voidstone": 131,
+    "Aetherhaven_Ring_Silver_Zephyr": 104,
     "Aetherhaven_Town_Planning_Desk": 1,
     "Armor_Adamantite_Chest": 235,
     "Armor_Adamantite_Hands": 101,
@@ -1103,14 +1103,38 @@
     },
     "Ingredient_Charcoal": 5,
     "Ingredient_Chitin_Sturdy": 5,
-    "Ingredient_Crystal_Blue": 5,
-    "Ingredient_Crystal_Cyan": 5,
-    "Ingredient_Crystal_Green": 5,
-    "Ingredient_Crystal_Pink": 5,
-    "Ingredient_Crystal_Purple": 5,
-    "Ingredient_Crystal_Red": 5,
-    "Ingredient_Crystal_White": 5,
-    "Ingredient_Crystal_Yellow": 5,
+    "Ingredient_Crystal_Blue": {
+      "gold": 15,
+      "batchSize": 5
+    },
+    "Ingredient_Crystal_Cyan": {
+      "gold": 15,
+      "batchSize": 5
+    },
+    "Ingredient_Crystal_Green": {
+      "gold": 15,
+      "batchSize": 5
+    },
+    "Ingredient_Crystal_Pink": {
+      "gold": 15,
+      "batchSize": 5
+    },
+    "Ingredient_Crystal_Purple": {
+      "gold": 15,
+      "batchSize": 5
+    },
+    "Ingredient_Crystal_Red": {
+      "gold": 15,
+      "batchSize": 5
+    },
+    "Ingredient_Crystal_White": {
+      "gold": 15,
+      "batchSize": 5
+    },
+    "Ingredient_Crystal_Yellow": {
+      "gold": 15,
+      "batchSize": 5
+    },
     "Ingredient_Dough": 5,
     "Ingredient_Fire_Essence": 5,
     "Ingredient_Flour": 5,
@@ -3445,146 +3469,41 @@
       "gold": 1,
       "batchSize": 10
     },
-    "Rock_Crystal_Blue_Block": {
-      "gold": 78,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Blue_Large": {
-      "gold": 60,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Blue_Medium": {
-      "gold": 42,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Blue_Small": {
-      "gold": 30,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Cyan_Block": {
-      "gold": 78,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Cyan_Large": {
-      "gold": 60,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Cyan_Medium": {
-      "gold": 42,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Cyan_Small": {
-      "gold": 30,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Green_Block": {
-      "gold": 78,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Green_Large": {
-      "gold": 60,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Green_Medium": {
-      "gold": 42,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Green_Small": {
-      "gold": 30,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Iridescent_Large": {
-      "gold": 60,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Iridescent_Medium": {
-      "gold": 42,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Iridescent_Small": {
-      "gold": 30,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Pink_Block": {
-      "gold": 78,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Pink_Large": {
-      "gold": 60,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Pink_Medium": {
-      "gold": 42,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Pink_Small": {
-      "gold": 30,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Purple_Block": {
-      "gold": 78,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Purple_Large": {
-      "gold": 60,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Purple_Medium": {
-      "gold": 42,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Purple_Small": {
-      "gold": 30,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Red_Block": {
-      "gold": 78,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Red_Large": {
-      "gold": 60,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Red_Medium": {
-      "gold": 42,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Red_Small": {
-      "gold": 30,
-      "batchSize": 10
-    },
-    "Rock_Crystal_White_Block": {
-      "gold": 78,
-      "batchSize": 10
-    },
-    "Rock_Crystal_White_Large": {
-      "gold": 60,
-      "batchSize": 10
-    },
-    "Rock_Crystal_White_Medium": {
-      "gold": 42,
-      "batchSize": 10
-    },
-    "Rock_Crystal_White_Small": {
-      "gold": 30,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Yellow_Block": {
-      "gold": 78,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Yellow_Large": {
-      "gold": 60,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Yellow_Medium": {
-      "gold": 42,
-      "batchSize": 10
-    },
-    "Rock_Crystal_Yellow_Small": {
-      "gold": 30,
-      "batchSize": 10
-    },
+    "Rock_Crystal_Blue_Block": 45,
+    "Rock_Crystal_Blue_Large": 45,
+    "Rock_Crystal_Blue_Medium": 30,
+    "Rock_Crystal_Blue_Small": 22,
+    "Rock_Crystal_Cyan_Block": 45,
+    "Rock_Crystal_Cyan_Large": 45,
+    "Rock_Crystal_Cyan_Medium": 30,
+    "Rock_Crystal_Cyan_Small": 22,
+    "Rock_Crystal_Green_Block": 45,
+    "Rock_Crystal_Green_Large": 45,
+    "Rock_Crystal_Green_Medium": 30,
+    "Rock_Crystal_Green_Small": 22,
+    "Rock_Crystal_Iridescent_Large": 45,
+    "Rock_Crystal_Iridescent_Medium": 30,
+    "Rock_Crystal_Iridescent_Small": 22,
+    "Rock_Crystal_Pink_Block": 45,
+    "Rock_Crystal_Pink_Large": 45,
+    "Rock_Crystal_Pink_Medium": 30,
+    "Rock_Crystal_Pink_Small": 22,
+    "Rock_Crystal_Purple_Block": 45,
+    "Rock_Crystal_Purple_Large": 45,
+    "Rock_Crystal_Purple_Medium": 30,
+    "Rock_Crystal_Purple_Small": 22,
+    "Rock_Crystal_Red_Block": 45,
+    "Rock_Crystal_Red_Large": 45,
+    "Rock_Crystal_Red_Medium": 30,
+    "Rock_Crystal_Red_Small": 22,
+    "Rock_Crystal_White_Block": 45,
+    "Rock_Crystal_White_Large": 45,
+    "Rock_Crystal_White_Medium": 30,
+    "Rock_Crystal_White_Small": 22,
+    "Rock_Crystal_Yellow_Block": 45,
+    "Rock_Crystal_Yellow_Large": 45,
+    "Rock_Crystal_Yellow_Medium": 30,
+    "Rock_Crystal_Yellow_Small": 22,
     "Rock_Dawnstone": {
       "gold": 12,
       "batchSize": 10
@@ -3601,13 +3520,13 @@
       "gold": 6,
       "batchSize": 10
     },
-    "Rock_Gem_Diamond": 125,
-    "Rock_Gem_Emerald": 68,
-    "Rock_Gem_Ruby": 88,
-    "Rock_Gem_Sapphire": 72,
-    "Rock_Gem_Topaz": 48,
-    "Rock_Gem_Voidstone": 98,
-    "Rock_Gem_Zephyr": 52,
+    "Rock_Gem_Diamond": 88,
+    "Rock_Gem_Emerald": 45,
+    "Rock_Gem_Ruby": 62,
+    "Rock_Gem_Sapphire": 62,
+    "Rock_Gem_Topaz": 62,
+    "Rock_Gem_Voidstone": 115,
+    "Rock_Gem_Zephyr": 88,
     "Rock_Gold_Brick": {
       "gold": 2,
       "batchSize": 10

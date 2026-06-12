@@ -129,6 +129,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 .append("@SelfBuildDays", "#SelfBuildDaysField.Value")
                 .append("@SaveEmptySpaces", "#SaveEmptySpacesToggle.Value")
                 .append("@TouristDestination", "#TouristDestinationToggle.Value")
+                .append("@PlotTokenLocked", "#PlotTokenLockedToggle.Value")
                 .append("@AssemblySections", "#AssemblySectionsField.Value"),
             false
         );
@@ -202,6 +203,18 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
+            "#TouristDestinationToggle",
+            EventData.of("@TouristDestination", "#TouristDestinationToggle.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#PlotTokenLockedToggle",
+            EventData.of("@PlotTokenLocked", "#PlotTokenLockedToggle.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
             "#AssemblySectionsField",
             EventData.of("@AssemblySections", "#AssemblySectionsField.Value"),
             false
@@ -237,6 +250,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#SaveEmptySpacesHint.TextSpans", Message.translation(MSG + ".field.saveEmptySpaces.hint"));
         b.set("#TouristDestinationLabel.TextSpans", Message.translation(MSG + ".field.touristDestination"));
         b.set("#TouristDestinationHint.TextSpans", Message.translation(MSG + ".field.touristDestination.hint"));
+        b.set("#PlotTokenLockedLabel.TextSpans", Message.translation(MSG + ".field.plotTokenLocked"));
+        b.set("#PlotTokenLockedHint.TextSpans", Message.translation(MSG + ".field.plotTokenLocked.hint"));
         b.set("#AssemblySectionsLabel.TextSpans", Message.translation(MSG + ".field.assemblySections"));
         b.set("#AssemblySectionsField.PlaceholderText", Message.translation(MSG + ".field.assemblySections"));
         ObjectArrayList<DropdownEntryInfo> kinds = new ObjectArrayList<>();
@@ -274,6 +289,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#SaveEmptySpacesHint.Visible", false);
             b.set("#TouristDestinationRow.Visible", false);
             b.set("#TouristDestinationHint.Visible", false);
+            b.set("#PlotTokenLockedRow.Visible", false);
+            b.set("#PlotTokenLockedHint.Visible", false);
             b.set("#AssemblySectionsLabel.Visible", false);
             b.set("#AssemblySectionsField.Visible", false);
             b.set("#OpenMaterialsButton.Visible", false);
@@ -282,7 +299,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         if (configurePanelOnly) {
-            boolean showTourist = PlotCreatorService.showsTouristDestinationToggle(session.getDraft().getKind());
             b.set("#DisplayNameField.Visible", false);
             b.set("#DescriptionField.Visible", false);
             b.set("#ConstructionIdField.Visible", false);
@@ -296,8 +312,10 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#SelfBuildDaysField.Visible", true);
             b.set("#SaveEmptySpacesRow.Visible", true);
             b.set("#SaveEmptySpacesHint.Visible", true);
-            b.set("#TouristDestinationRow.Visible", showTourist);
-            b.set("#TouristDestinationHint.Visible", showTourist);
+            b.set("#TouristDestinationRow.Visible", true);
+            b.set("#TouristDestinationHint.Visible", true);
+            b.set("#PlotTokenLockedRow.Visible", true);
+            b.set("#PlotTokenLockedHint.Visible", true);
             b.set("#AssemblySectionsLabel.Visible", true);
             b.set("#AssemblySectionsField.Visible", true);
             b.set("#OpenMaterialsButton.Visible", false);
@@ -320,6 +338,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#SaveEmptySpacesHint.Visible", false);
         b.set("#TouristDestinationRow.Visible", false);
         b.set("#TouristDestinationHint.Visible", false);
+        b.set("#PlotTokenLockedRow.Visible", false);
+        b.set("#PlotTokenLockedHint.Visible", false);
         b.set("#AssemblySectionsLabel.Visible", false);
         b.set("#AssemblySectionsField.Visible", false);
         b.set("#OpenMaterialsButton.Visible", step == PlotCreatorStep.MATERIALS);
@@ -370,6 +390,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
         b.set("#SaveEmptySpacesToggle.Value", d.isSaveEmptySpaces());
         b.set("#TouristDestinationToggle.Value", d.isTouristDestination());
+        b.set("#PlotTokenLockedToggle.Value", d.isPlotTokenLockedByDefault());
         if (d.getAssemblySectionsInput() != null) {
             b.set("#AssemblySectionsField.Value", d.getAssemblySectionsInput());
         } else if (d.getAssemblyPrefabSectionsPerAxis() > 1) {
@@ -592,6 +613,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.touristDestination != null) {
             d.setTouristDestination(data.touristDestination);
         }
+        if (data.plotTokenLocked != null) {
+            d.setPlotTokenLockedByDefault(data.plotTokenLocked);
+        }
         if (data.assemblySections != null) {
             d.setAssemblySectionsInput(data.assemblySections);
         }
@@ -690,6 +714,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             .add()
             .append(new KeyedCodec<>("@TouristDestination", Codec.BOOLEAN), (d, v) -> d.touristDestination = v, d -> d.touristDestination)
             .add()
+            .append(new KeyedCodec<>("@PlotTokenLocked", Codec.BOOLEAN), (d, v) -> d.plotTokenLocked = v, d -> d.plotTokenLocked)
+            .add()
             .append(new KeyedCodec<>("@AssemblySections", Codec.STRING), (d, v) -> d.assemblySections = v, d -> d.assemblySections)
             .add()
             .build();
@@ -718,6 +744,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private Boolean saveEmptySpaces;
         @Nullable
         private Boolean touristDestination;
+        @Nullable
+        private Boolean plotTokenLocked;
         @Nullable
         private String assemblySections;
     }

@@ -43,7 +43,10 @@ import com.hexvane.aetherhaven.plot.PlotTokenIconPacketAdapter;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageUseInteraction;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPlayerInitSystem;
 import com.hexvane.aetherhaven.plot.PlotTokenVirtualItemRegistry;
+import com.hexvane.aetherhaven.plot.ShopSafeBlock;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
+import com.hexvane.aetherhaven.shop.ShopSafeUseInteraction;
+import com.hexvane.aetherhaven.economy.ShopSafeBreakBlockSystem;
 import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchor;
 import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchorSystem;
 import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
@@ -150,6 +153,7 @@ import com.hexvane.aetherhaven.questboard.RaidHealthBarHudRefreshSystem;
 import com.hexvane.aetherhaven.questboard.RaidQuestMarchSystem;
 import com.hexvane.aetherhaven.questboard.RaidQuestMobBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.TownVillagerEnvironmentalDamageFilterSystem;
 import com.hexvane.aetherhaven.villager.TownVillagerNpcWorldSpawnSanitizeSystems;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
@@ -197,6 +201,7 @@ import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventoryChangeSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventorySyncSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiasDraughtConsumeInteraction;
 import com.hexvane.aetherhaven.loot.PlayerBlockBreakBonusSystem;
+import com.hexvane.aetherhaven.rescue.RescueVillagerBreakBlockSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentBreakSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentPlaceSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentStatueRestoreSystem;
@@ -517,6 +522,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         ManagementBlock.register(this.getChunkStoreRegistry());
         CharterBlock.register(this.getChunkStoreRegistry());
         TreasuryBlock.register(this.getChunkStoreRegistry());
+        ShopSafeBlock.register(this.getChunkStoreRegistry());
         GaiaStatueBlock.register(this.getChunkStoreRegistry());
         SprinklerBlock.register(this.getChunkStoreRegistry());
         FounderMonumentBlock.register(this.getChunkStoreRegistry());
@@ -776,6 +782,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenCommandPostUse", CommandPostUseInteraction.class, CommandPostUseInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenShopSafeUse", ShopSafeUseInteraction.class, ShopSafeUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenRtsToolPrimary", RtsToolPrimaryInteraction.class, RtsToolPrimaryInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenRtsToolSecondary", RtsToolSecondaryInteraction.class, RtsToolSecondaryInteraction.CODEC);
@@ -800,9 +808,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PendingEntityRemovalSystem());
         this.getEntityStoreRegistry().registerSystem(new TownsfolkAssignmentSystem());
         this.getEntityStoreRegistry().registerSystem(new VillagerDeathHandlerSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new TownVillagerEnvironmentalDamageFilterSystem());
         this.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ShopSafeBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotCreatorBreakAllowSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotCreatorPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotBlockPreviewCleanupSystem());
@@ -817,6 +827,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem());
         this.getEntityStoreRegistry().registerSystem(new NpcPersistentModelResyncSystem());
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentBreakSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new RescueVillagerBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));
         this.getEntityStoreRegistry().registerSystem(new AdventurerSpawnMarkerSystems.EnsurePrefabCopyable());
         this.getEntityStoreRegistry().registerSystem(new PoiMarkerSystems.EnsurePrefabCopyable());

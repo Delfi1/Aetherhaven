@@ -5,6 +5,7 @@ public enum PlotCreatorSubstepType {
     MANAGEMENT_BLOCK,
     PRODUCTION_STORAGE,
     TREASURY_BLOCK,
+    SHOP_SAFE_BLOCK,
     PLANNING_DESK_POI,
     WORK_POI,
     SLEEP_POI,

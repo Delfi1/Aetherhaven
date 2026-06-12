@@ -40,6 +40,14 @@ public final class PoiScoring {
         return scheduleLocation != null && VillagerScheduleResolver.LOC_WORK.equalsIgnoreCase(scheduleLocation.trim());
     }
 
+    static boolean isShopScheduleSegment(@Nullable String scheduleLocation) {
+        return scheduleLocation != null && VillagerScheduleResolver.LOC_SHOP.equalsIgnoreCase(scheduleLocation.trim());
+    }
+
+    public static boolean isShopPoi(@Nonnull PoiEntry e) {
+        return e.getTags().contains("SHOP");
+    }
+
     public static float score(@Nonnull VillagerNeeds needs, @Nonnull PoiEntry poi) {
         float hungerDef = VillagerNeeds.MAX - needs.getHunger();
         float energyDef = VillagerNeeds.MAX - needs.getEnergy();
@@ -161,21 +169,27 @@ public final class PoiScoring {
     ) {
         UUID preferredPlot = binding.getPreferredPlotId();
         boolean atWork = isWorkScheduleSegment(scheduleLocation);
+        boolean atShop = isShopScheduleSegment(scheduleLocation);
         boolean breakOverride = atWork && needsBreakForSchedule(needs);
         boolean workOnlyShift = preferredPlot != null && atWork && !breakOverride;
+        boolean shopBrowseShift = atShop;
         PoiEntry best = null;
         float bestScore = 0f;
         int bestUsed = Integer.MAX_VALUE;
         double bestDistSq = Double.POSITIVE_INFINITY;
         for (PoiEntry e : candidates) {
-            if (workOnlyShift) {
+            if (shopBrowseShift) {
+                if (!isShopPoi(e)) {
+                    continue;
+                }
+            } else if (workOnlyShift) {
                 if (e.getPlotId() == null || !preferredPlot.equals(e.getPlotId())) {
                     continue;
                 }
                 if (!isWorkPoi(e)) {
                     continue;
                 }
-            } else if (preferredPlot != null && !(atWork && breakOverride)) {
+            } else if (preferredPlot != null && !(atWork && breakOverride) && !atShop) {
                 if (e.getPlotId() != null && !preferredPlot.equals(e.getPlotId())) {
                     continue;
                 }
@@ -228,7 +242,7 @@ public final class PoiScoring {
         // Idle discretionary visits: require some unmet need so villagers do not crisscross town when already satisfied.
         // When the weekly schedule sets preferredPlotId, we must still pick a POI in that plot even if needs are full
         // (scores near zero); otherwise they never enter TRAVEL and stay on local wander (e.g. near Gaia after revival).
-        if (preferredPlot == null && bestScore < 8f) {
+        if (preferredPlot == null && !shopBrowseShift && bestScore < 8f) {
             return null;
         }
         return best;

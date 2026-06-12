@@ -1,8 +1,10 @@
 package com.hexvane.aetherhaven.shopspot;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -142,7 +144,7 @@ public final class ShopSpotPurchaseService {
             tm.updateTown(payerTown);
         }
         if (record.isPlayerControlled()) {
-            town.addTreasuryGoldCoins(totalCost);
+            creditSellerPayout(plugin, town, record, totalCost);
             tm.updateTown(town);
         }
         record.setStock(record.getStock() - itemQty);
@@ -346,7 +348,44 @@ public final class ShopSpotPurchaseService {
         context.getState().state = InteractionState.Finished;
     }
 
-    private static void notifySellerIfNeeded(
+    /** Credits listing revenue to the player shop safe or town treasury depending on plot type. */
+    public static void creditSellerPayout(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull ShopSpotRecord record,
+        long totalCost
+    ) {
+        if (totalCost <= 0L || !record.isPlayerControlled()) {
+            return;
+        }
+        UUID seller = record.getSellerUuid();
+        if (seller == null) {
+            return;
+        }
+        if (isPlayerShopPlot(plugin, town, record.getPlotId())) {
+            town.addPlayerShopSafeGold(seller, totalCost);
+        } else {
+            town.addTreasuryGoldCoins(totalCost);
+        }
+    }
+
+    public static boolean isPlayerShopPlot(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nullable UUID plotId
+    ) {
+        if (plotId == null) {
+            return false;
+        }
+        PlotInstance plot = town.findPlotById(plotId);
+        if (plot == null) {
+            return false;
+        }
+        String gid = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot.getConstructionId());
+        return AetherhavenConstants.CONSTRUCTION_PLOT_PLAYER_SHOP.equals(gid);
+    }
+
+    public static void notifySellerIfNeeded(
         @Nonnull ShopSpotRecord record,
         @Nonnull UUID buyerUuid,
         @Nonnull String buyerName,

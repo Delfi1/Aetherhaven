@@ -54,6 +54,8 @@ public final class PlotCreatorDraft {
     @Nullable
     private int[] treasuryLocalPos;
     @Nullable
+    private int[] shopSafeLocalPos;
+    @Nullable
     private int[] innkeeperSpawnLocal;
     @Nonnull
     private final List<int[]> visitorSpawnLocals = new ArrayList<>();
@@ -79,6 +81,8 @@ public final class PlotCreatorDraft {
     private boolean excludeFromTownJournal;
     /** When true, portal tourists may path here during the day. */
     private boolean touristDestination;
+    /** When true, players must unlock this plot at the plot crafting bench before crafting tokens. */
+    private boolean plotTokenLockedByDefault;
 
     @Nullable
     private Vector3i stagingChestWorldPos;
@@ -270,6 +274,15 @@ public final class PlotCreatorDraft {
     }
 
     @Nullable
+    public int[] getShopSafeLocalPos() {
+        return shopSafeLocalPos;
+    }
+
+    public void setShopSafeLocalPos(@Nullable int[] shopSafeLocalPos) {
+        this.shopSafeLocalPos = shopSafeLocalPos;
+    }
+
+    @Nullable
     public int[] getInnkeeperSpawnLocal() {
         return innkeeperSpawnLocal;
     }
@@ -383,6 +396,14 @@ public final class PlotCreatorDraft {
 
     public void setTouristDestination(boolean touristDestination) {
         this.touristDestination = touristDestination;
+    }
+
+    public boolean isPlotTokenLockedByDefault() {
+        return plotTokenLockedByDefault;
+    }
+
+    public void setPlotTokenLockedByDefault(boolean plotTokenLockedByDefault) {
+        this.plotTokenLockedByDefault = plotTokenLockedByDefault;
     }
 
     @Nullable

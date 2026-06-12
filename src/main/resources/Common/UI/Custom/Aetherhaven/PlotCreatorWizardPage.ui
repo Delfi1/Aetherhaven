@@ -111,7 +111,6 @@ $C.@PageOverlay {
       Group #TouristDestinationRow {
         LayoutMode: Left;
         Anchor: (Bottom: 10);
-        Visible: false;
 
         $C.@CheckBox #TouristDestinationToggle {}
 
@@ -123,6 +122,26 @@ $C.@PageOverlay {
       }
 
       Label #TouristDestinationHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+      }
+
+      Group #PlotTokenLockedRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+        Visible: false;
+
+        $C.@CheckBox #PlotTokenLockedToggle {}
+
+        Label #PlotTokenLockedLabel {
+          Text: "";
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+          Anchor: (Left: 11);
+        }
+      }
+
+      Label #PlotTokenLockedHint {
         Style: (...@HintStyle);
         Text: "";
         Anchor: (Bottom: 10);

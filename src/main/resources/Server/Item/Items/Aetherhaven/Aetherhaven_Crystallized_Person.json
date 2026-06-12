@@ -1,0 +1,66 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Crystallized_Person.name"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Blocks.Deco"
+  ],
+  "Set": "Aetherhaven",
+  "IconProperties": {
+    "Scale": 0.2,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -48
+    ]
+  },
+  "BlockType": {
+    "BlockParticleSetId": "Crystal",
+    "BlockSoundSetId": "Crystal",
+    "PhysicalMaterialId": "Stone",
+    "CustomModel": "Blocks/Crystallized_Person.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Crystallized_Person.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {},
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Rocks",
+        "DropList": "Aetherhaven_Crystallized_Person"
+      }
+    },
+    "HitboxType": "Aetherhaven_Crystallized_Person",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "VariantRotation": "NESW",
+    "ParticleColor": "#79d",
+    "TextureComputedColor": "#3C5BBF"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Crystallized_Person.png",
+  "Tags": {
+    "Type": [
+      "Deco"
+    ],
+    "Family": [
+      "Crystal"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Stone",
+  "MaxStack": 1
+}

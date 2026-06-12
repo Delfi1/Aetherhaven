@@ -85,6 +85,14 @@ public final class QuestDefinition {
     @Nullable
     private String grantPlotTokenConstructionId;
 
+    /**
+     * If set, a plot blueprint page for this construction is given to the player when the quest starts (dialogue accept
+     * or debug grant). The player must use the page to unlock crafting at the plot bench.
+     */
+    @SerializedName("grantPlotBlueprintConstructionId")
+    @Nullable
+    private String grantPlotBlueprintConstructionId;
+
     @Nonnull
     public String idOrEmpty() {
         return id != null ? id.trim() : "";
@@ -167,6 +175,11 @@ public final class QuestDefinition {
     @Nullable
     public String grantPlotTokenConstructionId() {
         return grantPlotTokenConstructionId != null ? grantPlotTokenConstructionId.trim() : null;
+    }
+
+    @Nullable
+    public String grantPlotBlueprintConstructionId() {
+        return grantPlotBlueprintConstructionId != null ? grantPlotBlueprintConstructionId.trim() : null;
     }
 
     /**

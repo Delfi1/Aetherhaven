@@ -165,6 +165,9 @@ npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
 npcRoles.Aetherhaven_Rancher.name=Thalen Meadowrun
 npcRoles.Aetherhaven_Townsfolk.name=Townsfolk
 npcRoles.Aetherhaven_Guild_Master.name=Lyra Fairhollow
+npcRoles.Aetherhaven_Crystal_Keeper.name=Vaelith Prismshade
+npcRoles.Aetherhaven_Pyrotechnic.name=Grubble Sparkmatch
+npcRoles.Aetherhaven_Florist.name=Ivy Bloomwell
 npcRoles.Aetherhaven_Guard.name=Town guard
 
 items.Aetherhaven_Quest_Board.name=Quest board

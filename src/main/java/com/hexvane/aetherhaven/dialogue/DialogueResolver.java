@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.data.DialogueTreeDefinition;
 import com.hexvane.aetherhaven.quest.QuestDialogueEntry;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.rescue.RescueVillagerTriggers;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -48,6 +49,12 @@ public final class DialogueResolver {
     public static final String KIND_GUARD = "guard";
     public static final String TREE_GUARD = "aetherhaven_guard";
 
+    public static final String KIND_CRYSTAL_KEEPER = "crystal_keeper";
+    public static final String TREE_CRYSTAL_KEEPER = "aetherhaven_crystal_keeper";
+
+    public static final String KIND_PYROTECHNIC = "pyrotechnic";
+    public static final String TREE_PYROTECHNIC = "aetherhaven_pyrotechnic";
+
     private final Map<String, String> kindToTree = new HashMap<>();
     private final Map<String, String> kindToVisitorTree = new HashMap<>();
 
@@ -71,6 +78,8 @@ public final class DialogueResolver {
         kindToVisitorTree.put("miner", VISITOR_DEFAULT);
         kindToVisitorTree.put("logger", VISITOR_DEFAULT);
         kindToVisitorTree.put("rancher", VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_CRYSTAL_KEEPER, VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_PYROTECHNIC, VISITOR_DEFAULT);
         registerNonVillagerDialogueKinds();
     }
 
@@ -167,6 +176,12 @@ public final class DialogueResolver {
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
             TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+            if (binding != null) {
+                var rescueTrigger = RescueVillagerTriggers.byBindingKind(binding.getKind());
+                if (rescueTrigger != null) {
+                    return new ResolvedDialogue(rescueTrigger.rescueDialogueTreeId(), "root");
+                }
+            }
             if (pu != null && binding != null) {
                 TownRecord npcTown = tm.getTown(binding.getTownId());
                 boolean outsider = npcTown == null || !npcTown.hasMemberOrOwner(pu.getUuid());

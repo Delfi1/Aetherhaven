@@ -16,18 +16,13 @@ import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 public final class TouristPortalBlockUtil {
-    private static final int[][] STAND_OFFSETS_FRONT_FIRST = {
-        {1, 2}, {0, 2}, {2, 2},
-        {1, 3}, {0, 3}, {2, 3}, {1, 4}, {0, 4}, {2, 4},
-        {1, 1}, {0, 1}, {2, 1},
-    };
+    private static final int[][] PLATFORM_OFFSETS_X_WIDE = {{0, 0}, {1, 0}};
+    private static final int[][] PLATFORM_OFFSETS_Z_WIDE = {{0, 0}, {0, 1}};
 
-    private static final int[][] STAND_OFFSETS_ANY = {
-        {1, 2}, {0, 2}, {2, 2},
-        {1, 3}, {0, 3}, {2, 3},
-        {1, 1}, {0, 1}, {2, 1},
-        {1, 4}, {0, 4}, {2, 4},
-    };
+    private enum PortalAxis {
+        X,
+        Z
+    }
 
     private TouristPortalBlockUtil() {}
 
@@ -84,22 +79,29 @@ public final class TouristPortalBlockUtil {
         }
     }
 
-    /** Center of the 2 wide platform at portal height for particles and burst VFX. */
+    /** Center of the 2×1 portal platform for particles and burst VFX. */
     @Nonnull
-    public static Vector3d portalEffectCenter(@Nonnull Vector3i blockPos) {
-        return new Vector3d(blockPos.x + 1.0, blockPos.y + 2.5, blockPos.z + 0.5);
+    public static Vector3d portalEffectCenter(@Nonnull World world, @Nonnull Vector3i blockPos) {
+        PortalLayout layout = resolvePortalLayout(world, blockPos);
+        return new Vector3d(layout.centerX(), blockPos.y + 2.5, layout.centerZ());
     }
 
-    /** Feet position on open ground near the portal for NPC spawn. */
+    /** Feet position at the center of the portal platform (spawn). */
     @Nonnull
     public static Vector3d spawnFeetPosition(@Nonnull World world, @Nonnull Vector3i blockPos) {
-        return spawnFeetPosition(world, blockPos, blockPos.hashCode());
+        return spawnFeetPosition(world, blockPos, 0L);
     }
 
-    /** Stand position in front of the portal for return / despawn approach. */
+    /** Feet position at the center of the portal platform; {@code salt} is ignored (kept for call-site compatibility). */
+    @Nonnull
+    public static Vector3d spawnFeetPosition(@Nonnull World world, @Nonnull Vector3i blockPos, long salt) {
+        return portalPlatformCenterFeet(world, blockPos);
+    }
+
+    /** Stand position at the center of the portal platform (return / despawn approach). */
     @Nonnull
     public static Vector3d returnStandPosition(@Nonnull World world, @Nonnull Vector3i blockPos) {
-        return resolveStandNearPortal(world, blockPos, true);
+        return portalPlatformCenterFeet(world, blockPos);
     }
 
     /** True when the NPC is close enough to the portal platform to despawn. */
@@ -107,97 +109,102 @@ public final class TouristPortalBlockUtil {
         Vector3d stand = returnStandPosition(world, blockPos);
         double dx = feet.x - stand.x;
         double dz = feet.z - stand.z;
-        if (dx * dx + dz * dz <= 6.25) {
+        if (dx * dx + dz * dz <= 2.25) {
             return true;
         }
-        Vector3d center = portalEffectCenter(blockPos);
+        Vector3d center = portalEffectCenter(world, blockPos);
         dx = feet.x - center.x;
         dz = feet.z - center.z;
         return dx * dx + dz * dz <= 9.0;
     }
 
     @Nonnull
-    private static Vector3d resolveStandNearPortal(
-        @Nonnull World world,
-        @Nonnull Vector3i blockPos,
-        boolean preferInFront
-    ) {
-        int bx0 = blockPos.x;
-        int bz0 = blockPos.z;
-        int[][] order = preferInFront ? STAND_OFFSETS_FRONT_FIRST : STAND_OFFSETS_ANY;
-        for (int feetY : standSearchHeights(blockPos.y, preferInFront)) {
-            Vector3d stand = tryStandOffsets(world, bx0, bz0, feetY, order);
-            if (stand != null) {
-                return stand;
+    private static Vector3d portalPlatformCenterFeet(@Nonnull World world, @Nonnull Vector3i blockPos) {
+        PortalLayout layout = resolvePortalLayout(world, blockPos);
+        for (int feetY : standSearchHeights(blockPos.y)) {
+            if (tryStandAtCenter(world, layout, feetY) != null) {
+                return new Vector3d(layout.centerX(), feetY, layout.centerZ());
             }
         }
-        return new Vector3d(blockPos.x + 1.5, blockPos.y + 1.0, blockPos.z + (preferInFront ? 2.5 : 1.5));
-    }
-
-    @Nonnull
-    private static int[] standSearchHeights(int portalY, boolean preferInFront) {
-        if (preferInFront) {
-            return new int[] { portalY - 1, portalY + 1, portalY, portalY + 2, portalY - 2 };
-        }
-        return new int[] { portalY - 1, portalY, portalY + 1, portalY + 2, portalY - 2 };
-    }
-
-    /** Picks a validated stand tile; {@code salt} spreads concurrent spawns across nearby tiles. */
-    @Nonnull
-    public static Vector3d spawnFeetPosition(@Nonnull World world, @Nonnull Vector3i blockPos, long salt) {
-        int bx0 = blockPos.x;
-        int bz0 = blockPos.z;
-        int[][] order = STAND_OFFSETS_ANY;
-        java.util.ArrayList<Vector3d> candidates = new java.util.ArrayList<>();
-        for (int feetY : standSearchHeights(blockPos.y, false)) {
-            collectStandOffsets(world, bx0, bz0, feetY, order, candidates);
-        }
-        if (candidates.isEmpty()) {
-            return new Vector3d(blockPos.x + 1.5, blockPos.y + 1.0, blockPos.z + 1.5);
-        }
-        int idx = (int) (Math.floorMod(salt, candidates.size()));
-        return candidates.get(idx);
-    }
-
-    private static void collectStandOffsets(
-        @Nonnull World world,
-        int bx0,
-        int bz0,
-        int feetY,
-        @Nonnull int[][] offsets,
-        @Nonnull java.util.ArrayList<Vector3d> out
-    ) {
-        if (feetY < 1 || feetY >= 320) {
-            return;
-        }
-        for (int[] off : offsets) {
-            int bx = bx0 + off[0];
-            int bz = bz0 + off[1];
-            if (VillagerBlockUtil.isNpcStandColumn(world, bx, feetY, bz)) {
-                out.add(new Vector3d(bx + 0.5, feetY, bz + 0.5));
-            }
-        }
+        Vector3d fallback = new Vector3d(layout.centerX(), blockPos.y + 1.0, layout.centerZ());
+        return VillagerBlockUtil.snapNpcFeetToStand(world, fallback);
     }
 
     @Nullable
-    private static Vector3d tryStandOffsets(
-        @Nonnull World world,
-        int bx0,
-        int bz0,
-        int feetY,
-        @Nonnull int[][] offsets
-    ) {
+    private static Vector3d tryStandAtCenter(@Nonnull World world, @Nonnull PortalLayout layout, int feetY) {
         if (feetY < 1 || feetY >= 320) {
             return null;
         }
-        for (int[] off : offsets) {
-            int bx = bx0 + off[0];
-            int bz = bz0 + off[1];
+        for (int[] off : layout.platformOffsets()) {
+            int bx = layout.minX() + off[0];
+            int bz = layout.minZ() + off[1];
             if (VillagerBlockUtil.isNpcStandColumn(world, bx, feetY, bz)) {
-                return new Vector3d(bx + 0.5, feetY, bz + 0.5);
+                return new Vector3d(layout.centerX(), feetY, layout.centerZ());
             }
         }
         return null;
+    }
+
+    @Nonnull
+    private static PortalLayout resolvePortalLayout(@Nonnull World world, @Nonnull Vector3i blockPos) {
+        Vector3i min = portalMinCorner(world, blockPos);
+        PortalAxis axis = resolvePortalAxis(world, blockPos, min);
+        double centerX = axis == PortalAxis.X ? min.x + 1.0 : min.x + 0.5;
+        double centerZ = axis == PortalAxis.Z ? min.z + 1.0 : min.z + 0.5;
+        int[][] offsets = axis == PortalAxis.X ? PLATFORM_OFFSETS_X_WIDE : PLATFORM_OFFSETS_Z_WIDE;
+        return new PortalLayout(min.x, min.z, centerX, centerZ, offsets);
+    }
+
+    @Nonnull
+    private static Vector3i portalMinCorner(@Nonnull World world, @Nonnull Vector3i blockPos) {
+        int x = blockPos.x;
+        int y = blockPos.y;
+        int z = blockPos.z;
+        if (isPortalBlockAt(world, x - 1, y, z)) {
+            x--;
+        }
+        if (isPortalBlockAt(world, x, y, z - 1)) {
+            z--;
+        }
+        return new Vector3i(x, y, z);
+    }
+
+    @Nonnull
+    private static PortalAxis resolvePortalAxis(@Nonnull World world, @Nonnull Vector3i blockPos, @Nonnull Vector3i min) {
+        if (isPortalBlockAt(world, min.x + 1, blockPos.y, min.z)
+            || isPortalBlockAt(world, blockPos.x + 1, blockPos.y, blockPos.z)
+            || isPortalBlockAt(world, blockPos.x - 1, blockPos.y, blockPos.z)) {
+            return PortalAxis.X;
+        }
+        if (isPortalBlockAt(world, min.x, blockPos.y, min.z + 1)
+            || isPortalBlockAt(world, blockPos.x, blockPos.y, blockPos.z + 1)
+            || isPortalBlockAt(world, blockPos.x, blockPos.y, blockPos.z - 1)) {
+            return PortalAxis.Z;
+        }
+        return PortalAxis.X;
+    }
+
+    private static boolean isPortalBlockAt(@Nonnull World world, int x, int y, int z) {
+        BlockType type = blockTypeIfLoaded(world, x, y, z);
+        return isTouristPortalBlock(type);
+    }
+
+    /** In-memory block read — safe from entity tick systems (no synchronous chunk load). */
+    @Nullable
+    private static BlockType blockTypeIfLoaded(@Nonnull World world, int x, int y, int z) {
+        if (y < 0 || y >= 320) {
+            return null;
+        }
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        if (chunk == null) {
+            return null;
+        }
+        return chunk.getBlockType(x, y, z);
+    }
+
+    @Nonnull
+    private static int[] standSearchHeights(int portalY) {
+        return new int[] { portalY + 1, portalY, portalY + 2, portalY - 1 };
     }
 
     @Nullable
@@ -212,4 +219,6 @@ public final class TouristPortalBlockUtil {
             return null;
         }
     }
+
+    private record PortalLayout(int minX, int minZ, double centerX, double centerZ, int[][] platformOffsets) {}
 }

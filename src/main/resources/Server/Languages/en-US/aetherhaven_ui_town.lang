@@ -71,6 +71,9 @@ aetherhaven.ui.giftHistory.cyclePrevTooltip=Previous town villager
 aetherhaven.ui.giftHistory.cycleNextTooltip=Next town villager
 aetherhaven.ui.villagerneeds.rescueDone=The selected resident was moved to you and their routine was reset.
 aetherhaven.ui.villagerneeds.rescueNotTownResident=That resident is not part of this town.
+
+# Town NPC death (chat + server log)
+aetherhaven.town.villagerDeath.chat={name} ({category}) has died.
 aetherhaven.ui.reputation.label=Reputation
 aetherhaven.reputation.dailyTalkGain=+{amount} reputation (daily greeting)
 aetherhaven.reputation.giftRepChange={amount} reputation (gift)

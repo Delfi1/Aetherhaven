@@ -32,6 +32,7 @@ public final class PlotCreatorDraftLoader {
         );
         draft.setScheduleSharedUtilityPick(def.isScheduleSharedUtilityPick());
         draft.setTouristDestination(def.isTouristDestination());
+        draft.setPlotTokenLockedByDefault(def.isPlotTokenLockedByDefault());
         draft.setExcludeFromTownJournal(def.isExcludeFromTownJournal());
         draft.getBuildingTags().clear();
         draft.getBuildingTags().addAll(def.getBuildingTags());
@@ -56,6 +57,7 @@ public final class PlotCreatorDraftLoader {
         }
         copyPos(def.getManagementBlockLocalPos(), draft::setManagementBlockLocalPos);
         copyPos(def.getTreasuryLocalPos(), draft::setTreasuryLocalPos);
+        copyPos(def.getShopSafeLocalPos(), draft::setShopSafeLocalPos);
         copyPos(def.getInnkeeperSpawnLocal(), draft::setInnkeeperSpawnLocal);
         copyPos(def.getGuildMasterSpawnLocal(), draft::setGuildMasterSpawnLocal);
         draft.getVisitorSpawnLocals().clear();
@@ -107,6 +109,9 @@ public final class PlotCreatorDraftLoader {
         }
         if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(id)) {
             return PlotBuildingKind.SHOP;
+        }
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_PLAYER_SHOP.equals(id)) {
+            return PlotBuildingKind.PLAYER_SHOP;
         }
         if (AetherhavenConstants.CONSTRUCTION_PLOT_TOURIST_PORTAL.equals(id)) {
             return PlotBuildingKind.TOURIST_PORTAL;
