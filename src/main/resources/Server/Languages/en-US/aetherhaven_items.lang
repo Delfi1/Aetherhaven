@@ -37,6 +37,9 @@ items.Aetherhaven_Founder_Monument.description=A stone pedestal that holds a lik
 items.Aetherhaven_Inn_Bell.name=Inn bell
 items.Aetherhaven_Inn_Bell.description=Ring to call inn visitors back to the guest area.
 
+items.Aetherhaven_Smokestack.name=Smokestack
+items.Aetherhaven_Smokestack.description=Place on chimneys and rooftops for a steady wisp of smoke. Invisible when placed.
+
 benchCategories.aetherhaven.town_planning=Town planning
 benchCategories.aetherhaven.plot_tokens=Plot tokens
 

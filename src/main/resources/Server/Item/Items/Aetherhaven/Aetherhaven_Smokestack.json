@@ -1,0 +1,100 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Smokestack.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Smokestack.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Smokestack.png",
+  "Categories": [
+    "Furniture.Deco"
+  ],
+  "Set": "Aetherhaven",
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Ingredient_Charcoal",
+        "Quantity": 5
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
+      }
+    ]
+  },
+  "MaxStack": 64,
+  "PlayerAnimationsId": "Block",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/_Debug/Model.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/_Debug/TextureEmpty.png",
+        "Weight": 1
+      }
+    ],
+    "CustomModelScale": 1.0,
+    "HitboxType": "Aetherhaven_Smokestack",
+    "Looping": true,
+    "Flags": {},
+    "Gathering": {
+      "Soft": {
+        "IsWeaponBreakable": true,
+        "ItemId": "Aetherhaven_Smokestack"
+      },
+      "Physics": {
+        "ItemId": "Aetherhaven_Smokestack"
+      },
+      "UseDefaultDropWhenPlaced": false
+    },
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "BlockParticleSetId": "Stone",
+    "ParticleColor": "#888888",
+    "BlockSoundSetId": "Stone",
+    "Particles": [
+      {
+        "SystemId": "Aetherhaven_Smokestack",
+        "PositionOffset": {
+          "Y": 0.25
+        }
+      }
+    ]
+  },
+  "Interactions": {
+    "Primary": "Block_Primary",
+    "Secondary": "Block_Secondary"
+  },
+  "Tags": {
+    "Type": [
+      "Furniture",
+      "Deco"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Stone",
+  "IconProperties": {
+    "Scale": 0.75,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -4
+    ]
+  }
+}
