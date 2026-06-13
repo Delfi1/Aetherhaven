@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.CharterSpecializationModifiers;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -168,7 +169,8 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
             state.setSlotTickAccum(slot, 0);
             accumChanged = true;
             long maxForItem = WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, selected);
-            state.addAmount(selected, 1, maxForItem);
+            long amount = CharterSpecializationModifiers.productionAmountPerCycle(town, ccat, gameplayPlotId);
+            state.addAmount(selected, amount, maxForItem);
             amountsChanged = true;
         }
         if (amountsChanged || accumChanged) {

@@ -356,6 +356,9 @@ public final class PlotCreatorService {
     ) {
         PlotCreatorDraft draft = session.getDraft();
         applyConfigureInput(draft);
+        if (draft.getKind() == PlotBuildingKind.DECORATION && !draft.getBuildingTags().contains("decoration")) {
+            draft.getBuildingTags().add("decoration");
+        }
         if (draft.getPlotAnchor() != null) {
             PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
         }
@@ -470,7 +473,8 @@ public final class PlotCreatorService {
             slug = slug.substring(0, slug.length() - 1);
         }
         if (!slug.isEmpty()) {
-            draft.setConstructionId("plot_" + slug);
+            String prefix = draft.getKind() == PlotBuildingKind.DECORATION ? "plot_decoration_" : "plot_";
+            draft.setConstructionId(prefix + slug);
             syncPrefabFileNameFromConstructionId(draft);
         }
     }

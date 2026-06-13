@@ -14,7 +14,9 @@
   "treasuryGoldCoinCost": 50,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 960 },
-    { "resourceTypeId": "Rock", "count": 210 }
+    { "resourceTypeId": "Rock", "count": 210 },
+    { "itemId": "Bench_Alchemy", "count": 1 },
+    { "itemId": "Bench_Arcane", "count": 1 }
   ],
   "tags": [
     "decoration"

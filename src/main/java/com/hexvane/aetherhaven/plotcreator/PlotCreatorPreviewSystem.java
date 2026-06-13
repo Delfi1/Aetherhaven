@@ -99,7 +99,7 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
             LAST_SPAWN_MARKER_SIG.put(uuid, spawnSig);
             PlotCreatorService.refreshSpawnMarkers(session, pr);
             LAST_SPAWN_MARKER_RESEND_MS.put(uuid, System.currentTimeMillis());
-        } else if (!session.getDraft().getAdventurerSpawns().isEmpty()) {
+        } else if (!session.getDraft().getAdventurerSpawns().isEmpty() || !session.getDraft().getVisitorSpawnLocals().isEmpty()) {
             long now = System.currentTimeMillis();
             Long lastResend = LAST_SPAWN_MARKER_RESEND_MS.get(uuid);
             if (lastResend == null || now - lastResend >= SPAWN_MARKER_RESEND_INTERVAL_MS) {

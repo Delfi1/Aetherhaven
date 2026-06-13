@@ -95,10 +95,15 @@ public final class FloatingGiftLootTable {
 
     @Nullable
     public ItemStack rollStack() {
+        return rollStack(ThreadLocalRandom.current());
+    }
+
+    @Nullable
+    public ItemStack rollStack(@Nonnull ThreadLocalRandom rnd) {
         if (entries.isEmpty() || totalWeight <= 0) {
             return null;
         }
-        int roll = ThreadLocalRandom.current().nextInt(totalWeight);
+        int roll = rnd.nextInt(totalWeight);
         int acc = 0;
         for (Entry e : entries) {
             acc += e.weight;
@@ -107,6 +112,31 @@ public final class FloatingGiftLootTable {
             }
         }
         return toStack(entries.get(entries.size() - 1));
+    }
+
+    /** Rolls up to {@code count} unique stacks from this table (no duplicate item ids). */
+    @Nonnull
+    public List<ItemStack> rollUniqueStacks(int count, @Nonnull ThreadLocalRandom rnd) {
+        if (count <= 0 || entries.isEmpty() || totalWeight <= 0) {
+            return List.of();
+        }
+        List<ItemStack> picked = new ArrayList<>(count);
+        List<String> seen = new ArrayList<>();
+        int attempts = 0;
+        int maxAttempts = Math.max(count * 20, 40);
+        while (picked.size() < count && attempts < maxAttempts) {
+            attempts++;
+            ItemStack stack = rollStack(rnd);
+            if (stack == null || ItemStack.isEmpty(stack)) {
+                continue;
+            }
+            String itemId = stack.getItemId();
+            if (itemId != null && !seen.contains(itemId)) {
+                seen.add(itemId);
+                picked.add(stack);
+            }
+        }
+        return picked;
     }
 
     @Nonnull

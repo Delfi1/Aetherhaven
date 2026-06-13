@@ -5,8 +5,10 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.PoiAutonomyVisuals;
 import com.hexvane.aetherhaven.autonomy.VillagerDoorUtil;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
+import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelSupport;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelWaypoints;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -14,6 +16,7 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.shopspot.NpcShopSpotBuyerService;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBrowseVisuals;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPurchaseService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRecord;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
@@ -53,6 +56,8 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
     private static final double RETURN_ARRIVE_HORIZONTAL_SQ = 2.75 * 2.75;
     private static final long TRAVEL_PHASE_MAX_MS = 120_000L;
     private static final int BLOCKED_FAIL_TICKS = 100;
+    private static final int DOOR_UNJAM_STUCK_TICKS = 30;
+    private static final int RETURN_DOOR_FORCE_DESPAWN_TICKS = 60;
     private static final long VISIT_MIN_MS = 45_000L;
     private static final long VISIT_MAX_MS = 120_000L;
     private static final long SHOP_VISIT_MIN_MS = 20_000L;
@@ -112,6 +117,9 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (!TownsfolkAssignmentKinds.TOURIST.equals(tb.getAssignmentKind())) {
             return;
         }
+        if (NpcFaceVisuals.isInInteractionDialogue(npc)) {
+            return;
+        }
 
         Ref<EntityStore> ref = chunk.getReferenceTo(index);
         long now = resolveNowMs(store);
@@ -134,7 +142,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             case TouristAutonomyState.PHASE_IDLE ->
                 tickIdle(ref, store, commandBuffer, npc, autonomy, now, town, world, catalog);
             case TouristAutonomyState.PHASE_TRAVEL, TouristAutonomyState.PHASE_RETURNING ->
-                tickTravel(ref, store, commandBuffer, npc, autonomy, now, town, world, poiRegistry);
+                tickTravel(ref, store, commandBuffer, npc, autonomy, now, town, world, poiRegistry, tb);
             case TouristAutonomyState.PHASE_VISIT ->
                 tickPlotVisit(ref, store, commandBuffer, npc, autonomy, now, town, world, poiRegistry, catalog);
             case TouristAutonomyState.PHASE_POI ->
@@ -343,7 +351,8 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
                         tc.getPosition(),
                         route,
                         finalTarget,
-                        (int) Math.floor(tc.getPosition().y)
+                        (int) Math.floor(tc.getPosition().y),
+                        plugin.getConfig().get().getPathNavNodeSpacing()
                     );
             }
             if (!route.isEmpty()) {
@@ -429,7 +438,8 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         long now,
         @Nonnull TownRecord town,
         @Nonnull World world,
-        @Nonnull PoiRegistry poiRegistry
+        @Nonnull PoiRegistry poiRegistry,
+        @Nonnull TownsfolkCharacterBinding tb
     ) {
         boolean returning = isReturningTravel(autonomy);
         if (returning) {
@@ -451,7 +461,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         }
 
         if (now >= autonomy.getNextDecisionEpochMs()) {
-            failTravel(ref, store, commandBuffer, npc, autonomy, now, town, world);
+            failTravel(ref, store, commandBuffer, npc, autonomy, now, town, world, tb);
             return;
         }
 
@@ -465,35 +475,68 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         double horizSq = (pos.x - leash.x) * (pos.x - leash.x) + (pos.z - leash.z) * (pos.z - leash.z);
         double arriveSq = returning ? RETURN_ARRIVE_HORIZONTAL_SQ : ARRIVE_HORIZONTAL_SQ;
 
-        Vector3d currentWaypoint = autonomy.getCurrentTravelWaypoint();
-        if (currentWaypoint != null && horizSq <= arriveSq) {
-            if (autonomy.advanceTravelWaypoint()) {
-                Vector3d next = autonomy.getCurrentTravelWaypoint();
-                if (next != null) {
-                    npc.setLeashPoint(next);
+        PathNavTravelSupport.WaypointTickAction waypointAction =
+            PathNavTravelSupport.tickTravelWaypoints(autonomy, pos, leash.x, leash.z, arriveSq, now);
+        if (waypointAction == PathNavTravelSupport.WaypointTickAction.ADVANCED) {
+            Vector3d next = autonomy.getCurrentTravelWaypoint();
+            if (next != null) {
+                npc.setLeashPoint(next);
+            }
+            autonomy.setTravelStuckTicks(0);
+            commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            return;
+        }
+        if (waypointAction == PathNavTravelSupport.WaypointTickAction.CLEARED_TO_FINAL) {
+            autonomy.setTravelStuckTicks(0);
+            npc.setLeashPoint(new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ()));
+            commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            return;
+        }
+
+        VillagerDoorUtil.tryOpenDoorsTowardLeash(
+            world,
+            pos,
+            leash,
+            (x, y, z) -> autonomy.addPendingDoorOpened(x, y, z)
+        );
+
+        MotionController mc = npc.getRole() != null ? npc.getRole().getActiveMotionController() : null;
+        NavState nav = mc != null ? mc.getNavState() : NavState.INIT;
+        if (nav == NavState.ABORTED) {
+            failTravel(ref, store, commandBuffer, npc, autonomy, now, town, world, tb);
+            return;
+        }
+        if (nav == NavState.BLOCKED || nav == NavState.DEFER) {
+            autonomy.setTravelStuckTicks(autonomy.getTravelStuckTicks() + 1);
+            if (autonomy.getTravelStuckTicks() >= DOOR_UNJAM_STUCK_TICKS) {
+                VillagerDoorUtil.tryUnjamDoorsAlongPath(world, pos, leash);
+            }
+            if (returning && autonomy.getTravelStuckTicks() >= RETURN_DOOR_FORCE_DESPAWN_TICKS) {
+                finishReturnDespawn(ref, store, commandBuffer, autonomy, town, world);
+                return;
+            }
+            if (autonomy.getTravelStuckTicks() >= BLOCKED_FAIL_TICKS) {
+                if (autonomy.hasTravelWaypoints()) {
+                    if (autonomy.advanceTravelWaypoint()) {
+                        Vector3d next = autonomy.getCurrentTravelWaypoint();
+                        if (next != null) {
+                            npc.setLeashPoint(next);
+                        }
+                    } else {
+                        autonomy.clearTravelWaypoints();
+                        npc.setLeashPoint(new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ()));
+                    }
                     autonomy.setTravelStuckTicks(0);
                     commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
                     commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
                     applyAutonomyRoleState(ref, npc, commandBuffer);
                     return;
                 }
-            }
-            autonomy.clearTravelWaypoints();
-            npc.setLeashPoint(new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ()));
-        }
-
-        VillagerDoorUtil.tryOpenDoorsTowardLeash(world, pos, leash, (x, y, z) -> {});
-
-        MotionController mc = npc.getRole() != null ? npc.getRole().getActiveMotionController() : null;
-        NavState nav = mc != null ? mc.getNavState() : NavState.INIT;
-        if (nav == NavState.ABORTED) {
-            failTravel(ref, store, commandBuffer, npc, autonomy, now, town, world);
-            return;
-        }
-        if (nav == NavState.BLOCKED || nav == NavState.DEFER) {
-            autonomy.setTravelStuckTicks(autonomy.getTravelStuckTicks() + 1);
-            if (autonomy.getTravelStuckTicks() >= BLOCKED_FAIL_TICKS) {
-                failTravel(ref, store, commandBuffer, npc, autonomy, now, town, world);
+                failTravel(ref, store, commandBuffer, npc, autonomy, now, town, world, tb);
                 return;
             }
         } else if (nav == NavState.PROGRESSING || nav == NavState.INIT) {
@@ -508,7 +551,8 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             }
         }
 
-        if (horizSq <= arriveSq) {
+        if (horizSq <= arriveSq && !autonomy.hasTravelWaypoints()) {
+            closePendingDoorsAfterTravelArrival(ref, store, world, autonomy, pos, arriveSq);
             UUID targetId = autonomy.getTargetPoiUuid();
             if (targetId != null && AetherhavenConstants.isTouristPortalReturnPoi(targetId)) {
                 finishReturnDespawn(ref, store, commandBuffer, autonomy, town, world);
@@ -620,6 +664,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         autonomy.setPhaseEndEpochMs(now + dur);
         commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         TouristShopSpotBrowse.faceTowardShopSpot(ref, store, commandBuffer, spot);
+        ShopSpotBrowseVisuals.beginPonder(ref, store, commandBuffer);
         applyAutonomyRoleState(ref, npc, commandBuffer);
     }
 
@@ -780,6 +825,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         ShopSpotRegistry shopRegistry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
         ShopSpotRecord shopSpot = targetId != null ? shopRegistry.get(targetId) : null;
         if (shopSpot != null) {
+            ShopSpotBrowseVisuals.endPonder(ref, store, commandBuffer);
             tryTouristPlayerShopPurchase(ref, store, autonomy, town, world, shopSpot.getPlotId(), now);
             autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
             commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
@@ -907,12 +953,51 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (uc == null) {
             return;
         }
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        if (tc != null) {
+            closePendingDoorsAfterTravelArrival(
+                ref,
+                store,
+                world,
+                autonomy,
+                tc.getPosition(),
+                RETURN_ARRIVE_HORIZONTAL_SQ
+            );
+        }
         UUID entityUuid = uc.getUuid();
         UUID portalId = autonomy.getHomePortalId();
         commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         world.execute(() ->
             TouristPortalTickService.finalizeTouristDeparture(world, plugin, town, tm, entityUuid, portalId, store)
+        );
+    }
+
+    private static void closePendingDoorsAfterTravelArrival(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull World world,
+        @Nonnull TouristAutonomyState autonomy,
+        @Nonnull Vector3d pos,
+        double arriveHorizontalSq
+    ) {
+        if (autonomy.getPendingOpenDoorsMutable().isEmpty()) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            autonomy.clearPendingDoorClose();
+            return;
+        }
+        Vector3d goal = new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ());
+        VillagerDoorUtil.closePendingDoorsAfterGoalReached(
+            world,
+            store,
+            uc.getUuid(),
+            pos,
+            goal,
+            arriveHorizontalSq,
+            autonomy.getPendingOpenDoorsMutable()
         );
     }
 
@@ -924,7 +1009,8 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         @Nonnull TouristAutonomyState autonomy,
         long now,
         @Nonnull TownRecord town,
-        @Nonnull World world
+        @Nonnull World world,
+        @Nonnull TownsfolkCharacterBinding tb
     ) {
         if (isReturningTravel(autonomy)) {
             TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
@@ -932,6 +1018,11 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             if (tc != null
                 && portal != null
                 && TouristPortalBlockUtil.isNearPortalDespawn(world, portal.getBlockPosition(), tc.getPosition())) {
+                finishReturnDespawn(ref, store, commandBuffer, autonomy, town, world);
+                return;
+            }
+            TouristRecord rec = TouristPortalTickService.findTouristRecord(town, tb.getCharacterId());
+            if (rec != null && TouristPortalTickService.shouldTouristLeaveNow(rec, store)) {
                 finishReturnDespawn(ref, store, commandBuffer, autonomy, town, world);
                 return;
             }
@@ -947,6 +1038,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         }
         autonomy.setPhase(TouristAutonomyState.PHASE_IDLE);
         autonomy.clearTravelWaypoints();
+        autonomy.clearPendingDoorClose();
         autonomy.setNextDecisionEpochMs(now + 5000L);
         commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         clearAutonomyRoleState(ref, npc, commandBuffer);

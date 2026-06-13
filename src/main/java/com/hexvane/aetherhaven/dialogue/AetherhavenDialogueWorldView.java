@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
+import com.hexvane.aetherhaven.ui.GuardRoleLabels;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.gaiadraught.PlayerHealUtil;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
@@ -542,6 +543,17 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         }
         String profileId = GuardHireService.equipmentProfileForNpc(plugin, npcRef, store);
         return profileId != null ? GuardHireService.hireCost(plugin, profileId) : 0L;
+    }
+
+    @Override
+    @Nonnull
+    public String guardHireGuardTypeLangKey(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return GuardRoleLabels.guardTypeLangKey(AetherhavenConstants.NPC_GUARD_KNIGHT);
+        }
+        return GuardHireService.guardTypeLangKeyForNpc(plugin, npcRef, store);
     }
 
     @Override

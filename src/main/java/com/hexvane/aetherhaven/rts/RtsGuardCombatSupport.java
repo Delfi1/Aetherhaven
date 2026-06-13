@@ -8,9 +8,11 @@ import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.components.messaging.BeaconSupport;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.role.support.MarkedEntitySupport;
+import com.hypixel.hytale.server.npc.role.support.StateSupport;
 import it.unimi.dsi.fastutil.ints.Int2FloatOpenHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -127,18 +129,58 @@ public final class RtsGuardCombatSupport {
         if (hostile == null || hostile.getRole() == null) {
             return;
         }
-        rememberHostile(hostileRef, guardRef, accessor);
-        hostile.getRole().getMarkedEntitySupport().setMarkedEntity(LOCKED_TARGET_SLOT, guardRef);
-        String state = hostile.getRole().getStateSupport().getStateName();
-        if (state.contains("Combat")) {
+        Role role = hostile.getRole();
+        Ref<EntityStore> lockedTarget = role.getMarkedEntitySupport().getMarkedEntityRef(LOCKED_TARGET_SLOT);
+        if (guardRef.equals(lockedTarget)) {
             return;
         }
-        ComponentAccessor<EntityStore> stateAccessor = commandBuffer != null ? commandBuffer : accessor;
-        hostile.getRole().getStateSupport().setState(hostileRef, "Combat", null, stateAccessor);
-        if (commandBuffer != null) {
-            commandBuffer.putComponent(hostileRef, NPCEntity.getComponentType(), hostile);
-        } else {
-            accessor.putComponent(hostileRef, NPCEntity.getComponentType(), hostile);
+        String state = role.getStateSupport().getStateName();
+        if (isEngagedInExternalCombat(state)) {
+            return;
         }
+        rememberHostile(hostileRef, guardRef, accessor);
+        role.getMarkedEntitySupport().setMarkedEntity(LOCKED_TARGET_SLOT, guardRef);
+        ComponentAccessor<EntityStore> stateAccessor = commandBuffer != null ? commandBuffer : accessor;
+        if (tryEnterExternalCombat(hostileRef, guardRef, role, stateAccessor)) {
+            if (commandBuffer != null) {
+                commandBuffer.putComponent(hostileRef, NPCEntity.getComponentType(), hostile);
+            } else {
+                accessor.putComponent(hostileRef, NPCEntity.getComponentType(), hostile);
+            }
+        }
+    }
+
+    /** True when the hostile is already in a role-defined combat/attack state. */
+    static boolean isEngagedInExternalCombat(@Nonnull String stateName) {
+        return stateName.contains("Combat")
+            || stateName.startsWith("Attack.")
+            || stateName.startsWith("Chase.");
+    }
+
+    /**
+     * Transitions a hostile into its role-specific combat flow. Many vanilla mobs (e.g. Trork companion wolves)
+     * use {@code Attack} or beacon messages instead of a top-level {@code Combat} state.
+     */
+    static boolean tryEnterExternalCombat(
+        @Nonnull Ref<EntityStore> hostileRef,
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Role role,
+        @Nonnull ComponentAccessor<EntityStore> accessor
+    ) {
+        StateSupport stateSupport = role.getStateSupport();
+        if (stateSupport.getStateHelper().getStateIndex("Combat") >= 0) {
+            stateSupport.setState(hostileRef, "Combat", null, accessor);
+            return true;
+        }
+        if (stateSupport.getStateHelper().getStateIndex("Attack") >= 0) {
+            stateSupport.setState(hostileRef, "Attack", null, accessor);
+            return true;
+        }
+        BeaconSupport beacon = accessor.getComponent(hostileRef, BeaconSupport.getComponentType());
+        if (beacon != null) {
+            beacon.postMessage("CompanionAttack", guardRef, 1.0);
+            return true;
+        }
+        return false;
     }
 }

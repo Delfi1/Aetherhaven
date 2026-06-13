@@ -4,7 +4,7 @@ Group #PlotCreatorStatusRoot {
   LayoutMode: Top;
 
   $C.@DecoratedContainer {
-    Anchor: (Top: 88, Left: 20, Width: 440);
+    Anchor: (Top: 88, Left: 20, Width: 460);
 
     #Title {
       Label #PlotCreatorHudTitleText {
@@ -18,10 +18,16 @@ Group #PlotCreatorStatusRoot {
       LayoutMode: Top;
       Padding: (Left: 14, Right: 14, Top: 10, Bottom: 14);
 
-      Label #HintLine {
+      Label #StepName {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #b8d8ff, FontSize: 17, RenderBold: true);
+        Anchor: (Bottom: 6);
+      }
+
+      Label #StepHelp {
         Text: " ";
         Style: (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 14, Wrap: true);
-        Anchor: (Bottom: 8);
+        Anchor: (Bottom: 10);
       }
 
       Label #DetailLine {
@@ -31,9 +37,8 @@ Group #PlotCreatorStatusRoot {
         Visible: false;
       }
 
-      Label #HotkeyLine {
-        Text: " ";
-        Style: (...$C.@DefaultLabelStyle, TextColor: #98a0a8, FontSize: 13, Wrap: true);
+      Group #ControlRows {
+        LayoutMode: Top;
       }
     }
   }

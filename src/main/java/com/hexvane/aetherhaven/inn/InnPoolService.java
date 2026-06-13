@@ -65,7 +65,7 @@ import javax.annotation.Nullable;
  */
 public final class InnPoolService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final int MAX_VISITORS = 2;
+    public static final int MAX_VISITORS = 2;
 
     private static final List<InnPoolEntry> LEGACY_INN_POOL = List.of(
         new InnPoolEntry(AetherhavenConstants.NPC_MERCHANT, TownVillagerBinding.KIND_VISITOR_MERCHANT, 0),
@@ -697,7 +697,83 @@ public final class InnPoolService {
         @Nonnull int[][] spawnLocals,
         @Nonnull WorldTimeResource wtr
     ) {
-        if (hasPendingUnlockedMissingRef(town, store)) {
+        fillEmptySlotsForSpawn(
+            world, plugin, town, tm, store, innPlot, innDef, spawnLocals, wtr, false
+        );
+    }
+
+    /**
+     * Fills open inn visitor slots at {@code visitorSpawnLocals}. When {@code ignorePendingMissingRef} is true, skips the
+     * guard that blocks fill while unlocked pool UUIDs lack entity refs (inn bell handles those explicitly first).
+     */
+    public static void fillEmptyInnVisitorSlotsAtSpawns(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotInstance innPlot,
+        @Nonnull ConstructionDefinition innDef
+    ) {
+        WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
+        if (wtr == null) {
+            return;
+        }
+        int[][] spawnLocals = innDef.getVisitorSpawnLocals();
+        if (spawnLocals == null || spawnLocals.length == 0) {
+            return;
+        }
+        fillEmptySlotsForSpawn(
+            world, plugin, town, tm, store, innPlot, innDef, spawnLocals, wtr, true
+        );
+    }
+
+    /**
+     * True if at least one inn pool role could still fill an open visitor slot (same eligibility as morning fill).
+     */
+    public static boolean hasEligibleInnPoolRoleForFill(
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (town.getInnPoolNpcIds().size() >= MAX_VISITORS) {
+            return false;
+        }
+        Set<String> presentRoles = new LinkedHashSet<>(collectTownVisitorNpcRolesFromStore(store, town));
+        mergeQuestCriticalRolesWhenLockedVisitorsUnresolved(town, store, presentRoles);
+        List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
+        List<String> mergedOrder = mergedVisitorRoleOrder(town, plugin, store);
+        for (String roleId : mergedOrder) {
+            if (!isRoleEligibleForInnPool(plugin, town, pool, roleId)) {
+                continue;
+            }
+            if (town.getInnVisitorPoolExcludedRoleIds().contains(roleId)) {
+                continue;
+            }
+            if (townHasResidentWithNpcRole(store, town, roleId)) {
+                continue;
+            }
+            if (presentRoles.contains(roleId)) {
+                continue;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private static void fillEmptySlotsForSpawn(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotInstance innPlot,
+        @Nonnull ConstructionDefinition innDef,
+        @Nonnull int[][] spawnLocals,
+        @Nonnull WorldTimeResource wtr,
+        boolean ignorePendingMissingRef
+    ) {
+        if (!ignorePendingMissingRef && hasPendingUnlockedMissingRef(town, store)) {
             return;
         }
 
@@ -942,6 +1018,62 @@ public final class InnPoolService {
         );
         UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
         return uuidComp != null ? uuidComp.getUuid() : null;
+    }
+
+    /**
+     * World position for an inn visitor spawn slot (center of block column, feet at local Y).
+     */
+    @Nullable
+    public static Vector3d resolveVisitorSpawnWorldPosition(
+        @Nonnull PlotInstance innPlot,
+        @Nonnull ConstructionDefinition innDef,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String roleId,
+        int slotIndex
+    ) {
+        int[][] spawnLocals = innDef.getVisitorSpawnLocals();
+        if (spawnLocals == null || spawnLocals.length == 0) {
+            return null;
+        }
+        List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
+        int[] local = resolveSpawnLocal(pool, roleId, spawnLocals, slotIndex);
+        if (local == null || local.length != 3) {
+            return null;
+        }
+        Vector3i anchor = innPlot.resolvePrefabAnchorWorld(innDef);
+        var yaw = innPlot.resolvePrefabYaw();
+        Vector3i d = PrefabLocalOffset.rotate(yaw, local[0], local[1], local[2]);
+        int wx = anchor.x + d.x;
+        int wy = anchor.y + d.y;
+        int wz = anchor.z + d.z;
+        return new Vector3d(wx + 0.5, wy, wz + 0.5);
+    }
+
+    /**
+     * Spawns an inn visitor at the spawn local for {@code slotIndex} (same placement as morning fill).
+     */
+    @Nullable
+    public static UUID spawnInnVisitorAtSlot(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotInstance innPlot,
+        @Nonnull ConstructionDefinition innDef,
+        @Nonnull String roleId,
+        @Nonnull String villagerKind,
+        int slotIndex
+    ) {
+        int[][] spawnLocals = innDef.getVisitorSpawnLocals();
+        if (spawnLocals == null || spawnLocals.length == 0) {
+            return null;
+        }
+        List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
+        int[] local = resolveSpawnLocal(pool, roleId, spawnLocals, slotIndex);
+        if (local == null || local.length != 3) {
+            return null;
+        }
+        return spawnVisitor(world, plugin, town, store, innPlot, innDef, local, roleId, villagerKind);
     }
 
     @Nonnull

@@ -75,6 +75,7 @@ public final class TouristPortalTickService {
         AetherhavenPluginConfig cfg = plugin.getConfig().get();
 
         dedupeTouristRecords(tm, world, plugin, store);
+        releaseStaleTouristPoolCheckouts(world, plugin, tm, store);
 
         processDawnTouristLeave(world, plugin, tm, store, wtr, cfg);
         processTouristLeaveWindow(world, plugin, tm, store, wtr);
@@ -454,9 +455,8 @@ public final class TouristPortalTickService {
                 continue;
             }
             boolean changed = false;
-            Iterator<TouristRecord> it = town.getTouristRecords().iterator();
-            while (it.hasNext()) {
-                TouristRecord rec = it.next();
+            // Snapshot: finalizeTouristDeparture removes from the live list while we may still be visiting rows.
+            for (TouristRecord rec : new ArrayList<>(town.getTouristRecords())) {
                 if (rec.isInvitedToStay() || rec.isCitizen()) {
                     continue;
                 }
@@ -471,13 +471,12 @@ public final class TouristPortalTickService {
                 UUID entityUuid = rec.getEntityUuid();
                 if (entityUuid == null) {
                     finalizeTouristRecord(world, plugin, town, tm, rec, store);
-                    it.remove();
+                    town.getTouristRecords().remove(rec);
                     changed = true;
                     continue;
                 }
                 Ref<EntityStore> leaveRef = store.getExternalData().getRefFromUUID(entityUuid);
                 if (leaveRef == null || !leaveRef.isValid()) {
-                    // finalizeTouristRecord -> finalizeTouristDeparture already removes the row.
                     finalizeTouristRecord(world, plugin, town, tm, rec, store);
                     changed = true;
                     continue;
@@ -724,6 +723,55 @@ public final class TouristPortalTickService {
     private static boolean isPortalChunkLoaded(@Nonnull World world, @Nonnull TouristPortalRecord portal) {
         Vector3i pos = portal.getBlockPosition();
         return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z)) != null;
+    }
+
+    private static void releaseStaleTouristPoolCheckouts(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store
+    ) {
+        TownsfolkExistenceService.reclaimAbsentNonGuardCheckouts(world, plugin, store);
+        Set<UUID> onlinePlayers = TownOnlinePresence.collectOnlinePlayerUuids(world);
+        Map<String, TownsfolkExistenceService.LiveTownsfolkEntity> liveByCharacter =
+            TownsfolkExistenceService.buildLiveIndex(store);
+        for (TownRecord town : tm.allTowns()) {
+            if (!world.getName().equals(town.getWorldName())) {
+                continue;
+            }
+            if (!TownOnlinePresence.hasAffiliatedPlayerOnline(town, onlinePlayers)) {
+                continue;
+            }
+            boolean changed = false;
+            Iterator<TouristRecord> it = town.getTouristRecords().iterator();
+            while (it.hasNext()) {
+                TouristRecord rec = it.next();
+                if (rec.isInvitedToStay() || rec.isCitizen()) {
+                    continue;
+                }
+                if (TouristReconcileService.isLiveTouristEntity(town, store, liveByCharacter, rec)) {
+                    continue;
+                }
+                UUID entityUuid = rec.getEntityUuid();
+                if (entityUuid != null) {
+                    Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
+                    if (ref == null) {
+                        continue;
+                    }
+                    if (ref.isValid()) {
+                        continue;
+                    }
+                }
+                finalizeTouristRecord(world, plugin, town, tm, rec, store);
+                if (entityUuid == null) {
+                    it.remove();
+                }
+                changed = true;
+            }
+            if (changed) {
+                tm.updateTown(town);
+            }
+        }
     }
 
     private static void dedupeTouristRecords(

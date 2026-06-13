@@ -16,7 +16,9 @@
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 400 },
-    { "resourceTypeId": "Rock", "count": 240 }
+    { "resourceTypeId": "Rock", "count": 240 },
+    { "itemId": "Aetherhaven_Plot_Crafting_Bench", "count": 1 },
+    { "itemId": "Aetherhaven_Town_Planning_Desk", "count": 1 }
   ],
   "pois": [
     {

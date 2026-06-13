@@ -3,12 +3,12 @@ package com.hexvane.aetherhaven.town;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Level-2 town specialization; production hooks may be partial until all jobs exist. */
+/** Level-2 town specialization; doubles output at the matching production workplace. */
 public enum CharterSpecialization {
     MINING("mining"),
     LOGGING("logging"),
     FARMING("farming"),
-    SMITHING("smithing");
+    RANCHING("ranching");
 
     private final String id;
 

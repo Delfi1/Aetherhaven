@@ -17,7 +17,10 @@
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 600 },
     { "resourceTypeId": "Soils", "count": 40 },
-    { "resourceTypeId": "Rock", "count": 200 }
+    { "resourceTypeId": "Rock", "count": 200 },
+    { "itemId": "Bench_Farming", "count": 1 },
+    { "itemId": "Bench_Tannery", "count": 1 },
+    { "itemId": "Bench_WorkBench", "count": 1 }
   ],
   "pois": [
     {

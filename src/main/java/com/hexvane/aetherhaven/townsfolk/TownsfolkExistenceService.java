@@ -8,7 +8,6 @@ import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -128,7 +127,9 @@ public final class TownsfolkExistenceService {
 
     /**
      * Releases non-guard ledger rows whose character is not live in the world. Keeps guard rows when the entity is
-     * unloaded (chunk not loaded). Fixes stale {@code guild_adventurer} checkouts that block dawn spawns.
+     * unloaded (chunk not loaded). {@code guild_adventurer} rows are always reclaimed when not live so dawn spawns are
+     * not blocked by stale ledger entries. Other non-guard rows keep their checkout when the entity ref is unloaded in
+     * another chunk until reconcile proves absence.
      */
     public static int reclaimAbsentNonGuardCheckouts(
         @Nonnull World world,
@@ -146,17 +147,22 @@ public final class TownsfolkExistenceService {
             if (TownsfolkAssignmentKinds.GUARD.equalsIgnoreCase(rec.getAssignmentKind().trim())) {
                 continue;
             }
-            if (TownsfolkAssignmentKinds.TOURIST.equalsIgnoreCase(rec.getAssignmentKind().trim())
-                && TouristReconcileService.isActiveTouristCharacter(world, plugin, characterId)) {
+            if (live.containsKey(characterId)) {
                 continue;
             }
-            if (live.containsKey(characterId)) {
+            // Guild hall roster is respawned from the pool each morning; stale ledger rows must not block picks.
+            if (TownsfolkAssignmentKinds.isGuildHallAdventurer(rec.getAssignmentKind())) {
+                toRelease.add(characterId);
                 continue;
             }
             UUID ledgerUuid = parseUuid(rec.getEntityUuid());
             if (ledgerUuid != null) {
                 Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(ledgerUuid);
-                if (ref != null && ref.isValid()) {
+                if (ref == null) {
+                    // Entity unloaded in another chunk — keep checkout until reconcile proves absence.
+                    continue;
+                }
+                if (ref.isValid()) {
                     continue;
                 }
             }

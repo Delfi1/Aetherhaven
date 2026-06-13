@@ -15,7 +15,10 @@
   "plotTokenLockedByDefault": true,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 900 },
-    { "resourceTypeId": "Rock", "count": 420 }
+    { "resourceTypeId": "Rock", "count": 420 },
+    { "itemId": "Bench_Builders", "count": 1 },
+    { "itemId": "Bench_Furnace", "count": 1 },
+    { "itemId": "Bench_WorkBench", "count": 1 }
   ],
   "tags": [
     "decoration"

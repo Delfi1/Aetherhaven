@@ -76,6 +76,46 @@ public final class PlotCreatorSpawnLocations {
         return false;
     }
 
+    /**
+     * Removes a visitor spawn when {@code clickedBlock} is the stand cell or within {@code maxDist} of a saved stand
+     * center.
+     */
+    public static boolean tryRemoveVisitorNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i clickedBlock,
+        double maxDist
+    ) {
+        if (draft.getPlotAnchor() == null && draft.getPrefabOriginMin() == null) {
+            return false;
+        }
+        double maxDistSq = maxDist * maxDist;
+        var locals = draft.getVisitorSpawnLocals();
+        int bestIdx = -1;
+        double bestDistSq = maxDistSq;
+        for (int i = 0; i < locals.size(); i++) {
+            int[] local = locals.get(i);
+            Vector3i standBlock = PlotCreatorLocalCoords.toWorldBlock(draft, local);
+            if (sameBlock(standBlock, clickedBlock)) {
+                locals.remove(i);
+                return true;
+            }
+            Vector3d center = standCenterWorld(draft, local);
+            double dx = center.x - (clickedBlock.x + 0.5);
+            double dy = center.y - (clickedBlock.y + 0.5);
+            double dz = center.z - (clickedBlock.z + 0.5);
+            double d2 = dx * dx + dy * dy + dz * dz;
+            if (d2 <= bestDistSq) {
+                bestDistSq = d2;
+                bestIdx = i;
+            }
+        }
+        if (bestIdx >= 0) {
+            locals.remove(bestIdx);
+            return true;
+        }
+        return false;
+    }
+
     private static boolean sameBlock(@Nonnull Vector3i a, @Nonnull Vector3i b) {
         return a.x == b.x && a.y == b.y && a.z == b.z;
     }

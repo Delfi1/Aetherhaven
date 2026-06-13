@@ -132,8 +132,6 @@ items.Aetherhaven_Geode.description=Порожнистий камінь, яки�
 items.Aetherhaven_Geode_Anvil.name=Жеодна ковадла
 items.Aetherhaven_Geode_Anvil.description=Відкриває геоди без оплати коваля. Розміщення та використання; ви повинні знати схему, щоб створити її у своєму столі містобудування.
 
-barter.aetherhaven_vex.title=Щоденні акції Vex
-
 items.Aetherhaven_Treasury.name=Міська скарбниця
 items.Aetherhaven_Treasury.description=Містить золоті монети міста. Використовується для внесення або зняття коштів (власник міста).
 

@@ -74,6 +74,11 @@ aetherhaven.ui.journalSettings.villagerBuildReport=Fill the box
 aetherhaven.ui.journalSettings.villagerCopyHint=Select all text in the box then copy with your usual copy keys.
 aetherhaven.ui.journalSettings.villagerModalClose=Close
 aetherhaven.ui.journalSettings.innRepairDone=Inn list fixed. Locked visitors {locked} promoted {promoted} removed stray entries {removed}
+aetherhaven.ui.innBell.notAllowed=This bell only works for members at their town inn.
+aetherhaven.ui.innBell.notOpen=The inn is not open yet.
+aetherhaven.ui.innBell.returned=The visitors returned to the guest area.
+aetherhaven.ui.innBell.noVisitors=No visitors are staying at the inn right now.
+aetherhaven.ui.innBell.noMoreGuests=There are no more guests.
 aetherhaven.ui.journalSettings.finishPlotOk=That building is finished now.
 aetherhaven.ui.journalSettings.finishPlotNotAssembling=That pick is not a building under construction.
 aetherhaven.ui.journalSettings.finishPlotNotLoaded=Stand closer to that building and try again.
@@ -173,9 +178,6 @@ npcRoles.Aetherhaven_Guard.name=Town guard
 
 items.Aetherhaven_Quest_Board.name=Quest board
 items.Aetherhaven_Quest_Board.description=A wooden board where townsfolk post fetch work and bounties. Use it to pick up jobs for your town.
-
-items.Aetherhaven_Plot_Token_Guild_Hall.name=Guild hall plot token
-items.Aetherhaven_Plot_Token_Guild_Hall.description=Marks where the guild hall prefab can be built. Craft at the town planning desk.
 
 items.Aetherhaven_Production_Storage.name=Workplace stores
 items.Aetherhaven_Production_Storage.description=Holds what your workers bring in. Open to set outputs and take stacks. Part of the building and <color is="#ffa726">cannot be picked up</color>.

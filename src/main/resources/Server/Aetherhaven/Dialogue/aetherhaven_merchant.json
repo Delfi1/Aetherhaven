@@ -8,20 +8,6 @@
       "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.fallback",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c0",
-          "condition": {
-            "type": "town_quest_completed",
-            "questId": "q_merchant_stall"
-          },
-          "actions": [
-            {
-              "type": "open_barter_shop",
-              "shop": "Aetherhaven_Vex_Merchant"
-            }
-          ],
-          "next": null
-        },
-        {
           "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.merchant.appraiseJewelry",
           "condition": {
             "type": "town_quest_completed",

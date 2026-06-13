@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.tourist;
 
+import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelSupport;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -14,7 +15,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
 
-public final class TouristAutonomyState implements Component<EntityStore> {
+public final class TouristAutonomyState implements Component<EntityStore>, PathNavTravelSupport.TravelWaypoints {
     public static final int PHASE_IDLE = 0;
     public static final int PHASE_TRAVEL = 1;
     public static final int PHASE_VISIT = 2;
@@ -55,6 +56,18 @@ public final class TouristAutonomyState implements Component<EntityStore> {
                 v -> v.travelWaypointIndex
             )
             .add()
+            .append(
+                new KeyedCodec<>("TravelWaypointStartedMs", Codec.LONG),
+                (v, x) -> v.travelWaypointStartedMs = x != null ? Math.max(0L, x) : 0L,
+                v -> v.travelWaypointStartedMs
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("TravelWaypointStartedIndex", Codec.INTEGER),
+                (v, x) -> v.travelWaypointStartedIndex = x != null ? Math.max(0, x) : 0,
+                v -> v.travelWaypointStartedIndex
+            )
+            .add()
             .append(new KeyedCodec<>("VisitPlotId", Codec.STRING), (v, x) -> v.visitPlotId = x != null ? x : "", v -> v.visitPlotId)
             .add()
             .append(new KeyedCodec<>("NextPoiPickMs", Codec.LONG), (v, x) -> v.nextPoiPickEpochMs = x, v -> v.nextPoiPickEpochMs)
@@ -73,6 +86,12 @@ public final class TouristAutonomyState implements Component<EntityStore> {
                 new KeyedCodec<>("ShopSpotsBrowsedThisVisit", Codec.INTEGER),
                 (v, x) -> v.shopSpotsBrowsedThisVisit = x != null ? Math.max(0, x) : 0,
                 v -> v.shopSpotsBrowsedThisVisit
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("PendingDoors", Codec.STRING),
+                (v, x) -> v.decodePendingDoors(x),
+                v -> v.encodePendingDoors()
             )
             .add()
             .build();
@@ -105,6 +124,8 @@ public final class TouristAutonomyState implements Component<EntityStore> {
     private int travelStuckTicks;
     private final ArrayList<Vector3d> travelWaypoints = new ArrayList<>();
     private int travelWaypointIndex;
+    private long travelWaypointStartedMs;
+    private int travelWaypointStartedIndex;
     private String visitPlotId = "";
     private long nextPoiPickEpochMs;
     @Nullable
@@ -113,6 +134,12 @@ public final class TouristAutonomyState implements Component<EntityStore> {
     private String lastPlotShopSpotId;
     private boolean shopPurchaseDoneThisVisit;
     private int shopSpotsBrowsedThisVisit;
+    /** Doors opened by autonomy this trip; closed when the NPC passes through toward the leash. */
+    @Nonnull
+    private final ArrayList<int[]> pendingOpenDoors = new ArrayList<>();
+    private transient double travelSampleX = Double.NaN;
+    private transient double travelSampleZ = Double.NaN;
+    private transient int travelProgressStallTicks;
 
     @Nonnull
     public static TouristAutonomyState fresh(long nowMs) {
@@ -162,6 +189,7 @@ public final class TouristAutonomyState implements Component<EntityStore> {
         this.targetY = y;
         this.targetZ = z;
         this.targetPoiId = destinationId.toString();
+        clearPendingDoorClose();
     }
 
     @Nullable
@@ -284,12 +312,141 @@ public final class TouristAutonomyState implements Component<EntityStore> {
     public void setTravelWaypoints(@Nonnull List<Vector3d> points) {
         travelWaypoints.clear();
         travelWaypointIndex = 0;
+        travelWaypointStartedMs = 0L;
+        travelWaypointStartedIndex = 0;
         travelWaypoints.addAll(points);
+        resetTravelProgressTracking();
     }
 
     public void clearTravelWaypoints() {
         travelWaypoints.clear();
         travelWaypointIndex = 0;
+        travelWaypointStartedMs = 0L;
+        travelWaypointStartedIndex = 0;
+        resetTravelProgressTracking();
+    }
+
+    @Override
+    public boolean hasTravelWaypoints() {
+        return !travelWaypoints.isEmpty() && travelWaypointIndex < travelWaypoints.size();
+    }
+
+    @Override
+    public boolean hasMoreTravelWaypoints() {
+        return travelWaypointIndex + 1 < travelWaypoints.size();
+    }
+
+    @Override
+    public void markTravelWaypointProgress(long nowMs) {
+        if (travelWaypoints.isEmpty()) {
+            travelWaypointStartedMs = 0L;
+            travelWaypointStartedIndex = 0;
+            return;
+        }
+        if (travelWaypointStartedMs <= 0L || travelWaypointStartedIndex != travelWaypointIndex) {
+            travelWaypointStartedMs = Math.max(0L, nowMs);
+            travelWaypointStartedIndex = travelWaypointIndex;
+        }
+    }
+
+    @Override
+    public boolean isCurrentWaypointTimedOut(long nowMs, long timeoutMs) {
+        if (timeoutMs <= 0L || travelWaypoints.isEmpty() || travelWaypointStartedMs <= 0L) {
+            return false;
+        }
+        return nowMs - travelWaypointStartedMs >= timeoutMs;
+    }
+
+    @Override
+    public double getTravelSampleX() {
+        return travelSampleX;
+    }
+
+    @Override
+    public double getTravelSampleZ() {
+        return travelSampleZ;
+    }
+
+    @Override
+    public int getTravelProgressStallTicks() {
+        return travelProgressStallTicks;
+    }
+
+    @Override
+    public void setTravelSamplePosition(double x, double z) {
+        travelSampleX = x;
+        travelSampleZ = z;
+    }
+
+    @Override
+    public void setTravelProgressStallTicks(int ticks) {
+        travelProgressStallTicks = Math.max(0, ticks);
+    }
+
+    @Override
+    public void resetTravelProgressTracking() {
+        travelSampleX = Double.NaN;
+        travelSampleZ = Double.NaN;
+        travelProgressStallTicks = 0;
+    }
+
+    @Nonnull
+    ArrayList<int[]> getPendingOpenDoorsMutable() {
+        return pendingOpenDoors;
+    }
+
+    public void addPendingDoorOpened(int x, int y, int z) {
+        for (int[] d : pendingOpenDoors) {
+            if (d[0] == x && d[1] == y && d[2] == z) {
+                return;
+            }
+        }
+        pendingOpenDoors.add(new int[] { x, y, z });
+    }
+
+    public void clearPendingDoorClose() {
+        pendingOpenDoors.clear();
+    }
+
+    private void decodePendingDoors(@Nullable String raw) {
+        pendingOpenDoors.clear();
+        if (raw == null || raw.isBlank()) {
+            return;
+        }
+        for (String part : raw.split(";")) {
+            part = part.trim();
+            if (part.isEmpty()) {
+                continue;
+            }
+            String[] xyz = part.split(",");
+            if (xyz.length != 3) {
+                continue;
+            }
+            try {
+                int bx = Integer.parseInt(xyz[0].trim());
+                int by = Integer.parseInt(xyz[1].trim());
+                int bz = Integer.parseInt(xyz[2].trim());
+                pendingOpenDoors.add(new int[] { bx, by, bz });
+            } catch (NumberFormatException ignored) {
+                // ignore
+            }
+        }
+    }
+
+    @Nonnull
+    private String encodePendingDoors() {
+        if (pendingOpenDoors.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < pendingOpenDoors.size(); i++) {
+            int[] d = pendingOpenDoors.get(i);
+            if (i > 0) {
+                sb.append(';');
+            }
+            sb.append(d[0]).append(',').append(d[1]).append(',').append(d[2]);
+        }
+        return sb.toString();
     }
 
     public void clearTravelTarget() {
@@ -311,9 +468,13 @@ public final class TouristAutonomyState implements Component<EntityStore> {
     public boolean advanceTravelWaypoint() {
         if (travelWaypointIndex + 1 < travelWaypoints.size()) {
             travelWaypointIndex++;
+            travelWaypointStartedMs = 0L;
+            travelWaypointStartedIndex = travelWaypointIndex;
             return true;
         }
         travelWaypointIndex = travelWaypoints.size();
+        travelWaypointStartedMs = 0L;
+        travelWaypointStartedIndex = travelWaypointIndex;
         return false;
     }
 
@@ -366,12 +527,17 @@ public final class TouristAutonomyState implements Component<EntityStore> {
         c.travelStuckTicks = travelStuckTicks;
         c.travelWaypoints.addAll(travelWaypoints);
         c.travelWaypointIndex = travelWaypointIndex;
+        c.travelWaypointStartedMs = travelWaypointStartedMs;
+        c.travelWaypointStartedIndex = travelWaypointStartedIndex;
         c.visitPlotId = visitPlotId;
         c.nextPoiPickEpochMs = nextPoiPickEpochMs;
         c.lastPlotPoiId = lastPlotPoiId;
         c.lastPlotShopSpotId = lastPlotShopSpotId;
         c.shopPurchaseDoneThisVisit = shopPurchaseDoneThisVisit;
         c.shopSpotsBrowsedThisVisit = shopSpotsBrowsedThisVisit;
+        for (int[] d : pendingOpenDoors) {
+            c.pendingOpenDoors.add(new int[] { d[0], d[1], d[2] });
+        }
         return c;
     }
 }

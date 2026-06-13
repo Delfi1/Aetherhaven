@@ -148,6 +148,7 @@ public final class ShopSpotPurchaseService {
             creditSellerPayout(plugin, town, record, totalCost);
             tm.updateTown(town);
         }
+        notifySellerIfNeeded(record, buyer, pr.getUsername(), itemId, itemQty, totalCost, world, store, plugin);
         record.setStock(record.getStock() - itemQty);
         if (record.getStock() <= 0) {
             record.setItemId(null);
@@ -167,7 +168,6 @@ public final class ShopSpotPurchaseService {
             });
         }
         ShopSpotHudRefresh.refreshFocused(playerRef, store, world, plugin);
-        notifySellerIfNeeded(record, buyer, pr.getUsername(), itemId, itemQty, totalCost, world, store, plugin);
         return true;
     }
 

@@ -48,9 +48,10 @@ import javax.annotation.Nullable;
  */
 public final class ConstructionPasteOps {
     /**
-     * Forced block placement: bit 2 only. {@link com.hypixel.hytale.server.core.util.FillerBlockUtil#setFillerBlocksAt}
-     * runs when {@code (settings & 8) == 0} (see {@link WorldChunk#setBlock}); bit 8 suppresses that and breaks
-     * multi-block furniture (beds): sibling cells keep old terrain and overlap the model.
+     * Passed to {@link com.hypixel.hytale.server.core.universe.world.accessor.BlockAccessor#placeBlock}: bit 2 maps to
+     * {@code setBlock} flag 256 (update block area), not the {@code setBlock} bit that skips block-entity spawn.
+     * Prefab construction must use {@code placeBlock} (never raw {@code setBlock} with this value) so benches,
+     * chests, and other {@link BlockType#getBlockEntity()} blocks get working components/interactions.
      */
     public static final int SET_BLOCK_SETTINGS_PLACE = 2;
     /** Air clears / {@link WorldChunk#breakBlock}: keep {@code 8|2} tuning from earlier construction fixes. */
@@ -294,14 +295,8 @@ public final class ConstructionPasteOps {
             }
             return true;
         }
-        if (!force) {
-            RotationTuple rot = RotationTuple.get(pb.blockRotation);
-            chunk.placeBlock(bx, by, bz, blockKey, rot.yaw(), rot.pitch(), rot.roll(), SET_BLOCK_SETTINGS_PLACE);
-        } else {
-            int indexKey = blockTypeMap.getIndex(blockKey);
-            BlockType type = blockTypeMap.getAsset(indexKey);
-            chunk.setBlock(bx, by, bz, indexKey, type, pb.blockRotation, pb.filler, SET_BLOCK_SETTINGS_PLACE);
-        }
+        RotationTuple rot = RotationTuple.get(pb.blockRotation);
+        chunk.placeBlock(bx, by, bz, blockKey, rot, SET_BLOCK_SETTINGS_PLACE, !force);
         if (pb.supportValue != 0) {
             Ref<ChunkStore> ref = chunk.getReference();
             if (!ref.isValid()) {

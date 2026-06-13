@@ -16,6 +16,7 @@ public final class PlotCreatorSpawnMarkerOverlay {
     /** Short hold so removed markers fade quickly when not re-sent. */
     private static final float MARKER_HOLD_SECONDS = 4f;
     private static final Vector3f COLOR_ADVENTURER = new Vector3f(0.55f, 0.35f, 0.95f);
+    private static final Vector3f COLOR_VISITOR = new Vector3f(0.25f, 0.82f, 0.72f);
     private static final double SPHERE_RADIUS = 0.32;
     private static final float OPACITY = 0.82f;
 
@@ -29,6 +30,11 @@ public final class PlotCreatorSpawnMarkerOverlay {
             h = 31 * h + entry.getLocalZ();
             h = 31 * h + Float.floatToIntBits(entry.getYawRadians());
         }
+        for (int[] local : draft.getVisitorSpawnLocals()) {
+            h = 31 * h + local[0];
+            h = 31 * h + local[1];
+            h = 31 * h + local[2];
+        }
         return h;
     }
 
@@ -38,11 +44,14 @@ public final class PlotCreatorSpawnMarkerOverlay {
             return;
         }
         for (PlotCreatorAdventurerSpawnEntry entry : draft.getAdventurerSpawns()) {
-            drawSphere(playerRef, PlotCreatorSpawnLocations.standCenterWorld(draft, entry.localArray()));
+            drawSphere(playerRef, PlotCreatorSpawnLocations.standCenterWorld(draft, entry.localArray()), COLOR_ADVENTURER);
+        }
+        for (int[] local : draft.getVisitorSpawnLocals()) {
+            drawSphere(playerRef, PlotCreatorSpawnLocations.standCenterWorld(draft, local), COLOR_VISITOR);
         }
     }
 
-    private static void drawSphere(@Nonnull PlayerRef playerRef, @Nonnull Vector3d center) {
+    private static void drawSphere(@Nonnull PlayerRef playerRef, @Nonnull Vector3d center, @Nonnull Vector3f color) {
         Matrix4d m = new Matrix4d();
         m.identity();
         m.translate(center.x, center.y, center.z);
@@ -51,7 +60,7 @@ public final class PlotCreatorSpawnMarkerOverlay {
             new DisplayDebug(
                 DebugShape.Sphere,
                 Matrix4dUtil.asFloatData(m),
-                COLOR_ADVENTURER,
+                color,
                 MARKER_HOLD_SECONDS,
                 (byte) PathDebugPreviewUtil.FLAG_MACHINIMA,
                 null,

@@ -47,12 +47,15 @@ public final class FloatingGiftComponent implements Component<EntityStore> {
                 o -> o.ambientCueAccum
             )
             .add()
+            .append(new KeyedCodec<>("GiftType", Codec.STRING), (o, v) -> o.giftType = v, o -> o.giftType)
+            .add()
             .build();
 
     @Nullable
     private static volatile ComponentType<EntityStore, FloatingGiftComponent> componentType;
 
     private String state = FloatingGiftState.FLOATING.name();
+    private String giftType = FloatingGiftType.REGULAR.name();
     private double dirX;
     private double dirY;
     private double dirZ;
@@ -104,6 +107,15 @@ public final class FloatingGiftComponent implements Component<EntityStore> {
 
     public void setState(@Nonnull FloatingGiftState state) {
         this.state = state.name();
+    }
+
+    @Nonnull
+    public FloatingGiftType getGiftType() {
+        return FloatingGiftType.fromString(giftType);
+    }
+
+    public void setGiftType(@Nonnull FloatingGiftType type) {
+        this.giftType = type.name();
     }
 
     public double getDirX() {
@@ -222,6 +234,7 @@ public final class FloatingGiftComponent implements Component<EntityStore> {
     public Component<EntityStore> clone() {
         FloatingGiftComponent c = new FloatingGiftComponent();
         c.state = this.state;
+        c.giftType = this.giftType;
         c.dirX = this.dirX;
         c.dirY = this.dirY;
         c.dirZ = this.dirZ;

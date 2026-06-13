@@ -15,7 +15,8 @@
   "plotTokenLockedByDefault": true,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 600 },
-    { "resourceTypeId": "Rock", "count": 180 }
+    { "resourceTypeId": "Rock", "count": 180 },
+    { "itemId": "Bench_Cooking", "count": 1 }
   ],
   "pois": [
     {

@@ -29,7 +29,19 @@ public final class PlotCreatorSubstepHandler {
             return false;
         }
         PlotCreatorAdventurerMarkers.removeMarkerNear(commandBuffer, targetBlock);
-        playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.spawnRemoved"));
+        playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.adventurerSpawnRemoved"));
+        return true;
+    }
+
+    public static boolean tryRemoveVisitorSpawnAt(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        if (!PlotCreatorSpawnLocations.tryRemoveVisitorNear(session.getDraft(), targetBlock, 2.0)) {
+            return false;
+        }
+        playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.visitorSpawnRemoved"));
         return true;
     }
 
@@ -191,6 +203,10 @@ public final class PlotCreatorSubstepHandler {
                     playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.tooManyVisitors"));
                     yield true;
                 }
+                if (hasVisitorLocal(draft, local)) {
+                    playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded"));
+                    yield true;
+                }
                 draft.getVisitorSpawnLocals().add(local);
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.spawnRecorded"));
                 yield true;
@@ -235,6 +251,18 @@ public final class PlotCreatorSubstepHandler {
     private static boolean hasAdventurerLocal(@Nonnull PlotCreatorDraft draft, @Nonnull int[] prefabLocal) {
         for (PlotCreatorAdventurerSpawnEntry existing : draft.getAdventurerSpawns()) {
             if (existing.matchesLocal(prefabLocal[0], prefabLocal[1], prefabLocal[2])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasVisitorLocal(@Nonnull PlotCreatorDraft draft, @Nonnull int[] local) {
+        for (int[] existing : draft.getVisitorSpawnLocals()) {
+            if (existing.length == 3
+                && existing[0] == local[0]
+                && existing[1] == local[1]
+                && existing[2] == local[2]) {
                 return true;
             }
         }

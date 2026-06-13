@@ -10,6 +10,49 @@ public final class PathNavPolylineUtil {
     private PathNavPolylineUtil() {}
 
     @Nonnull
+    public static List<PathNavPoint> resamplePolyline(
+        @Nonnull List<PathNavPoint> nodes,
+        double spacingBlocks
+    ) {
+        if (nodes.size() < 2) {
+            return new ArrayList<>(nodes);
+        }
+        ArrayList<PathSplineUtil.PathSample> samples = new ArrayList<>(nodes.size());
+        for (int i = 0; i < nodes.size(); i++) {
+            PathNavPoint p = nodes.get(i);
+            Vector3d pos = new Vector3d(p.x, p.y, p.z);
+            Vector3d forward = forwardAlongPolyline(nodes, i);
+            Vector3d right = new Vector3d(-forward.z, 0.0, forward.x);
+            samples.add(new PathSplineUtil.PathSample(pos, forward, right));
+        }
+        return resampleCenterline(samples, spacingBlocks);
+    }
+
+    @Nonnull
+    private static Vector3d forwardAlongPolyline(@Nonnull List<PathNavPoint> nodes, int index) {
+        if (index + 1 < nodes.size()) {
+            PathNavPoint a = nodes.get(index);
+            PathNavPoint b = nodes.get(index + 1);
+            return unitXZ(b.x - a.x, b.z - a.z);
+        }
+        if (index > 0) {
+            PathNavPoint a = nodes.get(index - 1);
+            PathNavPoint b = nodes.get(index);
+            return unitXZ(b.x - a.x, b.z - a.z);
+        }
+        return new Vector3d(0.0, 0.0, 1.0);
+    }
+
+    @Nonnull
+    private static Vector3d unitXZ(double dx, double dz) {
+        double len = Math.hypot(dx, dz);
+        if (len < 1.0e-6) {
+            return new Vector3d(0.0, 0.0, 1.0);
+        }
+        return new Vector3d(dx / len, 0.0, dz / len);
+    }
+
+    @Nonnull
     public static List<PathNavPoint> resampleCenterline(
         @Nonnull List<PathSplineUtil.PathSample> samples,
         double spacingBlocks

@@ -132,8 +132,6 @@ items.Aetherhaven_Geode.description=一块空心石头，里面可能藏有水�
 items.Aetherhaven_Geode_Anvil.name=晶洞砧
 items.Aetherhaven_Geode_Anvil.description=无需支付铁匠费用即可开启晶洞。放置后即可使用；您必须知道图纸才能在城镇规划桌上制作。
 
-barter.aetherhaven_vex.title=Vex每日股票
-
 items.Aetherhaven_Treasury.name=镇财政
 items.Aetherhaven_Treasury.description=存放城镇金币。用于存取（城镇所有者）。
 

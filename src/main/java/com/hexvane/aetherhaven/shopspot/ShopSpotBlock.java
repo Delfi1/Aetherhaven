@@ -1,6 +1,5 @@
 package com.hexvane.aetherhaven.shopspot;
 
-import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -138,8 +137,7 @@ public final class ShopSpotBlock implements Component<ChunkStore> {
     public void applyToRecord(@Nonnull ShopSpotRecord record) {
         record.setPlayerControlled(playerControlled);
         if (!playerControlled) {
-            String table = lootTableId != null && !lootTableId.isBlank() ? lootTableId.trim() : AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS;
-            record.setLootTableId(table);
+            record.setLootTableId(lootTableId != null ? lootTableId.trim() : "");
         } else {
             record.setItemId(null);
             record.setStock(0);

@@ -28,6 +28,8 @@ import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
+import com.hexvane.aetherhaven.npc.NpcFaceVisualState;
+import com.hexvane.aetherhaven.npc.NpcReputationWaveState;
 import com.hexvane.aetherhaven.npc.movement.BuilderBodyMotionWanderInRectGroundPreference;
 import com.hexvane.aetherhaven.placement.PlotBlockPreviewCleanupSystem;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
@@ -126,10 +128,14 @@ import com.hexvane.aetherhaven.purification.PurificationPowderVisualizationSyste
 import com.hexvane.aetherhaven.purification.PurificationPreviewEntity;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyDebugTag;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
+import com.hexvane.aetherhaven.autonomy.DoorwaySeparationBypassSystem;
+import com.hexvane.aetherhaven.autonomy.VillagerMoodVisualSystem;
+import com.hexvane.aetherhaven.autonomy.VillagerReputationWaveSystem;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
 import com.hexvane.aetherhaven.autonomy.BlockMountDeathCleanupSystem;
+import com.hexvane.aetherhaven.autonomy.ChunkUnloadMountDisconnectSystem;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockMountSafetySystem;
 import com.hexvane.aetherhaven.scaffold.ScaffoldBreakDebugSystem;
 import com.hexvane.aetherhaven.scaffold.ScaffoldColumnCascadeBreakSystem;
@@ -184,6 +190,7 @@ import com.hexvane.aetherhaven.floatinggift.FloatingGiftLootFiles;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftSchedulerSystem;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftDamagePopSystem;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftSystem;
+import com.hexvane.aetherhaven.inn.InnBellUseInteraction;
 import com.hexvane.aetherhaven.jewelry.JewelryGemTraits;
 import com.hexvane.aetherhaven.jewelry.JewelryInventoryTooltipSync;
 import com.hexvane.aetherhaven.jewelry.JewelryInventoryTooltipSyncSystem;
@@ -193,7 +200,7 @@ import com.hexvane.aetherhaven.jewelry.JewelryTooltipPacketAdapter;
 import com.hexvane.aetherhaven.jewelry.JewelryVirtualItemRegistry;
 import com.hexvane.aetherhaven.jewelry.JewelryRolling;
 import com.hexvane.aetherhaven.jewelry.LootChestBonusInjectSystem;
-import com.hexvane.aetherhaven.jewelry.LootrPerPlayerLootInjectSystem;
+import com.hexvane.aetherhaven.jewelry.LootrIntegration;
 import com.hexvane.aetherhaven.jewelry.LootrChestProcessedPlayers;
 import com.hexvane.aetherhaven.jewelry.LootChestWorldLootMarkSystem;
 import com.hexvane.aetherhaven.jewelry.LootChestWorldLootPending;
@@ -547,11 +554,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         LootrChestProcessedPlayers.register(this.getChunkStoreRegistry());
         this.getChunkStoreRegistry().registerSystem(new LootChestWorldLootMarkSystem());
         this.getChunkStoreRegistry().registerSystem(new LootChestBonusInjectSystem(this));
+        this.getChunkStoreRegistry().registerSystem(new ChunkUnloadMountDisconnectSystem());
         this.getChunkStoreRegistry().registerSystem(new EntityChunkStaleReferenceCleanupSystem());
-        LootrPerPlayerLootInjectSystem lootrCompat = LootrPerPlayerLootInjectSystem.createIfAvailable(this);
-        if (lootrCompat != null) {
-            this.getChunkStoreRegistry().registerSystem(lootrCompat);
-        }
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
         RaidQuestMobBinding.register(this.getEntityStoreRegistry());
@@ -561,6 +565,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.OnAdd());
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.EachTick());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
+        NpcFaceVisualState.register(this.getEntityStoreRegistry());
+        NpcReputationWaveState.register(this.getEntityStoreRegistry());
         BuilderConstructionAssistState.register(this.getEntityStoreRegistry());
         TouristAutonomyState.register(this.getEntityStoreRegistry());
         VillagerScheduleTickState.register(this.getEntityStoreRegistry());
@@ -786,6 +792,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenCommandPostUse", CommandPostUseInteraction.class, CommandPostUseInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenInnBellUse", InnBellUseInteraction.class, InnBellUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenShopSafeUse", ShopSafeUseInteraction.class, ShopSafeUseInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenRtsToolPrimary", RtsToolPrimaryInteraction.class, RtsToolPrimaryInteraction.CODEC);
@@ -809,7 +817,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new BlockMountDeathCleanupSystem());
         this.getEntityStoreRegistry().registerSystem(new BuilderConstructionAssistSystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new VillagerMoodVisualSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new VillagerReputationWaveSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TouristAutonomySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new DoorwaySeparationBypassSystem());
         this.getEntityStoreRegistry().registerSystem(new PendingEntityRemovalSystem());
         this.getEntityStoreRegistry().registerSystem(new TownsfolkAssignmentSystem());
         this.getEntityStoreRegistry().registerSystem(new VillagerDeathHandlerSystem(this));
@@ -1197,6 +1208,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             }
         }
         this.config.get();
+        LootrIntegration.registerIfAvailable(this);
         this.reloadAetherhavenAssetCatalogs();
         this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenAssetCatalogs());
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());

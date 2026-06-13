@@ -205,6 +205,13 @@ public interface DialogueWorldView {
         return 0L;
     }
 
+    @Nonnull
+    default String guardHireGuardTypeLangKey(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        return "aetherhaven_items.aetherhaven.patrolWand.guardTypeKnight";
+    }
+
     default boolean playerHasUnhousedHiredGuard(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
     ) {

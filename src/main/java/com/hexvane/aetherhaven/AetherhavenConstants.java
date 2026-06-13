@@ -656,8 +656,6 @@ public final class AetherhavenConstants {
     /** Default NPC stock batch range when a loot table JSON omits stockMin/stockMax. */
     public static final int SHOP_LOOT_DEFAULT_STOCK_MIN = 10;
     public static final int SHOP_LOOT_DEFAULT_STOCK_MAX = 10;
-    public static final String SHOP_LOOT_TABLE_GIFTS = "gifts";
-    public static final String SHOP_LOOT_TABLE_MERCHANT = "merchant";
 
     /** RTS guard command mode — command post block/item id. */
     public static final String COMMAND_POST_ITEM_ID = "Aetherhaven_Command_Post";
@@ -727,6 +725,9 @@ public final class AetherhavenConstants {
     public static final String TOURIST_PORTAL_ITEM_ID = "Aetherhaven_Tourist_Portal";
     public static final String TOURIST_PORTAL_BLOCK_TYPE_ID = "Aetherhaven_Tourist_Portal";
     public static final int TOURIST_PORTAL_ITEM_MAX_STACK = 1;
+
+    public static final String INN_BELL_BLOCK_TYPE_ID = "Aetherhaven_Inn_Bell";
+    public static final String INN_BELL_RING_SOUND_EVENT_ID = "SFX_Creative_Play_Eyedropper_Select";
 
     public static final String CONSTRUCTION_PLOT_TOURIST_PORTAL = "plot_tourist_portal";
     public static final String QUEST_HOUSE_TOWNSFOLK = "q_house_townsfolk";

@@ -83,6 +83,7 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
                         store,
                         new DialoguePage(pr, catalog, worldView, resolved.treeId(), resolved.entryNodeId(), npcRef)
                     );
+                NpcFaceVisuals.onDialogueOpened(npcRef, store);
             }
         );
         return true;

@@ -120,7 +120,10 @@ public final class ShopSpotDailyRerollService {
         }
         String tableId = record.getLootTableId();
         if (tableId.isBlank()) {
-            tableId = com.hexvane.aetherhaven.AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS;
+            record.setItemId(null);
+            record.setStock(0);
+            ShopSpotJewelrySupport.clearJewelryListing(record);
+            return;
         }
         ShopLootTable table = ShopLootFiles.loadTable(plugin, tableId);
         ShopLootTable.Entry loot = table.rollEntryWithRetries(32);

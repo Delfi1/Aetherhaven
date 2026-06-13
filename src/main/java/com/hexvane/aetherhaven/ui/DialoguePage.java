@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.dialogue.data.DialogueChoiceDefinition;
 import com.hexvane.aetherhaven.dialogue.data.DialogueNodeDefinition;
 import com.hexvane.aetherhaven.dialogue.data.DialogueTreeDefinition;
 import com.hexvane.aetherhaven.npc.NpcDialogueCleanup;
+import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -51,26 +52,41 @@ import javax.annotation.Nullable;
 /** Custom dialogue UI: full node text and choices in one build (no progressive reveal). */
 public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<DialoguePage.DialogueEventData> {
     private static final String DIALOGUE_PANEL = "#DialoguePanel";
-    private static final String DIALOGUE_COLUMN = DIALOGUE_PANEL + " #DialogueFill #DialogueColumn";
+    private static final String DIALOGUE_FILL = DIALOGUE_PANEL + " #DialogueFill";
+    private static final String HEADER_ROW = DIALOGUE_FILL + " #HeaderRow";
+    private static final String DIALOGUE_LEFT = DIALOGUE_FILL + " #DialogueColumns #DialogueLeftColumn";
+    private static final String DIALOGUE_RIGHT = DIALOGUE_FILL + " #DialogueColumns #DialogueRightColumn";
     /** Full path so command targets match the appended layout tree. */
-    private static final String PORTRAIT_ASSET = DIALOGUE_COLUMN + " #SpeakerFrame #Portrait.AssetPath";
-    private static final String SPEAKER_SPANS = DIALOGUE_COLUMN + " #SpeakerFrame #Speaker.TextSpans";
-    private static final String BODY_TEXT_SPANS = DIALOGUE_COLUMN + " #TextBlock #BodyText.TextSpans";
-    private static final String CHOICES_FRAME = DIALOGUE_COLUMN + " #ChoicesFrame";
+    private static final String PORTRAIT_ASSET = HEADER_ROW + " #PortraitFrame #Portrait.AssetPath";
+    private static final String SPEAKER_SPANS = HEADER_ROW + " #SpeakerNameFrame #Speaker.TextSpans";
+    private static final String BODY_TEXT_SPANS = DIALOGUE_LEFT + " #TextBlock #BodyText.TextSpans";
+    private static final String CHOICES_FRAME = DIALOGUE_RIGHT + " #ChoicesFrame";
     /** Inner list inside {@link #CHOICES_FRAME} scroll; append/clear/indexed selectors need full path. */
-    private static final String CHOICES_ROOT = DIALOGUE_COLUMN + " #ChoicesFrame #ChoicesScroll #ChoicesRoot";
+    private static final String CHOICES_ROOT = CHOICES_FRAME + " #ChoicesScroll #ChoicesRoot";
+    private static final String ICON_QUEST = "UI/Custom/exclamation.png";
+    private static final String ICON_QUEST_PROGRESS = "UI/Custom/placeholder_icon_256.png";
+    private static final String ICON_EXIT = "UI/Custom/exit.png";
+    private static final String ICON_GIFT = "UI/Custom/gift-box.png";
+    private static final String ICON_JEWELRY_APPRAISAL = "UI/Custom/Aetherhaven_jewelry_tab_ring.png";
+    private static final String ICON_BLACKSMITH_REPAIR = "UI/Custom/hammer.png";
+    private static final String ICON_GEODE_OPEN = "UI/Custom/broken-egg.png";
     private static final String LANG_GUILD_ADVENTURER_HIRE =
         "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire";
     private static final String LANG_PRIESTESS_DRAUGHT_SHARD =
         "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_shard";
     private static final String LANG_PRIESTESS_DRAUGHT_CATALYST =
         "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_catalyst";
-    private static final String REPUTATION_ROW = DIALOGUE_COLUMN + " #ReputationRow";
-    private static final String HEART_SLOTS = REPUTATION_ROW + " #HeartSlots";
+    private static final String REPUTATION_LABEL = HEADER_ROW + " #ReputationBlock #ReputationLabel";
+    private static final String HEART_SLOTS = HEADER_ROW + " #ReputationBlock #HeartSlots";
 
     @Nonnull
     private static String choiceRowSelector(int slot) {
         return CHOICES_ROOT + "[" + slot + "]";
+    }
+
+    private static void setReputationVisible(@Nonnull UICommandBuilder cmd, boolean visible) {
+        cmd.set(REPUTATION_LABEL + ".Visible", visible);
+        cmd.set(HEART_SLOTS + ".Visible", visible);
     }
 
     private final DialogueCatalog catalog;
@@ -132,7 +148,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             tree = catalog.get(treeId);
         }
         if (tree == null) {
-            commandBuilder.set(REPUTATION_ROW + ".Visible", false);
+            setReputationVisible(commandBuilder, false);
             applyPortrait(commandBuilder, store);
             commandBuilder.set(SPEAKER_SPANS, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.dialogue.title"));
             commandBuilder.set(
@@ -145,7 +161,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
 
         DialogueNodeDefinition node = tree.getNode(nodeId);
         if (node == null) {
-            commandBuilder.set(REPUTATION_ROW + ".Visible", false);
+            setReputationVisible(commandBuilder, false);
             applyPortrait(commandBuilder, store);
             commandBuilder.set(SPEAKER_SPANS, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.dialogue.title"));
             commandBuilder.set(
@@ -176,7 +192,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
 
         node = tree.getNode(nodeId);
         if (node == null) {
-            commandBuilder.set(REPUTATION_ROW + ".Visible", false);
+            setReputationVisible(commandBuilder, false);
             applyPortrait(commandBuilder, store);
             commandBuilder.set(
                 BODY_TEXT_SPANS,
@@ -192,7 +208,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 && npcRef.isValid()
                 && plugin != null
                 && VillagerBefriendableResolver.isBefriendable(store, npcRef, plugin);
-        commandBuilder.set(REPUTATION_ROW + ".Visible", showRep);
+        setReputationVisible(commandBuilder, showRep);
         if (showRep) {
             if (plugin != null) {
                 World world = store.getExternalData().getWorld();
@@ -214,7 +230,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                         int rep = VillagerReputationService.getOrCreateEntry(town, pu.getUuid(), nu.getUuid()).getReputation();
                         ReputationHeartUi.applyHearts(commandBuilder, HEART_SLOTS, rep);
                         commandBuilder.set(
-                            REPUTATION_ROW + ".TooltipText",
+                            HEART_SLOTS + ".TooltipText",
                             rep + "/" + VillagerReputationService.MAX_REPUTATION
                         );
                     }
@@ -351,7 +367,10 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         if (LANG_GUILD_ADVENTURER_HIRE.equals(text)) {
             long gold = dialogueWorldView.guardHireGoldCost(ref, store, npcRef);
-            return m.param("gold", Long.toString(gold));
+            String typeKey = dialogueWorldView.guardHireGuardTypeLangKey(ref, store, npcRef);
+            return m
+                .param("gold", Long.toString(gold))
+                .param("type", Message.translation(typeKey));
         }
         return m;
     }
@@ -469,6 +488,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         commandBuilder.set(sel + " #Text.TextSpans", choiceLine);
         commandBuilder.set(sel + ".Disabled", disabled);
         commandBuilder.set(sel + " #Text.Style.TextColor", disabled ? "#6d6658" : "#f0e6d2");
+        applyChoiceIcon(commandBuilder, sel, ch);
         if (!disabled) {
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -544,6 +564,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         commandBuilder.set(sel + " #Text.TextSpans", choiceLine);
         commandBuilder.set(sel + ".Disabled", !turnIn.ready());
         commandBuilder.set(sel + " #Text.Style.TextColor", turnIn.ready() ? "#f0e6d2" : "#6d6658");
+        applyChoiceIconPath(commandBuilder, sel, ICON_QUEST);
         if (turnIn.ready()) {
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -556,6 +577,54 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     }
 
     private record QuestBoardTurnInRow(boolean ready, boolean huntQuest, boolean raidQuest) {}
+
+    @Nullable
+    private static String choiceIconPath(@Nonnull DialogueChoiceDefinition ch) {
+        if (ch.isGiftChoice()) {
+            return ICON_GIFT;
+        }
+        if (ch.hasAction("open_jewelry_appraisal")) {
+            return ICON_JEWELRY_APPRAISAL;
+        }
+        if (ch.hasAction("open_blacksmith_repair")) {
+            return ICON_BLACKSMITH_REPAIR;
+        }
+        if (ch.hasAction("open_geode_ui")) {
+            return ICON_GEODE_OPEN;
+        }
+        if (ch.isQuestProgressChoice()) {
+            return ICON_QUEST_PROGRESS;
+        }
+        if (ch.isQuestOfferChoice()) {
+            return ICON_QUEST;
+        }
+        if (ch.endsConversation()) {
+            return ICON_EXIT;
+        }
+        return null;
+    }
+
+    private static void applyChoiceIcon(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull String rowSelector,
+        @Nonnull DialogueChoiceDefinition ch
+    ) {
+        applyChoiceIconPath(commandBuilder, rowSelector, choiceIconPath(ch));
+    }
+
+    private static void applyChoiceIconPath(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull String rowSelector,
+        @Nullable String iconPath
+    ) {
+        String iconSel = rowSelector + " #ChoiceIcon";
+        if (iconPath == null || iconPath.isBlank()) {
+            commandBuilder.set(iconSel + ".Visible", false);
+            return;
+        }
+        commandBuilder.set(iconSel + ".AssetPath", iconPath);
+        commandBuilder.set(iconSel + ".Visible", true);
+    }
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull DialogueEventData data) {
@@ -591,6 +660,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         DialogueActionBatchResult batch = new DialogueActionBatchResult();
         actions.runBatch(choice.getActions(), ref, store, batch, npcRef);
+        if (npcRef != null && npcRef.isValid()) {
+            NpcFaceVisuals.playTalkBurst(npcRef, store);
+        }
         applyBatchNavigation(ref, store, batch, choice.getNext());
     }
 

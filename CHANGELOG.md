@@ -31,13 +31,25 @@
 - **Tourist Portal** A new tourist portal building allows for tourists to come visit your town. They show up some time in the morning, walk around your town, and leave at night. They will buy items from player shops. They can also be invited to live in your town if you build them a house.
 - **Player Shop** Vex will now give a quest for the player to build their own shop. Players can put items up for sale and villagers and tourists will occasionally go shopping and buy stuff at player shops.
 - **Production Building Upgrades** Production buildings can now be upgraded in the town recoreds shelf.
+- **Multiple Balloon Gift Types** Balloon gifts now come in three different types with different loot. Green for jewelry, red for furniture, and white for plot blueprints. They have also been made rarer.
+- **Path designer shovel overhaul** Q now cycles five modes including Remove and Style designer. Remove mode shows placed paths and lets you delete them in world. Style designer opens a style manager with a double chest grid for weighted block columns. The status HUD uses key boxes with mode specific help text and a reminder to switch to Place mode.
+- **Villager faces** Villagers move their mouth when you talk to them and pick dialogue choices. Their face also reflects how well their needs are met while they walk around town.
+- **Villager waves** Befriendable villagers with 75+ reputation may wave at you when you walk nearby while they are idle.
+- **Inn Bell** A bell that can be used to respawn the visitors at the Inn.
 
 ### Changed
 
+- **Improved Dialogue GUI** Made the dialogue window look nicer.
+- **Building Costs** All buildings now require the crafting benches found in their prefabs.
+- **Improved Door Interaction** Villagers and tourists wait to close doors until they reach their destination, avoid closing on another traveler, and temporarily ignore NPC push-apart separation while sharing a doorway so two arrivals no longer wedge each other in the frame.
 - **Shop spot interactions** Removed LMB/RMB quantity overlay (it blocked breaking blocks). Player listings use RMB with an item in hand; buys use the F buy UI.
 - **Wall Costs** Walls now cost any type of wood instead of planks and now cost some gold to build.
 - **Resident Assigning** The gui for assigning residents has been improved.
 - **Instances** Town saves were being created in instances which doesn't make much sense, this was fixed. Towns now can't be created in instances, only permanent worlds.
+
+### Fixed
+
+- **Lootr Integration** Fixed loot spawning in lootr chests.
 
 ## [1.8.0] - 5/26/2026
 

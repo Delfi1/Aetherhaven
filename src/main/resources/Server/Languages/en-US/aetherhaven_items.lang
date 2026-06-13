@@ -34,6 +34,8 @@ items.Aetherhaven_Banquet_Table.name=Banquet table
 items.Aetherhaven_Banquet_Table.description=A long table for town feasts. Place in your territory and use it to serve a civic feast. Craft at the town planning desk once someone in town shares the pattern.
 items.Aetherhaven_Founder_Monument.name=Founder monument
 items.Aetherhaven_Founder_Monument.description=A stone pedestal that holds a likeness of the founder. Place inside town territory to honor them; the treasury's morning share grows slightly while it stands. Only one per town.
+items.Aetherhaven_Inn_Bell.name=Inn bell
+items.Aetherhaven_Inn_Bell.description=Ring to call inn visitors back to the guest area.
 
 benchCategories.aetherhaven.town_planning=Town planning
 benchCategories.aetherhaven.plot_tokens=Plot tokens
@@ -81,12 +83,12 @@ aetherhaven.poiTool.hudHelpAdventurerSpots=Secondary: place a spot above the blo
 aetherhaven.poiTool.hudHint=Q: cycle edit / placement / remove / adventurer spots
 
 aetherhaven.pathTool.legendPageTitle=Path tool
-aetherhaven.pathTool.legendBlurb=Build a spline, preview it, then place pathway blocks. A status panel appears in the corner while you hold the tool.
-aetherhaven.pathTool.legendHotkeyAdd=Secondary on ground adds a keyframe (gold sphere). Secondary while aiming a keyframe removes it. New keyframes face the way you are looking.
-aetherhaven.pathTool.legendHotkeyAim=Look at a keyframe to select it. In move mode, primary on ground moves the point. Primary on the same node does nothing.
-aetherhaven.pathTool.legendHotkeyUse=F: in rotate mode, step yaw on the selected node. In move mode, F does nothing. In place mode, F places the path (need two nodes). Q: mode cycle. E: width 1-8. Third tool ability: path style (inner blocks; see PathToolStyles in config). Secondary on a keyframe removes it.
-aetherhaven.pathTool.legendHotkeyCrouchUse=Optional: crouch is no longer required to change mode; use the tool ability (Q) instead.
-aetherhaven.pathTool.legendVisuals=Preview: white = nodes and spline, brown = path strip, green = edge grass; red = blocked. Slabs sit on the surface. Width: second tool ability (1-8). Style: third tool ability. Commit clears tall plants (Plant_Grass) above the path.
+aetherhaven.pathTool.legendBlurb=Build a path, preview it, then place it. A status panel appears while you hold the tool.
+aetherhaven.pathTool.legendHotkeyAdd=Secondary on ground adds a node. Secondary while aiming a node removes it.
+aetherhaven.pathTool.legendHotkeyAim=Primary selects a node. In move mode, primary on ground moves the selected node.
+aetherhaven.pathTool.legendHotkeyUse=Q cycles mode: Move, Rotate, Place, Remove, Style designer. F changes by mode: nudge direction, place path, remove path, or open style manager. E cycles width. R cycles style.
+aetherhaven.pathTool.legendHotkeyCrouchUse=Use Q to change mode instead of crouch.
+aetherhaven.pathTool.legendVisuals=Preview: white nodes and line, brown path, green edges. Remove mode shows placed paths in orange. Style designer opens a chest grid to build path styles.
 aetherhaven.pathTool.statusHeader=While holding the tool
 aetherhaven.pathTool.statusLine1=Toasts and chat when you add points, switch mode (Q), or cement in commit mode.
 aetherhaven.pathTool.statusLine2=Selection: aim at a sphere. Miss keeps your current selection. Q cycles mode; second ability cycles width; third ability cycles path style.
@@ -95,49 +97,115 @@ aetherhaven.pathTool.hudTitle=Path tool
 aetherhaven.pathTool.hudNameTranslate=Move
 aetherhaven.pathTool.hudNameRotate=Rotate
 aetherhaven.pathTool.hudNameCommit=Place
-aetherhaven.pathTool.hudHelpTranslate=Primary: aim a node to select, then primary on a block to move it. Secondary: ground adds a node; aiming a node removes it. Q: next mode.
-aetherhaven.pathTool.hudHelpRotate=Primary: aim a node to select. Secondary: ground adds a node; aiming a node removes it. F nudges selected node yaw. Q: next mode.
-aetherhaven.pathTool.hudHelpCommit=Primary: aim a node to select. Secondary: ground adds a node; aiming a node removes it. F places the path (2+ nodes). Q: next mode.
+aetherhaven.pathTool.hudNameRemove=Remove
+aetherhaven.pathTool.hudNameStyleDesigner=Style designer
+aetherhaven.pathTool.hudDescTranslate=Add and move nodes to shape your path.
+aetherhaven.pathTool.hudDescRotate=Turn the selected node to bend the path.
+aetherhaven.pathTool.hudDescCommit=Place the path on the ground when you are ready.
+aetherhaven.pathTool.hudDescRemove=View placed paths and remove ones you no longer want.
+aetherhaven.pathTool.hudDescStyleDesigner=Create and edit path styles with the chest grid.
 aetherhaven.pathTool.hudStyle=Style: {style}
-aetherhaven.pathTool.hudWidth=Width: {w} blocks (E to cycle)
+aetherhaven.pathTool.hudWidth=Width: {w} blocks
 aetherhaven.pathTool.hudNodes=Nodes: {n}
-aetherhaven.pathTool.hudHint=Primary = select/move | Secondary = add on ground, remove on node | Q: mode | E: width | R: style | F: rotate/place
+aetherhaven.pathTool.hudPlaceReminder=Switch to Place mode to place the path.
+
+aetherhaven.pathTool.hud.move.primary=Select a node, then click the ground to move it
+aetherhaven.pathTool.hud.move.secondary=Click the ground to add a node, or aim at a node to remove it
+aetherhaven.pathTool.hud.move.q=Next mode
+aetherhaven.pathTool.hud.move.e=Cycle path width
+aetherhaven.pathTool.hud.move.r=Cycle path style
+
+aetherhaven.pathTool.hud.rotate.primary=Select a node
+aetherhaven.pathTool.hud.rotate.secondary=Click the ground to add a node, or aim at a node to remove it
+aetherhaven.pathTool.hud.rotate.f=Nudge the selected node direction
+aetherhaven.pathTool.hud.rotate.q=Next mode
+aetherhaven.pathTool.hud.rotate.e=Cycle path width
+aetherhaven.pathTool.hud.rotate.r=Cycle path style
+
+aetherhaven.pathTool.hud.place.primary=Select a node
+aetherhaven.pathTool.hud.place.secondary=Click the ground to add a node, or aim at a node to remove it
+aetherhaven.pathTool.hud.place.f=Place the path
+aetherhaven.pathTool.hud.place.q=Next mode
+aetherhaven.pathTool.hud.place.e=Cycle path width
+aetherhaven.pathTool.hud.place.r=Cycle path style
+
+aetherhaven.pathTool.hud.remove.primary=Select a path
+aetherhaven.pathTool.hud.remove.f=Remove the selected path
+aetherhaven.pathTool.hud.remove.q=Next mode
+
+aetherhaven.pathTool.hud.styleDesigner.f=Open the style manager
+aetherhaven.pathTool.hud.styleDesigner.e=Cycle path width
+aetherhaven.pathTool.hud.styleDesigner.fContinue=Open the chest to keep editing
+aetherhaven.pathTool.hud.styleDesigner.eSave=Save the path style
+aetherhaven.pathTool.hud.styleDesigner.q=Next mode
+aetherhaven.pathTool.hud.styleDesigner.infoColumns=Left columns fill from the left edge in, right columns from the right edge in, and the middle column fills the path center
+aetherhaven.pathTool.hud.styleDesigner.infoRows=Stack blocks in a column to pick between them
+aetherhaven.pathTool.hud.styleDesigner.infoWeight=More of the same block in a column makes it show up more often
 
 aetherhaven.pathTool.addedNode=Node {n} added.
-aetherhaven.pathTool.modeCycledToTranslate=Mode: move and place keyframes.
-aetherhaven.pathTool.modeCycledToRotate=Mode: rotate — F nudges selected node yaw.
-aetherhaven.pathTool.modeCycledToCommit=Mode: place — F places the path (when you have 2+ nodes).
-aetherhaven.pathTool.widthCycled=Path width: {w} (1-8)
+aetherhaven.pathTool.modeCycledToTranslate=Mode: Move
+aetherhaven.pathTool.modeCycledToRotate=Mode: Rotate
+aetherhaven.pathTool.modeCycledToCommit=Mode: Place
+aetherhaven.pathTool.modeCycledToRemove=Mode: Remove
+aetherhaven.pathTool.modeCycledToStyleDesigner=Mode: Style designer
+aetherhaven.pathTool.widthCycled=Path width: {w}
 aetherhaven.pathTool.styleCycled=Path style: {style}
 aetherhaven.pathTool.toastStyleCycled=Path style changed
-aetherhaven.pathTool.useInTranslateMode=F does nothing in move mode. Press Q to switch to place mode, then F to place, or to rotate and F to nudge yaw.
-aetherhaven.pathTool.rotateNoSelection=Select a keyframe (aim at the gold sphere) to rotate, or press Q to change mode.
+aetherhaven.pathTool.useInTranslateMode=Press Q until you reach Place mode, then press F to place the path.
+aetherhaven.pathTool.rotateNoSelection=Select a node first, or press Q to change mode.
+aetherhaven.pathTool.wrongMode=That input does not work in this mode. Press Q to change mode.
 aetherhaven.pathTool.modeToggled=Mode: {m}
 aetherhaven.pathTool.selectedNode=Node selected.
 aetherhaven.pathTool.movedNode=Node moved.
-aetherhaven.pathTool.noNodeHit=No control node in range. In translate mode with a node selected, try primary on the ground to move.
-aetherhaven.pathTool.noNodeOnAim=No keyframe on crosshair. Aim at a gold disc to select. Selection unchanged.
+aetherhaven.pathTool.noNodeHit=No control node in range. In move mode with a node selected, try primary on the ground to move.
+aetherhaven.pathTool.noNodeOnAim=No node on crosshair. Selection unchanged.
 aetherhaven.pathTool.toastAdd=Control point added
-aetherhaven.pathTool.toastModeTranslate=Move: primary on block moves selection; secondary adds keyframe.
-aetherhaven.pathTool.toastModeRotate=Rotate: F nudges yaw for the selected node.
-aetherhaven.pathTool.toastModeCommit=Place: F places the path (2+ nodes). Switch with Q.
+aetherhaven.pathTool.toastModeTranslate=Move mode
+aetherhaven.pathTool.toastModeRotate=Rotate mode
+aetherhaven.pathTool.toastModeCommit=Place mode
+aetherhaven.pathTool.toastModeRemove=Remove mode
+aetherhaven.pathTool.toastModeStyleDesigner=Style designer mode
 aetherhaven.pathTool.toastMoved=Node position updated
 aetherhaven.pathTool.toastRemoved=Control point removed
-aetherhaven.pathTool.toastRotated=Yaw nudged
-aetherhaven.pathTool.toastCemented=Path cemented. Check chat for revert id.
-aetherhaven.pathTool.rotated=Rotated {deg}°.
+aetherhaven.pathTool.toastRotated=Direction nudged
+aetherhaven.pathTool.toastCemented=Path placed
+aetherhaven.pathTool.toastRemovedPath=Path removed
+aetherhaven.pathTool.rotated=Rotated {deg} degrees.
 aetherhaven.pathTool.removedNode=Node removed. {n} node(s) remaining.
-aetherhaven.pathTool.needTwoNodes=Need at least two keyframes. Add another with secondary, or press Q to leave commit mode and keep editing.
-aetherhaven.pathTool.emptyPlan=No ground found along the path (steep/void/unloaded chunks).
-aetherhaven.pathTool.cementFail=Nothing to place: no replaceable ground found or placement failed.
-aetherhaven.pathTool.cemented=Path placed. Revert id: {id} (aetherhaven path revert <id> with aetherhaven.path.revert)
+aetherhaven.pathTool.needTwoNodes=Need at least two nodes. Add another with secondary, or press Q to change mode.
+aetherhaven.pathTool.emptyPlan=No ground found along the path.
+aetherhaven.pathTool.cementFail=Nothing to place along the path.
+aetherhaven.pathTool.cemented=Path placed.
+aetherhaven.pathTool.removeSelected=Path selected.
+aetherhaven.pathTool.removeNoHit=No path on crosshair.
+aetherhaven.pathTool.removeNeedSelection=Select a path first with primary.
+aetherhaven.pathTool.removeUnknown=That path is no longer there.
+aetherhaven.pathTool.removedPath=Path removed. {cells} blocks restored.
 aetherhaven.pathTool.revertNoPerm=You do not have permission aetherhaven.path.revert
 aetherhaven.pathTool.badUuid=Invalid id: {raw}
 aetherhaven.pathTool.unknownId=No saved path with that id.
 aetherhaven.pathTool.reverted=Reverted {cells} block(s) for {id}
-aetherhaven.pathTool.navvizOn=Path nav debug: on (server shows committed path nodes as lines; run again to turn off)
+aetherhaven.pathTool.navvizOn=Path nav debug: on
 aetherhaven.pathTool.navvizOff=Path nav debug: off
 aetherhaven.pathTool.navvizNoPerm=Path nav debug requires aetherhaven.path.tool
+
+aetherhaven.pathTool.styleListTitle=Path styles
+aetherhaven.pathTool.styleListSelected=Selected: {name}
+aetherhaven.pathTool.styleListEmpty=No path styles yet. Press New to create one.
+aetherhaven.pathTool.styleListRowSelected=Selected
+aetherhaven.pathTool.styleListPickOne=Pick a style from the list first.
+aetherhaven.pathTool.styleListCreate=New
+aetherhaven.pathTool.styleListEdit=Edit
+aetherhaven.pathTool.styleListCancel=Cancel
+aetherhaven.pathTool.styleNameTitle=New path style
+aetherhaven.pathTool.styleNameHint=Name your style, then continue to the chest to pick blocks.
+aetherhaven.pathTool.styleNameContinue=Continue
+aetherhaven.pathTool.styleEditNameLabel=Style name
+aetherhaven.pathTool.styleEditNamePlaceholder=My path style
+aetherhaven.pathTool.toastStyleSaved=Path style saved
+aetherhaven.pathTool.styleEditNeedBlocks=Add at least one block in the chest before saving.
+aetherhaven.pathTool.styleEditNoSession=Style editor session expired. Open the style manager again.
+aetherhaven.pathTool.styleSaved=Saved path style: {name}
 
 commands.aetherhaven.path.root.desc=Path tool helpers
 commands.aetherhaven.path.revert.desc=Undo a placed path using the id from chat when you placed it
@@ -145,7 +213,7 @@ commands.aetherhaven.path.revert.id=Path id from chat when you placed the path
 commands.aetherhaven.path.navviz.desc=Debug: toggle path navigation debug lines
 
 items.Aetherhaven_Path_Tool.name=Path designer shovel
-items.Aetherhaven_Path_Tool.description=Designs spline paths (<color is="#5AB5B5">aetherhaven.path.tool</color>). Secondary: add nodes. Primary: select; in move mode, click ground to move. Q: mode cycle. 2nd ability: path width 1-8. 3rd ability: path style (inner blocks; PathToolStyles in config). F: nudge yaw in rotate, or place in place mode (2+ nodes). Revert: aetherhaven path revert. Config: PathToolStyles, raycast, and replace lists.
+items.Aetherhaven_Path_Tool.description=Designs paths for your town. Q cycles mode. Secondary adds or removes nodes. F places, removes, or opens the style manager depending on mode. E sets width. R sets style.
 
 items.Aetherhaven_Patrol_Wand.name=Patrol wand
 items.Aetherhaven_Patrol_Wand.description=Sets guard patrol routes for your town (<color is="#5AB5B5">aetherhaven.patrol.wand</color>). Craft at the town planning desk. See the on screen legend while holding it.
@@ -253,6 +321,9 @@ items.Aetherhaven_Plot_Token_House.description=Required to place the shared hous
 items.Aetherhaven_Plot_Token_Town_Hall.name=Town hall plot token
 items.Aetherhaven_Plot_Token_Town_Hall.description=Required to place the town hall footprint from the plot placement staff.
 
+items.Aetherhaven_Plot_Token_Guild_Hall.name=Guild hall plot token
+items.Aetherhaven_Plot_Token_Guild_Hall.description=Marks where the guild hall prefab can be built. Craft at the town planning desk.
+
 items.Aetherhaven_Gold_Coin.name=Gold coin
 items.Aetherhaven_Gold_Coin.description=Town currency stored in the treasury.
 
@@ -263,8 +334,6 @@ items.Aetherhaven_Geode_Anvil.name=Geode anvil
 items.Aetherhaven_Geode_Anvil.description=Opens geodes without a smith's fee. Place and use; <color is="#ffa726">you must know the schematic</color> to craft it at your town planning desk.
 
 items.Aetherhaven_Crystallized_Person.name=Crystallized Person
-
-barter.aetherhaven_vex.title=Vex's daily stock
 
 items.Aetherhaven_Treasury.name=Town treasury
 items.Aetherhaven_Treasury.description=Holds the town's gold coins. Use to deposit or withdraw (town owner).

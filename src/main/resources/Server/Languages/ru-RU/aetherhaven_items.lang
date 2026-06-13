@@ -132,8 +132,6 @@ items.Aetherhaven_Geode.description=Полый камень, в котором �
 items.Aetherhaven_Geode_Anvil.name=Геодовая наковальня
 items.Aetherhaven_Geode_Anvil.description=Открывает жеоды без платы за услуги кузнеца. Разместите и используйте; для изготовления на столе городского планирования вам необходимо знать схему.
 
-barter.aetherhaven_vex.title=Ежедневные запасы Vex
-
 items.Aetherhaven_Treasury.name=Городская казна
 items.Aetherhaven_Treasury.description=Хранит золотые монеты города. Используется для внесения или снятия средств (владельцем города).
 

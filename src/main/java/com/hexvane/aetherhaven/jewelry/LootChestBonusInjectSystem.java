@@ -145,6 +145,25 @@ public final class LootChestBonusInjectSystem extends RefSystem<ChunkStore> {
     }
 
     @Nullable
+    public static String resolveBlockTypeIdForState(@Nonnull Store<ChunkStore> store, @Nonnull BlockModule.BlockStateInfo bsi) {
+        Ref<ChunkStore> chunkRef = bsi.getChunkRef();
+        if (!chunkRef.isValid()) {
+            return null;
+        }
+        int index = bsi.getIndex();
+        int x = ChunkUtil.xFromBlockInColumn(index);
+        int y = ChunkUtil.yFromBlockInColumn(index);
+        int z = ChunkUtil.zFromBlockInColumn(index);
+        BlockChunk blockChunk = store.getComponent(chunkRef, BlockChunk.getComponentType());
+        if (blockChunk == null) {
+            return null;
+        }
+        int blockId = blockChunk.getBlock(x, y, z);
+        BlockType bt = BlockType.getAssetMap().getAsset(blockId);
+        return bt != null ? bt.getId() : null;
+    }
+
+    @Nullable
     private static String resolveBlockTypeId(@Nonnull CommandBuffer<ChunkStore> commandBuffer, @Nonnull BlockModule.BlockStateInfo bsi) {
         return resolveBlockTypeIdForState(commandBuffer, bsi);
     }

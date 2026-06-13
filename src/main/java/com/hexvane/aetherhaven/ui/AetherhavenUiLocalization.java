@@ -349,6 +349,33 @@ public final class AetherhavenUiLocalization {
         b.set(scoped.apply("#PathToolHudTitleText.TextSpans"), t("aetherhaven_items.aetherhaven.pathTool.hudTitle"));
     }
 
+    /** Title only; dynamic lines are set in {@link com.hexvane.aetherhaven.plotcreator.PlotCreatorStatusHud#refresh}. */
+    public static void applyPlotCreatorStatusHudTitle(
+        @Nonnull UICommandBuilder b,
+        @Nonnull UnaryOperator<String> scoped
+    ) {
+        b.set(
+            scoped.apply("#PlotCreatorHudTitleText.TextSpans"),
+            t("aetherhaven_plot_creator.aetherhaven.plotcreator.hud.title")
+        );
+    }
+
+    public static void applyPathToolStyleListPage(@Nonnull UICommandBuilder b) {
+        b.set("#PathToolStyleListTitleText.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleListTitle"));
+        b.set("#CreateButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleListCreate"));
+        b.set("#EditButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleListEdit"));
+        b.set("#CancelButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleListCancel"));
+    }
+
+    public static void applyPathToolStyleNamePage(@Nonnull UICommandBuilder b) {
+        b.set("#PathToolStyleNameTitleText.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleNameTitle"));
+        b.set("#Hint.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleNameHint"));
+        b.set("#NameLabel.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleEditNameLabel"));
+        b.set("#StyleNameInput.PlaceholderText", t("aetherhaven_items.aetherhaven.pathTool.styleEditNamePlaceholder"));
+        b.set("#ContinueButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleNameContinue"));
+        b.set("#CancelButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleListCancel"));
+    }
+
     /** Title only; dynamic lines are set in {@link com.hexvane.aetherhaven.poi.tool.PoiToolLegendHud#refresh}. */
     public static void applyPoiToolLegendHudTitle(
         @Nonnull UICommandBuilder b,

@@ -76,11 +76,7 @@ public final class PlotCraftingCatalog {
 
     @Nonnull
     private static Tab tabFor(@Nonnull ConstructionDefinition def) {
-        String id = def.getId().toLowerCase(Locale.ROOT);
-        if (id.startsWith("plot_decoration")) {
-            return Tab.DECORATIONS;
-        }
-        if (def.getBuildingTags().contains("decoration")) {
+        if (def.isDecorationPlot() || def.getBuildingTags().contains("decoration")) {
             return Tab.DECORATIONS;
         }
         return Tab.CORE;

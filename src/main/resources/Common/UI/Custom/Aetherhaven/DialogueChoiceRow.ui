@@ -11,6 +11,12 @@ Button #Row {
     Disabled: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #000000(0.35)))
   );
 
+  AssetImage #ChoiceIcon {
+    Anchor: (Width: 24, Height: 24, Right: 8);
+    Visible: false;
+    FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+  }
+
   Label #Text {
     Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true);
     FlexWeight: 1;

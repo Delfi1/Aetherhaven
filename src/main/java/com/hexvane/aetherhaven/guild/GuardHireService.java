@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolCheckoutRecord;
+import com.hexvane.aetherhaven.ui.GuardRoleLabels;
 import java.util.List;
 import com.hexvane.aetherhaven.villager.NpcModelSpawnUtil;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
@@ -80,6 +81,29 @@ public final class GuardHireService {
         }
         String profileId = def.getEquipmentProfileId();
         return profileId != null ? profileId : "guard_knight";
+    }
+
+    @Nonnull
+    public static String guardNpcRoleForNpc(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        String profileId = equipmentProfileForNpc(plugin, npcRef, store);
+        if (profileId == null) {
+            return AetherhavenConstants.NPC_GUARD_KNIGHT;
+        }
+        EquipmentProfileDefinition profile = plugin.getEquipmentProfileCatalog().byId(profileId);
+        return profile != null ? profile.getGuardNpcRole() : AetherhavenConstants.NPC_GUARD_KNIGHT;
+    }
+
+    @Nonnull
+    public static String guardTypeLangKeyForNpc(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        return GuardRoleLabels.guardTypeLangKey(guardNpcRoleForNpc(plugin, npcRef, store));
     }
 
     public static boolean tryHire(

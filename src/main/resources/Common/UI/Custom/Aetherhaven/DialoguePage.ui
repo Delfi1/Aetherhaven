@@ -1,10 +1,15 @@
 $C = "../Common.ui";
 
+@DarkPanelBg = (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #141c28(0.92));
+@ChoicesPanelBg = (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #0c1018(0.96));
+@BodyTextStyle = (...$C.@DefaultLabelStyle, FontSize: 20, Wrap: true, TextColor: #e8dcc8);
+@RepLabelStyle = (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #c4b8a8, RenderBold: true, VerticalAlignment: Center);
+
 $C.@PageOverlay {
   LayoutMode: Bottom;
 
   Group #DialoguePanel {
-    Anchor: (Left: 200, Right: 200, Bottom: 40, Height: 400);
+    Anchor: (Left: 140, Right: 140, Bottom: 40, Height: 400);
     LayoutMode: Top;
     Padding: (Full: 16);
     Background: (TexturePath: "../Common/ContainerFullPatch.png", Border: 20);
@@ -13,69 +18,100 @@ $C.@PageOverlay {
       FlexWeight: 1;
       LayoutMode: Top;
 
-      Group #DialogueColumn {
-        Anchor: (Full: 0);
-        LayoutMode: Top;
+      Group #HeaderRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 8, Height: 72);
+        Padding: (Horizontal: 2, Vertical: 0);
+        HitTestVisible: true;
 
-        Group #ReputationRow {
-          LayoutMode: Left;
-          Anchor: (Bottom: 8);
-          Padding: (Horizontal: 4, Vertical: 2);
-          HitTestVisible: true;
-          Label #ReputationLabel {
-            Anchor: (Right: 8, Width: 120);
-            Style: (...$C.@DefaultLabelStyle, TextColor: #c4b8a8, RenderBold: true);
-            Text: "";
-          }
-          Group #HeartSlots {
-            LayoutMode: Left;
-            FlexWeight: 1;
-          }
-        }
-
-        Group #SpeakerFrame {
-          LayoutMode: Left;
-          Padding: (Horizontal: 10, Vertical: 8);
-          Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+        Group #PortraitFrame {
+          LayoutMode: Middle;
+          Padding: (Full: 6);
+          Anchor: (Right: 10, Vertical: 0);
+          Background: (TexturePath: "../Common/Buttons/Secondary.png", Border: 12);
 
           AssetImage #Portrait {
-            Anchor: (Width: 72, Height: 72, Right: 10);
+            Anchor: (Width: 56, Height: 56);
             FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
           }
+        }
 
-          Label #Speaker {
-            FlexWeight: 1;
-            Anchor: (Bottom: 0);
-            Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #d4c4a8);
+        Group #SpeakerNameWrap {
+          LayoutMode: Middle;
+          Anchor: (Right: 12, Vertical: 0);
+
+          Group #SpeakerNameFrame {
+            LayoutMode: Middle;
+            Padding: (Horizontal: 10, Vertical: 4);
+            Background: (TexturePath: "../Common/Buttons/Secondary.png", Border: 12);
+
+            Label #Speaker {
+              Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #d4c4a8);
+              Text: "";
+            }
           }
         }
 
-        Group #TextBlock {
-          LayoutMode: Top;
-          Anchor: (Bottom: 8, Height: 108);
-          Padding: (Horizontal: 10, Vertical: 8);
-          Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
-
-          Label #BodyText {
-            Anchor: (Full: 0);
-            Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #e8dcc8);
-          }
+        Group #HeaderSpacer {
+          FlexWeight: 1;
         }
 
-        Group #ChoicesFrame {
+        Group #ReputationBlock {
+          LayoutMode: Middle;
+          Anchor: (Vertical: 0);
+
+          Label #ReputationLabel {
+            Anchor: (Right: 8);
+            Style: @RepLabelStyle;
+            Text: "";
+          }
+
+          Group #HeartSlots {
+            LayoutMode: Left;
+          }
+        }
+      }
+
+      Group #DialogueColumns {
+        FlexWeight: 1;
+        LayoutMode: Left;
+
+        Group #DialogueLeftColumn {
           FlexWeight: 1;
           LayoutMode: Top;
-          Anchor: (Top: 2);
-          Padding: (Horizontal: 8, Vertical: 8);
-          Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+          Anchor: (Right: 8);
 
-          Group #ChoicesScroll {
+          Group #TextBlock {
+            LayoutMode: Top;
             FlexWeight: 1;
-            LayoutMode: TopScrolling;
-            ScrollbarStyle: $C.@DefaultScrollbarStyle;
+            Padding: (Horizontal: 10, Vertical: 8);
+            Background: @DarkPanelBg;
 
-            Group #ChoicesRoot {
-              LayoutMode: Top;
+            Label #BodyText {
+              Anchor: (Full: 0);
+              Style: @BodyTextStyle;
+            }
+          }
+        }
+
+        Group #DialogueRightColumn {
+          FlexWeight: 1;
+          LayoutMode: Top;
+
+          Group #ChoicesFrame {
+            FlexWeight: 1;
+            LayoutMode: Top;
+            Padding: (Horizontal: 8, Vertical: 8);
+            Background: @ChoicesPanelBg;
+
+            Group #ChoicesScroll {
+              FlexWeight: 1;
+              LayoutMode: TopScrolling;
+              ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+              Group #ChoicesRoot {
+                LayoutMode: Top;
+              }
             }
           }
         }

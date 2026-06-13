@@ -14,7 +14,19 @@
   "treasuryGoldCoinCost": 50,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 1840 },
-    { "resourceTypeId": "Rock", "count": 900 }
+    { "resourceTypeId": "Rock", "count": 900 },
+    { "itemId": "Bench_Alchemy", "count": 1 },
+    { "itemId": "Bench_Arcane", "count": 1 },
+    { "itemId": "Bench_Armour", "count": 1 },
+    { "itemId": "Bench_Builders", "count": 1 },
+    { "itemId": "Bench_Cooking", "count": 1 },
+    { "itemId": "Bench_Farming", "count": 1 },
+    { "itemId": "Bench_Furnace", "count": 1 },
+    { "itemId": "Bench_Furniture", "count": 1 },
+    { "itemId": "Bench_Salvage", "count": 1 },
+    { "itemId": "Bench_Tannery", "count": 1 },
+    { "itemId": "Bench_Weapon", "count": 1 },
+    { "itemId": "Bench_WorkBench", "count": 2 }
   ],
   "tags": [
     "decoration",

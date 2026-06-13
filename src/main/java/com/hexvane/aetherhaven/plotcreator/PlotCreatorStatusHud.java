@@ -1,14 +1,18 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import java.util.List;
 import javax.annotation.Nonnull;
 
 /** In-world hints while the plot creator wizard is dismissed but the session is still active. */
 public final class PlotCreatorStatusHud extends CustomUIHud {
+    private static final String CONTROL_ROWS = "#ControlRows";
+    private static final String LANG_PREFIX = "aetherhaven_plot_creator.aetherhaven.plotcreator.";
 
     public PlotCreatorStatusHud(@Nonnull PlayerRef playerRef) {
         super(playerRef, AetherhavenConstants.PLOT_CREATOR_HUD_KEY, 0);
@@ -21,30 +25,47 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
 
     public void refresh(@Nonnull PlotCreatorSession session) {
         UICommandBuilder b = new UICommandBuilder();
-        String msg = "aetherhaven_plot_creator.aetherhaven.plotcreator";
+        AetherhavenUiLocalization.applyPlotCreatorStatusHudTitle(b, selector -> selector);
         PlotCreatorStep step = session.getDraft().getStep();
-        b.set("#PlotCreatorHudTitleText.TextSpans", Message.translation(msg + ".step." + step.name() + ".title"));
-        b.set("#HintLine.TextSpans", Message.translation(msg + ".step." + step.name() + ".hint"));
-        b.set("#HotkeyLine.TextSpans", Message.translation(msg + ".hud.hotkeys"));
+        String stepKey = "step." + step.name();
+        b.set("#StepName.TextSpans", Message.translation(LANG_PREFIX + stepKey + ".title"));
+        b.set("#StepHelp.TextSpans", Message.translation(LANG_PREFIX + stepKey + ".hint"));
         if (step == PlotCreatorStep.SUBSTEP) {
             PlotBuildingKindRequirements.SubstepRequirement sub = PlotCreatorService.currentSubstep(session.getDraft());
             if (sub != null) {
-                b.set("#DetailLine.TextSpans", Message.translation(msg + ".substep." + sub.type().name()));
+                b.set("#DetailLine.TextSpans", Message.translation(LANG_PREFIX + "substep." + sub.type().name()));
                 b.set("#DetailLine.Visible", true);
             } else {
                 b.set("#DetailLine.Visible", false);
             }
-        } else if (step == PlotCreatorStep.MATERIALS) {
-            b.set("#DetailLine.TextSpans", Message.translation(msg + ".step.MATERIALS.detail"));
-            b.set("#DetailLine.Visible", true);
         } else if (step == PlotCreatorStep.KIND && session.getDraft().getKind() != null) {
             b.set(
                 "#DetailLine.TextSpans",
-                Message.translation(msg + ".hud.kindSelected").param("kind", session.getDraft().getKind().name())
+                Message.translation(LANG_PREFIX + "hud.kindSelected").param("kind", session.getDraft().getKind().name())
             );
             b.set("#DetailLine.Visible", true);
         } else {
             b.set("#DetailLine.Visible", false);
+        }
+        b.clear(CONTROL_ROWS);
+        List<PlotCreatorHudControls.Row> rows = PlotCreatorHudControls.rowsFor(step, session);
+        for (int i = 0; i < rows.size(); i++) {
+            PlotCreatorHudControls.Row row = rows.get(i);
+            String base = CONTROL_ROWS + "[" + i + "]";
+            if (row.infoOnly()) {
+                b.append(CONTROL_ROWS, "Aetherhaven/PathToolHudInfoRow.ui");
+                b.set(
+                    base + " #InfoLabel.TextSpans",
+                    Message.translation(LANG_PREFIX + row.descriptionLangKey())
+                );
+            } else {
+                b.append(CONTROL_ROWS, "Aetherhaven/PathToolHudControlRow.ui");
+                b.set(base + " #KeyLabel.TextSpans", Message.raw(row.keyLabel()));
+                b.set(
+                    base + " #DescLabel.TextSpans",
+                    Message.translation(LANG_PREFIX + row.descriptionLangKey())
+                );
+            }
         }
         this.update(false, b);
     }

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.quest;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
@@ -8,6 +9,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,6 +46,13 @@ public final class QuestPlotTokenOnStart {
         if (player == null) {
             return;
         }
-        PlotTokenInventory.giveToPlayer(player, cdef.getId(), 1, cdef.getDisplayName());
+        String legacyTokenId = cdef.getPlotTokenItemId();
+        if (legacyTokenId != null
+            && !legacyTokenId.isBlank()
+            && !AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(legacyTokenId.trim())) {
+            player.giveItem(new ItemStack(legacyTokenId.trim(), 1), playerRef, store);
+            return;
+        }
+        PlotTokenInventory.giveToPlayer(player, cdef.getId(), 1, cdef.getDisplayName(), playerRef, store);
     }
 }

@@ -25,6 +25,9 @@
   "treasuryGoldCoinCost": 28,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 320 },
-    { "resourceTypeId": "Rock", "count": 40 }
+    { "resourceTypeId": "Rock", "count": 40 },
+    { "itemId": "Bench_Cooking", "count": 2 },
+    { "itemId": "Bench_Furnace", "count": 2 },
+    { "itemId": "Bench_WorkBench", "count": 1 }
   ]
 }

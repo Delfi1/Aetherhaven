@@ -132,8 +132,6 @@ items.Aetherhaven_Geode.description=İçinde kristaller, değerli taşlar veya m
 items.Aetherhaven_Geode_Anvil.name=Jeod örs
 items.Aetherhaven_Geode_Anvil.description=Jeodları demirci ücreti ödemeden açar. Yerleştirin ve kullanın; şehir planlama masanızda üretmek için şemayı bilmeniz gerekir.
 
-barter.aetherhaven_vex.title=Vex'in günlük stokları
-
 items.Aetherhaven_Treasury.name=Şehir hazinesi
 items.Aetherhaven_Treasury.description=Kasabanın altın paralarını muhafaza eder. Para yatırmak veya çekmek için kullanılır (kasaba sahibi).
 

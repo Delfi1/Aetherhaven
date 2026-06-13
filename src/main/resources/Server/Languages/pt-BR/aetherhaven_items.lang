@@ -132,8 +132,6 @@ items.Aetherhaven_Geode.description=Uma pedra oca que pode conter cristais, gema
 items.Aetherhaven_Geode_Anvil.name=Bigorna de geodo
 items.Aetherhaven_Geode_Anvil.description=Abre geodos sem custo para o ferreiro. Posicione e use; você precisa conhecer o esquema para criá-lo na sua mesa de planejamento urbano.
 
-barter.aetherhaven_vex.title=Estoque diário da Vex
-
 items.Aetherhaven_Treasury.name=Tesouraria municipal
 items.Aetherhaven_Treasury.description=Guarda as moedas de ouro da cidade. Usada para depositar ou sacar (do proprietário da cidade).
 

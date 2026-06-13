@@ -56,8 +56,18 @@ public final class PlotCreatorBlockInteraction extends SimpleBlockInteraction {
             return;
         }
         if (type == InteractionType.Secondary) {
-            if (PlotCreatorSubstepHandler.tryRemoveAdventurerSpawnAt(session, block, playerRef, commandBuffer)) {
-                PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
+            PlotCreatorDraft draft = session.getDraft();
+            if (draft.getStep() == PlotCreatorStep.SUBSTEP) {
+                PlotBuildingKindRequirements.SubstepRequirement sub = PlotCreatorService.currentSubstep(draft);
+                if (sub != null && sub.type() == PlotCreatorSubstepType.VISITOR_SPAWN) {
+                    if (PlotCreatorSubstepHandler.tryRemoveVisitorSpawnAt(session, block, playerRef)) {
+                        PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
+                    }
+                } else if (sub != null && sub.type() == PlotCreatorSubstepType.ADVENTURER_SPAWN) {
+                    if (PlotCreatorSubstepHandler.tryRemoveAdventurerSpawnAt(session, block, playerRef, commandBuffer)) {
+                        PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
+                    }
+                }
             }
             context.getState().state = InteractionState.Finished;
             return;

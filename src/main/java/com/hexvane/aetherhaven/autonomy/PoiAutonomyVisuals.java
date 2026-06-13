@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBrowseVisuals;
 import com.hypixel.hytale.builtin.mounts.BlockMountAPI;
 import com.hypixel.hytale.builtin.mounts.MountedComponent;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -130,6 +131,10 @@ public final class PoiAutonomyVisuals {
         } else {
             faceTowardBlock(npcRef, store, commandBuffer, poi);
         }
+        if (poi.getTags().contains("SHOP")) {
+            ShopSpotBrowseVisuals.beginPonder(npcRef, store, commandBuffer);
+            return;
+        }
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (npc == null) {
             return;
@@ -155,6 +160,9 @@ public final class PoiAutonomyVisuals {
             stopCampfireConsumeVisuals(npcRef, store, commandBuffer, npc);
             AnimationUtils.stopAnimation(npcRef, AnimationSlot.Movement, store);
             tryClearCampfireHeldFood(npcRef, store, commandBuffer);
+        }
+        if (poi.getTags().contains("SHOP")) {
+            ShopSpotBrowseVisuals.endPonder(npcRef, store, commandBuffer);
         }
         if (npc != null) {
             // Sleep/Sit use Status; explicitly clear in case role transition timing skips it.

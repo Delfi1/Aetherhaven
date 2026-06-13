@@ -13,8 +13,18 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.ser
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.hypixel.hytale.server.npc.role.Role;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -57,12 +67,18 @@ public final class VillagerDoorUtil {
      * Min XZ distance (m) past the door block center along the door→leash axis — NPC is on the leash side of the
      * doorway plane.
      */
-    private static final double THROUGH_ALONG_MIN = 0.22;
+    private static final double THROUGH_ALONG_MIN = 0.72;
     /**
      * Max XZ distance (m) from the door→leash line — wide enough for diagonal approaches and double-door jambs;
      * still rejects “walking past” far beside the building.
      */
-    private static final double THROUGH_PERP_MAX = 2.35;
+    private static final double THROUGH_PERP_MAX = 1.85;
+    /** Only open doors once the NPC is this close (XZ) — avoids opening from path nodes far up the leash ray. */
+    private static final double DOOR_OPEN_MAX_HORIZONTAL = 3.0;
+    /** Do not auto-close while the NPC is still this close unless they are clearly through the frame. */
+    private static final double DOOR_APPROACH_KEEP_OPEN_HORIZONTAL = 3.25;
+    /** Block auto-close when another NPC is within this XZ range of the door (both sides of the frame). */
+    private static final double DOOR_OTHER_NPC_BLOCK_HORIZONTAL = 3.25;
 
     private enum DoorState {
         CLOSED,
@@ -86,6 +102,100 @@ public final class VillagerDoorUtil {
             }
             return CLOSED;
         }
+    }
+
+    /**
+     * When pathing stalls near a doorway, close an open door and reopen with the alternate swing so the leaf does not
+     * block the corridor. Runs on the world task queue (see class Javadoc).
+     */
+    public static void tryUnjamDoorsAlongPath(
+        @Nonnull World world,
+        @Nonnull Vector3d npcPos,
+        @Nonnull Vector3d leashPos
+    ) {
+        Vector3d npcCopy = new Vector3d(npcPos);
+        Vector3d leashCopy = new Vector3d(leashPos);
+        world.execute(() -> tryUnjamDoorsAlongPathSync(world, npcCopy, leashCopy));
+    }
+
+    private static void tryUnjamDoorsAlongPathSync(
+        @Nonnull World world,
+        @Nonnull Vector3d npcPos,
+        @Nonnull Vector3d leashPos
+    ) {
+        int x0 = (int) Math.floor(npcPos.x);
+        int z0 = (int) Math.floor(npcPos.z);
+        int x1 = (int) Math.floor(leashPos.x);
+        int z1 = (int) Math.floor(leashPos.z);
+        int y0 = (int) Math.floor(npcPos.y);
+        int steps = Math.max(Math.abs(x1 - x0), Math.abs(z1 - z0)) + 3;
+        for (int s = 0; s <= steps; s++) {
+            double t = steps == 0 ? 0.0 : (double) s / (double) steps;
+            int cx = (int) Math.floor(x0 + (x1 - x0) * t);
+            int cz = (int) Math.floor(z0 + (z1 - z0) * t);
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    for (int dy = -1; dy <= 2; dy++) {
+                        int bx = cx + dx;
+                        int by = y0 + dy;
+                        int bz = cz + dz;
+                        if (!isNpcNearDoor(npcPos, bx, by, bz)) {
+                            continue;
+                        }
+                        tryUnjamDoorAt(world, npcPos, leashPos, new Vector3i(bx, by, bz));
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean isNpcNearDoor(@Nonnull Vector3d npcPos, int doorX, int doorY, int doorZ) {
+        return horizontalDistanceToDoorBlock(npcPos, doorX, doorY, doorZ) <= 2.75;
+    }
+
+    /**
+     * Close an open door and reopen with the opposite swing when the NPC is wedged in the frame (not while still
+     * walking up from a few blocks away).
+     */
+    private static boolean tryUnjamDoorAt(
+        @Nonnull World world,
+        @Nonnull Vector3d entityPos,
+        @Nonnull Vector3d leashPos,
+        @Nonnull Vector3i blockPos
+    ) {
+        Vector3i primary = doorPrimaryBlock(world, blockPos.x, blockPos.y, blockPos.z);
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
+        if (chunk == null) {
+            return false;
+        }
+        RotationTuple rotationTuple = RotationTuple.get(
+            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, primary.x, primary.y, primary.z)
+        );
+        DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
+            world.getChunkStore(),
+            primary.x,
+            primary.y,
+            primary.z,
+            rotationTuple.yaw()
+        );
+        if (doorInfo == null) {
+            return false;
+        }
+        BlockType blockType = doorInfo.getBlockType();
+        DoorState doorState = DoorState.fromBlockState(blockType.getStateForBlock(blockType));
+        if (doorState == DoorState.CLOSED) {
+            return tryOpenDoorAt(world, entityPos, primary);
+        }
+        if (isNpcApproachingDoor(entityPos, primary.x, primary.y, primary.z, leashPos)) {
+            return false;
+        }
+        if (horizontalDistanceToDoorBlock(entityPos, primary.x, primary.y, primary.z) > 1.35) {
+            return false;
+        }
+        if (!tryCloseDoorAt(world, primary.x, primary.y, primary.z)) {
+            return false;
+        }
+        return tryOpenDoorAt(world, entityPos, primary);
     }
 
     /**
@@ -113,28 +223,24 @@ public final class VillagerDoorUtil {
     ) {
         int x0 = (int) Math.floor(npcPos.x);
         int z0 = (int) Math.floor(npcPos.z);
-        int x1 = (int) Math.floor(leashPos.x);
-        int z1 = (int) Math.floor(leashPos.z);
         int y0 = (int) Math.floor(npcPos.y);
-        int steps = Math.max(Math.abs(x1 - x0), Math.abs(z1 - z0)) + 3;
-        for (int s = 0; s <= steps; s++) {
-            double t = steps == 0 ? 0.0 : (double) s / (double) steps;
-            int cx = (int) Math.floor(x0 + (x1 - x0) * t);
-            int cz = (int) Math.floor(z0 + (z1 - z0) * t);
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dz = -1; dz <= 1; dz++) {
-                    for (int dy = -1; dy <= 2; dy++) {
-                        int bx = cx + dx;
-                        int by = y0 + dy;
-                        int bz = cz + dz;
-                        if (shouldCloseDoorBehindNpc(npcPos, bx, by, bz, leashPos)) {
-                            continue;
-                        }
-                        if (tryOpenDoorAt(world, npcPos, new Vector3i(bx, by, bz))) {
-                            if (onOpened != null) {
-                                Vector3i primary = doorPrimaryBlock(world, bx, by, bz);
-                                onOpened.onOpened(primary.x, primary.y, primary.z);
-                            }
+        int r = (int) Math.ceil(DOOR_OPEN_MAX_HORIZONTAL);
+        for (int dx = -r; dx <= r; dx++) {
+            for (int dz = -r; dz <= r; dz++) {
+                for (int dy = -1; dy <= 2; dy++) {
+                    int bx = x0 + dx;
+                    int by = y0 + dy;
+                    int bz = z0 + dz;
+                    if (!isNpcWithinDoorOpenRange(npcPos, bx, by, bz)) {
+                        continue;
+                    }
+                    if (shouldCloseDoorBehindNpc(npcPos, bx, by, bz, leashPos)) {
+                        continue;
+                    }
+                    if (tryOpenDoorAt(world, npcPos, new Vector3i(bx, by, bz))) {
+                        if (onOpened != null) {
+                            Vector3i primary = doorPrimaryBlock(world, bx, by, bz);
+                            onOpened.onOpened(primary.x, primary.y, primary.z);
                         }
                     }
                 }
@@ -297,39 +403,229 @@ public final class VillagerDoorUtil {
     }
 
     /**
-     * For each door in {@code pendingOpenDoors} that the NPC has passed through (toward the leash), closes it and
-     * removes it from the list. Supports multiple doors on one route; does not wait for the POI. Runs on the world task
+     * Closes doors this NPC opened once it has reached its travel goal and no other NPC is using the doorway. Pending
+     * entries that cannot close yet (another NPC nearby) stay in the list for a later arrival. Runs on the world task
      * queue (see class Javadoc).
      */
-    public static void closePendingDoorsWhenPassed(
+    public static void closePendingDoorsAfterGoalReached(
         @Nonnull World world,
-        @Nonnull Vector3d npcPos,
-        @Nonnull Vector3d leashPos,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID openerEntityUuid,
+        @Nonnull Vector3d openerPos,
+        @Nonnull Vector3d goalPos,
+        double goalArriveHorizontalSq,
         @Nonnull ArrayList<int[]> pendingOpenDoors
     ) {
-        Vector3d npcCopy = new Vector3d(npcPos);
-        Vector3d leashCopy = new Vector3d(leashPos);
-        world.execute(() -> closePendingDoorsWhenPassedSync(world, npcCopy, leashCopy, pendingOpenDoors));
+        if (pendingOpenDoors.isEmpty()) {
+            return;
+        }
+        double dx = openerPos.x - goalPos.x;
+        double dz = openerPos.z - goalPos.z;
+        if (dx * dx + dz * dz > goalArriveHorizontalSq) {
+            return;
+        }
+        world.execute(() ->
+            closePendingDoorsAfterGoalReachedSync(world, store, openerEntityUuid, pendingOpenDoors)
+        );
     }
 
-    private static void closePendingDoorsWhenPassedSync(
+    private static void closePendingDoorsAfterGoalReachedSync(
         @Nonnull World world,
-        @Nonnull Vector3d npcPos,
-        @Nonnull Vector3d leashPos,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID openerEntityUuid,
         @Nonnull ArrayList<int[]> pendingOpenDoors
     ) {
         Iterator<int[]> it = pendingOpenDoors.iterator();
         while (it.hasNext()) {
             int[] d = it.next();
-            if (shouldCloseDoorBehindNpc(npcPos, d[0], d[1], d[2], leashPos)) {
-                if (tryCloseDoorAt(world, d[0], d[1], d[2])) {
-                    it.remove();
-                }
+            if (isOtherNpcNearDoor(store, openerEntityUuid, d[0], d[1], d[2])) {
+                continue;
+            }
+            if (tryCloseDoorAt(world, d[0], d[1], d[2])) {
+                it.remove();
             }
         }
     }
 
-    /** Strict corridor test or looser “past door toward leash” (single doors, offset paths). */
+    /**
+     * While traveling through a doorway, ignore separation steering from other NPCs also using that frame so push-apart
+     * forces do not wedge them in a 1-block opening. Must run after {@code ignoredEntitiesForAvoidance} is cleared and
+     * before {@link com.hypixel.hytale.server.npc.systems.AvoidanceSystem} blends separation.
+     */
+    public static void applyDoorwaySeparationBypass(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> selfRef,
+        @Nonnull Role role,
+        @Nonnull Vector3d selfPos
+    ) {
+        if (!role.isApplySeparation()) {
+            return;
+        }
+        ArrayList<int[]> doors = collectDoorPrimariesNearNpc(world, selfPos, DOOR_OTHER_NPC_BLOCK_HORIZONTAL);
+        if (doors.isEmpty()) {
+            return;
+        }
+        Set<Ref<EntityStore>> ignored = role.getIgnoredEntitiesForAvoidance();
+        store.forEachChunk(
+            Query.and(TransformComponent.getComponentType(), NPCEntity.getComponentType()),
+            (archetypeChunk, commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    Ref<EntityStore> otherRef = archetypeChunk.getReferenceTo(i);
+                    if (otherRef == null || otherRef.equals(selfRef) || !otherRef.isValid()) {
+                        continue;
+                    }
+                    TransformComponent tc = archetypeChunk.getComponent(i, TransformComponent.getComponentType());
+                    if (tc == null) {
+                        continue;
+                    }
+                    Vector3d otherPos = tc.getPosition();
+                    for (int[] door : doors) {
+                        if (horizontalDistanceToDoorBlock(otherPos, door[0], door[1], door[2]) <= DOOR_OTHER_NPC_BLOCK_HORIZONTAL) {
+                            ignored.add(otherRef);
+                            break;
+                        }
+                    }
+                }
+                return false;
+            }
+        );
+    }
+
+    @Nonnull
+    private static ArrayList<int[]> collectDoorPrimariesNearNpc(
+        @Nonnull World world,
+        @Nonnull Vector3d npcPos,
+        double maxHorizontal
+    ) {
+        ArrayList<int[]> out = new ArrayList<>();
+        int x0 = (int) Math.floor(npcPos.x);
+        int z0 = (int) Math.floor(npcPos.z);
+        int y0 = (int) Math.floor(npcPos.y);
+        int r = (int) Math.ceil(maxHorizontal);
+        for (int dx = -r; dx <= r; dx++) {
+            for (int dz = -r; dz <= r; dz++) {
+                for (int dy = -1; dy <= 2; dy++) {
+                    int bx = x0 + dx;
+                    int by = y0 + dy;
+                    int bz = z0 + dz;
+                    if (horizontalDistanceToDoorBlock(npcPos, bx, by, bz) > maxHorizontal) {
+                        continue;
+                    }
+                    Vector3i primary = doorPrimaryBlock(world, bx, by, bz);
+                    if (!isDoorPrimaryBlock(world, primary)) {
+                        continue;
+                    }
+                    if (containsDoorPrimary(out, primary.x, primary.y, primary.z)) {
+                        continue;
+                    }
+                    out.add(new int[] { primary.x, primary.y, primary.z });
+                }
+            }
+        }
+        return out;
+    }
+
+    private static boolean isDoorPrimaryBlock(@Nonnull World world, @Nonnull Vector3i primary) {
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
+        if (chunk == null) {
+            return false;
+        }
+        RotationTuple rotationTuple = RotationTuple.get(
+            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, primary.x, primary.y, primary.z)
+        );
+        return DoorInteraction.getDoorAtPosition(
+            world.getChunkStore(),
+            primary.x,
+            primary.y,
+            primary.z,
+            rotationTuple.yaw()
+        ) != null;
+    }
+
+    private static boolean containsDoorPrimary(@Nonnull ArrayList<int[]> doors, int x, int y, int z) {
+        for (int[] door : doors) {
+            if (door[0] == x && door[1] == y && door[2] == z) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * True when a different {@link NPCEntity} is close enough to this door that closing it would cut off their path.
+     */
+    private static boolean isOtherNpcNearDoor(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID excludeEntityUuid,
+        int doorX,
+        int doorY,
+        int doorZ
+    ) {
+        boolean[] occupied = { false };
+        store.forEachChunk(
+            Query.and(
+                TransformComponent.getComponentType(),
+                NPCEntity.getComponentType(),
+                UUIDComponent.getComponentType()
+            ),
+            (archetypeChunk, commandBuffer) -> {
+                if (occupied[0]) {
+                    return true;
+                }
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    if (uc == null || excludeEntityUuid.equals(uc.getUuid())) {
+                        continue;
+                    }
+                    TransformComponent tc = archetypeChunk.getComponent(i, TransformComponent.getComponentType());
+                    if (tc == null) {
+                        continue;
+                    }
+                    if (horizontalDistanceToDoorBlock(tc.getPosition(), doorX, doorY, doorZ) <= DOOR_OTHER_NPC_BLOCK_HORIZONTAL) {
+                        occupied[0] = true;
+                        return true;
+                    }
+                }
+                return false;
+            }
+        );
+        return occupied[0];
+    }
+
+    /** True while the NPC is still near the doorway and has not crossed to the leash side — keep the door open. */
+    private static boolean isNpcApproachingDoor(
+        @Nonnull Vector3d npcPos,
+        int doorX,
+        int doorY,
+        int doorZ,
+        @Nonnull Vector3d leashPos
+    ) {
+        if (isNpcThroughDoorTowardLeash(npcPos, doorX, doorY, doorZ, leashPos)) {
+            return false;
+        }
+        return horizontalDistanceToDoorBlock(npcPos, doorX, doorY, doorZ) <= DOOR_APPROACH_KEEP_OPEN_HORIZONTAL;
+    }
+
+    private static boolean isNpcWithinDoorOpenRange(@Nonnull Vector3d npcPos, int doorX, int doorY, int doorZ) {
+        if (Math.abs(npcPos.y - doorY) > 2.5) {
+            return false;
+        }
+        return horizontalDistanceToDoorBlock(npcPos, doorX, doorY, doorZ) <= DOOR_OPEN_MAX_HORIZONTAL;
+    }
+
+    private static double horizontalDistanceToDoorBlock(@Nonnull Vector3d npcPos, int doorX, int doorY, int doorZ) {
+        if (Math.abs(npcPos.y - doorY) > 3.5) {
+            return Double.POSITIVE_INFINITY;
+        }
+        double cx = doorX + 0.5;
+        double cz = doorZ + 0.5;
+        double dx = npcPos.x - cx;
+        double dz = npcPos.z - cz;
+        return Math.hypot(dx, dz);
+    }
+
+    /** Strict corridor test — used by door-unjam only (auto-close waits for travel goal arrival). */
     private static boolean shouldCloseDoorBehindNpc(
         @Nonnull Vector3d npcPos,
         int doorX,
@@ -337,39 +633,7 @@ public final class VillagerDoorUtil {
         int doorZ,
         @Nonnull Vector3d leashPos
     ) {
-        return isNpcThroughDoorTowardLeash(npcPos, doorX, doorY, doorZ, leashPos)
-            || isNpcPastDoorTowardLeashLoose(npcPos, doorX, doorY, doorZ, leashPos);
-    }
-
-    /**
-     * No perpendicular cap: once the NPC is clearly past the door block along the door→leash axis and not standing
-     * inside the door cell, close behind them (handles diagonal paths where {@link #isNpcThroughDoorTowardLeash} fails).
-     */
-    private static boolean isNpcPastDoorTowardLeashLoose(
-        @Nonnull Vector3d npcPos,
-        int doorX,
-        int doorY,
-        int doorZ,
-        @Nonnull Vector3d leashPos
-    ) {
-        double cx = doorX + 0.5;
-        double cz = doorZ + 0.5;
-        double ldx = leashPos.x - cx;
-        double ldz = leashPos.z - cz;
-        double len = Math.hypot(ldx, ldz);
-        if (len < 0.08) {
-            return false;
-        }
-        if (Math.abs(npcPos.y - doorY) > 3.5) {
-            return false;
-        }
-        double ux = ldx / len;
-        double uz = ldz / len;
-        double px = npcPos.x - cx;
-        double pz = npcPos.z - cz;
-        double along = px * ux + pz * uz;
-        double dist = Math.hypot(px, pz);
-        return along > 0.18 && dist > 0.42;
+        return isNpcThroughDoorTowardLeash(npcPos, doorX, doorY, doorZ, leashPos);
     }
 
     /**

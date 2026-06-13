@@ -1,5 +1,5 @@
 {
-  "Parent": "Player",
+  "Parent": "Aetherhaven_Human",
   "DefaultAttachments": [
     {
       "Model": "Characters/Player.blockymodel",

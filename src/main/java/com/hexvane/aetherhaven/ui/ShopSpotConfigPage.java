@@ -1,6 +1,5 @@
 package com.hexvane.aetherhaven.ui;
 
-import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.shopspot.ShopLootFiles;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlockUtil;
@@ -43,7 +42,7 @@ public final class ShopSpotConfigPage extends AetherhavenInteractiveCustomUIPage
 
     private boolean templateAppended;
     private boolean playerControlled;
-    private String lootTableId = AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS;
+    private String lootTableId = "";
 
     public ShopSpotConfigPage(@Nonnull PlayerRef playerRef) {
         super(playerRef, CustomPageLifetime.CanDismiss, PageData.CODEC);
@@ -104,9 +103,6 @@ public final class ShopSpotConfigPage extends AetherhavenInteractiveCustomUIPage
                 entries.add(new DropdownEntryInfo(LocalizableString.fromString(id), id));
             }
         }
-        if (entries.isEmpty()) {
-            entries.add(new DropdownEntryInfo(LocalizableString.fromString("gifts"), "gifts"));
-        }
         b.set("#LootTableDropdown.Entries", entries);
         b.set("#LootTableDropdown.Value", lootTableId);
     }
@@ -165,7 +161,7 @@ public final class ShopSpotConfigPage extends AetherhavenInteractiveCustomUIPage
         }
         record.setPlayerControlled(playerControlled);
         if (!playerControlled) {
-            record.setLootTableId(lootTableId.isBlank() ? AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS : lootTableId);
+            record.setLootTableId(lootTableId.trim());
             long epochDay = Long.MIN_VALUE;
             WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
             if (wtr != null) {

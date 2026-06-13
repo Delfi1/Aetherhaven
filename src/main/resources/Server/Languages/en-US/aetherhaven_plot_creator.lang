@@ -39,7 +39,9 @@ aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded = That shop stall is alread
 aetherhaven.plotcreator.hint.touristPortalRecorded = Tourist portal saved.
 aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded = That tourist portal is already saved for this step.
 aetherhaven.plotcreator.hint.spawnRecorded = Spawn spot saved.
-aetherhaven.plotcreator.hint.spawnRemoved = Adventurer spawn spot removed.
+aetherhaven.plotcreator.hint.adventurerSpawnRemoved = Adventurer spawn spot removed.
+aetherhaven.plotcreator.hint.visitorSpawnRemoved = Visitor spawn spot removed.
+aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded = That visitor spawn spot is already saved.
 aetherhaven.plotcreator.hint.poiRecorded = Activity spot saved.
 
 aetherhaven.plotcreator.button.save = Save building
@@ -55,9 +57,33 @@ aetherhaven.plotcreator.field.goldCost = Gold cost from treasury
 
 aetherhaven.plotcreator.session.started = Plot creator started. Use the HUD and staff keys while you work in the world.
 
-aetherhaven.plotcreator.hud.hotkeys = Primary: click blocks | F: step action | Q: back | E: next | R: cancel session
+aetherhaven.plotcreator.hud.title = Plot creator
 
-aetherhaven.plotcreator.hud.kindSelected = Type: {kind} (F to change)
+aetherhaven.plotcreator.hud.common.q = Previous step
+aetherhaven.plotcreator.hud.common.e = Continue to next step
+aetherhaven.plotcreator.hud.common.r = Cancel session
+
+aetherhaven.plotcreator.hud.WELCOME.f = Begin
+aetherhaven.plotcreator.hud.WELCOME.e = Begin
+
+aetherhaven.plotcreator.hud.CORNER_FIRST.primary = Click a block at one corner of your build
+aetherhaven.plotcreator.hud.CORNER_SECOND.primary = Click the opposite corner to mark the full area
+aetherhaven.plotcreator.hud.ANCHOR.primary = Click one of the four outside corners of the footprint
+
+aetherhaven.plotcreator.hud.PREFAB_SAVE.f = Export the build shape inside the bounds
+aetherhaven.plotcreator.hud.KIND.f = Open the building type picker
+aetherhaven.plotcreator.hud.IDENTITY.f = Enter the display name, description, and building id
+aetherhaven.plotcreator.hud.TAGS.f = Edit tags (comma separated)
+aetherhaven.plotcreator.hud.VARIANT.f = Pick which main building type this variant counts as
+aetherhaven.plotcreator.hud.SUBSTEP.primary = Click the required block or spot inside the footprint
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer = Remove an adventurer spawn marker
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor = Remove a visitor spawn marker
+aetherhaven.plotcreator.hud.SUBSTEP.q = Go back (extra placement blocks from the step you leave are removed)
+aetherhaven.plotcreator.hud.MATERIALS.f = Open material storage
+aetherhaven.plotcreator.hud.CONFIGURE.f = Open building settings
+aetherhaven.plotcreator.hud.REVIEW.f = Save the building
+
+aetherhaven.plotcreator.hud.kindSelected = Type: {kind}
 
 aetherhaven.plotcreator.hint.clickBlock = Click a block in the world for this step.
 
@@ -104,29 +130,29 @@ aetherhaven.plotcreator.button.close = Close
 aetherhaven.plotcreator.button.done = Done
 aetherhaven.plotcreator.button.next = Continue
 
-aetherhaven.plotcreator.step.WELCOME.title = Plot creator
-aetherhaven.plotcreator.step.WELCOME.hint = Turn something you built into a town building. Press F or E to begin. Q and E move between steps. R cancels.
+aetherhaven.plotcreator.step.WELCOME.title = Welcome
+aetherhaven.plotcreator.step.WELCOME.hint = Turn something you built into a town building.
 
 aetherhaven.plotcreator.step.CORNER_FIRST.title = First corner
-aetherhaven.plotcreator.step.CORNER_FIRST.hint = Primary-click a block at one corner of your build.
+aetherhaven.plotcreator.step.CORNER_FIRST.hint = Mark one corner of your build.
 
 aetherhaven.plotcreator.step.CORNER_SECOND.title = Opposite corner
-aetherhaven.plotcreator.step.CORNER_SECOND.hint = Primary-click the opposite corner to mark the full area.
+aetherhaven.plotcreator.step.CORNER_SECOND.hint = Mark the opposite corner to define the full area.
 
 aetherhaven.plotcreator.step.ANCHOR.title = Plot sign spot
-aetherhaven.plotcreator.step.ANCHOR.hint = Primary-click one of the four outside corners of the footprint (one block beyond the bounds on both X and Z). The sign must not be inside the build area.
+aetherhaven.plotcreator.step.ANCHOR.hint = Mark one of the four outside corners of the footprint (one block beyond the bounds on both X and Z). The sign must not be inside the build area.
 
 aetherhaven.plotcreator.step.KIND.title = Building type
-aetherhaven.plotcreator.step.KIND.hint = Press F to open the building type picker. Choose a type, close the panel, then E when it fits. For what each type means, open your town journal Guide → Mechanics → Plot creator staff.
+aetherhaven.plotcreator.step.KIND.hint = Choose a building type that fits your build. For what each type means, open your town journal Guide → Mechanics → Plot creator staff.
 
 aetherhaven.plotcreator.step.IDENTITY.title = Name and id
-aetherhaven.plotcreator.step.IDENTITY.hint = Press F to enter the display name, description, and building id. The id updates from the name until you edit the id field yourself. The prefab file uses this id. Press E when done.
+aetherhaven.plotcreator.step.IDENTITY.hint = Enter the display name, description, and building id. The id updates from the name until you edit the id field yourself. The prefab file uses this id.
 
 aetherhaven.plotcreator.step.TAGS.title = Building tags
-aetherhaven.plotcreator.step.TAGS.hint = Press F to edit tags (comma separated). Example: amenity, nature, fun. Finish the line before pressing E.
+aetherhaven.plotcreator.step.TAGS.hint = Add tags (comma separated). Example: amenity, nature, fun.
 
 aetherhaven.plotcreator.step.PREFAB_SAVE.title = Save shape
-aetherhaven.plotcreator.step.PREFAB_SAVE.hint = Press F to export everything inside the bounds using your building settings from the previous step, then E for the next step.
+aetherhaven.plotcreator.step.PREFAB_SAVE.hint = Export everything inside the bounds using your building settings from the previous step.
 
 aetherhaven.plotcreator.error.needIdentity = Set a display name and building id before exporting the prefab.
 
@@ -135,18 +161,18 @@ aetherhaven.plotcreator.error.selfBuildDays = Self-build days must be greater th
 aetherhaven.plotcreator.error.assemblySections = Assembly sections per axis must be a whole number from 1 to 16 (1 disables sectioned assembly).
 
 aetherhaven.plotcreator.step.VARIANT.title = Variant of
-aetherhaven.plotcreator.step.VARIANT.hint = Press F to pick which main building type this variant counts as, then E.
+aetherhaven.plotcreator.step.VARIANT.hint = Pick which main building type this variant counts as.
 
 aetherhaven.plotcreator.step.SUBSTEP.title = Important spots
-aetherhaven.plotcreator.step.SUBSTEP.hint = Placement blocks are added to your inventory for each substep. Place or click the required blocks and spots inside the footprint. Press Q to go back — extra placement blocks from the step you leave are removed from your inventory.
+aetherhaven.plotcreator.step.SUBSTEP.hint = Placement blocks are added to your inventory for each substep. Place or click the required blocks and spots inside the footprint.
 
 aetherhaven.plotcreator.step.MATERIALS.title = Build materials
-aetherhaven.plotcreator.step.MATERIALS.hint = Press F to open material storage. Add the items players must supply to build this plot, then E. Items are returned to your inventory when you continue.
+aetherhaven.plotcreator.step.MATERIALS.hint = Add the items players must supply to build this plot. Items are returned to your inventory when you continue.
 
 aetherhaven.plotcreator.step.MATERIALS.detail = Virtual chest for this building only — not placed in the world.
 
 aetherhaven.plotcreator.step.CONFIGURE.title = Building settings
-aetherhaven.plotcreator.step.CONFIGURE.hint = Press F to open settings: treasury gold cost, self-build days, prefab empty spaces, plot token lock, and assembly sections. Close the panel, then E when done.
+aetherhaven.plotcreator.step.CONFIGURE.hint = Set treasury gold cost, self-build days, prefab empty spaces, plot token lock, and assembly sections.
 
 aetherhaven.plotcreator.step.CONFIGURE.detail = Gold is paid from the town treasury when the plot is built. Self-build days is how long the plot takes to finish without a building staff. Save empty spaces controls whether air in your footprint is saved to clear blocks when built. Plot token locked requires players to unlock this plot at the plot crafting bench before they can craft tokens. Assembly sections splits the build into an N×N×N grid (1 = off).
 
@@ -161,7 +187,7 @@ aetherhaven.plotcreator.field.plotTokenLocked.hint = When on, players must unloc
 aetherhaven.plotcreator.field.assemblySections = Assembly sections per axis (1–16)
 
 aetherhaven.plotcreator.step.REVIEW.title = Review
-aetherhaven.plotcreator.step.REVIEW.hint = Press F to save the building. You will get a plot token to place it in town.
+aetherhaven.plotcreator.step.REVIEW.hint = Save the building. You will get a plot token to place it in town.
 
 aetherhaven.plotcreator.step.DONE.title = Done
 aetherhaven.plotcreator.step.DONE.hint = Your building was saved. Use the plot token from your inventory to place it in a town.
@@ -179,7 +205,7 @@ aetherhaven.plotcreator.substep.SHOP_POI = Click the shop counter work spot.
 aetherhaven.plotcreator.substep.TOURIST_VISIT_POI = Click where visitors should stand in front of the shop.
 aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK = Place the portal platform from your inventory, then click it with the plot creator staff.
 aetherhaven.plotcreator.substep.INNKEEPER_SPAWN = Click where the innkeeper should stand.
-aetherhaven.plotcreator.substep.VISITOR_SPAWN = Click a visitor spawn spot.
+aetherhaven.plotcreator.substep.VISITOR_SPAWN = Click where each inn visitor should stand (two spots). Right-click a teal marker to remove it.
 aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN = Click where the guild master should stand.
 aetherhaven.plotcreator.substep.ADVENTURER_SPAWN = Click an adventurer spawn spot. Right-click a purple marker to remove it.
 

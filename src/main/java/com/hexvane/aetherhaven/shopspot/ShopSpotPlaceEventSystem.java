@@ -88,7 +88,7 @@ public final class ShopSpotPlaceEventSystem extends EntityEventSystem<EntityStor
         String townId = town != null ? town.getTownId().toString() : "";
         String plotId = inCompletePlot && plot != null ? plot.getPlotId().toString() : "";
         ShopSpotBlock block =
-            new ShopSpotBlock(spotId.toString(), townId, plotId, false, AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS, false);
+            new ShopSpotBlock(spotId.toString(), townId, plotId, false, "", false);
 
         if (!ShopSpotBlockUtil.writeBlockComponent(world, pos, block)) {
             world.execute(() -> finishPlacementDeferred(world, pos, spotId, town, plot, inCompletePlot, playerRef, pr));
@@ -119,7 +119,7 @@ public final class ShopSpotPlaceEventSystem extends EntityEventSystem<EntityStor
         if (inCompletePlot && plot != null) {
             record.setPlotId(plot.getPlotId());
         }
-        record.setLootTableId(AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS);
+        record.setLootTableId("");
         record.setDisplayYawRadians(ShopSpotDisplayRotation.yawFromBlockAt(world, pos));
         registry.put(record);
         ShopSpotPersistence.save(world, plugin, registry);
@@ -154,7 +154,7 @@ public final class ShopSpotPlaceEventSystem extends EntityEventSystem<EntityStor
         ShopSpotBlockUtil.writeBlockComponent(
             world,
             pos,
-            new ShopSpotBlock(spotId.toString(), townId, plotId, false, AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS, false)
+            new ShopSpotBlock(spotId.toString(), townId, plotId, false, "", false)
         );
         Store<EntityStore> store = world.getEntityStore().getStore();
         if (store == null) {
@@ -171,7 +171,7 @@ public final class ShopSpotPlaceEventSystem extends EntityEventSystem<EntityStor
         if (inCompletePlot && plot != null) {
             record.setPlotId(plot.getPlotId());
         }
-        record.setLootTableId(AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS);
+        record.setLootTableId("");
         record.setDisplayYawRadians(ShopSpotDisplayRotation.yawFromBlockAt(world, pos));
         registry.put(record);
         ShopSpotPersistence.save(world, plugin, registry);

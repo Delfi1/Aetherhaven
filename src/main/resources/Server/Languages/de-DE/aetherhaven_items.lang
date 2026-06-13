@@ -132,8 +132,6 @@ items.Aetherhaven_Geode.description=Ein hohler Stein, der Kristalle, Edelsteine 
 items.Aetherhaven_Geode_Anvil.name=Geodenamboss
 items.Aetherhaven_Geode_Anvil.description=Öffnet Geoden ohne Schmiedegebühr. Platzieren und benutzen; du musst die Bauanleitung kennen, um sie an deinem Stadtplanungstisch herzustellen.
 
-barter.aetherhaven_vex.title=Vex's täglicher Bestand
-
 items.Aetherhaven_Treasury.name=Stadtkasse
 items.Aetherhaven_Treasury.description=Hier werden die Goldmünzen der Stadt aufbewahrt. Dient zum Einzahlen oder Abheben (für den Stadtbesitzer).
 

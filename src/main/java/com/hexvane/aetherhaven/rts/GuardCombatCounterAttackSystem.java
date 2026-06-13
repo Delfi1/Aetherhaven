@@ -61,6 +61,16 @@ public final class GuardCombatCounterAttackSystem extends EntityTickingSystem<En
         @Nonnull Store<EntityStore> store
     ) {
         TargetMemory memory = store.getComponent(targetRef, TargetMemory.getComponentType());
-        return memory != null && memory.getKnownHostiles().containsKey(guardRef.getIndex());
+        if (memory != null && memory.getKnownHostiles().containsKey(guardRef.getIndex())) {
+            return true;
+        }
+        NPCEntity hostile = store.getComponent(targetRef, NPCEntity.getComponentType());
+        if (hostile == null || hostile.getRole() == null) {
+            return false;
+        }
+        Ref<EntityStore> locked = hostile.getRole()
+            .getMarkedEntitySupport()
+            .getMarkedEntityRef(RtsGuardCombatSupport.LOCKED_TARGET_SLOT);
+        return guardRef.equals(locked);
     }
 }

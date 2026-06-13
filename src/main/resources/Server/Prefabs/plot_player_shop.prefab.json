@@ -2230,7 +2230,7 @@
             "TownId": "d87b9d18-a6de-42a7-9697-90f4c2aa0d9f",
             "PlotId": "00000000-0000-0000-0000-000000000000",
             "PlayerControlled": true,
-            "LootTableId": "gifts",
+            "LootTableId": "",
             "Configured": true
           },
           "PlacedByInteraction": {
@@ -3115,7 +3115,7 @@
             "TownId": "d87b9d18-a6de-42a7-9697-90f4c2aa0d9f",
             "PlotId": "00000000-0000-0000-0000-000000000000",
             "PlayerControlled": true,
-            "LootTableId": "gifts",
+            "LootTableId": "",
             "Configured": true
           },
           "PlacedByInteraction": {
@@ -4004,7 +4004,7 @@
             "TownId": "d87b9d18-a6de-42a7-9697-90f4c2aa0d9f",
             "PlotId": "00000000-0000-0000-0000-000000000000",
             "PlayerControlled": true,
-            "LootTableId": "gifts",
+            "LootTableId": "",
             "Configured": true
           },
           "PlacedByInteraction": {
@@ -4891,7 +4891,7 @@
             "TownId": "d87b9d18-a6de-42a7-9697-90f4c2aa0d9f",
             "PlotId": "00000000-0000-0000-0000-000000000000",
             "PlayerControlled": true,
-            "LootTableId": "gifts",
+            "LootTableId": "",
             "Configured": true
           },
           "PlacedByInteraction": {
@@ -5765,7 +5765,7 @@
             "TownId": "d87b9d18-a6de-42a7-9697-90f4c2aa0d9f",
             "PlotId": "00000000-0000-0000-0000-000000000000",
             "PlayerControlled": true,
-            "LootTableId": "gifts",
+            "LootTableId": "",
             "Configured": true
           },
           "PlacedByInteraction": {
@@ -6639,7 +6639,7 @@
             "TownId": "d87b9d18-a6de-42a7-9697-90f4c2aa0d9f",
             "PlotId": "00000000-0000-0000-0000-000000000000",
             "PlayerControlled": true,
-            "LootTableId": "gifts",
+            "LootTableId": "",
             "Configured": true
           },
           "PlacedByInteraction": {
@@ -7529,7 +7529,7 @@
             "TownId": "d87b9d18-a6de-42a7-9697-90f4c2aa0d9f",
             "PlotId": "00000000-0000-0000-0000-000000000000",
             "PlayerControlled": true,
-            "LootTableId": "gifts",
+            "LootTableId": "",
             "Configured": true
           },
           "PlacedByInteraction": {
@@ -8424,7 +8424,7 @@
             "TownId": "d87b9d18-a6de-42a7-9697-90f4c2aa0d9f",
             "PlotId": "00000000-0000-0000-0000-000000000000",
             "PlayerControlled": true,
-            "LootTableId": "gifts",
+            "LootTableId": "",
             "Configured": true
           },
           "PlacedByInteraction": {

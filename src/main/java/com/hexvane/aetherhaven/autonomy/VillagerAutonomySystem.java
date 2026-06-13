@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelSupport;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
 import com.hexvane.aetherhaven.poi.PoiEffectTable;
@@ -67,9 +68,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
      * persist while an NPC is wedged against geometry (wall bug), and must not reset stuck ticks like PROGRESSING.
      */
     private static final int BLOCKED_FAIL_TICKS = 100;
+    private static final int DOOR_UNJAM_STUCK_TICKS = 30;
     private static final int MOUNT_UNREACHABLE_FAIL_TICKS = 120;
-    /** Max time allowed to reach one path-nav waypoint before skipping it (door jams / corner deadlocks). */
-    private static final long PATH_WAYPOINT_TIMEOUT_MS = 12_000L;
     /** {@link #beginTravelToPoi} sets {@link VillagerAutonomyState#setNextDecisionEpochMs} to now + this; must be checked in {@link #tickTravel} or NPCs can follow Nav:PROGRESSING forever. */
     private static final long TRAVEL_PHASE_MAX_MS = 180_000L;
     static void onUnloadSafetyDismount(
@@ -408,6 +408,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 }
                 autonomy.clearTravelWaypoints();
                 npc.setLeashPoint(finalTarget);
+                closePendingDoorsAfterTravelArrival(ref, store, world, autonomy, tc.getPosition(), maxArriveSq);
                 npc.playAnimation(ref, AnimationSlot.Movement, null, store);
                 float dur = PoiEffectTable.useDurationSeconds(pick.getInteractionKind());
                 autonomy.setPhase(VillagerAutonomyState.PHASE_USE);
@@ -464,26 +465,6 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         double dx = pos.x - leash.x;
         double dz = pos.z - leash.z;
         double horizSq = dx * dx + dz * dz;
-        Vector3d currentWaypoint = autonomy.getCurrentTravelWaypoint();
-        if (currentWaypoint != null) {
-            autonomy.markTravelWaypointProgress(now);
-            if (autonomy.isCurrentWaypointTimedOut(now, PATH_WAYPOINT_TIMEOUT_MS)) {
-                if (autonomy.advanceTravelWaypoint()) {
-                    Vector3d nextLeash = autonomy.getCurrentTravelWaypoint();
-                    if (nextLeash != null) {
-                        npc.setLeashPoint(nextLeash);
-                    }
-                } else {
-                    autonomy.clearTravelWaypoints();
-                    npc.setLeashPoint(new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ()));
-                }
-                autonomy.setTravelStuckTicks(0);
-                commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
-                commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
-                applyAutonomyRoleState(ref, npc, commandBuffer);
-                return;
-            }
-        }
 
         PoiEntry poiEarly = reg.get(poiId);
         double maxArriveSq = ARRIVE_HORIZONTAL_SQ;
@@ -497,9 +478,30 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             maxArriveSq = MOUNT_ARRIVE_HORIZONTAL_SQ;
         }
 
+        PathNavTravelSupport.WaypointTickAction waypointAction =
+            PathNavTravelSupport.tickTravelWaypoints(autonomy, pos, leash.x, leash.z, maxArriveSq, now);
+        if (waypointAction == PathNavTravelSupport.WaypointTickAction.ADVANCED) {
+            Vector3d nextLeash = autonomy.getCurrentTravelWaypoint();
+            if (nextLeash != null) {
+                npc.setLeashPoint(nextLeash);
+            }
+            autonomy.setTravelStuckTicks(0);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            return;
+        }
+        if (waypointAction == PathNavTravelSupport.WaypointTickAction.CLEARED_TO_FINAL) {
+            autonomy.setTravelStuckTicks(0);
+            npc.setLeashPoint(new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ()));
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            return;
+        }
+
         World world = store.getExternalData().getWorld();
 
-        VillagerDoorUtil.closePendingDoorsWhenPassed(world, pos, leash, autonomy.getPendingOpenDoorsMutable());
         VillagerDoorUtil.tryOpenDoorsTowardLeash(
             world,
             pos,
@@ -533,7 +535,26 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             }
         } else if (nav == NavState.BLOCKED || nav == NavState.DEFER) {
             autonomy.setTravelStuckTicks(autonomy.getTravelStuckTicks() + 1);
+            if (autonomy.getTravelStuckTicks() >= DOOR_UNJAM_STUCK_TICKS) {
+                VillagerDoorUtil.tryUnjamDoorsAlongPath(world, pos, leash);
+            }
             if (autonomy.getTravelStuckTicks() >= BLOCKED_FAIL_TICKS) {
+                if (autonomy.hasTravelWaypoints()) {
+                    if (autonomy.advanceTravelWaypoint()) {
+                        Vector3d nextLeash = autonomy.getCurrentTravelWaypoint();
+                        if (nextLeash != null) {
+                            npc.setLeashPoint(nextLeash);
+                        }
+                    } else {
+                        autonomy.clearTravelWaypoints();
+                        npc.setLeashPoint(new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ()));
+                    }
+                    autonomy.setTravelStuckTicks(0);
+                    commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+                    commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+                    applyAutonomyRoleState(ref, npc, commandBuffer);
+                    return;
+                }
                 failTravel(autonomy, now, nav == NavState.DEFER ? "DEFER" : "BLOCKED", commandBuffer, ref, npc);
                 return;
             }
@@ -542,25 +563,13 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         }
 
         boolean arrived = horizSq <= maxArriveSq;
-        if (arrived) {
-            if (autonomy.getCurrentTravelWaypoint() != null && autonomy.advanceTravelWaypoint()) {
-                Vector3d nextLeash = autonomy.getCurrentTravelWaypoint();
-                if (nextLeash != null) {
-                    npc.setLeashPoint(nextLeash);
-                    autonomy.setTravelStuckTicks(0);
-                    commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
-                    commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
-                    applyAutonomyRoleState(ref, npc, commandBuffer);
-                    return;
-                }
-            }
-            autonomy.clearTravelWaypoints();
+        if (arrived && !autonomy.hasTravelWaypoints()) {
+            closePendingDoorsAfterTravelArrival(ref, store, world, autonomy, pos, maxArriveSq);
             if (AetherhavenConstants.isScheduleZoneCommutePoi(poiId)) {
                 autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
                 autonomy.setTargetPoiUuid(null);
                 autonomy.setPathFailureReason("");
                 autonomy.setTravelStuckTicks(0);
-                autonomy.clearPendingDoorClose();
                 autonomy.setNextDecisionEpochMs(now);
                 commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
                 clearAutonomyRoleState(ref, npc, commandBuffer);
@@ -591,6 +600,34 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
 
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         applyAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    private static void closePendingDoorsAfterTravelArrival(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull World world,
+        @Nonnull VillagerAutonomyState autonomy,
+        @Nonnull Vector3d pos,
+        double arriveHorizontalSq
+    ) {
+        if (autonomy.getPendingOpenDoorsMutable().isEmpty()) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            autonomy.clearPendingDoorClose();
+            return;
+        }
+        Vector3d goal = new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ());
+        VillagerDoorUtil.closePendingDoorsAfterGoalReached(
+            world,
+            store,
+            uc.getUuid(),
+            pos,
+            goal,
+            arriveHorizontalSq,
+            autonomy.getPendingOpenDoorsMutable()
+        );
     }
 
     private static void failTravel(

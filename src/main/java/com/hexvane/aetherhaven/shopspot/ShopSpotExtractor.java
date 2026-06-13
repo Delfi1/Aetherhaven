@@ -91,8 +91,6 @@ public final class ShopSpotExtractor {
 
         if (blockComp != null && blockComp.isConfigured()) {
             blockComp.applyToRecord(record);
-        } else {
-            record.setLootTableId(AetherhavenConstants.SHOP_LOOT_TABLE_GIFTS);
         }
 
         if (!record.isPlayerControlled()) {
