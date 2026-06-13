@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueActionExecutor;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.dialogue.DialogueConditionEvaluator;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.bard.BardDialogueSongs;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.data.DialogueChoiceDefinition;
 import com.hexvane.aetherhaven.dialogue.data.DialogueNodeDefinition;
@@ -16,6 +17,7 @@ import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownResidentDisplay;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkGreetingPicker;
@@ -45,6 +47,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -70,6 +73,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     private static final String ICON_JEWELRY_APPRAISAL = "UI/Custom/Aetherhaven_jewelry_tab_ring.png";
     private static final String ICON_BLACKSMITH_REPAIR = "UI/Custom/hammer.png";
     private static final String ICON_GEODE_OPEN = "UI/Custom/broken-egg.png";
+    private static final String ICON_MUSICAL_NOTE = "UI/Custom/musical-note.png";
     private static final String LANG_GUILD_ADVENTURER_HIRE =
         "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire";
     private static final String LANG_PRIESTESS_DRAUGHT_SHARD =
@@ -380,33 +384,18 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     }
 
     private void applyPortrait(@Nonnull UICommandBuilder commandBuilder, @Nonnull Store<EntityStore> store) {
-        if (npcRef == null || !npcRef.isValid()) {
-            commandBuilder.set(PORTRAIT_ASSET, NpcPortraitProvider.portraitPathForRoleId(""));
-            return;
-        }
-        TownsfolkCharacterBinding townsfolk = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
-        if (townsfolk != null) {
-            String modelId = townsfolk.getModelAssetId();
-            if (modelId.isBlank()) {
-                AetherhavenPlugin plugin = AetherhavenPlugin.get();
-                if (plugin != null) {
-                    TownsfolkCharacterDefinition character =
-                        plugin.getTownsfolkCharacterCatalog().byId(townsfolk.getCharacterId());
-                    if (character != null) {
-                        modelId = character.getModelAssetId();
-                    }
-                }
+        String portrait = NpcPortraitProvider.portraitPathForRoleId("");
+        if (npcRef != null && npcRef.isValid()) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+            String roleId = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
+            if (plugin != null && !roleId.isBlank()) {
+                portrait = TownResidentDisplay.resolveFromEntity(store, npcRef, roleId, plugin).portraitPath();
+            } else if (!roleId.isBlank()) {
+                portrait = NpcPortraitProvider.portraitPathForRoleId(roleId);
             }
-            commandBuilder.set(PORTRAIT_ASSET, NpcPortraitProvider.portraitPathForModelAssetId(modelId));
-            return;
         }
-        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-        if (npc == null) {
-            commandBuilder.set(PORTRAIT_ASSET, NpcPortraitProvider.portraitPathForRoleId(""));
-            return;
-        }
-        String roleName = npc.getRoleName();
-        commandBuilder.set(PORTRAIT_ASSET, NpcPortraitProvider.portraitPathForRoleId(roleName != null ? roleName : ""));
+        commandBuilder.set(PORTRAIT_ASSET, portrait);
     }
 
     private void appendChoices(
@@ -419,7 +408,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         commandBuilder.clear(CHOICES_ROOT);
         QuestBoardTurnInRow turnIn = resolveQuestBoardTurnIn(ref, store);
         int uiSlot = 0;
-        List<DialogueChoiceDefinition> choices = node.getChoices();
+        List<DialogueChoiceDefinition> choices = buildChoiceList(node);
         int lastChoiceIndex = choices.isEmpty() ? -1 : choices.size() - 1;
         for (int i = 0; i < choices.size(); i++) {
             if (i == lastChoiceIndex && turnIn != null) {
@@ -579,6 +568,24 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     private record QuestBoardTurnInRow(boolean ready, boolean huntQuest, boolean raidQuest) {}
 
     @Nullable
+    private static boolean isBardSongListNode(@Nonnull DialogueNodeDefinition node) {
+        String mode = node.getBodyMode();
+        return mode != null && "bard_song_list".equalsIgnoreCase(mode.trim());
+    }
+
+    @Nonnull
+    private static List<DialogueChoiceDefinition> buildChoiceList(@Nonnull DialogueNodeDefinition node) {
+        List<DialogueChoiceDefinition> choices = new ArrayList<>();
+        if (isBardSongListNode(node)) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin != null) {
+                choices.addAll(BardDialogueSongs.buildSongChoices(plugin));
+            }
+        }
+        choices.addAll(node.getChoices());
+        return choices;
+    }
+
     private static String choiceIconPath(@Nonnull DialogueChoiceDefinition ch) {
         if (ch.isGiftChoice()) {
             return ICON_GIFT;
@@ -591,6 +598,12 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         if (ch.hasAction("open_geode_ui")) {
             return ICON_GEODE_OPEN;
+        }
+        if (ch.hasAction("play_bard_song") || ch.hasAction("stop_bard_song")) {
+            return ICON_MUSICAL_NOTE;
+        }
+        if (ch.getNext() != null && "music_pick".equalsIgnoreCase(ch.getNext().trim())) {
+            return ICON_MUSICAL_NOTE;
         }
         if (ch.isQuestProgressChoice()) {
             return ICON_QUEST_PROGRESS;
@@ -642,10 +655,11 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return;
         }
         DialogueNodeDefinition node = tree != null ? tree.getNode(nodeId) : null;
-        if (node == null || choiceIndex < 0 || choiceIndex >= node.getChoices().size()) {
+        List<DialogueChoiceDefinition> choices = node != null ? buildChoiceList(node) : List.of();
+        if (node == null || choiceIndex < 0 || choiceIndex >= choices.size()) {
             return;
         }
-        DialogueChoiceDefinition choice = node.getChoices().get(choiceIndex);
+        DialogueChoiceDefinition choice = choices.get(choiceIndex);
         JsonObject visOnly = choice.getVisibilityCondition();
         if (visOnly != null && !conditions.evaluate(visOnly, ref, store, npcRef)) {
             return;

@@ -3,7 +3,7 @@
     "Name": "aetherhaven_items.items.Aetherhaven_Plot_Token_Guild_Hall.name",
     "Description": "aetherhaven_items.items.Aetherhaven_Plot_Token_Guild_Hall.description"
   },
-  "Icon": "Icons/ItemsGenerated/Aetherhaven_Token_Townhall.png",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Token_Guild_Hall.png",
   "Model": "Blocks/Decorative_Sets/Lumberjack/Sign.blockymodel",
   "Texture": "Items/Aetherhaven/Plot_Token_Sign_Texture.png",
   "MaxStack": 100,

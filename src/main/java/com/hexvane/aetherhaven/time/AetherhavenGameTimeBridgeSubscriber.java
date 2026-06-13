@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotDailyRerollService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRefreshSystem;
 import com.hexvane.aetherhaven.questboard.QuestBoardOnlineDawnService;
+import com.hexvane.aetherhaven.town.CitizenDawnRevivalService;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -50,6 +51,7 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         ShopSpotDailyRerollService.scheduleTickFromHub(world, plugin, wtr);
         ShopSpotRefreshSystem.onGameMinute(world, store, plugin, wtr);
         QuestBoardOnlineDawnService.tickWorld(world, store, plugin, wtr);
+        CitizenDawnRevivalService.scheduleTickFromHub(world, plugin, wtr);
     }
 
     @Override
@@ -67,6 +69,7 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
             InnPoolService.catchUpAfterTimeJump(world, plugin, store, wtr, from, to);
             SprinklerWateringService.catchUpAfterTimeJump(world, store, plugin, from, to);
             ShopSpotDailyRerollService.catchUpAfterTimeJump(world, plugin, store, wtr, from, to);
+            CitizenDawnRevivalService.catchUpAfterTimeJump(world, plugin, store, wtr, from, to);
             TownEconomyTimeService.onGameTimeFromHub(world, plugin, wtr, store);
         }
         VillagerScheduleService.applyForWorld(world, store, plugin, true);
@@ -79,5 +82,6 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         ShopSpotDailyRerollService.scheduleTickFromHub(world, plugin, wtr);
         ShopSpotRefreshSystem.onGameMinute(world, store, plugin, wtr);
         QuestBoardOnlineDawnService.tickWorld(world, store, plugin, wtr);
+        CitizenDawnRevivalService.scheduleTickFromHub(world, plugin, wtr);
     }
 }

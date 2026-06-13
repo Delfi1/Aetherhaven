@@ -437,7 +437,7 @@ public final class PlotCreatorService {
             }
             case HOME -> draft.getBuildingTags().add("home");
             case WORK -> draft.getBuildingTags().add("work");
-            case SHOP -> {
+            case SHOP, PLAYER_SHOP -> {
                 draft.getBuildingTags().add("shop");
                 draft.getBuildingTags().add("work");
                 draft.setTouristDestination(true);

@@ -32,7 +32,13 @@ public final class LootrIntegration {
         }
         attempted = true;
         try {
-            Class<?> lootrPluginClass = Class.forName("noobanidus.mods.lootr.LootrPlugin");
+            Class<?> lootrPluginClass;
+            try {
+                lootrPluginClass = Class.forName("noobanidus.mods.lootr.LootrPlugin");
+            } catch (ClassNotFoundException ignored) {
+                return false;
+            }
+
             Object lootrPlugin = lootrPluginClass.getMethod("get").invoke(null);
             if (lootrPlugin == null) {
                 LOGGER.atInfo().log("Lootr compatibility disabled: Lootr plugin instance is null.");
@@ -56,7 +62,7 @@ public final class LootrIntegration {
             LOGGER.atInfo().log("Lootr compatibility enabled.");
             return true;
         } catch (Throwable t) {
-            LOGGER.atInfo().withCause(t).log("Lootr compatibility disabled: Lootr classes unavailable or incompatible.");
+            LOGGER.atWarning().withCause(t).log("Lootr compatibility disabled: Lootr classes incompatible.");
             return false;
         }
     }

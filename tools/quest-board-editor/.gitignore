@@ -1,0 +1,5 @@
+quest_board_editor_config.json
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/

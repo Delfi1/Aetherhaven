@@ -1,6 +1,12 @@
 package com.hexvane.aetherhaven;
 
 import com.hexvane.aetherhaven.generated.HstatsBuildMetadata;
+import com.hexvane.aetherhaven.bard.BardActivePerformancesResource;
+import com.hexvane.aetherhaven.bard.BardMusicProximityState;
+import com.hexvane.aetherhaven.bard.BardMusicProximitySystem;
+import com.hexvane.aetherhaven.bard.BardPerformanceComponent;
+import com.hexvane.aetherhaven.bard.BardPerformanceTickSystem;
+import com.hexvane.aetherhaven.bard.data.BardSongCatalog;
 import com.hexvane.aetherhaven.charter.CharterPlaceEventSystem;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.command.AetherhavenPathCommand;
@@ -148,6 +154,7 @@ import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
 import com.hexvane.aetherhaven.townsfolk.EntityChunkStaleReferenceCleanupSystem;
+import com.hexvane.aetherhaven.world.WorldSpawnStaleChunkRefCleanupSystem;
 import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalSystem;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentSystem;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
@@ -321,6 +328,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private EquipmentProfileCatalog equipmentProfileCatalog = EquipmentProfileCatalog.empty();
     private ProductionCatalog productionCatalog = ProductionCatalog.empty();
     private WorkplaceUnlockCatalog workplaceUnlockCatalog = WorkplaceUnlockCatalog.empty();
+    private BardSongCatalog bardSongCatalog = BardSongCatalog.empty();
     private final DialogueResolver dialogueResolver = new DialogueResolver();
     private TownNameCatalog townNameCatalog = TownNameCatalog.loadFromClasspath();
     private ScheduledExecutorService constructionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
@@ -450,6 +458,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     }
 
     @Nonnull
+    public BardSongCatalog getBardSongCatalog() {
+        return bardSongCatalog;
+    }
+
+    @Nonnull
     public ShopPriceCatalog getShopPriceCatalog() {
         return shopPriceCatalog;
     }
@@ -556,6 +569,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getChunkStoreRegistry().registerSystem(new LootChestBonusInjectSystem(this));
         this.getChunkStoreRegistry().registerSystem(new ChunkUnloadMountDisconnectSystem());
         this.getChunkStoreRegistry().registerSystem(new EntityChunkStaleReferenceCleanupSystem());
+        this.getChunkStoreRegistry().registerSystem(new WorldSpawnStaleChunkRefCleanupSystem());
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
         RaidQuestMobBinding.register(this.getEntityStoreRegistry());
@@ -570,6 +584,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         BuilderConstructionAssistState.register(this.getEntityStoreRegistry());
         TouristAutonomyState.register(this.getEntityStoreRegistry());
         VillagerScheduleTickState.register(this.getEntityStoreRegistry());
+        BardPerformanceComponent.register(this.getEntityStoreRegistry());
+        BardActivePerformancesResource.register(this.getEntityStoreRegistry());
+        BardMusicProximityState.register(this.getEntityStoreRegistry());
         VillagerAutonomyDebugTag.register(this.getEntityStoreRegistry());
         PoiToolPlayerComponent.register(this.getEntityStoreRegistry());
         PathToolPlayerComponent.register(this.getEntityStoreRegistry());
@@ -854,6 +871,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new RaidQuestMarchSystem(this));
         this.getEntityStoreRegistry().registerSystem(new RaidHealthBarHudRefreshSystem(this));
         this.getEntityStoreRegistry().registerSystem(new HuntingKnifeBonusDropSystem());
+        this.getEntityStoreRegistry().registerSystem(new BardPerformanceTickSystem());
+        this.getEntityStoreRegistry().registerSystem(new BardMusicProximitySystem());
         GaiaDraughtCraftSystem gaiaDraughtCraftSystem = new GaiaDraughtCraftSystem(this);
         this.getEntityStoreRegistry().registerSystem(gaiaDraughtCraftSystem);
         this.getEntityStoreRegistry().registerSystem(new GaiaDraughtCraftSystem.Pre(gaiaDraughtCraftSystem));
@@ -1282,6 +1301,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.townNameCatalog = TownNameCatalog.loadFromClasspath();
         this.productionCatalog = ProductionCatalog.loadFromClasspath(cl);
         this.workplaceUnlockCatalog = WorkplaceUnlockCatalog.loadFromClasspath(cl);
+        this.bardSongCatalog = BardSongCatalog.loadFromAssetPacksOrClasspath(cl);
         LOGGER.atInfo().log(
             "Aetherhaven asset catalogs reloaded (constructions=%s, dialogue=%s, quests=%s, villagerDefs=%s, villagerSchedules=loaded)",
             this.constructionCatalog.ids(),

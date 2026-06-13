@@ -74,6 +74,18 @@ public final class DialogueChoiceDefinition {
         return actions != null ? actions : Collections.emptyList();
     }
 
+    public void setText(@Nullable String text) {
+        this.text = text;
+    }
+
+    public void setNext(@Nullable String next) {
+        this.next = next;
+    }
+
+    public void setActions(@Nullable List<JsonObject> actions) {
+        this.actions = actions;
+    }
+
     /** True when this choice closes the dialogue (goodbye / leave). */
     public boolean closesDialogue() {
         for (JsonObject action : getActions()) {

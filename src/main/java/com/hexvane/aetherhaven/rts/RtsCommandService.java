@@ -63,6 +63,10 @@ public final class RtsCommandService {
         if (pr == null || player == null) {
             return false;
         }
+        if (!RtsCommandingSessionIndex.tryClaimTown(pr.getUuid(), town.getTownId())) {
+            notify(playerRef, accessor, "aetherhaven_rts.aetherhaven.rts.errorCommandPostInUse");
+            return false;
+        }
         RtsExitMovementGuard.clear(pr.getUuid());
         RtsCommandPlayerComponent session = existing != null ? existing : new RtsCommandPlayerComponent();
         session.setActive(true);
@@ -101,7 +105,6 @@ public final class RtsCommandService {
         session.setSavedHotbarJson(RtsInventorySwap.saveHotbar(playerRef, accessor));
         session.setSessionExitedSafely(false);
         accessor.putComponent(playerRef, RtsCommandPlayerComponent.getComponentType(), session);
-        RtsCommandingSessionIndex.markActive(pr.getUuid());
         RtsInventorySwap.equipCommandTools(playerRef, accessor);
         TransformComponent tc = accessor.getComponent(playerRef, TransformComponent.getComponentType());
         double bodyY = TopDownCameraService.commanderBodyY(groundY, TopDownCameraService.DEFAULT_DISTANCE);

@@ -35,8 +35,12 @@ aetherhaven.ui.plotconstruction.pickUpPlotModalBody=Removes this plot from your 
 aetherhaven.ui.plotconstruction.pickUpPlotModalConfirm=Pick up
 aetherhaven.ui.plotconstruction.pickUpPlotModalCancel=Cancel
 aetherhaven.ui.plotconstruction.workplaceAssignHint=Assign a villager whose job matches this workplace. They will move to the work station here.
+aetherhaven.ui.plotconstruction.guildHallWorkplaceAssignHint=Assign the guild master and bard to their work stations in this hall.
 aetherhaven.ui.plotconstruction.workplaceWorker=Worker
+aetherhaven.ui.plotconstruction.workplaceGuildMaster=Guild master
+aetherhaven.ui.plotconstruction.workplaceBard=Bard
 aetherhaven.ui.plotconstruction.assignWorkplace=Assign worker
+aetherhaven.ui.plotconstruction.assignWorkplaceBard=Assign bard
 aetherhaven.ui.plotconstruction.workplacePickWorker=Choose a villager to assign to this workplace.
 aetherhaven.ui.plotconstruction.workplaceInvalidWorker=Invalid worker selection.
 aetherhaven.ui.plotconstruction.workplaceUpdated=Workplace assignment updated.
@@ -74,6 +78,7 @@ aetherhaven.ui.villagerneeds.rescueNotTownResident=That resident is not part of 
 
 # Town NPC death (chat + server log)
 aetherhaven.town.villagerDeath.chat={name} ({category}) has died.
+aetherhaven.town.citizenDawnRevival.chat={name} returned to the charter at dawn.
 aetherhaven.ui.reputation.label=Reputation
 aetherhaven.reputation.dailyTalkGain=+{amount} reputation (daily greeting)
 aetherhaven.reputation.giftRepChange={amount} reputation (gift)

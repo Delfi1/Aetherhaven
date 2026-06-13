@@ -36,6 +36,9 @@
 - **Villager faces** Villagers move their mouth when you talk to them and pick dialogue choices. Their face also reflects how well their needs are met while they walk around town.
 - **Villager waves** Befriendable villagers with 75+ reputation may wave at you when you walk nearby while they are idle.
 - **Inn Bell** A bell that can be used to respawn the visitors at the Inn.
+- **Citizen dawn revival** Town villagers who die return to the charter at dawn so you are not stuck waiting for a Gaia altar.
+- **Smokestack** A decorative item for creating a smoke particle effect for chimneys.
+- **Bard Villager** A Bard now shows up after the guild hall is built that will play music for you in the guild hall.
 
 ### Changed
 

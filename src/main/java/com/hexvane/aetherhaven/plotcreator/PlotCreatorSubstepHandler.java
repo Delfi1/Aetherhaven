@@ -236,7 +236,7 @@ public final class PlotCreatorSubstepHandler {
                 }
                 yield true;
             }
-            case WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI, PLANNING_DESK_POI -> addPoiForSubstep(
+            case WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI, PLANNING_DESK_POI, BARD_WORK_POI -> addPoiForSubstep(
                 session.getWorld(),
                 draft,
                 targetBlock,
@@ -293,6 +293,11 @@ public final class PlotCreatorSubstepHandler {
         switch (type) {
             case WORK_POI -> {
                 poi.getTags().add("WORK");
+                poi.setInteractionKind("WORK_SURFACE");
+            }
+            case BARD_WORK_POI -> {
+                poi.getTags().add("WORK");
+                poi.getTags().add(AetherhavenConstants.POI_TAG_BARD);
                 poi.setInteractionKind("WORK_SURFACE");
             }
             case SLEEP_POI -> {

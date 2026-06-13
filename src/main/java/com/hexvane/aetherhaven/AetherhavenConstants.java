@@ -311,6 +311,8 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_HOUSE_GUILD_MASTER = "q_house_guild_master";
 
+    public static final String QUEST_HOUSE_BARD = "q_house_bard";
+
     public static final String QUEST_MERCHANT_STALL = "q_merchant_stall";
 
     public static final String QUEST_PLAYER_SHOP = "q_player_shop";
@@ -403,6 +405,8 @@ public final class AetherhavenConstants {
     public static final String NPC_LOGGER = "Aetherhaven_Logger";
 
     public static final String NPC_RANCHER = "Aetherhaven_Rancher";
+
+    public static final String NPC_BARD = "Aetherhaven_Bard";
 
     /** Shared role for all townsfolk; appearance set per character at spawn. */
     public static final String NPC_TOWNSFOLK = "Aetherhaven_Townsfolk";
@@ -565,6 +569,11 @@ public final class AetherhavenConstants {
     public static final String INNKEEPER_NPC_ROLE_ID = "Aetherhaven_Innkeeper";
 
     public static final String GUILD_MASTER_NPC_ROLE_ID = "Aetherhaven_Guild_Master";
+
+    public static final String BARD_NPC_ROLE_ID = "Aetherhaven_Bard";
+
+    /** POI tag for the bard's guild hall performance spot. */
+    public static final String POI_TAG_BARD = "BARD";
 
     /** Hired guard NPC role (combat + large patrol wander). Appearance set from townsfolk model at spawn. */
     public static final String NPC_GUARD_KNIGHT = "Aetherhaven_Guard_Knight";

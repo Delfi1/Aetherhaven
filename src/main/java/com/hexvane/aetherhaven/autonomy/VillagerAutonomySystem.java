@@ -794,6 +794,14 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     }
 
     /**
+     * After assigning a villager to a workplace plot, reset autonomy so {@link SchedulePlotCommute} or POI scoring
+     * paths them there instead of leaving them idle until the next decision window.
+     */
+    public static void promptWorkplaceTravel(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store, long nowMs) {
+        resetAutonomyForRescue(npcRef, store, nowMs);
+    }
+
+    /**
      * After teleporting a town NPC to the player, drop them to idle pathing, clear travel targets, and end autonomy
      * role motion (Seek) so pathfinding can start fresh.
      */

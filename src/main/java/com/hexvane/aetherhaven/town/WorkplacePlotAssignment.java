@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
+import com.hexvane.aetherhaven.guild.BardWorkPoiResolver;
 import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
@@ -13,9 +15,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -53,10 +53,37 @@ public final class WorkplacePlotAssignment {
         if (residentKind == null) {
             return "This building is not a workplace.";
         }
+        return tryClearWorker(world, plugin, town, tm, workplacePlotId, residentKind, store);
+    }
+
+    /**
+     * Clears one workplace role on this plot (guild master vs bard at the guild hall).
+     *
+     * @return null on success, or a short English reason for the player
+     */
+    @Nullable
+    public static String tryClearWorker(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID workplacePlotId,
+        @Nonnull String residentKind,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PlotInstance plot = town.findPlotById(workplacePlotId);
+        if (plot == null || plot.getState() != PlotInstanceState.COMPLETE) {
+            return "Plot is not ready.";
+        }
+        String gameplayId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot.getConstructionId());
+        if (!ProductionWorkplaceKinds.supportsWorkerAssignment(gameplayId)) {
+            return "This building is not a workplace.";
+        }
 
         Ref<EntityStore> npcRef = findWorkerOnPlot(store, town.getTownId(), workplacePlotId, residentKind);
         if (npcRef == null || !npcRef.isValid()) {
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)) {
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)
+                && TownVillagerBinding.KIND_GUILD_MASTER.equals(residentKind)) {
                 GuildHallAdventurerPoolService.clearAdventurersForHall(world, plugin, town, tm, store, plot);
             }
             return null;
@@ -81,7 +108,8 @@ public final class WorkplacePlotAssignment {
                 ResidentRegistryService.upsert(town, tm, roleId, visitorKind, null, uuidComp.getUuid());
             }
         }
-        if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)) {
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)
+            && TownVillagerBinding.KIND_GUILD_MASTER.equals(residentKind)) {
             GuildHallAdventurerPoolService.clearAdventurersForHall(world, plugin, town, tm, store, plot);
         }
         tm.updateTown(town);
@@ -92,6 +120,7 @@ public final class WorkplacePlotAssignment {
     private static String visitorKindForResidentKind(@Nonnull String residentKind) {
         return switch (residentKind) {
             case TownVillagerBinding.KIND_GUILD_MASTER -> TownVillagerBinding.KIND_VISITOR_GUILD_MASTER;
+            case TownVillagerBinding.KIND_BARD -> TownVillagerBinding.KIND_VISITOR_BARD;
             case TownVillagerBinding.KIND_INNKEEPER -> TownVillagerBinding.KIND_VISITOR_MERCHANT;
             case TownVillagerBinding.KIND_FARMER -> TownVillagerBinding.KIND_VISITOR_FARMER;
             case TownVillagerBinding.KIND_BLACKSMITH -> TownVillagerBinding.KIND_VISITOR_BLACKSMITH;
@@ -157,10 +186,6 @@ public final class WorkplacePlotAssignment {
         if (!ProductionWorkplaceKinds.supportsWorkerAssignment(gameplayId)) {
             return "This building is not a workplace.";
         }
-        String kind = ProductionWorkplaceKinds.residentBindingKindForGameplayConstruction(gameplayId);
-        if (kind == null) {
-            return "No job role maps to this workplace.";
-        }
 
         Ref<EntityStore> npcRef = store.getExternalData().getRefFromUUID(npcEntityUuid);
         if (npcRef == null || !npcRef.isValid()) {
@@ -169,6 +194,10 @@ public final class WorkplacePlotAssignment {
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (npc == null || npc.getRoleName() == null || npc.getRoleName().isBlank()) {
             return "Invalid villager.";
+        }
+        String kind = ProductionWorkplaceKinds.residentBindingKindForNpcRoleId(plugin, npc.getRoleName().trim());
+        if (kind == null) {
+            return "No job role maps to this workplace.";
         }
         VillagerDefinition vdef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(npc.getRoleName().trim());
         if (vdef == null) {
@@ -185,19 +214,19 @@ public final class WorkplacePlotAssignment {
         }
 
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
-        PoiEntry work = findWorkPoi(reg, town.getTownId(), workplacePlotId);
-        if (work == null) {
-            LOGGER.atWarning().log("No WORK POI for workplace plot %s", workplacePlotId);
-            return "No work station found on this plot.";
-        }
-
-        TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
-        if (tc != null) {
-            Vector3d p = tc.getPosition();
-            p.x = work.getX() + 0.5;
-            p.y = work.getY() + 0.02;
-            p.z = work.getZ() + 0.5;
-            store.putComponent(npcRef, TransformComponent.getComponentType(), tc);
+        if (TownVillagerBinding.KIND_BARD.equals(kind)) {
+            BardWorkPoiResolver.BardPlacementTarget target =
+                BardWorkPoiResolver.resolvePlacement(plugin, town, plot, reg);
+            if (target == null) {
+                LOGGER.atWarning().log("No bard work station for workplace plot %s", workplacePlotId);
+                return "No bard work station found on this plot.";
+            }
+        } else if (TownVillagerBinding.KIND_GUILD_MASTER.equals(kind)) {
+            PoiEntry work = findGuildMasterWorkPoi(reg, town.getTownId(), workplacePlotId);
+            if (work == null) {
+                LOGGER.atWarning().log("No WORK POI for workplace plot %s", workplacePlotId);
+                return "No work station found on this plot.";
+            }
         }
 
         UUIDComponent uuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
@@ -220,12 +249,18 @@ public final class WorkplacePlotAssignment {
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(town.getTownId(), kind, workplacePlotId, workplacePlotId)
         );
+        VillagerAutonomySystem.promptWorkplaceTravel(
+            npcRef,
+            store,
+            VillagerAutonomySystem.resolveAutonomyNowMs(store)
+        );
         town.addInnVisitorPoolExcludedRoleId(npc.getRoleName().trim());
         if (uuidComp != null) {
             ResidentRegistryService.upsert(town, tm, npc.getRoleName().trim(), kind, workplacePlotId, uuidComp.getUuid());
         }
         tm.updateTown(town);
-        if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)) {
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)
+            && TownVillagerBinding.KIND_GUILD_MASTER.equals(kind)) {
             GuildHallAdventurerPoolService.tryFillAfterGuildMasterAssigned(
                 world,
                 plugin,
@@ -239,11 +274,15 @@ public final class WorkplacePlotAssignment {
     }
 
     @Nullable
-    private static PoiEntry findWorkPoi(@Nonnull PoiRegistry reg, @Nonnull UUID townId, @Nonnull UUID plotId) {
+    private static PoiEntry findGuildMasterWorkPoi(@Nonnull PoiRegistry reg, @Nonnull UUID townId, @Nonnull UUID plotId) {
         for (PoiEntry e : reg.listByTown(townId)) {
-            if (plotId.equals(e.getPlotId()) && isWorkPoi(e)) {
-                return e;
+            if (!plotId.equals(e.getPlotId()) || !isWorkPoi(e)) {
+                continue;
             }
+            if (e.getTags().contains(AetherhavenConstants.POI_TAG_BARD)) {
+                continue;
+            }
+            return e;
         }
         return null;
     }

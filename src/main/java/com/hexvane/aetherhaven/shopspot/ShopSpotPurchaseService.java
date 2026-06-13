@@ -33,6 +33,7 @@ import org.joml.Vector3i;
 
 public final class ShopSpotPurchaseService {
     private static final String MSG = "aetherhaven_shop.aetherhaven.shop";
+    private static final double DURABILITY_EPS = 1e-6;
 
     private ShopSpotPurchaseService() {}
 
@@ -282,6 +283,11 @@ public final class ShopSpotPurchaseService {
             fail(context);
             return;
         }
+        if (hasPartialDurability(hand)) {
+            notify(playerRef, commandBuffer, Message.translation(MSG + ".damagedItem"));
+            fail(context);
+            return;
+        }
         if (ShopSpotJewelrySupport.isJewelryListing(itemId)
             && !ShopSpotJewelrySupport.capturePlayerJewelryListing(record, hand)) {
             notify(playerRef, commandBuffer, Message.translation(MSG + ".jewelryNeedsAppraisal"));
@@ -454,6 +460,20 @@ public final class ShopSpotPurchaseService {
         @Nonnull Message msg
     ) {
         notify(playerRef, commandBuffer.getStore(), commandBuffer, msg);
+    }
+
+    /** Shop listings only store item id and quantity, so worn tools would be fully repaired on return. */
+    private static boolean hasPartialDurability(@Nonnull ItemStack stack) {
+        if (ItemStack.isEmpty(stack) || stack.isUnbreakable()) {
+            return false;
+        }
+        double baseMax = stack.getItem().getMaxDurability();
+        if (baseMax <= DURABILITY_EPS) {
+            return false;
+        }
+        double cur = stack.getDurability();
+        double stackMax = stack.getMaxDurability();
+        return cur < baseMax - DURABILITY_EPS || stackMax < baseMax - DURABILITY_EPS;
     }
 
     private static boolean clearActiveHotbarStack(

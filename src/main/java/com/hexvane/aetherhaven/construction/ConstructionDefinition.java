@@ -138,6 +138,16 @@ public final class ConstructionDefinition {
     @Nullable
     private int[][] adventurerSpawnLocals;
 
+    /** Prefab-local bard performance spot beside the quest board; optional fallback when no BARD POI in registry. */
+    @SerializedName("bardWorkPoiLocal")
+    @Nullable
+    private int[] bardWorkPoiLocal;
+
+    /** Prefab-local interaction facing for {@link #bardWorkPoiLocal}; optional. */
+    @SerializedName("bardWorkPoiInteractionTargetLocal")
+    @Nullable
+    private int[] bardWorkPoiInteractionTargetLocal;
+
     /** Body yaw (radians) per {@link #adventurerSpawnLocals} entry, in prefab-local axes. */
     @SerializedName("adventurerSpawnYaws")
     @Nullable
@@ -372,6 +382,20 @@ public final class ConstructionDefinition {
     @Nullable
     public int[][] getAdventurerSpawnLocals() {
         return adventurerSpawnLocals;
+    }
+
+    /** @return prefab-local bard work spot, or null */
+    @Nullable
+    public int[] getBardWorkPoiLocal() {
+        return bardWorkPoiLocal != null && bardWorkPoiLocal.length == 3 ? bardWorkPoiLocal : null;
+    }
+
+    /** @return prefab-local bard interaction target, or null */
+    @Nullable
+    public int[] getBardWorkPoiInteractionTargetLocal() {
+        return bardWorkPoiInteractionTargetLocal != null && bardWorkPoiInteractionTargetLocal.length == 3
+            ? bardWorkPoiInteractionTargetLocal
+            : null;
     }
 
     /** @return prefab-local body yaw per adventurer spawn, or null */

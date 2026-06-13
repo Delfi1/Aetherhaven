@@ -12,11 +12,12 @@
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 2,
   "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "treasuryGoldCoinCost": 50,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 520 },
     { "resourceTypeId": "Rock", "count": 280 }
   ],
-  "pois": [
+    "pois": [
     {
       "localX": 3,
       "localY": 2,
@@ -28,6 +29,19 @@
       "interactionTargetLocalX": 2,
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": -6
+    },
+    {
+      "localX": -5,
+      "localY": 1,
+      "localZ": -6,
+      "tags": ["WORK", "BARD"],
+      "interactionKind": "WORK_SURFACE",
+      "capacity": 1,
+      "interactionTargetLocalX": -4,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -6
     }
-  ]
+  ],
+  "bardWorkPoiLocal": [-5, 1, -6],
+  "bardWorkPoiInteractionTargetLocal": [-4, 1, -6]
 }

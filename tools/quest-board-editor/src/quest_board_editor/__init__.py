@@ -1,0 +1,1 @@
+"""Aetherhaven quest board editor."""

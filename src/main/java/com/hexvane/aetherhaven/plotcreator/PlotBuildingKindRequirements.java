@@ -16,10 +16,7 @@ public final class PlotBuildingKindRequirements {
 
     @Nonnull
     public static List<SubstepRequirement> forDraft(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
-        PlotBuildingKind kind = draft.getKind();
-        if (kind == PlotBuildingKind.VARIANT) {
-            kind = resolveVariantBaseKind(draft, plugin);
-        }
+        PlotBuildingKind kind = effectiveKind(draft, plugin);
         if (kind == null) {
             return List.of();
         }
@@ -34,19 +31,8 @@ public final class PlotBuildingKindRequirements {
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
                 new SubstepRequirement(PlotCreatorSubstepType.FUN_POI, 1)
             );
-            case SHOP -> List.of(
-                new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
-                new SubstepRequirement(PlotCreatorSubstepType.SHOP_SPOT, 1),
-                new SubstepRequirement(PlotCreatorSubstepType.SHOP_POI, 1),
-                new SubstepRequirement(PlotCreatorSubstepType.TOURIST_VISIT_POI, 1)
-            );
-            case PLAYER_SHOP -> List.of(
-                new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
-                new SubstepRequirement(PlotCreatorSubstepType.SHOP_SAFE_BLOCK, 1),
-                new SubstepRequirement(PlotCreatorSubstepType.SHOP_SPOT, 1),
-                new SubstepRequirement(PlotCreatorSubstepType.SHOP_POI, 1),
-                new SubstepRequirement(PlotCreatorSubstepType.TOURIST_VISIT_POI, 1)
-            );
+            case SHOP -> shopSubsteps(false);
+            case PLAYER_SHOP -> shopSubsteps(true);
             case TOURIST_PORTAL -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.TOURIST_PORTAL_BLOCK, 1)
             );
@@ -67,10 +53,49 @@ public final class PlotBuildingKindRequirements {
             case GUILD_HALL -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
                 new SubstepRequirement(PlotCreatorSubstepType.WORK_POI, 1),
+                new SubstepRequirement(PlotCreatorSubstepType.BARD_WORK_POI, 1),
                 new SubstepRequirement(PlotCreatorSubstepType.ADVENTURER_SPAWN, 1)
             );
             case VARIANT -> List.of();
         };
+    }
+
+    /** Resolves {@link PlotBuildingKind#VARIANT} to its base kind for substep and save rules. */
+    @Nullable
+    public static PlotBuildingKind effectiveKind(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
+        PlotBuildingKind kind = draft.getKind();
+        if (kind == PlotBuildingKind.VARIANT) {
+            return resolveVariantBaseKind(draft, plugin);
+        }
+        return kind;
+    }
+
+    public static boolean requiresShopSafe(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
+        PlotBuildingKind kind = draft.getKind();
+        if (kind == PlotBuildingKind.PLAYER_SHOP) {
+            return true;
+        }
+        if (kind != PlotBuildingKind.VARIANT) {
+            return false;
+        }
+        String baseId = draft.getCountsAsConstructionId();
+        if (baseId != null && AetherhavenConstants.CONSTRUCTION_PLOT_PLAYER_SHOP.equals(baseId.trim())) {
+            return true;
+        }
+        return effectiveKind(draft, plugin) == PlotBuildingKind.PLAYER_SHOP;
+    }
+
+    @Nonnull
+    private static List<SubstepRequirement> shopSubsteps(boolean requireSafe) {
+        List<SubstepRequirement> out = new ArrayList<>();
+        out.add(new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
+        if (requireSafe) {
+            out.add(new SubstepRequirement(PlotCreatorSubstepType.SHOP_SAFE_BLOCK, 1));
+        }
+        out.add(new SubstepRequirement(PlotCreatorSubstepType.SHOP_SPOT, 1));
+        out.add(new SubstepRequirement(PlotCreatorSubstepType.SHOP_POI, 1));
+        out.add(new SubstepRequirement(PlotCreatorSubstepType.TOURIST_VISIT_POI, 1));
+        return out;
     }
 
     @Nonnull

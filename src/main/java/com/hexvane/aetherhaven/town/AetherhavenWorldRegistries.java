@@ -156,6 +156,7 @@ public final class AetherhavenWorldRegistries {
         AssemblyWorldRegistry.unloadWorld(world.getName());
         SprinklerWateringService.clearWorldState(world.getName());
         ShopSpotDailyRerollService.clearWorldState(world.getName());
+        CitizenDawnRevivalService.clearWorldState(world.getName());
         if (PersistentWorldSupport.isTemporaryInstance(world)) {
             TOWN_MANAGERS.remove(world.getName());
             POI_REGISTRIES.remove(world.getName());

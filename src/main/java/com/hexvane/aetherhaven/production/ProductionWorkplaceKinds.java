@@ -1,7 +1,10 @@
 package com.hexvane.aetherhaven.production;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -14,7 +17,13 @@ public final class ProductionWorkplaceKinds {
 
     /** True when the town records shelf may assign a villager to work at this completed plot. */
     public static boolean supportsWorkerAssignment(@Nullable String gameplayConstructionId) {
-        return residentBindingKindForGameplayConstruction(gameplayConstructionId) != null;
+        return residentBindingKindForGameplayConstruction(gameplayConstructionId) != null
+            || isMultiRoleWorkplace(gameplayConstructionId);
+    }
+
+    /** Guild hall staffs a guild master and a bard at separate work stations. */
+    public static boolean isMultiRoleWorkplace(@Nullable String gameplayConstructionId) {
+        return AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(trimOrNull(gameplayConstructionId));
     }
 
     @Nullable
@@ -35,5 +44,38 @@ public final class ProductionWorkplaceKinds {
             case AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL -> TownVillagerBinding.KIND_MERCHANT;
             default -> null;
         };
+    }
+
+    /**
+     * Resident binding kind for a loaded NPC role (guild hall bard vs guild master, or default workplace mapping).
+     */
+    @Nullable
+    public static String residentBindingKindForNpcRoleId(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable String npcRoleId
+    ) {
+        if (npcRoleId == null || npcRoleId.isBlank()) {
+            return null;
+        }
+        String role = npcRoleId.trim();
+        if (AetherhavenConstants.BARD_NPC_ROLE_ID.equalsIgnoreCase(role)) {
+            return TownVillagerBinding.KIND_BARD;
+        }
+        if (AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equalsIgnoreCase(role)) {
+            return TownVillagerBinding.KIND_GUILD_MASTER;
+        }
+        VillagerDefinition vdef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(role);
+        if (vdef == null) {
+            return null;
+        }
+        return residentBindingKindForGameplayConstruction(vdef.getWorkConstructionId());
+    }
+
+    @Nullable
+    private static String trimOrNull(@Nullable String s) {
+        if (s == null || s.isBlank()) {
+            return null;
+        }
+        return s.trim();
     }
 }

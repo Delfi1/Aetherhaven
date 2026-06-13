@@ -18,5 +18,6 @@ public enum PlotCreatorSubstepType {
     INNKEEPER_SPAWN,
     VISITOR_SPAWN,
     GUILD_MASTER_SPAWN,
-    ADVENTURER_SPAWN
+    ADVENTURER_SPAWN,
+    BARD_WORK_POI
 }

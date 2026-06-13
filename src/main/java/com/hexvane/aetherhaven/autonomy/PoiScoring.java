@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.autonomy;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiOccupancy;
@@ -27,6 +28,27 @@ public final class PoiScoring {
             return true;
         }
         return e.getTags().contains("WORK");
+    }
+
+    public static boolean isBardWorkPoi(@Nonnull PoiEntry e) {
+        return e.getTags().contains(AetherhavenConstants.POI_TAG_BARD);
+    }
+
+    /** Guild master desk and similar work spots; excludes the bard performance spot. */
+    public static boolean isNonBardWorkPoi(@Nonnull PoiEntry e) {
+        return isWorkPoi(e) && !isBardWorkPoi(e);
+    }
+
+    static boolean matchesWorkPoiForBindingKind(@Nonnull PoiEntry e, @Nonnull String bindingKind) {
+        if (TownVillagerBinding.KIND_BARD.equals(bindingKind)
+            || TownVillagerBinding.KIND_VISITOR_BARD.equals(bindingKind)) {
+            return isBardWorkPoi(e);
+        }
+        if (TownVillagerBinding.KIND_GUILD_MASTER.equals(bindingKind)
+            || TownVillagerBinding.KIND_VISITOR_GUILD_MASTER.equals(bindingKind)) {
+            return isNonBardWorkPoi(e);
+        }
+        return isWorkPoi(e);
     }
 
     /** True when the villager should temporarily override a work shift to satisfy a low meter (eat / rest / fun). */
@@ -186,7 +208,7 @@ public final class PoiScoring {
                 if (e.getPlotId() == null || !preferredPlot.equals(e.getPlotId())) {
                     continue;
                 }
-                if (!isWorkPoi(e)) {
+                if (!matchesWorkPoiForBindingKind(e, binding.getKind())) {
                     continue;
                 }
             } else if (preferredPlot != null && !(atWork && breakOverride) && !atShop) {

@@ -75,7 +75,7 @@ public final class PlotCreatorValidator {
             case TREASURY_BLOCK -> draft.getTreasuryLocalPos() != null ? 1 : 0;
             case SHOP_SAFE_BLOCK -> draft.getShopSafeLocalPos() != null ? 1 : 0;
             case SHOP_SPOT, TOURIST_PORTAL_BLOCK -> draft.getPlacedSpecialBlocks().size();
-            case PLANNING_DESK_POI, WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI -> countPoiSubstep(draft, type);
+            case PLANNING_DESK_POI, WORK_POI, BARD_WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI -> countPoiSubstep(draft, type);
             case INNKEEPER_SPAWN -> draft.getInnkeeperSpawnLocal() != null ? 1 : 0;
             case VISITOR_SPAWN -> draft.getVisitorSpawnLocals().size();
             case GUILD_MASTER_SPAWN -> draft.getGuildMasterSpawnLocal() != null ? 1 : 0;
@@ -95,7 +95,8 @@ public final class PlotCreatorValidator {
 
     private static boolean matchesPoiSubstep(@Nonnull PlotCreatorPoiDraft p, @Nonnull PlotCreatorSubstepType type) {
         return switch (type) {
-            case WORK_POI -> p.getTags().contains("WORK");
+            case WORK_POI -> p.getTags().contains("WORK") && !p.getTags().contains(AetherhavenConstants.POI_TAG_BARD);
+            case BARD_WORK_POI -> p.getTags().contains(AetherhavenConstants.POI_TAG_BARD);
             case SLEEP_POI -> p.getTags().contains("SLEEP") || p.getTags().contains("ENERGY");
             case EAT_POI -> p.getTags().contains("EAT");
             case FUN_POI -> p.getTags().contains("FUN") || p.getTags().contains("SIT");

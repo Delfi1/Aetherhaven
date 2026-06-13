@@ -144,6 +144,17 @@ aetherhaven.plotcreator.step.ANCHOR.hint = Mark one of the four outside corners 
 
 aetherhaven.plotcreator.step.KIND.title = Building type
 aetherhaven.plotcreator.step.KIND.hint = Choose a building type that fits your build. For what each type means, open your town journal Guide → Mechanics → Plot creator staff.
+aetherhaven.plotcreator.kind.DECORATION = Decoration
+aetherhaven.plotcreator.kind.VARIANT = Variant of another building
+aetherhaven.plotcreator.kind.HOME = Home
+aetherhaven.plotcreator.kind.WORK = Workplace
+aetherhaven.plotcreator.kind.AMENITY = Amenity
+aetherhaven.plotcreator.kind.SHOP = Villager shop
+aetherhaven.plotcreator.kind.PLAYER_SHOP = Player shop
+aetherhaven.plotcreator.kind.INN = Inn
+aetherhaven.plotcreator.kind.TOWN_HALL = Town hall
+aetherhaven.plotcreator.kind.GUILD_HALL = Guild hall
+aetherhaven.plotcreator.kind.TOURIST_PORTAL = Tourist portal
 
 aetherhaven.plotcreator.step.IDENTITY.title = Name and id
 aetherhaven.plotcreator.step.IDENTITY.hint = Enter the display name, description, and building id. The id updates from the name until you edit the id field yourself. The prefab file uses this id.
@@ -197,6 +208,7 @@ aetherhaven.plotcreator.substep.PRODUCTION_STORAGE = Click the production storag
 aetherhaven.plotcreator.substep.TREASURY_BLOCK = Click the treasury block you placed.
 aetherhaven.plotcreator.substep.PLANNING_DESK_POI = Click the town planning desk.
 aetherhaven.plotcreator.substep.WORK_POI = Click a work spot (bench or desk).
+aetherhaven.plotcreator.substep.BARD_WORK_POI = Click where the bard should stand beside the quest board.
 aetherhaven.plotcreator.substep.SLEEP_POI = Click a bed or rest spot.
 aetherhaven.plotcreator.substep.EAT_POI = Click an eating spot.
 aetherhaven.plotcreator.substep.FUN_POI = Click a fun spot (bench to sit).

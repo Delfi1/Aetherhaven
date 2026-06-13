@@ -82,6 +82,11 @@ public final class TownVillagerBinding implements Component<EntityStore> {
     /** Permanent guild master at the guild hall (after build). */
     public static final String KIND_GUILD_MASTER = "guild_master";
 
+    /** Permanent bard at the guild hall (after inn pool promotion). */
+    public static final String KIND_BARD = "bard";
+
+    public static final String KIND_VISITOR_BARD = "visitor_bard";
+
     /** Hired guard from guild hall adventurer pool. */
     public static final String KIND_GUARD = "guard";
 

@@ -2,6 +2,10 @@ package com.hexvane.aetherhaven.dialogue;
 
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.bard.BardEnvironmentMusic;
+import com.hexvane.aetherhaven.bard.BardMusicProximityState;
+import com.hexvane.aetherhaven.bard.BardPerformanceComponent;
+import com.hexvane.aetherhaven.bard.BardPerformanceService;
 import com.hexvane.aetherhaven.rescue.RescueVillagerDespawnEffects;
 import com.hexvane.aetherhaven.rescue.RescueVillagerTriggers;
 import com.hexvane.aetherhaven.guild.GuardHireService;
@@ -30,6 +34,7 @@ import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.villager.gift.VillagerGiftService;
 import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
+import com.hypixel.hytale.builtin.audio.components.ForcedMusicTracker;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -126,6 +131,8 @@ public final class DialogueActionExecutor {
             case "priestess_gold_heal" -> priestessGoldHeal(playerRef, store, npcRef);
             case "hire_guild_adventurer" -> hireGuildAdventurer(playerRef, store, npcRef, out);
             case "despawn_npc" -> despawnNpc(playerRef, store, npcRef);
+            case "play_bard_song" -> playBardSong(a, playerRef, store, npcRef);
+            case "stop_bard_song" -> stopBardSong(playerRef, store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
     }
@@ -756,6 +763,58 @@ public final class DialogueActionExecutor {
         }
         World world = store.getExternalData().getWorld();
         PendingEntityRemovalService.schedule(world, npcUuid);
+    }
+
+    private static void playBardSong(
+        @Nonnull JsonObject a,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        String songId = stringField(a, "songId");
+        if (songId == null || songId.isBlank()) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        BardPerformanceService.startSong(store, null, npcRef, plugin, songId.trim());
+        BardPerformanceComponent perf =
+            store.getComponent(npcRef, BardPerformanceComponent.getComponentType());
+        if (perf == null || perf.getMusicContainerIndex() == 0) {
+            return;
+        }
+        ForcedMusicTracker tracker = store.getComponent(playerRef, ForcedMusicTracker.getComponentType());
+        PlayerRef playerRefComponent = store.getComponent(playerRef, PlayerRef.getComponentType());
+        UUIDComponent playerUuid = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (tracker == null || playerRefComponent == null || playerUuid == null) {
+            return;
+        }
+        BardEnvironmentMusic.setForcedMusic(
+            playerRef,
+            null,
+            store,
+            playerRefComponent,
+            tracker,
+            perf.getMusicContainerIndex()
+        );
+        store.getResource(BardMusicProximityState.getResourceType())
+            .setActive(playerUuid.getUuid(), perf.getMusicContainerIndex());
+    }
+
+    private static void stopBardSong(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        BardPerformanceService.stopOnStore(store, npcRef);
     }
 
     private static void giveItem(

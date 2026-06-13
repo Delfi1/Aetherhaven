@@ -48,12 +48,14 @@ import javax.annotation.Nullable;
  */
 public final class ConstructionPasteOps {
     /**
-     * Passed to {@link com.hypixel.hytale.server.core.universe.world.accessor.BlockAccessor#placeBlock}: bit 2 maps to
-     * {@code setBlock} flag 256 (update block area), not the {@code setBlock} bit that skips block-entity spawn.
-     * Prefab construction must use {@code placeBlock} (never raw {@code setBlock} with this value) so benches,
-     * chests, and other {@link BlockType#getBlockEntity()} blocks get working components/interactions.
+     * {@link com.hypixel.hytale.server.core.universe.world.accessor.BlockAccessor#placeBlock} settings for prefab
+     * construction ({@link com.hypixel.hytale.server.core.util.PrefabUtil} uses {@code 0} for force paste).
+     * Must stay {@code 0}: {@code placeBlock} maps bit 2 to {@code setBlock} flag 256 ({@code updateBlockArea}), which
+     * marks blocks ticking during incremental assembly and breaks furniture that needs support below. Use
+     * {@code placeBlock} (not raw {@code setBlock} with bit 2 set) so benches, chests, and other
+     * {@link BlockType#getBlockEntity()} blocks still get working components/interactions.
      */
-    public static final int SET_BLOCK_SETTINGS_PLACE = 2;
+    public static final int SET_BLOCK_SETTINGS_PLACE = 0;
     /** Air clears / {@link WorldChunk#breakBlock}: keep {@code 8|2} tuning from earlier construction fixes. */
     public static final int SET_BLOCK_SETTINGS_CLEAR = 10;
 

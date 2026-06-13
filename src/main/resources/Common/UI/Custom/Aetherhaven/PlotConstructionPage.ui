@@ -212,6 +212,31 @@ $C.@PageOverlay {
             }
           }
 
+          Group #WorkplaceAssignBardRow {
+            LayoutMode: Top;
+            Visible: false;
+            Anchor: (Bottom: 12);
+
+            Group #WorkplaceAssignBardDropdown {
+              LayoutMode: Left;
+              Anchor: (Bottom: 8);
+
+              Label #WorkplaceAssignBardFieldLabel {
+                Text: "";
+                Anchor: (Top: 6, Left: 6, Right: 16);
+                Style: $C.@DefaultLabelStyle;
+              }
+
+              $C.@DropdownBox #Input {
+                @Anchor = (Left: 0, Right: 16);
+              }
+            }
+
+            $C.@TextButton #AssignWorkplaceBardButton {
+              Text: "";
+            }
+          }
+
           Group #ProductionUpgradeTreeSlot {
             LayoutMode: Top;
             Visible: false;

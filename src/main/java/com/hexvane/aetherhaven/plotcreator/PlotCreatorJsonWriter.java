@@ -60,7 +60,8 @@ public final class PlotCreatorJsonWriter {
         if (draft.getTreasuryLocalPos() != null) {
             root.put("treasuryLocalPos", localPosList(draft.getTreasuryLocalPos()));
         }
-        if (draft.getShopSafeLocalPos() != null) {
+        if (PlotBuildingKindRequirements.requiresShopSafe(draft, null)
+            && draft.getShopSafeLocalPos() != null) {
             root.put("shopSafeLocalPos", localPosList(draft.getShopSafeLocalPos()));
         }
         if (draft.getProductionStorageLocalPos() != null) {

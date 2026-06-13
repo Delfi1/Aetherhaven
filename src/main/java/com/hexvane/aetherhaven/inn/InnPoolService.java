@@ -1507,6 +1507,9 @@ public final class InnPoolService {
             } else if (AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equals(roleId)) {
                 constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL;
                 residentKind = TownVillagerBinding.KIND_GUILD_MASTER;
+            } else if (AetherhavenConstants.BARD_NPC_ROLE_ID.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL;
+                residentKind = TownVillagerBinding.KIND_BARD;
             } else if (AetherhavenConstants.NPC_CRYSTAL_KEEPER.equals(roleId)) {
                 constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP;
                 residentKind = TownVillagerBinding.KIND_CRYSTAL_KEEPER;

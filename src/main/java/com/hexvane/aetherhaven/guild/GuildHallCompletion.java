@@ -2,6 +2,9 @@ package com.hexvane.aetherhaven.guild;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
+import com.hexvane.aetherhaven.guild.BardWorkPoiResolver;
+import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -13,7 +16,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -22,9 +24,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.joml.Vector3d;
 
-/** When the guild hall prefab completes, move Lyra from the inn pool to the hall WORK POI. */
+/** When the guild hall prefab completes, assign Lyra from the inn pool to the hall plot. */
 public final class GuildHallCompletion {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
@@ -52,6 +53,9 @@ public final class GuildHallCompletion {
         PoiEntry work = null;
         for (PoiEntry e : reg.listByTown(town.getTownId())) {
             if (plotId.equals(e.getPlotId()) && e.getTags().contains("WORK")) {
+                if (e.getTags().contains(AetherhavenConstants.POI_TAG_BARD)) {
+                    continue;
+                }
                 work = e;
                 break;
             }
@@ -65,30 +69,8 @@ public final class GuildHallCompletion {
         if (masterRef == null || !masterRef.isValid()) {
             return;
         }
-        TownVillagerBinding existingBinding = store.getComponent(masterRef, TownVillagerBinding.getComponentType());
-        boolean alreadyAtHall =
-            existingBinding != null
-                && TownVillagerBinding.KIND_GUILD_MASTER.equals(existingBinding.getKind())
-                && plotId.equals(existingBinding.getJobPlotId());
         UUIDComponent uuidComp = store.getComponent(masterRef, UUIDComponent.getComponentType());
         UUID masterUuid = uuidComp != null ? uuidComp.getUuid() : null;
-        double targetX = work.getX() + 0.5;
-        double targetY = work.getY() + 0.02;
-        double targetZ = work.getZ() + 0.5;
-        if (work.hasInteractionTarget()) {
-            Double tx = work.getInteractionTargetX();
-            Double ty = work.getInteractionTargetY();
-            Double tz = work.getInteractionTargetZ();
-            if (tx != null && ty != null && tz != null) {
-                targetX = tx;
-                targetY = ty;
-                targetZ = tz;
-            }
-        }
-        final double moveX = targetX;
-        final double moveY = targetY;
-        final double moveZ = targetZ;
-        final boolean moveTransform = !alreadyAtHall;
         if (masterUuid != null) {
             town.getInnPoolNpcIds().removeIf(s -> {
                 try {
@@ -102,17 +84,7 @@ public final class GuildHallCompletion {
             final UUID masterEntityUuid = masterUuid;
             final UUID townId = town.getTownId();
             world.execute(
-                () ->
-                    applyGuildMasterEntityComponents(
-                        world,
-                        masterEntityUuid,
-                        townId,
-                        plotId,
-                        moveTransform,
-                        moveX,
-                        moveY,
-                        moveZ
-                    )
+                () -> applyGuildMasterEntityComponents(world, masterEntityUuid, townId, plotId)
             );
         }
         town.addInnVisitorPoolExcludedRoleId(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID);
@@ -126,23 +98,132 @@ public final class GuildHallCompletion {
                 masterUuid
             );
         }
-        LOGGER.atInfo().log(
-            "Moved guild master to guild hall at %s,%s,%s",
-            work.hasInteractionTarget() ? work.getInteractionTargetX() : work.getX() + 0.5,
-            work.hasInteractionTarget() ? work.getInteractionTargetY() : work.getY() + 0.02,
-            work.hasInteractionTarget() ? work.getInteractionTargetZ() : work.getZ() + 0.5
+        LOGGER.atInfo().log("Assigned guild master to guild hall plot %s; pathing to work POI", plotId);
+
+        promoteBardIfInPool(world, plugin, town, plotId, tm, store, reg);
+    }
+
+    private static void promoteBardIfInPool(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull UUID plotId,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PoiRegistry reg
+    ) {
+        Ref<EntityStore> bardRef = findBardRef(store, town);
+        if (bardRef == null || !bardRef.isValid()) {
+            return;
+        }
+        PlotInstance plot = town.findPlotById(plotId);
+        if (plot == null) {
+            return;
+        }
+        BardWorkPoiResolver.BardPlacementTarget target =
+            BardWorkPoiResolver.resolvePlacement(plugin, town, plot, reg);
+        if (target == null) {
+            LOGGER.atWarning().log("No bard work POI for guild hall plot %s", plotId);
+            return;
+        }
+        UUIDComponent uuidComp = store.getComponent(bardRef, UUIDComponent.getComponentType());
+        UUID bardUuid = uuidComp != null ? uuidComp.getUuid() : null;
+        if (bardUuid != null) {
+            town.getInnPoolNpcIds().removeIf(s -> {
+                try {
+                    return bardUuid.equals(UUID.fromString(s.trim()));
+                } catch (Exception e) {
+                    return false;
+                }
+            });
+        }
+        if (bardUuid != null) {
+            final UUID bardEntityUuid = bardUuid;
+            final UUID townId = town.getTownId();
+            world.execute(
+                () -> applyBardEntityComponents(world, bardEntityUuid, townId, plotId)
+            );
+        }
+        town.addInnVisitorPoolExcludedRoleId(AetherhavenConstants.BARD_NPC_ROLE_ID);
+        if (bardUuid != null) {
+            ResidentRegistryService.upsert(
+                town,
+                tm,
+                AetherhavenConstants.BARD_NPC_ROLE_ID,
+                TownVillagerBinding.KIND_BARD,
+                plotId,
+                bardUuid
+            );
+        }
+        tm.updateTown(town);
+        LOGGER.atInfo().log("Assigned bard to guild hall plot %s; pathing to work POI", plotId);
+    }
+
+    private static void applyBardEntityComponents(
+        @Nonnull World world,
+        @Nonnull UUID bardEntityUuid,
+        @Nonnull UUID townId,
+        @Nonnull UUID plotId
+    ) {
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        if (store == null) {
+            return;
+        }
+        Ref<EntityStore> bardRef = store.getExternalData().getRefFromUUID(bardEntityUuid);
+        if (bardRef == null || !bardRef.isValid()) {
+            return;
+        }
+        store.putComponent(
+            bardRef,
+            TownVillagerBinding.getComponentType(),
+            new TownVillagerBinding(townId, TownVillagerBinding.KIND_BARD, plotId, plotId)
         );
+        VillagerAutonomySystem.promptWorkplaceTravel(
+            bardRef,
+            store,
+            VillagerAutonomySystem.resolveAutonomyNowMs(store)
+        );
+    }
+
+    @Nullable
+    private static Ref<EntityStore> findBardRef(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {
+        for (String sid : town.getInnPoolNpcIds()) {
+            Ref<EntityStore> ref = refForPoolEntry(store, sid, AetherhavenConstants.BARD_NPC_ROLE_ID);
+            if (ref != null) {
+                return ref;
+            }
+        }
+        AtomicReference<Ref<EntityStore>> found = new AtomicReference<>();
+        store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
+            if (found.get() != null) {
+                return;
+            }
+            Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+            if (ref == null || !ref.isValid()) {
+                return;
+            }
+            TownVillagerBinding b = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
+            if (b == null || !b.getTownId().equals(town.getTownId())) {
+                return;
+            }
+            if (!TownVillagerBinding.KIND_BARD.equals(b.getKind())
+                && !TownVillagerBinding.KIND_VISITOR_BARD.equals(b.getKind())) {
+                return;
+            }
+            var npcType = NPCEntity.getComponentType();
+            NPCEntity npc = npcType != null ? archetypeChunk.getComponent(index, npcType) : null;
+            if (npc != null && AetherhavenConstants.BARD_NPC_ROLE_ID.equals(npc.getRoleName())) {
+                found.set(ref);
+            }
+        });
+        return found.get();
     }
 
     private static void applyGuildMasterEntityComponents(
         @Nonnull World world,
         @Nonnull UUID masterEntityUuid,
         @Nonnull UUID townId,
-        @Nonnull UUID plotId,
-        boolean moveTransform,
-        double targetX,
-        double targetY,
-        double targetZ
+        @Nonnull UUID plotId
     ) {
         Store<EntityStore> store = world.getEntityStore().getStore();
         if (store == null) {
@@ -152,20 +233,15 @@ public final class GuildHallCompletion {
         if (masterRef == null || !masterRef.isValid()) {
             return;
         }
-        if (moveTransform) {
-            TransformComponent tc = store.getComponent(masterRef, TransformComponent.getComponentType());
-            if (tc != null) {
-                Vector3d p = tc.getPosition();
-                p.x = targetX;
-                p.y = targetY;
-                p.z = targetZ;
-                store.putComponent(masterRef, TransformComponent.getComponentType(), tc);
-            }
-        }
         store.putComponent(
             masterRef,
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(townId, TownVillagerBinding.KIND_GUILD_MASTER, plotId, plotId)
+        );
+        VillagerAutonomySystem.promptWorkplaceTravel(
+            masterRef,
+            store,
+            VillagerAutonomySystem.resolveAutonomyNowMs(store)
         );
     }
 

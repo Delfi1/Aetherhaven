@@ -256,7 +256,13 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#AssemblySectionsField.PlaceholderText", Message.translation(MSG + ".field.assemblySections"));
         ObjectArrayList<DropdownEntryInfo> kinds = new ObjectArrayList<>();
         for (PlotBuildingKind k : PlotBuildingKind.values()) {
-            kinds.add(new DropdownEntryInfo(LocalizableString.fromString(k.name()), k.name()));
+            String labelKey = MSG + ".kind." + k.name();
+            kinds.add(
+                new DropdownEntryInfo(
+                    LocalizableString.fromMessageId(labelKey),
+                    k.name()
+                )
+            );
         }
         b.set("#KindDropdown.Entries", kinds);
         if (session.getDraft().getKind() != null) {

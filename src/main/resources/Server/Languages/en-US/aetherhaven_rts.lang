@@ -51,6 +51,7 @@ aetherhaven.rts.errorNoGuards=You need hired guards to use this.
 aetherhaven.rts.errorNoSelection=Select guards first.
 aetherhaven.rts.errorNotEnemy=Your guards will not attack that.
 aetherhaven.rts.errorNotInTown=The command post must be inside your town lands to use.
+aetherhaven.rts.errorCommandPostInUse=Someone else is already using the command post in this town.
 aetherhaven.rts.recoverInventorySuccess=Restored your hotbar from the last guard command session.
 aetherhaven.rts.recoverInventorySuccessExited=Restored your hotbar and exited guard command mode.
 aetherhaven.rts.recoverInventoryNone=No saved hotbar from guard command mode was found.
