@@ -40,6 +40,7 @@
     ],
     "CustomModelScale": 1.0,
     "HitboxType": "Aetherhaven_Smokestack",
+    "IgnoreSupportWhenPlaced": true,
     "Looping": true,
     "Flags": {},
     "Gathering": {
@@ -51,13 +52,6 @@
         "ItemId": "Aetherhaven_Smokestack"
       },
       "UseDefaultDropWhenPlaced": false
-    },
-    "Support": {
-      "Down": [
-        {
-          "FaceType": "Full"
-        }
-      ]
     },
     "BlockParticleSetId": "Stone",
     "ParticleColor": "#888888",
