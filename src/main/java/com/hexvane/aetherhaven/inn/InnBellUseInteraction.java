@@ -99,6 +99,7 @@ public final class InnBellUseInteraction extends SimpleBlockInteraction {
         }
 
         final UUID townId = blockTown.getTownId();
+        final PlotInstance bellInnPlot = plot;
         final Vector3i bellBlock = new Vector3i(targetBlock);
         world.execute(
             () -> {
@@ -110,15 +111,8 @@ public final class InnBellUseInteraction extends SimpleBlockInteraction {
                 if (town == null || !town.isInnActive()) {
                     return;
                 }
-                PlotInstance innPlot =
-                    town.findCompletePlotWithConstruction(
-                        plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN
-                    );
-                if (innPlot == null) {
-                    return;
-                }
                 InnBellService.RingOutcome outcome =
-                    InnBellService.ring(world, plugin, town, tm, entityStore, innPlot);
+                    InnBellService.ring(world, plugin, town, tm, entityStore, bellInnPlot);
                 InnBellService.playRingSound(entityStore, bellBlock);
                 sendFeedback(playerEntityRef, entityStore, outcome.messageKeySuffix());
             }

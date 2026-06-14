@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.guild.BardWorkPoiResolver;
 import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
+import com.hexvane.aetherhaven.inn.InnBellService;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
@@ -329,6 +330,11 @@ public final class WorkplacePlotAssignment {
                 workplacePlotId,
                 store
             );
+        }
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_INN.equals(gameplayId)
+            && TownVillagerBinding.KIND_INNKEEPER.equals(kind)
+            && town.isInnActive()) {
+            InnBellService.ring(world, plugin, town, tm, store, plot);
         }
         return null;
     }

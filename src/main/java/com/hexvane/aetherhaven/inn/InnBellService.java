@@ -63,7 +63,7 @@ public final class InnBellService {
         @Nonnull Store<EntityStore> store,
         @Nonnull PlotInstance innPlot
     ) {
-        ConstructionDefinition innDef = plugin.getConstructionCatalog().get(AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+        ConstructionDefinition innDef = InnPlotResolver.resolveInnDefinition(plugin, innPlot);
         if (innDef == null) {
             return RingOutcome.NO_VISITORS;
         }

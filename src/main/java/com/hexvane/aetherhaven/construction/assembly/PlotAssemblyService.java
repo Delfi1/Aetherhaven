@@ -291,7 +291,9 @@ public final class PlotAssemblyService {
                 def.getId()
             );
         AssemblyObstructionUtil.clearSoftSkippedBlocksInFootprint(world, job);
-        if (AssemblyObstructionUtil.hasObstructionsInLoadedChunks(world, job)) {
+        // Placed prefab cells are non-air; treating them as obstructions would restart CLEARING and break progress.
+        if (!assemblyPastClearingPhase(plot)
+            && AssemblyObstructionUtil.hasObstructionsInLoadedChunks(world, job)) {
             registerClearingJob(world, plot.getPlotId(), job);
         } else {
             PlotAssemblyFrontierRuntime assemblyRt =
@@ -305,6 +307,14 @@ public final class PlotAssemblyService {
             }
         }
         return true;
+    }
+
+    /**
+     * {@code true} when persisted assembly state shows the plot already left the manual clearing phase (timer started
+     * in {@link #beginPlacingPhase} or at least one frontier block was committed).
+     */
+    private static boolean assemblyPastClearingPhase(@Nonnull PlotInstance plot) {
+        return plot.getAssemblyPlacedBlockCount() > 0 || plot.getAssemblyStartEpochMs() > 0L;
     }
 
     /**

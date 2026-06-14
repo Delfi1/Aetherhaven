@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyTravelKick;
 import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
+import com.hexvane.aetherhaven.inn.InnPlotResolver;
 import com.hexvane.aetherhaven.patrol.PatrolRoutePersistence;
 import com.hexvane.aetherhaven.patrol.PatrolRouteRegistry;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
@@ -111,7 +112,8 @@ public final class VillagerTownResetService {
         List<CapturedNpc> order = new ArrayList<>(captured.values());
         order.sort(Comparator.comparingInt(VillagerTownResetService::captureSortKey));
 
-        PlotInstance innPlot = town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+        PlotInstance innPlot =
+            InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
         int slot = 0;
         List<UUID> spawnedUuids = new ArrayList<>();
         for (CapturedNpc c : order) {

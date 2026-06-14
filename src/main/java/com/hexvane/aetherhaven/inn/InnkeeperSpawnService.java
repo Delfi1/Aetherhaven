@@ -76,11 +76,16 @@ public final class InnkeeperSpawnService {
         if (town.getInnkeeperEntityUuid() != null) {
             return;
         }
-        PlotInstance plot = town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        if (store == null) {
+            return;
+        }
+        PlotInstance plot =
+            InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
         if (plot == null) {
             return;
         }
-        ConstructionDefinition def = plugin.getConstructionCatalog().get(AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+        ConstructionDefinition def = InnPlotResolver.resolveInnDefinition(plugin, plot);
         if (def == null) {
             LOGGER.atWarning().log("Inn construction definition missing");
             return;
@@ -102,7 +107,6 @@ public final class InnkeeperSpawnService {
         if (npc == null) {
             return;
         }
-        Store<EntityStore> store = world.getEntityStore().getStore();
         var pair = npc.spawnNPC(store, AetherhavenConstants.INNKEEPER_NPC_ROLE_ID, null, pos, Rotation3f.ZERO);
         if (pair == null) {
             LOGGER.atWarning().log("Failed to spawn innkeeper for town %s", town.getTownId());

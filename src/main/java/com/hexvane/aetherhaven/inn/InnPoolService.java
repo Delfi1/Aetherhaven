@@ -320,11 +320,12 @@ public final class InnPoolService {
             if (town.getInnkeeperEntityUuid() == null) {
                 continue;
             }
-            PlotInstance innPlot = town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+            PlotInstance innPlot =
+                InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
             if (innPlot == null) {
                 continue;
             }
-            ConstructionDefinition innDef = plugin.getConstructionCatalog().get(innPlot.getConstructionId());
+            ConstructionDefinition innDef = InnPlotResolver.resolveInnDefinition(plugin, innPlot);
             if (innDef == null) {
                 continue;
             }
@@ -706,20 +707,21 @@ public final class InnPoolService {
         world.execute(
             () -> {
                 TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-                var innPlot = town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+                Store<EntityStore> store = world.getEntityStore().getStore();
+                if (store == null) {
+                    return;
+                }
+                var innPlot =
+                    InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
                 if (innPlot == null) {
                     return;
                 }
-                ConstructionDefinition innDef = plugin.getConstructionCatalog().get(AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+                ConstructionDefinition innDef = InnPlotResolver.resolveInnDefinition(plugin, innPlot);
                 if (innDef == null) {
                     return;
                 }
                 int[][] spawnLocals = innDef.getVisitorSpawnLocals();
                 if (spawnLocals == null || spawnLocals.length == 0) {
-                    return;
-                }
-                Store<EntityStore> store = world.getEntityStore().getStore();
-                if (store == null) {
                     return;
                 }
                 WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
@@ -1448,9 +1450,9 @@ public final class InnPoolService {
         trimInnPoolListToMax(town, tm, store);
         if (fillOpenSlots && town.getInnPoolNpcIds().size() < MAX_VISITORS) {
             PlotInstance innPlot =
-                town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+                InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
             if (innPlot != null) {
-                ConstructionDefinition innDef = plugin.getConstructionCatalog().get(AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+                ConstructionDefinition innDef = InnPlotResolver.resolveInnDefinition(plugin, innPlot);
                 if (innDef != null) {
                     fillEmptyInnVisitorSlotsAtSpawns(world, plugin, town, tm, store, innPlot, innDef);
                 }
