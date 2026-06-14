@@ -37,6 +37,10 @@ public final class VillagerDefinition {
     @Nullable
     private String workConstructionId;
 
+    @SerializedName("workEquipmentProfileId")
+    @Nullable
+    private String workEquipmentProfileId;
+
     @SerializedName("scheduleSharedLocations")
     @Nullable
     private Map<String, String> scheduleSharedLocations;
@@ -69,6 +73,16 @@ public final class VillagerDefinition {
     @SerializedName("visitorBindingKind")
     @Nullable
     private String visitorBindingKind;
+
+    /** When non-empty, the town must satisfy these before this villager can appear in the inn pool. */
+    @SerializedName("innPoolRequires")
+    @Nullable
+    private InnPoolRequires innPoolRequires;
+
+    /** Prefab-local spawn cell at the inn; overrides visitor slot rotation when set (length 3). */
+    @SerializedName("innPoolSpawnLocal")
+    @Nullable
+    private int[] innPoolSpawnLocal;
 
     @SerializedName("weeklySchedule")
     @Nullable
@@ -144,6 +158,11 @@ public final class VillagerDefinition {
         return workConstructionId != null && !workConstructionId.isBlank() ? workConstructionId.trim() : null;
     }
 
+    @Nullable
+    public String getWorkEquipmentProfileId() {
+        return workEquipmentProfileId != null && !workEquipmentProfileId.isBlank() ? workEquipmentProfileId.trim() : null;
+    }
+
     @Nonnull
     public Map<String, String> getScheduleSharedLocations() {
         if (scheduleSharedLocations == null || scheduleSharedLocations.isEmpty()) {
@@ -203,6 +222,16 @@ public final class VillagerDefinition {
             return null;
         }
         return visitorBindingKind.trim();
+    }
+
+    @Nonnull
+    public InnPoolRequires getInnPoolRequires() {
+        return innPoolRequires != null ? innPoolRequires : InnPoolRequires.EMPTY;
+    }
+
+    @Nullable
+    public int[] getInnPoolSpawnLocal() {
+        return innPoolSpawnLocal != null && innPoolSpawnLocal.length == 3 ? innPoolSpawnLocal : null;
     }
 
     @Nullable

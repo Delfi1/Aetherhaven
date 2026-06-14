@@ -1,0 +1,25 @@
+# Shop price overrides for generate_shop_prices.py
+# Edit this file, then run: python scripts/generate_shop_prices.py
+#
+# Format (one rule per line):
+#   <itemIdOrPattern> = <gold>
+#   <itemIdOrPattern> = <gold> batch <size>
+#   pattern:<glob> = <gold>
+#   pattern:<glob> = <gold> batch <size>
+#   pattern:<glob> = skip
+#
+# Rules are checked before config tiers. First matching pattern wins.
+# "skip" omits the item from generated output (falls back to defaultGoldPrice at runtime).
+#
+# Examples:
+#   Weapon_Longsword_Katana = 625
+#   pattern:WinterHoliday_* = 18
+#   Rock_Stone_Brick = 12 batch 16
+
+# Currency should not appear in shop loot rolls at a markup
+Aetherhaven_Gold_Coin = 1
+
+Aetherhaven_Geode = 50
+
+# Modular bookshelf pieces are not sold at shop spots (set_* bookcases/bookshelves are fine)
+pattern:Furniture_Bookshelf_* = skip

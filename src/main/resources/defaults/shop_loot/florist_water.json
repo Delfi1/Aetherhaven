@@ -1,0 +1,10 @@
+{
+  "entries": [
+    { "itemId": "Plant_Flower_Water_Green", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Water_Duckweed", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Water_Red", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Water_Blue", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Water_White", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Water_Purple", "weight": 2, "stockMin": 25, "stockMax": 50 }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "Parent": "Goblin",
+  "Model": "NPC/Intelligent/Goblin/Models/Model.blockymodel",
+  "Texture": "NPC/Intelligent/Goblin/Models/Model_Textures/Moldy.png",
+  "DefaultAttachments": [
+    {
+      "Model": "Cosmetics/Pants/CatacombCrawler_Short.blockymodel",
+      "Texture": "Cosmetics/Pants/CatacombCrawler_Short_Texture.png",
+      "GradientSet": "Jean_Generic",
+      "GradientId": "Maroon"
+    },
+    {
+      "Model": "Cosmetics/Undertops/Tshirt.blockymodel",
+      "Texture": "Cosmetics/Undertops/Tshirt_Textures/CatacombCrawler_Top_Texture.png",
+      "GradientSet": "Fantasy_Cotton_Dark",
+      "GradientId": "Red"
+    },
+    {
+      "Model": "Cosmetics/Shoes/Boots_Leather.blockymodel",
+      "Texture": "Cosmetics/Shoes/Boots_Leather_Textures/Adventurer_Greyscale.png",
+      "GradientSet": "Faded_Leather",
+      "GradientId": "Brown"
+    },
+    {
+      "Model": "Cosmetics/Head/WideGoggles.blockymodel",
+      "Texture": "Cosmetics/Head/WideGoggles_Textures/WideGoggles_Texture.png"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Aetherhaven_Pyrotechnic.png",
+  "IconProperties": {
+    "Scale": 0.4,
+    "Rotation": [
+      0,
+      33,
+      0
+    ],
+    "Translation": [
+      -8,
+      -99
+    ]
+  }
+}

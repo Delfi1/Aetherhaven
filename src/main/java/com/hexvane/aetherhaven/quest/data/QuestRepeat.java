@@ -14,4 +14,8 @@ public final class QuestRepeat {
     public String mode() {
         return mode != null ? mode : "none";
     }
+
+    public boolean isPerEntity() {
+        return "per_entity".equalsIgnoreCase(mode());
+    }
 }

@@ -1,6 +1,7 @@
 {
   "id": "plot_gaia_altar",
   "scheduleSharedUtilityPick": true,
+  "touristDestination": true,
   "displayName": "Gaia altar",
   "description": "A quiet shrine with a Gaia statue for the priestess to tend, and stools to rest by the path.",
   "prefabPath": "Gaia_Altar.prefab.json",
@@ -46,7 +47,7 @@
       "localX": 0,
       "localY": 2,
       "localZ": 0,
-      "blockTypeId": "Aetherhaven_Statue_of_Gaia",
+      "blockTypeId": "Aetherhaven_Statue_Of_Gaia",
       "interactionKind": "WORK_SURFACE",
       "tags": ["WORK"],
       "capacity": 1,

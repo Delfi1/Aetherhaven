@@ -45,9 +45,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCustomUIPage<VillagerNeedsOverviewPage.PageData> {
-    private static final String VILLAGER_ROWS = "#VillagerRows";
+    private static final String VILLAGER_ROWS = "#VillagerListScroll #VillagerRows";
     private static final String REPUTATION_HEART_SLOTS = "#ReputationHeartSlots";
-    private static final int MAX_ROWS = 16;
 
     private final UUID townId;
     @Nullable
@@ -163,15 +162,12 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         commandBuilder.set("#RescueTeleportButton.Visible", true);
         commandBuilder.set("#Hint.Visible", false);
         commandBuilder.clear(VILLAGER_ROWS);
-        int n = Math.min(rows.size(), MAX_ROWS);
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < rows.size(); i++) {
             TownVillagerRow r = rows.get(i);
             commandBuilder.append(VILLAGER_ROWS, "Aetherhaven/VillagerNeedsRow.ui");
             String row = VILLAGER_ROWS + "[" + i + "]";
-            commandBuilder.set(
-                row + " #Pick #Label.TextSpans",
-                Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + r.roleId() + ".name")
-            );
+            commandBuilder.set(row + " #Pick #Portrait.AssetPath", r.portraitPath());
+            commandBuilder.set(row + " #Pick #Label.TextSpans", Message.raw(r.label()));
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 row + " #Pick",
@@ -181,14 +177,23 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         }
 
         TownVillagerRow sel = rows.get(selectedIndex);
-        VillagerNeeds needs = findNeeds(entityStore, sel.entityUuid());
+        boolean showNeeds = sel.usesNeeds();
+        commandBuilder.set("#NeedsBarsGroup.Visible", showNeeds);
+        commandBuilder.set("#NoNeedsHint.Visible", !showNeeds);
+        if (!showNeeds) {
+            commandBuilder.set(
+                "#NoNeedsHint.TextSpans",
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.noNeedsForResident")
+            );
+        }
+        VillagerNeeds needs = showNeeds ? findNeeds(entityStore, sel.entityUuid()) : null;
         float hunger = needs != null ? needs.getHunger() / VillagerNeeds.MAX : 0.5f;
         float energy = needs != null ? needs.getEnergy() / VillagerNeeds.MAX : 0.5f;
         float fun = needs != null ? needs.getFun() / VillagerNeeds.MAX : 0.5f;
         commandBuilder.set("#HungerBar.Value", hunger);
         commandBuilder.set("#EnergyBar.Value", energy);
         commandBuilder.set("#FunBar.Value", fun);
-        commandBuilder.set("#Portrait.AssetPath", NpcPortraitProvider.portraitPathForRoleId(sel.roleId()));
+        commandBuilder.set("#Portrait.AssetPath", sel.portraitPath());
 
         Ref<EntityStore> selRef = entityStore.getExternalData().getRefFromUUID(sel.entityUuid());
         boolean befriendable = VillagerBefriendableResolver.isBefriendable(entityStore, selRef, plugin);
@@ -232,7 +237,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         if (data.action == null || !data.action.equalsIgnoreCase("Select")) {
             return;
         }
-        if (data.index >= 0 && data.index < MAX_ROWS) {
+        if (data.index >= 0) {
             selectedIndex = data.index;
         }
         UICommandBuilder cmd = new UICommandBuilder();

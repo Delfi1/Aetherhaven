@@ -9,9 +9,11 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/** Picks a random townsfolk hub greeting from the personality pool on each conversation. */
 public final class TownsfolkGreetingPicker {
     private TownsfolkGreetingPicker() {}
 
@@ -46,7 +48,7 @@ public final class TownsfolkGreetingPicker {
         if (greetingKeys.isEmpty()) {
             return null;
         }
-        int idx = Math.floorMod(playerUuid.hashCode() ^ npcEntityUuid.hashCode(), greetingKeys.size());
+        int idx = ThreadLocalRandom.current().nextInt(greetingKeys.size());
         return Message.translation(greetingKeys.get(idx));
     }
 }

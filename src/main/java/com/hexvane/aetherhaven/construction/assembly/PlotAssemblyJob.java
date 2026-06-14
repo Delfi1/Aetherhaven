@@ -16,6 +16,8 @@ public record PlotAssemblyJob(
     @Nonnull UUID ownerUuid,
     @Nonnull Vector3i anchor,
     @Nonnull Rotation yaw,
+    /** Full prefab footprint (air + solid) for clearing-phase obstruction scans. */
+    @Nonnull List<PendingBlock> footprintCells,
     @Nonnull List<PendingBlock> pendingBlocks,
     /**
      * Cells whose block types match construction {@code assemblyDeferredBlockIds}: not on the frontier; placed as a batch

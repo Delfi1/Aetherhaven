@@ -55,7 +55,7 @@ public final class LootChestBonusApplier {
         if (slot < 0) {
             return false;
         }
-        ItemStack bonus = UnidentifiedJewelry.rollStack(rnd);
+        ItemStack bonus = JewelryChestLoot.rollForChest(rnd, cfg);
         if (ItemStack.isEmpty(bonus)) {
             return false;
         }

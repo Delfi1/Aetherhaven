@@ -63,7 +63,7 @@
   "Texture": "Items/Aetherhaven/Purification_Powder.png",
   "Scale": 1.2,
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Purification_Powder.png",
-  "MaxStack": 64,
+  "MaxStack": 100,
   "Quality": "Uncommon",
   "Set": "Aetherhaven",
   "Tags": {

@@ -1,0 +1,106 @@
+{
+  "id": "plot_hytinys_cozy_tavern",
+  "displayName": "Hytiny's Cozy Tavern",
+  "description": "By HytinyBuilds",
+  "prefabPath": "plot_hytinys_cozy_tavern.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 80,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 1100 },
+    { "resourceTypeId": "Rock", "count": 910 },
+    { "itemId": "Bench_Campfire", "count": 1 },
+    { "itemId": "Bench_Cooking", "count": 2 },
+    { "itemId": "Bench_Farming", "count": 1 },
+    { "itemId": "Bench_Furnace", "count": 1 },
+    { "itemId": "Bench_Furniture", "count": 1 },
+    { "itemId": "Bench_Tannery", "count": 1 },
+    { "itemId": "Bench_WorkBench", "count": 1 }
+  ],
+  "pois": [
+    {
+      "localX": 11,
+      "localY": 4,
+      "localZ": -19,
+      "tags": [
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Counter",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 4,
+      "interactionTargetLocalZ": -18
+    }
+  ],
+  "managementBlockLocalPos": [
+    14,
+    5,
+    -25
+  ],
+  "adventurerSpawnLocals": [
+    [
+      11,
+      5,
+      -15
+    ],
+    [
+      8,
+      5,
+      -15
+    ],
+    [
+      10,
+      5,
+      -18
+    ],
+    [
+      18,
+      5,
+      -23
+    ],
+    [
+      21,
+      5,
+      -18
+    ],
+    [
+      24,
+      5,
+      -17
+    ],
+    [
+      19,
+      5,
+      -20
+    ],
+    [
+      19,
+      4,
+      -16
+    ]
+  ],
+  "adventurerSpawnYaws": [
+    4.658151149749756,
+    4.61348819732666,
+    0.1503230184316635,
+    3.1910359859466553,
+    4.504054069519043,
+    1.7549172639846802,
+    0.18423643708229065,
+    6.269322872161865
+  ],
+  "countsAsConstructionId": "plot_guild_hall",
+  "tags": [
+    "work",
+    "guild",
+    "cozy"
+  ],
+  "plotTokenLockedByDefault": true
+}

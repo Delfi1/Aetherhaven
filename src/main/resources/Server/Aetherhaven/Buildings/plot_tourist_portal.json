@@ -1,0 +1,25 @@
+{
+  "id": "plot_tourist_portal",
+  "displayName": "Tourist portal",
+  "description": "A magical platform that brings visitors to town each morning.",
+  "prefabPath": "plot_tourist_portal.prefab.json",
+  "selfBuildGameDays": 1,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Tourist_Portal",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 2,
+  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "treasuryGoldCoinCost": 30,
+  "materials": [
+    { "resourceTypeId": "Rock", "count": 50 }
+  ],
+  "tags": [
+    "civic",
+    "tourist"
+  ]
+}

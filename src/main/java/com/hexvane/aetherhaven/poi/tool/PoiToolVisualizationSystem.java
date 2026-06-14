@@ -4,6 +4,9 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.poi.PoiEntry;
+import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
+import com.hexvane.aetherhaven.poi.marker.PoiMarkerDataComponent;
+import com.hexvane.aetherhaven.poi.marker.PoiMarkerEntity;
 import com.hexvane.aetherhaven.poi.PoiPrefabCoords;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -46,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -71,6 +75,8 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
      * normal entity (otherwise the nameplate never syncs). Same asset as the marker, scaled near-zero so it is not visible.
      */
     private static final float NAMEPLATE_ANCHOR_MODEL_SCALE = 0.001f;
+    private static final ConcurrentHashMap<UUID, Integer> LAST_HUD_MODE = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, Boolean> LAST_HOLDING_POI_TOOL = new ConcurrentHashMap<>();
 
     @Nonnull
     private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
@@ -108,24 +114,40 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         }
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr == null || !pr.hasPermission(AetherhavenConstants.PERMISSION_POI_TOOL)) {
+            removeHudIfPresent(player, pr);
             clearLabelsIfPresent(world, store, commandBuffer, playerRef);
             return;
         }
         ItemStack hand = InventoryComponent.getItemInHand(commandBuffer, playerRef);
         boolean holding = PoiToolInteractions.isPoiToolItem(hand);
-        if (!holding) {
+        boolean customPageOpen = player.getPageManager().getCustomPage() != null;
+        boolean poiHudApplicable = holding && !customPageOpen;
+        if (!poiHudApplicable) {
+            removeHudIfPresent(player, pr);
             clearLabelsIfPresent(world, store, commandBuffer, playerRef);
             return;
         }
 
-        PoiToolPlayerComponent state = store.getComponent(playerRef, PoiToolPlayerComponent.getComponentType());
-        if (state == null) {
-            commandBuffer.addComponent(playerRef, PoiToolPlayerComponent.getComponentType(), new PoiToolPlayerComponent());
-            state = commandBuffer.getComponent(playerRef, PoiToolPlayerComponent.getComponentType());
-        }
+        PoiToolInteractions.ensureState(playerRef, commandBuffer);
+        PoiToolPlayerComponent state = commandBuffer.getComponent(playerRef, PoiToolPlayerComponent.getComponentType());
         if (state == null) {
             return;
         }
+        UUID playerUuid = pr.getUuid();
+        int modeOrdinal = state.getMode().ordinal();
+        Integer prevMode = LAST_HUD_MODE.get(playerUuid);
+        boolean modeChanged = prevMode == null || prevMode != modeOrdinal;
+        if (modeChanged) {
+            LAST_HUD_MODE.put(playerUuid, modeOrdinal);
+            PoiToolHudSupport.obtainPoiToolHud(player, pr).refresh(state);
+        } else if (!PoiToolHudSupport.isPoiToolHudActive(player)) {
+            PoiToolHudSupport.obtainPoiToolHud(player, pr).refresh(state);
+        }
+
+        Boolean wasHolding = LAST_HOLDING_POI_TOOL.get(playerUuid);
+        boolean holdingChanged = wasHolding == null || wasHolding != holding;
+        LAST_HOLDING_POI_TOOL.put(playerUuid, holding);
+
         long tick = world.getTick();
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         TransformComponent t = store.getComponent(playerRef, TransformComponent.getComponentType());
@@ -134,22 +156,88 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         }
         Vector3d ppos = t.getPosition();
         List<PoiEntry> nearby = new ArrayList<>();
-        for (PoiEntry e : reg.allEntries()) {
-            double dx = (e.getX() + 0.5) - ppos.x();
-            double dy = (e.getY() + 0.5) - ppos.y();
-            double dz = (e.getZ() + 0.5) - ppos.z();
-            if (dx * dx + dy * dy + dz * dz <= VIZ_RANGE_SQ) {
-                nearby.add(e);
+        if (PoiToolMarkerVisibility.showsRegistryAndPrefabPoiLabels(state.getMode())) {
+            for (PoiEntry e : reg.allEntries()) {
+                double dx = (e.getX() + 0.5) - ppos.x();
+                double dy = (e.getY() + 0.5) - ppos.y();
+                double dz = (e.getZ() + 0.5) - ppos.z();
+                if (dx * dx + dy * dy + dz * dz <= VIZ_RANGE_SQ) {
+                    nearby.add(e);
+                }
             }
         }
 
-        if (tick % LABEL_REFRESH_TICKS == 0) {
+        if (modeChanged || holdingChanged || tick % LABEL_REFRESH_TICKS == 0) {
             UUIDComponent ownerComp = store.getComponent(playerRef, UUIDComponent.getComponentType());
             if (ownerComp != null) {
-                UUID playerUuid = ownerComp.getUuid();
                 List<PoiEntry> nearbyCopy = new ArrayList<>(nearby);
-                world.execute(() -> refreshLabelsDeferred(world, playerUuid, nearbyCopy));
+                PoiToolMode modeCopy = state.getMode();
+                Vector3d pposCopy = new Vector3d(ppos);
+                world.execute(() -> refreshVisualizationDeferred(world, ownerComp.getUuid(), nearbyCopy, modeCopy, pposCopy));
             }
+        }
+    }
+
+    /** Schedules an immediate overlay refresh after mode cycle (tick may miss the change via {@link #noteHudMode}). */
+    public static void scheduleRefreshForPlayer(@Nonnull World world, @Nonnull UUID playerUuid, @Nonnull AetherhavenPlugin plugin) {
+        world.execute(() -> refreshForPlayerNow(world, playerUuid, plugin));
+    }
+
+    private static void refreshForPlayerNow(
+        @Nonnull World world,
+        @Nonnull UUID playerUuid,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        Ref<EntityStore> playerRef = world.getEntityRef(playerUuid);
+        if (playerRef == null || !playerRef.isValid()) {
+            return;
+        }
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        Player player = store.getComponent(playerRef, Player.getComponentType());
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (player == null || pr == null || !pr.hasPermission(AetherhavenConstants.PERMISSION_POI_TOOL)) {
+            return;
+        }
+        ItemStack hand = InventoryComponent.getItemInHand(store, playerRef);
+        if (!PoiToolInteractions.isPoiToolItem(hand) || player.getPageManager().getCustomPage() != null) {
+            return;
+        }
+        PoiToolPlayerComponent state = store.getComponent(playerRef, PoiToolPlayerComponent.getComponentType());
+        TransformComponent tc = store.getComponent(playerRef, TransformComponent.getComponentType());
+        if (state == null || tc == null) {
+            return;
+        }
+        Vector3d ppos = tc.getPosition();
+        List<PoiEntry> nearby = new ArrayList<>();
+        if (PoiToolMarkerVisibility.showsRegistryAndPrefabPoiLabels(state.getMode())) {
+            PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+            for (PoiEntry e : reg.allEntries()) {
+                double dx = (e.getX() + 0.5) - ppos.x();
+                double dy = (e.getY() + 0.5) - ppos.y();
+                double dz = (e.getZ() + 0.5) - ppos.z();
+                if (dx * dx + dy * dy + dz * dz <= VIZ_RANGE_SQ) {
+                    nearby.add(e);
+                }
+            }
+        }
+        new PoiToolVisualizationSystem(plugin).refreshVisualizationDeferred(world, playerUuid, nearby, state.getMode(), ppos);
+    }
+
+    static void noteHudMode(@Nonnull UUID playerUuid, @Nonnull PoiToolMode mode) {
+        LAST_HUD_MODE.put(playerUuid, mode.ordinal());
+    }
+
+    private static void removeHudIfPresent(@Nullable Player player, @Nullable PlayerRef pr) {
+        if (pr != null) {
+            UUID uuid = pr.getUuid();
+            LAST_HUD_MODE.remove(uuid);
+            LAST_HOLDING_POI_TOOL.remove(uuid);
+        }
+        if (player == null || pr == null) {
+            return;
+        }
+        if (PoiToolHudSupport.isPoiToolHudActive(player)) {
+            PoiToolHudSupport.removePoiToolHud(player, pr);
         }
     }
 
@@ -233,7 +321,13 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
      * Must not run inside an ECS system tick: schedules via {@link World#execute(Runnable)} so entity add/remove runs
      * when the store is not in {@code assertWriteProcessing}.
      */
-    private void refreshLabelsDeferred(@Nonnull World world, @Nonnull UUID playerUuid, @Nonnull List<PoiEntry> nearby) {
+    private void refreshVisualizationDeferred(
+        @Nonnull World world,
+        @Nonnull UUID playerUuid,
+        @Nonnull List<PoiEntry> nearbyRegistry,
+        @Nonnull PoiToolMode mode,
+        @Nonnull Vector3d playerPos
+    ) {
         Ref<EntityStore> playerRef = world.getEntityRef(playerUuid);
         if (playerRef == null || !playerRef.isValid()) {
             return;
@@ -244,59 +338,70 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
             return;
         }
         removeLabelEntities(world, state);
-        UUID ownerUuid = playerUuid;
         ModelAsset markerAsset = resolveMarkerModelAsset();
         if (markerAsset == null) {
             return;
         }
         Model markerModel = Model.createUnitScaleModel(markerAsset);
         Model anchorModel = Model.createScaledModel(markerAsset, NAMEPLATE_ANCHOR_MODEL_SCALE);
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        Rotation3f rot = new Rotation3f(0.0F, 0.0F, 0.0F);
-        for (PoiEntry poi : nearby) {
-            Vector3d markerPos = new Vector3d(
-                poi.getX() + POI_BLOCK_CENTER,
-                poi.getY() + POI_BLOCK_CENTER + MARKER_MODEL_Y_OFFSET,
-                poi.getZ() + POI_BLOCK_CENTER
-            );
-            spawnDebugMarkerPair(
-                world,
-                ownerUuid,
-                store,
-                state,
-                markerPos,
-                rot,
-                buildLabelText(poi, tm),
-                markerModel,
-                anchorModel
-            );
-            if (poi.hasInteractionTarget()) {
-                Double tx = poi.getInteractionTargetX();
-                Double ty = poi.getInteractionTargetY();
-                Double tz = poi.getInteractionTargetZ();
-                if (tx != null && ty != null && tz != null) {
-                    Vector3d targetMarkerPos = new Vector3d(
-                        tx,
-                        ty + POI_BLOCK_CENTER + MARKER_MODEL_Y_OFFSET,
-                        tz
-                    );
-                    spawnDebugMarkerPair(
-                        world,
-                        ownerUuid,
-                        store,
-                        state,
-                        targetMarkerPos,
-                        rot,
-                        buildInteractionTargetLabelText(poi, tm, tx, ty, tz),
-                        markerModel,
-                        anchorModel
-                    );
+        UUID ownerUuid = playerUuid;
+        Rotation3f defaultRot = new Rotation3f(0.0F, 0.0F, 0.0F);
+
+        if (PoiToolMarkerVisibility.showsRegistryAndPrefabPoiLabels(mode)) {
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            for (PoiEntry poi : nearbyRegistry) {
+                Vector3d markerPos = new Vector3d(
+                    poi.getX() + POI_BLOCK_CENTER,
+                    poi.getY() + POI_BLOCK_CENTER + MARKER_MODEL_Y_OFFSET,
+                    poi.getZ() + POI_BLOCK_CENTER
+                );
+                spawnDebugMarkerPair(
+                    world,
+                    ownerUuid,
+                    store,
+                    state,
+                    markerPos,
+                    defaultRot,
+                    buildLabelText(poi, tm),
+                    markerModel,
+                    anchorModel
+                );
+                if (poi.hasInteractionTarget()) {
+                    Double tx = poi.getInteractionTargetX();
+                    Double ty = poi.getInteractionTargetY();
+                    Double tz = poi.getInteractionTargetZ();
+                    if (tx != null && ty != null && tz != null) {
+                        Vector3d targetMarkerPos = new Vector3d(
+                            tx,
+                            ty + POI_BLOCK_CENTER + MARKER_MODEL_Y_OFFSET,
+                            tz
+                        );
+                        float targetYaw = poi.getInteractionTargetYawRadians() != null ? poi.getInteractionTargetYawRadians() : 0f;
+                        Rotation3f targetRot = new Rotation3f(0.0F, targetYaw, 0.0F);
+                        spawnDebugMarkerPair(
+                            world,
+                            ownerUuid,
+                            store,
+                            state,
+                            targetMarkerPos,
+                            targetRot,
+                            buildInteractionTargetLabelText(poi, tm, tx, ty, tz),
+                            markerModel,
+                            anchorModel
+                        );
+                    }
                 }
             }
+            spawnPrefabPoiMarkerOverlays(world, store, state, ownerUuid, playerPos, markerModel, anchorModel);
         }
+
+        if (PoiToolMarkerVisibility.showsAdventurerSpawnLabels(mode)) {
+            spawnAdventurerMarkerOverlays(world, store, state, ownerUuid, playerPos, markerModel, anchorModel);
+        }
+
         PlayerRef playerRefComp = store.getComponent(playerRef, PlayerRef.getComponentType());
-        if (playerRefComp != null) {
-            for (PoiEntry poi : nearby) {
+        if (playerRefComp != null && PoiToolMarkerVisibility.showsRegistryAndPrefabPoiLabels(mode)) {
+            for (PoiEntry poi : nearbyRegistry) {
                 if (!poi.hasInteractionTarget()) {
                     continue;
                 }
@@ -328,6 +433,124 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
             }
         }
     }
+
+    private void spawnPrefabPoiMarkerOverlays(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PoiToolPlayerComponent state,
+        @Nonnull UUID ownerUuid,
+        @Nonnull Vector3d playerPos,
+        @Nonnull Model markerModel,
+        @Nonnull Model anchorModel
+    ) {
+        List<PrefabMarkerOverlay> overlays = new ArrayList<>();
+        store.forEachChunk(
+            Query.and(PoiMarkerEntity.getComponentType(), PoiMarkerDataComponent.getComponentType(), TransformComponent.getComponentType()),
+            (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    TransformComponent tc = chunk.getComponent(i, TransformComponent.getComponentType());
+                    PoiMarkerDataComponent data = chunk.getComponent(i, PoiMarkerDataComponent.getComponentType());
+                    if (tc == null || data == null) {
+                        continue;
+                    }
+                    Vector3d p = tc.getPosition();
+                    if (distanceSq(playerPos, p) > VIZ_RANGE_SQ) {
+                        continue;
+                    }
+                    overlays.add(new PrefabMarkerOverlay(new Vector3d(p), tc.getRotation(), buildPrefabPoiLabel(data)));
+                }
+            }
+        );
+        for (PrefabMarkerOverlay overlay : overlays) {
+            Vector3d markerPos = new Vector3d(
+                overlay.position().x,
+                overlay.position().y + MARKER_MODEL_Y_OFFSET,
+                overlay.position().z
+            );
+            spawnDebugMarkerPair(
+                world,
+                ownerUuid,
+                store,
+                state,
+                markerPos,
+                overlay.rotation(),
+                overlay.label(),
+                markerModel,
+                anchorModel
+            );
+        }
+    }
+
+    private void spawnAdventurerMarkerOverlays(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PoiToolPlayerComponent state,
+        @Nonnull UUID ownerUuid,
+        @Nonnull Vector3d playerPos,
+        @Nonnull Model markerModel,
+        @Nonnull Model anchorModel
+    ) {
+        List<PrefabMarkerOverlay> overlays = new ArrayList<>();
+        store.forEachChunk(
+            Query.and(AdventurerSpawnMarkerEntity.getComponentType(), TransformComponent.getComponentType()),
+            (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    TransformComponent tc = chunk.getComponent(i, TransformComponent.getComponentType());
+                    if (tc == null) {
+                        continue;
+                    }
+                    Vector3d p = tc.getPosition();
+                    if (distanceSq(playerPos, p) > VIZ_RANGE_SQ) {
+                        continue;
+                    }
+                    overlays.add(
+                        new PrefabMarkerOverlay(
+                            new Vector3d(p),
+                            tc.getRotation(),
+                            "Adventurer spot"
+                        )
+                    );
+                }
+            }
+        );
+        for (PrefabMarkerOverlay overlay : overlays) {
+            Vector3d markerPos = new Vector3d(
+                overlay.position().x,
+                overlay.position().y + MARKER_MODEL_Y_OFFSET,
+                overlay.position().z
+            );
+            spawnDebugMarkerPair(
+                world,
+                ownerUuid,
+                store,
+                state,
+                markerPos,
+                overlay.rotation(),
+                overlay.label(),
+                markerModel,
+                anchorModel
+            );
+        }
+    }
+
+    @Nonnull
+    private static String buildPrefabPoiLabel(@Nonnull PoiMarkerDataComponent data) {
+        StringBuilder sb = new StringBuilder("POI spot");
+        if (!data.getTags().isEmpty()) {
+            sb.append(" | ").append(String.join(", ", data.getTags()));
+        }
+        sb.append(" | ").append(data.getInteractionKind().name());
+        return sb.toString();
+    }
+
+    private static double distanceSq(@Nonnull Vector3d from, @Nonnull Vector3d to) {
+        double dx = to.x - from.x;
+        double dy = to.y - from.y;
+        double dz = to.z - from.z;
+        return dx * dx + dy * dy + dz * dz;
+    }
+
+    private record PrefabMarkerOverlay(@Nonnull Vector3d position, @Nonnull Rotation3f rotation, @Nonnull String label) {}
 
     private void spawnDebugMarkerPair(
         @Nonnull World world,

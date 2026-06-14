@@ -1,0 +1,73 @@
+{
+  "npcRoleId": "Aetherhaven_Florist",
+  "dialogueVillagerKind": "florist",
+  "residentTreeId": "aetherhaven_florist",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_flower_shop",
+  "displayName": "Ivy Bloomwell",
+  "portraitIcon": "Aetherhaven_Florist.png",
+  "uiSortOrder": 15,
+  "innPoolEligible": true,
+  "innPoolOrder": 10,
+  "visitorBindingKind": "visitor_florist",
+  "innPoolRequires": {
+    "completedQuestIds": ["q_merchant_stall"]
+  },
+  "reputationMilestones": [],
+  "giftLoves": [
+    "Plant_Flower_Orchid_Purple",
+    "Plant_Flower_Orchid_Red",
+    "Plant_Flower_Orchid_White",
+    "Plant_Flower_Orchid_Yellow",
+    "Plant_Flower_Orchid_Pink",
+    "Plant_Flower_Orchid_Orange",
+    "Plant_Flower_Common_Yellow",
+    "Plant_Flower_Common_Purple",
+    "Plant_Flower_Common_Pink",
+    "Plant_Flower_Common_Red",
+    "Plant_Flower_Common_Blue",
+    "Plant_Flower_Common_White",
+    "Plant_Flower_Water_Green",
+    "Plant_Flower_Water_Red",
+    "Plant_Flower_Water_Blue",
+    "Plant_Flower_Water_White",
+    "Plant_Flower_Water_Purple"
+  ],
+  "giftLikes": [
+    "Plant_Bush",
+    "Plant_Bush_Green",
+    "Plant_Bush_Lush",
+    "Plant_Bush_Jungle",
+    "Wood_Oak_Trunk",
+    "Wood_Oak_Branch",
+    "Soil_Grass",
+    "Soil_Dirt",
+    "Deco_Starfish",
+    "Food_Salad_Berry"
+  ],
+  "giftDislikes": [
+    "Deco_Bone_Pile",
+    "Deco_Bone_Skulls",
+    "Deco_Trash",
+    "Deco_Trash_Pile_Large",
+    "Deco_Trash_Pile_Small",
+    "Ingredient_Poop",
+    "Ingredient_Void_Essence",
+    "Ingredient_Voidheart",
+    "Plant_Bush_Dead",
+    "Plant_Bush_Dead_Twisted",
+    "Plant_Bush_Dead_Tall"
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.0",
+    "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.1",
+    "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.2",
+    "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.3"
+  ],
+  "dialogueGiftHintLangKeys": [
+    "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.0",
+    "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.1",
+    "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.0",
+    "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.1"
+  ]
+}

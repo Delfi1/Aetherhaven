@@ -3,6 +3,9 @@ package com.hexvane.aetherhaven.dialogue;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.guild.GuardHireService;
+import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
+import com.hexvane.aetherhaven.ui.GuardRoleLabels;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.gaiadraught.PlayerHealUtil;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
@@ -10,6 +13,7 @@ import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestObjective;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.gift.VillagerGiftService;
 import com.hypixel.hytale.component.ComponentType;
@@ -500,5 +504,156 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
             return false;
         }
         return GoldCoinPayment.canAfford(town, inv, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
+    }
+
+    @Override
+    public boolean npcIsGuildHallAdventurer(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        TownRecord town = townFor(playerRef, store);
+        return nu != null && town != null && GuildHallAdventurerPoolService.isGuildHallAdventurer(town, nu.getUuid());
+    }
+
+    @Override
+    public boolean guardHireAffordable(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null || npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        String profileId = GuardHireService.equipmentProfileForNpc(plugin, npcRef, store);
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        return profileId != null
+            && inv != null
+            && GuardHireService.canAfford(plugin, town, inv, pu.getUuid(), profileId);
+    }
+
+    @Override
+    public long guardHireGoldCost(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return 0L;
+        }
+        String profileId = GuardHireService.equipmentProfileForNpc(plugin, npcRef, store);
+        return profileId != null ? GuardHireService.hireCost(plugin, profileId) : 0L;
+    }
+
+    @Override
+    @Nonnull
+    public String guardHireGuardTypeLangKey(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return GuardRoleLabels.guardTypeLangKey(AetherhavenConstants.NPC_GUARD_KNIGHT);
+        }
+        return GuardHireService.guardTypeLangKeyForNpc(plugin, npcRef, store);
+    }
+
+    @Override
+    public boolean playerHasUnhousedHiredGuard(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        TownRecord town = townFor(playerRef, store);
+        return town != null && GuardHireService.hasUnhousedHiredGuard(town, plugin);
+    }
+
+    @Override
+    public boolean guardHouseQuestTargetHoused(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        return questTargetEntityHoused(playerRef, store, AetherhavenConstants.QUEST_HOUSE_GUARD);
+    }
+
+    @Override
+    public boolean npcIsUnhousedHiredGuard(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        TownRecord town = townFor(playerRef, store);
+        return nu != null && town != null && GuardHireService.isUnhousedHiredGuard(town, nu.getUuid());
+    }
+
+    @Override
+    public boolean npcIsActiveTourist(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        TownRecord town = townFor(playerRef, store);
+        return nu != null && town != null && TouristPortalTickService.isActivePortalTourist(town, nu.getUuid());
+    }
+
+    @Override
+    public boolean npcIsInvitedUnhousedTownsfolk(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        TownRecord town = townFor(playerRef, store);
+        return nu != null
+            && town != null
+            && TouristPortalTickService.isInvitedUnhousedTourist(town, nu.getUuid(), plugin);
+    }
+
+    @Override
+    public boolean npcIsQuestTarget(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        @Nonnull String questId
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        TownRecord town = townFor(playerRef, store);
+        if (nu == null || town == null) {
+            return false;
+        }
+        UUID target = town.getQuestTargetEntityUuid(questId);
+        return target != null && target.equals(nu.getUuid());
+    }
+
+    @Override
+    public boolean questTargetEntityHoused(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String questId
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        if (town == null) {
+            return false;
+        }
+        UUID target = town.getQuestTargetEntityUuid(questId);
+        return target != null && town.isNpcHomeResidentOnHousePlot(target, plugin.getConstructionCatalog());
+    }
+
+    @Override
+    public boolean questCompletedForNpc(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        @Nonnull String questId
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        TownRecord town = townFor(playerRef, store);
+        return nu != null && town != null && town.hasQuestCompletedForEntity(questId, nu.getUuid());
     }
 }

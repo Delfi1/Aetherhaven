@@ -12,6 +12,32 @@ aetherhaven.poi.clearedInteractionTarget=Cleared interaction target; NPCs use th
 aetherhaven.poi.setInteractionTarget=Set interaction target to {x}, {y}, {z}.
 aetherhaven.poi.selected=Selected POI {id} at {x}, {y}, {z}
 aetherhaven.poi.targetBlockMismatch=Target block must match expected type {type} for this POI.
+aetherhaven.poi.removed=POI removed.
+aetherhaven.poi.noTownPlot=No completed town plot at that block.
+
+aetherhaven.adventurerSpawnMarker.label=Adventurer spot
+aetherhaven.adventurerSpawnMarker.placed=Adventurer spot placed.
+aetherhaven.adventurerSpawnMarker.removed=Adventurer spot removed.
+aetherhaven.adventurerSpawnMarker.alreadyHere=An adventurer spot is already here.
+
+aetherhaven.poiMarker.label=POI spot
+
+aetherhaven.poiMarkerConfig.title=Configure POI
+aetherhaven.poiMarkerConfig.needHeader=Need fulfilled
+aetherhaven.poiMarkerConfig.presetSleep=Sleep
+aetherhaven.poiMarkerConfig.presetEat=Eat
+aetherhaven.poiMarkerConfig.presetSit=Sit / fun
+aetherhaven.poiMarkerConfig.presetWork=Work
+aetherhaven.poiMarkerConfig.summary={preset} ({kind})
+aetherhaven.poiMarkerConfig.capacity=NPC slots (1–4)
+aetherhaven.poiMarkerConfig.mountToggle=Mount on furniture (beds, chairs)
+aetherhaven.poiMarkerConfig.workAction=Work action
+aetherhaven.poiMarkerConfig.workNone=None
+aetherhaven.poiMarkerConfig.workMine=Mine
+aetherhaven.poiMarkerConfig.workChop=Chop
+aetherhaven.poiMarkerConfig.confirm=Place POI
+aetherhaven.poiMarkerConfig.cancel=Cancel
+aetherhaven.poiMarkerConfig.placed=POI placed.
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
@@ -84,6 +110,12 @@ aetherhaven.debug.poi.listEmpty=None registered for this town (complete a buildi
 aetherhaven.debug.poi.listLine=  {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
 aetherhaven.debug.poi.dumpHeader=All POIs in world registry ({count}):
 aetherhaven.debug.poi.dumpLine=  town={town} {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} plot={plot}
+
+aetherhaven.debug.tourist.noTown=You have no town in this world.
+aetherhaven.debug.tourist.targetsHeader=Tourist visit targets for {town} ({count} plots):
+aetherhaven.debug.tourist.targetsEmpty=No completed plots with touristDestination enabled (check plot creator or building JSON).
+aetherhaven.debug.tourist.plotLine=  {building} plot={plot} entry=({entryX},{entryY},{entryZ}) preferred={preferred} visitPois={poiCount}
+aetherhaven.debug.tourist.poiLine=    poi {x},{y},{z} kind={kind} tags={tags}
 
 # Wall wand placement debug (/ah walldebug)
 aetherhaven.debug.wall.on=Wall wand debug ON (chat + server log).

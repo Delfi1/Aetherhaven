@@ -48,11 +48,14 @@ import javax.annotation.Nullable;
  */
 public final class ConstructionPasteOps {
     /**
-     * Forced block placement: bit 2 only. {@link com.hypixel.hytale.server.core.util.FillerBlockUtil#setFillerBlocksAt}
-     * runs when {@code (settings & 8) == 0} (see {@link WorldChunk#setBlock}); bit 8 suppresses that and breaks
-     * multi-block furniture (beds): sibling cells keep old terrain and overlap the model.
+     * {@link com.hypixel.hytale.server.core.universe.world.accessor.BlockAccessor#placeBlock} settings for prefab
+     * construction ({@link com.hypixel.hytale.server.core.util.PrefabUtil} uses {@code 0} for force paste).
+     * Must stay {@code 0}: {@code placeBlock} maps bit 2 to {@code setBlock} flag 256 ({@code updateBlockArea}), which
+     * marks blocks ticking during incremental assembly and breaks furniture that needs support below. Use
+     * {@code placeBlock} (not raw {@code setBlock} with bit 2 set) so benches, chests, and other
+     * {@link BlockType#getBlockEntity()} blocks still get working components/interactions.
      */
-    public static final int SET_BLOCK_SETTINGS_PLACE = 2;
+    public static final int SET_BLOCK_SETTINGS_PLACE = 0;
     /** Air clears / {@link WorldChunk#breakBlock}: keep {@code 8|2} tuning from earlier construction fixes. */
     public static final int SET_BLOCK_SETTINGS_CLEAR = 10;
 
@@ -202,6 +205,27 @@ public final class ConstructionPasteOps {
      * Does not place final prefab solids, fluids, or entities — prefab fluids are written when each cell is built
      * ({@link #placeOne}) or at completion ({@link #finishFluidsAndEntities}).
      */
+    /**
+     * Clears world fluids in footprint cells whose prefab has no fluid, so interiors are not left flooded after the
+     * manual clearing phase.
+     */
+    public static void clearNonPrefabFluidsInFootprint(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull List<PendingBlock> footprint,
+        @Nonnull LocalCachedChunkAccessor chunkAccessor
+    ) {
+        for (PendingBlock pb : footprint) {
+            if (pb.fluidId() != 0) {
+                continue;
+            }
+            int bx = origin.x + pb.x();
+            int by = origin.y + pb.y();
+            int bz = origin.z + pb.z();
+            applyPrefabFluidForCell(world, bx, by, bz, 0, 0, chunkAccessor);
+        }
+    }
+
     public static void prepAssemblySite(
         @Nonnull World world,
         @Nonnull Vector3i origin,
@@ -273,14 +297,8 @@ public final class ConstructionPasteOps {
             }
             return true;
         }
-        if (!force) {
-            RotationTuple rot = RotationTuple.get(pb.blockRotation);
-            chunk.placeBlock(bx, by, bz, blockKey, rot.yaw(), rot.pitch(), rot.roll(), SET_BLOCK_SETTINGS_PLACE);
-        } else {
-            int indexKey = blockTypeMap.getIndex(blockKey);
-            BlockType type = blockTypeMap.getAsset(indexKey);
-            chunk.setBlock(bx, by, bz, indexKey, type, pb.blockRotation, pb.filler, SET_BLOCK_SETTINGS_PLACE);
-        }
+        RotationTuple rot = RotationTuple.get(pb.blockRotation);
+        chunk.placeBlock(bx, by, bz, blockKey, rot, SET_BLOCK_SETTINGS_PLACE, !force);
         if (pb.supportValue != 0) {
             Ref<ChunkStore> ref = chunk.getReference();
             if (!ref.isValid()) {

@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ResourceType;
 import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
@@ -21,6 +22,16 @@ public final class UiMaterialLabels {
         String lang = language != null ? language : "en-US";
         String resolved = I18nModule.get().getMessage(lang, trKey);
         return resolved != null ? resolved : itemId;
+    }
+
+    /** Resolved item name for Custom UI / HUD {@link Message} params (mod and vanilla items). */
+    @Nonnull
+    public static Message itemNameMessage(@Nonnull String itemId) {
+        Item item = Item.getAssetMap().getAsset(itemId);
+        if (item != null && item.getTranslationKey() != null && !item.getTranslationKey().isBlank()) {
+            return Message.translation(item.getTranslationKey());
+        }
+        return Message.translation("server.items." + itemId + ".name");
     }
 
     @Nonnull

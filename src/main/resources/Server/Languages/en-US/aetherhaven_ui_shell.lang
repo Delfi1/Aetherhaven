@@ -27,6 +27,8 @@ aetherhaven.ui.questJournal.needTown=You need a town in this world to use this t
 aetherhaven.ui.questJournal.noPermission=You cannot manage town quests.
 aetherhaven.ui.questJournal.noActive=No active quests right now.
 aetherhaven.ui.questJournal.hint=Pick a quest on the left to read it here.
+aetherhaven.ui.questJournal.questForName={title} for {name}
+aetherhaven.ui.questJournal.questDescriptionForName={body} Assign {name} on the house sign when it is ready.
 
 # === UI: NPC dialogue page (shell / errors) ===
 # UI — dialogue
@@ -39,7 +41,7 @@ aetherhaven.ui.dialogue.missingNode=Missing node: {id}
 aetherhaven.ui.plotConstruction.buildingTitle=Building
 aetherhaven.ui.plotConstruction.plotSignTitle=Plot sign
 aetherhaven.ui.plotConstruction.noConstruction=No construction is configured for this plot.
-aetherhaven.ui.plotConstruction.assignResidentHint=Assign a villager who lives here (completes their house quest when it matches).
+aetherhaven.ui.plotConstruction.assignResidentHint=Choose who lives in this home.
 aetherhaven.ui.plotConstruction.houseResidentUnassigned=Unassigned
 aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=Could not load player data.
 aetherhaven.ui.plotConstruction.townDataMissing=Town data not found for this block.

@@ -33,6 +33,8 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.util.TargetUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import java.util.ArrayList;
@@ -57,13 +59,16 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
     /** Short creative brush ticks while charging (non-looping — stops when RMB releases). */
     private static final ConcurrentHashMap<UUID, Long> LAST_BRUSH_AMBIENT_NS = new ConcurrentHashMap<>();
     private static final long BRUSH_AMBIENT_INTERVAL_NS = 200_000_000L;
+    private static final ConcurrentHashMap<UUID, Long> LAST_NO_MANA_HINT_NS = new ConcurrentHashMap<>();
+    private static final long NO_MANA_HINT_INTERVAL_NS = 2_000_000_000L;
 
     @Nonnull
     public static final BuilderCodec<BuildingStaffSecondaryInteraction> CODEC =
         BuilderCodec
             .builder(BuildingStaffSecondaryInteraction.class, BuildingStaffSecondaryInteraction::new, ChargingInteraction.CODEC)
             .documentation(
-                "Hold secondary for half a second; aim locks until you release or the target becomes invalid. Preview cubes grow, then frontier blocks in that area are placed."
+                "Hold secondary for half a second; aim locks until you release or the target becomes invalid. "
+                    + "Red markers: break obstructing blocks; green markers: place frontier blocks."
             )
             .build();
 
@@ -124,29 +129,9 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         int brushRadiusBlocks = BuildingStaffTiers.assemblyBrushChebyshevRadius(hand.getItemId());
         channel.setBrushChebyshevRadius(brushRadiusBlocks);
         if (!channel.hasBrushLock()) {
-            Vector3i rayHit = AssemblyPreviewRay.findPenetratingPreviewCellHit(playerRef, world, plugin, RAY_MAX, store);
-            if (rayHit == null) {
+            if (!tryAcquireBrushLock(playerRef, world, plugin, store, uuid, channel)) {
                 return;
             }
-            PlotAssemblyJob jPick = PlotAssemblyService.findJobContainingPreview(world, plugin, rayHit);
-            if (jPick == null) {
-                return;
-            }
-            TownRecord tPick = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(jPick.plotId());
-            if (tPick == null) {
-                return;
-            }
-            PlotInstance pPick = tPick.findPlotById(jPick.plotId());
-            if (pPick == null || pPick.getState() != PlotInstanceState.ASSEMBLING) {
-                return;
-            }
-            if (!tPick.playerCanManageConstructions(uuid)) {
-                return;
-            }
-            if (PlotAssemblyService.resolveFrontierPlacementIndex(world, jPick, pPick, rayHit) < 0) {
-                return;
-            }
-            channel.setBrushLock(rayHit);
         }
         Vector3i activeCell = channel.getBrushLockWorld();
         PlotAssemblyJob job = PlotAssemblyService.findJobContainingPreview(world, plugin, activeCell);
@@ -168,7 +153,13 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
             channel.resetChargeSession();
             return;
         }
-        if (PlotAssemblyService.resolveFrontierPlacementIndex(world, job, plot, activeCell) < 0) {
+        PlotAssemblyPhase phase = AssemblyWorldRegistry.phase(world, job.plotId());
+        if (phase == PlotAssemblyPhase.PLACING) {
+            if (PlotAssemblyService.resolveFrontierPlacementIndex(world, job, plot, activeCell) < 0) {
+                channel.resetChargeSession();
+                return;
+            }
+        } else if (PlotAssemblyService.findClearingJobForObstructedCell(world, plugin, activeCell) == null) {
             channel.resetChargeSession();
             return;
         }
@@ -178,30 +169,148 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         if (elapsed < BuildingStaffAssemblyChannelComponent.CHANNEL_DURATION_NS) {
             return;
         }
-        IntArrayList batch =
-            PlotAssemblyService.frontierPlacementIndicesNearChebyshev(
-                world,
-                job,
-                plot,
-                activeCell,
-                brushRadiusBlocks
-            );
-        boolean anyPlaced = false;
-        for (int bi = 0; bi < batch.size(); bi++) {
-            int idx = batch.getInt(bi);
-            if (!PlotAssemblyService.advancePlacementAtIndex(world, plugin, store, town, plot, job, idx, true, uuid, true)) {
-                continue;
+        if (!BuildingStaffMana.canAffordBlock(playerRef, store)) {
+            maybeNotifyNoMana(playerRef, store, uuid, nowNs);
+            return;
+        }
+        boolean anyAction = false;
+        if (phase == PlotAssemblyPhase.CLEARING) {
+            ArrayList<Vector3i> batch =
+                PlotAssemblyService.obstructionCellsNearChebyshev(world, job, activeCell, brushRadiusBlocks);
+            for (int bi = 0; bi < batch.size(); bi++) {
+                if (!BuildingStaffMana.canAffordBlock(playerRef, store)) {
+                    maybeNotifyNoMana(playerRef, store, uuid, nowNs);
+                    break;
+                }
+                Vector3i cell = batch.get(bi);
+                if (!PlotAssemblyService.advanceClearingAtCell(
+                    world, plugin, commandBuffer, store, town, plot, job, cell, uuid
+                )) {
+                    continue;
+                }
+                if (!BuildingStaffMana.consumeForBlock(playerRef, commandBuffer)) {
+                    break;
+                }
+                anyAction = true;
+                if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+                    break;
+                }
+                if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.CLEARING) {
+                    break;
+                }
             }
-            anyPlaced = true;
-            if (plot.getState() != PlotInstanceState.ASSEMBLING) {
-                break;
+        } else {
+            IntArrayList batch =
+                PlotAssemblyService.frontierPlacementIndicesNearChebyshev(
+                    world,
+                    job,
+                    plot,
+                    activeCell,
+                    brushRadiusBlocks
+                );
+            for (int bi = 0; bi < batch.size(); bi++) {
+                if (!BuildingStaffMana.canAffordBlock(playerRef, store)) {
+                    maybeNotifyNoMana(playerRef, store, uuid, nowNs);
+                    break;
+                }
+                int idx = batch.getInt(bi);
+                if (!PlotAssemblyService.advancePlacementAtIndex(world, plugin, store, town, plot, job, idx, true, uuid, true)) {
+                    continue;
+                }
+                if (!BuildingStaffMana.consumeForBlock(playerRef, commandBuffer)) {
+                    break;
+                }
+                anyAction = true;
+                if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+                    break;
+                }
             }
         }
         channel.releaseBrushLockAfterPlacement(nowNs);
-        if (anyPlaced) {
+        if (anyAction) {
             spawnTracerBeadsAlongBeam(playerRef, store, activeCell);
             Vector3d p = new Vector3d(activeCell.x + 0.5, activeCell.y + 0.5, activeCell.z + 0.5);
             ParticleUtil.spawnParticleEffect(AetherhavenConstants.BUILDING_STAFF_STEP_PARTICLE_SYSTEM_ID, p, store);
+        }
+    }
+
+    private static boolean tryAcquireBrushLock(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID uuid,
+        @Nonnull BuildingStaffAssemblyChannelComponent channel
+    ) {
+        Vector3i blockHit = TargetUtil.getTargetBlock(playerRef, RAY_MAX, store);
+        if (blockHit != null) {
+            PlotAssemblyJob clearingJob = PlotAssemblyService.findClearingJobForObstructedCell(world, plugin, blockHit);
+            if (clearingJob != null) {
+                TownRecord tPick =
+                    AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(clearingJob.plotId());
+                if (tPick != null && tPick.playerCanManageConstructions(uuid)) {
+                    channel.setBrushLock(blockHit);
+                    return true;
+                }
+            }
+        }
+        Vector3i obstructionRayHit =
+            AssemblyPreviewRay.findPenetratingObstructionCellHit(playerRef, world, plugin, RAY_MAX, store);
+        if (obstructionRayHit != null) {
+            PlotAssemblyJob clearingJob =
+                PlotAssemblyService.findClearingJobForObstructedCell(world, plugin, obstructionRayHit);
+            if (clearingJob != null) {
+                TownRecord tPick =
+                    AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(clearingJob.plotId());
+                if (tPick != null && tPick.playerCanManageConstructions(uuid)) {
+                    channel.setBrushLock(obstructionRayHit);
+                    return true;
+                }
+            }
+        }
+        Vector3i rayHit = AssemblyPreviewRay.findPenetratingPreviewCellHit(playerRef, world, plugin, RAY_MAX, store);
+        if (rayHit == null) {
+            return false;
+        }
+        PlotAssemblyJob jPick = PlotAssemblyService.findJobContainingPreview(world, plugin, rayHit);
+        if (jPick == null) {
+            return false;
+        }
+        if (AssemblyWorldRegistry.phase(world, jPick.plotId()) != PlotAssemblyPhase.PLACING) {
+            return false;
+        }
+        TownRecord tPick = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(jPick.plotId());
+        if (tPick == null) {
+            return false;
+        }
+        PlotInstance pPick = tPick.findPlotById(jPick.plotId());
+        if (pPick == null || pPick.getState() != PlotInstanceState.ASSEMBLING) {
+            return false;
+        }
+        if (!tPick.playerCanManageConstructions(uuid)) {
+            return false;
+        }
+        if (PlotAssemblyService.resolveFrontierPlacementIndex(world, jPick, pPick, rayHit) < 0) {
+            return false;
+        }
+        channel.setBrushLock(rayHit);
+        return true;
+    }
+
+    private static void maybeNotifyNoMana(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID playerUuid,
+        long nowNs
+    ) {
+        Long prev = LAST_NO_MANA_HINT_NS.get(playerUuid);
+        if (prev != null && nowNs - prev < NO_MANA_HINT_INTERVAL_NS) {
+            return;
+        }
+        LAST_NO_MANA_HINT_NS.put(playerUuid, nowNs);
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr != null) {
+            pr.sendMessage(Message.translation("aetherhaven_misc.aetherhaven.assembly.staff.no_mana"));
         }
     }
 

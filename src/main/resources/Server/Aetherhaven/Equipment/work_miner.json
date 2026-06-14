@@ -1,0 +1,8 @@
+{
+  "id": "work_miner",
+  "displayName": "Miner tools",
+  "hireGoldCost": 0,
+  "hotbar": [
+    { "slot": 0, "itemId": "Tool_Pickaxe_Iron" }
+  ]
+}

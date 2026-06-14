@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryMetadata;
+import com.hexvane.aetherhaven.jewelry.JewelryPieceKind;
+import com.hexvane.aetherhaven.jewelry.JewelrySlotRules;
 import com.hexvane.aetherhaven.jewelry.PlayerJewelryLoadout;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
@@ -62,13 +64,10 @@ public final class HandMirrorLoadoutActions {
         if (!JewelryItemIds.isJewelry(cur0.getItemId())) {
             return EquipFromInventoryResult.NOT_JEWELRY;
         }
-        if (target0To2 == 2 && !JewelryItemIds.isNecklace(cur0.getItemId())) {
+        if (!JewelrySlotRules.canAccept(target0To2, cur0.getItemId())) {
             return EquipFromInventoryResult.INVALID_FOR_SLOT;
         }
-        if (target0To2 != 2 && !JewelryItemIds.isRing(cur0.getItemId())) {
-            return EquipFromInventoryResult.INVALID_FOR_SLOT;
-        }
-        ItemStack rolled = JewelryMetadata.ensureRolled(cur0);
+        ItemStack rolled = JewelryPieceKind.isEnchanted(cur0.getItemId()) ? JewelryMetadata.ensureRolled(cur0) : cur0;
         if (rolled != cur0) {
             if (!inv.replaceItemStackInSlot(invSlot, cur0, rolled).succeeded()) {
                 return EquipFromInventoryResult.INVENTORY_UPDATE_FAILED;
@@ -87,7 +86,9 @@ public final class HandMirrorLoadoutActions {
 
         PlayerJewelryLoadout lw = loadoutOrCreate(ref, store);
         ItemStack previous = lw.getSlot(target0To2);
-        one = JewelryMetadata.ensureRolled(one);
+        if (JewelryPieceKind.isEnchanted(one.getItemId())) {
+            one = JewelryMetadata.ensureRolled(one);
+        }
         lw.setSlot(target0To2, one);
         store.putComponent(ref, PlayerJewelryLoadout.getComponentType(), lw);
 

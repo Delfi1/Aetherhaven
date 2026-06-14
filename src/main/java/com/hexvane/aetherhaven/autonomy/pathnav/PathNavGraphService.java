@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.autonomy.pathnav;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.pathtool.PathCommitRecord;
 import com.hexvane.aetherhaven.pathtool.PathNavPoint;
+import com.hexvane.aetherhaven.pathtool.PathNavPolylineUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hexvane.aetherhaven.pathtool.PathToolRegistry;
 import org.joml.Vector3d;
@@ -468,12 +469,16 @@ public final class PathNavGraphService {
             if (rec.navNodes == null || rec.navNodes.size() < 2) {
                 continue;
             }
-            int need = rec.navNodes.size();
+            List<PathNavPoint> resampled = PathNavPolylineUtil.resamplePolyline(rec.navNodes, cfg.getPathNavNodeSpacing());
+            if (resampled.size() < 2) {
+                continue;
+            }
+            int need = resampled.size();
             if (used + need > maxNodes) {
                 break;
             }
             List<Vector3d> nodes = new ArrayList<>(need);
-            for (PathNavPoint p : rec.navNodes) {
+            for (PathNavPoint p : resampled) {
                 nodes.add(new Vector3d(p.x, p.y, p.z));
             }
             net.segments.add(new PlacedSegment(nodes));

@@ -46,6 +46,7 @@ aetherhaven.ui.memberPermissions.acceptQuests=Accept / start town quests
 aetherhaven.ui.memberPermissions.completeQuests=Complete town quests and claim reputation rewards
 aetherhaven.ui.memberPermissions.abandonQuests=Abandon active town quests
 aetherhaven.ui.memberPermissions.reviveVillagers=Revive villagers at the Gaia statue
+aetherhaven.ui.memberPermissions.useShopSpots=List and sell on player shop spots
 aetherhaven.ui.memberPermissions.err.notOwner=Only the town owner can edit permissions.
 aetherhaven.ui.memberPermissions.err.notInTown=That player is not in this town.
 aetherhaven.town.rolecmd.playerMustBeOnline=Player must be online.

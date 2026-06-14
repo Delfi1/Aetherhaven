@@ -16,9 +16,18 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
+import com.hexvane.aetherhaven.patrol.PatrolRouteRecord;
+import com.hexvane.aetherhaven.patrol.PatrolRouteRegistry;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
+import com.hexvane.aetherhaven.quest.QuestRewardService;
+import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
+import com.hexvane.aetherhaven.questboard.QuestBoardService;
+import com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
+import com.hexvane.aetherhaven.rts.RtsCommandPlayerComponent;
+import com.hexvane.aetherhaven.rts.RtsPickTuning;
+import com.hexvane.aetherhaven.rts.RtsScreenPickUtil;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -28,6 +37,8 @@ import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownDissolutionService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownResidentEligibility;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.google.gson.JsonObject;
 import com.hypixel.hytale.codec.Codec;
@@ -80,7 +91,6 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     private static final String TOWN_PLOT_ROWS =
         "#TownPage #TownSplit #TownPlotPane #TownPlotScroll #TownPlotRowList";
     private static final int MAX_ROWS = 24;
-    private static final int MAX_TOWN_VILLAGERS = 24;
     private static final int MAX_TOWN_PLOTS = 32;
     private static final int MAX_GUIDE_TOPICS = 48;
     /** Long topics (e.g. mechanic_commands) need nested list rows; 96 truncated sub-bullets. */
@@ -116,6 +126,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
      */
     @Nullable
     private AetherhavenPluginConfig journalSettingsFormSnapshot;
+    @Nullable
+    private Message journalSettingsPersonalStatus;
 
     public QuestJournalPage(@Nonnull PlayerRef playerRef) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
@@ -142,10 +154,11 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         }
         boolean journalSettingsAllowed = JournalSettingsAccess.canOpen(store, ref);
         PlayerTownJournalState.JournalTab currentTab = stateForTabs.getLastTab();
-        if (!journalSettingsAllowed && currentTab == PlayerTownJournalState.JournalTab.SETTINGS) {
-            currentTab = PlayerTownJournalState.JournalTab.QUESTS;
+        PlayerTownJournalState.SettingsSubTab settingsSubTab = stateForTabs.getLastSettingsSubTab();
+        if (!journalSettingsAllowed && settingsSubTab == PlayerTownJournalState.SettingsSubTab.SERVER) {
+            settingsSubTab = PlayerTownJournalState.SettingsSubTab.PERSONAL;
             if (journalState != null) {
-                scheduleCoerceJournalTabFromSettingsIfStillIllegal(world);
+                scheduleCoerceSettingsSubTabFromServerIfStillIllegal(world);
             }
         }
         if (!journalSettingsAllowed) {
@@ -153,9 +166,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             journalSettingsVillagerModalOpen = false;
             journalSettingsResetConfirmOpen = false;
             journalSettingsFormSnapshot = null;
+            journalSettingsPersonalStatus = null;
         }
 
-        commandBuilder.set("#TabSettings.Visible", journalSettingsAllowed);
+        commandBuilder.set("#TabSettings.Visible", true);
 
         commandBuilder.set("#TabTown.Disabled", currentTab == PlayerTownJournalState.JournalTab.TOWN);
         commandBuilder.set("#TabGuide.Disabled", currentTab == PlayerTownJournalState.JournalTab.GUIDE);
@@ -178,11 +192,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         boolean abandonModalBlocking = false;
         if (abandonConfirmOpen && pendingAbandonQuestId != null && plugin != null && uc != null) {
             TownRecord townModal = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-            List<String> activeModal =
-                townModal != null ? new ArrayList<>(townModal.getActiveQuestIdsSnapshot()) : List.of();
             if (townModal != null
                 && townModal.playerCanAbandonQuests(uc.getUuid())
-                && activeModal.contains(pendingAbandonQuestId)) {
+                && QuestBoardService.isActiveJournalQuest(townModal, pendingAbandonQuestId)) {
                 abandonModalBlocking = true;
             } else {
                 abandonConfirmOpen = false;
@@ -196,6 +208,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             journalSettingsVillagerModalOpen = false;
             journalSettingsResetConfirmOpen = false;
             journalSettingsFormSnapshot = null;
+            journalSettingsPersonalStatus = null;
         }
 
         boolean plotModalBlocking = false;
@@ -223,6 +236,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             journalSettingsVillagerModalOpen = false;
             journalSettingsResetConfirmOpen = false;
             journalSettingsFormSnapshot = null;
+            journalSettingsPersonalStatus = null;
         }
 
         boolean journalSettingsResetModalBlocking =
@@ -334,22 +348,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             new EventData().append("Action", "Tab").append("TabId", "QUESTS"),
             false
         );
-        if (journalSettingsAllowed) {
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#TabSettings",
-                new EventData().append("Action", "Tab").append("TabId", "SETTINGS"),
-                false
-            );
-        }
-
-        commandBuilder.set("#TownShowBordersCheck #CheckBox.Value", stateForTabs.isShowTownBordersOnMap());
         eventBuilder.addEventBinding(
-            CustomUIEventBindingType.ValueChanged,
-            "#TownShowBordersCheck #CheckBox",
-            new EventData()
-                .append("Action", "TownShowBordersToggle")
-                .append("@Checked", "#TownShowBordersCheck #CheckBox.Value"),
+            CustomUIEventBindingType.Activating,
+            "#TabSettings",
+            new EventData().append("Action", "Tab").append("TabId", "SETTINGS"),
             false
         );
 
@@ -371,6 +373,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             journalSettingsVillagerModalOpen = false;
             journalSettingsResetConfirmOpen = false;
             journalSettingsFormSnapshot = null;
+            journalSettingsPersonalStatus = null;
         }
 
         if (currentTab == PlayerTownJournalState.JournalTab.QUESTS) {
@@ -395,6 +398,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
 
             List<String> active = new ArrayList<>(town.getActiveQuestIdsSnapshot());
+            for (QuestBoardSlotRecord boardSlot : town.acceptedBoardQuestsSnapshot()) {
+                active.add(QuestBoardService.journalRowId(boardSlot.instanceIdOrEmpty()));
+            }
             if (active.isEmpty()) {
                 setQuestsBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.noActive"));
                 selectedQuestId = null;
@@ -409,13 +415,27 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
 
             QuestCatalog quests = plugin.getQuestCatalog();
+            QuestBoardCatalog boardCatalog = plugin.getQuestBoardCatalog();
+            Store<EntityStore> entityStore =
+                world.getEntityStore() != null ? world.getEntityStore().getStore() : store;
             commandBuilder.clear(QUEST_ROWS);
             int n = Math.min(active.size(), MAX_ROWS);
             for (int i = 0; i < n; i++) {
                 String qid = active.get(i);
                 commandBuilder.append(QUEST_ROWS, "Aetherhaven/QuestJournalRow.ui");
                 String row = QUEST_ROWS + "[" + i + "]";
-                commandBuilder.set(row + " #Select #QuestTitle.TextSpans", Message.raw(quests.displayName(qid)));
+                Message titleMsg;
+                if (QuestBoardService.isBoardJournalRow(qid)) {
+                    String instanceId = QuestBoardService.parseJournalInstanceId(qid);
+                    QuestBoardSlotRecord boardSlot = instanceId != null ? town.findBoardSlotByInstanceId(instanceId) : null;
+                    titleMsg =
+                        boardSlot != null
+                            ? QuestBoardService.displayTitle(boardSlot, town, entityStore, boardCatalog)
+                            : Message.raw("");
+                } else {
+                    titleMsg = quests.journalTitle(qid, town, entityStore, plugin);
+                }
+                commandBuilder.set(row + " #Select #QuestTitle.TextSpans", titleMsg);
                 boolean sel = qid.equals(selectedQuestId);
                 commandBuilder.set(row + " #QuestTitle.Style.TextColor", sel ? "#f4e8c8" : "#e8dcc8");
                 eventBuilder.addEventBinding(
@@ -427,22 +447,59 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
 
             String sel = selectedQuestId != null ? selectedQuestId : active.get(0);
-            commandBuilder.set("#QuestDetailTitle.TextSpans", Message.raw(quests.displayName(sel)));
-            commandBuilder.set("#QuestDetailDescription.TextSpans", Message.raw(quests.description(sel)));
-
-            String steps = quests.objectivesText(sel, town);
-            boolean hasSteps = !steps.isEmpty();
-            commandBuilder.set("#QuestStepsHeading.Visible", hasSteps);
-            commandBuilder.set("#QuestStepsBody.Visible", hasSteps);
-            if (hasSteps) {
-                commandBuilder.set("#QuestStepsHeading.TextSpans", Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading"));
-                commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(steps));
+            if (QuestBoardService.isBoardJournalRow(sel)) {
+                String instanceId = QuestBoardService.parseJournalInstanceId(sel);
+                QuestBoardSlotRecord boardSlot = instanceId != null ? town.findBoardSlotByInstanceId(instanceId) : null;
+                if (boardSlot != null) {
+                    String questRank = boardSlot.getQuestRank() != null ? boardSlot.getQuestRank() : "E";
+                    commandBuilder.set(
+                        "#QuestDetailTitle.TextSpans",
+                        QuestBoardService.displayTitle(boardSlot, town, entityStore, boardCatalog)
+                            .insert(Message.raw("  "))
+                            .insert(Message.raw("[" + questRank + "]"))
+                    );
+                    commandBuilder.set(
+                        "#QuestDetailDescription.TextSpans",
+                        QuestBoardService.displayDescription(boardSlot, town, entityStore, boardCatalog)
+                            .insert(Message.raw("\n\n"))
+                            .insert(
+                                Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.daysLeft")
+                                    .param("days", String.valueOf(QuestBoardService.daysRemaining(boardSlot)))
+                            )
+                    );
+                    commandBuilder.set("#QuestStepsHeading.Visible", true);
+                    commandBuilder.set("#QuestStepsBody.Visible", true);
+                    commandBuilder.set(
+                        "#QuestStepsHeading.TextSpans",
+                        Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading")
+                    );
+                    commandBuilder.set(
+                        "#QuestStepsBody.TextSpans",
+                        QuestBoardService.objectivesText(boardSlot, town, entityStore, boardCatalog)
+                    );
+                    applyBoardQuestRewardPreview(commandBuilder, boardSlot, entityStore, town);
+                }
             } else {
-                commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
-                commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
-            }
+                commandBuilder.set("#QuestDetailTitle.TextSpans", quests.journalTitle(sel, town, entityStore, plugin));
+                commandBuilder.set("#QuestDetailDescription.TextSpans", quests.journalDescription(sel, town, entityStore, plugin));
 
-            applyQuestRewardPreview(commandBuilder, quests, sel);
+                String steps = quests.objectivesText(sel, town, entityStore, plugin);
+                boolean hasSteps = !steps.isEmpty();
+                commandBuilder.set("#QuestStepsHeading.Visible", hasSteps);
+                commandBuilder.set("#QuestStepsBody.Visible", hasSteps);
+                if (hasSteps) {
+                    commandBuilder.set(
+                        "#QuestStepsHeading.TextSpans",
+                        Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading")
+                    );
+                    commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(steps));
+                } else {
+                    commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
+                    commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
+                }
+
+                applyQuestRewardPreview(commandBuilder, quests, sel);
+            }
 
             boolean canAbandon = town.playerCanAbandonQuests(uc.getUuid());
             commandBuilder.set("#AbandonQuestButton.Visible", canAbandon);
@@ -462,8 +519,19 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             return;
         }
 
-        if (currentTab == PlayerTownJournalState.JournalTab.SETTINGS && journalSettingsAllowed) {
-            buildJournalSettingsTab(commandBuilder, eventBuilder, plugin, store, ref, uc, world);
+        if (currentTab == PlayerTownJournalState.JournalTab.SETTINGS) {
+            buildJournalSettingsTab(
+                commandBuilder,
+                eventBuilder,
+                plugin,
+                store,
+                ref,
+                uc,
+                world,
+                journalSettingsAllowed,
+                settingsSubTab,
+                stateForTabs
+            );
             return;
         }
 
@@ -645,6 +713,90 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> ref,
         @Nullable UUIDComponent uc,
+        @Nonnull World world,
+        boolean serverSettingsAllowed,
+        @Nonnull PlayerTownJournalState.SettingsSubTab settingsSubTab,
+        @Nonnull PlayerTownJournalState journalPrefs
+    ) {
+        boolean personalActive =
+            settingsSubTab == PlayerTownJournalState.SettingsSubTab.PERSONAL || !serverSettingsAllowed;
+        commandBuilder.set("#SettingsSubTabStrip.Visible", serverSettingsAllowed);
+        commandBuilder.set("#SettingsTabServer.Visible", serverSettingsAllowed);
+        commandBuilder.set("#SettingsTabPersonal.Disabled", personalActive);
+        commandBuilder.set("#SettingsTabServer.Disabled", serverSettingsAllowed && !personalActive);
+        commandBuilder.set("#SettingsPersonalPage.Visible", personalActive);
+        commandBuilder.set("#SettingsServerPage.Visible", serverSettingsAllowed && !personalActive);
+
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#SettingsTabPersonal",
+            new EventData().append("Action", "SettingsSubTab").append("SubTabId", "PERSONAL"),
+            false
+        );
+        if (serverSettingsAllowed) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#SettingsTabServer",
+                new EventData().append("Action", "SettingsSubTab").append("SubTabId", "SERVER"),
+                false
+            );
+        }
+
+        if (personalActive) {
+            buildJournalSettingsPersonalTab(commandBuilder, eventBuilder, journalPrefs);
+        } else {
+            buildJournalSettingsServerTab(commandBuilder, eventBuilder, plugin, store, ref, uc, world);
+        }
+    }
+
+    private void buildJournalSettingsPersonalTab(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull PlayerTownJournalState journalPrefs
+    ) {
+        commandBuilder.set("#SettingsPersonalStatus.TextSpans", journalSettingsPersonalStatus != null ? journalSettingsPersonalStatus : Message.raw(""));
+        commandBuilder.set(
+            "#SettingsRtsPickFovField.Value",
+            String.format(Locale.US, "%.1f", journalPrefs.effectiveRtsPickVerticalFovDeg())
+        );
+        commandBuilder.set(
+            "#SettingsRtsPickAspectField.Value",
+            String.format(Locale.US, "%.3f", journalPrefs.effectiveRtsPickAspectRatio())
+        );
+        commandBuilder.set("#SettingsShowBordersCheck #CheckBox.Value", journalPrefs.isShowTownBordersOnMap());
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#SettingsShowBordersCheck #CheckBox",
+            new EventData()
+                .append("Action", "TownShowBordersToggle")
+                .append("@Checked", "#SettingsShowBordersCheck #CheckBox.Value"),
+            false
+        );
+
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#SettingsPersonalSaveButton",
+            new EventData()
+                .append("Action", "PersonalSettingsSave")
+                .append("@RtsFov", "#SettingsRtsPickFovField.Value")
+                .append("@RtsAspect", "#SettingsRtsPickAspectField.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#SettingsPersonalResetButton",
+            new EventData().append("Action", "PersonalSettingsReset"),
+            false
+        );
+    }
+
+    private void buildJournalSettingsServerTab(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> ref,
+        @Nullable UUIDComponent uc,
         @Nonnull World world
     ) {
         commandBuilder.set("#SettingsStatus.TextSpans", Message.raw(""));
@@ -705,6 +857,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             "#SettingsGiftDaysMaxField.Value",
             String.format(Locale.US, "%.2f", cfg.getFloatingGiftSpawnIntervalDaysMax())
         );
+        commandBuilder.set(
+            "#SettingsShopMemberPriceField.Value",
+            String.valueOf(cfg.getShopSpotPlayerListingPricePercent())
+        );
 
         TownRecord town = uc != null ? AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid()) : null;
         boolean tools = town != null;
@@ -736,7 +892,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 .append("@BreakW2", "#SettingsBreakableWeightTwoField.Value")
                 .append("@GiftEn", "#SettingsGiftEnabledCheck #CheckBox.Value")
                 .append("@GiftMinDays", "#SettingsGiftDaysMinField.Value")
-                .append("@GiftMaxDays", "#SettingsGiftDaysMaxField.Value"),
+                .append("@GiftMaxDays", "#SettingsGiftDaysMaxField.Value")
+                .append("@ShopMemberPct", "#SettingsShopMemberPriceField.Value"),
             false
         );
         eventBuilder.addEventBinding(
@@ -802,16 +959,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         List<TownVillagerRow> villagers = TownVillagerDirectory.listResidents(store, town);
         WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
         LocalDateTime gameNow = wtr != null ? wtr.getGameDateTime() : null;
-        int nv = Math.min(villagers.size(), MAX_TOWN_VILLAGERS);
-        for (int i = 0; i < nv; i++) {
+        for (int i = 0; i < villagers.size(); i++) {
             TownVillagerRow r = villagers.get(i);
             commandBuilder.append(TOWN_VILLAGER_ROWS, "Aetherhaven/TownJournalVillagerRow.ui");
             String row = TOWN_VILLAGER_ROWS + "[" + i + "]";
-            commandBuilder.set(row + " #Portrait.AssetPath", NpcPortraitProvider.portraitPathForRoleId(r.roleId()));
-            commandBuilder.set(
-                row + " #VillagerName.TextSpans",
-                Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + r.roleId() + ".name")
-            );
+            commandBuilder.set(row + " #Portrait.AssetPath", r.portraitPath());
+            commandBuilder.set(row + " #VillagerName.TextSpans", Message.raw(r.label()));
             boolean befriendable = VillagerBefriendableResolver.isBefriendableForJournal(store, r.entityUuid(), r.roleId(), plugin);
             String heartsPath = row + " #ReputationHeartSlots";
             commandBuilder.set(heartsPath + ".Visible", befriendable);
@@ -822,7 +975,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 int rep = VillagerReputationService.getOrCreateEntry(town, uc.getUuid(), r.entityUuid()).getReputation();
                 ReputationHeartUi.applyHearts(commandBuilder, heartsPath, rep);
             }
-            commandBuilder.set(row + " #ScheduleLocation.TextSpans", scheduleLocationMessage(plugin, r.roleId(), gameNow));
+            commandBuilder.set(row + " #ScheduleLocation.TextSpans", townJournalSecondaryLineMessage(plugin, world, r, gameNow));
+            commandBuilder.set(
+                row + " #ScheduleLocation.Visible",
+                !TownResidentEligibility.isTownsfolkPoolKind(r.bindingKind(), r.roleId(), plugin)
+                    || TownVillagerBinding.KIND_GUARD.equals(r.bindingKind())
+            );
         }
 
         commandBuilder.clear(TOWN_PLOT_ROWS);
@@ -926,6 +1084,46 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         commandBuilder.set("#TownSplit.Visible", false);
         commandBuilder.clear(TOWN_VILLAGER_ROWS);
         commandBuilder.clear(TOWN_PLOT_ROWS);
+    }
+
+    @Nonnull
+    private static Message townJournalSecondaryLineMessage(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull World world,
+        @Nonnull TownVillagerRow row,
+        @Nullable LocalDateTime gameNow
+    ) {
+        if (TownVillagerBinding.KIND_GUARD.equals(row.bindingKind())) {
+            return guardPatrolRouteMessage(world, plugin, row.entityUuid());
+        }
+        if (TownResidentEligibility.isTownsfolkPoolKind(row.bindingKind(), row.roleId(), plugin)) {
+            return Message.raw("");
+        }
+        return scheduleLocationMessage(plugin, row.roleId(), gameNow);
+    }
+
+    @Nonnull
+    private static Message guardPatrolRouteMessage(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID guardEntityUuid
+    ) {
+        PatrolRouteRegistry reg = AetherhavenWorldRegistries.getOrCreatePatrolRouteRegistry(world, plugin);
+        List<PatrolRouteRecord> routes = reg.routesForGuard(guardEntityUuid);
+        if (routes.isEmpty()) {
+            return Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleUnknown");
+        }
+        if (routes.size() == 1) {
+            return Message.raw(routes.get(0).safeDisplayName());
+        }
+        StringBuilder names = new StringBuilder();
+        for (int i = 0; i < routes.size(); i++) {
+            if (i > 0) {
+                names.append(", ");
+            }
+            names.append(routes.get(i).safeDisplayName());
+        }
+        return Message.raw(names.toString());
     }
 
     @Nonnull
@@ -1340,6 +1538,87 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         }
     }
 
+    private static void applyBoardQuestRewardPreview(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull QuestBoardSlotRecord slot,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town
+    ) {
+        List<com.hexvane.aetherhaven.quest.data.QuestReward> itemRewards = QuestBoardService.itemRewards(slot);
+        QuestRewardService.ReputationRewardPreview repRw = QuestBoardService.firstReputationReward(slot);
+        boolean hasItems = !itemRewards.isEmpty();
+        boolean hasRep = repRw != null;
+
+        if (hasItems) {
+            commandBuilder.set("#RewardRow.Visible", true);
+            if (itemRewards.size() == 1) {
+                com.hexvane.aetherhaven.quest.data.QuestReward itemRw = itemRewards.get(0);
+                commandBuilder.set("#RewardTextCluster.Visible", true);
+                commandBuilder.set(
+                    "#RewardSlot.Slots",
+                    new ItemGridSlot[]{new ItemGridSlot(new ItemStack(itemRw.itemId().trim(), Math.max(1, itemRw.count())))}
+                );
+                commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(String.valueOf(Math.max(1, itemRw.count()))));
+                Item assetItem = Item.getAssetMap().getAsset(itemRw.itemId().trim());
+                if (assetItem != null
+                    && assetItem.getTranslationKey() != null
+                    && !assetItem.getTranslationKey().isBlank()) {
+                    commandBuilder.set("#RewardTitle.TextSpans", Message.translation(assetItem.getTranslationKey()));
+                } else {
+                    commandBuilder.set("#RewardTitle.TextSpans", Message.raw(itemRw.itemId().trim()));
+                }
+            } else {
+                ItemGridSlot[] gridSlots = new ItemGridSlot[itemRewards.size()];
+                for (int i = 0; i < itemRewards.size(); i++) {
+                    com.hexvane.aetherhaven.quest.data.QuestReward itemRw = itemRewards.get(i);
+                    gridSlots[i] = new ItemGridSlot(new ItemStack(itemRw.itemId().trim(), Math.max(1, itemRw.count())));
+                }
+                commandBuilder.set("#RewardSlot.Slots", gridSlots);
+                commandBuilder.set("#RewardTextCluster.Visible", false);
+                commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(""));
+                commandBuilder.set("#RewardTitle.TextSpans", Message.raw(""));
+            }
+        } else {
+            commandBuilder.set("#RewardRow.Visible", false);
+            commandBuilder.set("#RewardTextCluster.Visible", false);
+            commandBuilder.set("#RewardSlot.Slots", new ItemGridSlot[]{new ItemGridSlot()});
+            commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(""));
+            commandBuilder.set("#RewardTitle.TextSpans", Message.raw(""));
+        }
+
+        if (hasRep) {
+            commandBuilder.set("#RewardReputationLine.Visible", true);
+            String roleId = repRw.npcRoleId();
+            if (roleId == null || roleId.isBlank()) {
+                roleId = slot.getGiverRoleId();
+            }
+            Message villagerName =
+                roleId != null && !roleId.isBlank()
+                    ? Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + roleId.trim() + ".name")
+                    : Message.raw(com.hexvane.aetherhaven.questboard.QuestBoardGiverDisplay.giverName(slot, store, town));
+            commandBuilder.set(
+                "#RewardReputationLine.TextSpans",
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.rewardReputationLine")
+                    .param("amount", String.valueOf(repRw.amount()))
+                    .param("villager", villagerName)
+            );
+        } else {
+            commandBuilder.set("#RewardReputationLine.Visible", false);
+            commandBuilder.set("#RewardReputationLine.TextSpans", Message.raw(""));
+        }
+
+        if (!hasItems && !hasRep) {
+            commandBuilder.set("#RewardFallback.Visible", true);
+            commandBuilder.set(
+                "#RewardFallback.TextSpans",
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.rewardFallback")
+            );
+        } else {
+            commandBuilder.set("#RewardFallback.Visible", false);
+            commandBuilder.set("#RewardFallback.TextSpans", Message.raw(""));
+        }
+    }
+
     @Nonnull
     private static String pageTitleKey(@Nonnull PlayerTownJournalState.JournalTab tab) {
         return switch (tab) {
@@ -1377,9 +1656,6 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         if (action.equalsIgnoreCase("Tab")) {
             String tabId = data.tabId;
             PlayerTownJournalState.JournalTab tab = parseTab(tabId);
-            if (tab == PlayerTownJournalState.JournalTab.SETTINGS && !JournalSettingsAccess.canOpen(store, ref)) {
-                return;
-            }
             PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
             if (st == null) {
                 st = new PlayerTownJournalState();
@@ -1395,6 +1671,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             journalSettingsVillagerModalOpen = false;
             journalSettingsResetConfirmOpen = false;
             journalSettingsFormSnapshot = null;
+            journalSettingsPersonalStatus = null;
             if (tab != PlayerTownJournalState.JournalTab.GUIDE) {
                 guideGiftSpoilerOpen = false;
                 guideScheduleSpoilerOpen = false;
@@ -1482,7 +1759,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (town == null || !town.playerCanAbandonQuests(uc.getUuid())) {
                 return;
             }
-            if (!town.getActiveQuestIdsSnapshot().contains(selectedQuestId)) {
+            if (!QuestBoardService.isActiveJournalQuest(town, selectedQuestId)) {
                 return;
             }
             pendingAbandonQuestId = selectedQuestId;
@@ -1599,6 +1876,61 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             sendUpdate(cmd, ev, false);
             return;
         }
+        if (action.equalsIgnoreCase("SettingsSubTab")) {
+            PlayerTownJournalState.SettingsSubTab subTab = parseSettingsSubTab(data.subTabId);
+            if (subTab == PlayerTownJournalState.SettingsSubTab.SERVER && !JournalSettingsAccess.canOpen(store, ref)) {
+                return;
+            }
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) {
+                st = new PlayerTownJournalState();
+                store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            }
+            st.setLastSettingsSubTab(subTab);
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            journalSettingsPersonalStatus = null;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("PersonalSettingsSave")) {
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) {
+                st = new PlayerTownJournalState();
+            }
+            float fovDef = st.effectiveRtsPickVerticalFovDeg();
+            float aspectDef = st.effectiveRtsPickAspectRatio();
+            float fov = (float) parseDoubleSafe(data.rtsFov, 30.0, 120.0, fovDef);
+            float aspect = (float) parseDoubleSafe(data.rtsAspect, 0.5, 3.0, aspectDef);
+            st.setRtsPickOverrides(fov, aspect);
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            refreshActiveRtsPickTuning(ref, store);
+            journalSettingsPersonalStatus =
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalSaveOk");
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("PersonalSettingsReset")) {
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) {
+                st = new PlayerTownJournalState();
+            }
+            st.clearRtsPickOverrides();
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            refreshActiveRtsPickTuning(ref, store);
+            journalSettingsPersonalStatus =
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalResetOk");
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
         if (action.equalsIgnoreCase("OpenDifficulty")) {
             if (!JournalSettingsAccess.canOpen(store, ref)) {
                 return;
@@ -1658,6 +1990,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
             boolean floatingOn =
                 data.giftEn != null ? data.giftEn.booleanValue() : parseSrc.isFloatingGiftEnabled();
+            int shopMemberPct = parseIntSafe(
+                data.shopMemberPct,
+                1,
+                100,
+                parseSrc.getShopSpotPlayerListingPricePercent()
+            );
             if (journalSettingsFormSnapshot != null) {
                 cfg.copyStateFrom(journalSettingsFormSnapshot);
                 journalSettingsFormSnapshot = null;
@@ -1676,7 +2014,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 breakW2,
                 floatingOn,
                 giftMinDays,
-                giftMaxDays
+                giftMaxDays,
+                shopMemberPct
             );
             try {
                 plugin.getConfig().save().join();
@@ -1950,10 +2289,28 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 return;
             }
             JsonObject a = new JsonObject();
-            a.addProperty("type", "abandon_quest");
-            a.addProperty("id", qid.trim());
-            DialogueActionExecutor ex = new DialogueActionExecutor();
-            ex.runBatch(List.of(a), ref, store, new DialogueActionBatchResult());
+            if (QuestBoardService.isBoardJournalRow(qid.trim())) {
+                String instanceId = QuestBoardService.parseJournalInstanceId(qid.trim());
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                if (
+                    instanceId != null
+                        && QuestBoardService.abandonByInstanceId(
+                            town,
+                            uc.getUuid(),
+                            instanceId,
+                            plugin.getQuestBoardCatalog(),
+                            world,
+                            store
+                        )
+                ) {
+                    tm.updateTown(town);
+                }
+            } else {
+                a.addProperty("type", "abandon_quest");
+                a.addProperty("id", qid.trim());
+                DialogueActionExecutor ex = new DialogueActionExecutor();
+                ex.runBatch(List.of(a), ref, store, new DialogueActionBatchResult());
+            }
             if (qid.trim().equals(selectedQuestId)) {
                 selectedQuestId = null;
             }
@@ -2019,7 +2376,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         });
     }
 
-    private void scheduleCoerceJournalTabFromSettingsIfStillIllegal(@Nonnull World world) {
+    private void scheduleCoerceSettingsSubTabFromServerIfStillIllegal(@Nonnull World world) {
         world.execute(() -> {
             Ref<EntityStore> pref = this.playerRef.getReference();
             if (pref == null || !pref.isValid()) {
@@ -2030,15 +2387,35 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (js == null) {
                 return;
             }
-            if (js.getLastTab() != PlayerTownJournalState.JournalTab.SETTINGS) {
+            if (js.getLastSettingsSubTab() != PlayerTownJournalState.SettingsSubTab.SERVER) {
                 return;
             }
             if (JournalSettingsAccess.canOpen(st, pref)) {
                 return;
             }
-            js.setLastTab(PlayerTownJournalState.JournalTab.QUESTS);
+            js.setLastSettingsSubTab(PlayerTownJournalState.SettingsSubTab.PERSONAL);
             st.putComponent(pref, PlayerTownJournalState.getComponentType(), js);
         });
+    }
+
+    private static void refreshActiveRtsPickTuning(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        RtsCommandPlayerComponent session = store.getComponent(ref, RtsCommandPlayerComponent.getComponentType());
+        if (session == null || !session.isActive()) {
+            return;
+        }
+        PlayerTownJournalState journal = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+        session.setPickTuning(RtsPickTuning.fromJournal(journal));
+        RtsScreenPickUtil.refreshPickViewHeight(session, store);
+        session.clearOrthoCalibration();
+        store.putComponent(ref, RtsCommandPlayerComponent.getComponentType(), session);
+    }
+
+    @Nonnull
+    private static PlayerTownJournalState.SettingsSubTab parseSettingsSubTab(@Nullable String subTabId) {
+        if (subTabId == null || subTabId.isBlank()) {
+            return PlayerTownJournalState.SettingsSubTab.PERSONAL;
+        }
+        return PlayerTownJournalState.SettingsSubTab.fromPersisted(subTabId);
     }
 
     @Nonnull
@@ -2100,9 +2477,17 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             .add()
             .append(new KeyedCodec<>("@GiftMaxDays", Codec.STRING), (d, v) -> d.giftMaxDays = v, d -> d.giftMaxDays)
             .add()
+            .append(new KeyedCodec<>("@ShopMemberPct", Codec.STRING), (d, v) -> d.shopMemberPct = v, d -> d.shopMemberPct)
+            .add()
             .append(new KeyedCodec<>("@PlotPick", Codec.STRING), (d, v) -> d.plotPick = v, d -> d.plotPick)
             .add()
             .append(new KeyedCodec<>("@VillagerPick", Codec.STRING), (d, v) -> d.villagerPick = v, d -> d.villagerPick)
+            .add()
+            .append(new KeyedCodec<>("SubTabId", Codec.STRING), (d, v) -> d.subTabId = v, d -> d.subTabId)
+            .add()
+            .append(new KeyedCodec<>("@RtsFov", Codec.STRING), (d, v) -> d.rtsFov = v, d -> d.rtsFov)
+            .add()
+            .append(new KeyedCodec<>("@RtsAspect", Codec.STRING), (d, v) -> d.rtsAspect = v, d -> d.rtsAspect)
             .add()
             .append(new KeyedCodec<>("@Checked", Codec.BOOLEAN), (d, v) -> d.checked = v, d -> d.checked)
             .add()
@@ -2149,9 +2534,17 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         @Nullable
         private String giftMaxDays;
         @Nullable
+        private String shopMemberPct;
+        @Nullable
         private String plotPick;
         @Nullable
         private String villagerPick;
+        @Nullable
+        private String subTabId;
+        @Nullable
+        private String rtsFov;
+        @Nullable
+        private String rtsAspect;
         @Nullable
         private Boolean checked;
     }

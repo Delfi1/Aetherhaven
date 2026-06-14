@@ -1,0 +1,40 @@
+$C = "../Common.ui";
+
+Group #StyleListRow {
+  LayoutMode: Top;
+  Anchor: (Bottom: 4);
+
+  Group #SelectShell {
+    LayoutMode: Full;
+
+    Group #SelectHilite {
+      Anchor: (Full: 0);
+      LayoutMode: Full;
+      Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #4a6a8c(0.65));
+      Visible: false;
+      HitTestVisible: false;
+    }
+
+    Button #Select {
+      LayoutMode: Left;
+      Padding: (Horizontal: 10, Vertical: 8);
+      Style: (
+        Default: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4, Color: #1e2430(0.75))),
+        Hovered: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4, Color: #2a3344(0.92))),
+        Pressed: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4, Color: #141820(0.95)))
+      );
+
+      Label #StyleName {
+        FlexWeight: 1;
+        Style: (...$C.@DefaultLabelStyle, FontSize: 15, TextColor: #dce4ec, Wrap: true);
+        Text: "";
+      }
+
+      Label #SelectedMark {
+        Visible: false;
+        Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #8ec8ff, RenderBold: true);
+        Text: "";
+      }
+    }
+  }
+}

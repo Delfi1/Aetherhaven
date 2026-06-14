@@ -1,12 +1,6 @@
 {
-  "Parent": "Player",
+  "Parent": "Aetherhaven_Human",
   "DefaultAttachments": [
-    {
-      "Model": "Characters/Player.blockymodel",
-      "Texture": "Characters/Player_Textures/Player_Muscular_Greyscale.png",
-      "GradientSet": "Skin",
-      "GradientId": "06"
-    },
     {
       "Model": "Cosmetics/Underwears/Underwear.blockymodel",
       "Texture": "Cosmetics/Underwears/Underwear_Textures/Underwear_Boxer_Texture.png",
@@ -44,12 +38,6 @@
       "GradientId": "Brown"
     },
     {
-      "Model": "Characters/Haircuts/GenericMedium.blockymodel",
-      "Texture": "Characters/Haircuts/GenericMedium_Greyscale.png",
-      "GradientSet": "Hair",
-      "GradientId": "Brown"
-    },
-    {
       "Model": "Characters/Haircuts/WavyBraids.blockymodel",
       "Texture": "Characters/Haircuts/WavyBraids_Greyscale.png",
       "GradientSet": "Hair",
@@ -82,5 +70,9 @@
       "Texture": "Cosmetics/Shoes/BootsBasic_Textures/Scavenger_Leather.png"
     }
   ],
-  "Icon": "Icons/ModelsGenerated/Female_Human_01.png"
+  "Icon": "Icons/ModelsGenerated/Female_Human_01.png",
+  "Model": "Characters/Player.blockymodel",
+  "Texture": "Characters/Player_Textures/Player_Muscular_Greyscale.png",
+  "GradientSet": "Skin",
+  "GradientId": "06"
 }

@@ -1,0 +1,8 @@
+{
+  "constructionId": "plot_guild_hall",
+  "prefabPath": "Guild_Hall.prefab.json",
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 520 },
+    { "resourceTypeId": "Rock", "count": 280 }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "Name": "Aetherhaven_Geode_Cave",
+  "$Comment": "Rarity knobs: EntryPoints.Scale (lower=rarer), EntryPoints.Density (lower=rarer), NoiseMask.Threshold (narrower=rarer)",
+  "BlockMask": {
+    "Default": [
+      { "Replace": false, "Fluid": "Water_Source" },
+      "!Rock_Bedrock",
+      "!Rock_Sandstone_Red",
+      "!Rock_Sandstone",
+      "!Rock_Sandstone_White",
+      "!Soil_Clay",
+      "!Soil_Dirt_Dry",
+      "!Soil_Grass_Dry",
+      "!Soil_Gravel_Sand_White",
+      "!Soil_Sand",
+      "!Soil_Gravel",
+      "!Soil_Gravel_Mossy",
+      "*"
+    ]
+  },
+  "NoiseMask": {
+    "Type": "MIN",
+    "Noise": [
+      {
+        "File": "Zones.Noise.Shared.Grids.Monuments_Encounter"
+      }
+    ],
+    "Threshold": [0, 0.7]
+  },
+  "Depth": 200,
+  "Entry": "Aetherhaven.Geode.Entry",
+  "EntryPoints": {
+    "Seed": "Aetherhaven-Geode-Cave",
+    "Density": 0.35,
+    "Scale": 0.012,
+    "Jitter": 0.5
+  },
+  "FixedEntryHeight": [88, 98],
+  "FluidLevel": {
+    "Fluid": "Lava_Source",
+    "Height": 24
+  },
+  "HeightRadiusFactor": {
+    "Positions": [0, 255],
+    "Values": [1, 1]
+  },
+  "Pitch": 90,
+  "Yaw": [0, 360],
+  "Environment": "Env_Zone1_Caves_Plains"
+}

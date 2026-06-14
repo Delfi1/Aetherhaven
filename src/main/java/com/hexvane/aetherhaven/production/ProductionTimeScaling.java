@@ -27,4 +27,24 @@ public final class ProductionTimeScaling {
     public static int effectiveTicks(@Nonnull AetherhavenPluginConfig config, int catalogTicks) {
         return effectiveTicks(catalogTicks, config.getProductionTimeMultiplier());
     }
+
+    /**
+     * Effective entity ticks after server config multiplier and workplace speed bonus ({@code workplaceSpeedMul} divides
+     * ticks, e.g. 1.2 for 20% faster).
+     */
+    public static int effectiveTicksWithWorkplaceSpeed(
+        @Nonnull AetherhavenPluginConfig config,
+        int catalogTicks,
+        double workplaceSpeedMul
+    ) {
+        double configMul = config.getProductionTimeMultiplier();
+        if (Double.isNaN(configMul) || configMul <= 0.0) {
+            configMul = 1.0;
+        }
+        double speed = workplaceSpeedMul;
+        if (Double.isNaN(speed) || speed <= 0.0) {
+            speed = 1.0;
+        }
+        return effectiveTicks(catalogTicks, configMul / speed);
+    }
 }

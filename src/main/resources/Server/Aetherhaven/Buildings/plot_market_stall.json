@@ -1,33 +1,49 @@
 {
   "id": "plot_market_stall",
-  "displayName": "Market stall",
-  "description": "A small stall for a traveling merchant.",
-  "prefabPath": "Market_Stall.prefab.json",
-  "selfBuildGameDays": 0.5,
+  "displayName": "Merchant Shop",
+  "description": "A shop for Vex to sell his wares at.",
+  "touristDestination": true,
+  "prefabPath": "plot_merchant_shop.prefab.json",
+  "selfBuildGameDays": 1.0,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Market_Stall",
-  "plotAnchorOffset": [4, 0, 3],
-  "managementBlockLocalPos": [-1, 1, 1],
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "managementBlockLocalPos": [
+    6,
+    3,
+    -12
+  ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 2,
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 42,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 25 },
-    { "resourceTypeId": "Rock", "count": 60 }
+    { "resourceTypeId": "Wood_All", "count": 360 },
+    { "resourceTypeId": "Rock", "count": 130 }
   ],
   "pois": [
     {
-      "localX": 1,
-      "localY": 1,
-      "localZ": -2,
+      "localX": 7,
+      "localY": 2,
+      "localZ": -7,
+      "tags": [
+        "WORK",
+        "SHOP"
+      ],
+      "capacity": 1,
       "blockTypeId": "Furniture_Village_Counter",
       "interactionKind": "WORK_SURFACE",
-      "tags": ["WORK", "SHOP"],
-      "capacity": 1,
-      "interactionTargetLocalX": 0,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -1
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -8
     }
+  ],
+  "tags": [
+    "shop",
+    "work"
   ]
 }

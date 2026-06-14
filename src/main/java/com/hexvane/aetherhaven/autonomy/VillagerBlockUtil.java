@@ -4,11 +4,14 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.mountpoints.BlockMountPoint;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DoorInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 
 /**
  * Ground sampling and block queries for POI visuals. Travel uses vanilla NPC Seek + leash.
@@ -124,6 +127,29 @@ public final class VillagerBlockUtil {
         return BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z));
     }
 
+    /** True when an NPC can stand at feet Y in this column (passable feet/head, solid ground below). */
+    public static boolean isNpcStandColumn(@Nonnull World world, int bx, int feetY, int bz) {
+        return walkableColumn(world, bx, feetY, bz);
+    }
+
+    /**
+     * Snaps a spawn/travel target to a validated feet column when the requested position is floating or inside blocks.
+     */
+    @Nonnull
+    public static Vector3d snapNpcFeetToStand(@Nonnull World world, @Nonnull Vector3d feet) {
+        int bx = (int) Math.floor(feet.x);
+        int bz = (int) Math.floor(feet.z);
+        int probeFeetY = (int) Math.floor(feet.y);
+        if (isNpcStandColumn(world, bx, probeFeetY, bz)) {
+            return new Vector3d(bx + 0.5, probeFeetY, bz + 0.5);
+        }
+        int standY = findStandY(world, bx, bz, Math.min(319, probeFeetY + 4));
+        if (standY != Integer.MIN_VALUE) {
+            return new Vector3d(bx + 0.5, standY, bz + 0.5);
+        }
+        return feet;
+    }
+
     private static boolean walkableColumn(@Nonnull World world, int bx, int by, int bz) {
         BlockType feet = blockTypeNoLoad(world, bx, by, bz);
         BlockType head = blockTypeNoLoad(world, bx, by + 1, bz);
@@ -168,6 +194,133 @@ public final class VillagerBlockUtil {
      * when {@link com.hypixel.hytale.builtin.mounts.BlockMountComponent#findAvailableSeat} picks a seat on the far
      * side of the block.
      */
+    /**
+     * Finds a chair/bed-style mount block near {@code npcFeet}, preferring the block under the spawn marker when the
+     * marker was placed on a seat. Only blocks with seat/bed mount points are considered.
+     */
+    @Nullable
+    public static Vector3i findMountBlockNear(
+        @Nonnull World world,
+        double npcX,
+        double npcYFeet,
+        double npcZ,
+        @Nonnull Vector3d spawnMarkerPosition
+    ) {
+        int markerBx = (int) Math.floor(spawnMarkerPosition.x);
+        int markerBy = (int) Math.floor(spawnMarkerPosition.y);
+        int markerBz = (int) Math.floor(spawnMarkerPosition.z);
+        Vector3i underMarker = tryMountBlockAt(world, npcX, npcYFeet, npcZ, markerBx, markerBy - 1, markerBz);
+        if (underMarker != null) {
+            return underMarker;
+        }
+        return tryMountBlockAt(world, npcX, npcYFeet, npcZ, markerBx, markerBy, markerBz);
+    }
+
+    /** True when the block at {@code (bx, by, bz)} has seat or bed mount points. */
+    public static boolean isBlockMountSeat(@Nonnull World world, int bx, int by, int bz) {
+        if (by < 0 || by >= 320) {
+            return false;
+        }
+        BlockType blockType = world.getBlockType(bx, by, bz);
+        if (blockType == null || blockType == BlockType.EMPTY) {
+            return false;
+        }
+        return blockType.getSeats() != null || blockType.getBeds() != null;
+    }
+
+    /** True when the chunk for an adventurer spawn marker column is loaded (seat lookup and mount need this). */
+    public static boolean isGuildHallSpawnColumnLoaded(@Nonnull World world, @Nonnull Vector3d spawnAnchor) {
+        int bx = (int) Math.floor(spawnAnchor.x);
+        int bz = (int) Math.floor(spawnAnchor.z);
+        return world.getChunkIfInMemory(com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(bx, bz)) != null;
+    }
+
+    /**
+     * Lowest seat block with a resolvable mount point under a guild hall adventurer spawn anchor (marker is above the
+     * chair). Scans down so stacked chair voxels pick the base block BlockMountAPI can use.
+     */
+    @Nullable
+    public static Vector3i findGuildHallSeatBelowSpawn(@Nonnull World world, @Nonnull Vector3d spawnAnchor) {
+        int bx = (int) Math.floor(spawnAnchor.x);
+        int bz = (int) Math.floor(spawnAnchor.z);
+        int anchorBlockY = (int) Math.floor(spawnAnchor.y);
+        Vector3i lowestWithSeat = null;
+        for (int dy = 1; dy <= 6; dy++) {
+            int by = anchorBlockY - dy;
+            if (by < 0) {
+                break;
+            }
+            if (!isBlockMountSeat(world, bx, by, bz)) {
+                continue;
+            }
+            Vector3i candidate = new Vector3i(bx, by, bz);
+            if (seatWorldPosition(world, candidate) != null) {
+                lowestWithSeat = candidate;
+            }
+        }
+        if (lowestWithSeat != null) {
+            return lowestWithSeat;
+        }
+        if (isBlockMountSeat(world, bx, anchorBlockY, bz)) {
+            Vector3i sameCell = new Vector3i(bx, anchorBlockY, bz);
+            if (seatWorldPosition(world, sameCell) != null) {
+                return sameCell;
+            }
+        }
+        return null;
+    }
+
+    /** World-space seat point for a chair/stool block, or null when the block has no seat mount points. */
+    @Nullable
+    public static Vector3d seatWorldPosition(@Nonnull World world, @Nonnull Vector3i mountBlock) {
+        BlockType blockType = world.getBlockType(mountBlock.x, mountBlock.y, mountBlock.z);
+        if (blockType == null || blockType.getSeats() == null) {
+            return null;
+        }
+        int rotationIndex = blockRotationIndexNoLoad(world, mountBlock.x, mountBlock.y, mountBlock.z);
+        BlockMountPoint[] points = blockType.getSeats().getRotated(rotationIndex);
+        if (points == null || points.length == 0) {
+            return null;
+        }
+        return points[0].computeWorldSpacePosition(mountBlock);
+    }
+
+    /**
+     * Feet position for a guild hall display adventurer: chair seat under the spawn marker when present, otherwise the
+     * marker anchor (standing cell center).
+     */
+    @Nonnull
+    public static Vector3d resolveGuildHallAdventurerFeetPosition(@Nonnull World world, @Nonnull Vector3d spawnMarker) {
+        Vector3i seatBlock = findGuildHallSeatBelowSpawn(world, spawnMarker);
+        if (seatBlock == null) {
+            return new Vector3d(spawnMarker);
+        }
+        Vector3d seatPos = seatWorldPosition(world, seatBlock);
+        return seatPos != null ? new Vector3d(seatPos) : new Vector3d(spawnMarker);
+    }
+
+    @Nullable
+    private static Vector3i tryMountBlockAt(
+        @Nonnull World world,
+        double npcX,
+        double npcYFeet,
+        double npcZ,
+        int bx,
+        int by,
+        int bz
+    ) {
+        if (by < 0 || by >= 320) {
+            return null;
+        }
+        if (!isBlockMountSeat(world, bx, by, bz)) {
+            return null;
+        }
+        if (!canNpcMountBlockPoi(world, npcX, npcYFeet, npcZ, bx, by, bz)) {
+            return null;
+        }
+        return new Vector3i(bx, by, bz);
+    }
+
     public static boolean canNpcMountBlockPoi(
         @Nonnull World world,
         double npcX,

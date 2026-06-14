@@ -31,7 +31,7 @@
     ]
   },
   "Scale": 0.85,
-  "MaxStack": 64,
+  "MaxStack": 100,
   "Quality": "Legendary",
   "Set": "Aetherhaven",
   "ItemSoundSetId": "ISS_Items_Gems"

@@ -1,0 +1,52 @@
+{
+  "id": "plot_player_shop",
+  "displayName": "Player Shop",
+  "description": "A shop that players can sell their goods at.",
+  "prefabPath": "plot_player_shop.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Player_Shop",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 42,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 360 },
+    { "resourceTypeId": "Rock", "count": 130 }
+  ],
+  "pois": [
+    {
+      "localX": 7,
+      "localY": 2,
+      "localZ": -7,
+      "tags": [
+        "WORK",
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Counter",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -6
+    }
+  ],
+  "managementBlockLocalPos": [
+    6,
+    3,
+    -12
+  ],
+  "shopSafeLocalPos": [
+    5,
+    2,
+    -12
+  ],
+  "touristDestination": true,
+  "tags": [
+    "shop",
+    "work",
+    "player"
+  ]
+}

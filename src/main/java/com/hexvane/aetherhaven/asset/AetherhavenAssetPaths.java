@@ -31,6 +31,9 @@ public final class AetherhavenAssetPaths {
     /** Townsfolk personality traits. */
     public static final String PERSONALITIES = "Server/Aetherhaven/Personalities";
 
+    /** Bard song catalog and related config. */
+    public static final String BARD = "Server/Aetherhaven/Bard";
+
     private AetherhavenAssetPaths() {}
 
     @Nonnull

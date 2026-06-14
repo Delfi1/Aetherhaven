@@ -1,0 +1,29 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "$Comment": "RTS pathing: Seek toward NPCEntity leash (focus-fire hold or move order) until very close.",
+  "Content": {
+    "Instructions": [
+      {
+        "Sensor": { "Type": "Leash", "Range": 1.25 },
+        "BodyMotion": {
+          "Type": "Seek",
+          "StopDistance": 0.5,
+          "SlowDownDistance": 4,
+          "AbortDistance": 256,
+          "UsePathfinder": true,
+          "UseSteering": true,
+          "RelativeSpeed": 1.0,
+          "ThrottleDelayRange": [0.3, 0.8],
+          "ThrottleIgnoreCount": 2,
+          "MaxPathLength": 400,
+          "MaxTotalNodes": 1200
+        }
+      },
+      {
+        "Sensor": { "Type": "Any" },
+        "BodyMotion": { "Type": "Nothing" }
+      }
+    ]
+  }
+}

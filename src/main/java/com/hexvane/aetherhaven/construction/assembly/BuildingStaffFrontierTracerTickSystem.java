@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.construction.assembly;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.entity.EntityChunkUtil;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -24,6 +25,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.modules.projectile.component.Projectile;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -139,6 +141,11 @@ public final class BuildingStaffFrontierTracerTickSystem extends EntityTickingSy
         float dtSec = Math.min(Math.max(dt, 1.0f / 240.0f), MAX_DT_SEC);
         double step = Math.min(dist, speed * dtSec);
         Vector3d moved = new Vector3d(pos.x + nx * step, pos.y + ny * step, pos.z + nz * step);
+        World world = store.getExternalData().getWorld();
+        if (!EntityChunkUtil.isPositionChunkInMemory(world, moved)) {
+            commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+            return;
+        }
         tc.setPosition(moved);
         double pitch = Math.asin(Math.max(-1.0, Math.min(1.0, ny)));
         double yaw = Math.atan2(-nx, -nz);

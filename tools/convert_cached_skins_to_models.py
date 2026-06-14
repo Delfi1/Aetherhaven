@@ -311,11 +311,51 @@ def skin_to_attachments(skin: dict[str, Any], registry: CosmeticRegistry) -> lis
     return attachments
 
 
+GENERIC_HAIR_MODELS = {
+    "Characters/Haircuts/GenericShort.blockymodel",
+    "Characters/Haircuts/GenericMedium.blockymodel",
+    "Characters/Haircuts/GenericLong.blockymodel",
+}
+PLAYER_BODY_MODEL = "Characters/Player.blockymodel"
+
+
+def is_styled_hair_model(model: str) -> bool:
+    return model.startswith("Characters/Haircuts/") and model not in GENERIC_HAIR_MODELS
+
+
+def sanitize_attachments(attachments: list[ModelAttachment]) -> None:
+    has_styled = any(is_styled_hair_model(a.model) for a in attachments)
+    if has_styled:
+        attachments[:] = [a for a in attachments if a.model not in GENERIC_HAIR_MODELS]
+    attachments[:] = [a for a in attachments if a.model != PLAYER_BODY_MODEL]
+
+
 def to_model_json(skin: dict[str, Any], registry: CosmeticRegistry) -> dict[str, Any]:
-    return {
+    attachments = skin_to_attachments(skin, registry)
+    root_model: str | None = None
+    root_texture: str | None = None
+    root_gradient_set: str | None = None
+    root_gradient_id: str | None = None
+    for i, att in enumerate(attachments):
+        if att.model == PLAYER_BODY_MODEL:
+            root_model = att.model
+            root_texture = att.texture
+            root_gradient_set = att.gradient_set
+            root_gradient_id = att.gradient_id
+            del attachments[i]
+            break
+    sanitize_attachments(attachments)
+    out: dict[str, Any] = {
         "Parent": PARENT_PLAYER,
-        "DefaultAttachments": [a.to_json() for a in skin_to_attachments(skin, registry)],
+        "DefaultAttachments": [a.to_json() for a in attachments],
     }
+    if root_model:
+        out["Model"] = root_model
+        out["Texture"] = root_texture
+        if root_gradient_set:
+            out["GradientSet"] = root_gradient_set
+            out["GradientId"] = root_gradient_id or ""
+    return out
 
 
 def common_asset_exists(common_root: Path, relative_path: str) -> bool:

@@ -7,7 +7,7 @@
   "plotAnchorOffset": [0, 0, 0],
   "rotationYaw": "None",
   "selfBuildGameDays": 0.35,
-  "treasuryGoldCoinCost": 0,
+  "treasuryGoldCoinCost": 20,
   "consumesPlotToken": false,
   "excludeFromTownJournal": true,
   "wallSegment": true,

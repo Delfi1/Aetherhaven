@@ -147,8 +147,11 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
         }
         HeadRotation headRot = store.getComponent(playerRef, HeadRotation.getComponentType());
         Vector3d tip = staffTip(transform, headRot);
-        ArrayList<Vector3i> cells = new ArrayList<>();
-        AssemblyFrontierWorldCells.collectWithinDefaultRange(world, plugin, tip, cells);
+        ArrayList<Vector3i> obstructionCells = new ArrayList<>();
+        AssemblyObstructionWorldCells.collectWithinDefaultRange(world, plugin, tip, obstructionCells);
+        ArrayList<Vector3i> frontierCells = new ArrayList<>();
+        AssemblyFrontierWorldCells.collectWithinDefaultRange(world, plugin, tip, frontierCells);
+        ArrayList<Vector3i> cells = !obstructionCells.isEmpty() ? obstructionCells : frontierCells;
         if (cells.isEmpty()) {
             failWithHint(playerRef, store);
             context.getState().state = InteractionState.Failed;
@@ -173,7 +176,12 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
             if (!town.playerCanManageConstructions(playerUuid)) {
                 continue;
             }
-            if (PlotAssemblyService.resolveFrontierPlacementIndex(world, job, plot, cell) < 0) {
+            PlotAssemblyPhase phase = AssemblyWorldRegistry.phase(world, job.plotId());
+            if (phase == PlotAssemblyPhase.CLEARING) {
+                if (PlotAssemblyService.findClearingJobForObstructedCell(world, plugin, cell) == null) {
+                    continue;
+                }
+            } else if (PlotAssemblyService.resolveFrontierPlacementIndex(world, job, plot, cell) < 0) {
                 continue;
             }
             double cx = cell.x + 0.5;

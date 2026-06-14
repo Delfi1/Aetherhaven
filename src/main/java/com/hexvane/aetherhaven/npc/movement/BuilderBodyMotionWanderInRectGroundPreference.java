@@ -3,7 +3,9 @@ package com.hexvane.aetherhaven.npc.movement;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.hypixel.hytale.server.npc.asset.builder.BuilderDescriptorState;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
+import com.hypixel.hytale.server.npc.asset.builder.validators.DoubleSingleValidator;
 import com.hypixel.hytale.server.npc.corecomponents.movement.builders.BuilderBodyMotionWanderInRect;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,31 +39,45 @@ public final class BuilderBodyMotionWanderInRectGroundPreference extends Builder
             return this;
         }
         super.readConfig(data);
-        if (!data.isJsonObject()) {
-            return this;
-        }
-        JsonObject o = data.getAsJsonObject();
-        if (o.has("DefaultGroundWeight") && o.get("DefaultGroundWeight").isJsonPrimitive()) {
-            this.defaultGroundWeight = o.get("DefaultGroundWeight").getAsDouble();
-        }
-        if (o.has("ObstacleWeight") && o.get("ObstacleWeight").isJsonPrimitive()) {
-            this.obstacleWeight = o.get("ObstacleWeight").getAsDouble();
-        }
-        if (o.has("GroundWeights") && o.get("GroundWeights").isJsonArray()) {
-            JsonArray arr = o.get("GroundWeights").getAsJsonArray();
-            for (JsonElement el : arr) {
-                if (!el.isJsonObject()) {
-                    continue;
+        this.ignoreAttribute("GroundWeights");
+        this.getDouble(
+            data,
+            "DefaultGroundWeight",
+            w -> this.defaultGroundWeight = w,
+            1.0,
+            DoubleSingleValidator.greater0(),
+            BuilderDescriptorState.Stable,
+            "Weight for normal walkable terrain",
+            null
+        );
+        this.getDouble(
+            data,
+            "ObstacleWeight",
+            w -> this.obstacleWeight = w,
+            0.12,
+            DoubleSingleValidator.greater0(),
+            BuilderDescriptorState.Stable,
+            "Weight for benches, seats, beds, and thin obstacles",
+            null
+        );
+        if (data.isJsonObject()) {
+            JsonObject o = data.getAsJsonObject();
+            if (o.has("GroundWeights") && o.get("GroundWeights").isJsonArray()) {
+                JsonArray arr = o.get("GroundWeights").getAsJsonArray();
+                for (JsonElement el : arr) {
+                    if (!el.isJsonObject()) {
+                        continue;
+                    }
+                    JsonObject row = el.getAsJsonObject();
+                    if (!row.has("BlockTypeId") || !row.has("Weight")) {
+                        continue;
+                    }
+                    String id = row.get("BlockTypeId").getAsString().trim();
+                    if (id.isEmpty()) {
+                        continue;
+                    }
+                    this.groundWeightsByBlockTypeId.put(id, row.get("Weight").getAsDouble());
                 }
-                JsonObject row = el.getAsJsonObject();
-                if (!row.has("BlockTypeId") || !row.has("Weight")) {
-                    continue;
-                }
-                String id = row.get("BlockTypeId").getAsString().trim();
-                if (id.isEmpty()) {
-                    continue;
-                }
-                this.groundWeightsByBlockTypeId.put(id, row.get("Weight").getAsDouble());
             }
         }
         return this;

@@ -1,0 +1,21 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Smokestack_Plume",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      }
+    },
+    {
+      "SpawnerId": "Aetherhaven_Smokestack_Wisp",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 0.02,
+        "Z": 0
+      }
+    }
+  ],
+  "CullDistance": 50.0
+}

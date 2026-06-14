@@ -1,6 +1,10 @@
 package com.hexvane.aetherhaven.prefab;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
+import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
+import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import java.nio.file.Path;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,7 +44,35 @@ public final class PrefabResolveUtil {
             }
         }
         p = tryUnderscoreCasePrefabAliases(ps, k);
-        return p;
+        if (p != null) {
+            return p;
+        }
+        return resolveDataDirectoryPrefab(k);
+    }
+
+    @Nullable
+    private static Path resolveDataDirectoryPrefab(@Nonnull String key) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        Path file = CustomBuildingsPaths.resolvePrefabFile(plugin.getDataDirectory(), key);
+        if (file != null) {
+            return file.toAbsolutePath().normalize();
+        }
+        return null;
+    }
+
+    /**
+     * Loads (and caches) the prefab buffer for a construction key, or null when the file is missing.
+     */
+    @Nullable
+    public static IPrefabBuffer resolvePrefabBuffer(@Nullable String prefabPathKey) {
+        Path path = resolvePrefabPath(prefabPathKey);
+        if (path == null) {
+            return null;
+        }
+        return PrefabBufferUtil.getCached(path);
     }
 
     /**

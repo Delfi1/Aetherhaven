@@ -120,3 +120,29 @@ commands.aetherhaven.townsfolk.list.availableIdle=Available for idle: {ids}
 commands.aetherhaven.townsfolk.list.inUse=Checked out: {ids}
 commands.aetherhaven.townsfolk.clear.desc=Despawn all townsfolk in this world and reset the shared pool
 commands.aetherhaven.townsfolk.clear.ok=Removed {count} townsfolk and cleared the pool for this world
+commands.aetherhaven.guild.desc=Debug: guild hall adventurer pool and hired guards
+commands.aetherhaven.guild.respawn.desc=Despawn hall adventurers, roll today's slots, and respawn immediately
+commands.aetherhaven.guild.respawn.ok=Guild respawn: reclaimed {reclaimed} stale checkouts, despawned {despawned}, rolled {slots} slots, spawned {spawned} (pool available: {available})
+commands.aetherhaven.guild.clearguards.desc=Despawn all hired guards in your town and release their pool entries
+commands.aetherhaven.guild.clearguards.ok=Removed {count} hired guard entities and cleared town guard records
+commands.aetherhaven.guild.status.desc=Show guild hall adventurer pool diagnostics for your town
+commands.aetherhaven.guild.status.ok=Guild hall active={active} epochDay={epochDay} lastMorning={lastMorning} filledSlots={filledSlots} trackedNpcIds={tracked} hiredGuards={hiredGuards} pool(total={poolTotal} guard={poolGuards} adventurer={poolAdventurers} other={poolOther})
+
+commands.aetherhaven.tourist.desc=Debug: tourist portal visit targets
+commands.aetherhaven.tourist.targets.desc=Debug: list tourist destination plots and optional POIs in your town
+commands.aetherhaven.guild.notActive=Your town does not have an active guild hall
+
+commands.aetherhaven.plotcreator.desc=Create custom town buildings
+commands.aetherhaven.plotcreator.start.desc=Open the plot creator guide
+commands.aetherhaven.plotcreator.cancel.desc=Cancel the plot creator session
+commands.aetherhaven.plotcreator.edit.desc=Edit a custom building saved on this server
+commands.aetherhaven.plotcreator.edit.constructionId=Building id (plot_my_building)
+commands.aetherhaven.plotcreator.generateicon.desc=Generate a plot token icon PNG from an existing prefab
+commands.aetherhaven.plotcreator.generateicon.idOrPrefab=Building id (plot_my_house) or prefab key (Guild_Hall.prefab.json)
+commands.aetherhaven.plotcreator.generateicon.outputId=Output id for the icon file (defaults to building id or prefab name)
+
+commands.aetherhaven.plottoken.desc=Give and list plot tokens for buildings
+commands.aetherhaven.plottoken.give.desc=Give a plot token for a building id
+commands.aetherhaven.plottoken.give.constructionId=Building id (example: plot_park)
+commands.aetherhaven.plottoken.give.amount=Stack size (default 1)
+commands.aetherhaven.plottoken.list.desc=List all building ids

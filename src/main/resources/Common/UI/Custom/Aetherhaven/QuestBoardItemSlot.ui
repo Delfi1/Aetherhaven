@@ -1,0 +1,19 @@
+$C = "../Common.ui";
+
+@QuestBoardItemSlotSize = 52;
+
+Group #QuestBoardItemSlot {
+  LayoutMode: Middle;
+  Anchor: (Width: @QuestBoardItemSlotSize, Height: @QuestBoardItemSlotSize, Right: 8);
+
+  ItemGrid #ItemIcon {
+    Anchor: (Width: @QuestBoardItemSlotSize, Height: @QuestBoardItemSlotSize);
+    SlotsPerRow: 1;
+    Style: (
+      SlotSize: @QuestBoardItemSlotSize,
+      SlotIconSize: @QuestBoardItemSlotSize,
+      SlotSpacing: 0,
+      SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+    );
+  }
+}

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.autonomy;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiOccupancy;
@@ -29,6 +30,27 @@ public final class PoiScoring {
         return e.getTags().contains("WORK");
     }
 
+    public static boolean isBardWorkPoi(@Nonnull PoiEntry e) {
+        return e.getTags().contains(AetherhavenConstants.POI_TAG_BARD);
+    }
+
+    /** Guild master desk and similar work spots; excludes the bard performance spot. */
+    public static boolean isNonBardWorkPoi(@Nonnull PoiEntry e) {
+        return isWorkPoi(e) && !isBardWorkPoi(e);
+    }
+
+    static boolean matchesWorkPoiForBindingKind(@Nonnull PoiEntry e, @Nonnull String bindingKind) {
+        if (TownVillagerBinding.KIND_BARD.equals(bindingKind)
+            || TownVillagerBinding.KIND_VISITOR_BARD.equals(bindingKind)) {
+            return isBardWorkPoi(e);
+        }
+        if (TownVillagerBinding.KIND_GUILD_MASTER.equals(bindingKind)
+            || TownVillagerBinding.KIND_VISITOR_GUILD_MASTER.equals(bindingKind)) {
+            return isNonBardWorkPoi(e);
+        }
+        return isWorkPoi(e);
+    }
+
     /** True when the villager should temporarily override a work shift to satisfy a low meter (eat / rest / fun). */
     public static boolean needsBreakForSchedule(@Nonnull VillagerNeeds needs) {
         return needs.getHunger() < NEEDS_BREAK_THRESHOLD
@@ -38,6 +60,14 @@ public final class PoiScoring {
 
     static boolean isWorkScheduleSegment(@Nullable String scheduleLocation) {
         return scheduleLocation != null && VillagerScheduleResolver.LOC_WORK.equalsIgnoreCase(scheduleLocation.trim());
+    }
+
+    static boolean isShopScheduleSegment(@Nullable String scheduleLocation) {
+        return scheduleLocation != null && VillagerScheduleResolver.LOC_SHOP.equalsIgnoreCase(scheduleLocation.trim());
+    }
+
+    public static boolean isShopPoi(@Nonnull PoiEntry e) {
+        return e.getTags().contains("SHOP");
     }
 
     public static float score(@Nonnull VillagerNeeds needs, @Nonnull PoiEntry poi) {
@@ -161,21 +191,27 @@ public final class PoiScoring {
     ) {
         UUID preferredPlot = binding.getPreferredPlotId();
         boolean atWork = isWorkScheduleSegment(scheduleLocation);
+        boolean atShop = isShopScheduleSegment(scheduleLocation);
         boolean breakOverride = atWork && needsBreakForSchedule(needs);
         boolean workOnlyShift = preferredPlot != null && atWork && !breakOverride;
+        boolean shopBrowseShift = atShop;
         PoiEntry best = null;
         float bestScore = 0f;
         int bestUsed = Integer.MAX_VALUE;
         double bestDistSq = Double.POSITIVE_INFINITY;
         for (PoiEntry e : candidates) {
-            if (workOnlyShift) {
+            if (shopBrowseShift) {
+                if (!isShopPoi(e)) {
+                    continue;
+                }
+            } else if (workOnlyShift) {
                 if (e.getPlotId() == null || !preferredPlot.equals(e.getPlotId())) {
                     continue;
                 }
-                if (!isWorkPoi(e)) {
+                if (!matchesWorkPoiForBindingKind(e, binding.getKind())) {
                     continue;
                 }
-            } else if (preferredPlot != null && !(atWork && breakOverride)) {
+            } else if (preferredPlot != null && !(atWork && breakOverride) && !atShop) {
                 if (e.getPlotId() != null && !preferredPlot.equals(e.getPlotId())) {
                     continue;
                 }
@@ -228,7 +264,7 @@ public final class PoiScoring {
         // Idle discretionary visits: require some unmet need so villagers do not crisscross town when already satisfied.
         // When the weekly schedule sets preferredPlotId, we must still pick a POI in that plot even if needs are full
         // (scores near zero); otherwise they never enter TRAVEL and stay on local wander (e.g. near Gaia after revival).
-        if (preferredPlot == null && bestScore < 8f) {
+        if (preferredPlot == null && !shopBrowseShift && bestScore < 8f) {
             return null;
         }
         return best;

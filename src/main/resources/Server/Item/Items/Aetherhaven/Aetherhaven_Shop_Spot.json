@@ -1,0 +1,94 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_shop.items.Aetherhaven_Shop_Spot.name",
+    "Description": "aetherhaven_shop.items.Aetherhaven_Shop_Spot.description"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Furniture.Decorative"
+  ],
+  "Set": "Aetherhaven",
+  "Interactions": {
+    "Primary": "Block_Primary",
+    "Secondary": "Block_Secondary"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Shop_Spot.png",
+  "BlockType": {
+    "BlockParticleSetId": "Wood",
+    "BlockSoundSetId": "Wood",
+    "CustomModel": "Items/Aetherhaven/Shop_Spot.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "BlockTextures/Wood_Softwood_Planks_Side.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Woods"
+      }
+    },
+    "HitboxType": "Aetherhaven_Shop_Spot",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "ParticleColor": "#8b7355",
+    "PlacementSettings": {
+      "RotationMode": "BlockNormal"
+    },
+    "VariantRotation": "NESW",
+    "BlockEntity": {
+      "Components": {
+        "AetherhavenShopSpotBlock": {
+          "SpotId": "",
+          "TownId": "",
+          "PlotId": "",
+          "PlayerControlled": false,
+          "LootTableId": "",
+          "Configured": false
+        }
+      }
+    },
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "AetherhavenShopSpotUse"
+          }
+        ]
+      },
+      "Secondary": {
+        "Interactions": [
+          {
+            "Type": "AetherhavenShopSpotSecondary"
+          }
+        ]
+      }
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.7,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -1
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "MaxStack": 25
+}

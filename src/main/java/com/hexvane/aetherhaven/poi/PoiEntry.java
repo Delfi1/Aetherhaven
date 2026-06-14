@@ -20,16 +20,17 @@ public final class PoiEntry {
     private final String blockTypeId;
     @Nonnull
     private final PoiInteractionKind interactionKind;
-    /**
-     * Optional world-space stand position for autonomy leash / Seek (not necessarily the furniture cell). When all
-     * three are non-null, villagers path here before USE; when null, leash uses the POI block center.
-     */
+    private final boolean mountOnUse;
+    @Nullable
+    private final String equipmentProfileId;
     @Nullable
     private final Double interactionTargetX;
     @Nullable
     private final Double interactionTargetY;
     @Nullable
     private final Double interactionTargetZ;
+    @Nullable
+    private final Float interactionTargetYawRadians;
 
     public PoiEntry(
         @Nonnull UUID id,
@@ -43,7 +44,7 @@ public final class PoiEntry {
         @Nullable String blockTypeId,
         @Nonnull PoiInteractionKind interactionKind
     ) {
-        this(id, townId, x, y, z, tags, capacity, plotId, blockTypeId, interactionKind, null, null, null);
+        this(id, townId, x, y, z, tags, capacity, plotId, blockTypeId, interactionKind, defaultMountOnUse(interactionKind), null, null, null, null, null);
     }
 
     public PoiEntry(
@@ -61,6 +62,81 @@ public final class PoiEntry {
         @Nullable Double interactionTargetY,
         @Nullable Double interactionTargetZ
     ) {
+        this(
+            id,
+            townId,
+            x,
+            y,
+            z,
+            tags,
+            capacity,
+            plotId,
+            blockTypeId,
+            interactionKind,
+            defaultMountOnUse(interactionKind),
+            null,
+            interactionTargetX,
+            interactionTargetY,
+            interactionTargetZ,
+            null
+        );
+    }
+
+    public PoiEntry(
+        @Nonnull UUID id,
+        @Nonnull UUID townId,
+        int x,
+        int y,
+        int z,
+        @Nonnull Set<String> tags,
+        int capacity,
+        @Nullable UUID plotId,
+        @Nullable String blockTypeId,
+        @Nonnull PoiInteractionKind interactionKind,
+        boolean mountOnUse,
+        @Nullable String equipmentProfileId,
+        @Nullable Double interactionTargetX,
+        @Nullable Double interactionTargetY,
+        @Nullable Double interactionTargetZ
+    ) {
+        this(
+            id,
+            townId,
+            x,
+            y,
+            z,
+            tags,
+            capacity,
+            plotId,
+            blockTypeId,
+            interactionKind,
+            mountOnUse,
+            equipmentProfileId,
+            interactionTargetX,
+            interactionTargetY,
+            interactionTargetZ,
+            null
+        );
+    }
+
+    public PoiEntry(
+        @Nonnull UUID id,
+        @Nonnull UUID townId,
+        int x,
+        int y,
+        int z,
+        @Nonnull Set<String> tags,
+        int capacity,
+        @Nullable UUID plotId,
+        @Nullable String blockTypeId,
+        @Nonnull PoiInteractionKind interactionKind,
+        boolean mountOnUse,
+        @Nullable String equipmentProfileId,
+        @Nullable Double interactionTargetX,
+        @Nullable Double interactionTargetY,
+        @Nullable Double interactionTargetZ,
+        @Nullable Float interactionTargetYawRadians
+    ) {
         this.id = id;
         this.townId = townId;
         this.x = x;
@@ -71,9 +147,16 @@ public final class PoiEntry {
         this.plotId = plotId;
         this.blockTypeId = blockTypeId;
         this.interactionKind = interactionKind;
+        this.mountOnUse = mountOnUse;
+        this.equipmentProfileId = equipmentProfileId != null && !equipmentProfileId.isBlank() ? equipmentProfileId.trim() : null;
         this.interactionTargetX = interactionTargetX;
         this.interactionTargetY = interactionTargetY;
         this.interactionTargetZ = interactionTargetZ;
+        this.interactionTargetYawRadians = interactionTargetYawRadians;
+    }
+
+    private static boolean defaultMountOnUse(@Nonnull PoiInteractionKind kind) {
+        return kind == PoiInteractionKind.SIT || kind == PoiInteractionKind.SLEEP;
     }
 
     @Nonnull
@@ -122,11 +205,19 @@ public final class PoiEntry {
         return interactionKind;
     }
 
+    public boolean isMountOnUse() {
+        return mountOnUse;
+    }
+
+    @Nullable
+    public String getEquipmentProfileId() {
+        return equipmentProfileId;
+    }
+
     public boolean hasInteractionTarget() {
         return interactionTargetX != null && interactionTargetY != null && interactionTargetZ != null;
     }
 
-    /** Set by the POI tool; only valid when {@link #hasInteractionTarget()} is true. */
     @Nullable
     public Double getInteractionTargetX() {
         return interactionTargetX;
@@ -142,7 +233,11 @@ public final class PoiEntry {
         return interactionTargetZ;
     }
 
-    /** Same POI id and metadata with an updated world cell (e.g. POI tool move). */
+    @Nullable
+    public Float getInteractionTargetYawRadians() {
+        return interactionTargetYawRadians;
+    }
+
     @Nonnull
     public PoiEntry copyWithPosition(int nx, int ny, int nz) {
         return new PoiEntry(
@@ -156,14 +251,27 @@ public final class PoiEntry {
             plotId,
             blockTypeId,
             interactionKind,
+            mountOnUse,
+            equipmentProfileId,
             interactionTargetX,
             interactionTargetY,
-            interactionTargetZ
+            interactionTargetZ,
+            interactionTargetYawRadians
         );
     }
 
     @Nonnull
     public PoiEntry copyWithInteractionTarget(@Nullable Double tx, @Nullable Double ty, @Nullable Double tz) {
+        return copyWithInteractionTarget(tx, ty, tz, tx == null ? null : interactionTargetYawRadians);
+    }
+
+    @Nonnull
+    public PoiEntry copyWithInteractionTarget(
+        @Nullable Double tx,
+        @Nullable Double ty,
+        @Nullable Double tz,
+        @Nullable Float yawRadians
+    ) {
         return new PoiEntry(
             id,
             townId,
@@ -175,9 +283,12 @@ public final class PoiEntry {
             plotId,
             blockTypeId,
             interactionKind,
+            mountOnUse,
+            equipmentProfileId,
             tx,
             ty,
-            tz
+            tz,
+            yawRadians
         );
     }
 }

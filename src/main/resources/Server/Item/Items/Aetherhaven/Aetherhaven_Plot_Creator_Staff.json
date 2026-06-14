@@ -1,0 +1,124 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Plot_Creator_Staff.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Plot_Creator_Staff.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Bar_Adamantite",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Ingredient_Bar_Thorium",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Ingredient_Bar_Cobalt",
+        "Quantity": 2
+      },
+      {
+        "ResourceTypeId": "Wood_Trunk",
+        "Quantity": 6
+      },
+      {
+        "ItemId": "Ingredient_Fibre",
+        "Quantity": 1
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ],
+        "RequiredTierLevel": 1
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Plot_Creator_Staff.png",
+  "Categories": [
+    "Items.Tools"
+  ],
+  "Model": "Items/Aetherhaven/Building_Staff/Building_Staff.blockymodel",
+  "Texture": "Items/Aetherhaven/Building_Staff/Plot_Creator_Staff.png",
+  "PlayerAnimationsId": "Staff",
+  "MaxStack": 1,
+  "Quality": "Uncommon",
+  "Set": "Aetherhaven",
+  "Tags": {
+    "Type": [
+      "Tool"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Weapons_Wood",
+  "IconProperties": {
+    "Scale": 0.28,
+    "Rotation": [
+      39,
+      171,
+      39
+    ],
+    "Translation": [
+      -47,
+      -41
+    ]
+  },
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPlotCreatorBlock"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPlotCreatorBlock"
+        }
+      ]
+    },
+    "Use": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPlotCreatorUse"
+        }
+      ]
+    },
+    "Ability1": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPlotCreatorStepBack"
+        }
+      ]
+    },
+    "Ability2": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPlotCreatorStepForward"
+        }
+      ]
+    },
+    "Ability3": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPlotCreatorCancel"
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "DebugOutlines": true,
+    "UseDistance": {
+      "Adventure": 8,
+      "Creative": 10
+    },
+    "AllEntities": false
+  }
+}

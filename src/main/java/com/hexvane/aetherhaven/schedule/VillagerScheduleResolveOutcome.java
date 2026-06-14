@@ -9,15 +9,21 @@ public record VillagerScheduleResolveOutcome(
     @Nullable UUID jobPlotIdToPersist,
     @Nullable String utilityPersistGameplayConstructionId,
     @Nullable String utilityPersistScheduleSegment,
-    @Nullable UUID utilityPersistPlotId
+    @Nullable UUID utilityPersistPlotId,
+    boolean clearPreferredPlot
 ) {
     /** Basic outcome without schedule utility pick bookkeeping. */
     public VillagerScheduleResolveOutcome(@Nullable UUID plotId, @Nullable UUID jobPlotIdToPersist) {
-        this(plotId, jobPlotIdToPersist, null, null, null);
+        this(plotId, jobPlotIdToPersist, null, null, null, false);
     }
 
     public static VillagerScheduleResolveOutcome skip() {
-        return new VillagerScheduleResolveOutcome(null, null, null, null, null);
+        return new VillagerScheduleResolveOutcome(null, null, null, null, null, false);
+    }
+
+    /** Active segment with no commute target; villager browses matching POIs town-wide. */
+    public static VillagerScheduleResolveOutcome browseTownWide() {
+        return new VillagerScheduleResolveOutcome(null, null, null, null, null, true);
     }
 
     public boolean hasUtilityPickPersist() {

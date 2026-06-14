@@ -6,6 +6,7 @@
   "countsAsConstructionId": "plot_barn",
   "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Barn_Hytiny",
+  "plotTokenLockedByDefault": true,
   "plotAnchorOffset": [9, 0, 9],
   "managementBlockLocalPos": [-2, 2, 7],
   "rotationYaw": "None",
@@ -16,7 +17,10 @@
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 600 },
     { "resourceTypeId": "Soils", "count": 40 },
-    { "resourceTypeId": "Rock", "count": 200 }
+    { "resourceTypeId": "Rock", "count": 200 },
+    { "itemId": "Bench_Farming", "count": 1 },
+    { "itemId": "Bench_Tannery", "count": 1 },
+    { "itemId": "Bench_WorkBench", "count": 1 }
   ],
   "pois": [
     {

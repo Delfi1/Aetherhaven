@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.inn;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -11,10 +12,8 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.logger.HytaleLogger;
-import org.joml.Vector3d;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -54,23 +53,10 @@ public final class MerchantStallCompletion {
             return;
         }
 
-        double tx = work.getX() + 0.5;
-        double ty = work.getY();
-        double tz = work.getZ() + 0.5;
-
         Ref<EntityStore> merchantRef = findMerchantRef(store, town);
         if (merchantRef == null || !merchantRef.isValid()) {
             return;
         }
-        TransformComponent tc = store.getComponent(merchantRef, TransformComponent.getComponentType());
-        if (tc == null) {
-            return;
-        }
-        Vector3d p = tc.getPosition();
-        p.x = tx;
-        p.y = ty + 0.02;
-        p.z = tz;
-        store.putComponent(merchantRef, TransformComponent.getComponentType(), tc);
         UUIDComponent uuidComp = store.getComponent(merchantRef, UUIDComponent.getComponentType());
         UUID merchantUuid = uuidComp != null ? uuidComp.getUuid() : null;
         if (merchantUuid != null) {
@@ -87,6 +73,11 @@ public final class MerchantStallCompletion {
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_MERCHANT, stallPlotId, stallPlotId)
         );
+        VillagerAutonomySystem.promptWorkplaceTravel(
+            merchantRef,
+            store,
+            VillagerAutonomySystem.resolveAutonomyNowMs(store)
+        );
         town.addInnVisitorPoolExcludedRoleId(AetherhavenConstants.NPC_MERCHANT);
         if (uuidComp != null) {
             ResidentRegistryService.upsert(
@@ -99,7 +90,7 @@ public final class MerchantStallCompletion {
             );
         }
         tm.updateTown(town);
-        LOGGER.atInfo().log("Moved merchant to stall at %s,%s,%s", work.getX(), work.getY(), work.getZ());
+        LOGGER.atInfo().log("Assigned merchant to stall plot %s; pathing to work POI", stallPlotId);
     }
 
     @Nullable

@@ -52,6 +52,17 @@ public final class VillagerRevivalService {
         if (roleId.isEmpty()) {
             return false;
         }
+        if (ResidentRegistryService.hasLiveTownRevivalNpcForRole(store, town, record)) {
+            LOGGER.atInfo()
+                .log(
+                    "Revival blocked: live town NPC still present for role %s in town %s",
+                    roleId,
+                    town.getTownId()
+                );
+            record.setPendingDawnRevival(false);
+            tm.updateTown(town);
+            return false;
+        }
         NPCPlugin npc = NPCPlugin.get();
         if (npc == null) {
             return false;
@@ -92,6 +103,8 @@ public final class VillagerRevivalService {
         UUID newUuid = nu.getUuid();
         VillagerReputationService.migrateVillagerEntityUuid(town, tm, oldUuid, newUuid);
         ResidentRegistryService.replaceEntityUuidEverywhere(town, tm, oldUuid, newUuid);
+        record.setPendingDawnRevival(false);
+        tm.updateTown(town);
         world.execute(
             () -> {
                 VillagerScheduleService.applyForWorld(world, store, plugin, true);

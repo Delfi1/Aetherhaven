@@ -132,8 +132,6 @@ items.Aetherhaven_Geode.description=水晶、宝石、鉱石などが中に詰�
 items.Aetherhaven_Geode_Anvil.name=ジオードアンビル
 items.Aetherhaven_Geode_Anvil.description=鍛冶屋の手数料なしで晶洞を開けることができます。設置して使用してください。作成するには、都市計画デスクで設計図を知っている必要があります。
 
-barter.aetherhaven_vex.title=Vexの毎日の在庫
-
 items.Aetherhaven_Treasury.name=町の財政
 items.Aetherhaven_Treasury.description=町の金貨を保管します。預け入れまたは引き出しに使用します（町の所有者）。
 

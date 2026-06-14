@@ -60,6 +60,12 @@ public final class PoiWorldFile {
         public Double interactionTargetY;
         @Nullable
         public Double interactionTargetZ;
+        @Nullable
+        public Float interactionTargetYawRadians;
+        @Nullable
+        public Boolean mountOnUse;
+        @Nullable
+        public String equipmentProfileId;
     }
 
     @Nonnull
@@ -114,16 +120,59 @@ public final class PoiWorldFile {
                 }
                 String blockType = row.blockTypeId != null && !row.blockTypeId.isBlank() ? row.blockTypeId.trim() : null;
                 PoiInteractionKind kind = PoiInteractionKind.fromJson(row.interactionKind);
+                boolean mountOnUse =
+                    row.mountOnUse != null
+                        ? row.mountOnUse
+                        : kind == PoiInteractionKind.SIT || kind == PoiInteractionKind.SLEEP;
+                String equipmentProfile =
+                    row.equipmentProfileId != null && !row.equipmentProfileId.isBlank() ? row.equipmentProfileId.trim() : null;
                 Double tx = row.interactionTargetX;
                 Double ty = row.interactionTargetY;
                 Double tz = row.interactionTargetZ;
                 if (tx != null && ty != null && tz != null) {
-                    out.add(new PoiEntry(id, townId, row.x, row.y, row.z, tags, row.capacity, plotUuid, blockType, kind, tx, ty, tz));
+                    out.add(
+                        new PoiEntry(
+                            id,
+                            townId,
+                            row.x,
+                            row.y,
+                            row.z,
+                            tags,
+                            row.capacity,
+                            plotUuid,
+                            blockType,
+                            kind,
+                            mountOnUse,
+                            equipmentProfile,
+                            tx,
+                            ty,
+                            tz,
+                            row.interactionTargetYawRadians
+                        )
+                    );
                 } else {
                     if (tx != null || ty != null || tz != null) {
                         LOGGER.atWarning().log("POI %s: ignoring partial interaction target (need all X,Y,Z)", row.id);
                     }
-                    out.add(new PoiEntry(id, townId, row.x, row.y, row.z, tags, row.capacity, plotUuid, blockType, kind));
+                    out.add(
+                        new PoiEntry(
+                            id,
+                            townId,
+                            row.x,
+                            row.y,
+                            row.z,
+                            tags,
+                            row.capacity,
+                            plotUuid,
+                            blockType,
+                            kind,
+                            mountOnUse,
+                            equipmentProfile,
+                            null,
+                            null,
+                            null
+                        )
+                    );
                 }
             } catch (IllegalArgumentException e) {
                 LOGGER.atWarning().withCause(e).log("Skipping invalid POI row id=%s town=%s", row.id, row.townId);
@@ -148,10 +197,13 @@ public final class PoiWorldFile {
             r.plotId = p != null ? p.toString() : null;
             r.blockTypeId = e.getBlockTypeId();
             r.interactionKind = e.getInteractionKind().name();
+            r.mountOnUse = e.isMountOnUse();
+            r.equipmentProfileId = e.getEquipmentProfileId();
             if (e.hasInteractionTarget()) {
                 r.interactionTargetX = e.getInteractionTargetX();
                 r.interactionTargetY = e.getInteractionTargetY();
                 r.interactionTargetZ = e.getInteractionTargetZ();
+                r.interactionTargetYawRadians = e.getInteractionTargetYawRadians();
             }
             f.getPois().add(r);
         }

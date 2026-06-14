@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.difficulty;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.io.IOException;
@@ -50,6 +51,9 @@ public final class WorldDifficultyPersistence {
 
     @Nonnull
     private static WorldDifficultyState readFromDisk(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            return WorldDifficultyState.normalUntilChosen();
+        }
         Path path = difficultyFile(world, plugin);
         try {
             WorldDifficultyFile file = WorldDifficultyFile.readOrEmpty(path);
@@ -63,6 +67,9 @@ public final class WorldDifficultyPersistence {
 
     public static void save(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull WorldDifficultyState state) {
         CACHE.put(world.getName(), state);
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            return;
+        }
         Path path = difficultyFile(world, plugin);
         try {
             WorldDifficultyFile file = new WorldDifficultyFile();
@@ -78,6 +85,9 @@ public final class WorldDifficultyPersistence {
         if (state == null) {
             return;
         }
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            return;
+        }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin != null) {
             save(world, plugin, state);
@@ -90,6 +100,9 @@ public final class WorldDifficultyPersistence {
             return;
         }
         for (var e : CACHE.entrySet()) {
+            if (!PersistentWorldSupport.shouldPersistWorldDataByName(e.getKey())) {
+                continue;
+            }
             // World name only in cache; persist without requiring live World handle
             String name = e.getKey();
             Path path =

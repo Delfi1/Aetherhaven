@@ -16,6 +16,7 @@ import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -75,6 +76,11 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         }
         UUID owner = uuidComp.getUuid();
         World world = store.getExternalData().getWorld();
+        if (PersistentWorldSupport.isTemporaryInstance(world)) {
+            event.setCancelled(true);
+            pr.sendMessage(Message.translation("aetherhaven_common.aetherhaven.charter.notInPersistentWorld"));
+            return;
+        }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         if (tm.findTownForPlayerInWorld(owner) != null) {
             event.setCancelled(true);

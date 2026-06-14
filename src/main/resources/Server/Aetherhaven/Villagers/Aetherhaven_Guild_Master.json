@@ -1,0 +1,27 @@
+{
+  "npcRoleId": "Aetherhaven_Guild_Master",
+  "dialogueVillagerKind": "guild_master",
+  "residentTreeId": "aetherhaven_guild_master",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_guild_hall",
+  "displayName": "Lyra Fairhollow",
+  "portraitIcon": "Aetherhaven_Guild_Master.png",
+  "uiSortOrder": 12,
+  "innPoolEligible": true,
+  "innPoolOrder": 7,
+  "visitorBindingKind": "visitor_guild_master",
+  "innPoolRequires": {
+    "completedQuestIds": ["q_build_town_hall"],
+    "completeConstructionIds": ["plot_town_hall"]
+  },
+  "reputationMilestones": [],
+  "giftLoves": [],
+  "giftLikes": [],
+  "giftDislikes": [],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.greeting.0",
+    "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.greeting.1",
+    "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.greeting.2"
+  ],
+  "dialogueGiftHintLangKeys": []
+}

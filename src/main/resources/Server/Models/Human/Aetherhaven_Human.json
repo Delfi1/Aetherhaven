@@ -1,0 +1,69 @@
+{
+  "Parent": "Player",
+  "AnimationSets": {
+    "Talk": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Expressions/Talk/Talk.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Talk2": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Expressions/Talk/Talk2.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Talk3": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Expressions/Talk/Talk3.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Talk4": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Expressions/Talk/Talk4.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Talk5": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Expressions/Talk/Talk5.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Frown": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Expressions/Frown.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Grin": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Expressions/Grin.blockyanim",
+          "Looping": true
+        }
+      ]
+    },
+    "Wave": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Emote/Wave.blockyanim",
+          "Looping": false
+        }
+      ]
+    }
+  }
+}

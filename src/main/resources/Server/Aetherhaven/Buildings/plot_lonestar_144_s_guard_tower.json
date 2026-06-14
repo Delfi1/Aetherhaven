@@ -1,0 +1,25 @@
+{
+  "id": "plot_lonestar_144_s_guard_tower",
+  "displayName": "LoneStar_144\u0027s Guard Tower",
+  "description": "By LoneStar_144 After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.",
+  "prefabPath": "plot_lonestar_144_s_guard_tower.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 25,
+  "plotTokenLockedByDefault": true,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 50 },
+    { "resourceTypeId": "Rock", "count": 400 }
+  ],
+  "tags": [
+    "decoration"
+  ],
+  "excludeFromTownJournal": true,
+  "decorationPlot": true
+}

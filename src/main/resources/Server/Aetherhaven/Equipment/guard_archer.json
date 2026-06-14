@@ -1,0 +1,14 @@
+{
+  "id": "guard_archer",
+  "guardNpcRole": "Aetherhaven_Guard_Archer",
+  "displayName": "Archer",
+  "hireGoldCost": 35,
+  "armor": [
+    "Armor_Leather_Light_Chest",
+    "Armor_Leather_Light_Legs",
+    "Armor_Leather_Light_Hands"
+  ],
+  "hotbar": [
+    { "slot": 0, "itemId": "Weapon_Shortbow_Iron" }
+  ]
+}

@@ -1,5 +1,59 @@
 # Changelog
 
+## [2.0.0] - Unreleased
+
+### Added
+
+- **Command Post** A new block that when used puts the player in command mode which is a top down RTS view where you can command groups of guards.
+- **Quest board** Guild hall quest boards now open a three card work panel. Townsfolk post fetch jobs with rank tiers, rewards, and time limits. Complete jobs for rank XP, turn items in through villager dialogue, and track active board quests in the town journal.
+- **Hunt Quests** Daily quest type where the player must kill a certain amount of a mob.
+- **Fetch Quests** Daily quest type where the player must get a certain item for villager.
+- **Raid Quests** Daily quest type where a group of mobs of a certain type spawns on the outskirts of town and head towards the town. The player must kill all the mobs in the group to complete the quest. Map markers and a Raid Health bar indicate which mobs to kill.
+- **Plot Creator Staff** A new staff that allows the player to create and configure a building they've created as a fully working plot for villagers. It walks you through it step by step.
+- **POI debug staff overhaul** Three modes (Q): edit existing POIs, place new prefab-saveable POI markers via a configuration GUI (need type, capacity, mount toggle, work equipment), and adventurer spawn markers. JSON building POIs still register on construction and merge with prefab markers (markers win at the same local cell). Guild hall adventurers spawn facing their marker and stand still at the spot.
+- **Townsfolk** Non-essential npcs that are chosen from a large pool of hand-designed characters. They each have three personality traits assigned to them that determine what dialogue lines they use. This will be used for tourists, guards, and more.
+- **Guild Hall** A place adventurers gather and can be hired as guards.
+- **Guards** Adventurer's can be hired as guards that will patrol the town and fight any hostile enemies.
+- **Patrol Wand** A new wand that lets you create and assign patrol routes to guards.
+- **Glow rings** Artifact rings that shed light while worn from the hand mirror. Gorruk the miner gifts them at 50 and 100 reputation. They can rarely appear in world chest jewelry rolls.
+- **Firewood** Dried log fuel that burns about twice as long as charcoal. Seren Fairhollow shares the pattern at 50 reputation. Craft five bundles at the town planning desk from any log trunk and fire essence.
+- **Root Remover** Right click a tree trunk to clear buried roots and stumps below ground, leaving dirt and dropping the wood at your feet. Seren Fairhollow shares the recipe at 100 reputation. Craft five at the town planning desk from dirt and life essence.
+- **Growth Serum** Right click a young animal to help it grow up right away. Thalen Meadowrun shares the recipe at 50 reputation. Craft it at the alchemist's bench from life essence, bone fragments, and blood petals.
+- **Hunting Knife** A one handed blade with iron dagger damage and sword attacks. Kill animals with it to sometimes get extra raw meat, hide, and feathers. Thalen Meadowrun shares the recipe at 100 reputation. Craft it at the weapons bench from iron bars, light leather, and linen scraps.
+- **Shop spot** Creative-only stall block for finished building plots. NPC shops roll stock at dawn from loot tables. Use (F) opens a buy panel with ±1/±10/max quantity; look-at HUD shows item, price, and stock. Stall facing rotates the floating item display.
+- **Plot Crafting Bench** Plot tokens are now crafted at the plot crafting bench which has a 3D preview of the building.
+- **Plot Blueprints** Some buildings are now unlocked by finding and using plot blueprints. Plot tokens found in balloon gifts have been replaced with these blueprints. You will need to delete floating_gift_loot.json if upgrading from an old save to find them.
+- **Reworked Vex's Shop** Vex's store now sells items in world through shop spots. He is more of a general store now that sells furniture, blocks, and some consumables.
+- **Builder Villager** A new villager and building. The builder helps build out buildings in your town faster.
+- **Florist Villager** A new villager and shop that sells plants and flowers.
+- **Pyrotechnic Villager** A new villager and shop that sells explosives. The new villager must be found out in the world before he will show up in the Inn.
+- **Crystal Keeper Villager** A new villager and shop that sells crystals and gems. The new villager must be found out in the world before he will show up in the Inn.
+- **Tourist Portal** A new tourist portal building allows for tourists to come visit your town. They show up some time in the morning, walk around your town, and leave at night. They will buy items from player shops. They can also be invited to live in your town if you build them a house.
+- **Player Shop** Vex will now give a quest for the player to build their own shop. Players can put items up for sale and villagers and tourists will occasionally go shopping and buy stuff at player shops.
+- **Production Building Upgrades** Production buildings can now be upgraded in the town recoreds shelf.
+- **Multiple Balloon Gift Types** Balloon gifts now come in three different types with different loot. Green for jewelry, red for furniture, and white for plot blueprints. They have also been made rarer.
+- **Path designer shovel overhaul** Q now cycles five modes including Remove and Style designer. Remove mode shows placed paths and lets you delete them in world. Style designer opens a style manager with a double chest grid for weighted block columns. The status HUD uses key boxes with mode specific help text and a reminder to switch to Place mode.
+- **Villager faces** Villagers move their mouth when you talk to them and pick dialogue choices. Their face also reflects how well their needs are met while they walk around town.
+- **Villager waves** Befriendable villagers with 75+ reputation may wave at you when you walk nearby while they are idle.
+- **Inn Bell** A bell that can be used to respawn the visitors at the Inn.
+- **Citizen dawn revival** Town villagers who die return to the charter at dawn so you are not stuck waiting for a Gaia altar.
+- **Smokestack** A decorative item for creating a smoke particle effect for chimneys.
+- **Bard Villager** A Bard now shows up after the guild hall is built that will play music for you in the guild hall.
+
+### Changed
+
+- **Improved Dialogue GUI** Made the dialogue window look nicer.
+- **Building Costs** All buildings now require the crafting benches found in their prefabs.
+- **Improved Door Interaction** Villagers and tourists wait to close doors until they reach their destination, avoid closing on another traveler, and temporarily ignore NPC push-apart separation while sharing a doorway so two arrivals no longer wedge each other in the frame.
+- **Shop spot interactions** Removed LMB/RMB quantity overlay (it blocked breaking blocks). Player listings use RMB with an item in hand; buys use the F buy UI.
+- **Wall Costs** Walls now cost any type of wood instead of planks and now cost some gold to build.
+- **Resident Assigning** The gui for assigning residents has been improved.
+- **Instances** Town saves were being created in instances which doesn't make much sense, this was fixed. Towns now can't be created in instances, only permanent worlds.
+
+### Fixed
+
+- **Lootr Integration** Fixed loot spawning in lootr chests.
+
 ## [1.8.0] - 5/26/2026
 
 ### Updated to Hytale 0.5.0

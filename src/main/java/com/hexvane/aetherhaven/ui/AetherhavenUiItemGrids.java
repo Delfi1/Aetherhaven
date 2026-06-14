@@ -3,11 +3,12 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryTooltipMessages;
 import com.hexvane.aetherhaven.jewelry.JewelryTooltipWire;
+import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.ui.ItemGridSlot;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
-import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Helpers for {@code ItemGrid.Slots}.
@@ -18,6 +19,46 @@ import javax.annotation.Nonnull;
  */
 public final class AetherhavenUiItemGrids {
     private AetherhavenUiItemGrids() {}
+
+    /**
+     * Stack safe for {@link ItemGridSlot}: custom UI decodes metadata as {@code ClientItemMetadata}; strip BSON /
+     * {@code ItemDisplay} blobs that crash the client (see {@link com.hexvane.aetherhaven.jewelry.JewelryTooltipWire}).
+     */
+    @Nonnull
+    public static ItemStack plainStackForUi(@Nonnull String itemId, int quantity) {
+        ItemStack probe = new ItemStack(itemId, quantity);
+        return new ItemStack(itemId, probe.getQuantity(), probe.getDurability(), probe.getMaxDurability(), null);
+    }
+
+    @Nonnull
+    public static ItemGridSlot plainSlotForUi(@Nonnull String itemId) {
+        return new ItemGridSlot(plainStackForUi(itemId, 1));
+    }
+
+    /** True when {@code itemId} is registered (unknown ids crash client {@code ItemGrid} tooltips). */
+    public static boolean isKnownItemId(@Nullable String itemId) {
+        if (itemId == null || itemId.isBlank()) {
+            return false;
+        }
+        return Item.getAssetMap().getAsset(itemId.trim()) != null;
+    }
+
+    /**
+     * {@link ItemGridSlot} with metadata stripped for custom UI. Returns null when the id is missing from the asset
+     * map so callers can skip the slot instead of crashing the client.
+     */
+    @Nullable
+    public static ItemGridSlot slotForKnownItem(@Nonnull String itemId, int quantity) {
+        String id = itemId.trim();
+        if (!isKnownItemId(id)) {
+            return null;
+        }
+        ItemStack stack = plainStackForUi(id, Math.max(1, quantity));
+        if (JewelryItemIds.isJewelry(id)) {
+            return jewelrySlotForUi(stack);
+        }
+        return new ItemGridSlot(stack);
+    }
 
     @Nonnull
     public static ItemGridSlot jewelrySlotForUi(@Nonnull ItemStack inventoryJewelryStack) {
@@ -36,7 +77,11 @@ public final class AetherhavenUiItemGrids {
     }
 
     public static void setSingleSlot(@Nonnull UICommandBuilder commandBuilder, @Nonnull String itemGridSelector, @Nonnull ItemStack stack) {
-        commandBuilder.set(itemGridSelector + ".Slots", new ItemGridSlot[] {new ItemGridSlot(stack)});
+        if (!ItemStack.isEmpty(stack) && JewelryItemIds.isJewelry(stack.getItemId())) {
+            setSingleSlot(commandBuilder, itemGridSelector, jewelrySlotForUi(stack));
+            return;
+        }
+        commandBuilder.set(itemGridSelector + ".Slots", new ItemGridSlot[] {new ItemGridSlot(plainStackForUi(stack.getItemId(), stack.getQuantity()))});
     }
 
     public static void setSingleSlotEmpty(@Nonnull UICommandBuilder commandBuilder, @Nonnull String itemGridSelector) {

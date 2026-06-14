@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.townsfolk;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.io.IOException;
@@ -43,6 +44,9 @@ public final class TownsfolkPoolPersistence {
     /** Loads pool state from disk only; {@link #getOrLoad} installs the result in {@link #CACHE}. */
     @Nonnull
     private static TownsfolkPoolState loadFromDisk(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            return new TownsfolkPoolState();
+        }
         Path path = poolFile(world, plugin);
         try {
             TownsfolkPoolFile file = TownsfolkPoolFile.readOrEmpty(path);
@@ -57,6 +61,9 @@ public final class TownsfolkPoolPersistence {
 
     public static void save(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull TownsfolkPoolState state) {
         CACHE.put(world.getName(), state);
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            return;
+        }
         Path path = poolFile(world, plugin);
         try {
             state.toFile().writeAtomic(path);
@@ -68,6 +75,9 @@ public final class TownsfolkPoolPersistence {
     public static void unloadWorld(@Nonnull World world) {
         TownsfolkPoolState state = CACHE.remove(world.getName());
         if (state == null) {
+            return;
+        }
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
             return;
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -82,6 +92,9 @@ public final class TownsfolkPoolPersistence {
             return;
         }
         for (var e : CACHE.entrySet()) {
+            if (!PersistentWorldSupport.shouldPersistWorldDataByName(e.getKey())) {
+                continue;
+            }
             // World name only in cache key; save uses path from world name
             Path path = TownManager.pluginData(plugin).resolve("worlds").resolve(sanitizeWorldDirName(e.getKey())).resolve("townsfolk_pool.json");
             try {

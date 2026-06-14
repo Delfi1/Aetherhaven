@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house=About a place to live...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_finish=Your house is finished.
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_remind=About your house...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_waiting=About housing...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.leave=Goodbye
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.body=I joined your town but I still sleep in the open. Could you build me a house and put my name on the sign?
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.accept=I will build you a house
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.decline=Maybe later
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.body=Thank you. Stake a house plot, finish the build, then pick me on the house sign. Come back when I am living there.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.ok=Will do
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.body=I still need a roof. Finish the house and pick me on the house sign.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.ok=Right
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.body=Another guard is waiting on a house first. Finish that home, then come talk to me.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.ok=Understood
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.body=Good. I have a door and a bed. I will pay my share like everyone else.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.ok=Thank you

@@ -1,0 +1,16 @@
+{
+  "AudioCategory": "AudioCat_Music",
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Aetherhaven/Bard/BeachChillin.ogg"
+      ],
+      "Looping": true
+    }
+  ],
+  "MaxDistance": 16,
+  "StartAttenuationDistance": 4,
+  "PreventSoundInterruption": true,
+  "MaxInstance": 1
+}
+

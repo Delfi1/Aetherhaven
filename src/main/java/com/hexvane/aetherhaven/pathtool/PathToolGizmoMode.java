@@ -6,5 +6,9 @@ public enum PathToolGizmoMode {
     /** Adjust node yaw (drives Bezier tangents / spline shape). */
     Rotate,
     /** Use key cements; avoids accidental place while editing. */
-    Commit
+    Commit,
+    /** View and remove committed paths. */
+    Remove,
+    /** Open the in game path style manager. */
+    StyleDesigner
 }

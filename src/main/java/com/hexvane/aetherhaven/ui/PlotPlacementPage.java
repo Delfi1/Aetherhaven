@@ -2,7 +2,7 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
-import com.hexvane.aetherhaven.inventory.InventoryMaterials;
+import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
 import com.hexvane.aetherhaven.placement.PlotSignGrounding;
@@ -40,7 +40,6 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
-import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.ui.DropdownEntryInfo;
@@ -293,7 +292,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             Player player = store.getComponent(ref, Player.getComponentType());
             CombinedItemContainer inv =
                 player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
-            if (def == null || inv == null || !hasPlotToken(inv, def)) {
+            if (def == null || inv == null || !PlotTokenInventory.hasPlotToken(inv, def)) {
                 sendError(store, ref, "You need the matching plot token in your inventory for that building.");
             } else {
                 session.setConstructionId(id);
@@ -611,7 +610,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         Player player = store.getComponent(ref, Player.getComponentType());
         CombinedItemContainer inv =
             player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
-        if (inv == null || !hasPlotToken(inv, def)) {
+        if (inv == null || !PlotTokenInventory.hasPlotToken(inv, def)) {
             sendError(store, ref, "You need the plot token for this building in your inventory to place it.");
             return false;
         }
@@ -633,13 +632,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             sendError(store, ref, err);
             return false;
         }
-        String tokenId = def.getPlotTokenItemId();
-        if (tokenId == null || tokenId.isBlank()) {
-            sendError(store, ref, "This construction has no plot token configured.");
-            return false;
-        }
-        ItemStackTransaction tokenTx = inv.removeItemStack(new ItemStack(tokenId, 1));
-        if (!tokenTx.succeeded()) {
+        if (!PlotTokenInventory.consumePlotToken(inv, def)) {
             sendError(store, ref, "Could not consume plot token (inventory changed?).");
             return false;
         }
@@ -656,7 +649,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 store
             );
         if (!placed) {
-            inv.addItemStack(new ItemStack(tokenId, 1));
+            inv.addItemStack(PlotTokenInventory.createTokenStack(session.getConstructionId(), 1, null));
             sendError(store, ref, "Could not place plot sign (blocked or invalid spot).");
             return false;
         }
@@ -796,8 +789,8 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             PlotPlacementWireframeOverlay.clearFor(pr);
             return;
         }
-        Path prefabPath = resolvePrefabAssetPath(def.getPrefabPath());
-        if (prefabPath == null) {
+        IPrefabBuffer buf = resolvePrefabBuffer(def.getPrefabPath());
+        if (buf == null) {
             PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
             PlotPlacementWireframeOverlay.clearFor(pr);
             return;
@@ -831,7 +824,6 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 );
         }
         boolean placementValid = placementErr == null;
-        IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
         try {
             Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(session.getAnchor(), session.getPrefabYaw());
             PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
@@ -865,18 +857,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
     private static List<String> listConstructionIdsWithPlotTokens(
         @Nonnull AetherhavenPlugin plugin, @Nonnull CombinedItemContainer inv
     ) {
-        ObjectArrayList<String> ids = new ObjectArrayList<>();
-        for (ConstructionDefinition d : plugin.getConstructionCatalog().list()) {
-            String token = d.getPlotTokenItemId();
-            if (token == null || token.isBlank()) {
-                continue;
-            }
-            if (InventoryMaterials.count(inv, token) <= 0) {
-                continue;
-            }
-            ids.add(d.getId());
-        }
-        return ids;
+        return PlotTokenInventory.listConstructionIdsWithTokens(plugin, inv);
     }
 
     @Nonnull
@@ -894,17 +875,14 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         return entries;
     }
 
-    private static boolean hasPlotToken(@Nonnull CombinedItemContainer inv, @Nonnull ConstructionDefinition def) {
-        String token = def.getPlotTokenItemId();
-        if (token == null || token.isBlank()) {
-            return false;
-        }
-        return InventoryMaterials.count(inv, token) > 0;
-    }
-
     @Nullable
     private static Path resolvePrefabAssetPath(@Nullable String key) {
         return PrefabResolveUtil.resolvePrefabPath(key);
+    }
+
+    @Nullable
+    private static IPrefabBuffer resolvePrefabBuffer(@Nullable String key) {
+        return PrefabResolveUtil.resolvePrefabBuffer(key);
     }
 
     @Nullable

@@ -40,6 +40,7 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
     private static final String FLAG_ABANDON_QUESTS = "abandonQuests";
     private static final String FLAG_REVIVE = "reviveVillagers";
     private static final String FLAG_REMOVE_PLOTS = "removePlots";
+    private static final String FLAG_USE_SHOP_SPOTS = "useShopSpots";
 
     private final Ref<ChunkStore> managementBlockRef;
     @Nonnull
@@ -122,6 +123,7 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
         bindToggle(eventBuilder, "#PermCbCompleteQuests", "TogglePermCompleteQuests");
         bindToggle(eventBuilder, "#PermCbAbandonQuests", "TogglePermAbandonQuests");
         bindToggle(eventBuilder, "#PermCbReviveVillagers", "TogglePermReviveVillagers");
+        bindToggle(eventBuilder, "#PermCbUseShopSpots", "TogglePermUseShopSpots");
 
         TownMemberPermissions p = town.getEffectiveMemberPermissions(targetPlayerUuid);
         setCheck(commandBuilder, "#PermCbPlacePlots", p.placePlots());
@@ -133,6 +135,7 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
         setCheck(commandBuilder, "#PermCbCompleteQuests", p.completeQuests());
         setCheck(commandBuilder, "#PermCbAbandonQuests", p.abandonQuests());
         setCheck(commandBuilder, "#PermCbReviveVillagers", p.reviveVillagers());
+        setCheck(commandBuilder, "#PermCbUseShopSpots", p.useShopSpots());
     }
 
     private static void setCheck(@Nonnull UICommandBuilder commandBuilder, @Nonnull String checkboxSelector, boolean on) {
@@ -229,6 +232,9 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
         if (a.equalsIgnoreCase("TogglePermReviveVillagers")) {
             return FLAG_REVIVE;
         }
+        if (a.equalsIgnoreCase("TogglePermUseShopSpots")) {
+            return FLAG_USE_SHOP_SPOTS;
+        }
         return null;
     }
 
@@ -243,6 +249,7 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
             case FLAG_COMPLETE_QUESTS -> p.setCompleteQuests(on);
             case FLAG_ABANDON_QUESTS -> p.setAbandonQuests(on);
             case FLAG_REVIVE -> p.setReviveVillagers(on);
+            case FLAG_USE_SHOP_SPOTS -> p.setUseShopSpots(on);
             default -> {
             }
         }

@@ -145,10 +145,8 @@ items.Aetherhaven_Geode.description=Камень в котором могут н
 items.Aetherhaven_Geode_Anvil.name=Жеодовая наковальня
 items.Aetherhaven_Geode_Anvil.description=Позволяет открывать Жеоды без кузнеца. <color is="#ffa726">Вы должны сами открыть этот рецепт</color> чтобы скрафтить наковальню на столе планирования.
 
-barter.aetherhaven_vex.title=Каждодневный ассортимент Векса
-
-items.Aetherhaven_Treasury.name=Казна
-items.Aetherhaven_Treasury.description=Здесь хранятся золотые монеты города. Можно положить или снять средства.
+items.Aetherhaven_Treasury.name=Городская казна
+items.Aetherhaven_Treasury.description=Хранит золотые монеты города. Используется для внесения или снятия средств (владельцем города).
 
 items.Aetherhaven_Quest_Journal.name=Журнал квестов города
 items.Aetherhaven_Quest_Journal.description=ПКМ: открывает журнал города. С помощью него вы можете проверять квесты.

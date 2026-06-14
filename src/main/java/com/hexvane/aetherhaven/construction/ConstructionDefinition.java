@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -108,6 +109,10 @@ public final class ConstructionDefinition {
     @SerializedName("scheduleSharedUtilityPick")
     private boolean scheduleSharedUtilityPick;
 
+    /** When true, portal tourists may visit this plot. */
+    @SerializedName("touristDestination")
+    private boolean touristDestination;
+
     /** Prefab-local position (same space as prefab `blocks[].x/y/z`) of the management block voxel to stamp after build. */
     @SerializedName("managementBlockLocalPos")
     @Nullable
@@ -123,10 +128,40 @@ public final class ConstructionDefinition {
     @Nullable
     private int[][] visitorSpawnLocals;
 
+    /** Prefab-local spawn cell for the guild master at the inn before the guild hall is built; optional. */
+    @SerializedName("guildMasterSpawnLocal")
+    @Nullable
+    private int[] guildMasterSpawnLocal;
+
+    /** Prefab-local spawn cells for guild hall adventurers (guard eligible townsfolk); optional. */
+    @SerializedName("adventurerSpawnLocals")
+    @Nullable
+    private int[][] adventurerSpawnLocals;
+
+    /** Prefab-local bard performance spot beside the quest board; optional fallback when no BARD POI in registry. */
+    @SerializedName("bardWorkPoiLocal")
+    @Nullable
+    private int[] bardWorkPoiLocal;
+
+    /** Prefab-local interaction facing for {@link #bardWorkPoiLocal}; optional. */
+    @SerializedName("bardWorkPoiInteractionTargetLocal")
+    @Nullable
+    private int[] bardWorkPoiInteractionTargetLocal;
+
+    /** Body yaw (radians) per {@link #adventurerSpawnLocals} entry, in prefab-local axes. */
+    @SerializedName("adventurerSpawnYaws")
+    @Nullable
+    private float[] adventurerSpawnYaws;
+
     /** Prefab-local position of the treasury block (town-shared gold storage); optional. */
     @SerializedName("treasuryLocalPos")
     @Nullable
     private int[] treasuryLocalPos;
+
+    /** Prefab-local position of the player shop safe block; optional. */
+    @SerializedName("shopSafeLocalPos")
+    @Nullable
+    private int[] shopSafeLocalPos;
 
     /** Prefab-local POI anchors for autonomy; listed in each construction JSON under {@code Server/Aetherhaven/Buildings/}. */
     @SerializedName("pois")
@@ -158,6 +193,10 @@ public final class ConstructionDefinition {
     @SerializedName("consumesPlotToken")
     private boolean consumesPlotToken = true;
 
+    /** When true, the plot crafting bench requires a per player unlock before this variant can be crafted. */
+    @SerializedName("plotTokenLockedByDefault")
+    private boolean plotTokenLockedByDefault;
+
     /** When true, the town journal plot list omits this construction. */
     @SerializedName("excludeFromTownJournal")
     private boolean excludeFromTownJournal;
@@ -165,6 +204,20 @@ public final class ConstructionDefinition {
     /** Town wall segment: journal excluded, overlap rules differ, completion moves to {@link com.hexvane.aetherhaven.town.WallSegmentRecord}. */
     @SerializedName("wallSegment")
     private boolean wallSegment;
+
+    /**
+     * Decorative build: uses plot placement and assembly, but on completion is removed from town data and left as world
+     * blocks only (no management block, journal entry, or villager systems).
+     */
+    @SerializedName("decorationPlot")
+    private boolean decorationPlot;
+
+    /**
+     * Plot level tags for schedule and leisure targeting (e.g. amenity, nature, fun). Villagers can prefer plots whose
+     * tags match personality leisure weights when multiple plots qualify.
+     */
+    @SerializedName("tags")
+    private List<String> buildingTags = Collections.emptyList();
 
     public String getId() {
         return id;
@@ -297,6 +350,10 @@ public final class ConstructionDefinition {
         return scheduleSharedUtilityPick;
     }
 
+    public boolean isTouristDestination() {
+        return touristDestination;
+    }
+
     /** @return prefab-local x,y,z of management block, or null if not configured */
     @Nullable
     public int[] getManagementBlockLocalPos() {
@@ -315,10 +372,48 @@ public final class ConstructionDefinition {
         return visitorSpawnLocals;
     }
 
+    /** @return prefab-local x,y,z for guild master spawn at inn, or null */
+    @Nullable
+    public int[] getGuildMasterSpawnLocal() {
+        return guildMasterSpawnLocal != null && guildMasterSpawnLocal.length == 3 ? guildMasterSpawnLocal : null;
+    }
+
+    /** @return prefab-local guild hall adventurer spawn positions, or null */
+    @Nullable
+    public int[][] getAdventurerSpawnLocals() {
+        return adventurerSpawnLocals;
+    }
+
+    /** @return prefab-local bard work spot, or null */
+    @Nullable
+    public int[] getBardWorkPoiLocal() {
+        return bardWorkPoiLocal != null && bardWorkPoiLocal.length == 3 ? bardWorkPoiLocal : null;
+    }
+
+    /** @return prefab-local bard interaction target, or null */
+    @Nullable
+    public int[] getBardWorkPoiInteractionTargetLocal() {
+        return bardWorkPoiInteractionTargetLocal != null && bardWorkPoiInteractionTargetLocal.length == 3
+            ? bardWorkPoiInteractionTargetLocal
+            : null;
+    }
+
+    /** @return prefab-local body yaw per adventurer spawn, or null */
+    @Nullable
+    public float[] getAdventurerSpawnYaws() {
+        return adventurerSpawnYaws;
+    }
+
     /** @return prefab-local x,y,z of treasury block, or null */
     @Nullable
     public int[] getTreasuryLocalPos() {
         return treasuryLocalPos != null && treasuryLocalPos.length == 3 ? treasuryLocalPos : null;
+    }
+
+    /** @return prefab-local x,y,z of player shop safe block, or null */
+    @Nullable
+    public int[] getShopSafeLocalPos() {
+        return shopSafeLocalPos != null && shopSafeLocalPos.length == 3 ? shopSafeLocalPos : null;
     }
 
     @Nonnull
@@ -345,11 +440,38 @@ public final class ConstructionDefinition {
         return consumesPlotToken;
     }
 
+    public boolean isPlotTokenLockedByDefault() {
+        return plotTokenLockedByDefault;
+    }
+
     public boolean isExcludeFromTownJournal() {
         return excludeFromTownJournal;
     }
 
     public boolean isWallSegment() {
         return wallSegment;
+    }
+
+    public boolean isDecorationPlot() {
+        if (decorationPlot) {
+            return true;
+        }
+        return id != null && id.startsWith("plot_decoration");
+    }
+
+    /** @return normalized plot level tags (lowercase trim); empty when unset */
+    @Nonnull
+    public Set<String> getBuildingTags() {
+        List<String> raw = buildingTags;
+        if (raw == null || raw.isEmpty()) {
+            return Set.of();
+        }
+        LinkedHashSet<String> out = new LinkedHashSet<>();
+        for (String t : raw) {
+            if (t != null && !t.isBlank()) {
+                out.add(t.trim().toLowerCase(Locale.ROOT));
+            }
+        }
+        return Collections.unmodifiableSet(out);
     }
 }

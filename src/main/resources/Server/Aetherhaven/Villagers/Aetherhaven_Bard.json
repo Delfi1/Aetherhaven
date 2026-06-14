@@ -1,0 +1,27 @@
+{
+  "npcRoleId": "Aetherhaven_Bard",
+  "dialogueVillagerKind": "bard",
+  "residentTreeId": "aetherhaven_bard",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_guild_hall",
+  "displayName": "Elias Thornwood",
+  "portraitIcon": "Aetherhaven_Bard.png",
+  "uiSortOrder": 13,
+  "innPoolEligible": true,
+  "innPoolOrder": 8,
+  "visitorBindingKind": "visitor_bard",
+  "innPoolRequires": {
+    "completedQuestIds": ["q_build_guild_hall"],
+    "completeConstructionIds": ["plot_guild_hall"]
+  },
+  "reputationMilestones": [],
+  "giftLoves": [],
+  "giftLikes": [],
+  "giftDislikes": [],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.0",
+    "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.1",
+    "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.2"
+  ],
+  "dialogueGiftHintLangKeys": []
+}

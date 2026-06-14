@@ -1,0 +1,28 @@
+{
+  "entries": [
+    { "itemId": "Plant_Flower_Common_Yellow", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Yellow2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Purple", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Purple2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Pink", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Pink2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Violet", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Violet2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Poisoned", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Poisoned2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Red", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Red2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Cyan", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Cyan2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Blue", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Blue2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_White", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_White2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Lime", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Lime2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Grey", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Grey2", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Orange", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Common_Orange2", "weight": 2, "stockMin": 25, "stockMax": 50 }
+  ]
+}

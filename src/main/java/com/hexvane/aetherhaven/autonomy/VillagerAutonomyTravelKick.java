@@ -78,7 +78,10 @@ public final class VillagerAutonomyTravelKick {
                     if (binding == null || needs == null || npc == null || npc.getRole() == null) {
                         return true;
                     }
-                    if (TownVillagerBinding.isVisitorKind(binding.getKind())) {
+                    if (TownVillagerBinding.isScheduleSuppressedKind(binding.getKind())) {
+                        return true;
+                    }
+                    if (VillagerAutonomySystem.skipsPoiAutonomy(binding, npc)) {
                         return true;
                     }
                     long now = resolveNowMs(store);

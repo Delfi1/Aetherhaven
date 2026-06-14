@@ -2,7 +2,7 @@ package com.hexvane.aetherhaven.floatinggift;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
-import com.hexvane.aetherhaven.jewelry.LootChestBonusApplier;
+import com.hexvane.aetherhaven.entity.EntityChunkUtil;
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -19,7 +19,6 @@ import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.modules.collision.CollisionModule;
@@ -37,12 +36,12 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
-    public static final String CHEST_BLOCK_ID = "Furniture_Christmas_Chest_Small_White";
+    /** Default white chest; per-type chests use {@link FloatingGiftType#chestBlockId()}. */
+    public static final String CHEST_BLOCK_ID = FloatingGiftType.REGULAR.chestBlockId();
 
     /** Same semantics as PathCementService silent clears: replace block without drops/particles when removing tall grass etc. */
     private static final int SET_BLOCK_SILENT = 10;
@@ -146,6 +145,11 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         double nz = p.z + dz * speed * dt;
         double bob = FLOAT_BOB_AMPLITUDE_BLOCKS * Math.sin(FLOAT_BOB_RAD_PER_SEC * gift.getLifeSeconds());
         double ny = gift.getAnchorY() + bob;
+        World world = store.getExternalData().getWorld();
+        if (!EntityChunkUtil.isBlockChunkInMemory(world, (int) Math.floor(nx), (int) Math.floor(nz))) {
+            commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+            return;
+        }
         transform.setPosition(new Vector3d(nx, ny, nz));
         // Do not refresh head rotation every tick — client animation drivers can glitch procedural clips.
         tryProjectileProximityPop(commandBuffer, store, ref, gift, transform, velocity, giftBoundingBox);
@@ -280,19 +284,23 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         velocity.set(0.0, -fall, 0.0);
         Vector3d p = transform.getPosition();
         Vector3d next = new Vector3d(p.x, p.y - fall * dt, p.z);
-        transform.setPosition(next);
         World world = store.getExternalData().getWorld();
+        if (!EntityChunkUtil.isPositionChunkInMemory(world, next)) {
+            commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+            return;
+        }
+        transform.setPosition(next);
         int bx = (int) Math.floor(next.x);
         int by = (int) Math.floor(next.y);
         int bz = (int) Math.floor(next.z);
         BlockType below = world.getBlockType(bx, by - 1, bz);
         if (below != null && below != BlockType.EMPTY) {
-            spawnRewardChest(world, bx, by, bz);
+            spawnRewardChest(world, gift.getGiftType(), bx, by, bz);
             commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
         }
     }
 
-    private static void spawnRewardChest(@Nonnull World world, int x, int y, int z) {
+    private static void spawnRewardChest(@Nonnull World world, @Nonnull FloatingGiftType type, int x, int y, int z) {
         WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return;
@@ -302,7 +310,8 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         // Use placeBlock + settings 10 (same as player placement): direct setBlock(settings=3) sets bit 2 and skips
         // cloning BlockEntity components, so containers never get ItemContainerBlock and cannot open.
         RotationTuple rot = RotationTuple.of(Rotation.None, Rotation.None, Rotation.None);
-        if (!chunk.placeBlock(x, y, z, CHEST_BLOCK_ID, rot, 10, false)) {
+        String chestBlockId = type.chestBlockId();
+        if (!chunk.placeBlock(x, y, z, chestBlockId, rot, 10, false)) {
             return;
         }
         if (world.getBlockType(x, y, z) == BlockType.EMPTY) {
@@ -317,7 +326,7 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         if (chest == null || chest.getItemContainer() == null) {
             return;
         }
-        fillChestLoot(chest.getItemContainer());
+        fillChestLoot(chest.getItemContainer(), type);
     }
 
     private static boolean isPlantGrassDecoration(@Nullable BlockType blockType) {
@@ -362,17 +371,8 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         }
     }
 
-    private static void fillChestLoot(@Nonnull SimpleItemContainer inv) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return;
-        }
-        ItemStack token = FloatingGiftLootFiles.loadTable(plugin).rollStack();
-        if (token != null && !ItemStack.isEmpty(token)) {
-            inv.addItemStackToSlot((short) 4, token);
-        }
-        ThreadLocalRandom rnd = ThreadLocalRandom.current();
-        LootChestBonusApplier.tryInjectGoldCoinsToContainer(inv, plugin.getConfig().get(), rnd, true);
+    private static void fillChestLoot(@Nonnull SimpleItemContainer inv, @Nonnull FloatingGiftType type) {
+        FloatingGiftChestLoot.fill(inv, type);
     }
 
     public static int countActiveGifts(@Nonnull Store<EntityStore> store) {

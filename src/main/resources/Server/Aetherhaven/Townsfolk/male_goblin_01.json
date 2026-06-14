@@ -1,18 +1,19 @@
 {
-  "id": "male_goblin_01",
-  "displayName": "Grik Mudboot",
-  "gender": "male",
-  "race": "goblin",
-  "modelAssetId": "Male_Goblin_01",
-  "personalityIds": [
-    "gloomy",
-    "cynical",
-    "dramatic"
-  ],
-  "allowedAssignmentKinds": [
-    "idle",
-    "tourist",
-    "guard"
-  ],
-  "befriendable": false
+    "id":  "male_goblin_01",
+    "displayName":  "Grik Mudboot",
+    "gender":  "male",
+    "race":  "goblin",
+    "modelAssetId":  "Male_Goblin_01",
+    "personalityIds":  [
+                           "gloomy",
+                           "cynical",
+                           "dramatic"
+                       ],
+    "allowedAssignmentKinds":  [
+                                   "idle",
+                                   "tourist",
+                                   "guard"
+                               ],
+    "befriendable":  false,
+    "equipmentProfileId":  "guard_archer"
 }

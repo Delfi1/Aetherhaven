@@ -28,10 +28,13 @@ public final class AetherhavenUiLocalization {
     public static void applyPlotConstructionPage(@Nonnull UICommandBuilder b) {
         applyManagementTabTooltips(b);
         b.set("#MaterialsHeader.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.materials"));
-        b.set("#HouseResidentDropdown #HouseResidentFieldLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResident"));
-        b.set("#AssignHouseResidentButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.assignHouseResident"));
-        b.set("#WorkplaceAssignDropdown #WorkplaceAssignFieldLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceWorker"));
-        b.set("#AssignWorkplaceButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.assignWorkplace"));
+        b.set("#ChooseHouseResidentButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.chooseHouseResident"));
+        b.set("#ChooseWorkplaceWorkerButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.chooseWorkplaceWorker"));
+        b.set("#ChooseWorkplaceBardButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.chooseWorkplaceBard"));
+        b.set("#HouseResidentPickerTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResidentPickerTitle"));
+        b.set("#WorkplaceWorkerPickerTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceWorkerPickerTitle"));
+        b.set("#HouseResidentPickerCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResidentPickerCancel"));
+        b.set("#WorkplaceWorkerPickerCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceWorkerPickerCancel"));
         b.set("#HouseResidentHideElsewhereCheckbox #HouseResidentHideElsewhereLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere"));
         b.set("#HouseResidentHideElsewhereCheckbox #HouseResidentHideElsewhereLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip"));
         b.set("#PickUpPlotButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlot"));
@@ -62,6 +65,7 @@ public final class AetherhavenUiLocalization {
         b.set("#CapCompleteQuests.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.completeQuests"));
         b.set("#CapAbandonQuests.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.abandonQuests"));
         b.set("#CapReviveVillagers.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.reviveVillagers"));
+        b.set("#CapUseShopSpots.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.useShopSpots"));
     }
 
     public static void applyDifficultyPage(@Nonnull UICommandBuilder b) {
@@ -122,6 +126,26 @@ public final class AetherhavenUiLocalization {
 
     public static void applyGaiaStatueReviveRow(@Nonnull UICommandBuilder b, @Nonnull String rowPath) {
         b.set(rowPath + " #ReviveButton.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.revive"));
+    }
+
+    public static void applyPatrolWandAssignGuardPage(@Nonnull UICommandBuilder b) {
+        b.set("#PatrolAssignTitleText.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.assignPageTitle"));
+    }
+
+    public static void applyPatrolWandAssignGuardRow(@Nonnull UICommandBuilder b, @Nonnull String rowPath) {
+        b.set(rowPath + " #AssignButton.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.assignPageAssignButton"));
+    }
+
+    public static void applyHouseResidentAssignRow(@Nonnull UICommandBuilder b, @Nonnull String rowPath) {
+        b.set(rowPath + " #SelectButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResidentSelect"));
+    }
+
+    public static void applyPatrolWandNameRoutePage(@Nonnull UICommandBuilder b) {
+        b.set("#PatrolNameRouteTitleText.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.nameRouteTitle"));
+        b.set("#NameLabel.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.nameRouteLabel"));
+        b.set("#RouteNameInput.PlaceholderText", t("aetherhaven_items.aetherhaven.patrolWand.nameRoutePlaceholder"));
+        b.set("#SaveRouteNameButton.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.nameRouteSave"));
+        b.set("#CancelRouteNameButton.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.nameRouteCancel"));
     }
 
     public static void applyTreasuryPage(@Nonnull UICommandBuilder b) {
@@ -188,21 +212,28 @@ public final class AetherhavenUiLocalization {
 
     public static void applyProductionStorage(@Nonnull UICommandBuilder b) {
         b.set("#ProductionTitleText.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.production.title"));
-        Message prevTip = t("aetherhaven_feasts_production.aetherhaven.ui.production.prevTooltip");
-        Message nextTip = t("aetherhaven_feasts_production.aetherhaven.ui.production.nextTooltip");
+        Message pickTip = t("aetherhaven_feasts_production.aetherhaven.ui.production.pickTooltip");
         Message take1 = t("aetherhaven_feasts_production.aetherhaven.ui.production.take1");
         Message take10 = t("aetherhaven_feasts_production.aetherhaven.ui.production.take10");
         Message take100 = t("aetherhaven_feasts_production.aetherhaven.ui.production.take100");
-        for (int i = 0; i < 3; i++) {
-            String p = "#Slot" + i;
-            b.set(p + "Prev.TooltipTextSpans", prevTip);
-            b.set(p + "Next.TooltipTextSpans", nextTip);
-            b.set(p + "Take1.TextSpans", take1);
-            b.set(p + "Take10.TextSpans", take10);
-            b.set(p + "Take100.TextSpans", take100);
+        for (int i = 0; i < 5; i++) {
+            String base = "#SlotsRow #Slot" + i + "Host[0]";
+            b.set(base + " #Pick.TooltipTextSpans", pickTip);
+            b.set(base + " #Take1.TextSpans", take1);
+            b.set(base + " #Take10.TextSpans", take10);
+            b.set(base + " #Take100.TextSpans", take100);
         }
         b.set("#OpenUnlocks.TooltipTextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.production.unlockTooltip"));
         b.set("#OpenUnlocks.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.production.unlockButton"));
+        b.set("#CollectAll.TooltipTextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.production.collectAllTooltip"));
+        b.set("#CollectAll.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.production.collectAllButton"));
+    }
+
+    public static void applyProductionMaterialPicker(@Nonnull UICommandBuilder b) {
+        b.set("#MaterialPickerTitleText.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.materialPicker.title"));
+        b.set("#MaterialPickerIntro.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.materialPicker.intro"));
+        b.set("#NavToProduction.TooltipTextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.materialPicker.backTooltip"));
+        b.set("#NavToProduction.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.materialPicker.back"));
     }
 
     public static void applyProductionStorageUnlocks(@Nonnull UICommandBuilder b) {
@@ -220,9 +251,9 @@ public final class AetherhavenUiLocalization {
         b.set("#TabSettings.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.settings"));
         b.set("#TownVillagersHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.townVillagersHeading"));
         b.set("#TownPlotsHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.townPlotsHeading"));
-        b.set("#TownShowBordersLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.showTownBorders"));
+        b.set("#SettingsShowBordersLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.showTownBorders"));
         b.set(
-            "#TownShowBordersLabel.TooltipTextSpans",
+            "#SettingsShowBordersLabel.TooltipTextSpans",
             t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.showTownBordersTooltip")
         );
         b.set(
@@ -257,12 +288,38 @@ public final class AetherhavenUiLocalization {
             "#SettingsBreakableWeightTwoLabel.TextSpans",
             t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.breakableWeightTwoLabel")
         );
+        b.set("#SettingsShopHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.shopHeading"));
+        b.set(
+            "#SettingsShopMemberPriceLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.shopMemberPriceLabel")
+        );
         b.set("#SettingsGiftHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.giftHeading"));
         b.set("#SettingsGiftEnabledLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.giftEnabledLabel"));
         b.set("#SettingsGiftDaysMinLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.giftDaysMinLabel"));
         b.set("#SettingsGiftDaysMaxLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.giftDaysMaxLabel"));
         b.set("#SettingsSaveButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.saveButton"));
         b.set("#SettingsResetDefaultsButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.resetDefaultsButton"));
+        b.set("#SettingsTabPersonal.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.tab.personal"));
+        b.set("#SettingsTabServer.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.tab.server"));
+        b.set("#SettingsPersonalHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalHeading"));
+        b.set("#SettingsPersonalHint.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalHint"));
+        b.set("#SettingsRtsPickHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.rtsPickHeading"));
+        b.set(
+            "#SettingsRtsPickFovLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.rtsPickFovLabel")
+        );
+        b.set(
+            "#SettingsRtsPickAspectLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.rtsPickAspectLabel")
+        );
+        b.set(
+            "#SettingsPersonalSaveButton.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalSaveButton")
+        );
+        b.set(
+            "#SettingsPersonalResetButton.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalResetButton")
+        );
         b.set("#JournalSettingsResetModalTitle.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.resetModalTitle"));
         b.set("#JournalSettingsResetModalText.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.resetModalBody"));
         b.set("#JournalSettingsResetModalConfirm.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.resetModalConfirm"));
@@ -292,5 +349,53 @@ public final class AetherhavenUiLocalization {
         @Nonnull UnaryOperator<String> scoped
     ) {
         b.set(scoped.apply("#PathToolHudTitleText.TextSpans"), t("aetherhaven_items.aetherhaven.pathTool.hudTitle"));
+    }
+
+    /** Title only; dynamic lines are set in {@link com.hexvane.aetherhaven.plotcreator.PlotCreatorStatusHud#refresh}. */
+    public static void applyPlotCreatorStatusHudTitle(
+        @Nonnull UICommandBuilder b,
+        @Nonnull UnaryOperator<String> scoped
+    ) {
+        b.set(
+            scoped.apply("#PlotCreatorHudTitleText.TextSpans"),
+            t("aetherhaven_plot_creator.aetherhaven.plotcreator.hud.title")
+        );
+    }
+
+    public static void applyPathToolStyleListPage(@Nonnull UICommandBuilder b) {
+        b.set("#PathToolStyleListTitleText.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleListTitle"));
+        b.set("#CreateButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleListCreate"));
+        b.set("#EditButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleListEdit"));
+        b.set("#CancelButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleListCancel"));
+    }
+
+    public static void applyPathToolStyleNamePage(@Nonnull UICommandBuilder b) {
+        b.set("#PathToolStyleNameTitleText.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleNameTitle"));
+        b.set("#Hint.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleNameHint"));
+        b.set("#NameLabel.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleEditNameLabel"));
+        b.set("#StyleNameInput.PlaceholderText", t("aetherhaven_items.aetherhaven.pathTool.styleEditNamePlaceholder"));
+        b.set("#ContinueButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleNameContinue"));
+        b.set("#CancelButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleListCancel"));
+    }
+
+    /** Title only; dynamic lines are set in {@link com.hexvane.aetherhaven.poi.tool.PoiToolLegendHud#refresh}. */
+    public static void applyPoiToolLegendHudTitle(
+        @Nonnull UICommandBuilder b,
+        @Nonnull UnaryOperator<String> scoped
+    ) {
+        b.set(scoped.apply("#PoiToolHudTitleText.TextSpans"), t("aetherhaven_items.aetherhaven.poiTool.hudTitle"));
+    }
+
+    public static void applyPlotCraftingPage(@Nonnull UICommandBuilder b) {
+        b.set("#PlotCraftTitleText.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.title"));
+        b.set("#PreviewTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.previewTitle"));
+        b.set("#VariantSectionTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantSectionTitle"));
+        b.set("#VariantPrev.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantPrevTooltip"));
+        b.set("#VariantNext.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantNextTooltip"));
+        b.set("#CraftButton.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.craftButton"));
+    }
+
+    public static void applyQuestBoardPage(@Nonnull UICommandBuilder b) {
+        b.set("#QuestBoardTitleText.TextSpans", t("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.title"));
     }
 }

@@ -1,0 +1,43 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "Interface": "Hytale.Instruction.Intelligent.Idle.Motion",
+  "$Comment": "Large patrol rect (48x48) with ground-preference wander.",
+  "Parameters": {
+    "WanderRectTimer": {
+      "Value": [6, 14],
+      "Description": "Seconds (min,max) for each WanderInRect phase"
+    },
+    "PauseTimer": {
+      "Value": [2, 5],
+      "Description": "Seconds (min,max) for each Nothing pause between wander bursts"
+    }
+  },
+  "Content": {
+    "Sensor": { "Type": "Any" },
+    "BodyMotion": {
+      "Type": "Sequence",
+      "Looped": true,
+      "Motions": [
+        {
+          "Type": "Timer",
+          "Time": { "Compute": "WanderRectTimer" },
+          "Motion": {
+            "Type": "WanderInRectGroundPreference",
+            "Width": 48,
+            "Depth": 48,
+            "MaxHeadingChange": 90,
+            "DefaultGroundWeight": 1.0,
+            "ObstacleWeight": 0.12,
+            "GroundWeights": []
+          }
+        },
+        {
+          "Type": "Timer",
+          "Time": { "Compute": "PauseTimer" },
+          "Motion": { "Type": "Nothing" }
+        }
+      ]
+    }
+  }
+}

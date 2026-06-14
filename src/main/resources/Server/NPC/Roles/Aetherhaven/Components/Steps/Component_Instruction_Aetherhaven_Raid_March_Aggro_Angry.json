@@ -1,0 +1,24 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "$Comment": "Zombie-style march aggro: transition to Angry when a hostile target is spotted.",
+  "Parameters": {
+    "_ImportStates": ["Angry"],
+    "DetectRange": {
+      "Value": 20,
+      "Description": "Range to spot hostile targets while marching toward town."
+    }
+  },
+  "Content": {
+    "Sensor": {
+      "Type": "Mob",
+      "Range": { "Compute": "DetectRange" },
+      "LockOnTarget": true,
+      "GetPlayers": true,
+      "GetNPCs": true,
+      "Filters": [{ "Type": "LineOfSight" }],
+      "Prioritiser": { "Type": "Attitude", "AttitudesByPriority": ["Hostile"] }
+    },
+    "Actions": [{ "Type": "ParentState", "State": "Angry" }]
+  }
+}

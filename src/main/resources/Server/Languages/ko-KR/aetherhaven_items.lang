@@ -132,8 +132,6 @@ items.Aetherhaven_Geode.description=속이 빈 돌에는 수정, 보석 또는 �
 items.Aetherhaven_Geode_Anvil.name=지오드 앤빌
 items.Aetherhaven_Geode_Anvil.description=대장장이 비용 없이 수정 동굴을 엽니다. 설치 후 사용 가능하며, 제작하려면 설계도를 알아야 마을 계획 데스크에서 제작할 수 있습니다.
 
-barter.aetherhaven_vex.title=Vex의 일일 재고
-
 items.Aetherhaven_Treasury.name=시 재정
 items.Aetherhaven_Treasury.description=마을의 금화를 보관합니다. 입금 또는 출금 시 사용합니다(마을 소유주).
 

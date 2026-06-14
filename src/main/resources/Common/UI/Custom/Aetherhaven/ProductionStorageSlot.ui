@@ -1,0 +1,116 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@QtyStyle = (...$C.@DefaultLabelStyle, TextColor: #c8d4e8, HorizontalAlignment: Center);
+@TimeStyle = (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #8fa0b0, HorizontalAlignment: Center);
+@NameStyle = (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #e8dcc8, HorizontalAlignment: Center);
+
+@PickBtnStyle = (
+  Default: (Background: #000000(0)),
+  Hovered: (Background: #ffffff(0.06)),
+  Pressed: (Background: #ffffff(0.10)),
+  Disabled: (Background: #000000(0))
+);
+
+@NarrowProductionProg = ProgressBar {
+  Anchor: (Width: 88, Height: 5);
+  Background: "../Common/ProgressBar.png";
+  BarTexturePath: "../Common/ProgressBarFill.png";
+  EffectTexturePath: "../Common/ProgressBarEffect.png";
+  EffectWidth: 102;
+  EffectHeight: 58;
+  EffectOffset: 74;
+  Value: 0.0;
+};
+
+Group #ProductionStorageSlot {
+  LayoutMode: Top;
+  Anchor: (Width: 180);
+
+  Group {
+    LayoutMode: Center;
+    Anchor: (Bottom: 8);
+
+    Button #Pick {
+      LayoutMode: Top;
+      Style: @PickBtnStyle;
+      TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+      Anchor: (Width: 56, Height: 56);
+
+      Group #IconBox {
+        LayoutMode: Full;
+        Background: #1a2530;
+        Padding: 2;
+        Anchor: (Width: 52, Height: 52);
+        HitTestVisible: false;
+
+        Group #IconSlot {
+          LayoutMode: Full;
+          HitTestVisible: false;
+
+          /** AssetImage (not ItemGrid) so clicks reach {@code #Pick} across the full icon. */
+          AssetImage #Icon {
+            Anchor: (Full: 0);
+            FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+            HitTestVisible: false;
+          }
+        }
+      }
+    }
+  }
+
+  Label #Name {
+    Style: (...@NameStyle);
+    Anchor: (Bottom: 6, Width: 168);
+    Text: "";
+  }
+
+  Label #Qty {
+    Style: (...@QtyStyle);
+    Anchor: (Bottom: 4, Width: 168);
+    Text: "";
+  }
+
+  Group {
+    LayoutMode: Center;
+    Anchor: (Bottom: 6, Width: 168);
+    @NarrowProductionProg #Prog {}
+  }
+
+  Label #Time {
+    Style: (...@TimeStyle);
+    Anchor: (Bottom: 8, Width: 168);
+    Text: "";
+  }
+
+  Group {
+    LayoutMode: Top;
+    Anchor: (Width: 168);
+    Group {
+      LayoutMode: Center;
+      Anchor: (Bottom: 4);
+      $C.@TextButton #Take1 {
+        TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+        Anchor: (Width: 160, Height: 32, Bottom: 4);
+        Text: "";
+      }
+    }
+    Group {
+      LayoutMode: Center;
+      Anchor: (Bottom: 4);
+      $C.@TextButton #Take10 {
+        TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+        Anchor: (Width: 160, Height: 32, Bottom: 4);
+        Text: "";
+      }
+    }
+    Group {
+      LayoutMode: Center;
+      $C.@TextButton #Take100 {
+        TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+        Anchor: (Width: 160, Height: 32);
+        Text: "";
+      }
+    }
+  }
+}

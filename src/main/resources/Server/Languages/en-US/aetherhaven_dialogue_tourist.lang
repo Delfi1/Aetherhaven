@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house=Would you like to live here?
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_finish=Your house is ready.
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind=About my home...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_waiting=About moving in...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.leave=Goodbye
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.body=I like your town. Would you find me a house? I would pay into the treasury each day once I have a bed.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept=I will find you a home
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline=Maybe later
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.body=Thank you. Stake a house plot, finish the build, then put my name on the house sign. Come back when I am living there.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.ok=Will do
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.body=Have you found a house for me yet? Finish the build and pick me on the house sign.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.ok=Right
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.body=Another visitor is waiting on a house first. Finish that home, then come talk to me.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.ok=Understood
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.body=This feels like home. Thank you. I will pay my share each morning.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.ok=Welcome

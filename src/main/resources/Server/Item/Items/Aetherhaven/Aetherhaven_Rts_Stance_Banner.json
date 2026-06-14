@@ -1,0 +1,20 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_rts.items.Aetherhaven_Rts_Stance_Banner.name",
+    "Description": "aetherhaven_rts.items.Aetherhaven_Rts_Stance_Banner.description"
+  },
+  "Categories": ["Items.Weapons"],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Rts_Stance_Banner.png",
+  "Model": "Items/Aetherhaven/Patrol_Wand.blockymodel",
+  "Texture": "Items/Aetherhaven/Patrol_Wand.png",
+  "PlayerAnimationsId": "Staff",
+  "MaxStack": 1,
+  "Set": "Aetherhaven",
+  "Interactions": {
+    "Primary": { "Interactions": [{ "Type": "AetherhavenRtsToolPrimary" }] },
+    "Secondary": { "Interactions": [{ "Type": "AetherhavenRtsToolSecondary" }] },
+    "Ability1": { "Interactions": [{ "Type": "AetherhavenRtsStanceCycle" }] }
+  },
+  "InteractionConfig": { "AllEntities": true },
+  "Tags": { "Family": ["Aetherhaven"], "Type": ["Tool"] }
+}

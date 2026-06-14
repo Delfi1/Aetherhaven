@@ -129,6 +129,15 @@ public final class BuildingStaffAssemblyChannelComponent implements Component<En
         return nowNs - lastChargeTickNs <= CHANNEL_STALE_NS;
     }
 
+    public long getLastChargeTickNs() {
+        return lastChargeTickNs;
+    }
+
+    /** {@code true} when secondary has not been held recently (used for faster idle mana regen). */
+    public boolean isIdleForManaRegen(long nowNs, long idleDelayNs) {
+        return lastChargeTickNs <= 0L || nowNs - lastChargeTickNs >= idleDelayNs;
+    }
+
     /** Brush center in world block coordinates (meaningful only when {@link #hasActiveTarget()}). */
     public int getBrushCenterX() {
         return channelCellX;

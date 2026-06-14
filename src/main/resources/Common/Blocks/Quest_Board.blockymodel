@@ -3,7 +3,7 @@
     {
       "id": "1",
       "name": "bone",
-      "position": {"x": -9.0338, "y": 25.81077, "z": -3.74557},
+      "position": {"x": 3.9662, "y": 25.81077, "z": -3.74557},
       "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
       "shape": {
         "type": "none",
@@ -23,7 +23,7 @@
           "id": "2",
           "name": "Recipe_Plant_Seeds_Mana1",
           "position": {"x": 7.2535, "y": 25.80173, "z": 22.42797},
-          "orientation": {"x": 0.07579, "y": -0.59957, "z": -0.00078, "w": 0.79673},
+          "orientation": {"x": 0.07579, "y": -0.59956, "z": -0.00078, "w": 0.79673},
           "shape": {
             "type": "none",
             "offset": {"x": 0, "y": -16, "z": 0},
@@ -393,8 +393,8 @@
                   },
                   "right": {
                     "offset": {"x": 21, "y": 60},
-                    "mirror": {"x": true, "y": true},
-                    "angle": 270
+                    "mirror": {"x": false, "y": false},
+                    "angle": 90
                   },
                   "front": {
                     "offset": {"x": 0, "y": 32},
@@ -403,8 +403,8 @@
                   },
                   "left": {
                     "offset": {"x": 21, "y": 57},
-                    "mirror": {"x": true, "y": true},
-                    "angle": 270
+                    "mirror": {"x": false, "y": false},
+                    "angle": 90
                   },
                   "top": {
                     "offset": {"x": 0, "y": 56},
@@ -429,7 +429,7 @@
           "id": "16",
           "name": "Recipe_Plant_Seeds_Mana1",
           "position": {"x": 7.9518, "y": -0.02047, "z": -21.96143},
-          "orientation": {"x": 0.02573, "y": -0.63203, "z": 0.02101, "w": 0.77424},
+          "orientation": {"x": 0.02573, "y": -0.63202, "z": 0.02101, "w": 0.77424},
           "shape": {
             "type": "none",
             "offset": {"x": 0, "y": 0, "z": 0},
@@ -765,7 +765,7 @@
           "id": "28",
           "name": "Recipe_Plant_Seeds_Mana1",
           "position": {"x": 7.9498, "y": 8.18483, "z": -7.85993},
-          "orientation": {"x": -0.05535, "y": -0.63012, "z": 0.1199, "w": 0.76519},
+          "orientation": {"x": -0.05535, "y": -0.63012, "z": 0.11989, "w": 0.76519},
           "shape": {
             "type": "none",
             "offset": {"x": 0, "y": 0, "z": 0},

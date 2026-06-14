@@ -59,6 +59,9 @@ public final class AssemblyFrontierWorldCells {
             if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
                 continue;
             }
+            if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.PLACING) {
+                continue;
+            }
             frontierScratch.clear();
             PlotAssemblyService.appendFrontierWorldCells(world, job, plot, frontierScratch);
             for (int fi = 0; fi < frontierScratch.size(); fi++) {

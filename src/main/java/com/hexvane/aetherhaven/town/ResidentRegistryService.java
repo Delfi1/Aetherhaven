@@ -27,7 +27,7 @@ public final class ResidentRegistryService {
     private ResidentRegistryService() {}
 
     /**
-     * One row per {@code npcRoleId} in town. Replaces any existing row with the same role id.
+     * Story villagers: one row per {@code npcRoleId}. Guards and townsfolk: one row per entity uuid.
      */
     public static void upsert(
         @Nonnull TownRecord town,
@@ -43,9 +43,15 @@ public final class ResidentRegistryService {
         }
         List<ResidentNpcRecord> list = town.getResidentNpcRecords();
         ResidentNpcRecord incoming = new ResidentNpcRecord(rid, kind, jobPlotId, entityUuid);
+        boolean perEntity =
+            TownVillagerBinding.KIND_GUARD.equals(kind) || TownVillagerBinding.KIND_TOWNSFOLK.equals(kind);
         boolean[] copied = {false};
         list.removeIf(r -> {
-            if (!rid.equalsIgnoreCase(r.getNpcRoleId())) {
+            if (perEntity) {
+                if (!entityUuid.equals(r.getLastEntityUuid())) {
+                    return false;
+                }
+            } else if (!rid.equalsIgnoreCase(r.getNpcRoleId())) {
                 return false;
             }
             if (!copied[0] && entityUuid.equals(r.getLastEntityUuid()) && r.hasLastKnownNeeds()) {
@@ -54,6 +60,7 @@ public final class ResidentRegistryService {
             }
             return true;
         });
+        incoming.setPendingDawnRevival(false);
         list.add(incoming);
         tm.updateTown(town);
     }
@@ -118,6 +125,7 @@ public final class ResidentRegistryService {
             if (oldUuid.equals(r.getLastEntityUuid())) {
                 r.setLastEntityUuid(newUuid);
                 r.clearLastKnownNeeds();
+                r.setPendingDawnRevival(false);
                 changed = true;
             }
         }
@@ -152,22 +160,33 @@ public final class ResidentRegistryService {
                 changed = true;
             }
         }
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            UUID u = rec.getEntityUuid();
+            if (u != null && u.equals(oldUuid)) {
+                rec.setEntityUuid(newUuid);
+                changed = true;
+            }
+        }
+        if (town.replaceEntityUuidInQuestTargets(oldUuid, newUuid)) {
+            changed = true;
+        }
         if (changed) {
             tm.updateTown(town);
         }
     }
 
     /**
-     * Rows suitable for Gaia revival UI: non-empty role, not inn visitors (stored kinds never use visitor_ prefix here).
+     * Rows suitable for Gaia revival UI: story villagers and citizen guards only — not generic pool townsfolk or inn
+     * visitors.
      */
     @Nonnull
     public static List<ResidentNpcRecord> revivalCandidates(@Nonnull TownRecord town) {
         List<ResidentNpcRecord> out = new ArrayList<>();
         for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
-            if (r.getNpcRoleId().isBlank()) {
+            if (!isRevivalCandidate(r.getKind(), r.getNpcRoleId())) {
                 continue;
             }
-            if (TownVillagerBinding.isVisitorKind(r.getKind())) {
+            if (TownVillagerBinding.KIND_GUARD.equals(r.getKind()) && !isGuardCitizen(town, r)) {
                 continue;
             }
             out.add(r);
@@ -197,7 +216,7 @@ public final class ResidentRegistryService {
             (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
                 for (int i = 0; i < archetypeChunk.size(); i++) {
                     TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
-                    if (b == null || !tid.equals(b.getTownId()) || TownVillagerBinding.isVisitorKind(b.getKind())) {
+                    if (b == null || !tid.equals(b.getTownId())) {
                         continue;
                     }
                     UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
@@ -206,6 +225,12 @@ public final class ResidentRegistryService {
                         continue;
                     }
                     String roleId = npc.getRoleName().trim();
+                    if (!isRevivalCandidate(b.getKind(), roleId)) {
+                        continue;
+                    }
+                    if (TownVillagerBinding.KIND_GUARD.equals(b.getKind()) && !isGuardCitizenUuid(town, uc.getUuid())) {
+                        continue;
+                    }
                     byRole.put(
                         roleId.toLowerCase(Locale.ROOT),
                         new ResidentNpcRecord(roleId, b.getKind(), b.getJobPlotId(), uc.getUuid())
@@ -249,6 +274,218 @@ public final class ResidentRegistryService {
         return out;
     }
 
+    /**
+     * Rows eligible for dawn auto-revival: {@link ResidentNpcRecord#isPendingDawnRevival()} only (death-confirmed).
+     * Clears stale pending flags when a live NPC for that role is already in loaded chunks.
+     */
+    @Nonnull
+    public static List<ResidentNpcRecord> dawnRevivalCandidates(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store
+    ) {
+        reconcileStalePendingDawnRevival(town, tm, store);
+        List<ResidentNpcRecord> out = new ArrayList<>();
+        for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
+            if (!r.isPendingDawnRevival()) {
+                continue;
+            }
+            if (!isRevivalCandidate(r.getKind(), r.getNpcRoleId())) {
+                continue;
+            }
+            if (TownVillagerBinding.KIND_GUARD.equals(r.getKind()) && !isGuardCitizen(town, r)) {
+                continue;
+            }
+            out.add(r);
+        }
+        out.sort(
+            Comparator.comparingInt(ResidentRegistryService::revivalRowSortOrder)
+                .thenComparing(r -> r.getNpcRoleId(), String.CASE_INSENSITIVE_ORDER)
+        );
+        return out;
+    }
+
+    /**
+     * Called from {@link com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem} when a revival-eligible villager
+     * dies. Dawn revival must not run without this flag.
+     */
+    public static void markPendingDawnRevivalOnDeath(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID entityUuid,
+        @Nonnull String roleId,
+        @Nonnull String kind,
+        @Nullable UUID jobPlotId
+    ) {
+        String rid = roleId.trim();
+        if (rid.isEmpty() || !isRevivalCandidate(kind, rid)) {
+            return;
+        }
+        if (TownVillagerBinding.KIND_GUARD.equals(kind) && !isGuardCitizenUuid(town, entityUuid)) {
+            return;
+        }
+        ResidentNpcRecord record = findRecordForDeathMark(town, entityUuid, rid);
+        if (record == null) {
+            record = new ResidentNpcRecord(rid, kind, jobPlotId, entityUuid);
+            town.getResidentNpcRecords().add(record);
+        } else {
+            record.setNpcRoleId(rid);
+            record.setKind(kind);
+            if (jobPlotId != null) {
+                record.setJobPlotId(jobPlotId);
+            }
+            if (!entityUuid.equals(record.getLastEntityUuid())) {
+                record.setLastEntityUuid(entityUuid);
+                record.clearLastKnownNeeds();
+            }
+        }
+        record.setPendingDawnRevival(true);
+        tm.updateTown(town);
+    }
+
+    /**
+     * True when any loaded town NPC matches this revival row's role (and entity uuid for guards). Used as a final guard
+     * before spawning a replacement.
+     */
+    public static boolean hasLiveTownRevivalNpcForRole(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull ResidentNpcRecord record
+    ) {
+        String roleId = record.getNpcRoleId().trim();
+        if (roleId.isEmpty()) {
+            return false;
+        }
+        UUID tid = town.getTownId();
+        boolean perEntity = TownVillagerBinding.KIND_GUARD.equals(record.getKind());
+        UUID recordUuid = record.getLastEntityUuid();
+        boolean[] found = { false };
+        Query<EntityStore> q =
+            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType(), NPCEntity.getComponentType());
+        store.forEachChunk(
+            q,
+            (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                if (found[0]) {
+                    return;
+                }
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (b == null || !tid.equals(b.getTownId())) {
+                        continue;
+                    }
+                    NPCEntity npc = archetypeChunk.getComponent(i, NPCEntity.getComponentType());
+                    UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    if (npc == null || uc == null || npc.getRoleName() == null || npc.getRoleName().isBlank()) {
+                        continue;
+                    }
+                    if (!roleId.equalsIgnoreCase(npc.getRoleName().trim())) {
+                        continue;
+                    }
+                    if (!isRevivalCandidate(b.getKind(), npc.getRoleName().trim())) {
+                        continue;
+                    }
+                    if (TownVillagerBinding.KIND_GUARD.equals(b.getKind()) && !isGuardCitizenUuid(town, uc.getUuid())) {
+                        continue;
+                    }
+                    if (perEntity && !recordUuid.equals(uc.getUuid())) {
+                        continue;
+                    }
+                    Ref<EntityStore> ref = archetypeChunk.getReferenceTo(i);
+                    if (ref != null && ref.isValid()) {
+                        found[0] = true;
+                        return;
+                    }
+                }
+            }
+        );
+        return found[0];
+    }
+
+    /** Clears {@link ResidentNpcRecord#isPendingDawnRevival()} when the villager is already live in loaded chunks. */
+    public static void reconcileStalePendingDawnRevival(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store
+    ) {
+        boolean changed = false;
+        for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
+            if (!r.isPendingDawnRevival()) {
+                continue;
+            }
+            UUID uuid = r.getLastEntityUuid();
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(uuid);
+            if (ref != null && ref.isValid()) {
+                r.setPendingDawnRevival(false);
+                changed = true;
+                continue;
+            }
+            if (hasLiveTownRevivalNpcForRole(store, town, r)) {
+                r.setPendingDawnRevival(false);
+                changed = true;
+            }
+        }
+        if (changed) {
+            tm.updateTown(town);
+        }
+    }
+
+    @Nullable
+    private static ResidentNpcRecord findRecordForDeathMark(
+        @Nonnull TownRecord town,
+        @Nonnull UUID entityUuid,
+        @Nonnull String roleId
+    ) {
+        for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
+            if (entityUuid.equals(r.getLastEntityUuid())) {
+                return r;
+            }
+        }
+        String key = roleId.toLowerCase(Locale.ROOT);
+        for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
+            if (key.equals(r.getNpcRoleId().toLowerCase(Locale.ROOT))) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * True when {@link TownRecord} still tracks this uuid but the entity is absent from the loaded index — usually an
+     * unloaded chunk, not a confirmed death (see {@link com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService}).
+     */
+    public static boolean isRevivalRecordLikelyUnloadedNotDead(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull ResidentNpcRecord record
+    ) {
+        UUID uuid = record.getLastEntityUuid();
+        if (uuid.getLeastSignificantBits() == 0L && uuid.getMostSignificantBits() == 0L) {
+            return false;
+        }
+        if (!townStillReferencesEntityUuid(town, uuid)) {
+            return false;
+        }
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(uuid);
+        return ref == null || !ref.isValid();
+    }
+
+    private static boolean townStillReferencesEntityUuid(@Nonnull TownRecord town, @Nonnull UUID uuid) {
+        if (uuid.equals(town.getElderEntityUuid()) || uuid.equals(town.getInnkeeperEntityUuid())) {
+            return true;
+        }
+        for (PlotInstance plot : town.getPlotInstances()) {
+            if (uuid.equals(plot.getHomeResidentEntityUuid())) {
+                return true;
+            }
+        }
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            if (uuid.equals(rec.getEntityUuid())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static void mergeIfAbsentRole(
         LinkedHashMap<String, ResidentNpcRecord> byRole,
         @Nonnull String roleId,
@@ -282,10 +519,30 @@ public final class ResidentRegistryService {
         if (b == null || npc == null || uc == null || npc.getRoleName() == null || npc.getRoleName().isBlank()) {
             return null;
         }
-        if (!town.getTownId().equals(b.getTownId()) || TownVillagerBinding.isVisitorKind(b.getKind())) {
+        if (!town.getTownId().equals(b.getTownId())) {
             return null;
         }
-        return new ResidentNpcRecord(npc.getRoleName().trim(), b.getKind(), b.getJobPlotId(), uc.getUuid());
+        String roleId = npc.getRoleName().trim();
+        if (!isRevivalCandidate(b.getKind(), roleId)) {
+            return null;
+        }
+        return new ResidentNpcRecord(roleId, b.getKind(), b.getJobPlotId(), uc.getUuid());
+    }
+
+    private static boolean isRevivalCandidate(@Nullable String kind, @Nonnull String roleId) {
+        if (roleId.isBlank()) {
+            return false;
+        }
+        if (kind != null && TownVillagerBinding.isVisitorKind(kind)) {
+            return false;
+        }
+        if (kind != null && TownVillagerBinding.KIND_TOWNSFOLK.equals(kind)) {
+            return false;
+        }
+        if (AetherhavenConstants.NPC_TOWNSFOLK.equalsIgnoreCase(roleId.trim())) {
+            return false;
+        }
+        return true;
     }
 
     private static int revivalRowSortOrder(@Nonnull ResidentNpcRecord r) {
@@ -328,7 +585,10 @@ public final class ResidentRegistryService {
             || AetherhavenConstants.NPC_PRIESTESS.equals(roleId)
             || AetherhavenConstants.NPC_MINER.equals(roleId)
             || AetherhavenConstants.NPC_LOGGER.equals(roleId)
-            || AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
+            || AetherhavenConstants.NPC_RANCHER.equals(roleId)
+            || AetherhavenConstants.NPC_CRYSTAL_KEEPER.equals(roleId)
+            || AetherhavenConstants.NPC_PYROTECHNIC.equals(roleId)
+            || AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
             return 2;
         }
         return 3;
@@ -369,10 +629,28 @@ public final class ResidentRegistryService {
             if (!entityUuid.equals(r.getLastEntityUuid())) {
                 continue;
             }
+            if (TownVillagerBinding.KIND_GUARD.equals(r.getKind()) || TownVillagerBinding.KIND_TOWNSFOLK.equals(r.getKind())) {
+                return;
+            }
             if (r.setLastKnownNeedsIfChanged(hunger, energy, fun, 0.5f)) {
                 tm.updateTown(town);
             }
             return;
         }
+    }
+
+    private static boolean isGuardCitizen(@Nonnull TownRecord town, @Nonnull ResidentNpcRecord record) {
+        UUID entityUuid = record.getLastEntityUuid();
+        return entityUuid != null && isGuardCitizenUuid(town, entityUuid);
+    }
+
+    private static boolean isGuardCitizenUuid(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            UUID u = rec.getEntityUuid();
+            if (u != null && u.equals(entityUuid)) {
+                return rec.isCitizen();
+            }
+        }
+        return false;
     }
 }

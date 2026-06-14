@@ -46,6 +46,18 @@ public final class PathToolRegistry {
         return new ArrayList<>(records);
     }
 
+    /** Lightweight revision for preview cache invalidation. */
+    public long revisionHash() {
+        long h = records.size();
+        for (PathCommitRecord r : records) {
+            if (r != null && r.id != null) {
+                h = h * 31 + r.id.hashCode();
+                h = h * 31 + (r.undo != null ? r.undo.size() : 0);
+            }
+        }
+        return h;
+    }
+
     @Nullable
     public PathCommitRecord remove(@Nonnull UUID id) {
         for (int i = 0; i < records.size(); i++) {

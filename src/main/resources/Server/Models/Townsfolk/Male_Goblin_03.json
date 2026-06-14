@@ -1,5 +1,5 @@
 {
-  "Parent": "Player",
+  "Parent": "Aetherhaven_Human",
   "DefaultAttachments": [
     {
       "Model": "Characters/Player.blockymodel",
@@ -82,5 +82,9 @@
       "GradientId": "Brass_Purple"
     }
   ],
-  "Icon": "Icons/ModelsGenerated/Male_Goblin_03.png"
+  "Icon": "Icons/ModelsGenerated/Male_Goblin_03.png",
+  "Model": "Characters/Player.blockymodel",
+  "Texture": "Characters/Player_Textures/Player_Muscular_Greyscale.png",
+  "GradientSet": "Skin",
+  "GradientId": "30"
 }

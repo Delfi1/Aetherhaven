@@ -1,6 +1,12 @@
 package com.hexvane.aetherhaven;
 
 import com.hexvane.aetherhaven.generated.HstatsBuildMetadata;
+import com.hexvane.aetherhaven.bard.BardActivePerformancesResource;
+import com.hexvane.aetherhaven.bard.BardMusicProximityState;
+import com.hexvane.aetherhaven.bard.BardMusicProximitySystem;
+import com.hexvane.aetherhaven.bard.BardPerformanceComponent;
+import com.hexvane.aetherhaven.bard.BardPerformanceTickSystem;
+import com.hexvane.aetherhaven.bard.data.BardSongCatalog;
 import com.hexvane.aetherhaven.charter.CharterPlaceEventSystem;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.command.AetherhavenPathCommand;
@@ -13,6 +19,8 @@ import com.hexvane.aetherhaven.construction.assembly.BuildingStaffAssemblyChanne
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerInteraction;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerTickSystem;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerComponent;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffHotbarManaHudSystem;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffManaRegenSystem;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffSecondaryInteraction;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyTickSystem;
@@ -20,10 +28,16 @@ import com.hexvane.aetherhaven.dialogue.AetherhavenDialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestKillProgressSystem;
+import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
+import com.hexvane.aetherhaven.questboard.QuestBoardOnlineDawnService;
+import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
+import com.hexvane.aetherhaven.npc.NpcFaceVisualState;
+import com.hexvane.aetherhaven.npc.NpcReputationWaveState;
 import com.hexvane.aetherhaven.npc.movement.BuilderBodyMotionWanderInRectGroundPreference;
+import com.hexvane.aetherhaven.placement.PlotBlockPreviewCleanupSystem;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.plot.CharterBlock;
@@ -32,10 +46,27 @@ import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.plot.SprinklerBlock;
 import com.hexvane.aetherhaven.plot.FounderMonumentBlock;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
+import com.hexvane.aetherhaven.plot.PlayerPlotTokenUnlockState;
+import com.hexvane.aetherhaven.plot.PlotTokenIconPacketAdapter;
+import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageUseInteraction;
+import com.hexvane.aetherhaven.plot.PlotTokenUnlockPlayerInitSystem;
+import com.hexvane.aetherhaven.plot.PlotTokenVirtualItemRegistry;
+import com.hexvane.aetherhaven.plot.ShopSafeBlock;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
+import com.hexvane.aetherhaven.shop.ShopSafeUseInteraction;
+import com.hexvane.aetherhaven.economy.ShopSafeBreakBlockSystem;
+import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchor;
+import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchorSystem;
+import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
+import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerSystems;
+import com.hexvane.aetherhaven.poi.marker.PoiMarkerDataComponent;
+import com.hexvane.aetherhaven.poi.marker.PoiMarkerEntity;
+import com.hexvane.aetherhaven.poi.marker.PoiMarkerSystems;
 import com.hexvane.aetherhaven.poi.tool.PoiDebugLabelEntity;
+import com.hexvane.aetherhaven.poi.tool.PoiToolModeCycleInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolMoveInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolPlayerComponent;
+import com.hexvane.aetherhaven.poi.tool.PoiToolSecondaryInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerComponent;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSetTargetInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSelectInteraction;
@@ -49,13 +80,68 @@ import com.hexvane.aetherhaven.pathtool.PathToolStyleCycleInteraction;
 import com.hexvane.aetherhaven.pathtool.PathToolUseInteraction;
 import com.hexvane.aetherhaven.pathtool.PathToolWidthCycleInteraction;
 import com.hexvane.aetherhaven.pathtool.PathNavViz;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorBlockInteraction;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorBreakAllowSystem;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorCancelInteraction;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorPreviewSystem;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorStepBackInteraction;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorStepForwardInteraction;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorUseInteraction;
+import com.hexvane.aetherhaven.patrol.GuardPatrolState;
+import com.hexvane.aetherhaven.patrol.GuardPatrolSystem;
+import com.hexvane.aetherhaven.rts.CommandPostBlock;
+import com.hexvane.aetherhaven.rts.CommandPostPlaceEventSystem;
+import com.hexvane.aetherhaven.rts.CommandPostUseInteraction;
+import com.hexvane.aetherhaven.rts.GuardRtsCommandState;
+import com.hexvane.aetherhaven.rts.GuardCombatCounterAttackSystem;
+import com.hexvane.aetherhaven.rts.GuardRtsCommandSystem;
+import com.hexvane.aetherhaven.rts.RtsCameraMousePollSystem;
+import com.hexvane.aetherhaven.rts.RtsMoveOrderVisualSystem;
+import com.hexvane.aetherhaven.rts.RtsCommanderCameraSystem;
+import com.hexvane.aetherhaven.rts.RtsExitMovementGuardSystem;
+import com.hexvane.aetherhaven.rts.RtsClientMovementPacketAdapter;
+import com.hexvane.aetherhaven.rts.RtsCommandHotbarSlotInboundAdapter;
+import com.hexvane.aetherhaven.rts.RtsCommandPlayerComponent;
+import com.hexvane.aetherhaven.rts.RtsCommandService;
+import com.hexvane.aetherhaven.rts.RtsExitInteraction;
+import com.hexvane.aetherhaven.rts.RtsFlagOrderCycleInteraction;
+import com.hexvane.aetherhaven.rts.RtsFlagStopInteraction;
+import com.hexvane.aetherhaven.rts.RtsHudRefreshSystem;
+import com.hexvane.aetherhaven.rts.RtsCommanderNpcDamageFilterSystem;
+import com.hexvane.aetherhaven.rts.RtsOrphanedGuardRecoverySystem;
+import com.hexvane.aetherhaven.rts.RtsUncleanSessionRecoverySystem;
+import com.hexvane.aetherhaven.rts.RtsInputGuardListener;
+import com.hexvane.aetherhaven.rts.RtsMarkerVisualSystem;
+import com.hexvane.aetherhaven.rts.RtsMouseInputListener;
+import com.hexvane.aetherhaven.rts.RtsStanceCycleInteraction;
+import com.hexvane.aetherhaven.rts.RtsToolPrimaryInteraction;
+import com.hexvane.aetherhaven.rts.RtsToolSecondaryInteraction;
+import com.hexvane.aetherhaven.patrol.PatrolWandModeCycleInteraction;
+import com.hexvane.aetherhaven.patrol.PatrolWandNewRouteInteraction;
+import com.hexvane.aetherhaven.patrol.PatrolWandPlayerComponent;
+import com.hexvane.aetherhaven.patrol.PatrolWandPreviewSystem;
+import com.hexvane.aetherhaven.patrol.PatrolWandPrimaryInteraction;
+import com.hexvane.aetherhaven.patrol.PatrolWandSecondaryInteraction;
+import com.hexvane.aetherhaven.patrol.PatrolWandToggleClosedInteraction;
+import com.hexvane.aetherhaven.patrol.PatrolWandUseInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderUseInteraction;
+import com.hexvane.aetherhaven.growthserum.GrowthSerumUseInteraction;
+import com.hexvane.aetherhaven.huntingknife.HuntingKnifeBonusDropSystem;
+import com.hexvane.aetherhaven.rootremover.RootRemoverUseInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerRemoveSystem;
 import com.hexvane.aetherhaven.purification.PurificationPowderVisualizationSystem;
 import com.hexvane.aetherhaven.purification.PurificationPreviewEntity;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyDebugTag;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
+import com.hexvane.aetherhaven.autonomy.DoorwaySeparationBypassSystem;
+import com.hexvane.aetherhaven.autonomy.VillagerMoodVisualSystem;
+import com.hexvane.aetherhaven.autonomy.VillagerReputationWaveSystem;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
+import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
+import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
+import com.hexvane.aetherhaven.autonomy.BlockMountDeathCleanupSystem;
+import com.hexvane.aetherhaven.autonomy.ChunkUnloadMountDisconnectSystem;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockMountSafetySystem;
 import com.hexvane.aetherhaven.scaffold.ScaffoldBreakDebugSystem;
 import com.hexvane.aetherhaven.scaffold.ScaffoldColumnCascadeBreakSystem;
@@ -66,24 +152,52 @@ import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleRegistry;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
+import com.hexvane.aetherhaven.townsfolk.EntityChunkStaleReferenceCleanupSystem;
+import com.hexvane.aetherhaven.world.WorldSpawnStaleChunkRefCleanupSystem;
+import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalSystem;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentSystem;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolPersistence;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
+import com.hexvane.aetherhaven.equipment.data.EquipmentProfileCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityCatalog;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
+import com.hexvane.aetherhaven.villager.NpcPersistentModelResyncSystem;
+import com.hexvane.aetherhaven.questboard.RaidHealthBarHudRefreshSystem;
+import com.hexvane.aetherhaven.questboard.RaidQuestMarchSystem;
+import com.hexvane.aetherhaven.questboard.RaidQuestMobBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.TownVillagerEnvironmentalDamageFilterSystem;
 import com.hexvane.aetherhaven.villager.TownVillagerNpcWorldSpawnSanitizeSystems;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.economy.TreasuryBreakBlockSystem;
 import com.hexvane.aetherhaven.geode.GeodeLootFiles;
+import com.hexvane.aetherhaven.shopspot.ShopLootFiles;
+import com.hexvane.aetherhaven.shopspot.ShopPriceCatalog;
+import com.hexvane.aetherhaven.shopspot.ShopPriceTooltipMessages;
+import com.hexvane.aetherhaven.shopspot.ShopPriceTooltipPacketAdapter;
+import com.hexvane.aetherhaven.shopspot.ShopPriceFiles;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBlock;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBreakBlockSystem;
+import com.hexvane.aetherhaven.shopspot.ShopSpotDisplayTickSystem;
+import com.hexvane.aetherhaven.shopspot.ShopSpotLookAtSystem;
+import com.hexvane.aetherhaven.shopspot.ShopSpotPlaceEventSystem;
+import com.hexvane.aetherhaven.shopspot.ShopSpotPlayerComponent;
+import com.hexvane.aetherhaven.shopspot.ShopSpotSecondaryInteraction;
+import com.hexvane.aetherhaven.shopspot.ShopSpotUseInteraction;
+import com.hexvane.aetherhaven.tourist.TouristAutonomyState;
+import com.hexvane.aetherhaven.tourist.TouristAutonomySystem;
+import com.hexvane.aetherhaven.tourist.TouristPortalBlock;
+import com.hexvane.aetherhaven.tourist.TouristPortalPlaceEventSystem;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftComponent;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftLootFiles;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftSchedulerSystem;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftDamagePopSystem;
 import com.hexvane.aetherhaven.floatinggift.FloatingGiftSystem;
+import com.hexvane.aetherhaven.inn.InnBellUseInteraction;
 import com.hexvane.aetherhaven.jewelry.JewelryGemTraits;
 import com.hexvane.aetherhaven.jewelry.JewelryInventoryTooltipSync;
 import com.hexvane.aetherhaven.jewelry.JewelryInventoryTooltipSyncSystem;
@@ -93,17 +207,18 @@ import com.hexvane.aetherhaven.jewelry.JewelryTooltipPacketAdapter;
 import com.hexvane.aetherhaven.jewelry.JewelryVirtualItemRegistry;
 import com.hexvane.aetherhaven.jewelry.JewelryRolling;
 import com.hexvane.aetherhaven.jewelry.LootChestBonusInjectSystem;
-import com.hexvane.aetherhaven.jewelry.LootrPerPlayerLootInjectSystem;
+import com.hexvane.aetherhaven.jewelry.LootrIntegration;
 import com.hexvane.aetherhaven.jewelry.LootrChestProcessedPlayers;
 import com.hexvane.aetherhaven.jewelry.LootChestWorldLootMarkSystem;
 import com.hexvane.aetherhaven.jewelry.LootChestWorldLootPending;
-import com.hexvane.aetherhaven.jewelry.JewelryStatSyncSystem;
+import com.hexvane.aetherhaven.jewelry.JewelryLoadoutEffectSyncSystem;
 import com.hexvane.aetherhaven.jewelry.PlayerJewelryLoadout;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtCraftSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventoryChangeSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventorySyncSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiasDraughtConsumeInteraction;
 import com.hexvane.aetherhaven.loot.PlayerBlockBreakBonusSystem;
+import com.hexvane.aetherhaven.rescue.RescueVillagerBreakBlockSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentBreakSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentPlaceSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentStatueRestoreSystem;
@@ -128,11 +243,14 @@ import com.hexvane.aetherhaven.placement.WallPlacementOpenHelper;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.WallPlacementPage;
 import com.hexvane.aetherhaven.ui.GeodeOpenPage;
+import com.hexvane.aetherhaven.ui.ShopSpotConfigPage;
 import com.hexvane.aetherhaven.ui.OpenHandMirrorUiInteraction;
 import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
 import com.hexvane.aetherhaven.ui.JewelryCraftingPage;
+import com.hexvane.aetherhaven.ui.PlotCraftingPage;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.ui.DifficultyPage;
+import com.hexvane.aetherhaven.ui.QuestBoardPage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.TownJournalPlayerInitSystem;
@@ -202,12 +320,15 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private PrefabMaterialsCatalog prefabMaterialsCatalog = PrefabMaterialsCatalog.empty();
     private DialogueCatalog dialogueCatalog = DialogueCatalog.empty();
     private QuestCatalog questCatalog = QuestCatalog.empty();
+    private QuestBoardCatalog questBoardCatalog = QuestBoardCatalog.empty();
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
     private TownsfolkPersonalityCatalog townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.empty();
     private TownsfolkCharacterCatalog townsfolkCharacterCatalog = TownsfolkCharacterCatalog.empty();
+    private EquipmentProfileCatalog equipmentProfileCatalog = EquipmentProfileCatalog.empty();
     private ProductionCatalog productionCatalog = ProductionCatalog.empty();
     private WorkplaceUnlockCatalog workplaceUnlockCatalog = WorkplaceUnlockCatalog.empty();
+    private BardSongCatalog bardSongCatalog = BardSongCatalog.empty();
     private final DialogueResolver dialogueResolver = new DialogueResolver();
     private TownNameCatalog townNameCatalog = TownNameCatalog.loadFromClasspath();
     private ScheduledExecutorService constructionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
@@ -227,6 +348,20 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     @Nullable
     private JewelryTooltipPacketAdapter jewelryTooltipPacketAdapter;
+    @Nullable
+    private ShopPriceTooltipPacketAdapter shopPriceTooltipPacketAdapter;
+    @Nullable
+    private RtsClientMovementPacketAdapter rtsClientMovementPacketAdapter;
+    @Nullable
+    private RtsCommandHotbarSlotInboundAdapter rtsCommandHotbarSlotInboundAdapter;
+
+    @Nullable
+    private PlotTokenVirtualItemRegistry plotTokenVirtualItemRegistry;
+
+    @Nullable
+    private PlotTokenIconPacketAdapter plotTokenIconPacketAdapter;
+
+    private ShopPriceCatalog shopPriceCatalog = ShopPriceCatalog.empty();
 
     public AetherhavenPlugin(JavaPluginInit init) {
         super(init);
@@ -240,6 +375,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nullable
     public JewelryTooltipPacketAdapter getJewelryTooltipPacketAdapter() {
         return jewelryTooltipPacketAdapter;
+    }
+
+    @Nullable
+    public PlotTokenIconPacketAdapter getPlotTokenIconPacketAdapter() {
+        return plotTokenIconPacketAdapter;
     }
 
     @Nonnull
@@ -265,6 +405,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public QuestCatalog getQuestCatalog() {
         return questCatalog;
+    }
+
+    @Nonnull
+    public QuestBoardCatalog getQuestBoardCatalog() {
+        return questBoardCatalog;
     }
 
     @Nonnull
@@ -298,6 +443,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     }
 
     @Nonnull
+    public EquipmentProfileCatalog getEquipmentProfileCatalog() {
+        return equipmentProfileCatalog;
+    }
+
+    @Nonnull
     public ProductionCatalog getProductionCatalog() {
         return productionCatalog;
     }
@@ -305,6 +455,16 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public WorkplaceUnlockCatalog getWorkplaceUnlockCatalog() {
         return workplaceUnlockCatalog;
+    }
+
+    @Nonnull
+    public BardSongCatalog getBardSongCatalog() {
+        return bardSongCatalog;
+    }
+
+    @Nonnull
+    public ShopPriceCatalog getShopPriceCatalog() {
+        return shopPriceCatalog;
     }
 
     @Nonnull
@@ -362,9 +522,17 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
         GeodeLootFiles.ensureDefaultLootFile(this);
         FloatingGiftLootFiles.ensureDefaultLootFile(this);
+        ShopPriceFiles.ensureDefaultPricesFile(this);
+        ShopLootFiles.ensureDefaultLootTables(this);
+        this.shopPriceCatalog = ShopPriceFiles.loadCatalog(this);
+        ShopPriceTooltipMessages.clearCache();
         registerModCommonAssetDelivery();
         registerJewelryNativeTooltipHooks();
         registerJewelryRarityBorderPackets();
+        registerPlotTokenIconPackets();
+        registerShopPriceTooltipPackets();
+        registerRtsClientMovementPacketAdapter();
+        registerRtsCommandHotbarSlotInboundAdapter();
 
         this.gameTimeCursorResourceType =
             this.getEntityStoreRegistry()
@@ -377,40 +545,86 @@ public final class AetherhavenPlugin extends JavaPlugin {
         ManagementBlock.register(this.getChunkStoreRegistry());
         CharterBlock.register(this.getChunkStoreRegistry());
         TreasuryBlock.register(this.getChunkStoreRegistry());
+        ShopSafeBlock.register(this.getChunkStoreRegistry());
         GaiaStatueBlock.register(this.getChunkStoreRegistry());
         SprinklerBlock.register(this.getChunkStoreRegistry());
         FounderMonumentBlock.register(this.getChunkStoreRegistry());
+        ShopSpotBlock.register(this.getChunkStoreRegistry());
+        TouristPortalBlock.register(this.getChunkStoreRegistry());
+        CommandPostBlock.register(this.getChunkStoreRegistry());
         FounderMonumentStatueSkin.register(this.getEntityStoreRegistry());
 
         VillagerNeeds.register(this.getEntityStoreRegistry());
         PlayerJewelryLoadout.register(this.getEntityStoreRegistry());
         PlayerTownJournalState.register(this.getEntityStoreRegistry());
+        PlayerPlotTokenUnlockState.register(this.getEntityStoreRegistry());
         this.getEntityStoreRegistry().registerSystem(new JewelryPlayerInitSystem());
         this.getEntityStoreRegistry().registerSystem(new JewelryInventoryTooltipSyncSystem());
         this.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
-        this.getEntityStoreRegistry().registerSystem(new JewelryStatSyncSystem());
+        this.getEntityStoreRegistry().registerSystem(new PlotTokenUnlockPlayerInitSystem());
+        this.getEntityStoreRegistry().registerSystem(new JewelryLoadoutEffectSyncSystem());
         LootChestWorldLootPending.register(this.getChunkStoreRegistry());
         LootrChestProcessedPlayers.register(this.getChunkStoreRegistry());
         this.getChunkStoreRegistry().registerSystem(new LootChestWorldLootMarkSystem());
         this.getChunkStoreRegistry().registerSystem(new LootChestBonusInjectSystem(this));
-        LootrPerPlayerLootInjectSystem lootrCompat = LootrPerPlayerLootInjectSystem.createIfAvailable(this);
-        if (lootrCompat != null) {
-            this.getChunkStoreRegistry().registerSystem(lootrCompat);
-        }
+        this.getChunkStoreRegistry().registerSystem(new ChunkUnloadMountDisconnectSystem());
+        this.getChunkStoreRegistry().registerSystem(new EntityChunkStaleReferenceCleanupSystem());
+        this.getChunkStoreRegistry().registerSystem(new WorldSpawnStaleChunkRefCleanupSystem());
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
+        RaidQuestMobBinding.register(this.getEntityStoreRegistry());
         TownsfolkCharacterBinding.register(this.getEntityStoreRegistry());
+        GuildHallDisplayAnchor.register(this.getEntityStoreRegistry());
+        PoiMarkerDataComponent.register(this.getEntityStoreRegistry());
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.OnAdd());
         this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.EachTick());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
+        NpcFaceVisualState.register(this.getEntityStoreRegistry());
+        NpcReputationWaveState.register(this.getEntityStoreRegistry());
+        BuilderConstructionAssistState.register(this.getEntityStoreRegistry());
+        TouristAutonomyState.register(this.getEntityStoreRegistry());
         VillagerScheduleTickState.register(this.getEntityStoreRegistry());
+        BardPerformanceComponent.register(this.getEntityStoreRegistry());
+        BardActivePerformancesResource.register(this.getEntityStoreRegistry());
+        BardMusicProximityState.register(this.getEntityStoreRegistry());
         VillagerAutonomyDebugTag.register(this.getEntityStoreRegistry());
         PoiToolPlayerComponent.register(this.getEntityStoreRegistry());
         PathToolPlayerComponent.register(this.getEntityStoreRegistry());
+        PatrolWandPlayerComponent.register(this.getEntityStoreRegistry());
+        RtsCommandPlayerComponent.register(this.getEntityStoreRegistry());
+        GuardRtsCommandState.register(this.getEntityStoreRegistry());
+        GuardPatrolState.register(this.getEntityStoreRegistry());
         PurificationPowderPlayerComponent.register(this.getEntityStoreRegistry());
+        ShopSpotPlayerComponent.register(this.getEntityStoreRegistry());
         BuildingStaffAssemblyChannelComponent.register(this.getEntityStoreRegistry());
         BuildingStaffFrontierTracerComponent.register(this.getEntityStoreRegistry());
         FloatingGiftComponent.register(this.getEntityStoreRegistry());
+        this.getEntityRegistry()
+            .registerEntity(
+                "AetherhavenAdventurerSpawnMarker",
+                AdventurerSpawnMarkerEntity.class,
+                world -> {
+                    AdventurerSpawnMarkerEntity e = new AdventurerSpawnMarkerEntity();
+                    if (world != null) {
+                        e.loadIntoWorld(world);
+                    }
+                    return e;
+                },
+                AdventurerSpawnMarkerEntity.CODEC
+            );
+        this.getEntityRegistry()
+            .registerEntity(
+                "AetherhavenPoiMarker",
+                PoiMarkerEntity.class,
+                world -> {
+                    PoiMarkerEntity e = new PoiMarkerEntity();
+                    if (world != null) {
+                        e.loadIntoWorld(world);
+                    }
+                    return e;
+                },
+                PoiMarkerEntity.CODEC
+            );
         this.getEntityRegistry()
             .registerEntity(
                 "AetherhavenPoiDebugLabel",
@@ -443,6 +657,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPoiToolMove", PoiToolMoveInteraction.class, PoiToolMoveInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPoiToolSecondary", PoiToolSecondaryInteraction.class, PoiToolSecondaryInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPoiToolModeCycle", PoiToolModeCycleInteraction.class, PoiToolModeCycleInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
             .register(
                 "AetherhavenPoiToolSetTarget",
                 PoiToolSetTargetInteraction.class,
@@ -465,6 +683,24 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 "AetherhavenPurificationPowderUse",
                 PurificationPowderUseInteraction.class,
                 PurificationPowderUseInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenRootRemoverUse",
+                RootRemoverUseInteraction.class,
+                RootRemoverUseInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenGrowthSerumUse",
+                GrowthSerumUseInteraction.class,
+                GrowthSerumUseInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotTokenUnlockPageUse",
+                PlotTokenUnlockPageUseInteraction.class,
+                PlotTokenUnlockPageUseInteraction.CODEC
             );
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenGaiasDraughtConsume", GaiasDraughtConsumeInteraction.class, GaiasDraughtConsumeInteraction.CODEC);
@@ -493,6 +729,56 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 PathToolStyleCycleInteraction.CODEC
             );
         this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPlotCreatorUse", PlotCreatorUseInteraction.class, PlotCreatorUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPlotCreatorBlock", PlotCreatorBlockInteraction.class, PlotCreatorBlockInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotCreatorStepBack",
+                PlotCreatorStepBackInteraction.class,
+                PlotCreatorStepBackInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotCreatorStepForward",
+                PlotCreatorStepForwardInteraction.class,
+                PlotCreatorStepForwardInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotCreatorCancel",
+                PlotCreatorCancelInteraction.class,
+                PlotCreatorCancelInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPatrolWandPrimary", PatrolWandPrimaryInteraction.class, PatrolWandPrimaryInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPatrolWandSecondary",
+                PatrolWandSecondaryInteraction.class,
+                PatrolWandSecondaryInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPatrolWandUse", PatrolWandUseInteraction.class, PatrolWandUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPatrolWandModeCycle",
+                PatrolWandModeCycleInteraction.class,
+                PatrolWandModeCycleInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPatrolWandNewRoute",
+                PatrolWandNewRouteInteraction.class,
+                PatrolWandNewRouteInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPatrolWandToggleClosed",
+                PatrolWandToggleClosedInteraction.class,
+                PatrolWandToggleClosedInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
             .register(
                 "AetherhavenBuildingStaffSecondary",
                 BuildingStaffSecondaryInteraction.class,
@@ -516,31 +802,99 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 ScaffoldUseExtendInteraction.class,
                 ScaffoldUseExtendInteraction.CODEC
             );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenShopSpotUse", ShopSpotUseInteraction.class, ShopSpotUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenShopSpotSecondary", ShopSpotSecondaryInteraction.class, ShopSpotSecondaryInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenCommandPostUse", CommandPostUseInteraction.class, CommandPostUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenInnBellUse", InnBellUseInteraction.class, InnBellUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenShopSafeUse", ShopSafeUseInteraction.class, ShopSafeUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenRtsToolPrimary", RtsToolPrimaryInteraction.class, RtsToolPrimaryInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenRtsToolSecondary", RtsToolSecondaryInteraction.class, RtsToolSecondaryInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenRtsFlagOrderCycle", RtsFlagOrderCycleInteraction.class, RtsFlagOrderCycleInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenRtsFlagStop", RtsFlagStopInteraction.class, RtsFlagStopInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenRtsStanceCycle", RtsStanceCycleInteraction.class, RtsStanceCycleInteraction.CODEC);
+        this.getCodecRegistry(com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction.CODEC)
+            .register("AetherhavenRtsExit", RtsExitInteraction.class, RtsExitInteraction.CODEC);
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new BuildingStaffFrontierTracerTickSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new BuildingStaffManaRegenSystem());
+        this.getEntityStoreRegistry().registerSystem(new BuildingStaffHotbarManaHudSystem.SlotChangeHandler());
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new BlockMountDeathCleanupSystem());
+        this.getEntityStoreRegistry().registerSystem(new BuilderConstructionAssistSystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new VillagerMoodVisualSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new VillagerReputationWaveSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new TouristAutonomySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new DoorwaySeparationBypassSystem());
+        this.getEntityStoreRegistry().registerSystem(new PendingEntityRemovalSystem());
         this.getEntityStoreRegistry().registerSystem(new TownsfolkAssignmentSystem());
+        this.getEntityStoreRegistry().registerSystem(new VillagerDeathHandlerSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new TownVillagerEnvironmentalDamageFilterSystem());
         this.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ShopSafeBreakBlockSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PlotCreatorBreakAllowSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PlotCreatorPreviewSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PlotBlockPreviewCleanupSystem());
+        this.getEntityStoreRegistry().registerSystem(new ShopSpotPlaceEventSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new TouristPortalPlaceEventSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ShopSpotBreakBlockSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ShopSpotDisplayTickSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ShopSpotLookAtSystem(this));
         this.getEntityStoreRegistry().registerSystem(new ScaffoldColumnCascadeBreakSystem());
         this.getEntityStoreRegistry().registerSystem(new PlayerBlockBreakBonusSystem(this));
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentPlaceSystem(this));
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem());
+        this.getEntityStoreRegistry().registerSystem(new NpcPersistentModelResyncSystem());
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentBreakSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new RescueVillagerBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new AdventurerSpawnMarkerSystems.EnsurePrefabCopyable());
+        this.getEntityStoreRegistry().registerSystem(new PoiMarkerSystems.EnsurePrefabCopyable());
+        this.getEntityStoreRegistry().registerSystem(new GuildHallDisplayAnchorSystem());
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderVisualizationSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderPlayerRemoveSystem());
         this.getEntityStoreRegistry().registerSystem(new QuestKillProgressSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new RaidQuestMarchSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new RaidHealthBarHudRefreshSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new HuntingKnifeBonusDropSystem());
+        this.getEntityStoreRegistry().registerSystem(new BardPerformanceTickSystem());
+        this.getEntityStoreRegistry().registerSystem(new BardMusicProximitySystem());
         GaiaDraughtCraftSystem gaiaDraughtCraftSystem = new GaiaDraughtCraftSystem(this);
         this.getEntityStoreRegistry().registerSystem(gaiaDraughtCraftSystem);
         this.getEntityStoreRegistry().registerSystem(new GaiaDraughtCraftSystem.Pre(gaiaDraughtCraftSystem));
         this.getEntityStoreRegistry().registerSystem(new GaiaDraughtInventoryChangeSystem());
         this.getEntityStoreRegistry().registerSystem(new GaiaDraughtInventorySyncSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PathToolPreviewSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PatrolWandPreviewSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new GuardPatrolSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new GuardRtsCommandSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new GuardCombatCounterAttackSystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsCommanderCameraSystem.Follow(this));
+        this.getEntityStoreRegistry().registerSystem(new RtsExitMovementGuardSystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsCameraMousePollSystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsHudRefreshSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new RtsUncleanSessionRecoverySystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsOrphanedGuardRecoverySystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsCommanderNpcDamageFilterSystem());
+        this.getEntityStoreRegistry().registerSystem(new RtsMarkerVisualSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new RtsMoveOrderVisualSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new CommandPostPlaceEventSystem(this));
+        RtsMouseInputListener.register(this.getEventRegistry());
+        RtsInputGuardListener.register(this.getEventRegistry());
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftSchedulerSystem());
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftSystem());
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftDamagePopSystem());
@@ -803,6 +1157,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             (ref, componentAccessor, playerRef, context) -> null
         );
         OpenCustomUIInteraction.registerSimple(this, QuestJournalPage.class, AetherhavenConstants.PAGE_QUEST_JOURNAL, QuestJournalPage::new);
+        OpenCustomUIInteraction.registerSimple(this, QuestBoardPage.class, AetherhavenConstants.PAGE_QUEST_BOARD, QuestBoardPage::new);
         OpenCustomUIInteraction.registerSimple(this, DifficultyPage.class, AetherhavenConstants.PAGE_DIFFICULTY, DifficultyPage::new);
         OpenCustomUIInteraction.registerSimple(
             this,
@@ -818,9 +1173,21 @@ public final class AetherhavenPlugin extends JavaPlugin {
         );
         OpenCustomUIInteraction.registerSimple(
             this,
+            PlotCraftingPage.class,
+            AetherhavenConstants.PAGE_PLOT_CRAFTING_BENCH,
+            PlotCraftingPage::new
+        );
+        OpenCustomUIInteraction.registerSimple(
+            this,
             GeodeOpenPage.class,
             AetherhavenConstants.PAGE_GEODE_ANVIL,
             pr -> new GeodeOpenPage(pr, false)
+        );
+        OpenCustomUIInteraction.registerSimple(
+            this,
+            ShopSpotConfigPage.class,
+            AetherhavenConstants.PAGE_SHOP_SPOT_CONFIG,
+            ShopSpotConfigPage::new
         );
         NPCPlugin npc = NPCPlugin.get();
         if (npc != null) {
@@ -860,6 +1227,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             }
         }
         this.config.get();
+        LootrIntegration.registerIfAvailable(this);
         this.reloadAetherhavenAssetCatalogs();
         this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenAssetCatalogs());
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
@@ -871,6 +1239,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
     public void reloadConfigsAndAssetCatalogs() {
         this.config.load().join();
         this.reloadAetherhavenAssetCatalogs();
+        this.shopPriceCatalog = ShopPriceFiles.loadCatalog(this);
+        ShopPriceTooltipMessages.clearCache();
     }
 
     /**
@@ -896,6 +1266,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         if (module == null) {
             return event;
         }
+        CustomBuildingIconAssetRegistry.syncFromDataDirectory(this);
         String packId = new PluginIdentifier(this.getManifest()).toString();
         List<CommonAsset> packAssets = CommonAssetRegistry.getCommonAssetsStartingWith(packId, "");
         if (packAssets.isEmpty()) {
@@ -917,16 +1288,20 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.loadFromAssetPacksOrClasspath(cl);
         this.townsfolkCharacterCatalog =
             TownsfolkCharacterCatalog.loadFromAssetPacksOrClasspath(cl, this.townsfolkPersonalityCatalog);
+        this.equipmentProfileCatalog = EquipmentProfileCatalog.loadFromAssetPacksOrClasspath(cl);
         ReputationRewardCatalog.refreshFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);
-        this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl);
-        this.prefabMaterialsCatalog = PrefabMaterialsCatalog.loadFromAssetPacksOrClasspath(cl);
+        Path customData = this.getDataDirectory();
+        this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl, customData);
+        this.prefabMaterialsCatalog = PrefabMaterialsCatalog.loadFromAssetPacksOrClasspath(cl, customData);
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
+        this.questBoardCatalog = QuestBoardCatalog.loadFromAssetPacksOrClasspath(cl);
         this.villagerScheduleRegistry = VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl);
         this.townNameCatalog = TownNameCatalog.loadFromClasspath();
         this.productionCatalog = ProductionCatalog.loadFromClasspath(cl);
         this.workplaceUnlockCatalog = WorkplaceUnlockCatalog.loadFromClasspath(cl);
+        this.bardSongCatalog = BardSongCatalog.loadFromAssetPacksOrClasspath(cl);
         LOGGER.atInfo().log(
             "Aetherhaven asset catalogs reloaded (constructions=%s, dialogue=%s, quests=%s, villagerDefs=%s, villagerSchedules=loaded)",
             this.constructionCatalog.ids(),
@@ -934,6 +1309,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             this.questCatalog.all().keySet(),
             this.villagerDefinitionCatalog.allByNpcRoleId().keySet()
         );
+        CustomBuildingIconAssetRegistry.syncFromDataDirectory(this);
     }
 
     private void registerJewelryNativeTooltipHooks() {
@@ -956,33 +1332,93 @@ public final class AetherhavenPlugin extends JavaPlugin {
                                 }
                                 JewelryInventoryTooltipSync.syncPlayerInventory(ref, store);
                                 JewelryNativeTooltipManager.refreshPlayer(playerRef);
+                                QuestBoardOnlineDawnService.onPlayerReady(ref, store, AetherhavenPlugin.get());
+                                UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+                                if (uc != null) {
+                                    TouristReconcileService.onTownMemberPlayerReady(
+                                        player.getWorld(),
+                                        AetherhavenPlugin.get(),
+                                        uc.getUuid()
+                                    );
+                                }
+                                RtsCommandService.exit(ref, store);
                             });
                 });
+        this.getEventRegistry()
+            .registerGlobal(
+                PlayerDisconnectEvent.class,
+                event -> {
+                    Ref<EntityStore> ref = event.getPlayerRef().getReference();
+                    if (ref != null && ref.isValid()) {
+                        Store<EntityStore> store = ref.getStore();
+                        World world = store.getExternalData().getWorld();
+                        if (world != null) {
+                            world.execute(() -> RtsCommandService.exit(ref, store));
+                        }
+                    }
+                    if (this.jewelryTooltipPacketAdapter != null) {
+                        this.jewelryTooltipPacketAdapter.onPlayerLeave(event.getPlayerRef().getUuid());
+                    }
+                    if (this.plotTokenIconPacketAdapter != null) {
+                        this.plotTokenIconPacketAdapter.onPlayerLeave(event.getPlayerRef().getUuid());
+                    }
+                    QuestBoardOnlineDawnService.clearPlayer(event.getPlayerRef().getUuid());
+                }
+            );
         LOGGER.atInfo().log("Jewelry tooltips use native ItemDisplay metadata (per-stack descriptions)");
+    }
+
+    private void registerShopPriceTooltipPackets() {
+        this.shopPriceTooltipPacketAdapter = new ShopPriceTooltipPacketAdapter();
+        this.shopPriceTooltipPacketAdapter.register();
     }
 
     private void registerJewelryRarityBorderPackets() {
         this.jewelryVirtualItemRegistry = new JewelryVirtualItemRegistry();
         this.jewelryTooltipPacketAdapter = new JewelryTooltipPacketAdapter(this.jewelryVirtualItemRegistry);
         this.jewelryTooltipPacketAdapter.register();
-        this.getEventRegistry()
-            .registerGlobal(
-                PlayerDisconnectEvent.class,
-                event -> {
-                    if (this.jewelryTooltipPacketAdapter != null) {
-                        this.jewelryTooltipPacketAdapter.onPlayerLeave(event.getPlayerRef().getUuid());
-                    }
-                }
-            );
+    }
+
+    private void registerPlotTokenIconPackets() {
+        this.plotTokenVirtualItemRegistry = new PlotTokenVirtualItemRegistry();
+        this.plotTokenIconPacketAdapter = new PlotTokenIconPacketAdapter(this.plotTokenVirtualItemRegistry);
+        this.plotTokenIconPacketAdapter.register();
+    }
+
+    private void registerRtsClientMovementPacketAdapter() {
+        this.rtsClientMovementPacketAdapter = new RtsClientMovementPacketAdapter();
+        this.rtsClientMovementPacketAdapter.register();
+    }
+
+    private void registerRtsCommandHotbarSlotInboundAdapter() {
+        this.rtsCommandHotbarSlotInboundAdapter = new RtsCommandHotbarSlotInboundAdapter();
+        this.rtsCommandHotbarSlotInboundAdapter.register();
     }
 
     @Override
     protected void shutdown() {
+        if (this.shopPriceTooltipPacketAdapter != null) {
+            this.shopPriceTooltipPacketAdapter.deregister();
+            this.shopPriceTooltipPacketAdapter = null;
+        }
         if (this.jewelryTooltipPacketAdapter != null) {
             this.jewelryTooltipPacketAdapter.deregister();
             this.jewelryTooltipPacketAdapter = null;
         }
+        if (this.plotTokenIconPacketAdapter != null) {
+            this.plotTokenIconPacketAdapter.deregister();
+            this.plotTokenIconPacketAdapter = null;
+        }
+        if (this.rtsClientMovementPacketAdapter != null) {
+            this.rtsClientMovementPacketAdapter.deregister();
+            this.rtsClientMovementPacketAdapter = null;
+        }
+        if (this.rtsCommandHotbarSlotInboundAdapter != null) {
+            this.rtsCommandHotbarSlotInboundAdapter.deregister();
+            this.rtsCommandHotbarSlotInboundAdapter = null;
+        }
         this.jewelryVirtualItemRegistry = null;
+        this.plotTokenVirtualItemRegistry = null;
         PathNavViz.shutdown();
         instance = null;
         AetherhavenWorldRegistries.saveAll();

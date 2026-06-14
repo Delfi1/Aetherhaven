@@ -6,7 +6,7 @@
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Geode.png",
   "Model": "Items/Aetherhaven/Geode.blockymodel",
   "Texture": "Items/Aetherhaven/Geode.png",
-  "MaxStack": 64,
+  "MaxStack": 100,
   "PlayerAnimationsId": "Item",
   "Categories": [
     "Items.Utility"

@@ -94,6 +94,6 @@
       "Furniture"
     ]
   },
-  "MaxStack": 64,
+  "MaxStack": 100,
   "ItemSoundSetId": "ISS_Blocks_Wood"
 }

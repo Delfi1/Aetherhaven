@@ -132,8 +132,6 @@ items.Aetherhaven_Geode.description=Une pierre creuse pouvant contenir des crist
 items.Aetherhaven_Geode_Anvil.name=enclume en géode
 items.Aetherhaven_Geode_Anvil.description=Permet d'ouvrir des géodes sans frais de forge. Emplacement et utilisation : vous devez connaître le schéma pour la fabriquer à votre bureau d'urbanisme.
 
-barter.aetherhaven_vex.title=Actions quotidiennes de Vex
-
 items.Aetherhaven_Treasury.name=trésor municipal
 items.Aetherhaven_Treasury.description=Contient les pièces d'or de la ville. Sert à déposer ou à retirer (propriétaire de la ville).
 

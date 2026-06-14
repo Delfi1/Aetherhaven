@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
+import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades;
 import com.hexvane.aetherhaven.production.WorkplaceUnlockCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -127,9 +128,69 @@ public final class TownRecord {
     @SerializedName("innVisitorPoolExcludedRoleIds")
     private LinkedHashSet<String> innVisitorPoolExcludedRoleIds = new LinkedHashSet<>();
 
+    @Nullable
+    @SerializedName("guildMasterEntityUuid")
+    private String guildMasterEntityUuid;
+
+    @SerializedName("guildHallActive")
+    private boolean guildHallActive;
+
+    /** Entity UUID strings for unhired guild hall adventurers (dawn cycled). */
+    @SerializedName("guildHallAdventurerNpcIds")
+    private List<String> guildHallAdventurerNpcIds = new ArrayList<>();
+
+    @Nullable
+    @SerializedName("guildHallLastMorningEpochDay")
+    private Long guildHallLastMorningEpochDay;
+
+    /** Slot indices chosen for today's ~50% guild hall adventurer fill. */
+    @SerializedName("guildHallAdventurerFilledSlots")
+    private List<Integer> guildHallAdventurerFilledSlots = new ArrayList<>();
+
+    /** Maps adventurer entity UUID string to spawn slot index for the current day. */
+    @SerializedName("guildHallAdventurerSlotByNpcId")
+    private Map<String, Integer> guildHallAdventurerSlotByNpcId = new LinkedHashMap<>();
+
+    /** Hired guards not yet promoted to tax paying citizens. */
+    @SerializedName("hiredGuardRecords")
+    private List<HiredGuardRecord> hiredGuardRecords = new ArrayList<>();
+
+    /** Portal tourists and invited residents from the tourist portal. */
+    @SerializedName("touristRecords")
+    private List<com.hexvane.aetherhaven.tourist.TouristRecord> touristRecords = new ArrayList<>();
+
+    /** Game epoch day for which {@link #touristPlannedSpawnEpochMinutes} was generated. */
+    @SerializedName("touristSpawnPlannedDayEpochDay")
+    private long touristSpawnPlannedDayEpochDay = Long.MIN_VALUE;
+
+    /** Planned tourist spawn times for the town (epoch minutes); shared across all portals in the town. */
+    @SerializedName("touristPlannedSpawnEpochMinutes")
+    private List<Long> touristPlannedSpawnEpochMinutes = new ArrayList<>();
+
+    @SerializedName("touristExecutedSpawnEpochMinutes")
+    private List<Long> touristExecutedSpawnEpochMinutes = new ArrayList<>();
+
+    /** Entity UUID of guard targeted by active {@link com.hexvane.aetherhaven.AetherhavenConstants#QUEST_HOUSE_GUARD}. */
+    @Nullable
+    @SerializedName("guardHouseQuestTargetEntityUuid")
+    private String guardHouseQuestTargetEntityUuid;
+
+    /** Active entity-scoped quests: quest id → target entity UUID string. */
+    @SerializedName("questTargetEntityUuidByQuestId")
+    private Map<String, String> questTargetEntityUuidByQuestId;
+
+    /** Per-entity quest completions for {@code repeat.mode: per_entity} quests. */
+    @SerializedName("questCompletedEntityUuids")
+    private Map<String, List<String>> questCompletedEntityUuids;
+
     /** Shared town treasury balance (gold coins); all treasury blocks in this town read/write this. */
     @SerializedName("treasuryGoldCoinCount")
     private long treasuryGoldCoinCount;
+
+    /** Per player gold stored in player shop safes from their listing sales. Key: player UUID string. */
+    @Nullable
+    @SerializedName("playerShopSafeGoldByPlayerUuid")
+    private Map<String, Long> playerShopSafeGoldByPlayerUuid;
 
     /** Dawn-aligned game epoch day when daily treasury tithe was last applied ({@link com.hexvane.aetherhaven.reputation.VillagerReputationService#currentGameEpochDay}). */
     @Nullable
@@ -252,6 +313,25 @@ public final class TownRecord {
     @SerializedName("feastGatherDeadlineEpochMs")
     private long feastGatherDeadlineEpochMs;
 
+    /** Cumulative XP from completed quest board quests; town rank tier is derived from this. */
+    @SerializedName("questBoardRankXp")
+    private int questBoardRankXp;
+
+    /** Last online dawn epoch day when unaccepted board slots were refreshed for this town. */
+    @Nullable
+    @SerializedName("questBoardLastRefreshOnlineDawnDay")
+    private Long questBoardLastRefreshOnlineDawnDay;
+
+    /** Up to three procedural quest board slot offers (see {@link com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord}). */
+    @SerializedName("questBoardSlots")
+    @Nullable
+    private List<com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord> questBoardSlots;
+
+    /** Remaining quest entry keys for shuffle bag board generation (roleId:entryId). */
+    @SerializedName("questBoardDrawPool")
+    @Nullable
+    private List<String> questBoardDrawPool;
+
     /**
      * Workplace plot production storage: key plot UUID string, value slot cursors + item amounts
      * (see {@link com.hexvane.aetherhaven.production.ProductionTickSystem}).
@@ -355,6 +435,19 @@ public final class TownRecord {
         migrateFeastFieldsIfNeeded();
         migratePlotProductionIfNeeded();
         migrateSharedRecipeUnlockFieldsIfNeeded();
+        migrateQuestBoardFieldsIfNeeded();
+    }
+
+    private void migrateQuestBoardFieldsIfNeeded() {
+        if (questBoardRankXp < 0) {
+            questBoardRankXp = 0;
+        }
+        if (questBoardSlots == null) {
+            questBoardSlots = new ArrayList<>();
+        }
+        if (questBoardDrawPool == null) {
+            questBoardDrawPool = new ArrayList<>();
+        }
     }
 
     private void migrateSharedRecipeUnlockFieldsIfNeeded() {
@@ -422,7 +515,7 @@ public final class TownRecord {
             if (centry == null) {
                 continue;
             }
-            if (s.clampAmountsToCatalogEntry(centry)) {
+            if (s.clampAmountsToCatalogEntry(centry, WorkplaceProductionUpgrades.capacityMultiplier(s))) {
                 changed = true;
             }
         }
@@ -852,6 +945,234 @@ public final class TownRecord {
         this.innPoolLastMorningEpochDay = epochDay;
     }
 
+    @Nullable
+    public UUID getGuildMasterEntityUuid() {
+        return guildMasterEntityUuid != null && !guildMasterEntityUuid.isBlank() ? UUID.fromString(guildMasterEntityUuid) : null;
+    }
+
+    public void setGuildMasterEntityUuid(@Nullable UUID uuid) {
+        this.guildMasterEntityUuid = uuid != null ? uuid.toString() : null;
+    }
+
+    public boolean isGuildHallActive() {
+        return guildHallActive;
+    }
+
+    public void setGuildHallActive(boolean guildHallActive) {
+        this.guildHallActive = guildHallActive;
+    }
+
+    @Nonnull
+    public List<String> getGuildHallAdventurerNpcIds() {
+        if (guildHallAdventurerNpcIds == null) {
+            guildHallAdventurerNpcIds = new ArrayList<>();
+        }
+        return guildHallAdventurerNpcIds;
+    }
+
+    @Nullable
+    public Long getGuildHallLastMorningEpochDay() {
+        return guildHallLastMorningEpochDay;
+    }
+
+    public void setGuildHallLastMorningEpochDay(@Nullable Long epochDay) {
+        this.guildHallLastMorningEpochDay = epochDay;
+    }
+
+    @Nonnull
+    public List<Integer> getGuildHallAdventurerFilledSlots() {
+        if (guildHallAdventurerFilledSlots == null) {
+            guildHallAdventurerFilledSlots = new ArrayList<>();
+        }
+        return guildHallAdventurerFilledSlots;
+    }
+
+    @Nonnull
+    public Map<String, Integer> getGuildHallAdventurerSlotByNpcId() {
+        if (guildHallAdventurerSlotByNpcId == null) {
+            guildHallAdventurerSlotByNpcId = new LinkedHashMap<>();
+        }
+        return guildHallAdventurerSlotByNpcId;
+    }
+
+    @Nonnull
+    public List<HiredGuardRecord> getHiredGuardRecords() {
+        if (hiredGuardRecords == null) {
+            hiredGuardRecords = new ArrayList<>();
+        }
+        return hiredGuardRecords;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.tourist.TouristRecord> getTouristRecords() {
+        if (touristRecords == null) {
+            touristRecords = new ArrayList<>();
+        }
+        return touristRecords;
+    }
+
+    public long getTouristSpawnPlannedDayEpochDay() {
+        return touristSpawnPlannedDayEpochDay;
+    }
+
+    public void setTouristSpawnPlannedDayEpochDay(long touristSpawnPlannedDayEpochDay) {
+        this.touristSpawnPlannedDayEpochDay = touristSpawnPlannedDayEpochDay;
+    }
+
+    @Nonnull
+    public List<Long> getTouristPlannedSpawnEpochMinutes() {
+        if (touristPlannedSpawnEpochMinutes == null) {
+            touristPlannedSpawnEpochMinutes = new ArrayList<>();
+        }
+        return touristPlannedSpawnEpochMinutes;
+    }
+
+    @Nonnull
+    public List<Long> getTouristExecutedSpawnEpochMinutes() {
+        if (touristExecutedSpawnEpochMinutes == null) {
+            touristExecutedSpawnEpochMinutes = new ArrayList<>();
+        }
+        return touristExecutedSpawnEpochMinutes;
+    }
+
+    public void clearTouristDailySpawnPlan() {
+        getTouristPlannedSpawnEpochMinutes().clear();
+        getTouristExecutedSpawnEpochMinutes().clear();
+    }
+
+    private void migrateLegacyGuardHouseQuestTarget() {
+        if (guardHouseQuestTargetEntityUuid == null || guardHouseQuestTargetEntityUuid.isBlank()) {
+            return;
+        }
+        if (questTargetEntityUuidByQuestId == null) {
+            questTargetEntityUuidByQuestId = new LinkedHashMap<>();
+        }
+        String qid = com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_GUARD;
+        questTargetEntityUuidByQuestId.putIfAbsent(qid, guardHouseQuestTargetEntityUuid.trim());
+    }
+
+    @Nullable
+    public UUID getQuestTargetEntityUuid(@Nonnull String questId) {
+        migrateLegacyGuardHouseQuestTarget();
+        String q = questId.trim();
+        if (q.isEmpty() || questTargetEntityUuidByQuestId == null) {
+            return null;
+        }
+        String raw = questTargetEntityUuidByQuestId.get(q);
+        if (raw == null || raw.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(raw.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public void setQuestTargetEntityUuid(@Nonnull String questId, @Nullable UUID uuid) {
+        migrateLegacyGuardHouseQuestTarget();
+        String q = questId.trim();
+        if (q.isEmpty()) {
+            return;
+        }
+        if (questTargetEntityUuidByQuestId == null) {
+            questTargetEntityUuidByQuestId = new LinkedHashMap<>();
+        }
+        if (uuid == null) {
+            questTargetEntityUuidByQuestId.remove(q);
+            if (com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_GUARD.equals(q)) {
+                guardHouseQuestTargetEntityUuid = null;
+            }
+        } else {
+            String s = uuid.toString();
+            questTargetEntityUuidByQuestId.put(q, s);
+            if (com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_GUARD.equals(q)) {
+                guardHouseQuestTargetEntityUuid = s;
+            }
+        }
+    }
+
+    public void clearQuestTarget(@Nonnull String questId) {
+        setQuestTargetEntityUuid(questId, null);
+    }
+
+    public boolean hasQuestCompletedForEntity(@Nonnull String questId, @Nonnull UUID entityUuid) {
+        String q = questId.trim();
+        if (q.isEmpty()) {
+            return false;
+        }
+        if (questCompletedEntityUuids == null) {
+            return false;
+        }
+        List<String> list = questCompletedEntityUuids.get(q);
+        if (list == null || list.isEmpty()) {
+            return false;
+        }
+        String want = entityUuid.toString();
+        for (String s : list) {
+            if (s != null && want.equalsIgnoreCase(s.trim())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void markQuestCompletedForEntity(@Nonnull String questId, @Nonnull UUID entityUuid) {
+        String q = questId.trim();
+        if (q.isEmpty()) {
+            return;
+        }
+        if (questCompletedEntityUuids == null) {
+            questCompletedEntityUuids = new LinkedHashMap<>();
+        }
+        List<String> list = questCompletedEntityUuids.computeIfAbsent(q, k -> new ArrayList<>());
+        String s = entityUuid.toString();
+        for (String existing : list) {
+            if (existing != null && s.equalsIgnoreCase(existing.trim())) {
+                return;
+            }
+        }
+        list.add(s);
+    }
+
+    @Nullable
+    public UUID getGuardHouseQuestTargetEntityUuid() {
+        return getQuestTargetEntityUuid(com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_GUARD);
+    }
+
+    public void setGuardHouseQuestTargetEntityUuid(@Nullable UUID uuid) {
+        setQuestTargetEntityUuid(com.hexvane.aetherhaven.AetherhavenConstants.QUEST_HOUSE_GUARD, uuid);
+    }
+
+    /**
+     * Updates quest target entity uuid references after villager reset or revival.
+     *
+     * @return true when any reference was updated
+     */
+    public boolean replaceEntityUuidInQuestTargets(@Nonnull UUID oldUuid, @Nonnull UUID newUuid) {
+        if (oldUuid.equals(newUuid)) {
+            return false;
+        }
+        migrateLegacyGuardHouseQuestTarget();
+        String oldS = oldUuid.toString();
+        String newS = newUuid.toString();
+        boolean changed = false;
+        if (questTargetEntityUuidByQuestId != null) {
+            for (Map.Entry<String, String> e : new ArrayList<>(questTargetEntityUuidByQuestId.entrySet())) {
+                String v = e.getValue();
+                if (v != null && oldS.equalsIgnoreCase(v.trim())) {
+                    questTargetEntityUuidByQuestId.put(e.getKey(), newS);
+                    changed = true;
+                }
+            }
+        }
+        if (guardHouseQuestTargetEntityUuid != null && oldS.equalsIgnoreCase(guardHouseQuestTargetEntityUuid.trim())) {
+            guardHouseQuestTargetEntityUuid = newS;
+            changed = true;
+        }
+        return changed;
+    }
+
     @Nonnull
     public List<PlotInstance> getPlotInstances() {
         if (plotInstances == null) {
@@ -953,6 +1274,17 @@ public final class TownRecord {
         return null;
     }
 
+    /** First complete plot whose footprint contains the block (for POI tool placement). */
+    @Nullable
+    public PlotInstance findCompletePlotContaining(int x, int y, int z) {
+        for (PlotInstance p : getPlotInstances()) {
+            if (p.containsWorldBlock(x, y, z)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     @Nullable
     public PlotFootprintRecord findOverlappingPlot(@Nonnull PlotFootprintRecord candidate) {
         return findOverlappingPlot(candidate, null);
@@ -980,6 +1312,19 @@ public final class TownRecord {
 
     public boolean hasQuestCompleted(@Nonnull String questId) {
         return normalizedQuestSet(completedQuestIds).contains(questId);
+    }
+
+    /** Removes a quest id from the town wide completed list (used when migrating to per entity repeat). */
+    public void clearGlobalQuestCompletion(@Nonnull String questId) {
+        String q = questId.trim();
+        if (q.isEmpty()) {
+            return;
+        }
+        Set<String> done = normalizedQuestSet(completedQuestIds);
+        if (!done.remove(q)) {
+            return;
+        }
+        completedQuestIds = new ArrayList<>(done);
     }
 
     /**
@@ -1021,6 +1366,7 @@ public final class TownRecord {
         completedQuestIds = new ArrayList<>(done);
         clearQuestObjectiveProgress(q);
         clearQuestKillProgress(q);
+        clearQuestTarget(q);
     }
 
     public void clearActiveQuest(@Nonnull String questId) {
@@ -1033,6 +1379,24 @@ public final class TownRecord {
         activeQuestIds = new ArrayList<>(active);
         clearQuestObjectiveProgress(q);
         clearQuestKillProgress(q);
+        clearQuestTarget(q);
+    }
+
+    /**
+     * Completes a {@code per_entity} quest for one NPC without marking the whole town as done for that quest id.
+     */
+    public void completeQuestForEntity(@Nonnull String questId, @Nonnull UUID entityUuid) {
+        String q = questId.trim();
+        if (q.isEmpty()) {
+            return;
+        }
+        Set<String> active = normalizedQuestSet(activeQuestIds);
+        active.remove(q);
+        activeQuestIds = new ArrayList<>(active);
+        markQuestCompletedForEntity(q, entityUuid);
+        clearQuestObjectiveProgress(q);
+        clearQuestKillProgress(q);
+        clearQuestTarget(q);
     }
 
     /** Initializes tracking entries for objectives that are not {@code journal} kind (future hooks). */
@@ -1185,6 +1549,48 @@ public final class TownRecord {
         this.treasuryGoldCoinCount = Math.max(0L, next);
     }
 
+    @Nonnull
+    private Map<String, Long> playerShopSafeGoldMap() {
+        if (playerShopSafeGoldByPlayerUuid == null) {
+            playerShopSafeGoldByPlayerUuid = new LinkedHashMap<>();
+        }
+        return playerShopSafeGoldByPlayerUuid;
+    }
+
+    public long getPlayerShopSafeGold(@Nonnull UUID playerUuid) {
+        Long v = playerShopSafeGoldMap().get(playerUuid.toString());
+        return v != null ? Math.max(0L, v) : 0L;
+    }
+
+    public void addPlayerShopSafeGold(@Nonnull UUID playerUuid, long delta) {
+        if (delta <= 0L) {
+            return;
+        }
+        String key = playerUuid.toString();
+        long next = getPlayerShopSafeGold(playerUuid) + delta;
+        playerShopSafeGoldMap().put(key, next);
+    }
+
+    /** Removes up to {@code amount} from the player's safe balance; returns amount actually removed. */
+    public long withdrawPlayerShopSafeGold(@Nonnull UUID playerUuid, long amount) {
+        if (amount <= 0L) {
+            return 0L;
+        }
+        String key = playerUuid.toString();
+        long bal = getPlayerShopSafeGold(playerUuid);
+        long take = Math.min(bal, amount);
+        if (take <= 0L) {
+            return 0L;
+        }
+        long remain = bal - take;
+        if (remain <= 0L) {
+            playerShopSafeGoldMap().remove(key);
+        } else {
+            playerShopSafeGoldMap().put(key, remain);
+        }
+        return take;
+    }
+
     @Nullable
     public Long getTreasuryLastTaxEpochDay() {
         return treasuryLastTaxEpochDay;
@@ -1296,6 +1702,97 @@ public final class TownRecord {
         this.feastGatherDeadlineEpochMs = feastGatherDeadlineEpochMs;
     }
 
+    public int getQuestBoardRankXp() {
+        migrateQuestBoardFieldsIfNeeded();
+        return questBoardRankXp;
+    }
+
+    public void setQuestBoardRankXp(int questBoardRankXp) {
+        migrateQuestBoardFieldsIfNeeded();
+        this.questBoardRankXp = Math.max(0, questBoardRankXp);
+    }
+
+    public void addQuestBoardRankXp(int amount) {
+        if (amount <= 0) {
+            return;
+        }
+        setQuestBoardRankXp(getQuestBoardRankXp() + amount);
+    }
+
+    @Nullable
+    public Long getQuestBoardLastRefreshOnlineDawnDay() {
+        return questBoardLastRefreshOnlineDawnDay;
+    }
+
+    public void setQuestBoardLastRefreshOnlineDawnDay(long epochDay) {
+        this.questBoardLastRefreshOnlineDawnDay = epochDay;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord> getQuestBoardSlots() {
+        migrateQuestBoardFieldsIfNeeded();
+        return questBoardSlots;
+    }
+
+    public void ensureQuestBoardSlotCount(int count) {
+        migrateQuestBoardFieldsIfNeeded();
+        while (questBoardSlots.size() < count) {
+            questBoardSlots.add(com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord.empty());
+        }
+        while (questBoardSlots.size() > count) {
+            questBoardSlots.remove(questBoardSlots.size() - 1);
+        }
+    }
+
+    @Nonnull
+    public List<String> getQuestBoardDrawPool() {
+        migrateQuestBoardFieldsIfNeeded();
+        return questBoardDrawPool;
+    }
+
+    public void setQuestBoardDrawPool(@Nonnull List<String> keys) {
+        migrateQuestBoardFieldsIfNeeded();
+        this.questBoardDrawPool = new ArrayList<>(keys);
+    }
+
+    @Nullable
+    public com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord findAcceptedBoardQuestForGiver(@Nonnull UUID giverEntityUuid) {
+        migrateQuestBoardFieldsIfNeeded();
+        String id = giverEntityUuid.toString();
+        for (com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord slot : questBoardSlots) {
+            if (slot.isAccepted() && id.equals(slot.getGiverEntityUuid())) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord findBoardSlotByInstanceId(@Nonnull String instanceId) {
+        migrateQuestBoardFieldsIfNeeded();
+        if (instanceId.isBlank()) {
+            return null;
+        }
+        for (com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord slot : questBoardSlots) {
+            if (instanceId.equals(slot.instanceIdOrEmpty())) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
+    @Nonnull
+    public List<com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord> acceptedBoardQuestsSnapshot() {
+        migrateQuestBoardFieldsIfNeeded();
+        List<com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord> out = new ArrayList<>();
+        for (com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord slot : questBoardSlots) {
+            if (slot.isAccepted()) {
+                out.add(slot);
+            }
+        }
+        return out;
+    }
+
     @Nonnull
     public String getDisplayName() {
         migrateTownSocialFieldsIfNeeded();
@@ -1398,6 +1895,17 @@ public final class TownRecord {
             return true;
         }
         return getEffectiveMemberPermissions(playerUuid).removePlots();
+    }
+
+    /** Town owner always may list on player shop spots; members need the explicit permission. */
+    public boolean playerCanUseShopSpots(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        if (!isMemberPlayer(playerUuid)) {
+            return false;
+        }
+        return getEffectiveMemberPermissions(playerUuid).useShopSpots();
     }
 
     /** Legacy: true if the player may place plots or manage constructions (any former "build" capability). */

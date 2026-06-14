@@ -51,7 +51,10 @@ public final class SchedulePlotCommute {
         if (tc == null) {
             return false;
         }
-        if (TownVillagerBinding.isVisitorKind(binding.getKind())) {
+        if (TownVillagerBinding.isScheduleSuppressedKind(binding.getKind())) {
+            return false;
+        }
+        if (VillagerAutonomySystem.skipsPoiAutonomy(binding, npc)) {
             return false;
         }
         UUID plotUuid = binding.getPreferredPlotId();
@@ -127,7 +130,8 @@ public final class SchedulePlotCommute {
                     tc.getPosition(),
                     route,
                     finalTarget,
-                    (int) Math.floor(tc.getPosition().y)
+                    (int) Math.floor(tc.getPosition().y),
+                    plugin.getConfig().get().getPathNavNodeSpacing()
                 );
         }
         if (!route.isEmpty()) {

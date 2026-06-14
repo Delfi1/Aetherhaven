@@ -29,10 +29,41 @@ public final class NpcPortraitProvider {
         Map.entry(AetherhavenConstants.NPC_PRIESTESS, "Aetherhaven_Priestess.png"),
         Map.entry(AetherhavenConstants.NPC_MINER, "Aetherhaven_Miner.png"),
         Map.entry(AetherhavenConstants.NPC_LOGGER, "Aetherhaven_Logger.png"),
-        Map.entry(AetherhavenConstants.NPC_RANCHER, "Aetherhaven_Rancher.png")
+        Map.entry(AetherhavenConstants.NPC_RANCHER, "Aetherhaven_Rancher.png"),
+        Map.entry(AetherhavenConstants.NPC_CRYSTAL_KEEPER, "Aetherhaven_Crystal_Keeper.png"),
+        Map.entry(AetherhavenConstants.NPC_PYROTECHNIC, "Aetherhaven_Pyrotechnic.png"),
+        Map.entry(AetherhavenConstants.NPC_FLORIST, "Aetherhaven_Florist.png"),
+        Map.entry(AetherhavenConstants.NPC_BUILDER, "Aetherhaven_Builder.png"),
+        Map.entry(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID, "Aetherhaven_Guild_Master.png"),
+        Map.entry(AetherhavenConstants.NPC_GUARD_KNIGHT, "Guild_Master.png"),
+        Map.entry(AetherhavenConstants.NPC_GUARD_ARCHER, "Guild_Master.png"),
+        Map.entry(AetherhavenConstants.NPC_GUARD_MAGE, "Guild_Master.png")
     );
 
+    private static final String RESCUE_ROLE_SUFFIX = "_Rescue";
+
     private NpcPortraitProvider() {}
+
+    /**
+     * One-shot rescue roles (e.g. {@code Aetherhaven_Pyrotechnic_Rescue}) share art with their permanent role via
+     * {@code MemoriesNameOverride}; dialogue must resolve the same canonical id.
+     */
+    @Nonnull
+    public static String canonicalNpcRoleIdForPortrait(@Nonnull String roleId) {
+        String r = roleId.trim();
+        if (r.isEmpty() || !r.endsWith(RESCUE_ROLE_SUFFIX)) {
+            return r;
+        }
+        String base = r.substring(0, r.length() - RESCUE_ROLE_SUFFIX.length());
+        if (base.isEmpty()) {
+            return r;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null && plugin.getVillagerDefinitionCatalog().byNpcRoleId(base) != null) {
+            return base;
+        }
+        return ROLE_ID_TO_FILE.containsKey(base) ? base : r;
+    }
 
     /**
      * Portrait for a townsfolk body model ({@code Male_Human_01.png}, etc.) under {@link #ICON_DIR}.
@@ -54,7 +85,7 @@ public final class NpcPortraitProvider {
 
     @Nonnull
     public static String portraitPathForRoleId(@Nonnull String roleId) {
-        String r = roleId.trim();
+        String r = canonicalNpcRoleIdForPortrait(roleId);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin != null) {
             VillagerDefinition d = plugin.getVillagerDefinitionCatalog().byNpcRoleId(r);

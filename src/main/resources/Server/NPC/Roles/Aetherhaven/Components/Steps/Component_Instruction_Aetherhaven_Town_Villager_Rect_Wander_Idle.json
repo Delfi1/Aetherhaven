@@ -2,7 +2,7 @@
   "Type": "Component",
   "Class": "Instruction",
   "Interface": "Hytale.Instruction.Intelligent.Idle.Motion",
-  "$Comment": "Looped WanderInRectGroundPreference + pause. DefaultGroundWeight applies to normal terrain; ObstacleWeight penalizes bench/seat/bed blocks. Optional GroundWeights override by BlockTypeId.",
+  "$Comment": "Looped WanderInRectGroundPreference + pause. Normal terrain uses DefaultGroundWeight; benches/seats/beds use ObstacleWeight.",
   "Parameters": {
     "WanderRectTimer": {
       "Value": [3, 8],

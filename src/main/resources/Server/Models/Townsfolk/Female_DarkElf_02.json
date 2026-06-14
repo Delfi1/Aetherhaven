@@ -1,5 +1,5 @@
 {
-  "Parent": "Player",
+  "Parent": "Aetherhaven_Human",
   "DefaultAttachments": [
     {
       "Model": "Characters/Player.blockymodel",
@@ -80,5 +80,9 @@
       "Texture": "Cosmetics/Head/SilverHoopsBead_Textures/Purple+Violet+Lime.png"
     }
   ],
-  "Icon": "Icons/ModelsGenerated/Female_DarkElf_02.png"
+  "Icon": "Icons/ModelsGenerated/Female_DarkElf_02.png",
+  "Model": "Characters/Player.blockymodel",
+  "Texture": "Characters/Player_Textures/Player_Muscular_Greyscale.png",
+  "GradientSet": "Skin",
+  "GradientId": "33"
 }

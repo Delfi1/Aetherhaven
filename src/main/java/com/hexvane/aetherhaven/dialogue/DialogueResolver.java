@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.data.DialogueTreeDefinition;
 import com.hexvane.aetherhaven.quest.QuestDialogueEntry;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.rescue.RescueVillagerTriggers;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -27,7 +28,6 @@ public final class DialogueResolver {
     private static final String DEFAULT_DIALOGUE_KIND = "merchant";
     private static final String DEFAULT_RESIDENT_DIALOGUE_TREE = "aetherhaven_merchant";
     public static final String KIND_ELDER_LYREN = "elder_lyren";
-    public static final String TREE_ELDER_WEEK1 = "aetherhaven_elder_week1";
     public static final String TREE_ELDER_WEEK2 = "aetherhaven_elder_week2";
     public static final String KIND_INNKEEPER = "innkeeper";
     public static final String TREE_INN_WELCOME = "aetherhaven_inn_welcome";
@@ -36,8 +36,23 @@ public final class DialogueResolver {
     public static final String VISITOR_ELDER = "aetherhaven_visitor_elder";
     public static final String VISITOR_INN = "aetherhaven_visitor_inn";
 
+    public static final String KIND_GUILD_MASTER = "guild_master";
+    public static final String TREE_GUILD_MASTER = "aetherhaven_guild_master";
+    public static final String KIND_GUILD_ADVENTURER = "guild_adventurer";
+    public static final String TREE_GUILD_ADVENTURER = "aetherhaven_guild_adventurer";
+
     public static final String KIND_TOWNSFOLK = "townsfolk";
     public static final String TREE_TOWNSFOLK_GENERIC = "aetherhaven_townsfolk_generic";
+    public static final String KIND_TOURIST = "tourist";
+    public static final String TREE_TOURIST = "aetherhaven_tourist";
+    public static final String KIND_GUARD = "guard";
+    public static final String TREE_GUARD = "aetherhaven_guard";
+
+    public static final String KIND_CRYSTAL_KEEPER = "crystal_keeper";
+    public static final String TREE_CRYSTAL_KEEPER = "aetherhaven_crystal_keeper";
+
+    public static final String KIND_PYROTECHNIC = "pyrotechnic";
+    public static final String TREE_PYROTECHNIC = "aetherhaven_pyrotechnic";
 
     private final Map<String, String> kindToTree = new HashMap<>();
     private final Map<String, String> kindToVisitorTree = new HashMap<>();
@@ -51,6 +66,8 @@ public final class DialogueResolver {
         kindToVisitorTree.clear();
         kindToTree.put(KIND_ELDER_LYREN, TREE_ELDER_WEEK2);
         kindToTree.put(KIND_INNKEEPER, TREE_INN_WELCOME);
+        kindToTree.put(KIND_GUILD_MASTER, TREE_GUILD_MASTER);
+        kindToTree.put(KIND_GUILD_ADVENTURER, TREE_GUILD_ADVENTURER);
         kindToVisitorTree.put(KIND_ELDER_LYREN, VISITOR_ELDER);
         kindToVisitorTree.put(KIND_INNKEEPER, VISITOR_INN);
         kindToVisitorTree.put("merchant", VISITOR_DEFAULT);
@@ -60,13 +77,22 @@ public final class DialogueResolver {
         kindToVisitorTree.put("miner", VISITOR_DEFAULT);
         kindToVisitorTree.put("logger", VISITOR_DEFAULT);
         kindToVisitorTree.put("rancher", VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_CRYSTAL_KEEPER, VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_PYROTECHNIC, VISITOR_DEFAULT);
+        kindToVisitorTree.put("florist", VISITOR_DEFAULT);
+        kindToVisitorTree.put("builder", VISITOR_DEFAULT);
         registerNonVillagerDialogueKinds();
     }
 
     /** Townsfolk and other dialogue kinds not backed by {@link VillagerDefinition} assets. */
     private void registerNonVillagerDialogueKinds() {
         kindToTree.put(KIND_TOWNSFOLK, TREE_TOWNSFOLK_GENERIC);
+        kindToTree.put(KIND_GUARD, TREE_GUARD);
+        kindToTree.put(KIND_GUILD_ADVENTURER, TREE_GUILD_ADVENTURER);
         kindToVisitorTree.put(KIND_TOWNSFOLK, VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_GUARD, VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_GUILD_MASTER, VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_GUILD_ADVENTURER, VISITOR_DEFAULT);
     }
 
     /** Called on asset catalog reload. Falls back to {@link #applyLegacyDefaultKindMaps} when the catalog is empty. */
@@ -104,16 +130,38 @@ public final class DialogueResolver {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         String kind = villagerKind != null && !villagerKind.isBlank() ? villagerKind.trim() : DEFAULT_DIALOGUE_KIND;
         if (plugin != null && npcRef != null && npcRef.isValid()) {
-            if (store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType())
-                != null) {
-                kind = KIND_TOWNSFOLK;
+            TownVillagerBinding guardBinding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+            if (guardBinding != null && TownVillagerBinding.KIND_GUARD.equals(guardBinding.getKind())) {
+                kind = KIND_GUARD;
+            } else {
+                var townsfolkBinding =
+                    store.getComponent(npcRef, com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding.getComponentType());
+                if (townsfolkBinding != null) {
+                    if (com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds.isGuildHallAdventurer(
+                        townsfolkBinding.getAssignmentKind()
+                    )) {
+                        kind = KIND_GUILD_ADVENTURER;
+                    } else if (com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds.TOURIST.equals(
+                        townsfolkBinding.getAssignmentKind()
+                    )) {
+                        kind = KIND_TOURIST;
+                    } else {
+                        kind = KIND_TOWNSFOLK;
+                    }
+                }
             }
         }
         String tree;
         if (explicitDialogueId != null && !explicitDialogueId.isBlank()) {
             tree = explicitDialogueId.trim();
+        } else if (KIND_GUILD_ADVENTURER.equals(kind)) {
+            tree = TREE_GUILD_ADVENTURER;
         } else if (KIND_TOWNSFOLK.equals(kind)) {
             tree = TREE_TOWNSFOLK_GENERIC;
+        } else if (KIND_TOURIST.equals(kind)) {
+            tree = TREE_TOURIST;
+        } else if (KIND_GUARD.equals(kind)) {
+            tree = TREE_GUARD;
         } else {
             tree = kindToTree.getOrDefault(kind, DEFAULT_RESIDENT_DIALOGUE_TREE);
         }
@@ -129,6 +177,12 @@ public final class DialogueResolver {
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
             TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+            if (binding != null) {
+                var rescueTrigger = RescueVillagerTriggers.byBindingKind(binding.getKind());
+                if (rescueTrigger != null) {
+                    return new ResolvedDialogue(rescueTrigger.rescueDialogueTreeId(), "root");
+                }
+            }
             if (pu != null && binding != null) {
                 TownRecord npcTown = tm.getTown(binding.getTownId());
                 boolean outsider = npcTown == null || !npcTown.hasMemberOrOwner(pu.getUuid());
@@ -151,7 +205,16 @@ public final class DialogueResolver {
                 if ("root".equals(entry)) {
                     NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
                     String npcRole = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
-                    if (!npcRole.isEmpty()) {
+                    String qEntryEntity = QuestDialogueEntry.resolveOfferEntryNodeIdForEntity(
+                        plugin.getQuestCatalog(),
+                        town,
+                        pu.getUuid(),
+                        nu.getUuid()
+                    );
+                    if (qEntryEntity != null && !qEntryEntity.isBlank()) {
+                        entry = qEntryEntity.trim();
+                    }
+                    if ("root".equals(entry) && !npcRole.isEmpty()) {
                         String qEntry = QuestDialogueEntry.resolveOfferEntryNodeId(
                             plugin.getQuestCatalog(),
                             town,

@@ -1,0 +1,33 @@
+{
+  "RenderMode": "BlendAdd",
+  "ParticleRotationInfluence": "Billboard",
+  "LinearFiltering": true,
+  "LightInfluence": 0,
+  "MaxConcurrentParticles": 2,
+  "SpawnRate": { "Min": 14, "Max": 14 },
+  "ParticleLifeSpan": { "Min": 0.18, "Max": 0.18 },
+  "Particle": {
+    "Texture": "Particles/Textures/Impacts/Impact_Round3.png",
+    "ScaleRatioConstraint": "OneToOne",
+    "UVOption": "RandomFlipU",
+    "InitialAnimationFrame": {
+      "FrameIndex": { "Min": 0, "Max": 0 },
+      "Rotation": { "Z": { "Min": -360, "Max": 360 } },
+      "Opacity": 1.0,
+      "Color": "#ff5533",
+      "Scale": { "X": { "Min": 0.55, "Max": 0.55 }, "Y": { "Min": 0.55, "Max": 0.55 } }
+    },
+    "Animation": {
+      "0": {
+        "Opacity": 1.0,
+        "Color": "#ff5533",
+        "Scale": { "X": { "Min": 0.55, "Max": 0.55 }, "Y": { "Min": 0.55, "Max": 0.55 } }
+      },
+      "100": {
+        "Opacity": 1.0,
+        "Color": "#ff5533",
+        "Scale": { "X": { "Min": 0.55, "Max": 0.55 }, "Y": { "Min": 0.55, "Max": 0.55 } }
+      }
+    }
+  }
+}

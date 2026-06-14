@@ -1,0 +1,80 @@
+{
+  "npcRoleId": "Aetherhaven_Crystal_Keeper",
+  "dialogueVillagerKind": "crystal_keeper",
+  "residentTreeId": "aetherhaven_crystal_keeper",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_crystal_keepers_shop",
+  "displayName": "Vaelith Prismshade",
+  "portraitIcon": "Aetherhaven_Crystal_Keeper.png",
+  "uiSortOrder": 13,
+  "innPoolEligible": true,
+  "innPoolOrder": 8,
+  "visitorBindingKind": "visitor_crystal_keeper",
+  "innPoolRequires": {
+    "completedQuestIds": ["q_crystal_keeper_rescue"]
+  },
+  "reputationMilestones": [],
+  "giftLoves": [
+    "Ingredient_Crystal_Blue",
+    "Ingredient_Crystal_Cyan",
+    "Ingredient_Crystal_Green",
+    "Ingredient_Crystal_Pink",
+    "Ingredient_Crystal_Purple",
+    "Ingredient_Crystal_Red",
+    "Ingredient_Crystal_White",
+    "Ingredient_Crystal_Yellow",
+    "Rock_Gem_Diamond",
+    "Rock_Gem_Emerald",
+    "Rock_Gem_Ruby",
+    "Rock_Gem_Sapphire",
+    "Rock_Gem_Topaz",
+    "Rock_Gem_Voidstone",
+    "Rock_Gem_Zephyr",
+    "Rock_Crystal_Blue_Large",
+    "Rock_Crystal_Green_Large",
+    "Rock_Crystal_Red_Large",
+    "Rock_Crystal_White_Large",
+    "Rock_Crystal_Yellow_Large"
+  ],
+  "giftLikes": [
+    "Rock_Crystal_Blue_Medium",
+    "Rock_Crystal_Green_Medium",
+    "Rock_Crystal_Red_Medium",
+    "Rock_Crystal_White_Medium",
+    "Rock_Crystal_Yellow_Medium",
+    "Rock_Crystal_Blue_Small",
+    "Rock_Crystal_Green_Small",
+    "Rock_Crystal_Red_Small",
+    "Rock_Crystal_White_Small",
+    "Rock_Crystal_Yellow_Small",
+    "Rock_Crystal_Blue",
+    "Rock_Crystal_Green",
+    "Rock_Crystal_Red",
+    "Rock_Crystal_White",
+    "Rock_Crystal_Yellow",
+    "Deco_Treasure",
+    "Deco_Treasure_Pile_Small"
+  ],
+  "giftDislikes": [
+    "Deco_Bone_Pile",
+    "Deco_Bone_Skulls",
+    "Deco_Trash",
+    "Deco_Trash_Pile_Large",
+    "Deco_Trash_Pile_Small",
+    "Ingredient_Poop",
+    "Ingredient_Void_Essence",
+    "Ingredient_Voidheart"
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.0",
+    "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.1",
+    "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.2",
+    "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.3"
+  ],
+  "dialogueGiftHintLangKeys": [
+    "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.0",
+    "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.1",
+    "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.0",
+    "aetherhaven_dialogue_crystal_keeper.aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.1"
+  ]
+}

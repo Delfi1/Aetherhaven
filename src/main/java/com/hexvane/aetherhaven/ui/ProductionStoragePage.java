@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
 import com.hexvane.aetherhaven.production.ProductionTimeScaling;
+import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
@@ -23,10 +24,10 @@ import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
-import com.hypixel.hytale.server.core.ui.ItemGridSlot;
+import com.hypixel.hytale.server.core.ui.Anchor;
+import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -35,14 +36,25 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Withdraw items from per plot workplace production storage (wardrobe block). */
 public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIPage<ProductionStoragePage.PageData> {
-    /** Live refresh for progress/time; keep ≥1s so Custom UI updates do not saturate the client ACK queue and block clicks. */
     private static final long LIVE_REFRESH_INTERVAL_MS = 1000L;
+    private static final int MAX_UI_SLOTS = 5;
+    private static final String SLOT_FRAGMENT = "[0]";
+    private static final int SLOT_WIDTH_PX = 180;
+    private static final int SLOT_GAP_PX = 20;
+    private static final int CONTENT_PADDING_PX = 32;
+    private static final int BOTTOM_BUTTON_ROW_PX = 416;
+    /** DecoratedContainer title, patch border, and macro padding beyond {@code #Content}. */
+    private static final int CONTAINER_CHROME_PX = 148;
 
     private final UUID townId;
     private final UUID plotId;
@@ -50,7 +62,8 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
     private final int blockY;
     private final int blockZ;
     private boolean templateAppended;
-    /** Started after first successful full build so we do not stack timers on reopen. */
+    private boolean slotFragmentsAppended;
+    private boolean localizationApplied;
     private boolean liveRefreshStarted;
     private volatile boolean liveRefreshActive;
 
@@ -80,9 +93,16 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         if (!templateAppended) {
             commandBuilder.append("Aetherhaven/ProductionStorage.ui");
             templateAppended = true;
-            // Static labels/tooltips only when the template is first attached. Live refresh re-runs build() without
-            // append; re-setting #ProductionTitleText etc. can race the client and log "Selected element ... not found".
+        }
+        if (!slotFragmentsAppended) {
+            for (int i = 0; i < MAX_UI_SLOTS; i++) {
+                commandBuilder.append(slotHost(i), "Aetherhaven/ProductionStorageSlot.ui");
+            }
+            slotFragmentsAppended = true;
+        }
+        if (!localizationApplied) {
             AetherhavenUiLocalization.applyProductionStorage(commandBuilder);
+            localizationApplied = true;
         }
         commandBuilder.set("#ErrMsg.Visible", false);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -128,6 +148,9 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         }
 
         AetherhavenPluginConfig cfg = plugin.getConfig().get();
+        int slotCount = WorkplaceProductionUpgrades.slotCount(state);
+        double speedMul = WorkplaceProductionUpgrades.speedMultiplier(state);
+        applyShellWidth(commandBuilder, slotCount);
 
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
@@ -135,38 +158,51 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             new EventData().append("Action", "OpenUnlocks"),
             false
         );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#CollectAll",
+            new EventData().append("Action", "CollectAll"),
+            false
+        );
 
-        for (int col = 0; col < 3; col++) {
-            String p = "#Slot" + col;
-            String c = String.valueOf(col);
-            // ItemGrid id is #Slot{N}Icon — use a single-id path (vanilla uses #ItemMaterialSlot.Slots); deep chains can fail client resolution.
-            String iconGrid = "#Slot" + c + "Icon";
+        for (int col = 0; col < MAX_UI_SLOTS; col++) {
+            String host = slotHost(col);
+            boolean active = col < slotCount;
+            if (active) {
+                commandBuilder.set(host + ".Visible", true);
+                resetHostAnchor(commandBuilder, host, col, slotCount);
+            } else {
+                commandBuilder.set(host + ".Visible", false);
+                collapseHostAnchor(commandBuilder, host);
+                continue;
+            }
+            String base = slotBase(col);
+            String iconPath = base + " #Icon";
             int cursor = state.getSlotCursor(col);
             String itemId = entry.itemAtCursor(cursor);
-            long cap = AetherhavenConstants.PRODUCTION_STORAGE_PER_ITEM_MAX;
             if (itemId == null || itemId.isBlank()) {
-                commandBuilder.set(iconGrid + ".Slots", new ItemGridSlot[0]);
-                commandBuilder.set(p + "Name.TextSpans", Message.raw("—"));
-                commandBuilder.set(p + "Qty.TextSpans", Message.raw("0/" + cap));
-                commandBuilder.set(p + "Time.TextSpans", Message.raw(""));
-                commandBuilder.set(p + "Prog.Value", 0f);
+                commandBuilder.set(iconPath + ".Visible", false);
+                commandBuilder.set(base + " #Name.TextSpans", Message.raw("—"));
+                commandBuilder.set(base + " #Qty.TextSpans", Message.raw("0/0"));
+                commandBuilder.set(base + " #Time.TextSpans", Message.raw(""));
+                commandBuilder.set(base + " #Prog.Value", 0f);
             } else {
-                long lineCap = entry.maxStorageForItem(itemId);
-                ItemStack iconStack = new ItemStack(itemId, 1);
-                commandBuilder.set(iconGrid + ".Slots", new ItemGridSlot[] {new ItemGridSlot(iconStack)});
-                Item it = iconStack.getItem();
+                long lineCap = WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, itemId);
+                Item it = Item.getAssetMap().getAsset(itemId);
+                commandBuilder.set(iconPath + ".Visible", true);
+                commandBuilder.set(iconPath + ".AssetPath", ItemAssetImagePath.forItem(it, itemId));
                 Message nameMsg =
                     it != null && it.getTranslationKey() != null && !it.getTranslationKey().isBlank()
                         ? Message.translation(it.getTranslationKey())
                         : Message.raw(itemId);
-                commandBuilder.set(p + "Name.TextSpans", nameMsg);
+                commandBuilder.set(base + " #Name.TextSpans", nameMsg);
                 long have = state.getAmount(itemId);
-                commandBuilder.set(p + "Qty.TextSpans", Message.raw(have + "/" + lineCap));
-                int ticks = ProductionTimeScaling.effectiveTicks(cfg, entry.ticksAtCursor(cursor));
+                commandBuilder.set(base + " #Qty.TextSpans", Message.raw(have + "/" + lineCap));
+                int ticks = ProductionTimeScaling.effectiveTicksWithWorkplaceSpeed(cfg, entry.ticksAtCursor(cursor), speedMul);
                 float progress = ticks > 0 ? Math.min(1f, state.getSlotTickAccum(col) / (float) ticks) : 0f;
-                commandBuilder.set(p + "Prog.Value", progress);
+                commandBuilder.set(base + " #Prog.Value", progress);
                 commandBuilder.set(
-                    p + "Time.TextSpans",
+                    base + " #Time.TextSpans",
                     Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.genInterval")
                         .param("time", ProductionCatalog.Entry.formatSecondsForTicks(ticks))
                 );
@@ -180,6 +216,43 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
     public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         super.onDismiss(ref, store);
         liveRefreshActive = false;
+    }
+
+    private static String slotHost(int col) {
+        return "#SlotsRow #Slot" + col + "Host";
+    }
+
+    private static String slotBase(int col) {
+        return slotHost(col) + SLOT_FRAGMENT;
+    }
+
+    private static void applyShellWidth(@Nonnull UICommandBuilder commandBuilder, int slotCount) {
+        int slots = Math.max(1, Math.min(MAX_UI_SLOTS, slotCount));
+        int slotsWidth = slots * SLOT_WIDTH_PX + Math.max(0, slots - 1) * SLOT_GAP_PX;
+        int inner = Math.max(slotsWidth, BOTTOM_BUTTON_ROW_PX);
+        int shellWidth = inner + CONTENT_PADDING_PX + CONTAINER_CHROME_PX;
+        Anchor shell = new Anchor();
+        shell.setWidth(Value.of(shellWidth));
+        commandBuilder.setObject("#ProductionShell.Anchor", shell);
+        Anchor row = new Anchor();
+        row.setWidth(Value.of(slotsWidth));
+        commandBuilder.setObject("#SlotsRow.Anchor", row);
+    }
+
+    private static void resetHostAnchor(@Nonnull UICommandBuilder commandBuilder, @Nonnull String host, int col, int slotCount) {
+        Anchor anchor = new Anchor();
+        anchor.setWidth(Value.of(SLOT_WIDTH_PX));
+        if (col < slotCount - 1) {
+            anchor.setRight(Value.of(SLOT_GAP_PX));
+        }
+        commandBuilder.setObject(host + ".Anchor", anchor);
+    }
+
+    private static void collapseHostAnchor(@Nonnull UICommandBuilder commandBuilder, @Nonnull String host) {
+        Anchor anchor = new Anchor();
+        anchor.setWidth(Value.of(0));
+        anchor.setHeight(Value.of(0));
+        commandBuilder.setObject(host + ".Anchor", anchor);
     }
 
     private void startLiveRefreshIfNeeded(@Nonnull Store<EntityStore> store) {
@@ -225,35 +298,30 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
     }
 
     private static void bindColEvents(@Nonnull UIEventBuilder eventBuilder, int col) {
-        String p = "#Slot" + col;
+        String base = slotBase(col);
+        String c = String.valueOf(col);
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
-            p + "Prev",
-            new EventData().append("Action", "Left").append("Slot", String.valueOf(col)),
+            base + " #Pick",
+            new EventData().append("Action", "PickMaterial").append("Slot", c),
             false
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
-            p + "Next",
-            new EventData().append("Action", "Right").append("Slot", String.valueOf(col)),
+            base + " #Take1",
+            new EventData().append("Action", "Take").append("Slot", c).append("Amount", "1"),
             false
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
-            p + "Take1",
-            new EventData().append("Action", "Take").append("Slot", String.valueOf(col)).append("Amount", "1"),
+            base + " #Take10",
+            new EventData().append("Action", "Take").append("Slot", c).append("Amount", "10"),
             false
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
-            p + "Take10",
-            new EventData().append("Action", "Take").append("Slot", String.valueOf(col)).append("Amount", "10"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.Activating,
-            p + "Take100",
-            new EventData().append("Action", "Take").append("Slot", String.valueOf(col)).append("Amount", "100"),
+            base + " #Take100",
+            new EventData().append("Action", "Take").append("Slot", c).append("Amount", "100"),
             false
         );
     }
@@ -304,23 +372,30 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             return;
         }
 
-        if (action.equalsIgnoreCase("Left") || action.equalsIgnoreCase("Right")) {
+        if (action.equalsIgnoreCase("PickMaterial")) {
             int slot = parseSlot(data.slot);
-            if (slot < 0 || slot > 2) {
-                refresh(ref, store);
+            if (slot < 0 || slot >= WorkplaceProductionUpgrades.slotCount(state)) {
                 return;
             }
-            int delta = action.equalsIgnoreCase("Left") ? -1 : 1;
-            state.cycleSlotCursor(slot, delta, entry.catalogSize());
-            tm.updateTown(town);
-            refresh(ref, store);
+            liveRefreshActive = false;
+            player.getPageManager().openCustomPage(
+                ref,
+                store,
+                new ProductionMaterialPickerPage(playerRef, townId, plotId, slot, blockX, blockY, blockZ)
+            );
             return;
         }
+
+        if (action.equalsIgnoreCase("CollectAll")) {
+            collectAll(ref, store, player, pr, tm, town, state, entry);
+            return;
+        }
+
         if (!action.equalsIgnoreCase("Take")) {
             return;
         }
         int slot = parseSlot(data.slot);
-        if (slot < 0 || slot > 2) {
+        if (slot < 0 || slot >= WorkplaceProductionUpgrades.slotCount(state)) {
             return;
         }
         int want;
@@ -332,11 +407,90 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         if (want <= 0) {
             return;
         }
+        withdrawFromSlot(ref, store, player, pr, tm, town, state, entry, slot, want);
+    }
+
+    private void collectAll(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Player player,
+        @Nonnull PlayerRef pr,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull PlotProductionState state,
+        @Nonnull ProductionCatalog.Entry entry
+    ) {
+        int slotCount = WorkplaceProductionUpgrades.slotCount(state);
+        Map<String, Long> toTake = new LinkedHashMap<>();
+        for (int slot = 0; slot < slotCount; slot++) {
+            String itemId = entry.itemAtCursor(state.getSlotCursor(slot));
+            if (itemId == null || itemId.isBlank()) {
+                continue;
+            }
+            long have = state.getAmount(itemId);
+            if (have <= 0L) {
+                continue;
+            }
+            toTake.merge(itemId, have, Long::sum);
+        }
+        if (toTake.isEmpty()) {
+            refresh(ref, store);
+            return;
+        }
+        List<Map.Entry<String, Long>> removals = new ArrayList<>();
+        for (var row : toTake.entrySet()) {
+            long removed = state.removeAmountUpTo(row.getKey(), row.getValue());
+            if (removed > 0L) {
+                removals.add(Map.entry(row.getKey(), removed));
+            }
+        }
+        boolean anyPartial = false;
+        for (var row : removals) {
+            long take = row.getValue();
+            String itemId = row.getKey();
+            ItemStack grant = new ItemStack(itemId, (int) Math.min(take, Integer.MAX_VALUE));
+            ItemStackTransaction giveTx = player.giveItem(grant, ref, store);
+            if (!giveTx.succeeded()) {
+                state.addAmount(itemId, take, WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, itemId));
+                anyPartial = true;
+                continue;
+            }
+            ItemStack remainder = giveTx.getRemainder();
+            long notAdded = ItemStack.isEmpty(remainder) ? 0L : Math.min(take, remainder.getQuantity());
+            if (notAdded > 0L) {
+                state.addAmount(itemId, notAdded, WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, itemId));
+                anyPartial = true;
+            }
+        }
+        tm.updateTown(town);
+        if (anyPartial) {
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.inventoryPartial"),
+                NotificationStyle.Warning
+            );
+        }
+        refresh(ref, store);
+    }
+
+    private void withdrawFromSlot(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Player player,
+        @Nonnull PlayerRef pr,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull PlotProductionState state,
+        @Nonnull ProductionCatalog.Entry entry,
+        int slot,
+        int want
+    ) {
         String itemId = entry.itemAtCursor(state.getSlotCursor(slot));
         if (itemId == null || itemId.isBlank()) {
             refresh(ref, store);
             return;
         }
+        long maxCap = WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, itemId);
         long have = state.getAmount(itemId);
         long take = Math.min(have, want);
         if (take <= 0L) {
@@ -347,7 +501,7 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         ItemStack grant = new ItemStack(itemId, (int) Math.min(take, Integer.MAX_VALUE));
         ItemStackTransaction giveTx = player.giveItem(grant, ref, store);
         if (!giveTx.succeeded()) {
-            state.addAmount(itemId, take, entry.maxStorageForItem(itemId));
+            state.addAmount(itemId, take, maxCap);
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
                 Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.inventoryFull"),
@@ -360,7 +514,7 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
         ItemStack remainder = giveTx.getRemainder();
         long notAdded = ItemStack.isEmpty(remainder) ? 0L : Math.min(take, remainder.getQuantity());
         if (notAdded > 0L) {
-            state.addAmount(itemId, notAdded, entry.maxStorageForItem(itemId));
+            state.addAmount(itemId, notAdded, maxCap);
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
                 Message.translation(

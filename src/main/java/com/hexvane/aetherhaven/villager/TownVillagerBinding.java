@@ -48,12 +48,61 @@ public final class TownVillagerBinding implements Component<EntityStore> {
 
     public static final String KIND_VISITOR_RANCHER = "visitor_rancher";
 
+    public static final String KIND_VISITOR_GUILD_MASTER = "visitor_guild_master";
+
+    public static final String KIND_VISITOR_CRYSTAL_KEEPER = "visitor_crystal_keeper";
+
+    /** Permanent crystal keeper at the crystal shop (after build). */
+    public static final String KIND_CRYSTAL_KEEPER = "crystal_keeper";
+
+    /** One-shot rescue spawn from a broken Crystallized Person block. */
+    public static final String KIND_RESCUE_CRYSTAL_KEEPER = "rescue_crystal_keeper";
+
+    public static final String KIND_VISITOR_PYROTECHNIC = "visitor_pyrotechnic";
+
+    /** Permanent pyrotechnic at the bomb shop (after build). */
+    public static final String KIND_PYROTECHNIC = "pyrotechnic";
+
+    /** One-shot rescue spawn from a broken spider cocoon. */
+    public static final String KIND_RESCUE_PYROTECHNIC = "rescue_pyrotechnic";
+
+    public static final String KIND_VISITOR_FLORIST = "visitor_florist";
+
+    /** Permanent florist at the flower shop (after build). */
+    public static final String KIND_FLORIST = "florist";
+
+    public static final String KIND_VISITOR_BUILDER = "visitor_builder";
+
+    /** Permanent builder at the builder's hut (after build). */
+    public static final String KIND_BUILDER = "builder";
+
     /** Shared pool townsfolk (tourist, guard, idle test, etc.). */
     public static final String KIND_TOWNSFOLK = "townsfolk";
+
+    /** Permanent guild master at the guild hall (after build). */
+    public static final String KIND_GUILD_MASTER = "guild_master";
+
+    /** Permanent bard at the guild hall (after inn pool promotion). */
+    public static final String KIND_BARD = "bard";
+
+    public static final String KIND_VISITOR_BARD = "visitor_bard";
+
+    /** Hired guard from guild hall adventurer pool. */
+    public static final String KIND_GUARD = "guard";
 
     /** True for inn pool visitors only; permanent residents use {@link #KIND_MERCHANT}, {@link #KIND_ELDER}, etc. */
     public static boolean isVisitorKind(@Nonnull String kind) {
         return kind.startsWith("visitor_");
+    }
+
+    /** True for one-shot field rescue NPCs (before inn pool). */
+    public static boolean isRescueKind(@Nonnull String kind) {
+        return kind.startsWith("rescue_");
+    }
+
+    /** Visitors and one-shot rescue spawns skip weekly schedules and POI autonomy. */
+    public static boolean isScheduleSuppressedKind(@Nonnull String kind) {
+        return isVisitorKind(kind) || isRescueKind(kind);
     }
 
     @Nonnull

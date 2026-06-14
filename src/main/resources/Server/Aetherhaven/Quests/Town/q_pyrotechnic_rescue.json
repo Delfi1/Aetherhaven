@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "q_pyrotechnic_rescue",
+  "category": "town",
+  "title": "Grubble's Big Escape",
+  "description": "You freed a goblin pyrotechnic from a spider cocoon.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [],
+  "rewards": [],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "none" }
+}

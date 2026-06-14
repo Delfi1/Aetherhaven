@@ -64,6 +64,12 @@ public final class QuestDefinition {
     private String assignNpcRoleId;
 
     /**
+     * When true, the quest targets a specific entity UUID (stored on the town) rather than a fixed {@link #assignNpcRoleId}.
+     */
+    @SerializedName("assignByEntity")
+    private boolean assignByEntity;
+
+    /**
      * When set with {@link #assignNpcRoleId}, residents who talk to that NPC may enter dialogue at this node id when the
      * quest is offerable (see {@link com.hexvane.aetherhaven.quest.QuestDialogueEntry}).
      */
@@ -78,6 +84,14 @@ public final class QuestDefinition {
     @SerializedName("grantPlotTokenConstructionId")
     @Nullable
     private String grantPlotTokenConstructionId;
+
+    /**
+     * If set, a plot blueprint page for this construction is given to the player when the quest starts (dialogue accept
+     * or debug grant). The player must use the page to unlock crafting at the plot bench.
+     */
+    @SerializedName("grantPlotBlueprintConstructionId")
+    @Nullable
+    private String grantPlotBlueprintConstructionId;
 
     @Nonnull
     public String idOrEmpty() {
@@ -149,6 +163,10 @@ public final class QuestDefinition {
         return assignNpcRoleId != null ? assignNpcRoleId.trim() : null;
     }
 
+    public boolean assignByEntity() {
+        return assignByEntity;
+    }
+
     @Nullable
     public String dialogueOfferEntryNodeId() {
         return dialogueOfferEntryNodeId != null ? dialogueOfferEntryNodeId.trim() : null;
@@ -157,6 +175,11 @@ public final class QuestDefinition {
     @Nullable
     public String grantPlotTokenConstructionId() {
         return grantPlotTokenConstructionId != null ? grantPlotTokenConstructionId.trim() : null;
+    }
+
+    @Nullable
+    public String grantPlotBlueprintConstructionId() {
+        return grantPlotBlueprintConstructionId != null ? grantPlotBlueprintConstructionId.trim() : null;
     }
 
     /**

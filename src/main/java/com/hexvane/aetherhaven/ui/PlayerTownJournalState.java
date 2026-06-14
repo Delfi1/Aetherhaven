@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -37,6 +38,27 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         }
     }
 
+    public enum SettingsSubTab {
+        PERSONAL,
+        SERVER;
+
+        @Nonnull
+        public static SettingsSubTab fromPersisted(@Nullable String s) {
+            if (s == null || s.isBlank()) {
+                return PERSONAL;
+            }
+            return switch (s.trim().toUpperCase()) {
+                case "SERVER" -> SERVER;
+                default -> PERSONAL;
+            };
+        }
+
+        @Nonnull
+        public String persisted() {
+            return name();
+        }
+    }
+
     @Nonnull
     public static final BuilderCodec<PlayerTownJournalState> CODEC =
         BuilderCodec.builder(PlayerTownJournalState.class, PlayerTownJournalState::new)
@@ -53,6 +75,29 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
                     }
                 },
                 c -> c.showTownBordersOnMap)
+            .add()
+            .append(
+                new KeyedCodec<>("LastSettingsSubTab", Codec.STRING),
+                (c, v) -> c.lastSettingsSubTab = SettingsSubTab.fromPersisted(v),
+                c -> c.lastSettingsSubTab.persisted())
+            .add()
+            .append(
+                new KeyedCodec<>("RtsPickFovOverride", Codec.FLOAT),
+                (c, v) -> {
+                    if (v != null) {
+                        c.rtsPickFovOverride = v;
+                    }
+                },
+                c -> c.rtsPickFovOverride)
+            .add()
+            .append(
+                new KeyedCodec<>("RtsPickAspectOverride", Codec.FLOAT),
+                (c, v) -> {
+                    if (v != null) {
+                        c.rtsPickAspectOverride = v;
+                    }
+                },
+                c -> c.rtsPickAspectOverride)
             .add()
             .build();
 
@@ -78,6 +123,14 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
 
     private boolean showTownBordersOnMap = true;
 
+    @Nonnull
+    private SettingsSubTab lastSettingsSubTab = SettingsSubTab.PERSONAL;
+
+    /** {@code <= 0} means use {@link AetherhavenConstants} default. */
+    private float rtsPickFovOverride;
+
+    private float rtsPickAspectOverride;
+
     public PlayerTownJournalState() {}
 
     @Nonnull
@@ -86,6 +139,9 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         PlayerTownJournalState c = new PlayerTownJournalState();
         c.lastTab = lastTab;
         c.showTownBordersOnMap = showTownBordersOnMap;
+        c.lastSettingsSubTab = lastSettingsSubTab;
+        c.rtsPickFovOverride = rtsPickFovOverride;
+        c.rtsPickAspectOverride = rtsPickAspectOverride;
         return c;
     }
 
@@ -104,5 +160,32 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
 
     public void setShowTownBordersOnMap(boolean showTownBordersOnMap) {
         this.showTownBordersOnMap = showTownBordersOnMap;
+    }
+
+    @Nonnull
+    public SettingsSubTab getLastSettingsSubTab() {
+        return lastSettingsSubTab;
+    }
+
+    public void setLastSettingsSubTab(@Nonnull SettingsSubTab lastSettingsSubTab) {
+        this.lastSettingsSubTab = lastSettingsSubTab;
+    }
+
+    public void clearRtsPickOverrides() {
+        rtsPickFovOverride = 0f;
+        rtsPickAspectOverride = 0f;
+    }
+
+    public void setRtsPickOverrides(float verticalFovDeg, float aspectRatio) {
+        rtsPickFovOverride = verticalFovDeg;
+        rtsPickAspectOverride = aspectRatio;
+    }
+
+    public float effectiveRtsPickVerticalFovDeg() {
+        return rtsPickFovOverride > 0f ? rtsPickFovOverride : AetherhavenConstants.RTS_COMMAND_PICK_VERTICAL_FOV_DEG;
+    }
+
+    public float effectiveRtsPickAspectRatio() {
+        return rtsPickAspectOverride > 0f ? rtsPickAspectOverride : AetherhavenConstants.RTS_COMMAND_PICK_ASPECT_RATIO;
     }
 }

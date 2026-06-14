@@ -11,13 +11,23 @@ import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolPersistence;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
+import com.hexvane.aetherhaven.patrol.PatrolRoutePersistence;
+import com.hexvane.aetherhaven.patrol.PatrolRouteRegistry;
 import com.hexvane.aetherhaven.pathtool.PathToolPersistence;
 import com.hexvane.aetherhaven.pathtool.PathToolRegistry;
 import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
+import com.hexvane.aetherhaven.map.RaidQuestMarkerProvider;
 import com.hexvane.aetherhaven.map.TownMapMarkerProvider;
 import com.hexvane.aetherhaven.map.TownSharedMapMarkerService;
 import com.hexvane.aetherhaven.poi.PoiPersistence;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
+import com.hexvane.aetherhaven.shopspot.ShopSpotDailyRerollService;
+import com.hexvane.aetherhaven.shopspot.ShopSpotPersistence;
+import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
+import com.hexvane.aetherhaven.tourist.TouristPortalPersistence;
+import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
+import com.hexvane.aetherhaven.tourist.TouristReconcileService;
+import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
@@ -28,6 +38,10 @@ public final class AetherhavenWorldRegistries {
     private static final ConcurrentHashMap<String, PoiRegistry> POI_REGISTRIES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, PathToolRegistry> PATH_TOOL_REGISTRIES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, PathNavGraphService> PATH_NAV_GRAPH_SERVICES = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, PatrolRouteRegistry> PATROL_ROUTE_REGISTRIES = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, ShopSpotRegistry> SHOP_SPOT_REGISTRIES = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, TouristPortalRegistry> TOURIST_PORTAL_REGISTRIES =
+        new ConcurrentHashMap<>();
 
     private AetherhavenWorldRegistries() {}
 
@@ -87,6 +101,39 @@ public final class AetherhavenWorldRegistries {
     }
 
     @Nonnull
+    public static ShopSpotRegistry getOrCreateShopSpotRegistry(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        return SHOP_SPOT_REGISTRIES.computeIfAbsent(world.getName(), n -> {
+            ShopSpotRegistry r = new ShopSpotRegistry(world);
+            ShopSpotPersistence.load(world, plugin, r);
+            return r;
+        });
+    }
+
+    @Nonnull
+    public static TouristPortalRegistry getOrCreateTouristPortalRegistry(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        return TOURIST_PORTAL_REGISTRIES.computeIfAbsent(world.getName(), n -> {
+            TouristPortalRegistry r = new TouristPortalRegistry(world);
+            TouristPortalPersistence.load(world, plugin, r);
+            return r;
+        });
+    }
+
+    @Nonnull
+    public static PatrolRouteRegistry getOrCreatePatrolRouteRegistry(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        return PATROL_ROUTE_REGISTRIES.computeIfAbsent(world.getName(), n -> {
+            PatrolRouteRegistry r = new PatrolRouteRegistry(world);
+            PatrolRoutePersistence.load(world, plugin, r);
+            return r;
+        });
+    }
+
+    @Nonnull
     public static TownManager getTownManager(@Nonnull World world) {
         TownManager m = TOWN_MANAGERS.get(world.getName());
         if (m == null) {
@@ -108,6 +155,20 @@ public final class AetherhavenWorldRegistries {
         TownBorderMapOverlayService.stopWorld(world);
         AssemblyWorldRegistry.unloadWorld(world.getName());
         SprinklerWateringService.clearWorldState(world.getName());
+        ShopSpotDailyRerollService.clearWorldState(world.getName());
+        CitizenDawnRevivalService.clearWorldState(world.getName());
+        if (PersistentWorldSupport.isTemporaryInstance(world)) {
+            TOWN_MANAGERS.remove(world.getName());
+            POI_REGISTRIES.remove(world.getName());
+            PATH_TOOL_REGISTRIES.remove(world.getName());
+            PATH_NAV_GRAPH_SERVICES.remove(world.getName());
+            PATROL_ROUTE_REGISTRIES.remove(world.getName());
+            SHOP_SPOT_REGISTRIES.remove(world.getName());
+            TOURIST_PORTAL_REGISTRIES.remove(world.getName());
+            WorldDifficultyPersistence.unloadWorld(world);
+            TownsfolkPoolPersistence.unloadWorld(world);
+            return;
+        }
         TownManager tm = TOWN_MANAGERS.remove(world.getName());
         if (tm != null) {
             tm.saveToDisk();
@@ -127,6 +188,27 @@ public final class AetherhavenWorldRegistries {
             }
         }
         PATH_NAV_GRAPH_SERVICES.remove(world.getName());
+        PatrolRouteRegistry patrolReg = PATROL_ROUTE_REGISTRIES.remove(world.getName());
+        if (patrolReg != null) {
+            AetherhavenPlugin p3 = AetherhavenPlugin.get();
+            if (p3 != null) {
+                PatrolRoutePersistence.save(world, p3, patrolReg);
+            }
+        }
+        ShopSpotRegistry shopReg = SHOP_SPOT_REGISTRIES.remove(world.getName());
+        if (shopReg != null) {
+            AetherhavenPlugin p4 = AetherhavenPlugin.get();
+            if (p4 != null) {
+                ShopSpotPersistence.save(world, p4, shopReg);
+            }
+        }
+        TouristPortalRegistry touristReg = TOURIST_PORTAL_REGISTRIES.remove(world.getName());
+        if (touristReg != null) {
+            AetherhavenPlugin p5 = AetherhavenPlugin.get();
+            if (p5 != null) {
+                TouristPortalPersistence.save(world, p5, touristReg);
+            }
+        }
         WorldDifficultyPersistence.unloadWorld(world);
         TownsfolkPoolPersistence.unloadWorld(world);
     }
@@ -147,25 +229,46 @@ public final class AetherhavenWorldRegistries {
                 World w = e.getValue().getWorld();
                 PathToolPersistence.save(w, p, e.getValue());
             }
+            for (var e : PATROL_ROUTE_REGISTRIES.entrySet()) {
+                World w = e.getValue().getWorld();
+                PatrolRoutePersistence.save(w, p, e.getValue());
+            }
+            for (var e : SHOP_SPOT_REGISTRIES.entrySet()) {
+                World w = e.getValue().getWorld();
+                ShopSpotPersistence.save(w, p, e.getValue());
+            }
+            for (var e : TOURIST_PORTAL_REGISTRIES.entrySet()) {
+                World w = e.getValue().getWorld();
+                TouristPortalPersistence.save(w, p, e.getValue());
+            }
         }
         WorldDifficultyPersistence.saveAll();
         TownsfolkPoolPersistence.saveAll();
     }
 
     public static void bootstrapWorld(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        if (PersistentWorldSupport.isTemporaryInstance(world)) {
+            return;
+        }
         WorldDifficultyPersistence.loadFromDisk(world, plugin);
         refreshTownDataFromDisk(world, plugin);
         getOrCreateTownManager(world, plugin);
         getOrCreatePoiRegistry(world, plugin);
         getOrCreatePathToolRegistry(world, plugin);
+        getOrCreatePatrolRouteRegistry(world, plugin);
+        getOrCreateShopSpotRegistry(world, plugin);
+        getOrCreateTouristPortalRegistry(world, plugin);
         getOrCreatePathNavGraphService(world);
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
+        TouristReconcileService.scheduleAfterWorldLoad(world, plugin);
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
         InnPoolService.reconcileAfterWorldLoad(world, plugin);
         TownsfolkSpawnService.reconcileAfterWorldLoad(world, plugin);
         PlotAssemblyService.scheduleRehydrateAfterWorldLoad(world, plugin);
+        com.hexvane.aetherhaven.shopspot.ShopSpotBootstrap.reconcileAfterWorldLoad(world, plugin);
         TownBorderMapOverlayService.startWorld(world);
         world.getWorldMapManager().addMarkerProvider("aetherhaven-towns", TownMapMarkerProvider.INSTANCE);
+        world.getWorldMapManager().addMarkerProvider("aetherhaven-raid-quests", RaidQuestMarkerProvider.INSTANCE);
         TownSharedMapMarkerService.purgeLegacyStoredMarkers(world);
     }
 }

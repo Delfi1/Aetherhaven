@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.entity.EntityChunkUtil;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.Holder;
@@ -130,6 +131,9 @@ public final class PlotPreviewSpawner {
         @Nonnull AtomicInteger spawned
     ) {
         if (spawned.get() >= MAX_BLOCKS) {
+            return;
+        }
+        if (!EntityChunkUtil.isBlockChunkInMemory(store.getExternalData().getWorld(), wx, wz)) {
             return;
         }
         spawned.incrementAndGet();

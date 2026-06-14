@@ -132,8 +132,6 @@ items.Aetherhaven_Geode.description=Una piedra hueca que puede contener cristale
 items.Aetherhaven_Geode_Anvil.name=Yunque de geoda
 items.Aetherhaven_Geode_Anvil.description=Abre geodas sin coste de herrería. Colócalas y úsalas; debes conocer el esquema para fabricarlas en tu oficina de planificación urbana.
 
-barter.aetherhaven_vex.title=Stock diario de Vex
-
 items.Aetherhaven_Treasury.name=Tesorería municipal
 items.Aetherhaven_Treasury.description=Contiene las monedas de oro del pueblo. Se utiliza para depositar o retirar (del propietario del pueblo).
 

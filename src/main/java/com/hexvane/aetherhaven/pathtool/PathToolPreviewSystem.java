@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.pathtool;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -100,7 +101,7 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
             }
             return;
         }
-        PathToolInteractions.ensureState(ref, commandBuffer);
+        PathToolPlayerComponent.ensurePresent(ref, commandBuffer);
         PathToolPlayerComponent st = store.getComponent(ref, PathToolPlayerComponent.getComponentType());
         if (st == null) {
             return;
@@ -110,12 +111,14 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
             return;
         }
         st.clampPathStyleIndex(cfg.getPathToolStyleDefinitions().size());
+        PathToolRegistry pathReg = AetherhavenWorldRegistries.getOrCreatePathToolRegistry(w, AetherhavenPlugin.get());
+        long registryRevision = pathReg.revisionHash();
         UUID playerUuid = pr.getUuid();
-        long sig = PathToolPreviewSignature.compute(st);
+        long sig = PathToolPreviewSignature.compute(st, registryRevision);
         Long prevHud = LAST_HUD_SIGNATURE.get(playerUuid);
         if (prevHud == null || prevHud != sig) {
             LAST_HUD_SIGNATURE.put(playerUuid, sig);
-            PathToolHudSupport.obtainPathToolHud(p, pr).refresh(st, cfg);
+            PathToolHudSupport.obtainPathToolHud(p, pr).refresh(st, cfg, pr);
         }
         @Nullable
         UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -128,6 +131,13 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         }
         LAST_DEBUG_SIGNATURE.put(playerUuid, sig);
         PathDebugPreviewUtil.clear(pr);
+        if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
+            drawCommittedPaths(pr, w, pathReg, st.getSelectedRemovePathId());
+            return;
+        }
+        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
+            return;
+        }
         for (PathToolNode n : st.getNodes()) {
             boolean sel = n.getId().equals(st.getSelectedNodeId());
             PathDebugPreviewUtil.drawMachinimaNode(
@@ -177,6 +187,35 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
                 col = ok ? new Vector3f(0.18f, 0.55f, 0.22f) : new Vector3f(0.4f, 0.05f, 0.05f);
             }
             PathDebugPreviewUtil.drawPlannedBlock(pr, cell.pos.x(), cell.pos.y(), cell.pos.z(), col, w);
+        }
+    }
+
+    private static void drawCommittedPaths(
+        @Nonnull PlayerRef pr,
+        @Nonnull World world,
+        @Nonnull PathToolRegistry reg,
+        @Nullable UUID selectedPathId
+    ) {
+        int drawn = 0;
+        Vector3f normal = new Vector3f(0.85f, 0.45f, 0.12f);
+        Vector3f selected = new Vector3f(0.98f, 0.88f, 0.15f);
+        for (PathCommitRecord rec : reg.all()) {
+            if (rec == null || rec.undo == null) {
+                continue;
+            }
+            boolean sel;
+            try {
+                sel = selectedPathId != null && selectedPathId.equals(rec.getIdUuid());
+            } catch (Exception e) {
+                sel = false;
+            }
+            Vector3f col = sel ? selected : normal;
+            for (PathToolUndoCell c : rec.undo) {
+                if (c == null || drawn++ > MAX_PLANNED) {
+                    return;
+                }
+                PathDebugPreviewUtil.drawPlannedBlock(pr, c.x, c.y, c.z, col, world);
+            }
         }
     }
 }

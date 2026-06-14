@@ -70,9 +70,17 @@ public final class FounderMonumentSpawnService {
             LOGGER.atWarning().withCause(e).log("Founder monument: failed to resolve skin attachments");
             return null;
         }
+        if (skinAttachments.length == 0) {
+            LOGGER.atWarning().log("Founder monument: skin resolved to no attachments");
+            return null;
+        }
         ModelAsset playerAsset = ModelAsset.getAssetMap().getAsset("Player");
         if (playerAsset == null) {
             return null;
+        }
+        String baseMesh = PlayerSkinModelExporter.findPlayerBodyModel(skin, cos.getRegistry());
+        if (baseMesh == null) {
+            baseMesh = playerAsset.getModel();
         }
         Model template = Model.createScaledModel(playerAsset, 1.0f, null, null, true);
         String stone = AetherhavenConstants.FOUNDER_MONUMENT_STATUE_TEXTURE;
@@ -83,7 +91,7 @@ public final class FounderMonumentSpawnService {
             template.getRandomAttachmentIds(),
             stoneAttachments,
             template.getBoundingBox(),
-            template.getModel(),
+            baseMesh,
             stone,
             null,
             null,

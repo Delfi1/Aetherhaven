@@ -1,0 +1,83 @@
+$C = "../Common.ui";
+
+@RosterPanelMaxWidth = 720;
+@RosterPanelBottom = 145;
+@RosterPanelOuter = (TexturePath: "../Common/ContainerFullPatch.png", Border: 20);
+@RosterTabPatch = (TexturePath: "../Common/ContainerFullPatch.png", Border: 12);
+@PortraitRowHeight = 72;
+@RosterTabWidth = 220;
+@RosterTabHeight = 30;
+
+Group #RtsGuardRosterRoot {
+  LayoutMode: Top;
+  Anchor: (Full: 0);
+  HitTestVisible: false;
+
+  Group {
+    LayoutMode: Top;
+    FlexWeight: 1;
+    HitTestVisible: false;
+  }
+
+  Group {
+    LayoutMode: Left;
+    HitTestVisible: false;
+
+    Group {
+      FlexWeight: 1;
+      HitTestVisible: false;
+    }
+
+    Group #RosterShell {
+      LayoutMode: Top;
+      Anchor: (Width: @RosterPanelMaxWidth, Bottom: @RosterPanelBottom);
+      HitTestVisible: false;
+
+      Group {
+        LayoutMode: Left;
+        HitTestVisible: false;
+
+        Group {
+          FlexWeight: 1;
+          HitTestVisible: false;
+        }
+
+        Group #RosterTitleTab {
+          LayoutMode: CenterMiddle;
+          Anchor: (Width: @RosterTabWidth, Height: @RosterTabHeight);
+          HitTestVisible: false;
+          Background: @RosterTabPatch;
+          Padding: (Horizontal: 14, Vertical: 5);
+
+          Label #RosterTitle {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 14, TextColor: #e8dcc4, RenderBold: true, HorizontalAlignment: Center);
+            Text: "";
+          }
+        }
+
+        Group {
+          FlexWeight: 1;
+          HitTestVisible: false;
+        }
+      }
+
+      Group #RosterPanel {
+        LayoutMode: Top;
+        Anchor: (Top: -8);
+        HitTestVisible: false;
+        Background: @RosterPanelOuter;
+        Padding: (Left: 16, Right: 16, Top: 12, Bottom: 12);
+
+        Group #PortraitGrid {
+          LayoutMode: Top;
+          HitTestVisible: false;
+        }
+      }
+    }
+
+    Group {
+      FlexWeight: 1;
+      HitTestVisible: false;
+    }
+  }
+}

@@ -110,6 +110,21 @@ public final class ConstructionAnimator {
         if (start.isCancelled()) {
             return;
         }
+        LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, origin, bufferAccess);
+        ConstructionPasteOps.prepAssemblySite(
+            world,
+            origin,
+            seq.pendingBlocks(),
+            force,
+            seq.prefabRotation(),
+            bufferAccess
+        );
+        ConstructionPasteOps.clearNonPrefabFluidsInFootprint(
+            world,
+            origin,
+            seq.pendingBlocks(),
+            chunkAccessor
+        );
         ConstructionAnimator job = new ConstructionAnimator(
             plugin,
             world,

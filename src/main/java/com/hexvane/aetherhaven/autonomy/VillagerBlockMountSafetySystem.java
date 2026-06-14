@@ -102,6 +102,7 @@ public final class VillagerBlockMountSafetySystem extends EntityTickingSystem<En
 
         TransformComponent tc = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
         if (tc == null) {
+            commandBuffer.tryRemoveComponent(ref, MountedComponent.getComponentType());
             return;
         }
         long entityChunk = entityChunkIndex(tc);
@@ -172,7 +173,7 @@ public final class VillagerBlockMountSafetySystem extends EntityTickingSystem<En
             long now = resolveNowMs(store);
             VillagerAutonomySystem.onUnloadSafetyDismount(ref, store, commandBuffer, npc, autonomy, needs, reg, now);
         } else {
-            commandBuffer.tryRemoveComponent(ref, MountedComponent.getComponentType());
+            BlockMountRelease.release(ref, store, commandBuffer);
         }
     }
 

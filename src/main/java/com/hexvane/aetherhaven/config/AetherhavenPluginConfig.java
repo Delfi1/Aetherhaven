@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.config;
 
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -290,6 +292,15 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("ShopSpotPlayerListingPricePercent", Codec.INTEGER),
+            (o, v) -> o.shopSpotPlayerListingPricePercent = v,
+            o -> o.shopSpotPlayerListingPricePercent
+        )
+        .documentation(
+            "Percent of catalog gold price buyers pay at player controlled shop spots (NPC spots use full catalog price). Default 75."
+        )
+        .add()
+        .append(
             new KeyedCodec<>("PathToolNodeBlockYOffset", Codec.DOUBLE),
             (o, v) -> o.pathToolNodeBlockYOffset = v != null ? v : 1.0,
             o -> o.pathToolNodeBlockYOffset
@@ -363,7 +374,7 @@ public final class AetherhavenPluginConfig {
         .add()
         .append(
             new KeyedCodec<>("PathNavNodeSpacing", Codec.DOUBLE),
-            (o, v) -> o.pathNavNodeSpacing = v != null ? v : 1.5,
+            (o, v) -> o.pathNavNodeSpacing = v != null ? v : 3.5,
             o -> o.pathNavNodeSpacing
         )
         .documentation("Equidistant centerline spacing in blocks for nav nodes sampled from the spline on commit.")
@@ -427,6 +438,79 @@ public final class AetherhavenPluginConfig {
             "If true, logs [PathNav] lines when a villager skips placed-path routing (see PathNav findRoute skip codes)."
         )
         .add()
+        .append(
+            new KeyedCodec<>("GrantPlotCreatorPermissionToEveryone", Codec.BOOLEAN),
+            (o, v) -> o.grantPlotCreatorPermissionToEveryone = v != null ? v : true,
+            o -> o.grantPlotCreatorPermissionToEveryone
+        )
+        .documentation(
+            "When true (default), every player may use the plot creator staff and related commands without assigning "
+                + "aetherhaven.plot.creator. Set false to require that permission (or operator) explicitly."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("DialogueTalkDurationSeconds", Codec.FLOAT),
+            (o, v) -> o.dialogueTalkDurationSeconds = v != null ? v : 3f,
+            o -> o.dialogueTalkDurationSeconds
+        )
+        .documentation("Seconds villagers play a talking mouth animation when dialogue opens or a choice is picked.")
+        .add()
+        .append(
+            new KeyedCodec<>("NeedsMoodLowThreshold", Codec.FLOAT),
+            (o, v) -> o.needsMoodLowThreshold = v != null ? v : 40f,
+            o -> o.needsMoodLowThreshold
+        )
+        .documentation("Lowest hunger, energy, or fun value below which villagers show an unhappy face.")
+        .add()
+        .append(
+            new KeyedCodec<>("NeedsMoodHighThreshold", Codec.FLOAT),
+            (o, v) -> o.needsMoodHighThreshold = v != null ? v : 70f,
+            o -> o.needsMoodHighThreshold
+        )
+        .documentation("Lowest hunger, energy, or fun value at or above which villagers show a happy face.")
+        .add()
+        .append(
+            new KeyedCodec<>("ReputationWaveMinReputation", Codec.INTEGER),
+            (o, v) -> o.reputationWaveMinReputation = v != null ? v : 75,
+            o -> o.reputationWaveMinReputation
+        )
+        .documentation("Minimum villager reputation toward a player before idle NPCs may wave when nearby.")
+        .add()
+        .append(
+            new KeyedCodec<>("ReputationWaveNearbyRangeBlocks", Codec.FLOAT),
+            (o, v) -> o.reputationWaveNearbyRangeBlocks = v != null ? v : 8f,
+            o -> o.reputationWaveNearbyRangeBlocks
+        )
+        .documentation("Horizontal distance (blocks) within which reputation waves are considered.")
+        .add()
+        .append(
+            new KeyedCodec<>("ReputationWaveCheckIntervalSeconds", Codec.FLOAT),
+            (o, v) -> o.reputationWaveCheckIntervalSeconds = v != null ? v : 2.5f,
+            o -> o.reputationWaveCheckIntervalSeconds
+        )
+        .documentation("Seconds between proximity/reputation checks per villager.")
+        .add()
+        .append(
+            new KeyedCodec<>("ReputationWaveChancePerCheck", Codec.FLOAT),
+            (o, v) -> o.reputationWaveChancePerCheck = v != null ? v : 0.12f,
+            o -> o.reputationWaveChancePerCheck
+        )
+        .documentation("Probability (0..1) of waving when a qualifying player is nearby on each check.")
+        .add()
+        .append(
+            new KeyedCodec<>("ReputationWaveDurationSeconds", Codec.FLOAT),
+            (o, v) -> o.reputationWaveDurationSeconds = v != null ? v : 2.5f,
+            o -> o.reputationWaveDurationSeconds
+        )
+        .documentation("Seconds the Wave emote plays before stopping (vanilla emote loops).")
+        .add()
+        .append(
+            new KeyedCodec<>("ReputationWaveCooldownSeconds", Codec.FLOAT),
+            (o, v) -> o.reputationWaveCooldownSeconds = v != null ? v : 45f,
+            o -> o.reputationWaveCooldownSeconds
+        )
+        .documentation("Seconds before the same villager may wave again.")
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -445,6 +529,9 @@ public final class AetherhavenPluginConfig {
 
     private boolean villagerScheduleEnabled = true;
     private boolean villagerScheduleDebugLog = false;
+
+    /** When true, plot creator staff and commands do not require explicit aetherhaven.plot.creator grants. */
+    private boolean grantPlotCreatorPermissionToEveryone = true;
 
     /** Max gold coins per resident per morning tax tick (needs-scaled). */
     private int treasuryMaxGoldTaxPerVillagerPerDay = 10;
@@ -482,6 +569,8 @@ public final class AetherhavenPluginConfig {
 
     /** Multiplier on catalog production ticks (workplace outputs). Default 1.0. */
     private double productionTimeMultiplier = 1.0;
+    /** Buyer price at player shop spots as percent of catalog price (1-100). Default 75. */
+    private int shopSpotPlayerListingPricePercent = 75;
 
     private double pathToolNodeBlockYOffset = 1.0;
     private int pathToolSamplesPerBlock = 2;
@@ -492,13 +581,24 @@ public final class AetherhavenPluginConfig {
     private String pathToolReplaceableResourceTypeIds = "";
     private String pathToolStyles = PathToolStyleDefinition.DEFAULT_JSON;
     private boolean pathNavEnabled = true;
-    private double pathNavNodeSpacing = 1.5;
+    private double pathNavNodeSpacing = 3.5;
     private double pathNavSnapRadius = 8.0;
     private double pathNavJunctionEps = 1.25;
     private double pathNavEndpointGateRadius = 32.0;
     private int pathNavMaxNodesPerTown = 6000;
     private boolean pathNavPreferIfShorterOnly = false;
     private boolean pathNavPathfindingLog = false;
+
+    private float dialogueTalkDurationSeconds = 3f;
+    private float needsMoodLowThreshold = 40f;
+    private float needsMoodHighThreshold = 70f;
+
+    private int reputationWaveMinReputation = 75;
+    private float reputationWaveNearbyRangeBlocks = 8f;
+    private float reputationWaveCheckIntervalSeconds = 2.5f;
+    private float reputationWaveChancePerCheck = 0.12f;
+    private float reputationWaveDurationSeconds = 2.5f;
+    private float reputationWaveCooldownSeconds = 45f;
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -566,6 +666,61 @@ public final class AetherhavenPluginConfig {
             return 0.04f;
         }
         return v;
+    }
+
+    public float getDialogueTalkDurationSeconds() {
+        float v = dialogueTalkDurationSeconds;
+        return v > 0f ? v : 3f;
+    }
+
+    public float getNeedsMoodLowThreshold() {
+        float v = needsMoodLowThreshold;
+        if (v < 0f) {
+            return 0f;
+        }
+        return Math.min(v, VillagerNeeds.MAX);
+    }
+
+    public float getNeedsMoodHighThreshold() {
+        float v = needsMoodHighThreshold;
+        float low = getNeedsMoodLowThreshold();
+        if (v <= low) {
+            return Math.min(low + 1f, VillagerNeeds.MAX);
+        }
+        return Math.min(v, VillagerNeeds.MAX);
+    }
+
+    public int getReputationWaveMinReputation() {
+        int v = reputationWaveMinReputation;
+        return Math.max(0, Math.min(VillagerReputationService.MAX_REPUTATION, v));
+    }
+
+    public float getReputationWaveNearbyRangeBlocks() {
+        float v = reputationWaveNearbyRangeBlocks;
+        return v > 0f ? v : 8f;
+    }
+
+    public float getReputationWaveCheckIntervalSeconds() {
+        float v = reputationWaveCheckIntervalSeconds;
+        return v > 0f ? v : 2.5f;
+    }
+
+    public float getReputationWaveChancePerCheck() {
+        float v = reputationWaveChancePerCheck;
+        if (v < 0f) {
+            return 0f;
+        }
+        return Math.min(v, 1f);
+    }
+
+    public float getReputationWaveDurationSeconds() {
+        float v = reputationWaveDurationSeconds;
+        return v > 0f ? v : 2.5f;
+    }
+
+    public float getReputationWaveCooldownSeconds() {
+        float v = reputationWaveCooldownSeconds;
+        return v > 0f ? v : 45f;
     }
 
     public boolean isVillagerScheduleEnabled() {
@@ -749,6 +904,21 @@ public final class AetherhavenPluginConfig {
      * Multiplier applied to catalog production tick counts (below 1 = faster, above 1 = slower). Clamped to the range
      * 0.05–100; NaN and non-positive stored values fall back to 1.0.
      */
+    public boolean isGrantPlotCreatorPermissionToEveryone() {
+        return grantPlotCreatorPermissionToEveryone;
+    }
+
+    public int getShopSpotPlayerListingPricePercent() {
+        int p = shopSpotPlayerListingPricePercent;
+        if (p < 1) {
+            return 1;
+        }
+        if (p > 100) {
+            return 100;
+        }
+        return p;
+    }
+
     public double getProductionTimeMultiplier() {
         double v = productionTimeMultiplier;
         if (Double.isNaN(v) || v <= 0.0) {
@@ -804,6 +974,15 @@ public final class AetherhavenPluginConfig {
     @Nonnull
     public List<PathToolStyleDefinition> getPathToolStyleDefinitions() {
         return PathToolStyleDefinition.parseList(pathToolStyles);
+    }
+
+    public void setPathToolStyleDefinitions(@Nonnull List<PathToolStyleDefinition> definitions) {
+        this.pathToolStyles = PathToolStyleDefinition.serializeList(definitions);
+    }
+
+    @Nonnull
+    public String getPathToolStylesJson() {
+        return pathToolStyles != null && !pathToolStyles.isBlank() ? pathToolStyles : PathToolStyleDefinition.DEFAULT_JSON;
     }
 
     @Nonnull
@@ -979,6 +1158,10 @@ public final class AetherhavenPluginConfig {
         return v > 0.0 ? v : 1.15;
     }
 
+    public double getJewelryShopPriceMultiplier(@Nonnull com.hexvane.aetherhaven.jewelry.JewelryRarity rarity) {
+        return getJewelry().getShopPriceMultipliers().forRarity(rarity);
+    }
+
     public double getJewelryStatHealthCommonMin() {
         return getJewelry().getStat().getHealth().getCommon().getMin();
     }
@@ -1149,7 +1332,8 @@ public final class AetherhavenPluginConfig {
         int breakableWeightTwoRaw,
         boolean floatingGiftEnabled,
         double floatingGiftIntervalDaysMinRaw,
-        double floatingGiftIntervalDaysMaxRaw
+        double floatingGiftIntervalDaysMaxRaw,
+        int shopSpotPlayerListingPricePercentRaw
     ) {
         this.passivePlotAssembly = passivePlotAssembly;
         this.constructionBlocksPerTick = Math.max(1, constructionBlocksPerTickRaw);
@@ -1173,6 +1357,13 @@ public final class AetherhavenPluginConfig {
         if (this.floatingGift == null) {
             this.floatingGift = new FloatingGiftConfig();
         }
+        int shopPct = shopSpotPlayerListingPricePercentRaw;
+        if (shopPct < 1) {
+            shopPct = 1;
+        } else if (shopPct > 100) {
+            shopPct = 100;
+        }
+        this.shopSpotPlayerListingPricePercent = shopPct;
         this.floatingGift.applyJournalSpawnCadence(
             floatingGiftEnabled,
             floatingGiftIntervalDaysMinRaw,
@@ -1196,6 +1387,7 @@ public final class AetherhavenPluginConfig {
         this.innPoolMorningEndHour = o.innPoolMorningEndHour;
         this.villagerScheduleEnabled = o.villagerScheduleEnabled;
         this.villagerScheduleDebugLog = o.villagerScheduleDebugLog;
+        this.grantPlotCreatorPermissionToEveryone = o.grantPlotCreatorPermissionToEveryone;
         this.treasuryMaxGoldTaxPerVillagerPerDay = o.treasuryMaxGoldTaxPerVillagerPerDay;
         this.geodeDropChancePerOreBreak = o.geodeDropChancePerOreBreak;
         this.geodeOreUseBlocksOresCategory = o.geodeOreUseBlocksOresCategory;
@@ -1218,6 +1410,7 @@ public final class AetherhavenPluginConfig {
         this.feastNeedsDecayScalePermille = o.feastNeedsDecayScalePermille;
         this.feastGatherTimeoutSeconds = o.feastGatherTimeoutSeconds;
         this.productionTimeMultiplier = o.productionTimeMultiplier;
+        this.shopSpotPlayerListingPricePercent = o.shopSpotPlayerListingPricePercent;
         this.pathToolNodeBlockYOffset = o.pathToolNodeBlockYOffset;
         this.pathToolSamplesPerBlock = o.pathToolSamplesPerBlock;
         this.pathToolHalfWidth = o.pathToolHalfWidth;
@@ -1235,6 +1428,15 @@ public final class AetherhavenPluginConfig {
         this.pathNavMaxNodesPerTown = o.pathNavMaxNodesPerTown;
         this.pathNavPreferIfShorterOnly = o.pathNavPreferIfShorterOnly;
         this.pathNavPathfindingLog = o.pathNavPathfindingLog;
+        this.dialogueTalkDurationSeconds = o.dialogueTalkDurationSeconds;
+        this.needsMoodLowThreshold = o.needsMoodLowThreshold;
+        this.needsMoodHighThreshold = o.needsMoodHighThreshold;
+        this.reputationWaveMinReputation = o.reputationWaveMinReputation;
+        this.reputationWaveNearbyRangeBlocks = o.reputationWaveNearbyRangeBlocks;
+        this.reputationWaveCheckIntervalSeconds = o.reputationWaveCheckIntervalSeconds;
+        this.reputationWaveChancePerCheck = o.reputationWaveChancePerCheck;
+        this.reputationWaveDurationSeconds = o.reputationWaveDurationSeconds;
+        this.reputationWaveCooldownSeconds = o.reputationWaveCooldownSeconds;
     }
 
     @Nonnull

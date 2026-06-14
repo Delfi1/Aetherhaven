@@ -1,0 +1,13 @@
+{
+  "CullDistance": 50,
+  "BoundingRadius": 5,
+  "LifeSpan": 1.5,
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Route_Node_Flash"
+    },
+    {
+      "SpawnerId": "Aetherhaven_Route_Node_Burst"
+    }
+  ]
+}

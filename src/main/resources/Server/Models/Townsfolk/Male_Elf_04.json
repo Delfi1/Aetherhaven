@@ -1,5 +1,5 @@
 {
-  "Parent": "Player",
+  "Parent": "Aetherhaven_Human",
   "DefaultAttachments": [
     {
       "Model": "Characters/Player.blockymodel",
@@ -82,5 +82,9 @@
       "Texture": "Cosmetics/Shoes/BootsBasic_Textures/Scavenger_Leather.png"
     }
   ],
-  "Icon": "Icons/ModelsGenerated/Male_Elf_04.png"
+  "Icon": "Icons/ModelsGenerated/Male_Elf_04.png",
+  "Model": "Characters/Player.blockymodel",
+  "Texture": "Characters/Player_Textures/Player_Greyscale.png",
+  "GradientSet": "Skin",
+  "GradientId": "01"
 }

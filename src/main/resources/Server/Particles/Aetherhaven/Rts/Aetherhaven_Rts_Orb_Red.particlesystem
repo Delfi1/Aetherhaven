@@ -1,0 +1,6 @@
+{
+  "CullDistance": 64,
+  "BoundingRadius": 3,
+  "LifeSpan": 40,
+  "Spawners": [{ "SpawnerId": "Aetherhaven_Rts_Orb_Red_Spawner" }]
+}

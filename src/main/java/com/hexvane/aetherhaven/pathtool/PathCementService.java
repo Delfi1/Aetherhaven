@@ -38,7 +38,8 @@ public final class PathCementService {
         @Nonnull World world,
         @Nonnull AetherhavenPluginConfig cfg,
         @Nonnull List<PathPlannedCell.Planned> plan,
-        int pathStyleIndex
+        int pathStyleIndex,
+        int pathWidthBlocks
     ) {
         if (plan.isEmpty()) {
             return null;
@@ -65,7 +66,7 @@ public final class PathCementService {
                 continue;
             }
             int oldRot = chunkRotationIndex(ch, x, y, z);
-            String placeId = pickPlaceId(p.role, r, pathStyleIndex, cfg);
+            String placeId = pickPlaceId(p.lateralIndex, r, pathStyleIndex, pathWidthBlocks, cfg);
             if (!ch.placeBlock(x, y, z, placeId, FLAT, PLACE, false)) {
                 continue;
             }
@@ -105,15 +106,36 @@ public final class PathCementService {
 
     @Nonnull
     private static String pickPlaceId(
-        @Nonnull PathPlannedCell.CellRole role,
+        int lateralIndex,
         @Nonnull Random r,
         int pathStyleIndex,
+        int pathWidthBlocks,
         @Nonnull AetherhavenPluginConfig cfg
     ) {
+        List<PathToolStyleDefinition> styles = cfg.getPathToolStyleDefinitions();
+        PathToolStyleDefinition style = null;
+        if (!styles.isEmpty()) {
+            style = styles.get(Math.floorMod(pathStyleIndex, styles.size()));
+        }
+        if (style != null && style.hasColumnLayout()) {
+            return style.pickBlockForPathCell(lateralIndex, pathWidthBlocks, r);
+        }
+        PathPlannedCell.CellRole role = lateralRole(lateralIndex, pathWidthBlocks);
         if (role == PathPlannedCell.CellRole.Center) {
             return pickCenterBlockId(r, pathStyleIndex, cfg);
         }
         return r.nextBoolean() ? AetherhavenConstants.PATH_BLOCK_GRASS : AetherhavenConstants.PATH_BLOCK_GRASS_DEEP;
+    }
+
+    @Nonnull
+    private static PathPlannedCell.CellRole lateralRole(int lateralIndex, int pathWidthBlocks) {
+        int w = Math.max(1, Math.min(8, pathWidthBlocks));
+        if (w < 3) {
+            return PathPlannedCell.CellRole.Center;
+        }
+        return lateralIndex == 0 || lateralIndex == w - 1
+            ? PathPlannedCell.CellRole.Outline
+            : PathPlannedCell.CellRole.Center;
     }
 
     @Nonnull

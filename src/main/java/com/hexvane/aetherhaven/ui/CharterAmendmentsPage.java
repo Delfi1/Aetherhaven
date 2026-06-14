@@ -149,46 +149,46 @@ public final class CharterAmendmentsPage extends AetherhavenInteractiveCustomUIP
         commandBuilder.set("#T2MiningText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.miningShort"));
         commandBuilder.set("#T2LoggingText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.loggingShort"));
         commandBuilder.set("#T2FarmingText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.farmingShort"));
-        commandBuilder.set("#T2SmithingText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.smithingShort"));
+        commandBuilder.set("#T2RanchingText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.ranchingShort"));
         commandBuilder.set("#T2Mining.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.miningTooltip"));
         commandBuilder.set("#T2Logging.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.loggingTooltip"));
         commandBuilder.set("#T2Farming.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.farmingTooltip"));
-        commandBuilder.set("#T2Smithing.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.smithingTooltip"));
+        commandBuilder.set("#T2Ranching.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.ranchingTooltip"));
 
         CharterSpecialization spec = town.getCharterSpecializationEnum();
         boolean tier2Unlocked = tierUnlock >= 2 && t1Done;
         boolean miningD;
         boolean loggingD;
         boolean farmingD;
-        boolean smithingD;
+        boolean ranchingD;
         if (!tier2Unlocked) {
             miningD = true;
             loggingD = true;
             farmingD = true;
-            smithingD = true;
+            ranchingD = true;
         } else if (spec == null) {
             miningD = false;
             loggingD = false;
             farmingD = false;
-            smithingD = false;
+            ranchingD = false;
         } else {
             miningD = spec != CharterSpecialization.MINING;
             loggingD = spec != CharterSpecialization.LOGGING;
             farmingD = spec != CharterSpecialization.FARMING;
-            smithingD = spec != CharterSpecialization.SMITHING;
+            ranchingD = spec != CharterSpecialization.RANCHING;
         }
         commandBuilder.set("#T2Mining.Disabled", miningD);
         commandBuilder.set("#T2Logging.Disabled", loggingD);
         commandBuilder.set("#T2Farming.Disabled", farmingD);
-        commandBuilder.set("#T2Smithing.Disabled", smithingD);
+        commandBuilder.set("#T2Ranching.Disabled", ranchingD);
         commandBuilder.set("#T2MiningDim.Visible", miningD);
         commandBuilder.set("#T2LoggingDim.Visible", loggingD);
         commandBuilder.set("#T2FarmingDim.Visible", farmingD);
-        commandBuilder.set("#T2SmithingDim.Visible", smithingD);
+        commandBuilder.set("#T2RanchingDim.Visible", ranchingD);
         commandBuilder.set("#T2MiningText.Style.TextColor", miningD ? "#8a8698" : "#e4dfd4");
         commandBuilder.set("#T2LoggingText.Style.TextColor", loggingD ? "#8a8698" : "#e4dfd4");
         commandBuilder.set("#T2FarmingText.Style.TextColor", farmingD ? "#8a8698" : "#e4dfd4");
-        commandBuilder.set("#T2SmithingText.Style.TextColor", smithingD ? "#8a8698" : "#e4dfd4");
+        commandBuilder.set("#T2RanchingText.Style.TextColor", ranchingD ? "#8a8698" : "#e4dfd4");
 
         if (tier2Unlocked && spec == null) {
             eventBuilder.addEventBinding(
@@ -211,8 +211,8 @@ public final class CharterAmendmentsPage extends AetherhavenInteractiveCustomUIP
             );
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
-                "#T2Smithing",
-                new EventData().append("Action", "Pick").append("Choice", "t2_smithing"),
+                "#T2Ranching",
+                new EventData().append("Action", "Pick").append("Choice", "t2_ranching"),
                 false
             );
         }
@@ -254,7 +254,7 @@ public final class CharterAmendmentsPage extends AetherhavenInteractiveCustomUIP
                     town.setCharterTaxPolicy(CharterTaxPolicy.HAPPINESS_WEIGHTED.id());
                 }
             }
-            case "t2_mining", "t2_logging", "t2_farming", "t2_smithing" -> {
+            case "t2_mining", "t2_logging", "t2_farming", "t2_ranching" -> {
                 if (tierUnlock < 2 || town.getCharterTaxPolicyEnum() == null || town.getCharterSpecializationEnum() != null) {
                     err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.locked";
                 } else {
@@ -263,9 +263,14 @@ public final class CharterAmendmentsPage extends AetherhavenInteractiveCustomUIP
                             case "t2_mining" -> CharterSpecialization.MINING;
                             case "t2_logging" -> CharterSpecialization.LOGGING;
                             case "t2_farming" -> CharterSpecialization.FARMING;
-                            default -> CharterSpecialization.SMITHING;
+                            case "t2_ranching" -> CharterSpecialization.RANCHING;
+                            default -> null;
                         };
-                    town.setCharterSpecialization(spec.id());
+                    if (spec == null) {
+                        err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.invalid";
+                    } else {
+                        town.setCharterSpecialization(spec.id());
+                    }
                 }
             }
             default -> err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.invalid";

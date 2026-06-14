@@ -14,7 +14,8 @@
   "treasuryGoldCoinCost": 60,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 270 },
-    { "resourceTypeId": "Rock", "count": 60 }
+    { "resourceTypeId": "Rock", "count": 60 },
+    { "itemId": "Bench_Lumbermill", "count": 1 }
   ],
   "pois": [
     {

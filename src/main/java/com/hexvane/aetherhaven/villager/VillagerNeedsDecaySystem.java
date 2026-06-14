@@ -8,6 +8,8 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownResidentEligibility;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -56,6 +58,11 @@ public final class VillagerNeedsDecaySystem extends EntityTickingSystem<EntitySt
         VillagerNeeds needs = archetypeChunk.getComponent(index, VillagerNeeds.getComponentType());
         TownVillagerBinding binding = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
         if (needs == null || binding == null) {
+            return;
+        }
+        NPCEntity npc = archetypeChunk.getComponent(index, NPCEntity.getComponentType());
+        String roleId = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
+        if (!TownResidentEligibility.usesVillagerNeeds(binding.getKind(), roleId, plugin)) {
             return;
         }
         long nowMs = resolveNowMs(store);

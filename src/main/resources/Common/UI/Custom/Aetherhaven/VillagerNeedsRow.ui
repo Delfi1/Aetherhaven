@@ -12,6 +12,10 @@ Group #VillagerRow {
       Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
       Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
     );
+    AssetImage #Portrait {
+      Anchor: (Width: 36, Height: 36, Right: 8);
+      FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+    }
     Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
   }
 }

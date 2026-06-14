@@ -1,0 +1,56 @@
+{
+  "id": "plot_jimmys_windmill",
+  "displayName": "Jimmy\u0027s Windmill",
+  "description": "By Jimmy G",
+  "prefabPath": "plot_jimmys_windmill.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 50,
+  "plotTokenLockedByDefault": true,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 850 },
+    { "resourceTypeId": "Rock", "count": 340 },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 25
+    }
+  ],
+  "pois": [
+    {
+      "localX": 13,
+      "localY": 2,
+      "localZ": -8,
+      "tags": [
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Beech_Trunk",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 14,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -8
+    }
+  ],
+  "managementBlockLocalPos": [
+    9,
+    2,
+    -8
+  ],
+  "productionStorageLocalPos": [
+    6,
+    2,
+    -6
+  ],
+  "countsAsConstructionId": "plot_farm",
+  "tags": [
+    "farm",
+    "work",
+    "nature"
+  ]
+}

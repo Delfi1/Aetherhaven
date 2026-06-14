@@ -1,0 +1,58 @@
+items.Aetherhaven_Command_Post.name=Guard command post
+items.Aetherhaven_Command_Post.description=Sit at this stool to command your town guards from above.
+
+items.Aetherhaven_Rts_Flag.name=Command flag
+items.Aetherhaven_Rts_Flag.description=Send guards to a spot on the ground.
+
+items.Aetherhaven_Rts_Sword.name=Command sword
+items.Aetherhaven_Rts_Sword.description=Focus your guards on one creature.
+
+items.Aetherhaven_Rts_Select_All.name=Select all guards
+items.Aetherhaven_Rts_Select_All.description=Select every hired guard in town.
+
+items.Aetherhaven_Rts_Select_Knight.name=Select knights
+items.Aetherhaven_Rts_Select_Knight.description=Select all knight guards.
+
+items.Aetherhaven_Rts_Select_Archer.name=Select archers
+items.Aetherhaven_Rts_Select_Archer.description=Select all archer guards.
+
+items.Aetherhaven_Rts_Select_Mage.name=Select mages
+items.Aetherhaven_Rts_Select_Mage.description=Select all mage guards.
+
+items.Aetherhaven_Rts_Stance_Banner.name=Stance banner
+items.Aetherhaven_Rts_Stance_Banner.description=Set how selected guards fight.
+
+items.Aetherhaven_Rts_Free.name=Release staff
+items.Aetherhaven_Rts_Free.description=Return selected guards to normal duty.
+
+items.Aetherhaven_Rts_Exit.name=Leave command
+items.Aetherhaven_Rts_Exit.description=Exit guard command mode and return to normal play.
+
+aetherhaven.rts.hudTitle=Guard Command
+aetherhaven.rts.rosterTitle=Town Guards
+aetherhaven.rts.orderAttackMove=Order: Attack-move
+aetherhaven.rts.orderMove=Order: Move
+aetherhaven.rts.orderFocusAttack=Order: Focus fire
+aetherhaven.rts.stanceDefensive=Stance: Defensive
+aetherhaven.rts.stanceAggressive=Stance: Aggressive
+aetherhaven.rts.stanceStandGround=Stance: Stand ground
+aetherhaven.rts.stanceHoldFire=Stance: Hold fire
+aetherhaven.rts.hudSelected={n} guards selected
+aetherhaven.rts.hudControls=WASD pans the battlefield view. Space and Ctrl fly up and down to zoom. Scroll or number keys switch tools. Click guards to select. Hold Shift and click to add or remove one. Drag a box to select many. Use the Leave command tool (hotbar slot 8) to exit.
+aetherhaven.rts.helpFlag=Right click the ground to send guards. Ability1 switches between attack-move and move. Ability2 stops selected guards.
+aetherhaven.rts.helpSword=Right click a creature to focus your guards on it. They will not attack villagers, tourists, or guards.
+aetherhaven.rts.helpSelectAll=Click to select all guards in town and deselect others.
+aetherhaven.rts.helpStance=Ability1 cycles combat stance and applies it to selected guards.
+aetherhaven.rts.helpFree=Right click to release selected guards from your orders.
+aetherhaven.rts.helpSelectType=Click to select all guards of this type in town and deselect others.
+aetherhaven.rts.helpExit=Click to leave guard command mode.
+aetherhaven.rts.errorUseExitTool=Use the Leave command tool in your hotbar to exit command mode.
+aetherhaven.rts.errorNoGuards=You need hired guards to use this.
+aetherhaven.rts.errorNoSelection=Select guards first.
+aetherhaven.rts.errorNotEnemy=Your guards will not attack that.
+aetherhaven.rts.errorNotInTown=The command post must be inside your town lands to use.
+aetherhaven.rts.errorCommandPostInUse=Someone else is already using the command post in this town.
+aetherhaven.rts.recoverInventorySuccess=Restored your hotbar from the last guard command session.
+aetherhaven.rts.recoverInventorySuccessExited=Restored your hotbar and exited guard command mode.
+aetherhaven.rts.recoverInventoryNone=No saved hotbar from guard command mode was found.
+aetherhaven.rts.recoverInventoryAuto=Your hotbar was restored after an interrupted guard command session.
