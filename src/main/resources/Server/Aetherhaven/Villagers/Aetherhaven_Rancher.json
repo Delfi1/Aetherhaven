@@ -11,7 +11,24 @@
   "innPoolEligible": true,
   "innPoolOrder": 6,
   "visitorBindingKind": "visitor_rancher",
-  "reputationMilestones": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_rancher_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Growth_Serum"
+    },
+    {
+      "rewardId": "rep_rancher_100",
+      "minReputation": 100,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_100",
+      "learnRecipeItemId": "Aetherhaven_Hunting_Knife"
+    }
+  ],
   "giftLoves": [
     "Tool_Feedbag",
     "Farming_Collar",

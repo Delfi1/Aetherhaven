@@ -1,0 +1,20 @@
+{
+  "id": "snooty",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.snooty.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.snooty.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.snooty.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.snooty.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.snooty.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "SIT": 1.3,
+    "WORK": 1.0,
+    "FUN": 0.6,
+    "EAT": 1.1
+  },
+  "preferredScheduleLocations": [
+    "inn",
+    "park"
+  ]
+}

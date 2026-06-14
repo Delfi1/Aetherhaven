@@ -1,0 +1,19 @@
+{
+    "id":  "male_darkelf_02",
+    "displayName":  "Malrik Duskbane",
+    "gender":  "male",
+    "race":  "darkelf",
+    "modelAssetId":  "Male_DarkElf_02",
+    "personalityIds":  [
+                           "rude",
+                           "shy",
+                           "bitter"
+                       ],
+    "allowedAssignmentKinds":  [
+                                   "idle",
+                                   "tourist",
+                                   "guard"
+                               ],
+    "befriendable":  false,
+    "equipmentProfileId":  "guard_knight"
+}

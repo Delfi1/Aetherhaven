@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollection {
     public AetherhavenAutonomyDebugCommand() {
         super("debug-autonomy", "aetherhaven_commands_help.commands.aetherhaven.debug_autonomy.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new ToggleCommand());
         this.addSubCommand(new ShowCommand());
         this.addSubCommand(new ClearCommand());

@@ -1,0 +1,74 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Inn_Bell.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Inn_Bell.description"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Furniture.Deco"
+  ],
+  "Set": "Aetherhaven",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Inn_Bell.png",
+  "BlockType": {
+    "BlockParticleSetId": "Crystal",
+    "BlockSoundSetId": "Crystal",
+    "CustomModel": "Blocks/Inn_Bell.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Inn_Bell.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "HitboxType": "Aetherhaven_Inn_Bell",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "VariantRotation": "NESW",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "AetherhavenInnBellUse"
+          }
+        ]
+      }
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "IconProperties": {
+    "Scale": 1.4,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -2
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Stone",
+  "MaxStack": 25
+}

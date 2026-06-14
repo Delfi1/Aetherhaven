@@ -62,6 +62,19 @@
       "Creative": 20
     }
   },
+  "Weapon": {
+    "StatModifiers": {
+      "Mana": [
+        {
+          "Amount": 250,
+          "CalculationType": "Additive"
+        }
+      ]
+    }
+  },
+  "DisplayEntityStatsHUD": [
+    "Mana"
+  ],
   "Tags": {
     "Type": [
       "Tool"

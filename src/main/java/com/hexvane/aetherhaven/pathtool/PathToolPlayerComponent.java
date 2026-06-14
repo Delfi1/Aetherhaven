@@ -6,10 +6,12 @@ import com.google.gson.annotations.SerializedName;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
-import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.component.Ref;
+import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +63,12 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
             c -> c.pathStyleIndex
         )
         .add()
+        .append(
+            new KeyedCodec<>("SelectedRemovePathId", Codec.UUID_BINARY),
+            (c, u) -> c.selectedRemovePathId = u,
+            c -> c.selectedRemovePathId
+        )
+        .add()
         .build();
 
     @Nullable
@@ -72,6 +80,8 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
     private int pathStyleIndex;
     @Nullable
     private UUID selectedNodeId;
+    @Nullable
+    private UUID selectedRemovePathId;
     @Nonnull
     private final List<PathToolNode> nodes = new ArrayList<>();
 
@@ -93,6 +103,16 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
         return t;
     }
 
+    /** Ensures the path-tool edit session component exists (safe from tick systems without loading {@link PathToolInteractions}). */
+    public static void ensurePresent(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        if (commandBuffer.getComponent(playerRef, getComponentType()) == null) {
+            commandBuffer.addComponent(playerRef, getComponentType(), new PathToolPlayerComponent());
+        }
+    }
+
     @Nonnull
     public List<PathToolNode> getNodes() {
         return nodes;
@@ -112,12 +132,14 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
         this.gizmoMode = gizmoMode;
     }
 
-    /** Cycles: Translate -> Rotate -> Commit -> Translate. */
+    /** Cycles: Translate -> Rotate -> Commit -> Remove -> StyleDesigner -> Translate. */
     public void cycleGizmoMode() {
         this.gizmoMode = switch (gizmoMode) {
             case Translate -> PathToolGizmoMode.Rotate;
             case Rotate -> PathToolGizmoMode.Commit;
-            case Commit -> PathToolGizmoMode.Translate;
+            case Commit -> PathToolGizmoMode.Remove;
+            case Remove -> PathToolGizmoMode.StyleDesigner;
+            case StyleDesigner -> PathToolGizmoMode.Translate;
         };
     }
 
@@ -159,6 +181,15 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
     }
 
     @Nullable
+    public UUID getSelectedRemovePathId() {
+        return selectedRemovePathId;
+    }
+
+    public void setSelectedRemovePathId(@Nullable UUID selectedRemovePathId) {
+        this.selectedRemovePathId = selectedRemovePathId;
+    }
+
+    @Nullable
     public UUID getSelectedNodeId() {
         return selectedNodeId;
     }
@@ -193,6 +224,7 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
         c.pathWidthBlocks = this.pathWidthBlocks;
         c.pathStyleIndex = this.pathStyleIndex;
         c.selectedNodeId = this.selectedNodeId;
+        c.selectedRemovePathId = this.selectedRemovePathId;
         c.nodes.addAll(this.nodes);
         return c;
     }

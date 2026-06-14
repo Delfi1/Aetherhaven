@@ -1,0 +1,56 @@
+$C = "../Common.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 420);
+
+    #Title {
+      Label #PatrolNameRouteTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 20);
+
+      Label #Hint {
+        Anchor: (Bottom: 12);
+        Style: (...$C.@DefaultLabelStyle, Wrap: true);
+        Text: "";
+      }
+
+      Label #NameLabel {
+        Anchor: (Bottom: 8);
+        Style: (RenderBold: true, TextColor: #94a7bb, FontSize: 13);
+        Text: "";
+      }
+
+      $C.@TextField #RouteNameInput {
+        Anchor: (Height: 44, Bottom: 16);
+        PlaceholderText: "";
+      }
+
+      Group #Buttons {
+        LayoutMode: Left;
+
+        $C.@TextButton #SaveRouteNameButton {
+          FlexWeight: 1;
+          Anchor: (Right: 8);
+          Text: "";
+        }
+
+        $C.@CancelTextButton #CancelRouteNameButton {
+          FlexWeight: 1;
+          Text: "";
+        }
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

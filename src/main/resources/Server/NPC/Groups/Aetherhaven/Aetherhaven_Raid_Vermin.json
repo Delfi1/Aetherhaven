@@ -1,0 +1,8 @@
+{
+  "$Comment": "Raid march vermin (rat/spider/scorpion variants). Friendly to each other; still counted in Aetherhaven_Raid for guard aggro.",
+  "IncludeRoles": [
+    "Aetherhaven_Raid_Rat*",
+    "Aetherhaven_Raid_Spider*",
+    "Aetherhaven_Raid_Scorpion*"
+  ]
+}

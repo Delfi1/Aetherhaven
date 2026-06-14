@@ -52,6 +52,12 @@ public final class VillagerScheduleTickState implements Component<EntityStore> {
                 v -> v.scheduleUtilityPickSegment
             )
             .add()
+            .append(
+                new KeyedCodec<>("ShopSegmentPurchaseDone", Codec.BOOLEAN),
+                (v, x) -> v.shopSegmentPurchaseDone = x != null && x,
+                v -> v.shopSegmentPurchaseDone
+            )
+            .add()
             .build();
 
     @Nullable
@@ -88,6 +94,8 @@ public final class VillagerScheduleTickState implements Component<EntityStore> {
     private String scheduleUtilityPickGameplayConstructionId = "";
     @Nonnull
     private String scheduleUtilityPickSegment = "";
+
+    private boolean shopSegmentPurchaseDone;
 
     public VillagerScheduleTickState() {}
 
@@ -147,6 +155,14 @@ public final class VillagerScheduleTickState implements Component<EntityStore> {
         return scheduleUtilityPickSegment;
     }
 
+    public boolean isShopSegmentPurchaseDone() {
+        return shopSegmentPurchaseDone;
+    }
+
+    public void setShopSegmentPurchaseDone(boolean shopSegmentPurchaseDone) {
+        this.shopSegmentPurchaseDone = shopSegmentPurchaseDone;
+    }
+
     @Nullable
     @Override
     public Component<EntityStore> clone() {
@@ -157,6 +173,7 @@ public final class VillagerScheduleTickState implements Component<EntityStore> {
         c.scheduleUtilityPickPlotId = scheduleUtilityPickPlotId;
         c.scheduleUtilityPickGameplayConstructionId = scheduleUtilityPickGameplayConstructionId;
         c.scheduleUtilityPickSegment = scheduleUtilityPickSegment;
+        c.shopSegmentPurchaseDone = shopSegmentPurchaseDone;
         return c;
     }
 }

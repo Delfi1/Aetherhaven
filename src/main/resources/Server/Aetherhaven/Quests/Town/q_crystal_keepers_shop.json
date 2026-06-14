@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "q_crystal_keepers_shop",
+  "category": "town",
+  "grantPlotBlueprintConstructionId": "plot_crystal_keepers_shop",
+  "title": "Vaelith's Crystal Shop",
+  "description": "Vaelith wants a proper shop where she can share her crystal collection with the town.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "blueprint",
+      "kind": "journal",
+      "text": "Take the shop blueprint from Vaelith."
+    },
+    {
+      "id": "learn",
+      "kind": "journal",
+      "text": "Use the blueprint to learn the crystal shop at your plot crafting bench."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Craft a shop plot token and build the crystal shop prefab."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Find Vaelith at the shop and close the quest in dialogue."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Crystal_Keeper",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+    ],
+    "onComplete": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ],
+    "onAbandon": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ]
+  },
+  "repeat": { "mode": "none" }
+}

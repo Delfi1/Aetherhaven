@@ -37,6 +37,14 @@ public final class ResidentNpcRecord {
     @SerializedName("lastKnownFun")
     private Float lastKnownFun;
 
+    /**
+     * Set when {@link com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem} confirms this villager died. Dawn auto
+     * revival only runs for rows with this flag — never inferred from a missing entity ref (unloaded chunks look the
+     * same as dead).
+     */
+    @SerializedName("pendingDawnRevival")
+    private boolean pendingDawnRevival;
+
     public ResidentNpcRecord() {}
 
     public ResidentNpcRecord(
@@ -96,6 +104,14 @@ public final class ResidentNpcRecord {
 
     public void setLastEntityUuid(@Nonnull UUID uuid) {
         this.lastEntityUuid = uuid.toString();
+    }
+
+    public boolean isPendingDawnRevival() {
+        return pendingDawnRevival;
+    }
+
+    public void setPendingDawnRevival(boolean pendingDawnRevival) {
+        this.pendingDawnRevival = pendingDawnRevival;
     }
 
     public boolean hasLastKnownNeeds() {

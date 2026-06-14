@@ -1,5 +1,9 @@
 package com.hexvane.aetherhaven.charter;
 
+import com.hypixel.hytale.math.vector.Rotation3f;
+
+import com.hypixel.hytale.math.vector.Vector3fUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.CharterBlock;
@@ -12,6 +16,7 @@ import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -20,9 +25,9 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -71,6 +76,11 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         }
         UUID owner = uuidComp.getUuid();
         World world = store.getExternalData().getWorld();
+        if (PersistentWorldSupport.isTemporaryInstance(world)) {
+            event.setCancelled(true);
+            pr.sendMessage(Message.translation("aetherhaven_common.aetherhaven.charter.notInPersistentWorld"));
+            return;
+        }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         if (tm.findTownForPlayerInWorld(owner) != null) {
             event.setCancelled(true);
@@ -78,7 +88,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
             return;
         }
 
-        Vector3i pos = event.getTargetBlock().clone();
+        Vector3i pos = new Vector3i(event.getTargetBlock());
         world.execute(() -> finishCharterPlacement(world, pos, owner, pr, playerRef));
     }
 
@@ -162,7 +172,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         }
         Vector3d p = new Vector3d(town.getCharterX() + 2.5, town.getCharterY(), town.getCharterZ() + 0.5);
         Store<EntityStore> store = world.getEntityStore().getStore();
-        var pair = npc.spawnNPC(store, AetherhavenConstants.ELDER_NPC_ROLE_ID, null, p, Vector3f.ZERO);
+        var pair = npc.spawnNPC(store, AetherhavenConstants.ELDER_NPC_ROLE_ID, null, p, Rotation3f.ZERO);
         if (pair == null) {
             LOGGER.atWarning().log("Failed to spawn elder NPC for town %s", town.getTownId());
             return;

@@ -16,7 +16,7 @@ import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.time.TimeModule;
@@ -78,7 +78,10 @@ public final class VillagerAutonomyTravelKick {
                     if (binding == null || needs == null || npc == null || npc.getRole() == null) {
                         return true;
                     }
-                    if (TownVillagerBinding.isVisitorKind(binding.getKind())) {
+                    if (TownVillagerBinding.isScheduleSuppressedKind(binding.getKind())) {
+                        return true;
+                    }
+                    if (VillagerAutonomySystem.skipsPoiAutonomy(binding, npc)) {
                         return true;
                     }
                     long now = resolveNowMs(store);

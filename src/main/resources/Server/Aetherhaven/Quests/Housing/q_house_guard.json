@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "q_house_guard",
+  "category": "housing",
+  "assignByEntity": true,
+  "grantPlotTokenConstructionId": "plot_house",
+  "dialogueOfferEntryNodeId": "guard_house_offer",
+  "title": "A home for a guard",
+  "description": "This guard wants a house in town before they count as a full resident.",
+  "prerequisites": {
+    "completedQuestIds": ["q_build_guild_hall"],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Talk to the guard and take a house plot token."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the house."
+    },
+    {
+      "id": "assign",
+      "kind": "custom",
+      "text": "Assign this guard on the house sign."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Talk to the guard again when they are living there."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "per_entity" }
+}

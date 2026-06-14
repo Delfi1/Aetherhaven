@@ -1,0 +1,17 @@
+{
+  "id": "male_goblin_02",
+  "displayName": "Nix Candlefinger",
+  "gender": "male",
+  "race": "goblin",
+  "modelAssetId": "Male_Goblin_02",
+  "personalityIds": [
+    "curious",
+    "cheerful",
+    "crafty"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

@@ -1,0 +1,41 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "Interface": "Hytale.Instruction",
+  "$Comment": "Stay in combat while an aggressive mob or current target is visible (line of sight).",
+  "Parameters": {
+    "ViewRange": {
+      "Value": 24,
+      "Description": "Combat awareness range"
+    }
+  },
+  "Content": {
+    "Sensor": {
+      "Type": "Or",
+      "Sensors": [
+        {
+          "Type": "Mob",
+          "Range": { "Compute": "ViewRange" },
+          "LockOnTarget": true,
+          "Filters": [
+            { "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] },
+            { "Type": "LineOfSight" }
+          ],
+          "Collector": { "Type": "CombatTargets" }
+        },
+        {
+          "Type": "Target",
+          "Range": { "Compute": "ViewRange" },
+          "Filters": [{ "Type": "LineOfSight" }]
+        },
+        {
+          "Type": "Target",
+          "TargetSlot": "LockedTarget",
+          "Range": { "Compute": "ViewRange" },
+          "Filters": [{ "Type": "LineOfSight" }]
+        }
+      ]
+    },
+    "Instructions": []
+  }
+}

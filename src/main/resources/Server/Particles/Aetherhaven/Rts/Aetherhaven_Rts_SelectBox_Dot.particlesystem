@@ -1,0 +1,6 @@
+{
+  "CullDistance": 96,
+  "BoundingRadius": 2,
+  "LifeSpan": 0.5,
+  "Spawners": [{ "SpawnerId": "Aetherhaven_Rts_SelectBox_Dot_Spawner" }]
+}

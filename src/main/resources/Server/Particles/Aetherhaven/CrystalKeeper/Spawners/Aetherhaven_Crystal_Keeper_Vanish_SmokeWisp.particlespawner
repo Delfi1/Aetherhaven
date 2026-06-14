@@ -1,0 +1,56 @@
+{
+  "RenderMode": "BlendLinear",
+  "ParticleRotationInfluence": "Billboard",
+  "LinearFiltering": true,
+  "LightInfluence": 0,
+  "ParticleRotateWithSpawner": false,
+  "MaxConcurrentParticles": 8,
+  "ParticleLifeSpan": {
+    "Min": 0.5,
+    "Max": 0.9
+  },
+  "SpawnRate": {
+    "Min": 1.0,
+    "Max": 1.0
+  },
+  "EmitOffset": {
+    "X": { "Min": -0.15, "Max": 0.15 },
+    "Y": { "Min": 0.0, "Max": 0.2 },
+    "Z": { "Min": -0.15, "Max": 0.15 }
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Smoke/Smoke_Cartoon.png",
+    "FrameSize": { "Width": 64, "Height": 64 },
+    "ScaleRatioConstraint": "OneToOne",
+    "UVOption": "RandomFlipU",
+    "Animation": {
+      "0": {
+        "FrameIndex": { "Min": 0, "Max": 3 },
+        "Scale": { "X": { "Min": 0.35, "Max": 0.5 } },
+        "Opacity": 0.85,
+        "Color": "#c89bff"
+      },
+      "100": {
+        "Opacity": 0,
+        "Scale": { "X": { "Min": 1.2, "Max": 1.6 } },
+        "Color": "#8a8a9a"
+      }
+    },
+    "InitialAnimationFrame": {
+      "Scale": { "X": { "Min": 0.3, "Max": 0.45 } },
+      "Opacity": 0.85,
+      "Color": "#c89bff",
+      "FrameIndex": { "Min": 0, "Max": 3 }
+    }
+  },
+  "InitialVelocity": {
+    "Speed": { "Min": 0.8, "Max": 1.4 },
+    "Yaw": { "Min": -180, "Max": 180 },
+    "Pitch": { "Min": 65, "Max": 95 }
+  },
+  "SpawnBurst": true,
+  "TotalParticles": {
+    "Min": 6,
+    "Max": 8
+  }
+}

@@ -1,0 +1,20 @@
+Group #PortraitRow {
+  LayoutMode: Left;
+  Anchor: (Height: 72);
+  HitTestVisible: false;
+
+  Group {
+    FlexWeight: 1;
+    HitTestVisible: false;
+  }
+
+  Group #PortraitRowCells {
+    LayoutMode: Left;
+    HitTestVisible: false;
+  }
+
+  Group {
+    FlexWeight: 1;
+    HitTestVisible: false;
+  }
+}

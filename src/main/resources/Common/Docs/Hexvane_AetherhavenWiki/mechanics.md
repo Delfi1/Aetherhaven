@@ -5,6 +5,7 @@ author: Hexvane
 sub-topics:
   - mechanic_commands
   - mechanic_plot_placement_staff
+  - mechanic_plot_creator_staff
   - mechanic_building_staff
   - mechanic_charter
   - mechanic_villager_needs

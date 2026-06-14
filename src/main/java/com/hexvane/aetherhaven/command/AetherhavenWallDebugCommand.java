@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenWallDebugCommand extends AbstractCommandCollection {
     public AetherhavenWallDebugCommand() {
         super("walldebug", "aetherhaven_commands_help.commands.aetherhaven.walldebug.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new OnCommand());
         this.addSubCommand(new OffCommand());
         this.addSubCommand(new DumpCommand());

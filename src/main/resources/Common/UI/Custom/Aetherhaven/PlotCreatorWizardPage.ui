@@ -1,0 +1,202 @@
+$C = "../Common.ui";
+
+@HintStyle = (
+  FontSize: 12,
+  TextColor: #8a8070,
+  Wrap: true
+);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 520);
+
+    #Title {
+      Label #PlotCreatorTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Top: 14, Left: 18, Right: 18, Bottom: 18);
+
+      Label #StepHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 12);
+      }
+
+      Label #DetailHint {
+        Style: (...@HintStyle, TextColor: #a89878);
+        Text: "";
+        Anchor: (Bottom: 14);
+      }
+
+      $C.@TextField #DisplayNameField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+      }
+
+      $C.@TextField #DescriptionField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+      }
+
+      $C.@TextField #ConstructionIdField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+      }
+
+      $C.@TextField #PrefabNameField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+      }
+
+      $C.@TextField #TagsField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+      }
+
+      $C.@DropdownBox #VariantOfDropdown {
+        Anchor: (Bottom: 10, Height: $C.@DropdownBoxHeight);
+      }
+
+      Label #GoldCostLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@TextField #GoldCostField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+      }
+
+      Label #SelfBuildDaysLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@TextField #SelfBuildDaysField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+      }
+
+      Group #SaveEmptySpacesRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+
+        $C.@CheckBox #SaveEmptySpacesToggle {}
+
+        Label #SaveEmptySpacesLabel {
+          Text: "";
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+          Anchor: (Left: 11);
+        }
+      }
+
+      Label #SaveEmptySpacesHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+      }
+
+      Group #TouristDestinationRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+
+        $C.@CheckBox #TouristDestinationToggle {}
+
+        Label #TouristDestinationLabel {
+          Text: "";
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+          Anchor: (Left: 11);
+        }
+      }
+
+      Label #TouristDestinationHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+      }
+
+      Group #PlotTokenLockedRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+        Visible: false;
+
+        $C.@CheckBox #PlotTokenLockedToggle {}
+
+        Label #PlotTokenLockedLabel {
+          Text: "";
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+          Anchor: (Left: 11);
+        }
+      }
+
+      Label #PlotTokenLockedHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+        Visible: false;
+      }
+
+      Label #AssemblySectionsLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@TextField #AssemblySectionsField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+      }
+
+      $C.@TextButton #OpenMaterialsButton {
+        Anchor: (Bottom: 12, Height: 40);
+        Text: "";
+        Visible: false;
+      }
+
+      $C.@DropdownBox #KindDropdown {
+        Anchor: (Bottom: 10, Height: $C.@DropdownBoxHeight);
+      }
+
+      Label #ReviewSummary {
+        Style: (...@HintStyle, TextColor: #e8dcc8);
+        Text: "";
+        Anchor: (Bottom: 14);
+        Visible: false;
+      }
+
+      Group #ButtonRow {
+        LayoutMode: Left;
+        Anchor: (Top: 8);
+
+        $C.@TextButton #BackButton {
+          Anchor: (Right: 8, Height: 40, Width: 110);
+          Text: "";
+        }
+
+        $C.@TextButton #NextButton {
+          FlexWeight: 1;
+          Anchor: (Right: 8, Height: 40);
+          Text: "";
+        }
+
+        $C.@CancelTextButton #CancelButton {
+          Anchor: (Height: 40, Width: 110);
+          Text: "";
+        }
+      }
+    }
+  }
+}

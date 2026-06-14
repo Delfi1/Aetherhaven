@@ -42,6 +42,14 @@ aetherhaven.ui.production.err.inventoryFull=Your inventory is too full to take t
 aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
 aetherhaven.ui.production.unlockButton=Unlocks
 aetherhaven.ui.production.unlockTooltip=View and purchase locked workplace outputs for this building.
+aetherhaven.ui.production.pickTooltip=Choose what this line makes
+aetherhaven.ui.production.collectAllButton=Collect all
+aetherhaven.ui.production.collectAllTooltip=Take everything stored in every line
+
+aetherhaven.ui.materialPicker.title=Choose output
+aetherhaven.ui.materialPicker.intro=Pick one of your unlocked outputs for this line.
+aetherhaven.ui.materialPicker.back=Back
+aetherhaven.ui.materialPicker.backTooltip=Return to workplace stores
 
 aetherhaven.ui.productionUnlocks.title=Workplace unlocks
 aetherhaven.ui.productionUnlocks.intro=Select an output below to see its name and requirements in the panel. Hover an icon for held vs. needed counts. When you meet the item and gold totals, click a locked output to unlock it.

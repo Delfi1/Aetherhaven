@@ -20,7 +20,13 @@ public final class UnidentifiedJewelry {
 
     @Nonnull
     public static ItemStack rollStack(@Nonnull ThreadLocalRandom random) {
-        String[] ids = allJewelryItemIds();
+        return rollEnchantedStack(random);
+    }
+
+    /** Random gem jewelry with rolled traits, unappraised. */
+    @Nonnull
+    public static ItemStack rollEnchantedStack(@Nonnull ThreadLocalRandom random) {
+        String[] ids = allEnchantedJewelryItemIds();
         if (ids.length == 0) {
             return ItemStack.EMPTY;
         }
@@ -30,7 +36,7 @@ public final class UnidentifiedJewelry {
     }
 
     @Nonnull
-    private static String[] allJewelryItemIds() {
+    private static String[] allEnchantedJewelryItemIds() {
         String[] c = cachedIds;
         if (c != null) {
             return c;
@@ -42,7 +48,7 @@ public final class UnidentifiedJewelry {
             }
             List<String> list = new ObjectArrayList<>();
             for (String id : Item.getAssetMap().getAssetMap().keySet()) {
-                if (JewelryItemIds.isJewelry(id)) {
+                if (JewelryPieceKind.isEnchanted(id)) {
                     list.add(id);
                 }
             }

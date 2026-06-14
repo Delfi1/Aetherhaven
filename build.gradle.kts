@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.hexvane"
-version = "1.7.0"
+version = "2.0.0"
 val javaVersion = 25
 
 repositories {
@@ -17,43 +17,88 @@ repositories {
     }
 }
 
-val dynamicTooltipsLib = "curse.maven:dynamictooltipslib-1459711:7939479"
+/** Jars merged into the published mod only (not the full dev {@code runtimeClasspath}). */
+val modEmbed: Configuration by configurations.creating {
+    isCanBeResolved = true
+    isCanBeConsumed = false
+}
 
 dependencies {
     // Core parser only. flexmark-all also embeds PDF/HTML converters (iText, OpenHTML) with tens of
     // thousands of extra classes that trigger CurseForge manual security review on upload.
-    implementation("com.vladsch.flexmark:flexmark:0.64.8")
-    implementation("com.google.code.gson:gson:2.11.0")
+    val flexmark = "com.vladsch.flexmark:flexmark:0.64.8"
+    val gson = "com.google.code.gson:gson:2.11.0"
+    implementation(flexmark)
+    implementation(gson)
+    modEmbed(flexmark)
+    modEmbed(gson)
     compileOnly(libs.jetbrains.annotations)
     compileOnly(libs.jspecify)
-    compileOnly(dynamicTooltipsLib)
-    runtimeOnly(dynamicTooltipsLib)
-
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 /**
  * Hytale loads each plugin from an isolated classloader with only the plugin jar (no Gradle lib folder).
- * Embed runtime dependency jars (flexmark core, Gson, optional Curse libs) so classes like
- * {@code com.vladsch.flexmark.util.ast.Node} resolve at runtime.
+ * Embed flexmark core + Gson via [modEmbed]. Do not use [configurations.runtimeClasspath] here: hytale-mod
+ * adds HytaleServer.jar (~120MB) to runtimeClasspath for runServer, which must not ship in the release jar.
  */
 tasks.named<Jar>("jar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from({
-        configurations.runtimeClasspath.get()
+        modEmbed
             .filter { it.isFile && it.extension.equals("jar", ignoreCase = true) }
-            .filter { jar ->
-                val n = jar.name.lowercase()
-                // Belt-and-suspenders: never merge DTL into the fat jar even if it appears on runtimeClasspath.
-                !n.contains("dynamictooltip") && !n.contains("dynamictooltips")
-            }
             .map { zipTree(it) }
     }) {
         exclude("META-INF/INDEX.LIST")
         exclude("META-INF/*.SF")
         exclude("META-INF/*.DSA")
         exclude("META-INF/*.RSA")
+    }
+    // Mod Common/ + Server/ + manifest.json must win over anything merged from dependency jars.
+    from(sourceSets.main.get().output.resourcesDir)
+}
+
+tasks.register("verifyReleaseJar") {
+    group = "verification"
+    description = "Fails if the release jar accidentally bundles HytaleServer or other blocked packages."
+    dependsOn(tasks.jar)
+    val releaseJar = tasks.named<Jar>("jar").flatMap { it.archiveFile }
+    inputs.file(releaseJar)
+    doLast {
+        val jarFile = releaseJar.get().asFile
+        if (!jarFile.isFile) {
+            error("Missing release jar: ${jarFile.absolutePath}")
+        }
+        val blocked =
+            listOf(
+                "com/hypixel/hytale/Main.class",
+                "org/bouncycastle/",
+                "native/win-x64/quiche.dll",
+            )
+        val jarExe =
+            File(System.getProperty("java.home"), "bin/jar.exe").takeIf { it.isFile }
+                ?: File(System.getProperty("java.home"), "bin/jar").takeIf { it.isFile }
+        if (jarExe == null) {
+            logger.lifecycle("verifyReleaseJar: jar tool not found; skipped content checks")
+            return@doLast
+        }
+        val listing =
+            ProcessBuilder(jarExe.absolutePath, "tf", jarFile.absolutePath)
+                .redirectErrorStream(true)
+                .start()
+                .inputStream
+                .bufferedReader()
+                .readText()
+        for (pattern in blocked) {
+            if (listing.contains(pattern)) {
+                error(
+                    "Release jar ${jarFile.name} contains $pattern — do not embed HytaleServer on modEmbed/runtimeClasspath merge"
+                )
+            }
+        }
+        val sizeMb = jarFile.length() / (1024.0 * 1024.0)
+        logger.lifecycle("verifyReleaseJar: ${jarFile.name} OK (${"%.1f".format(sizeMb)} MB, no HytaleServer)")
     }
 }
 
@@ -280,6 +325,9 @@ afterEvaluate {
         return@afterEvaluate
     }
     val runServer = runServerTask as JavaExec
+    // hytale-mod 0.7.x always adds an empty jvmArg when HytaleServer.aot is missing; on Windows Gradle's
+    // JavaExec then fails with "Could not find or load main class" (empty ClassNotFoundException).
+    runServer.jvmArgs = runServer.jvmArgs.filter { it.isNotBlank() }
     runServer.finalizedBy(syncAssets)
     logger.lifecycle("✅ Task '${runServer.name}' finalized by syncAssets (copy build resources back to src on exit).")
 
@@ -291,6 +339,7 @@ afterEvaluate {
         mainClass = runServer.mainClass
         mainModule = runServer.mainModule
         modularity.inferModulePath = runServer.modularity.inferModulePath
+        jvmArgs = runServer.jvmArgs.filter { it.isNotBlank() }
         workingDir = runServer.workingDir
         jvmArgs = runServer.jvmArgs
         args = runServer.args

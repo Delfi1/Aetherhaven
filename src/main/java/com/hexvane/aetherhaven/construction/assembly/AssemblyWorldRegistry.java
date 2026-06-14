@@ -10,25 +10,25 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** In-memory assembly jobs keyed by plot id (per world), each with incremental frontier state. */
+/** In-memory assembly jobs keyed by plot id (per world), each with phase and optional frontier state. */
 public final class AssemblyWorldRegistry {
     private static final Map<String, ConcurrentHashMap<UUID, AssemblyEntry>> BY_WORLD = new ConcurrentHashMap<>();
 
-    private record AssemblyEntry(@Nonnull PlotAssemblyJob job, @Nonnull PlotAssemblyFrontierRuntime runtime) {}
+    private record AssemblyEntry(
+        @Nonnull PlotAssemblyJob job,
+        @Nonnull PlotAssemblyPhase phase,
+        @Nullable PlotAssemblyFrontierRuntime runtime,
+        @Nullable PlotAssemblyClearingRuntime clearingRuntime
+    ) {}
 
     private AssemblyWorldRegistry() {}
 
-    /**
-     * {@link IPrefabBuffer#release()} on cached prefab accessors is not idempotent (internal duplicate is nulled).
-     * Overlapping cleanup (e.g. unload vs tick) or any double dispose must not crash the world thread.
-     */
     /** Releases a cached prefab accessor; safe when already released or shared across jobs. */
     public static void releasePrefabBufferQuietly(@Nullable IPrefabBuffer buffer) {
         if (buffer == null) {
             return;
         }
         try {
-            buffer.release();
         } catch (NullPointerException ignored) {
             // Already released
         }
@@ -47,9 +47,11 @@ public final class AssemblyWorldRegistry {
         @Nonnull World world,
         @Nonnull UUID plotId,
         @Nonnull PlotAssemblyJob job,
-        @Nonnull PlotAssemblyFrontierRuntime runtime
+        @Nonnull PlotAssemblyPhase phase,
+        @Nullable PlotAssemblyFrontierRuntime runtime,
+        @Nullable PlotAssemblyClearingRuntime clearingRuntime
     ) {
-        AssemblyEntry previous = mapFor(world).put(plotId, new AssemblyEntry(job, runtime));
+        AssemblyEntry previous = mapFor(world).put(plotId, new AssemblyEntry(job, phase, runtime, clearingRuntime));
         if (previous != null) {
             releaseJobBufferQuietly(previous.job().buffer());
         }
@@ -61,10 +63,35 @@ public final class AssemblyWorldRegistry {
         return e != null ? e.job() : null;
     }
 
+    @Nonnull
+    public static PlotAssemblyPhase phase(@Nonnull World world, @Nonnull UUID plotId) {
+        AssemblyEntry e = mapFor(world).get(plotId);
+        return e != null ? e.phase() : PlotAssemblyPhase.PLACING;
+    }
+
     @Nullable
     public static PlotAssemblyFrontierRuntime frontierRuntime(@Nonnull World world, @Nonnull UUID plotId) {
         AssemblyEntry e = mapFor(world).get(plotId);
         return e != null ? e.runtime() : null;
+    }
+
+    @Nullable
+    public static PlotAssemblyClearingRuntime clearingRuntime(@Nonnull World world, @Nonnull UUID plotId) {
+        AssemblyEntry e = mapFor(world).get(plotId);
+        return e != null ? e.clearingRuntime() : null;
+    }
+
+    public static void transitionToPlacing(
+        @Nonnull World world,
+        @Nonnull UUID plotId,
+        @Nonnull PlotAssemblyFrontierRuntime runtime
+    ) {
+        ConcurrentHashMap<UUID, AssemblyEntry> map = mapFor(world);
+        AssemblyEntry e = map.get(plotId);
+        if (e == null) {
+            return;
+        }
+        map.put(plotId, new AssemblyEntry(e.job(), PlotAssemblyPhase.PLACING, runtime, null));
     }
 
     public static void remove(@Nonnull World world, @Nonnull UUID plotId) {
@@ -81,6 +108,15 @@ public final class AssemblyWorldRegistry {
             out.add(e.job());
         }
         return out;
+    }
+
+    public static boolean anyJobInPhase(@Nonnull World world, @Nonnull PlotAssemblyPhase phase) {
+        for (AssemblyEntry e : mapFor(world).values()) {
+            if (e.phase() == phase) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void unloadWorld(@Nonnull String worldName) {

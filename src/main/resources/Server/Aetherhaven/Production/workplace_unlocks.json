@@ -11,6 +11,7 @@
     { "workplace": "plot_miners_hut", "itemId": "Ore_Prisma", "rarityTier": 8, "defaultUnlocked": false, "resourceCost": 25, "ticks": 600, "maxStorage": 25 },
     { "workplace": "plot_miners_hut", "itemId": "Ore_Onyxium", "rarityTier": 9, "defaultUnlocked": false, "resourceCost": 25, "ticks": 600, "maxStorage": 25 },
 
+    { "workplace": "plot_lumbermill", "itemId": "Ingredient_Fibre", "rarityTier": 0, "defaultUnlocked": true, "resourceCost": 25, "ticks": 50, "maxStorage": 100 },
     { "workplace": "plot_lumbermill", "itemId": "Wood_Amber_Trunk", "rarityTier": 3, "defaultUnlocked": false, "resourceCost": 25, "ticks": 200, "maxStorage": 100 },
     { "workplace": "plot_lumbermill", "itemId": "Wood_Apple_Trunk", "rarityTier": 0, "defaultUnlocked": true, "resourceCost": 25, "ticks": 200, "maxStorage": 100 },
     { "workplace": "plot_lumbermill", "itemId": "Wood_Ash_Trunk", "rarityTier": 0, "defaultUnlocked": true, "resourceCost": 25, "ticks": 200, "maxStorage": 100 },

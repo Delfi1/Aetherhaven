@@ -1,8 +1,11 @@
 package com.hexvane.aetherhaven.config;
 
+import com.hexvane.aetherhaven.floatinggift.FloatingGiftType;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import java.util.concurrent.ThreadLocalRandom;
+import javax.annotation.Nonnull;
 
 public final class FloatingGiftConfig {
     /**
@@ -58,13 +61,19 @@ public final class FloatingGiftConfig {
             .add()
             .append(new KeyedCodec<>("MaxActivePerWorld", Codec.INTEGER), (o, v) -> o.maxActivePerWorld = v, o -> o.maxActivePerWorld)
             .add()
+            .append(new KeyedCodec<>("TypeWeightRegular", Codec.INTEGER), (o, v) -> o.typeWeightRegular = v, o -> o.typeWeightRegular)
+            .add()
+            .append(new KeyedCodec<>("TypeWeightGreen", Codec.INTEGER), (o, v) -> o.typeWeightGreen = v, o -> o.typeWeightGreen)
+            .add()
+            .append(new KeyedCodec<>("TypeWeightRed", Codec.INTEGER), (o, v) -> o.typeWeightRed = v, o -> o.typeWeightRed)
+            .add()
             .build();
 
     private boolean enabled = true;
     private double spawnRadiusBlocks = 100.0;
     private double spawnHeightOffsetBlocks = 15.0;
-    private double spawnIntervalDaysMin = 0.1;
-    private double spawnIntervalDaysMax = 0.3;
+    private double spawnIntervalDaysMin = 0.4;
+    private double spawnIntervalDaysMax = 0.8;
     private double moveSpeedBlocksPerSec = 1.3;
     private double fallSpeedBlocksPerSec = 8.5;
     private double maxLifeSeconds = 240.0;
@@ -73,6 +82,9 @@ public final class FloatingGiftConfig {
     private double popHoldLatchSeconds = 1.05;
     private double projectileHitRadiusBlocks = 1.4;
     private int maxActivePerWorld = 8;
+    private int typeWeightRegular = 40;
+    private int typeWeightGreen = 10;
+    private int typeWeightRed = 50;
 
     public boolean isEnabled() {
         return enabled;
@@ -131,6 +143,38 @@ public final class FloatingGiftConfig {
 
     public int getMaxActivePerWorld() {
         return Math.max(1, maxActivePerWorld);
+    }
+
+    public int getTypeWeightRegular() {
+        return Math.max(0, typeWeightRegular);
+    }
+
+    public int getTypeWeightGreen() {
+        return Math.max(0, typeWeightGreen);
+    }
+
+    public int getTypeWeightRed() {
+        return Math.max(0, typeWeightRed);
+    }
+
+    @Nonnull
+    public FloatingGiftType rollType(@Nonnull ThreadLocalRandom rnd) {
+        int regular = getTypeWeightRegular();
+        int green = getTypeWeightGreen();
+        int red = getTypeWeightRed();
+        int total = regular + green + red;
+        if (total <= 0) {
+            return FloatingGiftType.REGULAR;
+        }
+        int roll = rnd.nextInt(total);
+        if (roll < regular) {
+            return FloatingGiftType.REGULAR;
+        }
+        roll -= regular;
+        if (roll < green) {
+            return FloatingGiftType.GREEN;
+        }
+        return FloatingGiftType.RED;
     }
 
     /** Town Journal: toggle balloons and the in game days between spawn rolls range. */

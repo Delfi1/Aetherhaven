@@ -1,0 +1,74 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Quest_Board.name",
+    "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Quest_Board.description"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Furniture.Signs"
+  ],
+  "Set": "Aetherhaven",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Quest_Board.png",
+  "BlockType": {
+    "BlockParticleSetId": "Wood",
+    "BlockSoundSetId": "Wood",
+    "CustomModel": "Blocks/Quest_Board.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Quest_Board.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "HitboxType": "Quest_Board",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "ParticleColor": "#8b7355",
+    "PlacementSettings": {
+      "RotationMode": "BlockNormal"
+    },
+    "VariantRotation": "NESW",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AetherhavenQuestBoard"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.3,
+    "Rotation": [
+      349,
+      136,
+      354
+    ],
+    "Translation": [
+      6,
+      -26
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "MaxStack": 25
+}

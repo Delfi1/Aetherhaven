@@ -1,0 +1,43 @@
+{
+  "RenderMode": "BlendAdd",
+  "ParticleRotationInfluence": "Billboard",
+  "LinearFiltering": true,
+  "LightInfluence": 0.2,
+  "MaxConcurrentParticles": 3,
+  "SpawnBurst": true,
+  "TotalParticles": { "Min": 1, "Max": 2 },
+  "ParticleLifeSpan": { "Min": 0.9, "Max": 1.4 },
+  "EmitOffset": {
+    "X": { "Min": -0.08, "Max": 0.08 },
+    "Y": { "Min": -0.05, "Max": 0.1 },
+    "Z": { "Min": 0.15, "Max": 0.35 }
+  },
+  "InitialVelocity": {
+    "Speed": { "Min": 0.28, "Max": 0.5 },
+    "Yaw": { "Min": -25, "Max": 25 },
+    "Pitch": { "Min": 84, "Max": 92 }
+  },
+  "Attractors": [
+    {
+      "LinearAcceleration": { "X": 0, "Y": 0.035, "Z": 0 },
+      "DampingMultiplier": { "X": 0.995, "Y": 0.995, "Z": 0.995 }
+    }
+  ],
+  "Particle": {
+    "Texture": "Particles/musical-note-2.png",
+    "FrameSize": { "Width": 64, "Height": 64 },
+    "ScaleRatioConstraint": "OneToOne",
+    "UVOption": "RandomFlipU",
+    "Animation": {
+      "0": { "Opacity": 0.85, "Color": "#ffd27a", "Scale": { "X": { "Min": 0.2, "Max": 0.26 } } },
+      "18": { "Opacity": 0.88 },
+      "65": { "Opacity": 0.65, "Color": "#ff7ab8" },
+      "100": { "Opacity": 0, "Color": "#9a7aff", "Scale": { "X": { "Min": 0.28, "Max": 0.36 } } }
+    },
+    "InitialAnimationFrame": {
+      "Opacity": 0.9,
+      "Color": "#ffd27a",
+      "Scale": { "X": { "Min": 0.18, "Max": 0.24 } }
+    }
+  }
+}

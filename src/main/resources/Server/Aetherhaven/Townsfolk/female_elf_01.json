@@ -1,0 +1,17 @@
+{
+  "id": "female_elf_01",
+  "displayName": "Aelindra Dawnsong",
+  "gender": "female",
+  "race": "sylvian",
+  "modelAssetId": "Female_Elf_01",
+  "personalityIds": [
+    "gardener",
+    "cheerful",
+    "shy"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

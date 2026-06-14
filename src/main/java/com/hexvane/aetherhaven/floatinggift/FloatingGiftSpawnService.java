@@ -10,8 +10,8 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.util.MathUtil;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import org.joml.Vector3d;
+import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
@@ -50,7 +50,12 @@ public final class FloatingGiftSpawnService {
     private FloatingGiftSpawnService() {}
 
     public static boolean isModelAssetRegistered() {
-        return ModelAsset.getAssetMap().getAsset(MODEL_ID) != null;
+        for (FloatingGiftType type : FloatingGiftType.values()) {
+            if (ModelAsset.getAssetMap().getAsset(type.modelAssetId()) == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -67,8 +72,8 @@ public final class FloatingGiftSpawnService {
         if (!FloatingGiftSpawnSchedule.tryBeginDeferredSpawn(playerUuid)) {
             return;
         }
-        Vector3d o = origin.clone();
-        Vector3d t = target.clone();
+        Vector3d o = new Vector3d(origin);
+        Vector3d t = new Vector3d(target);
         world.execute(() -> {
             try {
                 if (!world.isAlive()) {
@@ -169,16 +174,18 @@ public final class FloatingGiftSpawnService {
             dirHz = hdz / lenH;
         }
         Vector3d dirFlat = new Vector3d(dirHx, 0.0, dirHz);
-        Vector3f rot = toYawPitch(dirFlat);
+        Rotation3f rot = toYawPitch(dirFlat);
 
-        ModelAsset asset = ModelAsset.getAssetMap().getAsset(MODEL_ID);
+        FloatingGiftType giftType = cfg.getFloatingGift().rollType(rnd);
+        String modelAssetId = giftType.modelAssetId();
+        ModelAsset asset = ModelAsset.getAssetMap().getAsset(modelAssetId);
         if (asset == null) {
             LOGGER
                 .atWarning()
                 .log(
                     "Floating gift spawn skipped: model asset '%s' not loaded — add Server/Models/%s.json and register mesh under Items/... (MISC-only paths fail validation).",
-                    MODEL_ID,
-                    MODEL_ID
+                    modelAssetId,
+                    modelAssetId
                 );
             return null;
         }
@@ -189,13 +196,14 @@ public final class FloatingGiftSpawnService {
         holder.addComponent(ModelComponent.getComponentType(), new ModelComponent(model));
         holder.addComponent(
             PersistentModel.getComponentType(),
-            new PersistentModel(new Model.ModelReference(MODEL_ID, model.getScale(), model.getRandomAttachmentIds(), false))
+            new PersistentModel(new Model.ModelReference(modelAssetId, model.getScale(), model.getRandomAttachmentIds(), false))
         );
         holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(Box.horizontallyCentered(1.0, 1.5, 1.0)));
         holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
         holder.addComponent(ActiveAnimationComponent.getComponentType(), new ActiveAnimationComponent());
         holder.addComponent(Velocity.getComponentType(), new Velocity());
         FloatingGiftComponent gift = new FloatingGiftComponent();
+        gift.setGiftType(giftType);
         gift.setState(FloatingGiftState.FLOATING);
         gift.setDirX(dirHx);
         gift.setDirY(0.0);
@@ -209,10 +217,10 @@ public final class FloatingGiftSpawnService {
     }
 
     @Nonnull
-    public static Vector3f toYawPitch(@Nonnull Vector3d dir) {
+    public static Rotation3f toYawPitch(@Nonnull Vector3d dir) {
         double ny = Math.max(-1.0, Math.min(1.0, dir.y));
         double pitch = Math.asin(ny);
         double yaw = Math.atan2(-dir.x, -dir.z);
-        return new Vector3f((float) pitch, (float) yaw, 0.0f);
+        return new Rotation3f((float) pitch, (float) yaw, 0.0f);
     }
 }

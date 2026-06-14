@@ -1,0 +1,20 @@
+{
+  "id": "bitter",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.bitter.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.bitter.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.bitter.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.bitter.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.bitter.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "SIT": 1.2,
+    "EAT": 1.1,
+    "FUN": 0.4,
+    "WORK": 0.8
+  },
+  "preferredScheduleLocations": [
+    "home",
+    "inn"
+  ]
+}

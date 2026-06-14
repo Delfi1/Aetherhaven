@@ -15,8 +15,8 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
@@ -40,8 +40,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPage<GaiaStatueRevivePage.PageData> {
-    private static final String ROWS = "#Rows";
-    private static final int MAX_ROWS = 16;
+    private static final String ROWS = "#ListScroll #Rows";
 
     private final Ref<ChunkStore> statueBlockRef;
     private final Vector3i statueBlockWorldPos;
@@ -113,8 +112,7 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
         commandBuilder.clear(ROWS);
 
         List<ResidentNpcRecord> candidates = ResidentRegistryService.revivalCandidatesMerged(town, store);
-        int n = Math.min(candidates.size(), MAX_ROWS);
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < candidates.size(); i++) {
             ResidentNpcRecord r = candidates.get(i);
             String roleId = r.getNpcRoleId();
             Ref<EntityStore> ent = store.getExternalData().getRefFromUUID(r.getLastEntityUuid());

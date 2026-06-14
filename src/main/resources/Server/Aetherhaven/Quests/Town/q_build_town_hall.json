@@ -42,7 +42,9 @@
   ],
   "lifecycle": {
     "onStart": [],
-    "onComplete": [],
+    "onComplete": [
+      { "effect": "refresh_inn_pool", "params": {} }
+    ],
     "onAbandon": []
   },
   "repeat": { "mode": "none" }

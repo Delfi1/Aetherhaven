@@ -1,0 +1,17 @@
+{
+  "id": "male_human_10",
+  "displayName": "Hester Wold",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Male_Human_10",
+  "personalityIds": [
+    "gardener",
+    "cheerful",
+    "foodie"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

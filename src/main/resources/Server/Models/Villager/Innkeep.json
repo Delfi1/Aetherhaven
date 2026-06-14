@@ -1,5 +1,5 @@
 {
-  "Parent": "Player",
+  "Parent": "Aetherhaven_Human",
   "DefaultAttachments": [
     {
       "Model": "Cosmetics/Underwears/Underwear.blockymodel",
@@ -15,7 +15,7 @@
     },
     {
       "Model": "Characters/Body_Attachments/Ears/Ears1.blockymodel",
-      "Texture": "Characters/Body_Attachments/Ears/Ears.png",
+      "Texture": "Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png",
       "GradientSet": "Skin",
       "GradientId": "01"
     },

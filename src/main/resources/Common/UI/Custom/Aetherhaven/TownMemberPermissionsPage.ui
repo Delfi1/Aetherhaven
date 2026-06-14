@@ -160,6 +160,16 @@ $C.@PageOverlay {
                 Anchor: (Right: 30, Left: 11);
               }
             }
+            Group #MemberPermUseShopSpots {
+              LayoutMode: Left;
+              Anchor: (Bottom: 6);
+              $C.@CheckBox #PermCbUseShopSpots {}
+              Label #CapUseShopSpots {
+                Text: "";
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+                Anchor: (Right: 30, Left: 11);
+              }
+            }
           }
         }
       }

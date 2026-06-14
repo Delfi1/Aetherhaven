@@ -10,8 +10,8 @@ import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Transform;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
@@ -46,25 +46,23 @@ public final class PathToolInteractions {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull ComponentAccessor<EntityStore> accessor
     ) {
-        Player player = accessor.getComponent(playerRef, Player.getComponentType());
-        return player != null && player.hasPermission(AetherhavenConstants.PERMISSION_PATH_TOOL);
+        PlayerRef pr = accessor.getComponent(playerRef, PlayerRef.getComponentType());
+        return pr != null && pr.hasPermission(AetherhavenConstants.PERMISSION_PATH_TOOL);
     }
 
     public static void ensureState(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        if (commandBuffer.getComponent(playerRef, PathToolPlayerComponent.getComponentType()) == null) {
-            commandBuffer.addComponent(playerRef, PathToolPlayerComponent.getComponentType(), new PathToolPlayerComponent());
-        }
+        PathToolPlayerComponent.ensurePresent(playerRef, commandBuffer);
     }
 
     @Nonnull
     public static Vector3d blockTopCenter(@Nonnull Vector3i b, double yOffsetBlocks) {
         return new Vector3d(
-            b.getX() + 0.5,
-            b.getY() + 0.5 + yOffsetBlocks,
-            b.getZ() + 0.5
+            b.x() + 0.5,
+            b.y() + 0.5 + yOffsetBlocks,
+            b.z() + 0.5
         );
     }
 
@@ -88,6 +86,11 @@ public final class PathToolInteractions {
         ensureState(playerRef, commandBuffer);
         PathToolPlayerComponent st = commandBuffer.getComponent(playerRef, PathToolPlayerComponent.getComponentType());
         if (st == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        if (st.getGizmoMode() == PathToolGizmoMode.Remove || st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
+            wrongModeToast(playerRef, commandBuffer);
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -161,10 +164,27 @@ public final class PathToolInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        double yo = plugin.getConfig().get().getPathToolNodeBlockYOffset();
         Transform look = TargetUtil.getLook(playerRef, store);
         Vector3d origin = look.getPosition();
         Vector3d dir = look.getDirection();
+        if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
+            PathToolRegistry reg = AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
+            @Nullable
+            UUID picked = PathToolRemovePick.pickPathId(origin, dir, PICK_RAY_MAX, reg.all());
+            if (picked != null) {
+                st.setSelectedRemovePathId(picked);
+                send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.removeSelected"));
+            } else if (!reg.all().isEmpty()) {
+                send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.removeNoHit"));
+            }
+            return;
+        }
+        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
+            wrongModeToast(playerRef, commandBuffer);
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        double yo = plugin.getConfig().get().getPathToolNodeBlockYOffset();
         @Nullable
         PathToolNode looked = PathToolRayPick.pickNode(
             origin,
@@ -229,6 +249,19 @@ public final class PathToolInteractions {
             case Translate -> "aetherhaven_items.aetherhaven.pathTool.toastModeTranslate";
             case Rotate -> "aetherhaven_items.aetherhaven.pathTool.toastModeRotate";
             case Commit -> "aetherhaven_items.aetherhaven.pathTool.toastModeCommit";
+            case Remove -> "aetherhaven_items.aetherhaven.pathTool.toastModeRemove";
+            case StyleDesigner -> "aetherhaven_items.aetherhaven.pathTool.toastModeStyleDesigner";
+        };
+    }
+
+    @Nonnull
+    private static String modeCycleMessageId(@Nonnull PathToolGizmoMode m) {
+        return switch (m) {
+            case Translate -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToTranslate";
+            case Rotate -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToRotate";
+            case Commit -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToCommit";
+            case Remove -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToRemove";
+            case StyleDesigner -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToStyleDesigner";
         };
     }
 
@@ -256,13 +289,7 @@ public final class PathToolInteractions {
         send(
             playerRef,
             commandBuffer,
-            Message.translation(
-                switch (st.getGizmoMode()) {
-                    case Translate -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToTranslate";
-                    case Rotate -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToRotate";
-                    case Commit -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToCommit";
-                }
-            )
+            Message.translation(modeCycleMessageId(st.getGizmoMode()))
         );
         pathToast(playerRef, commandBuffer, modeToastId(st.getGizmoMode()));
     }
@@ -281,6 +308,19 @@ public final class PathToolInteractions {
         if (st == null) {
             context.getState().state = InteractionState.Failed;
             return;
+        }
+        Store<EntityStore> store = commandBuffer.getStore();
+        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
+            @Nullable
+            PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+            if (pr != null && PathToolStyleUi.isActivelyEditing(playerRef, store)) {
+                if (PathToolStyleUi.tryFinishEditing(playerRef, store, pr)) {
+                    pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastStyleSaved");
+                } else {
+                    context.getState().state = InteractionState.Failed;
+                }
+                return;
+            }
         }
         st.cyclePathWidth();
         send(
@@ -344,6 +384,7 @@ public final class PathToolInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
+        Store<EntityStore> store = commandBuffer.getStore();
         ensureState(playerRef, commandBuffer);
         PathToolPlayerComponent st = commandBuffer.getComponent(playerRef, PathToolPlayerComponent.getComponentType());
         if (st == null) {
@@ -351,6 +392,18 @@ public final class PathToolInteractions {
             return;
         }
         st.clampPathStyleIndex(plugin.getConfig().get().getPathToolStyleDefinitions().size());
+        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
+            @Nullable
+            PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+            if (pr != null) {
+                PathToolStyleUi.handleUse(playerRef, store, pr);
+            }
+            return;
+        }
+        if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
+            handleRemovePath(playerRef, commandBuffer, world, plugin, st, context);
+            return;
+        }
         if (st.getGizmoMode() == PathToolGizmoMode.Translate) {
             send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.useInTranslateMode"));
             context.getState().state = InteractionState.Failed;
@@ -416,7 +469,8 @@ public final class PathToolInteractions {
             world,
             plugin.getConfig().get(),
             plan,
-            st.getPathStyleIndex()
+            st.getPathStyleIndex(),
+            st.getPathWidthBlocks()
         );
         if (rec == null) {
             send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.cementFail"));
@@ -433,9 +487,53 @@ public final class PathToolInteractions {
         send(
             playerRef,
             commandBuffer,
-            Message.translation("aetherhaven_items.aetherhaven.pathTool.cemented").param("id", rec.id)
+            Message.translation("aetherhaven_items.aetherhaven.pathTool.cemented")
         );
         pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastCemented");
+    }
+
+    private static void handleRemovePath(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PathToolPlayerComponent st,
+        @Nonnull InteractionContext context
+    ) {
+        UUID targetId = st.getSelectedRemovePathId();
+        if (targetId == null) {
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.removeNeedSelection"));
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        PathToolRegistry reg = AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
+        @Nullable
+        PathCommitRecord rec = reg.remove(targetId);
+        if (rec == null) {
+            st.setSelectedRemovePathId(null);
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.removeUnknown"));
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        int cells = PathToolRestoreService.restoreAndRemove(world, rec);
+        AetherhavenWorldRegistries.getOrCreatePathNavGraphService(world).rebuildAll(reg, plugin.getConfig().get());
+        PathToolPersistence.save(world, plugin, reg);
+        st.setSelectedRemovePathId(null);
+        send(
+            playerRef,
+            commandBuffer,
+            Message
+                .translation("aetherhaven_items.aetherhaven.pathTool.removedPath")
+                .param("cells", String.valueOf(cells))
+        );
+        pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastRemovedPath");
+    }
+
+    private static void wrongModeToast(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.wrongMode");
     }
 
     @Nullable
@@ -456,8 +554,8 @@ public final class PathToolInteractions {
                 Vector3d pick = samples.get(pi).position;
                 TownRecord town = tm.findTownContainingBlock(
                     world.getName(),
-                    (int) Math.floor(pick.getX()),
-                    (int) Math.floor(pick.getZ())
+                    (int) Math.floor(pick.x()),
+                    (int) Math.floor(pick.z())
                 );
                 if (town != null) {
                     return town.getTownId().toString();
@@ -467,8 +565,8 @@ public final class PathToolInteractions {
             Vector3d pick = st.getNodes().get(0).getPosition();
             TownRecord town = tm.findTownContainingBlock(
                 world.getName(),
-                (int) Math.floor(pick.getX()),
-                (int) Math.floor(pick.getZ())
+                (int) Math.floor(pick.x()),
+                (int) Math.floor(pick.z())
             );
             if (town != null) {
                 return town.getTownId().toString();

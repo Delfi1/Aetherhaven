@@ -1,0 +1,10 @@
+{
+  "catalogRevision": 1,
+  "defaultGoldPrice": 5,
+  "defaultBatchSize": 1,
+  "_generatedBy": "scripts/find_missing_shop_prices.py",
+  "_generatedNote": "Items from shop_loot tables without an explicit entry in shop_prices.json. Each entry starts at defaultGoldPrice (5) with batchSize 1; adjust as needed, then copy entries into shop_prices.json.",
+  "_missingCount": 0,
+  "_lootTables": {},
+  "prices": {}
+}

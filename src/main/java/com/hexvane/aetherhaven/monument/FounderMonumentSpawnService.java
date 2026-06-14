@@ -8,15 +8,15 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import org.joml.Vector3d;
+import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.PlayerSkin;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.cosmetics.CosmeticsModule;
 import com.hypixel.hytale.server.core.entity.Frozen;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.modules.entity.component.DisplayNameComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -70,9 +70,17 @@ public final class FounderMonumentSpawnService {
             LOGGER.atWarning().withCause(e).log("Founder monument: failed to resolve skin attachments");
             return null;
         }
+        if (skinAttachments.length == 0) {
+            LOGGER.atWarning().log("Founder monument: skin resolved to no attachments");
+            return null;
+        }
         ModelAsset playerAsset = ModelAsset.getAssetMap().getAsset("Player");
         if (playerAsset == null) {
             return null;
+        }
+        String baseMesh = PlayerSkinModelExporter.findPlayerBodyModel(skin, cos.getRegistry());
+        if (baseMesh == null) {
+            baseMesh = playerAsset.getModel();
         }
         Model template = Model.createScaledModel(playerAsset, 1.0f, null, null, true);
         String stone = AetherhavenConstants.FOUNDER_MONUMENT_STATUE_TEXTURE;
@@ -83,7 +91,7 @@ public final class FounderMonumentSpawnService {
             template.getRandomAttachmentIds(),
             stoneAttachments,
             template.getBoundingBox(),
-            template.getModel(),
+            baseMesh,
             stone,
             null,
             null,
@@ -128,7 +136,7 @@ public final class FounderMonumentSpawnService {
         int blockZ,
         @Nonnull PlayerSkin skin,
         @Nonnull String displayNameForLabel,
-        @Nonnull Vector3f rotation
+        @Nonnull Rotation3f rotation
     ) {
         NPCPlugin npc = NPCPlugin.get();
         if (npc == null) {
@@ -167,8 +175,8 @@ public final class FounderMonumentSpawnService {
         store.ensureComponent(ref, Frozen.getComponentType());
         store.putComponent(
             ref,
-            DisplayNameComponent.getComponentType(),
-            new DisplayNameComponent(Message.raw(displayNameForLabel))
+            PersistentDisplayName.getComponentType(),
+            new PersistentDisplayName(Message.raw(displayNameForLabel))
         );
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         return uc != null ? uc.getUuid() : null;

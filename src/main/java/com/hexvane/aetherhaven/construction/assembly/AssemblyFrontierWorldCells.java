@@ -5,8 +5,8 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -47,9 +47,9 @@ public final class AssemblyFrontierWorldCells {
         List<PlotAssemblyJob> jobs = new ArrayList<>(AssemblyWorldRegistry.jobs(world));
         jobs.sort(Comparator.comparing(PlotAssemblyJob::plotId));
         ArrayList<Vector3i> frontierScratch = new ArrayList<>(256);
-        double ox = observerPos.getX();
-        double oy = observerPos.getY();
-        double oz = observerPos.getZ();
+        double ox = observerPos.x();
+        double oy = observerPos.y();
+        double oz = observerPos.z();
         for (PlotAssemblyJob job : jobs) {
             TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(job.plotId());
             if (town == null) {
@@ -57,6 +57,9 @@ public final class AssemblyFrontierWorldCells {
             }
             PlotInstance plot = town.findPlotById(job.plotId());
             if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
+                continue;
+            }
+            if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.PLACING) {
                 continue;
             }
             frontierScratch.clear();

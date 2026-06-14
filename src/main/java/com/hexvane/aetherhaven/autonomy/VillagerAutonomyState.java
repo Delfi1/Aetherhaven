@@ -1,12 +1,13 @@
 package com.hexvane.aetherhaven.autonomy;
 
+import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelSupport;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class VillagerAutonomyState implements Component<EntityStore> {
+public final class VillagerAutonomyState implements Component<EntityStore>, PathNavTravelSupport.TravelWaypoints {
     public static final int PHASE_IDLE = 0;
     public static final int PHASE_TRAVEL = 1;
     public static final int PHASE_USE = 2;
@@ -125,6 +126,9 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
     /** Doors opened by autonomy this trip; closed when the NPC passes through toward the leash. */
     @Nonnull
     private final ArrayList<int[]> pendingOpenDoors = new ArrayList<>();
+    private transient double travelSampleX = Double.NaN;
+    private transient double travelSampleZ = Double.NaN;
+    private transient int travelProgressStallTicks;
 
     public VillagerAutonomyState() {}
 
@@ -224,6 +228,50 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
         travelWaypointIndex = 0;
         travelWaypointStartedMs = 0L;
         travelWaypointStartedIndex = 0;
+        resetTravelProgressTracking();
+    }
+
+    @Override
+    public boolean hasTravelWaypoints() {
+        return !travelWaypoints.isEmpty() && travelWaypointIndex < travelWaypoints.size();
+    }
+
+    @Override
+    public boolean hasMoreTravelWaypoints() {
+        return travelWaypointIndex + 1 < travelWaypoints.size();
+    }
+
+    @Override
+    public double getTravelSampleX() {
+        return travelSampleX;
+    }
+
+    @Override
+    public double getTravelSampleZ() {
+        return travelSampleZ;
+    }
+
+    @Override
+    public int getTravelProgressStallTicks() {
+        return travelProgressStallTicks;
+    }
+
+    @Override
+    public void setTravelSamplePosition(double x, double z) {
+        travelSampleX = x;
+        travelSampleZ = z;
+    }
+
+    @Override
+    public void setTravelProgressStallTicks(int ticks) {
+        travelProgressStallTicks = Math.max(0, ticks);
+    }
+
+    @Override
+    public void resetTravelProgressTracking() {
+        travelSampleX = Double.NaN;
+        travelSampleZ = Double.NaN;
+        travelProgressStallTicks = 0;
     }
 
     /**
@@ -345,7 +393,7 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
             if (i > 0) {
                 sb.append(';');
             }
-            sb.append(p.getX()).append(',').append(p.getY()).append(',').append(p.getZ());
+            sb.append(p.x()).append(',').append(p.y()).append(',').append(p.z());
         }
         return sb.toString();
     }

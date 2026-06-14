@@ -3,9 +3,10 @@ package com.hexvane.aetherhaven.autonomy.pathnav;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.pathtool.PathCommitRecord;
 import com.hexvane.aetherhaven.pathtool.PathNavPoint;
+import com.hexvane.aetherhaven.pathtool.PathNavPolylineUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hexvane.aetherhaven.pathtool.PathToolRegistry;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -239,7 +240,7 @@ public final class PathNavGraphService {
             for (int i = 0; i + 1 < seg.nodes.size(); i++) {
                 Vector3d a = seg.nodes.get(i);
                 Vector3d b = seg.nodes.get(i + 1);
-                best = Math.min(best, horizontalPointToOpenSegment2d(p.getX(), p.getZ(), a.getX(), a.getZ(), b.getX(), b.getZ()));
+                best = Math.min(best, horizontalPointToOpenSegment2d(p.x(), p.z(), a.x(), a.z(), b.x(), b.z()));
             }
         }
         return best;
@@ -320,15 +321,15 @@ public final class PathNavGraphService {
         if (chain.size() == 1) {
             return new ArrayList<>(chain);
         }
-        double fromX = from.getX();
-        double fromZ = from.getZ();
+        double fromX = from.x();
+        double fromZ = from.z();
         double bestD2 = Double.POSITIVE_INFINITY;
         int bestI = 0;
         double bestT = 0.0;
         for (int i = 0; i + 1 < chain.size(); i++) {
             Vector3d a = chain.get(i);
             Vector3d b = chain.get(i + 1);
-            double t = projectParamOpenSegment2dClamped(fromX, fromZ, a.getX(), a.getZ(), b.getX(), b.getZ());
+            double t = projectParamOpenSegment2dClamped(fromX, fromZ, a.x(), a.z(), b.x(), b.z());
             Vector3d p = lerp3d(a, b, t);
             double d2 = horizontalDistSq(from, p);
             if (d2 < bestD2) {
@@ -368,9 +369,9 @@ public final class PathNavGraphService {
     @Nonnull
     private static Vector3d lerp3d(@Nonnull Vector3d a, @Nonnull Vector3d b, double t) {
         return new Vector3d(
-            a.getX() + t * (b.getX() - a.getX()),
-            a.getY() + t * (b.getY() - a.getY()),
-            a.getZ() + t * (b.getZ() - a.getZ())
+            a.x() + t * (b.x() - a.x()),
+            a.y() + t * (b.y() - a.y()),
+            a.z() + t * (b.z() - a.z())
         );
     }
 
@@ -434,8 +435,8 @@ public final class PathNavGraphService {
                     for (int l = 0; l < lb; l++) {
                         int vb = net.vertId(t, l);
                         Vector3d pb = net.pos.get(vb);
-                        double dx = pa.getX() - pb.getX();
-                        double dz = pa.getZ() - pb.getZ();
+                        double dx = pa.x() - pb.x();
+                        double dz = pa.z() - pb.z();
                         double d2 = dx * dx + dz * dz;
                         if (d2 <= jSq) {
                             strictToSeg[va][t] = true;
@@ -468,12 +469,16 @@ public final class PathNavGraphService {
             if (rec.navNodes == null || rec.navNodes.size() < 2) {
                 continue;
             }
-            int need = rec.navNodes.size();
+            List<PathNavPoint> resampled = PathNavPolylineUtil.resamplePolyline(rec.navNodes, cfg.getPathNavNodeSpacing());
+            if (resampled.size() < 2) {
+                continue;
+            }
+            int need = resampled.size();
             if (used + need > maxNodes) {
                 break;
             }
             List<Vector3d> nodes = new ArrayList<>(need);
-            for (PathNavPoint p : rec.navNodes) {
+            for (PathNavPoint p : resampled) {
                 nodes.add(new Vector3d(p.x, p.y, p.z));
             }
             net.segments.add(new PlacedSegment(nodes));
@@ -484,14 +489,14 @@ public final class PathNavGraphService {
     }
 
     private static double horizontal(@Nonnull Vector3d a, @Nonnull Vector3d b) {
-        double dx = a.getX() - b.getX();
-        double dz = a.getZ() - b.getZ();
+        double dx = a.x() - b.x();
+        double dz = a.z() - b.z();
         return Math.sqrt(dx * dx + dz * dz);
     }
 
     private static double horizontalDistSq(@Nonnull Vector3d a, @Nonnull Vector3d b) {
-        double dx = a.getX() - b.getX();
-        double dz = a.getZ() - b.getZ();
+        double dx = a.x() - b.x();
+        double dz = a.z() - b.z();
         return dx * dx + dz * dz;
     }
 

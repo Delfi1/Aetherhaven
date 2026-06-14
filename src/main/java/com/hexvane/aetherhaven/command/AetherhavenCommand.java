@@ -6,7 +6,7 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractComman
 public final class AetherhavenCommand extends AbstractCommandCollection {
     public AetherhavenCommand() {
         super("aetherhaven", "aetherhaven_commands_root.commands.aetherhaven.root.desc");
-        this.setPermissionGroup(GameMode.Adventure);
+        this.setPermissionGroups("hytale:Adventurer");
         this.addAliases("ah");
         this.addSubCommand(new AetherhavenStarterKitCommand());
         this.addSubCommand(new AetherhavenTownsCommand());
@@ -30,5 +30,12 @@ public final class AetherhavenCommand extends AbstractCommandCollection {
         this.addSubCommand(new AetherhavenTimeCommand());
         this.addSubCommand(new AetherhavenDifficultyCommand());
         this.addSubCommand(new AetherhavenWallDebugCommand());
+        this.addSubCommand(new AetherhavenRtsBoxDebugCommand());
+        this.addSubCommand(new AetherhavenRtsRecoverInventoryCommand());
+        this.addSubCommand(new AetherhavenTownsfolkCommand());
+        this.addSubCommand(new AetherhavenGuildCommand());
+        this.addSubCommand(new AetherhavenPlotTokenCommand());
+        this.addSubCommand(new AetherhavenPlotCreatorCommand());
+        this.addSubCommand(new AetherhavenTouristDebugCommand());
     }
 }

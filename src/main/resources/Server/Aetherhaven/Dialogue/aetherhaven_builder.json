@@ -1,0 +1,305 @@
+{
+  "id": "aetherhaven_builder",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.speaker",
+      "bodyMode": "villager_greeting",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.main_hub.fallback",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } },
+              { "type": "player_holds_any_item" }
+            ]
+          },
+          "whenFalse": "hide",
+          "giftDisableWhenNotAllowed": true,
+          "next": "gift_confirm"
+        },
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.hc0",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_completed", "questId": "q_builders_hut" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    { "type": "town_quest_active", "questId": "q_house_builder" },
+                    { "type": "town_quest_completed", "questId": "q_house_builder" }
+                  ]
+                }
+              },
+              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "rowan_house_offer"
+        },
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.hc1",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_builder" },
+              { "type": "town_npc_home_resident_house" }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [{ "type": "complete_quest", "id": "q_house_builder" }],
+          "next": "rowan_house_finish"
+        },
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.hc2",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_builder" },
+              { "type": "not", "condition": { "type": "town_npc_home_resident_house" } }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "rowan_house_remind"
+        },
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.c0",
+          "condition": { "type": "town_quest_completed", "questId": "q_builders_hut" },
+          "next": "rowan_done"
+        },
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.c1",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_builders_hut" },
+              { "type": "town_has_complete_plot", "constructionId": "plot_builders_hut" }
+            ]
+          },
+          "actions": [{ "type": "complete_quest", "id": "q_builders_hut" }],
+          "next": "rowan_done"
+        },
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.c2",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_builders_hut" },
+              {
+                "type": "not",
+                "condition": { "type": "town_has_complete_plot", "constructionId": "plot_builders_hut" }
+              }
+            ]
+          },
+          "next": "rowan_building"
+        },
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.c3",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": { "type": "town_quest_completed", "questId": "q_builders_hut" }
+              },
+              {
+                "type": "not",
+                "condition": { "type": "town_quest_active", "questId": "q_builders_hut" }
+              }
+            ]
+          },
+          "next": "rowan_quest_hut"
+        },
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.c4",
+          "next": null
+        }
+      ]
+    },
+    "rowan_quest_hut": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c0",
+          "actions": [{ "type": "start_quest", "id": "q_builders_hut" }],
+          "next": "rowan_accepted"
+        },
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c1",
+          "next": null
+        }
+      ]
+    },
+    "rowan_accepted": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "rowan_building": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_building.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_building.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_building.c0",
+          "actions": [{ "type": "abandon_quest", "id": "q_builders_hut" }],
+          "next": "rowan_abandoned"
+        },
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_building.c1",
+          "next": null
+        }
+      ]
+    },
+    "rowan_abandoned": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.c0",
+          "next": null
+        }
+      ]
+    },
+    "rowan_done": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_done.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_done.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_done.c0",
+          "next": null
+        }
+      ]
+    },
+    "rowan_house_offer": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c0",
+          "actions": [{ "type": "start_quest", "id": "q_house_builder" }],
+          "next": "rowan_house_accepted"
+        },
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c1",
+          "next": null
+        }
+      ]
+    },
+    "rowan_house_accepted": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "rowan_house_remind": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.c0",
+          "next": null
+        }
+      ]
+    },
+    "rowan_house_finish": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.c0",
+          "next": null
+        }
+      ]
+    },
+    "gift_confirm": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.speaker",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
+          "actions": [
+            {
+              "type": "gift_villager",
+              "reactionNodeLove": "gift_love",
+              "reactionNodeLike": "gift_like",
+              "reactionNodeNeutral": "gift_neutral",
+              "reactionNodeDislike": "gift_dislike"
+            }
+          ],
+          "next": "main_hub"
+        },
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_love": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.gift.love",
+      "choices": [{ "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back", "next": "main_hub" }]
+    },
+    "gift_like": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.gift.like",
+      "choices": [{ "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back", "next": "main_hub" }]
+    },
+    "gift_neutral": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.gift.neutral",
+      "choices": [{ "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back", "next": "main_hub" }]
+    },
+    "gift_dislike": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.root.speaker",
+      "text": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.gift.dislike",
+      "choices": [{ "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back", "next": "main_hub" }]
+    },
+    "rep_reward_50": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rep_reward_50.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.miner.50",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_miner_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_100": {
+      "speaker": "aetherhaven_dialogue_builder.aetherhaven.dialogue.aetherhaven_builder.rep_reward_100.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.miner.100",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_miner_100"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    }
+  }
+}

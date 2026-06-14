@@ -1,0 +1,18 @@
+{
+  "id": "impatient",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.impatient.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.impatient.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.impatient.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.impatient.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.impatient.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "FUN": 1.2,
+    "WORK": 1.2,
+    "SIT": 0.5
+  },
+  "preferredScheduleLocations": [
+    "park"
+  ]
+}

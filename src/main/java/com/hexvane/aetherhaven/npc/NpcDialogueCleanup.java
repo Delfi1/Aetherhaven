@@ -36,6 +36,7 @@ public final class NpcDialogueCleanup {
                     return;
                 }
                 try {
+                    NpcFaceVisuals.clearDialogueFace(npcRef, store);
                     npc.getRole().getStateSupport().setState(npcRef, "Idle", null, store);
                 } catch (Exception e) {
                     LOGGER.atWarning().withCause(e).log("Failed to reset NPC to Idle after dialogue");

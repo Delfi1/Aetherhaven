@@ -12,9 +12,9 @@ import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.RootDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -54,8 +54,16 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
     /** Players who need {@link PathDebugPreviewUtil#clear} + redraw after committing a staff assembly block this tick. */
     private static final Set<UUID> STAFF_ASSEMBLY_FRONTIER_REFRESH = ConcurrentHashMap.newKeySet();
 
+    /** Throttle idle clearing-marker redraws (shape lifetime is long; grow animation only needs ticks while brushing). */
+    private static final long CLEARING_PREVIEW_IDLE_REDRAW_INTERVAL_NS = 250_000_000L;
+    private static final ConcurrentHashMap<UUID, Long> LAST_CLEARING_PREVIEW_REDRAW_NS = new ConcurrentHashMap<>();
+    /** Detects when visible clearing markers change (manual breaks, frontier shift) so we clear stale debug shapes. */
+    private static final ConcurrentHashMap<UUID, Long> LAST_CLEARING_VISIBLE_FINGERPRINT = new ConcurrentHashMap<>();
+
     /** Same family as path-tool “replaceable” tint, shifted green. */
     private static final Vector3f NEXT_CELL_COLOR = new Vector3f(0.22f, 0.92f, 0.48f);
+
+    private static final Vector3f OBSTRUCTION_CELL_COLOR = PathDebugPreviewUtil.COLOR_OBSTRUCTION_MARKER;
 
     @Nonnull
     private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
@@ -113,35 +121,41 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             return;
         }
         Vector3d obsForRange = snapObserverForAssemblyPreview(tc.getPosition());
-        List<Vector3i> cellsInRange = new ArrayList<>();
-        AssemblyFrontierWorldCells.collectWithinDefaultRange(world, p, obsForRange, cellsInRange);
-        if (cellsInRange.isEmpty()) {
+        boolean hasClearing = AssemblyWorldRegistry.anyJobInPhase(world, PlotAssemblyPhase.CLEARING);
+        boolean hasPlacing = AssemblyWorldRegistry.anyJobInPhase(world, PlotAssemblyPhase.PLACING);
+        List<Vector3i> obstructionCells = hasClearing ? new ArrayList<>() : List.of();
+        if (hasClearing) {
+            AssemblyObstructionWorldCells.collectWithinDefaultRange(world, p, obsForRange, obstructionCells);
+        }
+        List<Vector3i> frontierCells = hasPlacing ? new ArrayList<>() : List.of();
+        if (hasPlacing) {
+            AssemblyFrontierWorldCells.collectWithinDefaultRange(world, p, obsForRange, frontierCells);
+        }
+        if (obstructionCells.isEmpty() && frontierCells.isEmpty()) {
             return;
         }
-        cellsInRange.sort(
-            Comparator
-                .comparingInt((Vector3i v) -> v.x)
-                .thenComparingInt(v -> v.y)
-                .thenComparingInt(v -> v.z)
-        );
         long nowNs = System.nanoTime();
         BuildingStaffAssemblyChannelComponent channel =
             store.getComponent(ref, BuildingStaffAssemblyChannelComponent.getComponentType());
         if (channel != null) {
             channel.setBrushChebyshevRadius(BuildingStaffTiers.assemblyBrushChebyshevRadius(hand.getItemId()));
         }
-        int maxDraw = AetherhavenConstants.BUILDING_STAFF_ASSEMBLY_PREVIEW_MAX_GHOST_CELLS;
-        List<Vector3i> drawCells =
-            cellsInRange.size() <= maxDraw
-                ? cellsInRange
-                : cappedPreviewCells(cellsInRange, maxDraw, channel, nowNs, obsForRange);
-        drawCells.sort(
-            Comparator
-                .comparingInt((Vector3i v) -> v.x)
-                .thenComparingInt(v -> v.y)
-                .thenComparingInt(v -> v.z)
-        );
-        redrawAssemblyFrontierCells(pr, world, drawCells, true, channel, nowNs);
+        int clearingMaxDraw = AetherhavenConstants.BUILDING_STAFF_CLEARING_PREVIEW_MAX_GHOST_CELLS;
+        int frontierMaxDraw = AetherhavenConstants.BUILDING_STAFF_ASSEMBLY_PREVIEW_MAX_GHOST_CELLS;
+        List<Vector3i> drawObstruction =
+            obstructionCells.isEmpty()
+                ? List.of()
+                : obstructionCells.size() <= clearingMaxDraw
+                    ? obstructionCells
+                    : cappedObstructionPreviewCells(obstructionCells, clearingMaxDraw, channel, nowNs, obsForRange);
+        List<Vector3i> drawFrontier =
+            frontierCells.isEmpty()
+                ? List.of()
+                : frontierCells.size() <= frontierMaxDraw
+                    ? frontierCells
+                    : cappedPreviewCells(frontierCells, frontierMaxDraw, channel, nowNs, obsForRange);
+        redrawObstructionCells(pr, world, drawObstruction, true, channel, nowNs);
+        redrawAssemblyFrontierCells(pr, world, drawFrontier, true, channel, nowNs);
     }
 
     @Nonnull
@@ -184,6 +198,8 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             && AetherhavenConstants.PATH_TOOL_ITEM_ID.equals(hand.getItemId())) {
             if (ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.remove(previewCacheKey) != null) {
                 STAFF_ASSEMBLY_FRONTIER_REFRESH.remove(previewCacheKey);
+                LAST_CLEARING_PREVIEW_REDRAW_NS.remove(previewCacheKey);
+                LAST_CLEARING_VISIBLE_FINGERPRINT.remove(previewCacheKey);
                 clearDebugShapesThenRestoreFootprintUi(pr, ref, store);
             }
             return;
@@ -192,6 +208,8 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
         if (!staffInHand) {
             if (ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.remove(previewCacheKey) != null) {
                 STAFF_ASSEMBLY_FRONTIER_REFRESH.remove(previewCacheKey);
+                LAST_CLEARING_PREVIEW_REDRAW_NS.remove(previewCacheKey);
+                LAST_CLEARING_VISIBLE_FINGERPRINT.remove(previewCacheKey);
                 clearDebugShapesThenRestoreFootprintUi(pr, ref, store);
             }
             return;
@@ -200,23 +218,34 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
         if (tc == null) {
             return;
         }
-        Vector3d ppos = tc.getPosition();
-        Vector3d obsForRange = snapObserverForAssemblyPreview(ppos);
-        List<Vector3i> cellsInRange = new ArrayList<>();
-        AssemblyFrontierWorldCells.collectWithinDefaultRange(world, p, obsForRange, cellsInRange);
-        if (cellsInRange.isEmpty()) {
+        Vector3d obsForRange = snapObserverForAssemblyPreview(tc.getPosition());
+        boolean hasClearing = AssemblyWorldRegistry.anyJobInPhase(world, PlotAssemblyPhase.CLEARING);
+        boolean hasPlacing = AssemblyWorldRegistry.anyJobInPhase(world, PlotAssemblyPhase.PLACING);
+        List<Vector3i> obstructionCells = hasClearing ? new ArrayList<>() : List.of();
+        if (hasClearing) {
+            AssemblyObstructionWorldCells.collectWithinDefaultRange(world, p, obsForRange, obstructionCells);
+        }
+        List<Vector3i> frontierCells = hasPlacing ? new ArrayList<>() : List.of();
+        if (hasPlacing) {
+            AssemblyFrontierWorldCells.collectWithinDefaultRange(world, p, obsForRange, frontierCells);
+        }
+        if (obstructionCells.isEmpty() && frontierCells.isEmpty()) {
             if (ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.remove(previewCacheKey) != null) {
                 STAFF_ASSEMBLY_FRONTIER_REFRESH.remove(previewCacheKey);
+                LAST_CLEARING_PREVIEW_REDRAW_NS.remove(previewCacheKey);
+                LAST_CLEARING_VISIBLE_FINGERPRINT.remove(previewCacheKey);
                 clearDebugShapesThenRestoreFootprintUi(pr, ref, store);
             }
             return;
         }
-        cellsInRange.sort(
-            Comparator
-                .comparingInt((Vector3i v) -> v.x)
-                .thenComparingInt(v -> v.y)
-                .thenComparingInt(v -> v.z)
-        );
+        if (hasPlacing) {
+            frontierCells.sort(
+                Comparator
+                    .comparingInt((Vector3i v) -> v.x)
+                    .thenComparingInt(v -> v.y)
+                    .thenComparingInt(v -> v.z)
+            );
+        }
         long nowNs = System.nanoTime();
         BuildingStaffAssemblyChannelComponent channel =
             store.getComponent(ref, BuildingStaffAssemblyChannelComponent.getComponentType());
@@ -232,25 +261,169 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
         if (channelForDraw != null) {
             channelForDraw.setBrushChebyshevRadius(brushR);
         }
-        int maxDraw = AetherhavenConstants.BUILDING_STAFF_ASSEMBLY_PREVIEW_MAX_GHOST_CELLS;
-        List<Vector3i> drawCells =
-            cellsInRange.size() <= maxDraw
-                ? cellsInRange
-                : cappedPreviewCells(cellsInRange, maxDraw, channelForDraw, nowNs, obsForRange);
-        drawCells.sort(
-            Comparator
-                .comparingInt((Vector3i v) -> v.x)
-                .thenComparingInt(v -> v.y)
-                .thenComparingInt(v -> v.z)
-        );
+        int clearingMaxDraw = AetherhavenConstants.BUILDING_STAFF_CLEARING_PREVIEW_MAX_GHOST_CELLS;
+        int frontierMaxDraw = AetherhavenConstants.BUILDING_STAFF_ASSEMBLY_PREVIEW_MAX_GHOST_CELLS;
+        List<Vector3i> drawObstruction =
+            obstructionCells.isEmpty()
+                ? List.of()
+                : obstructionCells.size() <= clearingMaxDraw
+                    ? obstructionCells
+                    : cappedObstructionPreviewCells(obstructionCells, clearingMaxDraw, channelForDraw, nowNs, obsForRange);
+        List<Vector3i> drawFrontier =
+            frontierCells.isEmpty()
+                ? List.of()
+                : frontierCells.size() <= frontierMaxDraw
+                    ? frontierCells
+                    : cappedPreviewCells(frontierCells, frontierMaxDraw, channelForDraw, nowNs, obsForRange);
 
         boolean entering = ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.put(previewCacheKey, Boolean.TRUE) == null;
         boolean staffRefresh = STAFF_ASSEMBLY_FRONTIER_REFRESH.remove(previewCacheKey);
+        long clearingFingerprint = clearingVisibleFingerprint(drawObstruction);
+        Long prevClearingFingerprint = LAST_CLEARING_VISIBLE_FINGERPRINT.get(previewCacheKey);
+        boolean clearingSetChanged =
+            !drawObstruction.isEmpty()
+                && (prevClearingFingerprint == null || prevClearingFingerprint.longValue() != clearingFingerprint);
+        if (clearingSetChanged) {
+            LAST_CLEARING_VISIBLE_FINGERPRINT.put(previewCacheKey, clearingFingerprint);
+        }
 
-        if (entering || staffRefresh) {
+        if (entering || staffRefresh || clearingSetChanged) {
             clearDebugShapesThenRestoreFootprintUi(pr, ref, store);
         }
-        redrawAssemblyFrontierCells(pr, world, drawCells, staffInHand, channelForDraw, nowNs);
+        if (shouldRedrawClearingPreview(previewCacheKey, nowNs, entering, staffRefresh, channelForDraw, !drawObstruction.isEmpty())) {
+            redrawObstructionCells(pr, world, drawObstruction, staffInHand, channelForDraw, nowNs);
+        }
+        if (!drawFrontier.isEmpty()) {
+            redrawAssemblyFrontierCells(pr, world, drawFrontier, staffInHand, channelForDraw, nowNs);
+        }
+    }
+
+    private static long clearingVisibleFingerprint(@Nonnull List<Vector3i> cells) {
+        long fp = cells.size();
+        for (int i = 0; i < cells.size(); i++) {
+            Vector3i c = cells.get(i);
+            fp = fp * 31L + c.x;
+            fp = fp * 31L + c.y;
+            fp = fp * 31L + c.z;
+        }
+        return fp;
+    }
+
+    private static boolean shouldRedrawClearingPreview(
+        @Nonnull UUID playerId,
+        long nowNs,
+        boolean entering,
+        boolean staffRefresh,
+        @Nullable BuildingStaffAssemblyChannelComponent channel,
+        boolean hasObstructionMarkers
+    ) {
+        if (!hasObstructionMarkers) {
+            return false;
+        }
+        if (entering || staffRefresh) {
+            LAST_CLEARING_PREVIEW_REDRAW_NS.put(playerId, nowNs);
+            return true;
+        }
+        if (channel != null && channel.hasActiveTarget() && channel.isFresh(nowNs)) {
+            LAST_CLEARING_PREVIEW_REDRAW_NS.put(playerId, nowNs);
+            return true;
+        }
+        Long last = LAST_CLEARING_PREVIEW_REDRAW_NS.get(playerId);
+        if (last != null && nowNs - last < CLEARING_PREVIEW_IDLE_REDRAW_INTERVAL_NS) {
+            return false;
+        }
+        LAST_CLEARING_PREVIEW_REDRAW_NS.put(playerId, nowNs);
+        return true;
+    }
+
+    private static void redrawObstructionCells(
+        @Nonnull PlayerRef pr,
+        @Nonnull World world,
+        @Nonnull List<Vector3i> cellsInRange,
+        boolean staffInHand,
+        @Nullable BuildingStaffAssemblyChannelComponent channel,
+        long nowNs
+    ) {
+        for (Vector3i cell : cellsInRange) {
+            double grow01 =
+                staffInHand
+                    && channel != null
+                    && channel.cellMatchesBrush(cell.x, cell.y, cell.z)
+                    && channel.isFresh(nowNs)
+                    ? channel.channelGrow01(nowNs)
+                    : 0.0;
+            PathDebugPreviewUtil.drawObstructionCellMarkers(
+                pr, cell.x, cell.y, cell.z, OBSTRUCTION_CELL_COLOR, world, grow01
+            );
+        }
+    }
+
+    /**
+     * Like {@link #cappedPreviewCells} but fills overflow with evenly spaced cells so large footprints still show
+     * distant obstructions during clearing (not only the nearest subset to the player).
+     */
+    @Nonnull
+    private static List<Vector3i> cappedObstructionPreviewCells(
+        @Nonnull List<Vector3i> sortedFull,
+        int maxDraw,
+        @Nullable BuildingStaffAssemblyChannelComponent channel,
+        long nowNs,
+        @Nonnull Vector3d ppos
+    ) {
+        if (sortedFull.size() <= maxDraw) {
+            return sortedFull;
+        }
+        ArrayList<Vector3i> priority = new ArrayList<>();
+        if (channel != null && channel.hasActiveTarget() && channel.isFresh(nowNs)) {
+            for (int i = 0; i < sortedFull.size(); i++) {
+                Vector3i c = sortedFull.get(i);
+                if (channel.cellMatchesBrush(c.x, c.y, c.z)) {
+                    priority.add(c);
+                }
+            }
+        }
+        if (priority.size() >= maxDraw) {
+            priority.sort(
+                Comparator
+                    .comparingInt((Vector3i v) -> v.x)
+                    .thenComparingInt(v -> v.y)
+                    .thenComparingInt(v -> v.z)
+            );
+            return new ArrayList<>(priority.subList(0, maxDraw));
+        }
+        ArrayList<Vector3i> out = new ArrayList<>(maxDraw);
+        out.addAll(priority);
+        int slots = maxDraw - out.size();
+        int n = sortedFull.size();
+        for (int s = 0; s < slots; s++) {
+            int idx = (s * n) / slots;
+            Vector3i c = sortedFull.get(Math.min(idx, n - 1));
+            if (!cellOccursIn(c, out)) {
+                out.add(c);
+            }
+        }
+        if (out.size() >= maxDraw) {
+            return out;
+        }
+        ArrayList<Vector3i> rest = new ArrayList<>(sortedFull.size());
+        for (int i = 0; i < sortedFull.size(); i++) {
+            Vector3i c = sortedFull.get(i);
+            if (!cellOccursIn(c, out)) {
+                rest.add(c);
+            }
+        }
+        rest.sort(
+            Comparator.comparingDouble((Vector3i c) -> {
+                double dx = c.x + 0.5 - ppos.x;
+                double dy = c.y + 0.5 - ppos.y;
+                double dz = c.z + 0.5 - ppos.z;
+                return dx * dx + dy * dy + dz * dz;
+            })
+        );
+        for (int i = 0; i < rest.size() && out.size() < maxDraw; i++) {
+            out.add(rest.get(i));
+        }
+        return out;
     }
 
     /**

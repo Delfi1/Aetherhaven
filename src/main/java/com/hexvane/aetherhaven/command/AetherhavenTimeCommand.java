@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenTimeCommand extends AbstractCommandCollection {
     public AetherhavenTimeCommand() {
         super("time", "aetherhaven_commands_help.commands.aetherhaven.time.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addUsageVariant(new SetScheduleHourCommand());
         this.addSubCommand(new ScheduleDawnCommand());
     }
@@ -56,7 +56,6 @@ public final class AetherhavenTimeCommand extends AbstractCommandCollection {
 
         SetScheduleHourCommand() {
             super("aetherhaven_commands_help.commands.aetherhaven.time.set.desc");
-            this.setPermissionGroup(null);
         }
 
         @Override
@@ -69,7 +68,6 @@ public final class AetherhavenTimeCommand extends AbstractCommandCollection {
     private static final class ScheduleDawnCommand extends AbstractWorldCommand {
         ScheduleDawnCommand() {
             super("dawn", "aetherhaven_commands_help.commands.aetherhaven.time.dawn.desc");
-            this.setPermissionGroup(null);
         }
 
         @Override

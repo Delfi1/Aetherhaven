@@ -1,0 +1,19 @@
+{
+  "entries": [
+    { "itemId": "Ingredient_Crystal_Blue", "weight": 3, "stockMin": 2, "stockMax": 5 },
+    { "itemId": "Ingredient_Crystal_Cyan", "weight": 3, "stockMin": 2, "stockMax": 5 },
+    { "itemId": "Ingredient_Crystal_Green", "weight": 3, "stockMin": 2, "stockMax": 5 },
+    { "itemId": "Ingredient_Crystal_Pink", "weight": 3, "stockMin": 2, "stockMax": 5 },
+    { "itemId": "Ingredient_Crystal_Purple", "weight": 3, "stockMin": 2, "stockMax": 5 },
+    { "itemId": "Ingredient_Crystal_Red", "weight": 3, "stockMin": 2, "stockMax": 5 },
+    { "itemId": "Ingredient_Crystal_White", "weight": 3, "stockMin": 2, "stockMax": 5 },
+    { "itemId": "Ingredient_Crystal_Yellow", "weight": 3, "stockMin": 2, "stockMax": 5 },
+    { "itemId": "Rock_Gem_Diamond", "weight": 1, "stockMin": 1, "stockMax": 3 },
+    { "itemId": "Rock_Gem_Emerald", "weight": 1, "stockMin": 1, "stockMax": 3},
+    { "itemId": "Rock_Gem_Ruby", "weight": 1, "stockMin": 1, "stockMax": 3 },
+    { "itemId": "Rock_Gem_Sapphire", "weight": 1, "stockMin": 1, "stockMax": 3 },
+    { "itemId": "Rock_Gem_Topaz", "weight": 1, "stockMin": 1, "stockMax": 3 },
+    { "itemId": "Rock_Gem_Voidstone", "weight": 1, "stockMin": 1, "stockMax": 3 },
+    { "itemId": "Rock_Gem_Zephyr", "weight": 1, "stockMin": 1, "stockMax": 3 }
+  ]
+}

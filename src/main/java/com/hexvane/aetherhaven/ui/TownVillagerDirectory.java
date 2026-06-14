@@ -1,11 +1,20 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.town.HiredGuardRecord;
+import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownResidentDisplay;
+import com.hexvane.aetherhaven.town.TownResidentEligibility;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -21,14 +30,18 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Town residents (non-visitor) with {@link TownVillagerBinding}, in the same order as the needs overview: elder,
- * innkeeper, then other roles by label.
+ * Town residents for UI lists: story villagers always; townsfolk and guards only when assigned a house.
  */
 public final class TownVillagerDirectory {
     private TownVillagerDirectory() {}
 
     @Nonnull
     public static List<TownVillagerRow> listResidents(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return List.of();
+        }
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
         UUID tid = town.getTownId();
         Map<UUID, TownVillagerRow> byUuid = new LinkedHashMap<>();
         Query<EntityStore> q =
@@ -38,7 +51,7 @@ public final class TownVillagerDirectory {
             (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
                 for (int i = 0; i < archetypeChunk.size(); i++) {
                     TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
-                    if (b == null || !tid.equals(b.getTownId()) || TownVillagerBinding.isVisitorKind(b.getKind())) {
+                    if (b == null || !tid.equals(b.getTownId())) {
                         continue;
                     }
                     UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
@@ -47,17 +60,32 @@ public final class TownVillagerDirectory {
                         continue;
                     }
                     UUID u = uc.getUuid();
-                    String roleId = npc.getRoleName();
-                    String label = NpcPortraitProvider.displayLabelForRoleId(roleId);
+                    String roleId = npc.getRoleName().trim();
+                    if (!TownResidentEligibility.includeInResidentList(town, u, b, roleId, plugin, catalog)) {
+                        continue;
+                    }
+                    TownResidentDisplay.Resolved display = TownResidentDisplay.resolveFromChunk(archetypeChunk, i, roleId, plugin);
                     int ko = kindOrderForBindingKind(b.getKind());
-                    byUuid.put(u, new TownVillagerRow(label, u, roleId, ko));
+                    boolean needs = TownResidentEligibility.usesVillagerNeeds(b.getKind(), roleId, plugin);
+                    byUuid.put(
+                        u,
+                        new TownVillagerRow(display.displayName(), u, roleId, b.getKind(), ko, display.portraitPath(), needs)
+                    );
                 }
             }
         );
 
-        addFallbackIfMissing(byUuid, town.getElderEntityUuid(), AetherhavenConstants.ELDER_NPC_ROLE_ID);
-        addFallbackIfMissing(byUuid, town.getInnkeeperEntityUuid(), AetherhavenConstants.INNKEEPER_NPC_ROLE_ID);
-        addResidentsFromRegistry(byUuid, town);
+        addStoryFallbackIfMissing(byUuid, town, plugin, town.getElderEntityUuid(), AetherhavenConstants.ELDER_NPC_ROLE_ID, TownVillagerBinding.KIND_ELDER);
+        addStoryFallbackIfMissing(
+            byUuid,
+            town,
+            plugin,
+            town.getInnkeeperEntityUuid(),
+            AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
+            TownVillagerBinding.KIND_INNKEEPER
+        );
+        addResidentsFromRegistry(byUuid, town, plugin, catalog);
+        addHousedTownsfolkFallbacks(byUuid, town, store, plugin, catalog);
 
         List<TownVillagerRow> out = new ArrayList<>(byUuid.values());
         out.sort(
@@ -75,51 +103,176 @@ public final class TownVillagerDirectory {
         return -1;
     }
 
-    private static void addFallbackIfMissing(
+    private static void addStoryFallbackIfMissing(
         @Nonnull Map<UUID, TownVillagerRow> byUuid,
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin,
         @Nullable UUID entityUuid,
-        @Nonnull String roleId
+        @Nonnull String roleId,
+        @Nonnull String kind
     ) {
         if (entityUuid == null || byUuid.containsKey(entityUuid)) {
             return;
         }
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
+        if (!TownResidentEligibility.includeInResidentList(town, entityUuid, kind, roleId, plugin, catalog)) {
+            return;
+        }
+        TownResidentDisplay.Resolved display = TownResidentDisplay.resolveOffline(plugin, roleId, null, null);
         byUuid.put(
             entityUuid,
             new TownVillagerRow(
-                NpcPortraitProvider.displayLabelForRoleId(roleId),
+                display.displayName(),
                 entityUuid,
                 roleId,
-                kindOrderForRoleId(roleId)
+                kind,
+                kindOrderForBindingKind(kind),
+                display.portraitPath(),
+                TownResidentEligibility.usesVillagerNeeds(kind, roleId, plugin)
             )
         );
     }
 
     /**
-     * Residents whose entities are not in any loaded chunk still appear in town management (same idea as elder /
-     * innkeeper fallbacks).
+     * Story villagers only from registry (one row per role). Townsfolk and guards use per entity fallbacks instead.
      */
-    private static void addResidentsFromRegistry(@Nonnull Map<UUID, TownVillagerRow> byUuid, @Nonnull TownRecord town) {
+    private static void addResidentsFromRegistry(
+        @Nonnull Map<UUID, TownVillagerRow> byUuid,
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog catalog
+    ) {
         UUID nil = new UUID(0L, 0L);
         for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
             if (TownVillagerBinding.isVisitorKind(r.getKind())) {
                 continue;
             }
-            UUID u = r.getLastEntityUuid();
-            if (u.equals(nil)) {
+            if (TownResidentEligibility.isTownsfolkPoolKind(r.getKind(), r.getNpcRoleId(), plugin)) {
                 continue;
             }
-            if (byUuid.containsKey(u)) {
+            UUID u = r.getLastEntityUuid();
+            if (u.equals(nil) || byUuid.containsKey(u)) {
                 continue;
             }
             String roleId = r.getNpcRoleId().trim();
             if (roleId.isEmpty()) {
                 continue;
             }
+            if (!TownResidentEligibility.includeInResidentList(town, u, r.getKind(), roleId, plugin, catalog)) {
+                continue;
+            }
             String kind = r.getKind();
-            int ko =
-                kind != null && !kind.isBlank() ? kindOrderForBindingKind(kind) : kindOrderForRoleId(roleId);
-            byUuid.put(u, new TownVillagerRow(NpcPortraitProvider.displayLabelForRoleId(roleId), u, roleId, ko));
+            int ko = kind != null && !kind.isBlank() ? kindOrderForBindingKind(kind) : kindOrderForRoleId(roleId);
+            TownResidentDisplay.Resolved display = TownResidentDisplay.resolveOffline(plugin, roleId, null, null);
+            byUuid.put(
+                u,
+                new TownVillagerRow(
+                    display.displayName(),
+                    u,
+                    roleId,
+                    kind != null ? kind : "",
+                    ko,
+                    display.portraitPath(),
+                    TownResidentEligibility.usesVillagerNeeds(kind != null ? kind : "", roleId, plugin)
+                )
+            );
         }
+    }
+
+    private static void addHousedTownsfolkFallbacks(
+        @Nonnull Map<UUID, TownVillagerRow> byUuid,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog catalog
+    ) {
+        for (PlotInstance plot : town.getPlotInstances()) {
+            if (plot.getState() != PlotInstanceState.COMPLETE) {
+                continue;
+            }
+            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(catalog.resolveGameplayConstructionId(plot.getConstructionId()))) {
+                continue;
+            }
+            UUID home = plot.getHomeResidentEntityUuid();
+            if (home == null || byUuid.containsKey(home)) {
+                continue;
+            }
+            addHousedEntityFallback(byUuid, town, store, plugin, catalog, home);
+        }
+        for (HiredGuardRecord guard : town.getHiredGuardRecords()) {
+            UUID guardUuid = guard.getEntityUuid();
+            if (guardUuid == null || byUuid.containsKey(guardUuid)) {
+                continue;
+            }
+            if (!town.isNpcHomeResidentOnHousePlot(guardUuid, catalog)) {
+                continue;
+            }
+            addHousedEntityFallback(byUuid, town, store, plugin, catalog, guardUuid);
+        }
+    }
+
+    private static void addHousedEntityFallback(
+        @Nonnull Map<UUID, TownVillagerRow> byUuid,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull UUID entityUuid
+    ) {
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
+        if (ref != null && ref.isValid()) {
+            TownVillagerBinding b = store.getComponent(ref, TownVillagerBinding.getComponentType());
+            NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+            if (b != null && npc != null && npc.getRoleName() != null) {
+                String roleId = npc.getRoleName().trim();
+                if (TownResidentEligibility.includeInResidentList(town, entityUuid, b, roleId, plugin, catalog)) {
+                    TownResidentDisplay.Resolved display = TownResidentDisplay.resolveFromEntity(store, ref, roleId, plugin);
+                    byUuid.put(
+                        entityUuid,
+                        new TownVillagerRow(
+                            display.displayName(),
+                            entityUuid,
+                            roleId,
+                            b.getKind(),
+                            kindOrderForBindingKind(b.getKind()),
+                            display.portraitPath(),
+                            TownResidentEligibility.usesVillagerNeeds(b.getKind(), roleId, plugin)
+                        )
+                    );
+                }
+                return;
+            }
+        }
+        String roleId = AetherhavenConstants.NPC_GUARD_KNIGHT;
+        String kind = TownVillagerBinding.KIND_GUARD;
+        String characterId = null;
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            UUID u = rec.getEntityUuid();
+            if (u != null && u.equals(entityUuid)) {
+                characterId = rec.getCharacterId();
+                break;
+            }
+        }
+        if (characterId == null) {
+            roleId = AetherhavenConstants.NPC_TOWNSFOLK;
+            kind = TownVillagerBinding.KIND_TOWNSFOLK;
+        }
+        if (!TownResidentEligibility.includeInResidentList(town, entityUuid, kind, roleId, plugin, catalog)) {
+            return;
+        }
+        TownResidentDisplay.Resolved display = TownResidentDisplay.resolveOffline(plugin, roleId, characterId, null);
+        byUuid.put(
+            entityUuid,
+            new TownVillagerRow(
+                display.displayName(),
+                entityUuid,
+                roleId,
+                kind,
+                kindOrderForBindingKind(kind),
+                display.portraitPath(),
+                false
+            )
+        );
     }
 
     private static int kindOrderForBindingKind(@Nonnull String kind) {

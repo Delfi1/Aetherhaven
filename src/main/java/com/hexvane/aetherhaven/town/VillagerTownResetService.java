@@ -1,11 +1,21 @@
 package com.hexvane.aetherhaven.town;
 
+import com.hypixel.hytale.math.vector.Rotation3f;
+
+import com.hypixel.hytale.math.vector.Vector3fUtil;
+
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyTravelKick;
+import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
+import com.hexvane.aetherhaven.patrol.PatrolRoutePersistence;
+import com.hexvane.aetherhaven.patrol.PatrolRouteRegistry;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.equipment.data.EquipmentProfileDefinition;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -14,8 +24,8 @@ import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -50,7 +60,11 @@ public final class VillagerTownResetService {
         @Nonnull String npcRoleId,
         @Nonnull String bindingKind,
         @Nullable UUID jobPlotId,
-        boolean visitor
+        boolean visitor,
+        @Nullable String guardCharacterId,
+        @Nullable String guardEquipmentProfileId,
+        @Nullable TownsfolkCharacterBinding guardCharacterBinding,
+        boolean guardCitizen
     ) {}
 
     private VillagerTownResetService() {}
@@ -122,6 +136,33 @@ public final class VillagerTownResetService {
                 if (InnPoolService.innQuestLocksVisitorRole(town, c.npcRoleId.trim())) {
                     town.addInnLockedEntity(spawned);
                 }
+            } else if (
+                TownVillagerBinding.KIND_GUARD.equals(c.bindingKind)
+                    && c.guardCharacterId() != null
+                    && !c.guardCharacterId().isBlank()
+                    && c.guardCharacterBinding() != null
+            ) {
+                UUID spawned = GuardHireService.respawnHiredGuardAtPosition(
+                    world,
+                    plugin,
+                    town,
+                    store,
+                    c.guardCharacterId(),
+                    c.guardEquipmentProfileId() != null && !c.guardEquipmentProfileId().isBlank()
+                        ? c.guardEquipmentProfileId()
+                        : "guard_knight",
+                    c.guardCharacterBinding(),
+                    pos,
+                    c.jobPlotId()
+                );
+                if (spawned == null) {
+                    LOGGER.atWarning().log("Reset: failed to spawn guard %s for town %s", c.guardCharacterId(), town.getTownId());
+                    continue;
+                }
+                newUuid = spawned;
+                if (c.guardCitizen()) {
+                    ResidentRegistryService.upsert(town, tm, c.npcRoleId(), c.bindingKind(), c.jobPlotId(), newUuid);
+                }
             } else {
                 UUID spawned = spawnResidentLikeNpc(store, town, tm, c, pos, innPlot);
                 if (spawned == null) {
@@ -132,6 +173,7 @@ public final class VillagerTownResetService {
             }
             VillagerReputationService.migrateVillagerEntityUuid(town, tm, c.previousEntityUuid, newUuid);
             ResidentRegistryService.replaceEntityUuidEverywhere(town, tm, c.previousEntityUuid, newUuid);
+            migratePatrolRoutesForGuard(world, plugin, c.previousEntityUuid, newUuid);
             spawnedUuids.add(newUuid);
         }
 
@@ -163,6 +205,9 @@ public final class VillagerTownResetService {
         }
         if (TownVillagerBinding.KIND_INNKEEPER.equals(c.bindingKind)) {
             return 1;
+        }
+        if (TownVillagerBinding.KIND_GUARD.equals(c.bindingKind)) {
+            return 2;
         }
         return 10;
     }
@@ -223,7 +268,7 @@ public final class VillagerTownResetService {
                 }
                 String role = npc.getRoleName().trim();
                 visitorRolesTaken.add(role);
-                map.put(old, new CapturedNpc(old, true, role, b.getKind(), b.getJobPlotId(), true));
+                map.put(old, new CapturedNpc(old, true, role, b.getKind(), b.getJobPlotId(), true, null, null, null, false));
             }
         }
 
@@ -261,10 +306,176 @@ public final class VillagerTownResetService {
                 continue;
             }
             String kind = InnPoolService.visitorBindingKindForRole(plugin, roleId);
-            map.put(old, new CapturedNpc(old, false, roleId, kind, null, true));
+            map.put(old, new CapturedNpc(old, false, roleId, kind, null, true, null, null, null, false));
         }
 
+        captureHiredGuards(map, town, store, plugin);
+
         return map;
+    }
+
+    /** Hired guards are tracked in {@link HiredGuardRecord}, not only {@link ResidentNpcRecord}. */
+    private static void captureHiredGuards(
+        @Nonnull LinkedHashMap<UUID, CapturedNpc> map,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        UUID guildJobPlot = null;
+        PlotInstance guildPlot = town.findCompletePlotWithConstruction(
+            plugin.getConstructionCatalog(),
+            AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL
+        );
+        if (guildPlot != null) {
+            guildJobPlot = guildPlot.getPlotId();
+        }
+        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
+            UUID resolved = resolveGuardEntityUuid(store, town, rec);
+            if (resolved == null || NIL_UUID.equals(resolved)) {
+                continue;
+            }
+            UUID recorded = rec.getEntityUuid();
+            if (recorded != null && !recorded.equals(resolved) && map.containsKey(recorded)) {
+                map.remove(recorded);
+            }
+            if (!resolved.equals(recorded)) {
+                rec.setEntityUuid(resolved);
+            }
+            String characterId = rec.getCharacterId().trim();
+            if (characterId.isEmpty()) {
+                continue;
+            }
+            String equipmentProfileId = rec.getEquipmentProfileId().trim();
+            if (equipmentProfileId.isEmpty()) {
+                equipmentProfileId = "guard_knight";
+            }
+            String roleId = guardRoleIdForProfile(plugin, equipmentProfileId);
+            TownsfolkCharacterBinding binding = resolveGuardCharacterBinding(store, resolved, plugin, characterId);
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(resolved);
+            boolean loaded = ref != null && ref.isValid();
+            UUID jobPlotId = guildJobPlot;
+            if (loaded) {
+                TownVillagerBinding b = store.getComponent(ref, TownVillagerBinding.getComponentType());
+                if (b != null && b.getJobPlotId() != null) {
+                    jobPlotId = b.getJobPlotId();
+                }
+            } else {
+                CapturedNpc existing = map.get(resolved);
+                if (existing != null && existing.jobPlotId() != null) {
+                    jobPlotId = existing.jobPlotId();
+                }
+            }
+            map.put(
+                resolved,
+                new CapturedNpc(
+                    resolved,
+                    loaded,
+                    roleId,
+                    TownVillagerBinding.KIND_GUARD,
+                    jobPlotId,
+                    false,
+                    characterId,
+                    equipmentProfileId,
+                    binding,
+                    rec.isCitizen()
+                )
+            );
+        }
+    }
+
+    @Nullable
+    private static UUID resolveGuardEntityUuid(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull HiredGuardRecord rec
+    ) {
+        UUID recorded = rec.getEntityUuid();
+        if (recorded != null && !NIL_UUID.equals(recorded)) {
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(recorded);
+            if (ref != null && ref.isValid()) {
+                return recorded;
+            }
+        }
+        String characterId = rec.getCharacterId().trim();
+        if (characterId.isEmpty()) {
+            return recorded;
+        }
+        UUID tid = town.getTownId();
+        UUID[] found = { null };
+        Query<EntityStore> q = Query.and(
+            TownVillagerBinding.getComponentType(),
+            TownsfolkCharacterBinding.getComponentType(),
+            UUIDComponent.getComponentType()
+        );
+        store.forEachChunk(q, (archetypeChunk, commandBuffer) -> {
+            if (found[0] != null) {
+                return;
+            }
+            int n = archetypeChunk.size();
+            for (int i = 0; i < n; i++) {
+                TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                if (b == null || !tid.equals(b.getTownId()) || !TownVillagerBinding.KIND_GUARD.equals(b.getKind())) {
+                    continue;
+                }
+                TownsfolkCharacterBinding tb = archetypeChunk.getComponent(i, TownsfolkCharacterBinding.getComponentType());
+                if (tb == null || !characterId.equalsIgnoreCase(tb.getCharacterId())) {
+                    continue;
+                }
+                UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                if (uc != null) {
+                    found[0] = uc.getUuid();
+                    return;
+                }
+            }
+        });
+        if (found[0] != null) {
+            return found[0];
+        }
+        return recorded;
+    }
+
+    @Nonnull
+    private static String guardRoleIdForProfile(@Nonnull AetherhavenPlugin plugin, @Nonnull String equipmentProfileId) {
+        EquipmentProfileDefinition profile = plugin.getEquipmentProfileCatalog().byId(equipmentProfileId);
+        return profile != null ? profile.getGuardNpcRole() : AetherhavenConstants.NPC_GUARD_KNIGHT;
+    }
+
+    @Nonnull
+    private static TownsfolkCharacterBinding resolveGuardCharacterBinding(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID entityUuid,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String characterId
+    ) {
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
+        if (ref != null && ref.isValid()) {
+            TownsfolkCharacterBinding live = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
+            if (live != null && characterId.equalsIgnoreCase(live.getCharacterId())) {
+                return new TownsfolkCharacterBinding(
+                    live.getCharacterId(),
+                    live.getActivePersonalityId(),
+                    com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds.GUARD,
+                    live.getModelAssetId(),
+                    live.getPersonalityIds()
+                );
+            }
+        }
+        return GuardHireService.characterBindingFromCatalog(plugin, characterId);
+    }
+
+    private static void migratePatrolRoutesForGuard(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID oldUuid,
+        @Nonnull UUID newUuid
+    ) {
+        if (oldUuid.equals(newUuid)) {
+            return;
+        }
+        PatrolRouteRegistry reg = AetherhavenWorldRegistries.getOrCreatePatrolRouteRegistry(world, plugin);
+        if (reg.migrateGuardAssignment(oldUuid, newUuid)) {
+            PatrolRoutePersistence.save(world, plugin, reg);
+        }
     }
 
     /**
@@ -416,7 +627,7 @@ public final class VillagerTownResetService {
                 return;
             }
         }
-        map.put(oldUuid, new CapturedNpc(oldUuid, loaded, roleId, kind, jobPlotId, false));
+        map.put(oldUuid, new CapturedNpc(oldUuid, loaded, roleId, kind, jobPlotId, false, null, null, null, false));
     }
 
     @Nullable
@@ -436,7 +647,7 @@ public final class VillagerTownResetService {
         if (role.isEmpty()) {
             return null;
         }
-        var pair = npc.spawnNPC(store, role, null, pos, Vector3f.ZERO);
+        var pair = npc.spawnNPC(store, role, null, pos, Rotation3f.ZERO);
         if (pair == null) {
             return null;
         }

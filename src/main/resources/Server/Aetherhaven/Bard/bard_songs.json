@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "songs": [
+    {
+      "id": "beach_chillin",
+      "displayLangKey": "aetherhaven_bard.songs.beach_chillin",
+      "musicTrack": "Music/zUnused/BeachChillin.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_Beach_Chillin",
+      "durationSeconds": 132
+    },
+    {
+      "id": "cafe",
+      "displayLangKey": "aetherhaven_bard.songs.cafe",
+      "musicTrack": "Music/zUnused/Cafe.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_Cafe",
+      "durationSeconds": 118
+    },
+    {
+      "id": "city_of_dreams",
+      "displayLangKey": "aetherhaven_bard.songs.city_of_dreams",
+      "musicTrack": "Music/zUnused/CityofDreams.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_City_Of_Dreams",
+      "durationSeconds": 145
+    },
+    {
+      "id": "coconuts",
+      "displayLangKey": "aetherhaven_bard.songs.coconuts",
+      "musicTrack": "Music/zUnused/Coconuts.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_Coconuts",
+      "durationSeconds": 120
+    },
+    {
+      "id": "crackerjackers",
+      "displayLangKey": "aetherhaven_bard.songs.crackerjackers",
+      "musicTrack": "Music/zUnused/Crackerjackers.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_Crackerjackers",
+      "durationSeconds": 128
+    },
+    {
+      "id": "crafting",
+      "displayLangKey": "aetherhaven_bard.songs.crafting",
+      "musicTrack": "Music/zUnused/Crafting.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_Crafting",
+      "durationSeconds": 140
+    },
+    {
+      "id": "emerald_trek",
+      "displayLangKey": "aetherhaven_bard.songs.emerald_trek",
+      "musicTrack": "Music/zUnused/EmeraldTrek.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_Emerald_Trek",
+      "durationSeconds": 150
+    },
+    {
+      "id": "explorers_guild",
+      "displayLangKey": "aetherhaven_bard.songs.explorers_guild",
+      "musicTrack": "Music/zUnused/ExplorersGuild.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_Explorers_Guild",
+      "durationSeconds": 135
+    },
+    {
+      "id": "explorers_lounge",
+      "displayLangKey": "aetherhaven_bard.songs.explorers_lounge",
+      "musicTrack": "Music/zUnused/ExplorersLounge.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_Explorers_Lounge",
+      "durationSeconds": 142
+    },
+    {
+      "id": "family_walk",
+      "displayLangKey": "aetherhaven_bard.songs.family_walk",
+      "musicTrack": "Music/zUnused/FamilyWalk.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_Family_Walk",
+      "durationSeconds": 125
+    }
+  ]
+}

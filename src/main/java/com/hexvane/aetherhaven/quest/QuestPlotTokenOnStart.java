@@ -1,7 +1,9 @@
 package com.hexvane.aetherhaven.quest;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -40,14 +42,17 @@ public final class QuestPlotTokenOnStart {
             );
             return;
         }
-        String tokenId = cdef.getPlotTokenItemId();
-        if (tokenId == null || tokenId.isBlank()) {
-            return;
-        }
         Player player = store.getComponent(playerRef, Player.getComponentType());
         if (player == null) {
             return;
         }
-        player.giveItem(new ItemStack(tokenId.trim(), 1), playerRef, store);
+        String legacyTokenId = cdef.getPlotTokenItemId();
+        if (legacyTokenId != null
+            && !legacyTokenId.isBlank()
+            && !AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(legacyTokenId.trim())) {
+            player.giveItem(new ItemStack(legacyTokenId.trim(), 1), playerRef, store);
+            return;
+        }
+        PlotTokenInventory.giveToPlayer(player, cdef.getId(), 1, cdef.getDisplayName(), playerRef, store);
     }
 }

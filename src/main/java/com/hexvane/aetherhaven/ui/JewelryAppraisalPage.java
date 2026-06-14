@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryMetadata;
+import com.hexvane.aetherhaven.jewelry.JewelryPieceKind;
 import com.hexvane.aetherhaven.jewelry.JewelryRarity;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -39,8 +40,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.herolias.tooltips.api.DynamicTooltipsApi;
-import org.herolias.tooltips.api.DynamicTooltipsApiProvider;
+import com.hexvane.aetherhaven.jewelry.JewelryNativeTooltipManager;
+import com.hexvane.aetherhaven.jewelry.JewelryTooltipUiSupport;
 
 /** Appraise jewelry stacks in combined inventory; merchant charges gold, appraisal bench does not. */
 public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPage<JewelryAppraisalPage.PageData> {
@@ -100,7 +101,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
             if (ItemStack.isEmpty(st)) {
                 continue;
             }
-            if (JewelryItemIds.isJewelry(st.getItemId())) {
+            if (JewelryPieceKind.isEnchanted(st.getItemId())) {
                 slots.add(s);
             }
         }
@@ -125,6 +126,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         for (int i = 0; i < n; i++) {
             short slot = slots.get(i);
             ItemStack stack = inv.getItemStack(slot);
+            JewelryTooltipUiSupport.ensureVirtualItemForStack(pr, stack);
             commandBuilder.append(ROWS, "Aetherhaven/JewelryAppraisalRow.ui");
             String row = ROWS + "[" + i + "]";
             Item it = stack.getItem();
@@ -330,10 +332,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
             NotificationStyle.Success
         );
         if (uc != null) {
-            DynamicTooltipsApi dtlApi = DynamicTooltipsApiProvider.get();
-            if (dtlApi != null) {
-                dtlApi.refreshPlayer(uc.getUuid());
-            }
+            JewelryNativeTooltipManager.refreshPlayer(uc.getUuid());
         }
         UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_ARCANE_WORKBENCH_CRAFT);
         selectedSlot = slot;

@@ -1,0 +1,69 @@
+# Builder dialogue (Rowan Ridgecraft)
+
+aetherhaven.dialogue.aetherhaven_builder.root.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.root.hc0=Ask about a home
+aetherhaven.dialogue.aetherhaven_builder.root.hc1=Finish the home quest
+aetherhaven.dialogue.aetherhaven_builder.root.hc2=Check on the house quest
+aetherhaven.dialogue.aetherhaven_builder.root.c0=Talk about the builder's hut
+aetherhaven.dialogue.aetherhaven_builder.root.c1=Finish the hut quest
+aetherhaven.dialogue.aetherhaven_builder.root.c2=Check on the hut build
+aetherhaven.dialogue.aetherhaven_builder.root.c3=Ask about building the hut
+aetherhaven.dialogue.aetherhaven_builder.root.c4=Goodbye
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.body=I take pride in every wall that goes up in this town. Give me a proper builder's hut with a bench and plans, and I will help your plots rise faster while I am on the clock.
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c0=Accept the quest
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c1=Not now
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.body=Take this plot token. Stake the hut, pay the sign, and let the build run. When the roof is on, find me at the bench.
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.c0=Understood
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.body=I can already picture the finished hut. Have you staked the plot and started the build yet?
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c0=Abandon the quest
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c1=Still working on it
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.body=That is fine. I will wait at the inn until you are ready to try again.
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.c0=Goodbye
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.body=Now this is a hut worth signing my name on. When other plots are going up, I will be out there with my hammer lending a hand.
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.c0=Happy to have you here
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.body=The hut is for work. I would like a small house of my own when you have time to stake one.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c0=Accept the quest
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c1=Not now
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.body=Take the house token and build a plot. Assign me on the management block when it is ready.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.c0=Understood
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.body=I still need a house assigned to me on the management block.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.c0=I will take care of it
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.body=Warm walls and a solid roof. I can rest easy and still keep an eye on the town's builds.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.c0=Welcome home
+
+aetherhaven.dialogue.aetherhaven_builder.gift.love=Perfect. Good timber and clean stone tell me you understand what holds a building up.
+aetherhaven.dialogue.aetherhaven_builder.gift.like=Useful stuff. I can always find a place for that on site.
+aetherhaven.dialogue.aetherhaven_builder.gift.neutral=Not quite my taste, but thank you anyway.
+aetherhaven.dialogue.aetherhaven_builder.gift.dislike=I would rather not keep that around the hut.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.fallback=If you need the hut, a house, or help with a plot, say the word.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.0=Good lines on that last roof. I noticed.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.1=I was sketching a floor plan in my head. Old habit.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.2=Every town deserves buildings that stand straight. Yours is getting there.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.3=Sorry about the sawdust. I never leave home without a bit of it.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.0=Bring me timber, stone, or a proper builder's bench and you will make my day.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.1=A good hammer is always welcome in my hands.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.0=Please do not bring me trash or void junk.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.1=Dead plants and bone piles do not belong on my workbench.
+
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_50.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_100.speaker=Rowan Ridgecraft

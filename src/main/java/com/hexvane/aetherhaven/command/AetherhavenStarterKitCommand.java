@@ -22,7 +22,7 @@ public final class AetherhavenStarterKitCommand extends AbstractPlayerCommand {
     public AetherhavenStarterKitCommand() {
         super("starterkit", "aetherhaven_commands_root.commands.aetherhaven.starterkit.desc");
         this.addAliases("starter");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
     }
 
     @Override

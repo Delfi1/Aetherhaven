@@ -1,0 +1,20 @@
+{
+  "id": "cynical",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.cynical.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.cynical.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.cynical.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.cynical.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.cynical.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "SIT": 1.2,
+    "FUN": 0.5,
+    "WORK": 1.0,
+    "EAT": 0.9
+  },
+  "preferredScheduleLocations": [
+    "inn",
+    "home"
+  ]
+}

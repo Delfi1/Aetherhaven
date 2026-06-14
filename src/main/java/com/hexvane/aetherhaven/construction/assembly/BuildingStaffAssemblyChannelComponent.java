@@ -5,7 +5,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -127,6 +127,15 @@ public final class BuildingStaffAssemblyChannelComponent implements Component<En
 
     public boolean isFresh(long nowNs) {
         return nowNs - lastChargeTickNs <= CHANNEL_STALE_NS;
+    }
+
+    public long getLastChargeTickNs() {
+        return lastChargeTickNs;
+    }
+
+    /** {@code true} when secondary has not been held recently (used for faster idle mana regen). */
+    public boolean isIdleForManaRegen(long nowNs, long idleDelayNs) {
+        return lastChargeTickNs <= 0L || nowNs - lastChargeTickNs >= idleDelayNs;
     }
 
     /** Brush center in world block coordinates (meaningful only when {@link #hasActiveTarget()}). */

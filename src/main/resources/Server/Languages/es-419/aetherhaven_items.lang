@@ -36,7 +36,7 @@ aetherhaven.poiTool.legendSecondary=Secundario: mover el punto de interés selec
 aetherhaven.poiTool.legendUse=Uso: establece el destino de la ruta del PNJ para el POI seleccionado (Usar al eliminar bloques del POI)
 
 aetherhaven.pathTool.legendPageTitle=Herramienta de ruta
-aetherhaven.pathTool.legendBlurb=Crea una curva, previsualízala y luego coloca los bloques de ruta. Un panel de estado aparece en la esquina mientras mantienes presionada la herramienta. Con Buuz135 MHUD instalado, el panel se registra como una capa independiente, por lo que otros HUD personalizados también pueden permanecer visibles.
+aetherhaven.pathTool.legendBlurb=Crea una curva, previsualízala y luego coloca los bloques de ruta. Un panel de estado aparece en la esquina mientras mantienes presionada la herramienta.
 aetherhaven.pathTool.legendHotkeyAdd=Al apuntar con el arma secundaria al suelo, se añade un fotograma clave (esfera dorada). Al apuntar con el arma secundaria, se elimina un fotograma clave. Los nuevos fotogramas clave apuntan en la dirección en la que se está mirando.
 aetherhaven.pathTool.legendHotkeyAim=Para seleccionarlo, observa un fotograma clave. En el modo de movimiento, el elemento principal en el suelo mueve el punto. El elemento principal en el mismo nodo no hace nada.
 aetherhaven.pathTool.legendHotkeyUse=F: en modo de rotación, realiza un paso de guiñada en el nodo seleccionado. En modo de movimiento, F no hace nada. En modo de colocación, F coloca la ruta (se necesitan dos nodos). Q: modo de ciclo. E: ancho 1-8. Tercera capacidad de la herramienta: estilo de ruta (bloques internos; ver PathToolStyles en la configuración). La opción secundaria en un fotograma clave lo elimina.
@@ -131,8 +131,6 @@ items.Aetherhaven_Geode.description=Una piedra hueca que puede contener cristale
 
 items.Aetherhaven_Geode_Anvil.name=Yunque de geoda
 items.Aetherhaven_Geode_Anvil.description=Abre geodas sin coste de herrería. Colócalas y úsalas; debes conocer el esquema para fabricarlas en tu oficina de planificación urbana.
-
-barter.aetherhaven_vex.title=Stock diario de Vex
 
 items.Aetherhaven_Treasury.name=Tesorería municipal
 items.Aetherhaven_Treasury.description=Contiene las monedas de oro del pueblo. Se utiliza para depositar o retirar (del propietario del pueblo).

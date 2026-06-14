@@ -22,7 +22,12 @@ public final class AetherhavenRoleLabels {
         Map.entry(AetherhavenConstants.NPC_PRIESTESS, "Serah Thornwell"),
         Map.entry(AetherhavenConstants.NPC_MINER, "Gorruk Stonevein"),
         Map.entry(AetherhavenConstants.NPC_LOGGER, "Seren Fairhollow"),
-        Map.entry(AetherhavenConstants.NPC_RANCHER, "Thalen Meadowrun")
+        Map.entry(AetherhavenConstants.NPC_RANCHER, "Thalen Meadowrun"),
+        Map.entry(AetherhavenConstants.NPC_CRYSTAL_KEEPER, "Vaelith Prismshade"),
+        Map.entry(AetherhavenConstants.NPC_PYROTECHNIC, "Grubble Sparkmatch"),
+        Map.entry(AetherhavenConstants.NPC_FLORIST, "Ivy Bloomwell"),
+        Map.entry(AetherhavenConstants.NPC_BUILDER, "Rowan Ridgecraft"),
+        Map.entry(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID, "Lyra Fairhollow")
     );
 
     private static final Map<String, String> KIND_TO_ENGLISH_PROFESSION = Map.ofEntries(
@@ -34,7 +39,13 @@ public final class AetherhavenRoleLabels {
         Map.entry(TownVillagerBinding.KIND_PRIESTESS, "Priestess"),
         Map.entry(TownVillagerBinding.KIND_MINER, "Miner"),
         Map.entry(TownVillagerBinding.KIND_LOGGER, "Logger"),
-        Map.entry(TownVillagerBinding.KIND_RANCHER, "Rancher")
+        Map.entry(TownVillagerBinding.KIND_RANCHER, "Rancher"),
+        Map.entry(TownVillagerBinding.KIND_CRYSTAL_KEEPER, "Crystal Keeper"),
+        Map.entry(TownVillagerBinding.KIND_PYROTECHNIC, "Pyrotechnic"),
+        Map.entry(TownVillagerBinding.KIND_FLORIST, "Florist"),
+        Map.entry(TownVillagerBinding.KIND_BUILDER, "Builder"),
+        Map.entry(TownVillagerBinding.KIND_GUILD_MASTER, "Guild Master"),
+        Map.entry(TownVillagerBinding.KIND_TOWNSFOLK, "Townsfolk")
     );
 
     private AetherhavenRoleLabels() {}
@@ -63,11 +74,34 @@ public final class AetherhavenRoleLabels {
      */
     @Nonnull
     public static String professionTranslationKey(@Nonnull String roleId, @Nonnull String kind) {
+        String r = roleId.trim();
         String k = kind != null ? kind.trim() : "";
+        if (TownVillagerBinding.KIND_GUARD.equals(k)) {
+            return guardTypeTranslationKey(r);
+        }
+        if (TownVillagerBinding.KIND_TOWNSFOLK.equals(k)) {
+            return "aetherhaven_jewelry_geode.aetherhaven.profession.kind.townsfolk";
+        }
         if (!k.isEmpty() && !TownVillagerBinding.isVisitorKind(k)) {
             return "aetherhaven_jewelry_geode.aetherhaven.profession.kind." + k;
         }
-        return "aetherhaven_jewelry_geode.aetherhaven.profession.kind." + professionKindSlugFromRoleId(roleId.trim());
+        String slug = professionKindSlugFromRoleId(r);
+        if (TownVillagerBinding.KIND_GUARD.equals(slug)) {
+            return guardTypeTranslationKey(r);
+        }
+        return "aetherhaven_jewelry_geode.aetherhaven.profession.kind." + slug;
+    }
+
+    /** Guard class label (Knight / Archer / Mage) for patrol, tithe, and resident UI. */
+    @Nonnull
+    public static String guardTypeTranslationKey(@Nonnull String roleId) {
+        if (AetherhavenConstants.NPC_GUARD_ARCHER.equals(roleId)) {
+            return "aetherhaven_items.aetherhaven.patrolWand.guardTypeArcher";
+        }
+        if (AetherhavenConstants.NPC_GUARD_MAGE.equals(roleId)) {
+            return "aetherhaven_items.aetherhaven.patrolWand.guardTypeMage";
+        }
+        return "aetherhaven_items.aetherhaven.patrolWand.guardTypeKnight";
     }
 
     /**
@@ -90,20 +124,48 @@ public final class AetherhavenRoleLabels {
 
     @Nonnull
     private static String professionEnglishFor(@Nullable String roleId, @Nonnull String bindingKind) {
-        if (!bindingKind.isEmpty() && !TownVillagerBinding.isVisitorKind(bindingKind)) {
-            String j = KIND_TO_ENGLISH_PROFESSION.get(bindingKind.trim());
+        String kind = bindingKind.trim();
+        if (TownVillagerBinding.KIND_GUARD.equals(kind)) {
+            return guardTypeEnglish(roleId);
+        }
+        if (!kind.isEmpty() && !TownVillagerBinding.isVisitorKind(kind)) {
+            String j = KIND_TO_ENGLISH_PROFESSION.get(kind);
             if (j != null) {
                 return j;
             }
         }
         if (roleId != null && !roleId.isBlank()) {
-            String k = professionKindSlugFromRoleId(roleId.trim());
-            String fromSlug = mapSlugToEnglish(k);
+            String r = roleId.trim();
+            if (isGuardRoleId(r)) {
+                return guardTypeEnglish(r);
+            }
+            String fromSlug = mapSlugToEnglish(professionKindSlugFromRoleId(r));
             if (fromSlug != null) {
                 return fromSlug;
             }
         }
         return "Resident";
+    }
+
+    @Nonnull
+    private static String guardTypeEnglish(@Nullable String roleId) {
+        if (roleId == null || roleId.isBlank()) {
+            return "Knight";
+        }
+        String r = roleId.trim();
+        if (AetherhavenConstants.NPC_GUARD_ARCHER.equals(r)) {
+            return "Archer";
+        }
+        if (AetherhavenConstants.NPC_GUARD_MAGE.equals(r)) {
+            return "Mage";
+        }
+        return "Knight";
+    }
+
+    private static boolean isGuardRoleId(@Nonnull String roleId) {
+        return AetherhavenConstants.NPC_GUARD_KNIGHT.equals(roleId)
+            || AetherhavenConstants.NPC_GUARD_ARCHER.equals(roleId)
+            || AetherhavenConstants.NPC_GUARD_MAGE.equals(roleId);
     }
 
     @Nullable
@@ -118,6 +180,9 @@ public final class AetherhavenRoleLabels {
             case TownVillagerBinding.KIND_MINER -> "Miner";
             case TownVillagerBinding.KIND_LOGGER -> "Logger";
             case TownVillagerBinding.KIND_RANCHER -> "Rancher";
+            case TownVillagerBinding.KIND_BUILDER -> "Builder";
+            case TownVillagerBinding.KIND_GUILD_MASTER -> "Guild Master";
+            case TownVillagerBinding.KIND_TOWNSFOLK -> "Townsfolk";
             default -> null;
         };
     }
@@ -150,6 +215,24 @@ public final class AetherhavenRoleLabels {
         }
         if (AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
             return TownVillagerBinding.KIND_RANCHER;
+        }
+        if (AetherhavenConstants.NPC_CRYSTAL_KEEPER.equals(roleId)) {
+            return TownVillagerBinding.KIND_CRYSTAL_KEEPER;
+        }
+        if (AetherhavenConstants.NPC_PYROTECHNIC.equals(roleId)) {
+            return TownVillagerBinding.KIND_PYROTECHNIC;
+        }
+        if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
+            return TownVillagerBinding.KIND_FLORIST;
+        }
+        if (AetherhavenConstants.NPC_BUILDER.equals(roleId)) {
+            return TownVillagerBinding.KIND_BUILDER;
+        }
+        if (AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID.equals(roleId)) {
+            return TownVillagerBinding.KIND_GUILD_MASTER;
+        }
+        if (isGuardRoleId(roleId)) {
+            return TownVillagerBinding.KIND_GUARD;
         }
         return "unknown";
     }

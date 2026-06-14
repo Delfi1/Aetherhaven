@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenTownsCommand extends AbstractPlayerCommand {
     public AetherhavenTownsCommand() {
         super("towns", "aetherhaven_commands_help.commands.aetherhaven.towns.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
     }
 
     @Override

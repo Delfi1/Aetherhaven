@@ -1,5 +1,7 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_logger)
-# Full translation keys are aetherhaven.dialogue.aetherhaven_logger.<lineKey> (see Hytale I18nModule).
+# Full translation keys are aetherhaven_dialogue_logger.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_logger.rep_reward_50.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.rep_reward_100.speaker=Seren Fairhollow
 aetherhaven.dialogue.aetherhaven_logger.root.speaker=Seren Fairhollow
 aetherhaven.dialogue.aetherhaven_logger.root.body=I fell trees and process them into lumber for the settlement. This work becomes much more precise when we have an actual lumbermill with proper saws, stacking space, and a dedicated bench. If you build that for me, I can keep the plank racks full instead of leaving good timber in messy piles outside the walls. I need sharp iron and straight boards; that is how I operate.
 aetherhaven.dialogue.aetherhaven_logger.root.hc0=You wanted to talk about a house.

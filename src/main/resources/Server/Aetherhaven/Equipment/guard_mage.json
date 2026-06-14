@@ -1,0 +1,14 @@
+{
+  "id": "guard_mage",
+  "guardNpcRole": "Aetherhaven_Guard_Mage",
+  "displayName": "Mage",
+  "hireGoldCost": 45,
+  "armor": [
+    "Armor_Cloth_Cotton_Chest",
+    "Armor_Cloth_Cotton_Legs",
+    "Armor_Cloth_Cotton_Hands"
+  ],
+  "hotbar": [
+    { "slot": 0, "itemId": "Weapon_Staff_Iron" }
+  ]
+}

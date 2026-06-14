@@ -39,6 +39,10 @@
       "count": 18
     },
     {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 18
+    },
+    {
       "itemId": "Furniture_Village_Ladder",
       "count": 16
     },
@@ -63,10 +67,6 @@
       "count": 9
     },
     {
-      "itemId": "Wood_Hardwood_Planks",
-      "count": 8
-    },
-    {
       "itemId": "Furniture_Tavern_Trapdoor",
       "count": 7
     },
@@ -85,10 +85,6 @@
     {
       "resourceTypeId": "Wood_All",
       "count": 6
-    },
-    {
-      "itemId": "Furniture_Tavern_Shelf",
-      "count": 5
     },
     {
       "itemId": "Deco_Rope_Diagonal",

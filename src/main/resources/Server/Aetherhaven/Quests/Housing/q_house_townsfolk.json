@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "q_house_townsfolk",
+  "category": "housing",
+  "assignByEntity": true,
+  "grantPlotTokenConstructionId": "plot_house",
+  "dialogueOfferEntryNodeId": "tourist_house_offer",
+  "title": "A home for a visitor",
+  "description": "This visitor from the portal wants a house before they count as a full resident.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Talk to the visitor and take a house plot token."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the house."
+    },
+    {
+      "id": "assign",
+      "kind": "custom",
+      "text": "Assign this visitor on the house sign."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Talk to the visitor again when they are living there."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      { "effect": "lock_tourist_for_npc", "params": {} }
+    ],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "per_entity" }
+}

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.inn;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -12,9 +13,7 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -54,23 +53,10 @@ public final class FarmerPlotCompletion {
             return;
         }
 
-        double tx = work.getX() + 0.5;
-        double ty = work.getY();
-        double tz = work.getZ() + 0.5;
-
         Ref<EntityStore> farmerRef = findFarmerRef(store, town);
         if (farmerRef == null || !farmerRef.isValid()) {
             return;
         }
-        TransformComponent tc = store.getComponent(farmerRef, TransformComponent.getComponentType());
-        if (tc == null) {
-            return;
-        }
-        Vector3d p = tc.getPosition();
-        p.x = tx;
-        p.y = ty + 0.02;
-        p.z = tz;
-        store.putComponent(farmerRef, TransformComponent.getComponentType(), tc);
         UUIDComponent uuidComp = store.getComponent(farmerRef, UUIDComponent.getComponentType());
         UUID farmerUuid = uuidComp != null ? uuidComp.getUuid() : null;
         if (farmerUuid != null) {
@@ -87,6 +73,11 @@ public final class FarmerPlotCompletion {
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_FARMER, farmPlotId, farmPlotId)
         );
+        VillagerAutonomySystem.promptWorkplaceTravel(
+            farmerRef,
+            store,
+            VillagerAutonomySystem.resolveAutonomyNowMs(store)
+        );
         town.addInnVisitorPoolExcludedRoleId(AetherhavenConstants.NPC_FARMER);
         if (uuidComp != null) {
             ResidentRegistryService.upsert(
@@ -99,7 +90,7 @@ public final class FarmerPlotCompletion {
             );
         }
         tm.updateTown(town);
-        LOGGER.atInfo().log("Moved farmer to farm plot at %s,%s,%s", work.getX(), work.getY(), work.getZ());
+        LOGGER.atInfo().log("Assigned farmer to farm plot %s; pathing to work POI", farmPlotId);
     }
 
     @Nullable

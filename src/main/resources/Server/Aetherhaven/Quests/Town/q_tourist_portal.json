@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "q_tourist_portal",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_tourist_portal",
+  "title": "Welcome visitors",
+  "description": "Lyren wants a tourist portal so travelers can visit Aetherhaven each day and see what the town has become.",
+  "assignNpcRoleId": "Aetherhaven_Elder_Lyren",
+  "prerequisites": {
+    "completedQuestIds": ["q_build_town_hall"],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Take the tourist portal plot token from Lyren."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the tourist portal."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Tell Lyren in person when the portal is complete."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Elder_Lyren",
+      "amount": 15,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "none" }
+}

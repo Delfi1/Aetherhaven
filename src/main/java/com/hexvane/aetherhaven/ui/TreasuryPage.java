@@ -221,12 +221,7 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
         commandBuilder.clear(TAX_ROWS);
         List<VillagerTaxLine> sorted = new ArrayList<>(b.lines());
         sorted.sort(
-            Comparator.comparing(
-                    (VillagerTaxLine l) ->
-                        AetherhavenRoleLabels.displayNameForRoleId(l.npcRole() != null ? l.npcRole() : ""),
-                    String.CASE_INSENSITIVE_ORDER
-                )
-                .thenComparing(VillagerTaxLine::entityUuid)
+            Comparator.comparing(VillagerTaxLine::displayName, String.CASE_INSENSITIVE_ORDER).thenComparing(VillagerTaxLine::entityUuid)
         );
         int n = Math.min(sorted.size(), MAX_TAX_ROWS);
         for (int i = 0; i < n; i++) {
@@ -235,21 +230,26 @@ public final class TreasuryPage extends AetherhavenInteractiveCustomUIPage<Treas
             VillagerTaxLine line = sorted.get(i);
             String roleId = line.npcRole() != null ? line.npcRole() : "";
             String profKey = AetherhavenRoleLabels.professionTranslationKey(roleId, line.bindingKind());
-            Message nameLine =
-                roleId.isBlank()
-                    ? Message.raw(line.displayName())
-                    : Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + roleId.trim() + ".name");
+            Message nameLine = Message.raw(line.displayName());
             commandBuilder.set(
                 row + " #Name.TextSpans",
                 Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.residentLine")
                     .param("name", nameLine)
                     .param("job", Message.translation(profKey))
             );
-            int comfortPct = Math.round(line.needsRatio() * 100f);
-            commandBuilder.set(
-                row + " #Comfort.TextSpans",
-                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.tax.comfortPercent").param("pct", String.valueOf(comfortPct))
-            );
+            if (line.townsfolkFlatTax()) {
+                commandBuilder.set(
+                    row + " #Comfort.TextSpans",
+                    Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.townsfolkFlatGold")
+                        .param("amount", Integer.toString(AetherhavenConstants.TOWNSFOLK_TAX_GOLD_PER_DAY))
+                );
+            } else {
+                int comfortPct = Math.round(line.needsRatio() * 100f);
+                commandBuilder.set(
+                    row + " #Comfort.TextSpans",
+                    Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.tax.comfortPercent").param("pct", String.valueOf(comfortPct))
+                );
+            }
             commandBuilder.set(row + " #Gold.TextSpans", Message.raw(padGoldColumn(line.contributionGold())));
         }
         if (sorted.size() > MAX_TAX_ROWS) {

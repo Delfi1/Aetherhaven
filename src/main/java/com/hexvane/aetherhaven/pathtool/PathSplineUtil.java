@@ -1,6 +1,6 @@
 package com.hexvane.aetherhaven.pathtool;
 
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -31,10 +31,10 @@ public final class PathSplineUtil {
             Vector3d p3 = b.getPosition();
             Vector3d tanA = forwardHorizontal(a.getYawDeg());
             Vector3d tanB = forwardHorizontal(b.getYawDeg());
-            double dist = p0.distanceTo(p3);
+            double dist = p0.distance(p3);
             double handle = Math.max(0.5, dist * HANDLE_FRAC);
-            Vector3d p1 = new Vector3d(p0.getX() + tanA.getX() * handle, p0.getY() + tanA.getY() * handle, p0.getZ() + tanA.getZ() * handle);
-            Vector3d p2 = new Vector3d(p3.getX() - tanB.getX() * handle, p3.getY() - tanB.getY() * handle, p3.getZ() - tanB.getZ() * handle);
+            Vector3d p1 = new Vector3d(p0.x() + tanA.x() * handle, p0.y() + tanA.y() * handle, p0.z() + tanA.z() * handle);
+            Vector3d p2 = new Vector3d(p3.x() - tanB.x() * handle, p3.y() - tanB.y() * handle, p3.z() - tanB.z() * handle);
             int steps = (int) Math.ceil(dist * sps);
             steps = Math.max(4, Math.min(256, steps));
             for (int k = 0; k < steps; k++) {
@@ -45,11 +45,11 @@ public final class PathSplineUtil {
                 }
                 Vector3d pos = bezier(t, p0, p1, p2, p3);
                 Vector3d d = bezierDeriv(t, p0, p1, p2, p3);
-                d.setY(0.0);
+                d.y = 0.0;
                 if (len2(d) < 1.0e-6) {
-                    d.setX(tanA.getX());
-                    d.setY(0.0);
-                    d.setZ(tanA.getZ());
+                    d.x = tanA.x();
+                    d.y = 0.0;
+                    d.z = tanA.z();
                 } else {
                     d.normalize();
                 }
@@ -57,9 +57,9 @@ public final class PathSplineUtil {
                 Vector3d right = new Vector3d();
                 UP.cross(d, right);
                 if (len2(right) < 1.0e-6) {
-                    right.setX(1.0);
-                    right.setY(0.0);
-                    right.setZ(0.0);
+                    right.x = 1.0;
+                    right.y = 0.0;
+                    right.z = 0.0;
                 } else {
                     right.normalize();
                 }
@@ -72,9 +72,9 @@ public final class PathSplineUtil {
         Vector3d r = new Vector3d();
         UP.cross(tan, r);
         if (len2(r) < 1.0e-6) {
-            r.setX(1.0);
-            r.setY(0.0);
-            r.setZ(0.0);
+            r.x = 1.0;
+            r.y = 0.0;
+            r.z = 0.0;
         } else {
             r.normalize();
         }
@@ -86,8 +86,8 @@ public final class PathSplineUtil {
      * Yaw in degrees (same basis as {@link #forwardHorizontal}) from a world-space direction, using only XZ.
      */
     public static double yawDegFromLookDirection(@Nonnull Vector3d dir) {
-        double x = dir.getX();
-        double z = dir.getZ();
+        double x = dir.x();
+        double z = dir.z();
         double h = Math.hypot(x, z);
         if (h < 1.0e-6) {
             return 0.0;
@@ -110,7 +110,7 @@ public final class PathSplineUtil {
     }
 
     private static double len2(@Nonnull Vector3d v) {
-        return v.getX() * v.getX() + v.getY() * v.getY() + v.getZ() * v.getZ();
+        return v.x() * v.x() + v.y() * v.y() + v.z() * v.z();
     }
 
     @Nonnull
@@ -136,9 +136,9 @@ public final class PathSplineUtil {
         double uuu = uu * u;
         double tt = t * t;
         double ttt = tt * t;
-        double x = uuu * p0.getX() + 3 * uu * t * p1.getX() + 3 * u * tt * p2.getX() + ttt * p3.getX();
-        double y = uuu * p0.getY() + 3 * uu * t * p1.getY() + 3 * u * tt * p2.getY() + ttt * p3.getY();
-        double z = uuu * p0.getZ() + 3 * uu * t * p1.getZ() + 3 * u * tt * p2.getZ() + ttt * p3.getZ();
+        double x = uuu * p0.x() + 3 * uu * t * p1.x() + 3 * u * tt * p2.x() + ttt * p3.x();
+        double y = uuu * p0.y() + 3 * uu * t * p1.y() + 3 * u * tt * p2.y() + ttt * p3.y();
+        double z = uuu * p0.z() + 3 * uu * t * p1.z() + 3 * u * tt * p2.z() + ttt * p3.z();
         return new Vector3d(x, y, z);
     }
 
@@ -148,17 +148,17 @@ public final class PathSplineUtil {
         double uu = u * u;
         double tt = t * t;
         double x =
-            3 * uu * (p1.getX() - p0.getX())
-                + 6 * u * t * (p2.getX() - p1.getX())
-                + 3 * tt * (p3.getX() - p2.getX());
+            3 * uu * (p1.x() - p0.x())
+                + 6 * u * t * (p2.x() - p1.x())
+                + 3 * tt * (p3.x() - p2.x());
         double y =
-            3 * uu * (p1.getY() - p0.getY())
-                + 6 * u * t * (p2.getY() - p1.getY())
-                + 3 * tt * (p3.getY() - p2.getY());
+            3 * uu * (p1.y() - p0.y())
+                + 6 * u * t * (p2.y() - p1.y())
+                + 3 * tt * (p3.y() - p2.y());
         double z =
-            3 * uu * (p1.getZ() - p0.getZ())
-                + 6 * u * t * (p2.getZ() - p1.getZ())
-                + 3 * tt * (p3.getZ() - p2.getZ());
+            3 * uu * (p1.z() - p0.z())
+                + 6 * u * t * (p2.z() - p1.z())
+                + 3 * tt * (p3.z() - p2.z());
         return new Vector3d(x, y, z);
     }
 }

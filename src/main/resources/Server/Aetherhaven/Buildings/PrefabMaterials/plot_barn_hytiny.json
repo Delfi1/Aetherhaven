@@ -11,20 +11,20 @@
       "count": 356
     },
     {
+      "itemId": "Wood_Darkwood_Planks",
+      "count": 180
+    },
+    {
       "itemId": "Wood_Softwood_Roof",
       "count": 138
     },
     {
+      "itemId": "Ingredient_Fibre",
+      "count": 136
+    },
+    {
       "itemId": "Furniture_Village_Platform",
       "count": 135
-    },
-    {
-      "itemId": "Ingredient_Fibre",
-      "count": 132
-    },
-    {
-      "itemId": "Prototype_Wood_Darkwood_Fence_Platform",
-      "count": 84
     },
     {
       "itemId": "Wood_Redwood_Stairs",
@@ -40,7 +40,7 @@
     },
     {
       "itemId": "Wood_Hardwood_Planks",
-      "count": 38
+      "count": 46
     },
     {
       "itemId": "Wood_Softwood_Roof_Shallow",
@@ -67,10 +67,6 @@
       "count": 14
     },
     {
-      "itemId": "Wood_Darkwood_Planks",
-      "count": 12
-    },
-    {
       "itemId": "Furniture_Crude_Torch",
       "count": 8
     },
@@ -91,12 +87,12 @@
       "count": 7
     },
     {
-      "itemId": "Ingredient_Hay",
-      "count": 5
+      "itemId": "Wood_Softwood_Planks",
+      "count": 6
     },
     {
-      "itemId": "Furniture_Human_Ruins_Door",
-      "count": 4
+      "itemId": "Ingredient_Hay",
+      "count": 5
     },
     {
       "itemId": "Wood_Darkwood_Fence_Gate",
@@ -117,14 +113,6 @@
     {
       "itemId": "Tool_Feedbag",
       "count": 3
-    },
-    {
-      "itemId": "Bench_Trough",
-      "count": 2
-    },
-    {
-      "itemId": "Furniture_Ancient_Sack",
-      "count": 2
     },
     {
       "itemId": "Bench_Farming",
@@ -156,10 +144,6 @@
     },
     {
       "itemId": "Furniture_Village_Stool",
-      "count": 1
-    },
-    {
-      "itemId": "Tinkering_Target_Dummy",
       "count": 1
     }
   ]

@@ -3,14 +3,15 @@ package com.hexvane.aetherhaven.map;
 import com.hypixel.hytale.common.fastutil.HLongSet;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.world.WorldMapTracker;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import java.lang.reflect.Field;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Reads {@link WorldMapTracker} loaded-chunk state (same field BetterMap uses for exploration gating). */
+/** Reads {@link WorldMapTracker} loaded-chunk state for map chunks already sent to the client. */
 public final class WorldMapTrackerCompat {
-  private static final boolean BETTERMAP_PRESENT = detectBetterMapPresent();
 
   @Nullable
   private static final Field LOADED_FIELD;
@@ -27,7 +28,7 @@ public final class WorldMapTrackerCompat {
       lock = WorldMapTracker.class.getDeclaredField("loadedLock");
       lock.setAccessible(true);
     } catch (ReflectiveOperationException ignored) {
-      // Fall back to view-radius checks only.
+      // Fall back to empty loaded set.
     }
     LOADED_FIELD = loaded;
     LOADED_LOCK_FIELD = lock;
@@ -35,20 +36,26 @@ public final class WorldMapTrackerCompat {
 
   private WorldMapTrackerCompat() {}
 
-  public static boolean isBetterMapPresent() {
-    return BETTERMAP_PRESENT;
+  /**
+   * Returns a copy of map chunk indices already sent to this player's client, or empty if unavailable.
+   */
+  @Nonnull
+  public static LongSet getLoadedChunks(@Nonnull Player player) {
+    HLongSet loaded = getLoadedSet(player);
+    if (loaded == null || loaded.isEmpty()) {
+      return new LongOpenHashSet();
+    }
+    LongOpenHashSet copy = new LongOpenHashSet(loaded.size());
+    for (long chunkIndex : loaded) {
+      copy.add(chunkIndex);
+    }
+    return copy;
   }
 
-  /**
-   * True when the vanilla tracker has already sent this map chunk to the player.
-   * Required for BetterMap compatibility so we do not push unexplored tiles.
-   */
+  /** True when the tracker has already sent this map chunk to the player. */
   public static boolean hasChunkLoadedOnClient(@Nonnull Player player, long chunkIndex) {
     HLongSet loaded = getLoadedSet(player);
-    if (loaded != null) {
-      return loaded.contains(chunkIndex);
-    }
-    return false;
+    return loaded != null && loaded.contains(chunkIndex);
   }
 
   @Nullable
@@ -70,15 +77,6 @@ public final class WorldMapTrackerCompat {
       return null;
     } finally {
       lock.readLock().unlock();
-    }
-  }
-
-  private static boolean detectBetterMapPresent() {
-    try {
-      Class.forName("dev.ninesliced.BetterMap");
-      return true;
-    } catch (ClassNotFoundException e) {
-      return false;
     }
   }
 }

@@ -1,0 +1,63 @@
+{
+  "id": "plot_hytinys_sandswept_castle",
+  "displayName": "Hytiny's Sandswept Castle",
+  "description": "By HytinyBuilds",
+  "prefabPath": "plot_hytinys_sandswept_castle.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 80,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 475 },
+    { "itemId": "Rock_Sandstone_Brick", "count": 1900 }
+  ],
+  "pois": [
+    {
+      "localX": 8,
+      "localY": 2,
+      "localZ": -15,
+      "tags": [
+        "FUN",
+        "SIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -15
+    },
+    {
+      "localX": 24,
+      "localY": 2,
+      "localZ": -15,
+      "tags": [
+        "FUN",
+        "SIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 23,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -15
+    }
+  ],
+  "managementBlockLocalPos": [
+    8,
+    2,
+    -8
+  ],
+  "countsAsConstructionId": "plot_gaia_altar",
+  "tags": [
+    "altar",
+    "work",
+    "desert"
+  ],
+  "plotTokenLockedByDefault": true
+}

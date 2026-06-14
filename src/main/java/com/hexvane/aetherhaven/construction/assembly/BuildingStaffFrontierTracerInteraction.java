@@ -13,9 +13,10 @@ import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.shape.Box;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import com.hypixel.hytale.math.vector.Rotation3fc;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.WaitForDataFrom;
@@ -146,8 +147,11 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
         }
         HeadRotation headRot = store.getComponent(playerRef, HeadRotation.getComponentType());
         Vector3d tip = staffTip(transform, headRot);
-        ArrayList<Vector3i> cells = new ArrayList<>();
-        AssemblyFrontierWorldCells.collectWithinDefaultRange(world, plugin, tip, cells);
+        ArrayList<Vector3i> obstructionCells = new ArrayList<>();
+        AssemblyObstructionWorldCells.collectWithinDefaultRange(world, plugin, tip, obstructionCells);
+        ArrayList<Vector3i> frontierCells = new ArrayList<>();
+        AssemblyFrontierWorldCells.collectWithinDefaultRange(world, plugin, tip, frontierCells);
+        ArrayList<Vector3i> cells = !obstructionCells.isEmpty() ? obstructionCells : frontierCells;
         if (cells.isEmpty()) {
             failWithHint(playerRef, store);
             context.getState().state = InteractionState.Failed;
@@ -172,7 +176,12 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
             if (!town.playerCanManageConstructions(playerUuid)) {
                 continue;
             }
-            if (PlotAssemblyService.resolveFrontierPlacementIndex(world, job, plot, cell) < 0) {
+            PlotAssemblyPhase phase = AssemblyWorldRegistry.phase(world, job.plotId());
+            if (phase == PlotAssemblyPhase.CLEARING) {
+                if (PlotAssemblyService.findClearingJobForObstructedCell(world, plugin, cell) == null) {
+                    continue;
+                }
+            } else if (PlotAssemblyService.resolveFrontierPlacementIndex(world, job, plot, cell) < 0) {
                 continue;
             }
             double cx = cell.x + 0.5;
@@ -202,16 +211,16 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
         double tx = best.x + 0.5;
         double ty = best.y + 0.5;
         double tz = best.z + 0.5;
-        Vector3d spawnPos = tip.clone();
+        Vector3d spawnPos = new Vector3d(tip);
         Vector3d toTarget = new Vector3d(tx - spawnPos.x, ty - spawnPos.y, tz - spawnPos.z);
         double leg = toTarget.length();
         if (leg < 1.0e-4) {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        toTarget.scale(1.0 / leg);
+        toTarget.mul(1.0 / leg);
         double pullback = Math.min(0.58, Math.max(0.22, leg * 0.09));
-        spawnPos.addScaled(toTarget, -pullback);
+        spawnPos.add(new Vector3d(toTarget).mul(-pullback));
         double pathLen =
             Math.sqrt(
                 (tx - spawnPos.x) * (tx - spawnPos.x)
@@ -223,12 +232,12 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
             return;
         }
         Vector3d dir = new Vector3d(tx - spawnPos.x, ty - spawnPos.y, tz - spawnPos.z);
-        dir.scale(1.0 / pathLen);
+        dir.mul(1.0 / pathLen);
         double pitch = Math.asin(Math.max(-1.0, Math.min(1.0, dir.y)));
         double yaw = Math.atan2(-dir.x, -dir.z);
-        Vector3f spawnRot = new Vector3f((float) pitch, (float) yaw, 0.0F);
+        Rotation3f spawnRot = new Rotation3f((float) pitch, (float) yaw, 0.0F);
         Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
-        holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(spawnPos.clone(), spawnRot));
+        holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(new Vector3d(spawnPos), spawnRot));
         holder.addComponent(HeadRotation.getComponentType(), new HeadRotation(spawnRot));
         holder.addComponent(Interactions.getComponentType(), new Interactions());
         holder.addComponent(ModelComponent.getComponentType(), new ModelComponent(model));
@@ -259,12 +268,12 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
         commandBuffer.addEntity(holder, AddReason.SPAWN);
         ParticleUtil.spawnParticleEffect(
             AetherhavenConstants.BUILDING_STAFF_GUIDE_TRAIL_PARTICLE_SYSTEM_ID,
-            spawnPos.clone(),
+            new Vector3d(spawnPos),
             store
         );
         ParticleUtil.spawnParticleEffect(
             AetherhavenConstants.BUILDING_STAFF_MATERIAL_BEAD_PARTICLE_SYSTEM_ID,
-            spawnPos.clone(),
+            new Vector3d(spawnPos),
             store
         );
         LAST_PRIMARY_NS.put(playerUuid, nowNs);
@@ -279,16 +288,16 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
 
     @Nonnull
     private static Vector3d staffTip(@Nonnull TransformComponent transform, @Nullable HeadRotation head) {
-        Vector3f euler = transform.getRotation();
+        Rotation3fc euler = transform.getRotation();
         Vector3d forward =
             head != null ? head.getDirection() : directionFromRotation(euler);
-        return transform.getPosition().clone().add(0.0, 1.32, 0.0).add(forward.clone().scale(0.42));
+        return new Vector3d(transform.getPosition()).add(0.0, 1.32, 0.0).add(new Vector3d(forward).mul(0.42));
     }
 
     @Nonnull
-    private static Vector3d directionFromRotation(@Nonnull Vector3f euler) {
-        double pitch = euler.getPitch();
-        double yaw = euler.getYaw();
+    private static Vector3d directionFromRotation(@Nonnull Rotation3fc euler) {
+        double pitch = euler.pitch();
+        double yaw = euler.yaw();
         double len = Math.cos(pitch);
         double x = len * -Math.sin(yaw);
         double y = Math.sin(pitch);

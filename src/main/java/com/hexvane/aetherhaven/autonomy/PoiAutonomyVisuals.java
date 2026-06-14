@@ -1,17 +1,20 @@
 package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBrowseVisuals;
 import com.hypixel.hytale.builtin.mounts.BlockMountAPI;
 import com.hypixel.hytale.builtin.mounts.MountedComponent;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
@@ -47,6 +50,36 @@ public final class PoiAutonomyVisuals {
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PoiEntry poi
     ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            String poiProfile = poi.getEquipmentProfileId();
+            if (poiProfile != null) {
+                VillagerEquipmentService.applyProfile(
+                    npcRef,
+                    store,
+                    commandBuffer,
+                    plugin.getEquipmentProfileCatalog(),
+                    poiProfile
+                );
+            } else if (poi.getInteractionKind() == PoiInteractionKind.WORK_SURFACE) {
+                NPCEntity roleNpc = store.getComponent(npcRef, NPCEntity.getComponentType());
+                if (roleNpc != null && roleNpc.getRoleName() != null) {
+                    var villagerDef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(roleNpc.getRoleName());
+                    if (villagerDef != null) {
+                        String workProfile = villagerDef.getWorkEquipmentProfileId();
+                        if (workProfile != null) {
+                            VillagerEquipmentService.applyProfile(
+                                npcRef,
+                                store,
+                                commandBuffer,
+                                plugin.getEquipmentProfileCatalog(),
+                                workProfile
+                            );
+                        }
+                    }
+                }
+            }
+        }
         Set<String> tags = poi.getTags();
         if (poi.getInteractionKind() == PoiInteractionKind.USE_BENCH && tags.contains("EAT")) {
             faceTowardBlock(npcRef, store, commandBuffer, poi);
@@ -55,7 +88,8 @@ public final class PoiAutonomyVisuals {
             return;
         }
         if (poi.getInteractionKind() == PoiInteractionKind.SIT) {
-            if (tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
+            if (poi.isMountOnUse() && tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
+                applyInteractionTargetFacing(npcRef, store, commandBuffer, poi);
                 NPCEntity mountedNpc = store.getComponent(npcRef, NPCEntity.getComponentType());
                 if (mountedNpc != null) {
                     String sitAnim = pickAnimationId(store, npcRef, PoiInteractionKind.SIT);
@@ -67,7 +101,7 @@ public final class PoiAutonomyVisuals {
             }
             faceTowardBlock(npcRef, store, commandBuffer, poi);
         } else if (poi.getInteractionKind() == PoiInteractionKind.SLEEP) {
-            if (tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
+            if (poi.isMountOnUse() && tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
                 NPCEntity mountedNpc = store.getComponent(npcRef, NPCEntity.getComponentType());
                 if (mountedNpc != null) {
                     String sleepAnim = pickAnimationId(store, npcRef, PoiInteractionKind.SLEEP);
@@ -97,6 +131,10 @@ public final class PoiAutonomyVisuals {
         } else {
             faceTowardBlock(npcRef, store, commandBuffer, poi);
         }
+        if (poi.getTags().contains("SHOP")) {
+            ShopSpotBrowseVisuals.beginPonder(npcRef, store, commandBuffer);
+            return;
+        }
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (npc == null) {
             return;
@@ -116,12 +154,15 @@ public final class PoiAutonomyVisuals {
     ) {
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (poi.getInteractionKind() == PoiInteractionKind.SIT || poi.getInteractionKind() == PoiInteractionKind.SLEEP) {
-            commandBuffer.tryRemoveComponent(npcRef, MountedComponent.getComponentType());
+            BlockMountRelease.release(npcRef, store, commandBuffer);
         }
         if (poi.getInteractionKind() == PoiInteractionKind.USE_BENCH && poi.getTags().contains("EAT")) {
             stopCampfireConsumeVisuals(npcRef, store, commandBuffer, npc);
             AnimationUtils.stopAnimation(npcRef, AnimationSlot.Movement, store);
             tryClearCampfireHeldFood(npcRef, store, commandBuffer);
+        }
+        if (poi.getTags().contains("SHOP")) {
+            ShopSpotBrowseVisuals.endPonder(npcRef, store, commandBuffer);
         }
         if (npc != null) {
             // Sleep/Sit use Status; explicitly clear in case role transition timing skips it.
@@ -140,9 +181,8 @@ public final class PoiAutonomyVisuals {
         }
         try {
             hb.getInventory().setItemStackForSlot((short) 0, new ItemStack(AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID, 1));
-            hb.setActiveSlot((byte) 0);
+            hb.setActiveSlot((byte) 0, npcRef, commandBuffer);
             commandBuffer.putComponent(npcRef, InventoryComponent.Hotbar.getComponentType(), hb);
-            invalidateLivingEquipment(npcRef, store);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not equip campfire display item on NPC hotbar");
         }
@@ -160,20 +200,8 @@ public final class PoiAutonomyVisuals {
         try {
             hb.getInventory().removeItemStackFromSlot((short) 0);
             commandBuffer.putComponent(npcRef, InventoryComponent.Hotbar.getComponentType(), hb);
-            invalidateLivingEquipment(npcRef, store);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not clear campfire display item from NPC hotbar");
-        }
-    }
-
-    /**
-     * {@link com.hypixel.hytale.server.core.inventory.Inventory} keeps the same Java references as ECS hotbar
-     * components; cloning hotbar desyncs {@code getItemInHand()} and skips equipment network updates.
-     */
-    private static void invalidateLivingEquipment(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
-        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-        if (npc != null) {
-            npc.invalidateEquipmentNetwork();
         }
     }
 
@@ -200,7 +228,7 @@ public final class PoiAutonomyVisuals {
         }
         try {
             Vector3i block = new Vector3i(poi.getX(), poi.getY(), poi.getZ());
-            Vector3f hit = mountPickHit(store, npcRef, poi);
+            Vector3d hit = mountPickHit(store, npcRef, poi);
             BlockMountAPI.BlockMountResult result = BlockMountAPI.mountOnBlock(npcRef, commandBuffer, block, hit);
             return result instanceof BlockMountAPI.Mounted;
         } catch (RuntimeException ex) {
@@ -210,7 +238,7 @@ public final class PoiAutonomyVisuals {
     }
 
     @Nonnull
-    private static Vector3f mountPickHit(
+    private static Vector3d mountPickHit(
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull PoiEntry poi
@@ -218,9 +246,9 @@ public final class PoiAutonomyVisuals {
         TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
         if (tc != null) {
             Vector3d p = tc.getPosition();
-            return new Vector3f((float) p.x, (float) p.y + 0.5F, (float) p.z);
+            return new Vector3d(p.x, p.y + 0.5, p.z);
         }
-        return new Vector3f(poi.getX() + 0.5F, poi.getY() + 0.5F, poi.getZ() + 0.5F);
+        return new Vector3d(poi.getX() + 0.5, poi.getY() + 0.5, poi.getZ() + 0.5);
     }
 
     /** When bed mount fails (chunk, etc.): lie on mattress height without the old corner nudge (wrong pillow / below bed). */
@@ -315,6 +343,28 @@ public final class PoiAutonomyVisuals {
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PoiEntry poi
     ) {
+        if (poi.hasInteractionTarget()) {
+            Float storedYaw = poi.getInteractionTargetYawRadians();
+            if (storedYaw != null) {
+                applyBodyYaw(npcRef, store, commandBuffer, storedYaw);
+                return;
+            }
+            Double tx = poi.getInteractionTargetX();
+            Double ty = poi.getInteractionTargetY();
+            Double tz = poi.getInteractionTargetZ();
+            if (tx != null && tz != null) {
+                TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
+                if (tc != null) {
+                    Vector3d pos = tc.getPosition();
+                    double dx = tx - pos.x;
+                    double dz = tz - pos.z;
+                    if (dx * dx + dz * dz >= 1.0e-6) {
+                        applyBodyYaw(npcRef, store, commandBuffer, bodyYawAlongMove(dx, dz));
+                        return;
+                    }
+                }
+            }
+        }
         TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
         if (tc == null) {
             return;
@@ -325,7 +375,35 @@ public final class PoiAutonomyVisuals {
         if (dx * dx + dz * dz < 1.0e-6) {
             return;
         }
-        tc.getRotation().setYaw(bodyYawAlongMove(dx, dz));
+        applyBodyYaw(npcRef, store, commandBuffer, bodyYawAlongMove(dx, dz));
+    }
+
+    private static void applyInteractionTargetFacing(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull PoiEntry poi
+    ) {
+        if (!poi.hasInteractionTarget()) {
+            return;
+        }
+        Float yaw = poi.getInteractionTargetYawRadians();
+        if (yaw != null) {
+            applyBodyYaw(npcRef, store, commandBuffer, yaw);
+        }
+    }
+
+    private static void applyBodyYaw(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        float yawRadians
+    ) {
+        TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
+        if (tc == null) {
+            return;
+        }
+        tc.getRotation().setYaw(yawRadians);
         commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
     }
 

@@ -55,7 +55,7 @@ public final class AetherhavenReplaceCharterCommand extends AbstractPlayerComman
         if (player == null || uc == null) {
             return;
         }
-        boolean admin = TownPermissionUtil.canAdministerForeignTowns(player);
+        boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, playerRef);
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         String townOpt = context.provided(townArg) ? context.get(townArg) : null;
         TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), townOpt, admin);
@@ -75,7 +75,7 @@ public final class AetherhavenReplaceCharterCommand extends AbstractPlayerComman
         if (tc == null) {
             return Rotation.None;
         }
-        float yaw = tc.getRotation().getYaw();
+        float yaw = tc.getRotation().yaw();
         double twoPi = Math.PI * 2.0;
         double n = (yaw + Math.PI / 4.0 + twoPi) % twoPi;
         int step = (int) (n / (Math.PI / 2.0)) % 4;

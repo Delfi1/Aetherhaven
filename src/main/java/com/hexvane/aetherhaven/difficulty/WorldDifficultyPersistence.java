@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.difficulty;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.io.IOException;
@@ -38,30 +39,37 @@ public final class WorldDifficultyPersistence {
 
     @Nonnull
     public static WorldDifficultyState getOrLoad(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
-        return CACHE.computeIfAbsent(world.getName(), n -> loadFromDisk(world, plugin));
+        return CACHE.computeIfAbsent(world.getName(), n -> readFromDisk(world, plugin));
     }
 
     @Nonnull
     public static WorldDifficultyState loadFromDisk(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        WorldDifficultyState loaded = readFromDisk(world, plugin);
+        CACHE.put(world.getName(), loaded);
+        return loaded;
+    }
+
+    @Nonnull
+    private static WorldDifficultyState readFromDisk(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            return WorldDifficultyState.normalUntilChosen();
+        }
         Path path = difficultyFile(world, plugin);
         try {
             WorldDifficultyFile file = WorldDifficultyFile.readOrEmpty(path);
             WorldDifficultyState state = file.getState();
-            if (state == null) {
-                state = WorldDifficultyState.normalUntilChosen();
-            }
-            CACHE.put(world.getName(), state);
-            return state;
+            return state != null ? state : WorldDifficultyState.normalUntilChosen();
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to load difficulty for world %s", world.getName());
-            WorldDifficultyState fallback = WorldDifficultyState.normalUntilChosen();
-            CACHE.put(world.getName(), fallback);
-            return fallback;
+            return WorldDifficultyState.normalUntilChosen();
         }
     }
 
     public static void save(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull WorldDifficultyState state) {
         CACHE.put(world.getName(), state);
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            return;
+        }
         Path path = difficultyFile(world, plugin);
         try {
             WorldDifficultyFile file = new WorldDifficultyFile();
@@ -77,6 +85,9 @@ public final class WorldDifficultyPersistence {
         if (state == null) {
             return;
         }
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            return;
+        }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin != null) {
             save(world, plugin, state);
@@ -89,6 +100,9 @@ public final class WorldDifficultyPersistence {
             return;
         }
         for (var e : CACHE.entrySet()) {
+            if (!PersistentWorldSupport.shouldPersistWorldDataByName(e.getKey())) {
+                continue;
+            }
             // World name only in cache; persist without requiring live World handle
             String name = e.getKey();
             Path path =

@@ -1,0 +1,8 @@
+{
+  "constructionId": "plot_builders_hut",
+  "prefabPath": "plot_builders_hut.prefab.json",
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 360 },
+    { "resourceTypeId": "Rock", "count": 80 }
+  ]
+}

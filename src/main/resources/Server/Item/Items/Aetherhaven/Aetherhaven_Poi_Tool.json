@@ -22,7 +22,7 @@
     "Secondary": {
       "Interactions": [
         {
-          "Type": "AetherhavenPoiToolMove"
+          "Type": "AetherhavenPoiToolSecondary"
         }
       ]
     },
@@ -30,6 +30,13 @@
       "Interactions": [
         {
           "Type": "AetherhavenPoiToolSetTarget"
+        }
+      ]
+    },
+    "Ability1": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPoiToolModeCycle"
         }
       ]
     }
@@ -40,14 +47,8 @@
       "Adventure": 5,
       "Creative": 6
     },
-    "AllEntities": false
+    "AllEntities": true
   },
-  "HudUI": [
-    {
-      "Path": "Custom/Aetherhaven/AetherhavenPoiToolLegend.ui",
-      "Type": "Legend"
-    }
-  ],
   "Tags": {
     "Family": ["Aetherhaven"],
     "Type": ["Tool"]

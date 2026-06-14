@@ -1,0 +1,47 @@
+$C = "../Common.ui";
+
+Group #RtsCommandHudRoot {
+  LayoutMode: Top;
+
+  $C.@DecoratedContainer {
+    Anchor: (Top: 88, Right: 20, Width: 420);
+
+    #Title {
+      Label #HudTitle {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 12);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Left: 14, Right: 14, Top: 10, Bottom: 14);
+
+      Label #OrderModeLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #b8d8ff, FontSize: 16, RenderBold: true);
+        Anchor: (Bottom: 6);
+      }
+      Label #StanceLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #c8e0ff, FontSize: 15);
+        Anchor: (Bottom: 6);
+      }
+      Label #SelectedLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 15);
+        Anchor: (Bottom: 6);
+      }
+      Label #ToolHelpLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 14, Wrap: true);
+        Anchor: (Bottom: 8);
+      }
+      Label #ControlsLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #98a0a8, FontSize: 12, Wrap: true);
+      }
+    }
+  }
+}

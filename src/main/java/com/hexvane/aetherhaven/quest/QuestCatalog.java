@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
@@ -14,6 +15,9 @@ import com.hexvane.aetherhaven.quest.data.QuestObjective;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -240,19 +244,14 @@ public final class QuestCatalog {
         if (def == null) {
             return null;
         }
-        for (QuestReward rw : def.rewardsOrEmpty()) {
-            if (rw.kind() == null || !"reputation".equalsIgnoreCase(rw.kind().trim())) {
-                continue;
-            }
-            String grantTo = rw.grantTo();
-            if (grantTo != null && "quest_beneficiary_npc".equalsIgnoreCase(grantTo.trim())) {
-                String role = rw.npcRoleId();
-                if (role != null && !role.isBlank()) {
-                    return new QuestReputationGrant(rw.amount(), role.trim());
-                }
-            }
+        QuestRewardService.ReputationRewardPreview preview = QuestRewardService.firstReputationReward(
+            def.rewardsOrEmpty(),
+            QuestRewardService.GRANT_TO_QUEST_BENEFICIARY_NPC
+        );
+        if (preview == null || preview.npcRoleId() == null || preview.npcRoleId().isBlank()) {
+            return null;
         }
-        return null;
+        return new QuestReputationGrant(preview.amount(), preview.npcRoleId());
     }
 
     public record QuestReputationGrant(int amount, @Nonnull String beneficiaryRoleId) {}
@@ -293,6 +292,50 @@ public final class QuestCatalog {
     }
 
     @Nonnull
+    public Message journalTitle(
+        @Nonnull String questId,
+        @Nonnull TownRecord town,
+        @Nullable Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        QuestDefinition def = get(questId);
+        String base = displayName(questId);
+        if (def == null || !def.assignByEntity()) {
+            return Message.raw(base);
+        }
+        String targetName = QuestAssigneeDisplay.targetName(def, town, store, plugin);
+        if (targetName == null || targetName.isBlank()) {
+            return Message.raw(base);
+        }
+        return Message
+            .translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.questForName")
+            .param("title", Message.raw(base))
+            .param("name", Message.raw(targetName.trim()));
+    }
+
+    @Nonnull
+    public Message journalDescription(
+        @Nonnull String questId,
+        @Nonnull TownRecord town,
+        @Nullable Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        QuestDefinition def = get(questId);
+        String base = description(questId);
+        if (def == null || !def.assignByEntity()) {
+            return Message.raw(base);
+        }
+        String targetName = QuestAssigneeDisplay.targetName(def, town, store, plugin);
+        if (targetName == null || targetName.isBlank()) {
+            return Message.raw(base);
+        }
+        return Message
+            .translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.questDescriptionForName")
+            .param("body", Message.raw(base))
+            .param("name", Message.raw(targetName.trim()));
+    }
+
+    @Nonnull
     public String description(@Nonnull String questId) {
         QuestDefinition def = get(questId);
         if (def != null) {
@@ -308,6 +351,16 @@ public final class QuestCatalog {
 
     @Nonnull
     public String objectivesText(@Nonnull String questId, @Nullable TownRecord town) {
+        return objectivesText(questId, town, null, null);
+    }
+
+    @Nonnull
+    public String objectivesText(
+        @Nonnull String questId,
+        @Nullable TownRecord town,
+        @Nullable Store<EntityStore> store,
+        @Nullable AetherhavenPlugin plugin
+    ) {
         QuestDefinition def = get(questId);
         if (def == null) {
             return "";
@@ -317,6 +370,10 @@ public final class QuestCatalog {
             return "";
         }
         String qid = questId.trim();
+        String targetName = null;
+        if (town != null && plugin != null && def.assignByEntity()) {
+            targetName = QuestAssigneeDisplay.targetName(def, town, store, plugin);
+        }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < lines.size(); i++) {
             if (i > 0) {
@@ -324,6 +381,9 @@ public final class QuestCatalog {
             }
             QuestObjective o = lines.get(i);
             String line = o.text() != null ? o.text().trim() : "";
+            if (targetName != null && !targetName.isBlank()) {
+                line = QuestAssigneeDisplay.personalizeObjectiveLine(line, targetName);
+            }
             sb.append(i + 1).append(". ").append(line);
             if (town != null
                 && o.kind() != null

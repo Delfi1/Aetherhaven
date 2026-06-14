@@ -1,0 +1,149 @@
+{
+  "id": "aetherhaven_tourist",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "",
+      "bodyMode": "villager_greeting",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_has_complete_plot", "constructionId": "plot_tourist_portal" },
+              { "type": "npc_is_active_tourist" },
+              {
+                "type": "not",
+                "condition": { "type": "quest_completed_for_npc", "questId": "q_house_townsfolk" }
+              },
+              {
+                "type": "not",
+                "condition": { "type": "town_quest_active", "questId": "q_house_townsfolk" }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "tourist_house_offer"
+        },
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_finish",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_townsfolk" },
+              { "type": "npc_is_quest_target", "questId": "q_house_townsfolk" },
+              { "type": "town_npc_home_resident_house" }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [{ "type": "complete_quest", "id": "q_house_townsfolk" }],
+          "next": "tourist_house_finish"
+        },
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_townsfolk" },
+              { "type": "npc_is_quest_target", "questId": "q_house_townsfolk" },
+              {
+                "type": "not",
+                "condition": { "type": "town_npc_home_resident_house" }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "tourist_house_remind"
+        },
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_waiting",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_townsfolk" },
+              {
+                "type": "not",
+                "condition": { "type": "npc_is_quest_target", "questId": "q_house_townsfolk" }
+              },
+              { "type": "npc_is_active_tourist" }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "tourist_house_waiting"
+        },
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.leave",
+          "next": null,
+          "actions": [{ "type": "close" }]
+        }
+      ]
+    },
+    "tourist_house_offer": {
+      "speaker": "",
+      "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept",
+          "condition": {
+            "type": "not",
+            "condition": { "type": "town_quest_active", "questId": "q_house_townsfolk" }
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_house_townsfolk",
+              "bindTargetEntity": true
+            }
+          ],
+          "next": "tourist_house_accepted"
+        },
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline",
+          "next": null
+        }
+      ]
+    },
+    "tourist_house_accepted": {
+      "speaker": "",
+      "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.ok",
+          "next": null
+        }
+      ]
+    },
+    "tourist_house_remind": {
+      "speaker": "",
+      "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.ok",
+          "next": null
+        }
+      ]
+    },
+    "tourist_house_waiting": {
+      "speaker": "",
+      "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.ok",
+          "next": null
+        }
+      ]
+    },
+    "tourist_house_finish": {
+      "speaker": "",
+      "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.ok",
+          "next": null
+        }
+      ]
+    }
+  }
+}

@@ -264,6 +264,42 @@
       "hour": 20,
       "minute": 0,
       "location": "home"
+    },
+    {
+      "dayOfWeek": "TUESDAY",
+      "hour": 15,
+      "minute": 25,
+      "location": "shop"
+    },
+    {
+      "dayOfWeek": "TUESDAY",
+      "hour": 16,
+      "minute": 25,
+      "location": "park"
+    },
+    {
+      "dayOfWeek": "FRIDAY",
+      "hour": 10,
+      "minute": 50,
+      "location": "shop"
+    },
+    {
+      "dayOfWeek": "FRIDAY",
+      "hour": 11,
+      "minute": 50,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "WEDNESDAY",
+      "hour": 10,
+      "minute": 5,
+      "location": "shop"
+    },
+    {
+      "dayOfWeek": "WEDNESDAY",
+      "hour": 11,
+      "minute": 5,
+      "location": "work"
     }
   ]
 }

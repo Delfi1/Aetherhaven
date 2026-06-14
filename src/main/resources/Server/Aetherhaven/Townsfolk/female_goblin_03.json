@@ -1,0 +1,17 @@
+{
+  "id": "female_goblin_03",
+  "displayName": "Brix Snaggletooth",
+  "gender": "female",
+  "race": "goblin",
+  "modelAssetId": "Female_Goblin_03",
+  "personalityIds": [
+    "crafty",
+    "homebody",
+    "stingy"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

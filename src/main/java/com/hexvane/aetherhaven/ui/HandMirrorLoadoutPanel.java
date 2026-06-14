@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.jewelry.JewelryGem;
 import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryMetadata;
+import com.hexvane.aetherhaven.jewelry.JewelryPieceKind;
 import com.hexvane.aetherhaven.jewelry.JewelryRarity;
 import com.hexvane.aetherhaven.jewelry.JewelryStatTuning;
 import com.hexvane.aetherhaven.jewelry.JewelryTooltipText;
@@ -40,6 +41,9 @@ public final class HandMirrorLoadoutPanel {
         if (st == null || ItemStack.isEmpty(st) || !JewelryItemIds.isJewelry(st.getItemId())) {
             return null;
         }
+        if (JewelryPieceKind.isArtifact(st.getItemId())) {
+            return st;
+        }
         return JewelryMetadata.syncInstanceDescriptionForTooltip(JewelryMetadata.ensureRolled(st));
     }
 
@@ -55,6 +59,10 @@ public final class HandMirrorLoadoutPanel {
                 ? Message.translation(it.getTranslationKey())
                 : Message.raw(stack.getItemId());
         m = m.insert(itemLine.color(C_STAT)).insert(Message.raw("\n"));
+        if (JewelryPieceKind.isArtifact(stack.getItemId())) {
+            return m.insert(
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.artifact.wornLight").color(C_DIM));
+        }
         if (!JewelryMetadata.hasJewelryMeta(stack)) {
             return m.insert(
                 Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.traitsUnattuned").color(C_DIM));

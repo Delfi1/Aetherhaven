@@ -36,7 +36,7 @@ aetherhaven.poiTool.legendSecondary=İkincil: Seçilen ilgi noktasını bloğa t
 aetherhaven.poiTool.legendUse=Kullanım: Seçilen POI için NPC yol hedefi belirleme (POI blok temizlemelerinde kullanılır)
 
 aetherhaven.pathTool.legendPageTitle=Yol aracı
-aetherhaven.pathTool.legendBlurb=Bir eğri oluşturun, önizleyin ve ardından yol bloklarını yerleştirin. Aracı tutarken köşede bir durum paneli belirir. Buuz135 MHUD yüklü olduğunda, panel kendi katmanı olarak kaydedilir, böylece diğer özel HUD'lar da görünür kalabilir.
+aetherhaven.pathTool.legendBlurb=Bir eğri oluşturun, önizleyin ve ardından yol bloklarını yerleştirin. Aracı tutarken köşede bir durum paneli belirir.
 aetherhaven.pathTool.legendHotkeyAdd=Yerdeki ikincil imleç bir anahtar kare (altın küre) ekler. Nişan alırken ikincil imleç bir anahtar kareyi kaldırır. Yeni anahtar kareler baktığınız yöne bakar.
 aetherhaven.pathTool.legendHotkeyAim=Seçmek için bir anahtar kareye bakın. Taşıma modunda, zemindeki birincil nokta, noktayı hareket ettirir. Aynı düğümdeki birincil nokta hiçbir şey yapmaz.
 aetherhaven.pathTool.legendHotkeyUse=F: Döndürme modunda, seçili düğümde adım adım sapma hareketi yapar. Taşıma modunda, F hiçbir şey yapmaz. Yerleştirme modunda, F yolu yerleştirir (iki düğüm gerekir). Q: Mod döngüsü. E: Genişlik 1-8. Üçüncü araç özelliği: Yol stili (iç bloklar; yapılandırmadaki PathToolStyles'a bakın). Bir anahtar karede ikincil tuşa basıldığında kaldırılır.
@@ -131,8 +131,6 @@ items.Aetherhaven_Geode.description=İçinde kristaller, değerli taşlar veya m
 
 items.Aetherhaven_Geode_Anvil.name=Jeod örs
 items.Aetherhaven_Geode_Anvil.description=Jeodları demirci ücreti ödemeden açar. Yerleştirin ve kullanın; şehir planlama masanızda üretmek için şemayı bilmeniz gerekir.
-
-barter.aetherhaven_vex.title=Vex'in günlük stokları
 
 items.Aetherhaven_Treasury.name=Şehir hazinesi
 items.Aetherhaven_Treasury.description=Kasabanın altın paralarını muhafaza eder. Para yatırmak veya çekmek için kullanılır (kasaba sahibi).

@@ -55,11 +55,6 @@
           "Id": "Aetherhaven_TownPlanning",
           "Icon": "Icons/CraftingCategories/Aetherhaven/Town_Planning.png",
           "Name": "aetherhaven_items.benchCategories.aetherhaven.town_planning"
-        },
-        {
-          "Id": "Aetherhaven_TownPlanningPlotTokens",
-          "Icon": "Icons/CraftingCategories/Aetherhaven/Plot_Tokens.png",
-          "Name": "aetherhaven_items.benchCategories.aetherhaven.plot_tokens"
         }
       ],
       "LocalOpenSoundEventId": "SFX_Workbench_Open",

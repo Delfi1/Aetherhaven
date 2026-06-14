@@ -5,8 +5,8 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
@@ -117,9 +117,9 @@ public final class PurificationPowderUseInteraction extends SimpleInstantInterac
         }
         commandBuffer.removeEntity(best.ref(), RemoveReason.REMOVE);
         Vector3d vfxPos = new Vector3d(
-            best.position().getX(),
-            best.position().getY() + 0.35,
-            best.position().getZ()
+            best.position().x(),
+            best.position().y() + 0.35,
+            best.position().z()
         );
         ParticleUtil.spawnParticleEffect(AetherhavenConstants.PURIFICATION_DESPAWN_PARTICLE_SYSTEM_ID, vfxPos, store);
         int despawnSfx = SoundEvent.getAssetMap().getIndex(AetherhavenConstants.PURIFICATION_DESPAWN_SOUND_EVENT_ID);

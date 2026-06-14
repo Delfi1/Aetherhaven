@@ -1,0 +1,5 @@
+{
+  "entries": [
+    { "itemId": "Weapon_Bomb_Potion_Poison", "weight": 2, "stockMin": 25, "stockMax": 50 }
+  ]
+}

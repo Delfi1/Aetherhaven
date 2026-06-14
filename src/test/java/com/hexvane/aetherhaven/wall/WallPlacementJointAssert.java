@@ -3,7 +3,7 @@ package com.hexvane.aetherhaven.wall;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import javax.annotation.Nonnull;
 
@@ -15,20 +15,38 @@ public final class WallPlacementJointAssert {
     private WallPlacementJointAssert() {}
 
     public static void assertSameRow(int wallZ, @Nonnull Vector3i anchor, @Nonnull String label) {
-        assertWallRowAligned(wallZ, anchor, label);
+        assertEquals(
+            wallZ,
+            anchor.z,
+            label + " must stay on wall Z row (wall z=" + wallZ + ", got z=" + anchor.z + ")"
+        );
     }
 
-    /** Tower sign may sit ±{@link WallPieceGeometry#TOWER_CONNECTION_HALF} from wall sign while faces stay flush. */
-    public static void assertWallRowAligned(int wallZ, @Nonnull Vector3i anchor, @Nonnull String label) {
+    /** Tower sign may sit within kit {@link WallPieceGeometry#towerConnectionTolerance} of wall sign while faces stay flush. */
+    public static void assertWallRowAligned(
+        int wallZ,
+        @Nonnull Vector3i anchor,
+        @Nonnull String wallConstructionId,
+        @Nonnull String anchorConstructionId,
+        @Nonnull String label
+    ) {
+        int half = WallPieceGeometry.towerConnectionTolerance(wallConstructionId, anchorConstructionId);
         assertTrue(
-            Math.abs(anchor.z - wallZ) <= WallPieceGeometry.TOWER_CONNECTION_HALF,
+            Math.abs(anchor.z - wallZ) <= half,
             label + " must align with wall Z row (wall z=" + wallZ + ", got z=" + anchor.z + ")"
         );
     }
 
-    public static void assertWallColumnAligned(int wallX, @Nonnull Vector3i anchor, @Nonnull String label) {
+    public static void assertWallColumnAligned(
+        int wallX,
+        @Nonnull Vector3i anchor,
+        @Nonnull String wallConstructionId,
+        @Nonnull String anchorConstructionId,
+        @Nonnull String label
+    ) {
+        int half = WallPieceGeometry.towerConnectionTolerance(wallConstructionId, anchorConstructionId);
         assertTrue(
-            Math.abs(anchor.x - wallX) <= WallPieceGeometry.TOWER_CONNECTION_HALF,
+            Math.abs(anchor.x - wallX) <= half,
             label + " must align with wall X column (wall x=" + wallX + ", got x=" + anchor.x + ")"
         );
     }

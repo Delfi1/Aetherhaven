@@ -1,0 +1,435 @@
+$C = "../Common.ui";
+
+@TreeWidth = 284;
+@ColWidth = 132;
+@ColGap = 20;
+@BtnWidth = 110;
+@IconSize = 44;
+
+@NodeTitle = (
+  ...$C.@DefaultLabelStyle,
+  FontSize: 11,
+  HorizontalAlignment: Center,
+  Wrap: true,
+  TextColor: #e4dfd4
+);
+
+/** Flat colors only — patch textures break when this file is appended into PlotConstructionPage. */
+@NodeBtnStyle = (
+  Default: (Background: #252b38(0.98)),
+  Hovered: (Background: #323a4c(0.98)),
+  Pressed: (Background: #1c2230(0.98)),
+  Disabled: (Background: #141820(0.96))
+);
+
+@TreeLineColor = #7a6c5a;
+@DotEmpty = #5a5a5a;
+@DotFilled = #d8ccb4;
+
+@IronInnerBg = #3a4048;
+@ThoriumInnerBg = #264032;
+@CobaltInnerBg = #243448;
+@AdamInnerBg = #342848;
+
+Group #ProductionUpgradeTree {
+  LayoutMode: Top;
+
+  Label #ProductionUpgradeHeading {
+    Anchor: (Bottom: 10);
+    Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #d8ccb4);
+    Text: "";
+  }
+
+  Group #UpgradeTreeFrame {
+    LayoutMode: Center;
+
+    Group #UpgradeTreeCanvas {
+      LayoutMode: Top;
+      Anchor: (Width: @TreeWidth);
+
+      Group #Tier1Wrap {
+        LayoutMode: Center;
+        Anchor: (Bottom: 0);
+
+        Button #UpgIron {
+          LayoutMode: Top;
+          Style: @NodeBtnStyle;
+          TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+          Anchor: (Width: @BtnWidth);
+          Padding: (Horizontal: 8, Vertical: 8);
+
+          Label #UpgIronTitle {
+            Anchor: (Bottom: 4);
+            Style: (...@NodeTitle);
+            Text: "";
+          }
+
+          Group #UpgIronIconOuter {
+            LayoutMode: Full;
+            Anchor: (Width: @IconSize, Height: @IconSize);
+            Padding: (Full: 2);
+            Background: #5a5468;
+
+            Group #UpgIronIconInner {
+              LayoutMode: Full;
+              Anchor: (Full: 0);
+              Padding: (Full: 4);
+              Background: @IronInnerBg;
+
+              AssetImage #UpgIronIcon {
+                Anchor: (Full: 0);
+                AssetPath: "UI/Custom/sack.png";
+              }
+
+              Group #UpgIronDim {
+                LayoutMode: Full;
+                Anchor: (Full: 0);
+                Visible: false;
+                Background: #000000(0.55);
+              }
+            }
+          }
+        }
+      }
+
+      Group #TrunkIronDown {
+        LayoutMode: Center;
+        Group #TrunkIronDownLine {
+          Anchor: (Width: 4, Height: 14);
+          Background: @TreeLineColor;
+        }
+      }
+
+      Group #Tier2BarRow {
+        LayoutMode: Left;
+        Anchor: (Width: @TreeWidth, Height: 12);
+
+        Group #Tier2BarLeftArm {
+          LayoutMode: Middle;
+          Anchor: (Width: 132, Height: 12);
+          Group #Tier2BarLeftLine {
+            Anchor: (Right: 0, Width: 72, Height: 4);
+            Background: @TreeLineColor;
+          }
+        }
+
+        Group #Tier2BarCenter {
+          LayoutMode: Center;
+          Anchor: (Width: 20, Height: 12);
+          Group {
+            Anchor: (Width: 4, Height: 12);
+            Background: @TreeLineColor;
+          }
+        }
+
+        Group #Tier2BarRightArm {
+          LayoutMode: Middle;
+          Anchor: (Width: 132, Height: 12);
+          Group #Tier2BarRightLine {
+            Anchor: (Left: 0, Width: 72, Height: 4);
+            Background: @TreeLineColor;
+          }
+        }
+      }
+
+      Group #Tier2ConnectRow {
+        LayoutMode: Left;
+        Anchor: (Width: @TreeWidth);
+
+        Group #Tier2LeftCol {
+          LayoutMode: Top;
+          Anchor: (Width: @ColWidth);
+
+          Group #Tier2LeftDrop {
+            LayoutMode: Center;
+            Anchor: (Bottom: 0);
+            Group {
+              Anchor: (Width: 4, Height: 10);
+              Background: @TreeLineColor;
+            }
+          }
+
+          Group #Tier2LeftBtnWrap {
+            LayoutMode: Center;
+            Anchor: (Top: 0);
+
+            Button #UpgThorium {
+              LayoutMode: Top;
+              Style: @NodeBtnStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Width: @BtnWidth);
+              Padding: (Horizontal: 8, Vertical: 8);
+
+              Label #UpgThoriumTitle {
+                Anchor: (Bottom: 4);
+                Style: (...@NodeTitle);
+                Text: "";
+              }
+
+              Group #UpgThoriumIconOuter {
+                LayoutMode: Full;
+                Anchor: (Width: @IconSize, Height: @IconSize);
+                Padding: (Full: 2);
+                Background: #5a5468;
+
+                Group #UpgThoriumIconInner {
+                  LayoutMode: Full;
+                  Anchor: (Full: 0);
+                  Padding: (Full: 4);
+                  Background: @ThoriumInnerBg;
+
+                  AssetImage #UpgThoriumIcon {
+                    Anchor: (Full: 0);
+                    AssetPath: "UI/Custom/lightning.png";
+                  }
+
+                  Group #UpgThoriumDim {
+                    LayoutMode: Full;
+                    Anchor: (Full: 0);
+                    Visible: false;
+                    Background: #000000(0.55);
+                  }
+                }
+              }
+
+              Group #UpgThoriumDots {
+                LayoutMode: Center;
+                Anchor: (Top: 6);
+                Group {
+                  LayoutMode: Left;
+                  Group #UpgThoriumDot0 {
+                    Anchor: (Width: 7, Height: 7, Right: 5);
+                    Background: @DotEmpty;
+                  }
+                  Group #UpgThoriumDot1 {
+                    Anchor: (Width: 7, Height: 7, Right: 5);
+                    Background: @DotEmpty;
+                  }
+                  Group #UpgThoriumDot2 {
+                    Anchor: (Width: 7, Height: 7);
+                    Background: @DotEmpty;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        Group #Tier2MidGap {
+          Anchor: (Width: @ColGap);
+        }
+
+        Group #Tier2RightCol {
+          LayoutMode: Top;
+          Anchor: (Width: @ColWidth);
+
+          Group #Tier2RightDrop {
+            LayoutMode: Center;
+            Anchor: (Bottom: 0);
+            Group {
+              Anchor: (Width: 4, Height: 10);
+              Background: @TreeLineColor;
+            }
+          }
+
+          Group #Tier2RightBtnWrap {
+            LayoutMode: Center;
+            Anchor: (Top: 0);
+
+            Button #UpgCobalt {
+              LayoutMode: Top;
+              Style: @NodeBtnStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Width: @BtnWidth);
+              Padding: (Horizontal: 8, Vertical: 8);
+
+              Label #UpgCobaltTitle {
+                Anchor: (Bottom: 4);
+                Style: (...@NodeTitle);
+                Text: "";
+              }
+
+              Group #UpgCobaltIconOuter {
+                LayoutMode: Full;
+                Anchor: (Width: @IconSize, Height: @IconSize);
+                Padding: (Full: 2);
+                Background: #5a5468;
+
+                Group #UpgCobaltIconInner {
+                  LayoutMode: Full;
+                  Anchor: (Full: 0);
+                  Padding: (Full: 4);
+                  Background: @CobaltInnerBg;
+
+                  AssetImage #UpgCobaltIcon {
+                    Anchor: (Full: 0);
+                    AssetPath: "UI/Custom/sack.png";
+                  }
+
+                  Group #UpgCobaltDim {
+                    LayoutMode: Full;
+                    Anchor: (Full: 0);
+                    Visible: false;
+                    Background: #000000(0.55);
+                  }
+                }
+              }
+
+              Group #UpgCobaltDots {
+                LayoutMode: Center;
+                Anchor: (Top: 6);
+                Group {
+                  LayoutMode: Left;
+                  Group #UpgCobaltDot0 {
+                    Anchor: (Width: 7, Height: 7, Right: 5);
+                    Background: @DotEmpty;
+                  }
+                  Group #UpgCobaltDot1 {
+                    Anchor: (Width: 7, Height: 7, Right: 5);
+                    Background: @DotEmpty;
+                  }
+                  Group #UpgCobaltDot2 {
+                    Anchor: (Width: 7, Height: 7);
+                    Background: @DotEmpty;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      Group #ConvergeStemRow {
+        LayoutMode: Left;
+        Anchor: (Width: @TreeWidth);
+
+        Group #ConvergeLeftStem {
+          LayoutMode: Center;
+          Anchor: (Width: @ColWidth);
+          Group {
+            Anchor: (Width: 4, Height: 12);
+            Background: @TreeLineColor;
+          }
+        }
+
+        Group #ConvergeMidGap {
+          Anchor: (Width: @ColGap);
+        }
+
+        Group #ConvergeRightStem {
+          LayoutMode: Center;
+          Anchor: (Width: @ColWidth);
+          Group {
+            Anchor: (Width: 4, Height: 12);
+            Background: @TreeLineColor;
+          }
+        }
+      }
+
+      Group #ConvergeBarRow {
+        LayoutMode: Left;
+        Anchor: (Width: @TreeWidth, Height: 8);
+
+        Group {
+          LayoutMode: Middle;
+          Anchor: (Width: 132, Height: 8);
+          Group {
+            Anchor: (Right: 0, Width: 72, Height: 4);
+            Background: @TreeLineColor;
+          }
+        }
+
+        Group {
+          LayoutMode: Center;
+          Anchor: (Width: 20, Height: 8);
+          Group {
+            Anchor: (Width: 4, Height: 8);
+            Background: @TreeLineColor;
+          }
+        }
+
+        Group {
+          LayoutMode: Middle;
+          Anchor: (Width: 132, Height: 8);
+          Group {
+            Anchor: (Left: 0, Width: 72, Height: 4);
+            Background: @TreeLineColor;
+          }
+        }
+      }
+
+      Group #ConvergeTrunkDown {
+        LayoutMode: Center;
+        Group {
+          Anchor: (Width: 4, Height: 14);
+          Background: @TreeLineColor;
+        }
+      }
+
+      Group #Tier3Wrap {
+        LayoutMode: Center;
+        Anchor: (Top: 0);
+
+        Button #UpgAdamantite {
+          LayoutMode: Top;
+          Style: @NodeBtnStyle;
+          TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+          Anchor: (Width: @BtnWidth);
+          Padding: (Horizontal: 8, Vertical: 8);
+
+          Label #UpgAdamantiteTitle {
+            Anchor: (Bottom: 4);
+            Style: (...@NodeTitle);
+            Text: "";
+          }
+
+          Group #UpgAdamIconOuter {
+            LayoutMode: Full;
+            Anchor: (Width: @IconSize, Height: @IconSize);
+            Padding: (Full: 2);
+            Background: #5a5468;
+
+            Group #UpgAdamIconInner {
+              LayoutMode: Full;
+              Anchor: (Full: 0);
+              Padding: (Full: 4);
+              Background: @AdamInnerBg;
+
+              AssetImage #UpgAdamIcon {
+                Anchor: (Full: 0);
+                AssetPath: "UI/Custom/crate.png";
+              }
+
+              Group #UpgAdamDim {
+                LayoutMode: Full;
+                Anchor: (Full: 0);
+                Visible: false;
+                Background: #000000(0.55);
+              }
+            }
+          }
+
+          Group #UpgAdamDots {
+            LayoutMode: Center;
+            Anchor: (Top: 6);
+            Group {
+              LayoutMode: Left;
+              Group #UpgAdamDot0 {
+                Anchor: (Width: 7, Height: 7, Right: 5);
+                Background: @DotEmpty;
+              }
+              Group #UpgAdamDot1 {
+                Anchor: (Width: 7, Height: 7, Right: 5);
+                Background: @DotEmpty;
+              }
+              Group #UpgAdamDot2 {
+                Anchor: (Width: 7, Height: 7);
+                Background: @DotEmpty;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "CullDistance": 128,
+  "BoundingRadius": 2,
+  "LifeSpan": 0.45,
+  "Spawners": [
+    { "SpawnerId": "Aetherhaven_Rts_Move_Ring_Spawner" },
+    { "SpawnerId": "Aetherhaven_Rts_Move_Rise_Spawner" }
+  ]
+}

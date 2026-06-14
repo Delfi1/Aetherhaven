@@ -8,8 +8,8 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.server.core.util.TargetUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -39,9 +39,9 @@ public final class AssemblyPreviewRay {
         Transform look = TargetUtil.getLook(playerRef, store);
         Vector3d o = look.getPosition();
         Vector3d d = look.getDirection();
-        double dx = d.getX();
-        double dy = d.getY();
-        double dz = d.getZ();
+        double dx = d.x();
+        double dy = d.y();
+        double dz = d.z();
         double len = Math.sqrt(dx * dx + dy * dy + dz * dz);
         if (len < 1.0e-6) {
             return null;
@@ -49,9 +49,9 @@ public final class AssemblyPreviewRay {
         dx /= len;
         dy /= len;
         dz /= len;
-        double ox = o.getX();
-        double oy = o.getY();
-        double oz = o.getZ();
+        double ox = o.x();
+        double oy = o.y();
+        double oz = o.z();
 
         double bestT = Double.POSITIVE_INFINITY;
         Vector3i bestCell = null;
@@ -64,6 +64,9 @@ public final class AssemblyPreviewRay {
             }
             PlotInstance plot = town.findPlotById(job.plotId());
             if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
+                continue;
+            }
+            if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.PLACING) {
                 continue;
             }
             frontierScratch.clear();
@@ -81,10 +84,73 @@ public final class AssemblyPreviewRay {
     }
 
     /**
+     * @return world cell of a cached clearing-phase obstruction whose unit cube the ray hits; when several are hit,
+     *         prefers the closest hit along the ray (smallest entry distance {@code t}).
+     */
+    @Nullable
+    public static Vector3i findPenetratingObstructionCellHit(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        double maxDistance,
+        @Nonnull Store<EntityStore> store
+    ) {
+        Transform look = TargetUtil.getLook(playerRef, store);
+        Vector3d o = look.getPosition();
+        Vector3d d = look.getDirection();
+        double dx = d.x();
+        double dy = d.y();
+        double dz = d.z();
+        double len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (len < 1.0e-6) {
+            return null;
+        }
+        dx /= len;
+        dy /= len;
+        dz /= len;
+        double ox = o.x();
+        double oy = o.y();
+        double oz = o.z();
+
+        double bestT = Double.POSITIVE_INFINITY;
+        Vector3i bestCell = null;
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        ArrayList<Vector3i> obstructionScratch = new ArrayList<>(256);
+        for (PlotAssemblyJob job : AssemblyWorldRegistry.jobs(world)) {
+            if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.CLEARING) {
+                continue;
+            }
+            TownRecord town = tm.findTownOwningPlot(job.plotId());
+            if (town == null) {
+                continue;
+            }
+            PlotInstance plot = town.findPlotById(job.plotId());
+            if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
+                continue;
+            }
+            PlotAssemblyClearingRuntime clearingRt = AssemblyWorldRegistry.clearingRuntime(world, job.plotId());
+            if (clearingRt == null || clearingRt.isEmpty()) {
+                continue;
+            }
+            obstructionScratch.clear();
+            clearingRt.appendAllVisibleObstructedCells(world, job, obstructionScratch);
+            for (int i = 0; i < obstructionScratch.size(); i++) {
+                Vector3i cell = obstructionScratch.get(i);
+                Double t = rayEnterUnitCube(ox, oy, oz, dx, dy, dz, cell.x, cell.y, cell.z, maxDistance);
+                if (t != null && t < bestT) {
+                    bestT = t;
+                    bestCell = cell;
+                }
+            }
+        }
+        return bestCell;
+    }
+
+    /**
      * Slab method: entry distance along normalized ray for unit cube [cx,cx+1]³, clamped to {@code maxDistance}.
      */
     @Nullable
-    private static Double rayEnterUnitCube(
+    static Double rayEnterUnitCube(
         double ox,
         double oy,
         double oz,

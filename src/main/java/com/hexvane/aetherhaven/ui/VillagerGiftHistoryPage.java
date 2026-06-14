@@ -13,7 +13,7 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
@@ -75,7 +75,7 @@ public final class VillagerGiftHistoryPage extends AetherhavenInteractiveCustomU
         this.villagerEntityUuid = villagerEntityUuid;
         this.returnVillagerIndex = returnVillagerIndex;
         this.managementBlockRef = managementBlockRef;
-        this.managementBlockPos = managementBlockPos != null ? managementBlockPos.clone() : null;
+        this.managementBlockPos = managementBlockPos != null ? new Vector3i(managementBlockPos) : null;
     }
 
     @Override

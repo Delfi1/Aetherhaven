@@ -1,0 +1,48 @@
+{
+  "id": "plot_flower_shop",
+  "displayName": "Flower Shop",
+  "description": "A shop for selling flowers and plants.",
+  "prefabPath": "plot_flower_shop.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotTokenLockedByDefault": true,
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 45,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 430 },
+    { "resourceTypeId": "Rock", "count": 160 }
+  ],
+  "pois": [
+    {
+      "localX": 6,
+      "localY": 2,
+      "localZ": -7,
+      "tags": [
+        "WORK",
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Counter",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 6,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -8
+    }
+  ],
+  "managementBlockLocalPos": [
+    3,
+    2,
+    -9
+  ],
+  "tags": [
+    "shop",
+    "work",
+    "flowers"
+  ],
+  "touristDestination": true
+}

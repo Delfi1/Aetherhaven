@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -18,9 +19,9 @@ import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
@@ -44,9 +45,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCustomUIPage<VillagerNeedsOverviewPage.PageData> {
-    private static final String VILLAGER_ROWS = "#VillagerRows";
+    private static final String VILLAGER_ROWS = "#VillagerListScroll #VillagerRows";
     private static final String REPUTATION_HEART_SLOTS = "#ReputationHeartSlots";
-    private static final int MAX_ROWS = 16;
 
     private final UUID townId;
     @Nullable
@@ -83,7 +83,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
         this.townId = townId;
         this.managementBlockRef = managementBlockRef;
-        this.managementBlockPos = managementBlockPos != null ? managementBlockPos.clone() : null;
+        this.managementBlockPos = managementBlockPos != null ? new Vector3i(managementBlockPos) : null;
         this.initialVillagerIndex = initialVillagerIndex;
         if (initialVillagerIndex >= 0) {
             this.selectedIndex = initialVillagerIndex;
@@ -160,18 +160,14 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         }
 
         commandBuilder.set("#RescueTeleportButton.Visible", true);
-        commandBuilder.set("#GiftHistoryButton.Visible", true);
         commandBuilder.set("#Hint.Visible", false);
         commandBuilder.clear(VILLAGER_ROWS);
-        int n = Math.min(rows.size(), MAX_ROWS);
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < rows.size(); i++) {
             TownVillagerRow r = rows.get(i);
             commandBuilder.append(VILLAGER_ROWS, "Aetherhaven/VillagerNeedsRow.ui");
             String row = VILLAGER_ROWS + "[" + i + "]";
-            commandBuilder.set(
-                row + " #Pick #Label.TextSpans",
-                Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + r.roleId() + ".name")
-            );
+            commandBuilder.set(row + " #Pick #Portrait.AssetPath", r.portraitPath());
+            commandBuilder.set(row + " #Pick #Label.TextSpans", Message.raw(r.label()));
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 row + " #Pick",
@@ -181,17 +177,30 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         }
 
         TownVillagerRow sel = rows.get(selectedIndex);
-        VillagerNeeds needs = findNeeds(entityStore, sel.entityUuid());
+        boolean showNeeds = sel.usesNeeds();
+        commandBuilder.set("#NeedsBarsGroup.Visible", showNeeds);
+        commandBuilder.set("#NoNeedsHint.Visible", !showNeeds);
+        if (!showNeeds) {
+            commandBuilder.set(
+                "#NoNeedsHint.TextSpans",
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.noNeedsForResident")
+            );
+        }
+        VillagerNeeds needs = showNeeds ? findNeeds(entityStore, sel.entityUuid()) : null;
         float hunger = needs != null ? needs.getHunger() / VillagerNeeds.MAX : 0.5f;
         float energy = needs != null ? needs.getEnergy() / VillagerNeeds.MAX : 0.5f;
         float fun = needs != null ? needs.getFun() / VillagerNeeds.MAX : 0.5f;
         commandBuilder.set("#HungerBar.Value", hunger);
         commandBuilder.set("#EnergyBar.Value", energy);
         commandBuilder.set("#FunBar.Value", fun);
-        commandBuilder.set("#Portrait.AssetPath", NpcPortraitProvider.portraitPathForRoleId(sel.roleId()));
+        commandBuilder.set("#Portrait.AssetPath", sel.portraitPath());
 
+        Ref<EntityStore> selRef = entityStore.getExternalData().getRefFromUUID(sel.entityUuid());
+        boolean befriendable = VillagerBefriendableResolver.isBefriendable(entityStore, selRef, plugin);
+        commandBuilder.set("#ReputationBlock.Visible", befriendable);
+        commandBuilder.set("#GiftHistoryButton.Visible", befriendable);
         UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (pu != null) {
+        if (befriendable && pu != null) {
             int rep = VillagerReputationService.getOrCreateEntry(town, pu.getUuid(), sel.entityUuid()).getReputation();
             ReputationHeartUi.applyHearts(commandBuilder, REPUTATION_HEART_SLOTS, rep);
             commandBuilder.set(
@@ -228,7 +237,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
         if (data.action == null || !data.action.equalsIgnoreCase("Select")) {
             return;
         }
-        if (data.index >= 0 && data.index < MAX_ROWS) {
+        if (data.index >= 0) {
             selectedIndex = data.index;
         }
         UICommandBuilder cmd = new UICommandBuilder();
@@ -314,13 +323,14 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
                     return;
                 }
                 Vector3d pPos = pTc.getPosition();
-                float yaw = pTc.getRotation().getYaw();
+                float yaw = pTc.getRotation().yaw();
                 double side = 1.5;
                 double cos = Math.cos(yaw);
                 double sin = Math.sin(yaw);
                 Vector3d target = new Vector3d(pPos.x + cos * side, pPos.y, pPos.z - sin * side);
                 TransformComponent nTc = es.getComponent(npcRef, TransformComponent.getComponentType());
-                Vector3f bodyRot = nTc != null ? nTc.getRotation().clone() : new Vector3f(yaw, 0f, 0f);
+                Rotation3f bodyRot =
+                    nTc != null ? new Rotation3f(nTc.getRotation()) : new Rotation3f(0f, yaw, 0f);
                 es.addComponent(npcRef, Teleport.getComponentType(), Teleport.createExact(target, bodyRot));
                 long now = VillagerAutonomySystem.resolveAutonomyNowMs(es);
                 VillagerAutonomySystem.resetAutonomyForRescue(npcRef, es, now);

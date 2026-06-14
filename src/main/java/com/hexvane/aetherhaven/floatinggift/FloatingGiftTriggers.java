@@ -2,7 +2,7 @@ package com.hexvane.aetherhaven.floatinggift;
 
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
@@ -28,7 +28,7 @@ public final class FloatingGiftTriggers {
         gift.resetPopHoldClipApplied();
         gift.resetFloatClipRetriggerAccum();
         gift.resetAmbientCueAccum();
-        Vector3d popPos = transform.getPosition().clone();
+        Vector3d popPos = new Vector3d(transform.getPosition());
         FloatingGiftSounds.playPop3d(popPos, commandBuffer.getStore());
         FloatingGiftAnimationHelper.stopAnimation(commandBuffer.getStore(), ref, AnimationSlot.Action);
         FloatingGiftAnimationHelper.playAnimation(commandBuffer.getStore(), ref, AnimationSlot.Action, FloatingGiftSpawnService.POP_ANIMATION);

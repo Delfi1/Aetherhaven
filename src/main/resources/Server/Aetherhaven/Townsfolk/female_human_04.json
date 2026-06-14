@@ -1,0 +1,19 @@
+{
+    "id":  "female_human_04",
+    "displayName":  "Lysandra Crownwell",
+    "gender":  "female",
+    "race":  "human",
+    "modelAssetId":  "Female_Human_04",
+    "personalityIds":  [
+                           "cheerful",
+                           "blunt",
+                           "adventurer"
+                       ],
+    "allowedAssignmentKinds":  [
+                                   "idle",
+                                   "tourist",
+                                   "guard"
+                               ],
+    "befriendable":  false,
+    "equipmentProfileId":  "guard_knight"
+}

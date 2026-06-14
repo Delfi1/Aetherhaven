@@ -1,0 +1,188 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "Interface": "Hytale.Instruction",
+  "$Comment": "Melee combat: Seek to close from detection range, then maintain distance and attack.",
+  "Parameters": {
+    "ViewRange": {
+      "Value": 24,
+      "Description": "Combat awareness range"
+    },
+    "AttackDistance": {
+      "Value": 3.0,
+      "Description": "Melee attack range"
+    },
+    "DesiredAttackDistanceRange": {
+      "Value": [1.5, 2.2],
+      "Description": "Preferred melee engagement band"
+    },
+    "CombatBehaviorDistance": {
+      "Value": 24,
+      "Description": "Distance within which combat positioning runs"
+    },
+    "StrafingDurationRange": {
+      "Value": [0.4, 1],
+      "Description": "How long to strafe while maintaining distance"
+    },
+    "StrafingFrequencyRange": {
+      "Value": [0.5, 1.5],
+      "Description": "How often to strafe while maintaining distance"
+    },
+    "MeleeAttack": {
+      "Value": "Root_NPC_Attack_Melee",
+      "Description": "Melee attack interaction root"
+    },
+    "AttackPauseRange": {
+      "Value": [1, 2],
+      "Description": "Pause between melee swings"
+    },
+    "CombatAttackPreDelay": {
+      "Value": [0.15, 0.35],
+      "Description": "Brief stop before swinging so the hit connects"
+    }
+  },
+  "Content": {
+    "Instructions": [
+      {
+        "Continue": true,
+        "Sensor": { "Type": "Damage", "Combat": true },
+        "Actions": [
+          { "Type": "AddToHostileTargetMemory" },
+          { "Type": "OverrideAttitude", "Attitude": "Hostile", "Duration": 60 }
+        ]
+      },
+      {
+        "Continue": true,
+        "Sensor": {
+          "Type": "Or",
+          "Sensors": [
+            {
+              "Type": "Target",
+              "Range": { "Compute": "CombatBehaviorDistance" },
+              "Filters": [{ "Type": "LineOfSight" }]
+            },
+            {
+              "Type": "Target",
+              "TargetSlot": "LockedTarget",
+              "Range": { "Compute": "CombatBehaviorDistance" },
+              "Filters": [{ "Type": "LineOfSight" }]
+            }
+          ]
+        },
+        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 1.5, "HitProbability": 1.0 }
+      },
+      {
+        "Continue": true,
+        "Sensor": {
+          "Type": "Or",
+          "Sensors": [
+            {
+              "Type": "Target",
+              "Range": { "Compute": "AttackDistance" },
+              "Filters": [{ "Type": "LineOfSight" }]
+            },
+            {
+              "Type": "Target",
+              "TargetSlot": "LockedTarget",
+              "Range": { "Compute": "AttackDistance" },
+              "Filters": [{ "Type": "LineOfSight" }]
+            }
+          ]
+        },
+        "ActionsBlocking": true,
+        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 1.5, "HitProbability": 1.0 },
+        "Actions": [
+          { "Type": "Timeout", "Delay": { "Compute": "CombatAttackPreDelay" } },
+          {
+            "Type": "Attack",
+            "Attack": { "Compute": "MeleeAttack" },
+            "AvoidFriendlyFire": true,
+            "AttackPauseRange": { "Compute": "AttackPauseRange" }
+          }
+        ]
+      },
+      {
+        "Continue": true,
+        "Sensor": {
+          "Type": "And",
+          "Sensors": [
+            {
+              "Type": "Or",
+              "Sensors": [
+                {
+                  "Type": "Target",
+                  "Range": { "Compute": "ViewRange" },
+                  "Filters": [{ "Type": "LineOfSight" }]
+                },
+                {
+                  "Type": "Target",
+                  "TargetSlot": "LockedTarget",
+                  "Range": { "Compute": "ViewRange" },
+                  "Filters": [{ "Type": "LineOfSight" }]
+                }
+              ]
+            },
+            {
+              "Type": "Not",
+              "Sensor": {
+                "Type": "Or",
+                "Sensors": [
+                  {
+                    "Type": "Target",
+                    "Range": { "Compute": "AttackDistance" },
+                    "Filters": [{ "Type": "LineOfSight" }]
+                  },
+                  {
+                    "Type": "Target",
+                    "TargetSlot": "LockedTarget",
+                    "Range": { "Compute": "AttackDistance" },
+                    "Filters": [{ "Type": "LineOfSight" }]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "BodyMotion": {
+          "Type": "Seek",
+          "SlowDownDistance": 8,
+          "StopDistance": 1.8,
+          "RelativeSpeed": 1.0,
+          "UsePathfinder": true,
+          "UseSteering": true,
+          "AbortDistance": 48,
+          "MaxPathLength": 400,
+          "MaxTotalNodes": 1200
+        }
+      },
+      {
+        "Continue": true,
+        "Sensor": {
+          "Type": "Or",
+          "Sensors": [
+            {
+              "Type": "Target",
+              "Range": { "Compute": "CombatBehaviorDistance" },
+              "Filters": [{ "Type": "LineOfSight" }]
+            },
+            {
+              "Type": "Target",
+              "TargetSlot": "LockedTarget",
+              "Range": { "Compute": "CombatBehaviorDistance" },
+              "Filters": [{ "Type": "LineOfSight" }]
+            }
+          ]
+        },
+        "BodyMotion": {
+          "Type": "MaintainDistance",
+          "DesiredDistanceRange": { "Compute": "DesiredAttackDistanceRange" },
+          "MoveThreshold": 0.25,
+          "StrafingDurationRange": { "Compute": "StrafingDurationRange" },
+          "StrafingFrequencyRange": { "Compute": "StrafingFrequencyRange" },
+          "RelativeForwardsSpeed": 0.75,
+          "RelativeBackwardsSpeed": 0.4
+        }
+      }
+    ]
+  }
+}

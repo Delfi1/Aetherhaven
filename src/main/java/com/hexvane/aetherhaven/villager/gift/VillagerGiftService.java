@@ -7,11 +7,12 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.VillagerGiftLogEntry;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -61,6 +62,10 @@ public final class VillagerGiftService {
     ) {
         if (town == null || npcRef == null || !npcRef.isValid()) {
             return GiftEligibility.no(GiftEligibility.Reason.NO_CONTEXT);
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null && !VillagerBefriendableResolver.isBefriendable(store, npcRef, plugin)) {
+            return GiftEligibility.no(GiftEligibility.Reason.NOT_BEFRIENDABLE);
         }
         if (isVisitor(store, npcRef)) {
             return GiftEligibility.no(GiftEligibility.Reason.VISITOR);
@@ -244,9 +249,9 @@ public final class VillagerGiftService {
         if (tc == null) {
             return;
         }
-        double hx = tc.getPosition().getX();
-        double hy = tc.getPosition().getY();
-        double hz = tc.getPosition().getZ();
+        double hx = tc.getPosition().x();
+        double hy = tc.getPosition().y();
+        double hz = tc.getPosition().z();
         float eye = 1.6F;
         ModelComponent mc = store.getComponent(npcRef, ModelComponent.getComponentType());
         if (mc != null) {
@@ -327,6 +332,7 @@ public final class VillagerGiftService {
             NO_CONTEXT,
             NO_PLAYER,
             VISITOR,
+            NOT_BEFRIENDABLE,
             EMPTY_HAND,
             DAILY_LIMIT,
             WEEKLY_LIMIT

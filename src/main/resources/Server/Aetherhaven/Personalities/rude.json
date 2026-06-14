@@ -1,0 +1,19 @@
+{
+  "id": "rude",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.rude.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.rude.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.rude.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.rude.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.rude.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "SIT": 1.0,
+    "FUN": 0.4,
+    "WORK": 1.1
+  },
+  "preferredScheduleLocations": [
+    "home",
+    "park"
+  ]
+}

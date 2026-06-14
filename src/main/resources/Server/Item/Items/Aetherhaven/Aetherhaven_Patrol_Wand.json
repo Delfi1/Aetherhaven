@@ -1,0 +1,110 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Patrol_Wand.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Patrol_Wand.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 0,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Stick",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Ingredient_Bar_Iron",
+        "Quantity": 1
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
+      }
+    ]
+  },
+  "Categories": [
+    "Items.Weapons"
+  ],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Patrol_Wand.png",
+  "Quality": "Uncommon",
+  "Model": "Items/Aetherhaven/Patrol_Wand.blockymodel",
+  "Texture": "Items/Aetherhaven/Patrol_Wand.png",
+  "PlayerAnimationsId": "Staff",
+  "MaxStack": 1,
+  "Set": "Aetherhaven",
+  "IconProperties": {
+    "Scale": 0.25,
+    "Rotation": [
+      27,
+      164,
+      38
+    ],
+    "Translation": [
+      -48,
+      -48
+    ]
+  },
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPatrolWandPrimary"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPatrolWandSecondary"
+        }
+      ]
+    },
+    "Use": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPatrolWandUse"
+        }
+      ]
+    },
+    "Ability1": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPatrolWandModeCycle"
+        }
+      ]
+    },
+    "Ability2": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPatrolWandNewRoute"
+        }
+      ]
+    },
+    "Ability3": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPatrolWandToggleClosed"
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "DebugOutlines": true,
+    "AllEntities": true,
+    "UseDistance": {
+      "Adventure": 5,
+      "Creative": 6
+    }
+  },
+  "Tags": {
+    "Family": [
+      "Aetherhaven"
+    ],
+    "Type": [
+      "Tool"
+    ]
+  }
+}

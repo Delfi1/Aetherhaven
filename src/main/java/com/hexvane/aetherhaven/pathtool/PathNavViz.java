@@ -5,7 +5,7 @@ import com.hexvane.aetherhaven.poi.tool.PoiDebugLineHelper;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3f;
+import org.joml.Vector3f;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.debug.DebugUtils;

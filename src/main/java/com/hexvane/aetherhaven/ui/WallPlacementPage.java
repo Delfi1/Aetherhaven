@@ -31,8 +31,8 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import java.nio.file.Path;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
@@ -489,7 +489,6 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 (fp.getMinZ() + fp.getMaxZ() + 1) / 2.0
             );
         } finally {
-            buf.release();
         }
     }
 
@@ -615,7 +614,6 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
             double z = sign0.z + k0.z - k1.z;
             session.setCurrentAnchor(new Vector3i((int) Math.round(x), (int) Math.round(y), (int) Math.round(z)));
         } finally {
-            buf.release();
         }
     }
 
@@ -679,7 +677,6 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     Vector3i origin = step.ghostPrefabOriginWorld();
                     committedFps.add(PlotFootprintUtil.computeFootprint(origin, step.getPrefabYaw(), stepBuf));
                 } finally {
-                    stepBuf.release();
                 }
             }
             PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
@@ -710,7 +707,6 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                             Vector3i lastOrigin = last.ghostPrefabOriginWorld();
                             previousFp = PlotFootprintUtil.computeFootprint(lastOrigin, last.getPrefabYaw(), lastBuf);
                         } finally {
-                            lastBuf.release();
                         }
                     }
                 }
@@ -720,7 +716,6 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 PlotAssemblyPreviewSystem.repaintFrontierAfterExternalDebugClear(ref, store);
             }
         } finally {
-            buf.release();
         }
     }
 
@@ -742,7 +737,6 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         try {
             PlotPreviewSpawner.append(store, step.ghostPrefabOriginWorld(), step.getPrefabYaw(), buf, refs);
         } finally {
-            buf.release();
         }
     }
 
@@ -980,7 +974,6 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 town.addPlotInstance(inst);
                 tm.updateTown(town);
             } finally {
-                buf.release();
             }
         }
         session.addCommitted(

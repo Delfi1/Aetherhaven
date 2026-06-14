@@ -36,7 +36,7 @@ aetherhaven.poiTool.legendSecondary=次要操作：將選定的興趣點移至�
 aetherhaven.poiTool.legendUse=用途：為選定的興趣點設定NPC路徑目標（用於興趣點區域清除時）
 
 aetherhaven.pathTool.legendPageTitle=路徑工具
-aetherhaven.pathTool.legendBlurb=建立樣條曲線，預覽，然後放置路徑塊。握住工具時，角落會顯示一個狀態面板。安裝 Buuz135 MHUD 後，面板會註冊為獨立的圖層，因此其他自訂 HUD 也能保持可見。
+aetherhaven.pathTool.legendBlurb=建立樣條曲線，預覽，然後放置路徑塊。握住工具時，角落會顯示一個狀態面板。安裝
 aetherhaven.pathTool.legendHotkeyAdd=地面上的輔助技能會增加一個關鍵影格（金色球體）。瞄準時，輔助技能會移除一個關鍵影格。新新增的關鍵影格會朝向你的視線方向。
 aetherhaven.pathTool.legendHotkeyAim=查看關鍵影格即可選取它。在移動模式下，地面上的主要元素會移動該點。同一節點上的主要元素則不會執行任何操作。
 aetherhaven.pathTool.legendHotkeyUse=F：在旋轉模式下，對選定節點進行偏航步進。在移動模式下，F 鍵無作用。在放置模式下，F 鍵放置路徑（需要兩個節點）。 Q：模式切換。 E：寬度 1-8。第三個工具功能：路徑樣式（內部區塊；請參閱配置中的 PathToolStyles）。在關鍵影格上按輔助鍵可移除該路徑。
@@ -131,8 +131,6 @@ items.Aetherhaven_Geode.description=一塊空心石頭，裡面可能藏有水�
 
 items.Aetherhaven_Geode_Anvil.name=晶洞砧
 items.Aetherhaven_Geode_Anvil.description=無需支付鐵匠費用即可開啟晶洞。放置後即可使用；您必須知道圖紙才能在城鎮規劃桌上製作。
-
-barter.aetherhaven_vex.title=Vex每日股票
 
 items.Aetherhaven_Treasury.name=鎮財政
 items.Aetherhaven_Treasury.description=存放城鎮金幣。用於訪問（城鎮所有者）。

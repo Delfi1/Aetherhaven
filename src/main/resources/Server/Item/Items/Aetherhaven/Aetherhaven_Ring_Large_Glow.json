@@ -1,0 +1,44 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_jewelry_geode.items.Aetherhaven_Ring_Large_Glow.name",
+    "Description": "aetherhaven_jewelry_geode.items.Aetherhaven_Ring_Large_Glow.description"
+  },
+  "Categories": [
+    "Items.Utility"
+  ],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Ring_Large_Glow.png",
+  "Model": "Items/Aetherhaven/Jewelry/Ring.blockymodel",
+  "Texture": "Items/Aetherhaven/Jewelry/Large_Glow_Ring.png",
+  "MaxStack": 1,
+  "PlayerAnimationsId": "Item",
+  "Quality": "Legendary",
+  "Set": "Aetherhaven",
+  "Light": {
+    "Radius": 12,
+    "Color": "#e8f4ff"
+  },
+  "IconProperties": {
+    "Scale": 1.2,
+    "Rotation": [
+      14,
+      177,
+      30
+    ],
+    "Translation": [
+      -3,
+      -6
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Jewelry"
+    ],
+    "Aetherhaven": [
+      "Artifact"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

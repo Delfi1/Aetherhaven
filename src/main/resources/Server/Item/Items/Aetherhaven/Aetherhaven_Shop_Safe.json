@@ -1,0 +1,81 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Shop_Safe.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Shop_Safe.description"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": ["Furniture.Containers"],
+  "Set": "Aetherhaven",
+  "Icon": "Icons/ItemsGenerated/Furniture_Dungeon_Chest_Epic.png",
+  "BlockType": {
+    "BlockParticleSetId": "Wood",
+    "BlockSoundSetId": "Wood",
+    "CustomModel": "Blocks/Shop_Safe.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Shop_Safe.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Woods"
+      }
+    },
+    "HitboxType": "Full",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "ParticleColor": "#7a3d27",
+    "State": {
+      "Definitions": {
+        "CloseWindow": {
+          "InteractionSoundEventId": "SFX_Chest_Wooden_Close",
+          "CustomModelAnimation": "Blocks/Animations/Chest/Chest_Open.blockyanim"
+        },
+        "OpenWindow": {
+          "InteractionSoundEventId": "SFX_Chest_Wooden_Open",
+          "CustomModelAnimation": "Blocks/Animations/Chest/Chest_Open.blockyanim"
+        }
+      }
+    },
+    "BlockEntity": {
+      "Components": {
+        "AetherhavenShopSafeBlock": {
+          "PlotId": "",
+          "TownId": ""
+        }
+      }
+    },
+    "Supporting": {
+      "Up": [{ "FaceType": "Full" }]
+    },
+    "Support": {
+      "Down": [{ "FaceType": "Full" }]
+    },
+    "VariantRotation": "NESW",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "AetherhavenShopSafeUse"
+          }
+        ]
+      }
+    }
+  },
+  "Tags": {
+    "Type": ["Furniture"],
+    "Family": ["Aetherhaven"]
+  },
+  "IconProperties": {
+    "Scale": 0.55,
+    "Translation": [0, -15],
+    "Rotation": [22.5, 45, 22.5]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "MaxStack": 25
+}

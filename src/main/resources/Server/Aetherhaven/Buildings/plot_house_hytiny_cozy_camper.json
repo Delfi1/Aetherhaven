@@ -6,6 +6,7 @@
   "countsAsConstructionId": "plot_house",
   "selfBuildGameDays": 0.5,
   "plotTokenItemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper",
+  "plotTokenLockedByDefault": true,
   "plotAnchorOffset": [4, 0, 4],
   "managementBlockLocalPos": [0, 5, -4],
   "rotationYaw": "None",
@@ -15,7 +16,11 @@
   "treasuryGoldCoinCost": 48,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 235 },
-    { "resourceTypeId": "Rock", "count": 75 }
+    { "resourceTypeId": "Rock", "count": 75 },
+    { "itemId": "Bench_Cooking", "count": 1 },
+    { "itemId": "Bench_Farming", "count": 1 },
+    { "itemId": "Bench_Lumbermill", "count": 1 },
+    { "itemId": "Bench_WorkBench", "count": 1 }
   ],
   "pois": [
     {

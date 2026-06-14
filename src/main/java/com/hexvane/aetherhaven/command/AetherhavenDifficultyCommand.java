@@ -21,7 +21,7 @@ public final class AetherhavenDifficultyCommand extends AbstractPlayerCommand {
 
     public AetherhavenDifficultyCommand() {
         super("difficulty", "aetherhaven_commands_root.commands.aetherhaven.difficulty.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
     }
 
     @Override

@@ -62,6 +62,6 @@ public final class PlotAssemblyTickSystem extends EntityTickingSystem<EntityStor
             return;
         }
         LAST_RUN_MS.put(name, now);
-        PlotAssemblyService.tickPassive(world, plugin, store);
+        PlotAssemblyService.tickPassive(world, plugin, store, commandBuffer);
     }
 }

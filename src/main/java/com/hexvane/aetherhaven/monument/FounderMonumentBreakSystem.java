@@ -13,7 +13,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -46,11 +46,11 @@ public final class FounderMonumentBreakSystem extends EntityEventSystem<EntitySt
         }
         World world = store.getExternalData().getWorld();
         Vector3i pos = event.getTargetBlock();
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.getX(), pos.getZ()));
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x(), pos.z()));
         if (chunk == null) {
             return;
         }
-        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(pos.getX(), pos.getY(), pos.getZ());
+        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(pos.x(), pos.y(), pos.z());
         if (blockRef == null || !blockRef.isValid()) {
             return;
         }

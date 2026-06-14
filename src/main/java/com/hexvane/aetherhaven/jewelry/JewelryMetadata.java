@@ -31,6 +31,41 @@ public final class JewelryMetadata {
         return stack.getFromMetadataOrNull(BSON_KEY, AetherhavenBsonCodecs.BSON_DOCUMENT) != null;
     }
 
+    /** Reads {@link #BSON_KEY} from an inventory packet metadata JSON blob ({@link com.hypixel.hytale.protocol.ItemWithAllMetadata#metadata}). */
+    public static boolean hasJewelryMetaFromMetadataJson(@Nullable String metadataJson) {
+        return readJewelryRootFromMetadataJson(metadataJson) != null;
+    }
+
+    @Nullable
+    public static JewelryRarity readRarityFromMetadataJson(@Nullable String metadataJson) {
+        BsonDocument root = readJewelryRootFromMetadataJson(metadataJson);
+        if (root == null) {
+            return null;
+        }
+        BsonValue v = root.get("rarity");
+        if (v == null || !v.isString()) {
+            return null;
+        }
+        return JewelryRarity.fromWire(v.asString().getValue());
+    }
+
+    @Nullable
+    private static BsonDocument readJewelryRootFromMetadataJson(@Nullable String metadataJson) {
+        if (metadataJson == null || metadataJson.isBlank()) {
+            return null;
+        }
+        try {
+            BsonDocument meta = BsonDocument.parse(metadataJson);
+            BsonValue v = meta.get(BSON_KEY);
+            if (v == null || !v.isDocument()) {
+                return null;
+            }
+            return v.asDocument();
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
     /**
      * Whether this stack should show appraised jewelry UI (revealed traits, no “still need appraisal” blurbs).
      * <p>Uses BSON {@code appraised} when present ({@linkplain #readAppraisedLenient tolerant} decoding). When the wire
@@ -171,8 +206,9 @@ public final class JewelryMetadata {
     }
 
     /**
-     * Writes {@code TranslationProperties.Description} on the stack metadata with plain English text so the default
-     * tooltip can show rolled traits (and hidden lines when unappraised) instead of only the static item description key.
+     * Syncs per-instance tooltip text onto the stack for inventory and default item tooltips. Uses native
+     * {@link ItemDisplayMetadata} (0.5.0 per-stack display); also keeps {@link #INSTANCE_TRANSLATION_PROPERTIES_KEY} for
+     * UIs that read plain description text.
      */
     @Nonnull
     public static ItemStack syncInstanceDescriptionForTooltip(@Nonnull ItemStack stack) {
@@ -184,7 +220,8 @@ public final class JewelryMetadata {
         }
         BsonDocument tp = new BsonDocument();
         tp.put("Description", new BsonString(JewelryTooltipMessages.toPlainEnglishDescription(stack)));
-        return stack.withMetadata(INSTANCE_TRANSLATION_PROPERTIES_KEY, tp);
+        stack = stack.withMetadata(INSTANCE_TRANSLATION_PROPERTIES_KEY, tp);
+        return JewelryNativeTooltipManager.apply(stack);
     }
 
     @Nonnull
@@ -306,6 +343,45 @@ public final class JewelryMetadata {
             return (float) def;
         }
         return (float) v.asNumber().doubleValue();
+    }
+
+    /** Serializes {@link #BSON_KEY} for shop spot persistence; null when stack has no jewelry metadata. */
+    @Nullable
+    public static String exportJewelryRootJson(@Nonnull ItemStack stack) {
+        BsonDocument root = readRoot(stack);
+        return root != null ? root.toJson() : null;
+    }
+
+    /** Applies persisted jewelry metadata and rebuilds tooltip display state. */
+    @Nonnull
+    public static ItemStack applyJewelryRootJson(@Nonnull ItemStack stack, @Nonnull String jewelryRootJson) {
+        if (ItemStack.isEmpty(stack) || jewelryRootJson.isBlank()) {
+            return stack;
+        }
+        try {
+            BsonDocument root = BsonDocument.parse(jewelryRootJson);
+            stack = syncInstanceDescriptionForTooltip(writeRoot(stack, root));
+            return JewelryNativeTooltipManager.apply(stack);
+        } catch (Exception ignored) {
+            return stack;
+        }
+    }
+
+    @Nullable
+    public static JewelryRarity readRarityFromRootJson(@Nullable String jewelryRootJson) {
+        if (jewelryRootJson == null || jewelryRootJson.isBlank()) {
+            return null;
+        }
+        try {
+            BsonDocument root = BsonDocument.parse(jewelryRootJson);
+            BsonValue v = root.get("rarity");
+            if (v == null || !v.isString()) {
+                return null;
+            }
+            return JewelryRarity.fromWire(v.asString().getValue());
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 
     public record RolledTrait(int gemTraitIndex, @Nonnull String statId, @Nonnull String calculationType, float amount) {}

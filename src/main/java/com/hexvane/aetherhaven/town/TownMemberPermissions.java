@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.town;
 
 import com.google.gson.annotations.SerializedName;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Per-player town gameplay permissions (owner and members). Serialized under {@link TownRecord}.
@@ -35,6 +36,11 @@ public final class TownMemberPermissions {
     @SerializedName("removePlots")
     private boolean removePlots;
 
+    /** List and sell on town player shop spots; omitted in older saves defaults to allowed. */
+    @SerializedName("useShopSpots")
+    @Nullable
+    private Boolean useShopSpots;
+
     public TownMemberPermissions() {}
 
     public TownMemberPermissions(
@@ -46,7 +52,8 @@ public final class TownMemberPermissions {
         boolean completeQuests,
         boolean abandonQuests,
         boolean reviveVillagers,
-        boolean removePlots
+        boolean removePlots,
+        boolean useShopSpots
     ) {
         this.placePlots = placePlots;
         this.manageConstructions = manageConstructions;
@@ -57,18 +64,19 @@ public final class TownMemberPermissions {
         this.abandonQuests = abandonQuests;
         this.reviveVillagers = reviveVillagers;
         this.removePlots = removePlots;
+        this.useShopSpots = useShopSpots;
     }
 
     @Nonnull
     public static TownMemberPermissions fullMember() {
-        return new TownMemberPermissions(true, true, true, true, true, true, true, true, true);
+        return new TownMemberPermissions(true, true, true, true, true, true, true, true, true, true);
     }
 
     @Nonnull
     public static TownMemberPermissions fromRole(@Nonnull TownMemberRole role) {
         return switch (role) {
-            case BUILD -> new TownMemberPermissions(true, true, true, false, false, false, false, false, true);
-            case QUEST -> new TownMemberPermissions(false, false, false, false, true, true, true, false, false);
+            case BUILD -> new TownMemberPermissions(true, true, true, false, false, false, false, false, true, true);
+            case QUEST -> new TownMemberPermissions(false, false, false, false, true, true, true, false, false, false);
             case BOTH -> fullMember();
         };
     }
@@ -162,6 +170,14 @@ public final class TownMemberPermissions {
         this.removePlots = removePlots;
     }
 
+    public boolean useShopSpots() {
+        return useShopSpots == null || useShopSpots;
+    }
+
+    public void setUseShopSpots(boolean useShopSpots) {
+        this.useShopSpots = useShopSpots;
+    }
+
     @Nonnull
     public TownMemberPermissions copy() {
         return new TownMemberPermissions(
@@ -173,7 +189,8 @@ public final class TownMemberPermissions {
             completeQuests,
             abandonQuests,
             reviveVillagers,
-            removePlots
+            removePlots,
+            useShopSpots()
         );
     }
 }

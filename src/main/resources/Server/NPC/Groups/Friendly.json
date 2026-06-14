@@ -1,0 +1,6 @@
+{
+  "$Comment": "Shared convention group for town allies. Other mods can add IncludeGroups: [\"Friendly\"] on their villager groups, or list roles here.",
+  "IncludeGroups": [
+    "Aetherhaven_Townsfolk"
+  ]
+}

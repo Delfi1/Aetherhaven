@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
     public AetherhavenPlotsCommand() {
         super("plots", "aetherhaven_commands_help.commands.aetherhaven.plots.desc");
-        this.setPermissionGroup(GameMode.Creative);
+        this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new ListCommand());
         this.addSubCommand(new FinishAssemblyCommand());
         this.addSubCommand(new RemoveCommand());
@@ -83,7 +83,7 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
     private static final class FinishAssemblyCommand extends AbstractPlayerCommand {
         FinishAssemblyCommand() {
             super("finishassembly", "aetherhaven_commands_help.commands.aetherhaven.plots.finishassembly.desc");
-            this.setPermissionGroup(GameMode.Creative);
+            this.setPermissionGroups("hytale:WorldEditor");
         }
 
         @Override
@@ -124,7 +124,7 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
 
         RemoveCommand() {
             super("remove", "aetherhaven_commands_help.commands.aetherhaven.plots.remove.desc");
-            this.setPermissionGroup(GameMode.Creative);
+            this.setPermissionGroups("hytale:WorldEditor");
         }
 
         @Override

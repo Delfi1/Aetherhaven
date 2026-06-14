@@ -36,7 +36,7 @@ aetherhaven.poiTool.legendSecondary=보조 기능: 선택한 POI를 블록으로
 aetherhaven.poiTool.legendUse=용도: 선택한 POI에 대한 NPC 경로 대상을 설정합니다. (POI에 사용하면 블록이 초기화됩니다.)
 
 aetherhaven.pathTool.legendPageTitle=경로 도구
-aetherhaven.pathTool.legendBlurb=스플라인을 생성하고 미리 보기를 한 다음 경로 블록을 배치합니다. 도구를 들고 있는 동안 화면 모서리에 상태 패널이 나타납니다. Buuz135 MHUD가 설치되어 있으면 이 패널이 별도의 레이어로 등록되어 다른 사용자 지정 HUD도 함께 표시될 수 있습니다.
+aetherhaven.pathTool.legendBlurb=스플라인을 생성하고 미리 보기를 한 다음 경로 블록을 배치합니다. 도구를 들고 있는 동안 화면 모서리에 상태 패널이 나타납니다.
 aetherhaven.pathTool.legendHotkeyAdd=지면에 보조 무기를 사용하면 키프레임(금색 구체)이 추가됩니다. 조준 중에 보조 무기를 사용하면 키프레임이 제거됩니다. 새 키프레임은 플레이어가 바라보는 방향을 향합니다.
 aetherhaven.pathTool.legendHotkeyAim=키프레임을 살펴보고 선택하세요. 이동 모드에서 지면에 있는 기본 커서는 포인트를 이동시킵니다. 같은 노드에 있는 기본 커서는 아무런 동작도 하지 않습니다.
 aetherhaven.pathTool.legendHotkeyUse=F: 회전 모드에서 선택한 노드를 기준으로 단계적으로 요(yaw) 이동을 합니다. 이동 모드에서 F 키는 아무런 동작도 하지 않습니다. 배치 모드에서 F 키는 경로를 배치합니다(노드 두 개 필요). Q: 모드 전환. E: 너비 1-8. 세 번째 도구 기능: 경로 스타일(내부 블록, 설정 파일의 PathToolStyles 참조). 키프레임에 대한 보조 키는 해당 스타일을 제거합니다.
@@ -131,8 +131,6 @@ items.Aetherhaven_Geode.description=속이 빈 돌에는 수정, 보석 또는 �
 
 items.Aetherhaven_Geode_Anvil.name=지오드 앤빌
 items.Aetherhaven_Geode_Anvil.description=대장장이 비용 없이 수정 동굴을 엽니다. 설치 후 사용 가능하며, 제작하려면 설계도를 알아야 마을 계획 데스크에서 제작할 수 있습니다.
-
-barter.aetherhaven_vex.title=Vex의 일일 재고
 
 items.Aetherhaven_Treasury.name=시 재정
 items.Aetherhaven_Treasury.description=마을의 금화를 보관합니다. 입금 또는 출금 시 사용합니다(마을 소유주).

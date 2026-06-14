@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "q_florist_shop",
+  "category": "town",
+  "grantPlotBlueprintConstructionId": "plot_flower_shop",
+  "title": "Ivy's Flower Shop",
+  "description": "Ivy wants a proper shop where she can share her plants with the town.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "blueprint",
+      "kind": "journal",
+      "text": "Take the shop blueprint from Ivy."
+    },
+    {
+      "id": "learn",
+      "kind": "journal",
+      "text": "Use the blueprint to learn the flower shop at your plot crafting bench."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Craft a shop plot token and build the flower shop prefab."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Find Ivy at the shop and close the quest in dialogue."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Florist",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+    ],
+    "onComplete": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ],
+    "onAbandon": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ]
+  },
+  "repeat": { "mode": "none" }
+}

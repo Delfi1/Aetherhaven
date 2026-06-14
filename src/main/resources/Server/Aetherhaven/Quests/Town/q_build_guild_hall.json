@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "id": "q_build_guild_hall",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_guild_hall",
+  "title": "Raise The Guild Hall",
+  "description": "Lyra wants a proper guild hall where adventurers can sign on and guards can be hired.",
+  "prerequisites": {
+    "completedQuestIds": ["q_build_town_hall"],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Take the guild hall plot token from Lyra."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the guild hall prefab."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Find Lyra at the guild hall and close the quest in dialogue."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Guild_Master",
+      "amount": 16,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 18,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+    ],
+    "onComplete": [
+      { "effect": "clear_inn_visitor_locks", "params": {} },
+      { "effect": "activate_guild_hall_if_ready", "params": {} }
+    ],
+    "onAbandon": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ]
+  },
+  "repeat": { "mode": "none" }
+}

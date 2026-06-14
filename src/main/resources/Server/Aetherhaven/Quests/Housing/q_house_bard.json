@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "id": "q_house_bard",
+  "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
+  "title": "Elias's home",
+  "description": "Elias plays at the guild hall most days. He would like a quiet roof at night that belongs to him alone.",
+  "assignNpcRoleId": "Aetherhaven_Bard",
+  "prerequisites": {
+    "completedQuestIds": ["q_build_guild_hall"],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Take the house plot token from Elias."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the house prefab."
+    },
+    {
+      "id": "assign",
+      "kind": "assign_house_resident",
+      "npcRoleId": "Aetherhaven_Bard",
+      "text": "Assign Elias as resident on the house management block."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Find Elias and close the quest in dialogue."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Bard",
+      "amount": 10,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 16,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "none" }
+}

@@ -1,0 +1,38 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Lute.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Lute.description"
+  },
+  "Categories": [
+    "Items.Deco"
+  ],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Lute.png",
+  "Model": "Items/Aetherhaven/Lute.blockymodel",
+  "Texture": "Items/Aetherhaven/Lute_Texture.png",
+  "Scale": 1.2,
+  "MaxStack": 1,
+  "PlayerAnimationsId": "Item",
+  "Quality": "Common",
+  "Set": "Aetherhaven",
+  "IconProperties": {
+    "Scale": 0.45,
+    "Rotation": [
+      12,
+      28,
+      0
+    ],
+    "Translation": [
+      -8,
+      18
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Tool"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

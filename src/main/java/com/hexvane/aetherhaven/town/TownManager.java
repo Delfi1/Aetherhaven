@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.WorkplaceUnlockCatalog;
@@ -53,6 +54,10 @@ public final class TownManager {
     }
 
     public void loadFromDisk() {
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            byTownId.clear();
+            return;
+        }
         byTownId.clear();
         try {
             TownWorldFile file = TownWorldFile.readOrEmpty(saveFile);
@@ -90,6 +95,9 @@ public final class TownManager {
     }
 
     public void saveToDisk() {
+        if (!PersistentWorldSupport.shouldPersistWorldData(world)) {
+            return;
+        }
         try {
             TownWorldFile file = new TownWorldFile();
             file.getTowns().addAll(byTownId.values());

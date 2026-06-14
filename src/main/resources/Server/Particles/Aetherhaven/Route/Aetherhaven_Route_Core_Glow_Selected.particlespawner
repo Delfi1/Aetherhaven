@@ -1,0 +1,100 @@
+{
+  "RenderMode": "BlendAdd",
+  "ParticleRotationInfluence": "Billboard",
+  "LinearFiltering": true,
+  "LightInfluence": 0,
+  "MaxConcurrentParticles": 3,
+  "SpawnRate": {
+    "Min": 4,
+    "Max": 4
+  },
+  "ParticleLifeSpan": {
+    "Min": 0.4,
+    "Max": 0.6
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Basic/Ball.png",
+    "FrameSize": {
+      "Width": 64,
+      "Height": 64
+    },
+    "ScaleRatioConstraint": "OneToOne",
+    "UVOption": "None",
+    "InitialAnimationFrame": {
+      "FrameIndex": {
+        "Min": 0,
+        "Max": 0
+      },
+      "Opacity": 1,
+      "Color": "#00ff55",
+      "Scale": {
+        "X": {
+          "Min": 0.18,
+          "Max": 0.28
+        },
+        "Y": {
+          "Min": 0.18,
+          "Max": 0.28
+        }
+      }
+    },
+    "Animation": {
+      "0": {
+        "Opacity": 0.65,
+        "Color": "#00ff55",
+        "Scale": {
+          "X": {
+            "Min": 0.18,
+            "Max": 0.28
+          },
+          "Y": {
+            "Min": 0.18,
+            "Max": 0.28
+          }
+        }
+      },
+      "30": {
+        "Opacity": 0.55,
+        "Color": "#66ff88",
+        "Scale": {
+          "X": {
+            "Min": 0.22,
+            "Max": 0.32
+          },
+          "Y": {
+            "Min": 0.22,
+            "Max": 0.32
+          }
+        }
+      },
+      "70": {
+        "Opacity": 0.35,
+        "Color": "#aaffbb",
+        "Scale": {
+          "X": {
+            "Min": 0.18,
+            "Max": 0.28
+          },
+          "Y": {
+            "Min": 0.18,
+            "Max": 0.28
+          }
+        }
+      },
+      "100": {
+        "Opacity": 0,
+        "Color": "#ddffdd",
+        "Scale": {
+          "X": {
+            "Min": 0.12,
+            "Max": 0.18
+          },
+          "Y": {
+            "Min": 0.12,
+            "Max": 0.18
+          }
+        }
+      }
+    }
+  }
+}

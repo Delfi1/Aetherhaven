@@ -1,0 +1,123 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "Interface": "Hytale.Instruction",
+  "$Comment": "Staff combat: Aim and Attack must share one instruction so ActionAttack receives AimingData.",
+  "Parameters": {
+    "ViewRange": {
+      "Value": 24,
+      "Description": "Combat awareness range"
+    },
+    "AttackDistance": {
+      "Value": 15,
+      "Description": "Maximum staff cast range"
+    },
+    "CombatFleeIfTooCloseDistance": {
+      "Value": 4,
+      "Description": "Retreat when hostiles stay inside this range"
+    },
+    "DesiredRangedDistance": {
+      "Value": [5, 14],
+      "Description": "Preferred casting range"
+    },
+    "RangedAttack": {
+      "Value": "Skeleton_Archmage_Staff_Corruption_Orb",
+      "Description": "Staff attack interaction"
+    },
+    "AttackPauseRange": {
+      "Value": [1.5, 2.5],
+      "Description": "Pause between casts"
+    },
+    "CombatAttackPreDelay": {
+      "Value": [0.6, 1.1],
+      "Description": "Cast wind-up time"
+    },
+    "CombatBehaviorDistance": {
+      "Value": 15,
+      "Description": "Distance within which positioning logic runs"
+    }
+  },
+  "Content": {
+    "Instructions": [
+      {
+        "Continue": true,
+        "Sensor": { "Type": "Damage", "Combat": true },
+        "Actions": [
+          { "Type": "AddToHostileTargetMemory" },
+          { "Type": "OverrideAttitude", "Attitude": "Hostile", "Duration": 60 }
+        ]
+      },
+      {
+        "Reference": "Component_Instruction_Combat_Retreat",
+        "Modify": {
+          "CombatFleeIfTooCloseDistance": { "Compute": "CombatFleeIfTooCloseDistance" },
+          "AttackDistance": { "Compute": "AttackDistance" }
+        }
+      },
+      {
+        "Continue": true,
+        "Sensor": {
+          "Type": "Target",
+          "Range": { "Compute": "CombatBehaviorDistance" },
+          "Filters": [{ "Type": "LineOfSight" }]
+        },
+        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 1.25, "HitProbability": 1.0 }
+      },
+      {
+        "Continue": true,
+        "Sensor": {
+          "Type": "And",
+          "Sensors": [
+            {
+              "Type": "Target",
+              "Range": { "Compute": "AttackDistance" },
+              "Filters": [{ "Type": "LineOfSight" }]
+            },
+            {
+              "Type": "Not",
+              "Sensor": {
+                "Type": "Target",
+                "Range": { "Compute": "CombatFleeIfTooCloseDistance" }
+              }
+            }
+          ]
+        },
+        "ActionsBlocking": true,
+        "HeadMotion": { "Type": "Aim", "RelativeTurnSpeed": 1.25, "HitProbability": 1.0 },
+        "Actions": [
+          { "Type": "Timeout", "Delay": { "Compute": "CombatAttackPreDelay" } },
+          {
+            "Type": "Attack",
+            "Attack": { "Compute": "RangedAttack" },
+            "AvoidFriendlyFire": true,
+            "AttackPauseRange": { "Compute": "AttackPauseRange" }
+          }
+        ]
+      },
+      {
+        "Continue": true,
+        "Sensor": {
+          "Type": "Target",
+          "Range": { "Compute": "CombatBehaviorDistance" },
+          "Filters": [{ "Type": "LineOfSight" }]
+        },
+        "BodyMotion": {
+          "Type": "MaintainDistance",
+          "DesiredDistanceRange": { "Compute": "DesiredRangedDistance" },
+          "MoveThreshold": 0.35,
+          "RelativeForwardsSpeed": 0.4,
+          "RelativeBackwardsSpeed": 0.5
+        }
+      },
+      {
+        "Sensor": { "Type": "Target", "Range": { "Compute": "ViewRange" } },
+        "BodyMotion": {
+          "Type": "Seek",
+          "SlowDownDistance": 12,
+          "StopDistance": 6,
+          "RelativeSpeed": 0.45
+        }
+      }
+    ]
+  }
+}

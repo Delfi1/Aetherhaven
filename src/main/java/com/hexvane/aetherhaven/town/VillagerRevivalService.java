@@ -1,5 +1,9 @@
 package com.hexvane.aetherhaven.town;
 
+import com.hypixel.hytale.math.vector.Rotation3f;
+
+import com.hypixel.hytale.math.vector.Vector3fUtil;
+
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyTravelKick;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
@@ -10,8 +14,8 @@ import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -48,6 +52,17 @@ public final class VillagerRevivalService {
         if (roleId.isEmpty()) {
             return false;
         }
+        if (ResidentRegistryService.hasLiveTownRevivalNpcForRole(store, town, record)) {
+            LOGGER.atInfo()
+                .log(
+                    "Revival blocked: live town NPC still present for role %s in town %s",
+                    roleId,
+                    town.getTownId()
+                );
+            record.setPendingDawnRevival(false);
+            tm.updateTown(town);
+            return false;
+        }
         NPCPlugin npc = NPCPlugin.get();
         if (npc == null) {
             return false;
@@ -57,7 +72,7 @@ public final class VillagerRevivalService {
             LOGGER.atWarning().log("Failed to revive NPC: role id not registered (getIndex < 0): %s for town %s", roleId, town.getTownId());
             return false;
         }
-        var pair = npc.spawnNPC(store, roleId, null, spawnPos, Vector3f.ZERO);
+        var pair = npc.spawnNPC(store, roleId, null, spawnPos, Rotation3f.ZERO);
         if (pair == null) {
             LOGGER.atWarning()
                 .log(
@@ -88,6 +103,8 @@ public final class VillagerRevivalService {
         UUID newUuid = nu.getUuid();
         VillagerReputationService.migrateVillagerEntityUuid(town, tm, oldUuid, newUuid);
         ResidentRegistryService.replaceEntityUuidEverywhere(town, tm, oldUuid, newUuid);
+        record.setPendingDawnRevival(false);
+        tm.updateTown(town);
         world.execute(
             () -> {
                 VillagerScheduleService.applyForWorld(world, store, plugin, true);

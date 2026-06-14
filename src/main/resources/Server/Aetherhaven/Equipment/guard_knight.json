@@ -1,0 +1,14 @@
+{
+  "id": "guard_knight",
+  "guardNpcRole": "Aetherhaven_Guard_Knight",
+  "displayName": "Knight",
+  "hireGoldCost": 40,
+  "armor": [
+    "Armor_Iron_Chest",
+    "Armor_Iron_Legs",
+    "Armor_Iron_Hands"
+  ],
+  "hotbar": [
+    { "slot": 0, "itemId": "Weapon_Sword_Iron" }
+  ]
+}

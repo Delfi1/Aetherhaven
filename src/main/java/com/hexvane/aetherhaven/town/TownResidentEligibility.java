@@ -1,0 +1,135 @@
+package com.hexvane.aetherhaven.town;
+
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
+import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+/** Who appears in town resident lists, uses needs, and pays flat townsfolk tax. */
+public final class TownResidentEligibility {
+    private TownResidentEligibility() {}
+
+    public static boolean excludeFromResidentLists(
+        @Nonnull TownRecord town,
+        @Nonnull UUID entityUuid,
+        @Nonnull TownVillagerBinding binding
+    ) {
+        if (TownVillagerBinding.isVisitorKind(binding.getKind())) {
+            return true;
+        }
+        return GuildHallAdventurerPoolService.isGuildHallAdventurer(town, entityUuid)
+            || TouristPortalTickService.isActivePortalTourist(town, entityUuid);
+    }
+
+    public static boolean requiresHouseToAppear(
+        @Nonnull String bindingKind,
+        @Nonnull String roleId,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        return isTownsfolkPoolKind(bindingKind, roleId, plugin);
+    }
+
+    public static boolean includeInResidentList(
+        @Nonnull TownRecord town,
+        @Nonnull UUID entityUuid,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull String roleId,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        if (excludeFromResidentLists(town, entityUuid, binding)) {
+            return false;
+        }
+        if (requiresHouseToAppear(binding.getKind(), roleId, plugin)) {
+            return town.isNpcHomeResidentOnHousePlot(entityUuid, constructionCatalog);
+        }
+        return true;
+    }
+
+    public static boolean includeInResidentList(
+        @Nonnull TownRecord town,
+        @Nonnull UUID entityUuid,
+        @Nonnull String bindingKind,
+        @Nonnull String roleId,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        if (TownVillagerBinding.isVisitorKind(bindingKind)) {
+            return false;
+        }
+        if (GuildHallAdventurerPoolService.isGuildHallAdventurer(town, entityUuid)) {
+            return false;
+        }
+        if (TouristPortalTickService.isActivePortalTourist(town, entityUuid)) {
+            return false;
+        }
+        if (requiresHouseToAppear(bindingKind, roleId, plugin)) {
+            return town.isNpcHomeResidentOnHousePlot(entityUuid, constructionCatalog);
+        }
+        return true;
+    }
+
+    public static boolean usesVillagerNeeds(
+        @Nonnull String bindingKind,
+        @Nonnull String roleId,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        return !isTownsfolkPoolKind(bindingKind, roleId, plugin);
+    }
+
+    public static boolean countsAsTownsfolkTax(
+        @Nonnull TownRecord town,
+        @Nonnull UUID entityUuid,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull String roleId,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        if (excludeFromResidentLists(town, entityUuid, binding)) {
+            return false;
+        }
+        if (!isTownsfolkPoolKind(binding.getKind(), roleId, plugin)) {
+            return false;
+        }
+        return town.isNpcHomeResidentOnHousePlot(entityUuid, constructionCatalog);
+    }
+
+    public static boolean countsAsTownsfolkTax(
+        @Nonnull TownRecord town,
+        @Nonnull UUID entityUuid,
+        @Nonnull String bindingKind,
+        @Nonnull String roleId,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        if (TownVillagerBinding.isVisitorKind(bindingKind)) {
+            return false;
+        }
+        if (GuildHallAdventurerPoolService.isGuildHallAdventurer(town, entityUuid)) {
+            return false;
+        }
+        if (TouristPortalTickService.isActivePortalTourist(town, entityUuid)) {
+            return false;
+        }
+        if (!isTownsfolkPoolKind(bindingKind, roleId, plugin)) {
+            return false;
+        }
+        return town.isNpcHomeResidentOnHousePlot(entityUuid, constructionCatalog);
+    }
+
+    public static boolean isTownsfolkPoolKind(
+        @Nonnull String bindingKind,
+        @Nonnull String roleId,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        if (TownVillagerBinding.KIND_GUARD.equals(bindingKind) || TownVillagerBinding.KIND_TOWNSFOLK.equals(bindingKind)) {
+            return true;
+        }
+        return plugin.getTownsfolkCharacterCatalog().isTownsfolkRole(roleId);
+    }
+}

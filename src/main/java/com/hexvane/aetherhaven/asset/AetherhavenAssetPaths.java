@@ -25,6 +25,15 @@ public final class AetherhavenAssetPaths {
     /** Relative to pack root: villager gameplay metadata JSON (dialogue keys, rep, inn pool, schedule bindings). */
     public static final String VILLAGERS = "Server/Aetherhaven/Villagers";
 
+    /** Townsfolk character definitions (world pool). */
+    public static final String TOWNSFOLK = "Server/Aetherhaven/Townsfolk";
+
+    /** Townsfolk personality traits. */
+    public static final String PERSONALITIES = "Server/Aetherhaven/Personalities";
+
+    /** Bard song catalog and related config. */
+    public static final String BARD = "Server/Aetherhaven/Bard";
+
     private AetherhavenAssetPaths() {}
 
     @Nonnull
@@ -55,5 +64,15 @@ public final class AetherhavenAssetPaths {
     @Nonnull
     public static String villagersPrefix() {
         return VILLAGERS + "/";
+    }
+
+    @Nonnull
+    public static String townsfolkPrefix() {
+        return TOWNSFOLK + "/";
+    }
+
+    @Nonnull
+    public static String personalitiesPrefix() {
+        return PERSONALITIES + "/";
     }
 }

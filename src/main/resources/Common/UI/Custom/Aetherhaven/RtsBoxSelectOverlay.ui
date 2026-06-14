@@ -1,0 +1,12 @@
+$C = "../Common.ui";
+
+Group #RtsBoxSelectRoot {
+  LayoutMode: Full;
+  HitTestVisible: false;
+
+  Group #SelectionBox {
+    Visible: false;
+    HitTestVisible: false;
+    Background: (TexturePath: "../Common/ColorPickerDropdownBoxOverlay.png", Border: 12, Color: #4488ff(0.55));
+  }
+}

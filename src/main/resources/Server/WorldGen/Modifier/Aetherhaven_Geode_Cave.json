@@ -1,0 +1,21 @@
+{
+  "Priority": "Normal",
+  "Target": {
+    "Root": "Default",
+    "Rules": [
+      "Zones.Zone1_Tier1.Cave.Caves",
+      "Zones.Zone1_Tier2.Cave.Caves",
+      "Zones.Zone1_Tier3.Cave.Caves"
+    ]
+  },
+  "Operations": [
+    {
+      "Type": "Add",
+      "Content": {
+        "Type": "File",
+        "ContentType": "CaveType",
+        "Path": "Aetherhaven.Caves.Geode"
+      }
+    }
+  ]
+}

@@ -4,6 +4,7 @@
   "residentTreeId": "aetherhaven_logger",
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_lumbermill",
+  "workEquipmentProfileId": "work_logger",
   "scheduleRoleId": "Aetherhaven_Logger",
   "displayName": "Seren Fairhollow",
   "portraitIcon": "Aetherhaven_Logger.png",
@@ -11,7 +12,24 @@
   "innPoolEligible": true,
   "innPoolOrder": 5,
   "visitorBindingKind": "visitor_logger",
-  "reputationMilestones": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_logger_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Firewood"
+    },
+    {
+      "rewardId": "rep_logger_100",
+      "minReputation": 100,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_100",
+      "learnRecipeItemId": "Aetherhaven_Root_Remover"
+    }
+  ],
   "giftLoves": [
     "Tool_Hatchet_Mithril",
     "Tool_Hatchet_Onyxium",

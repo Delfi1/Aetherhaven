@@ -9,6 +9,7 @@ import com.hypixel.hytale.server.core.cosmetics.PlayerSkinGradientSet;
 import com.hypixel.hytale.server.core.cosmetics.PlayerSkinPart;
 import com.hypixel.hytale.server.core.cosmetics.PlayerSkinPartTexture;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -22,8 +23,9 @@ import javax.annotation.Nullable;
  *
  * <p>Haircut + hat: matches {@link com.hypixel.hytale.server.core.cosmetics.CosmeticsModule#isValidHaircutAttachment}
  * a {@link PlayerSkinPart.HeadAccessoryType#HalfCovering} head accessory with a haircut that
- * {@link PlayerSkinPart#doesRequireGenericHaircut()} exports as {@code Generic{HairType}} plus the same hair
- * gradient id as the chosen style (see server validation using {@code Generic} + {@link PlayerSkinPart#getHairType()}).
+ * {@link PlayerSkinPart#doesRequireGenericHaircut()} exports as {@code Generic{HairType}} only (same hair gradient id).
+ * Without a half-covering hat, export only the chosen style. The style blockymodel already includes a
+ * {@code HairBase} mesh; duplicating {@code Generic{HairType}} as a second attachment z-fights on NPC models.
  *
  * <p>Attachment order (inner → outer draw order): body, underwear, skin feature, face features,
  * hair, lower body, tops, footwear, gloves, head/face/ear accessories, cape.
@@ -38,17 +40,51 @@ import javax.annotation.Nullable;
 public final class PlayerSkinModelExporter {
     private static final String PARENT_PLAYER = "Player";
     private static final String HAIR_GRADIENT_SET_ID = "Hair";
+    private static final String EARS1_BLOCKYMODEL = "Characters/Body_Attachments/Ears/Ears1.blockymodel";
+    private static final String EAR_DEFAULT_NPC_GREYSCALE =
+        "Characters/Body_Attachments/Ears/Ears1_Textures/Ears1_Greyscale_Texture.png";
+    private static final String LEGACY_EAR_GREYSCALE = "Characters/Body_Attachments/Ears/Ears.png";
+    private static final String PLAYER_BLOCKYMODEL = "Characters/Player.blockymodel";
+    private static final String GENERIC_SHORT_HAIR = "Characters/Haircuts/GenericShort.blockymodel";
+    private static final String GENERIC_MEDIUM_HAIR = "Characters/Haircuts/GenericMedium.blockymodel";
+    private static final String GENERIC_LONG_HAIR = "Characters/Haircuts/GenericLong.blockymodel";
 
     private PlayerSkinModelExporter() {}
 
     @Nonnull
     public static JsonObject toModelJson(@Nonnull PlayerSkin skin, @Nonnull CosmeticRegistry registry) {
+        List<ModelAttachment> list = buildAttachmentList(skin, registry);
+        String rootModel = null;
+        String rootTexture = null;
+        String rootGradientSet = null;
+        String rootGradientId = null;
+        for (Iterator<ModelAttachment> it = list.iterator(); it.hasNext(); ) {
+            ModelAttachment body = it.next();
+            if (PLAYER_BLOCKYMODEL.equals(body.getModel())) {
+                rootModel = body.getModel();
+                rootTexture = body.getTexture();
+                rootGradientSet = body.getGradientSet();
+                rootGradientId = body.getGradientId();
+                it.remove();
+                break;
+            }
+        }
+        sanitizeAttachmentList(list);
+
         JsonArray attachments = new JsonArray();
-        for (ModelAttachment ma : toModelAttachments(skin, registry)) {
+        for (ModelAttachment ma : list) {
             attachments.add(modelAttachmentToJson(ma));
         }
         JsonObject root = new JsonObject();
         root.addProperty("Parent", PARENT_PLAYER);
+        if (rootModel != null) {
+            root.addProperty("Model", rootModel);
+            root.addProperty("Texture", rootTexture);
+            if (rootGradientSet != null && !rootGradientSet.isEmpty()) {
+                root.addProperty("GradientSet", rootGradientSet);
+                root.addProperty("GradientId", rootGradientId);
+            }
+        }
         root.add("DefaultAttachments", attachments);
         return root;
     }
@@ -61,10 +97,23 @@ public final class PlayerSkinModelExporter {
      */
     @Nonnull
     public static ModelAttachment[] toModelAttachments(@Nonnull PlayerSkin skin, @Nonnull CosmeticRegistry registry) {
+        List<ModelAttachment> list = buildAttachmentList(skin, registry);
+        sanitizeAttachmentList(list);
+        return list.toArray(ModelAttachment[]::new);
+    }
+
+    @Nonnull
+    private static List<ModelAttachment> buildAttachmentList(@Nonnull PlayerSkin skin, @Nonnull CosmeticRegistry registry) {
         List<ModelAttachment> list = new ArrayList<>();
         for (Slot slot : Slot.values()) {
-            String raw =
-                slot == Slot.HAIRCUT ? effectiveHaircutIdForHeadAccessory(skin, registry) : slot.getter.apply(skin);
+            String raw;
+            if (slot == Slot.HAIRCUT) {
+                raw = effectiveHaircutIdForHeadAccessory(skin, registry);
+            } else if (slot == Slot.FACE) {
+                raw = effectiveFaceIdForFacialHair(skin);
+            } else {
+                raw = slot.getter.apply(skin);
+            }
             if (raw == null || raw.isEmpty()) {
                 continue;
             }
@@ -73,7 +122,46 @@ public final class PlayerSkinModelExporter {
                 list.add(one);
             }
         }
-        return list.toArray(ModelAttachment[]::new);
+        return list;
+    }
+
+    /**
+     * Body mesh from the skin's body characteristic (e.g. muscular), before NPC sanitization drops the body attachment.
+     */
+    @Nullable
+    public static String findPlayerBodyModel(@Nonnull PlayerSkin skin, @Nonnull CosmeticRegistry registry) {
+        for (ModelAttachment attachment : buildAttachmentList(skin, registry)) {
+            if (PLAYER_BLOCKYMODEL.equals(attachment.getModel())) {
+                return attachment.getModel();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Drops NPC-problematic attachments: duplicate {@code Generic*} hair bases when a styled haircut is present, and
+     * {@code Player.blockymodel} body meshes (the {@code Player} parent already provides the base mesh).
+     */
+    public static void sanitizeAttachmentList(@Nonnull List<ModelAttachment> list) {
+        removeRedundantGenericHaircuts(list);
+        list.removeIf(a -> PLAYER_BLOCKYMODEL.equals(a.getModel()));
+    }
+
+    private static void removeRedundantGenericHaircuts(@Nonnull List<ModelAttachment> list) {
+        boolean hasStyledHaircut =
+            list.stream().anyMatch(a -> a.getModel() != null && isStyledHaircutModel(a.getModel()));
+        if (!hasStyledHaircut) {
+            return;
+        }
+        list.removeIf(a -> a.getModel() != null && isGenericHaircutModel(a.getModel()));
+    }
+
+    private static boolean isGenericHaircutModel(@Nonnull String model) {
+        return GENERIC_SHORT_HAIR.equals(model) || GENERIC_MEDIUM_HAIR.equals(model) || GENERIC_LONG_HAIR.equals(model);
+    }
+
+    private static boolean isStyledHaircutModel(@Nonnull String model) {
+        return model.startsWith("Characters/Haircuts/") && !isGenericHaircutModel(model);
     }
 
     @Nonnull
@@ -183,7 +271,7 @@ public final class PlayerSkinModelExporter {
             }
             return new ModelAttachment(
                 modelPath,
-                greyscale,
+                npcEarGreyscaleTexture(modelPath, greyscale),
                 Objects.requireNonNull(part.getGradientSet()),
                 selector,
                 1.0
@@ -289,6 +377,42 @@ public final class PlayerSkinModelExporter {
         }
 
         return haircutId;
+    }
+
+    /** Character Creator lists {@link #LEGACY_EAR_GREYSCALE} for default ears; static NPC models need {@link #EAR_DEFAULT_NPC_GREYSCALE}. */
+    @Nonnull
+    private static String npcEarGreyscaleTexture(@Nonnull String modelPath, @Nonnull String greyscale) {
+        if (EARS1_BLOCKYMODEL.equals(modelPath) && LEGACY_EAR_GREYSCALE.equals(greyscale)) {
+            return EAR_DEFAULT_NPC_GREYSCALE;
+        }
+        return greyscale;
+    }
+
+    /**
+     * {@code Face_Stubble} paints chin stubble on the detached face texture; with a beard attachment that overlaps
+     * and smears on NPC {@code DefaultAttachments}. Use neutral face when facial hair is equipped.
+     */
+    @Nullable
+    private static String effectiveFaceIdForFacialHair(@Nonnull PlayerSkin skin) {
+        String faceId = skin.face;
+        if (faceId == null || faceId.isEmpty()) {
+            return null;
+        }
+        if (skin.facialHair == null || skin.facialHair.isEmpty()) {
+            return faceId;
+        }
+        String[] parts = faceId.split("\\.");
+        if (!"Face_Stubble".equals(parts[0])) {
+            return faceId;
+        }
+        if (parts.length > 1) {
+            StringBuilder sb = new StringBuilder("Face_Neutral");
+            for (int i = 1; i < parts.length; i++) {
+                sb.append('.').append(parts[i]);
+            }
+            return sb.toString();
+        }
+        return "Face_Neutral";
     }
 
     private enum Slot {

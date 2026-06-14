@@ -1,0 +1,11 @@
+{
+  "entries": [
+    { "itemId": "Plant_Flower_Orchid_Purple", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Orchid_Red", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Orchid_White", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Orchid_Yellow", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Orchid_Pink", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Orchid_Orange", "weight": 2, "stockMin": 25, "stockMax": 50 },
+    { "itemId": "Plant_Flower_Orchid_Poisoned", "weight": 2, "stockMin": 25, "stockMax": 50 }
+  ]
+}

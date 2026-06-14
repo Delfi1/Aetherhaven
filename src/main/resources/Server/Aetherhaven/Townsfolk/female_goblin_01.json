@@ -1,0 +1,17 @@
+{
+  "id": "female_goblin_01",
+  "displayName": "Pip Sootgrin",
+  "gender": "female",
+  "race": "goblin",
+  "modelAssetId": "Female_Goblin_01",
+  "personalityIds": [
+    "shy",
+    "curious",
+    "foodie"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist"
+  ],
+  "befriendable": false
+}

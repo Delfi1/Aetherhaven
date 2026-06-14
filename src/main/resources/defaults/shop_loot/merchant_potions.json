@@ -1,0 +1,10 @@
+{
+  "entries": [
+    { "itemId": "Tool_Repair_Kit_Iron", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Potion_Health", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Potion_Health_Greater", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Potion_Stamina", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Potion_Stamina_Greater", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Potion_Antidote", "weight": 2, "stockMin": 5, "stockMax": 10 }
+  ]
+}
