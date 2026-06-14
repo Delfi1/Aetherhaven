@@ -5,7 +5,7 @@
 # Town command resolution
 aetherhaven.town.resolve.notOwnerInWorld=在这个世界上，你并不拥有一座城镇。
 aetherhaven.town.resolve.noTownNamed=世界上没有一个城镇叫“{name}”。
-aetherhaven.town.resolve.ownerOrOpOnly=只有城镇所有者（或获得许可的经营者）才能这样做。
+aetherhaven.town.resolve.ownerOrOpOnly=只有城镇所有者才能这样做（或者获得许可的经营者）。
 aetherhaven.town.resolve.notInTown=你并不在这个世界的任何一座城镇里。
 aetherhaven.town.resolve.nameOnlyForOwner=只有城镇所有者（或经营者）才能在此处使用城镇名称。
 aetherhaven.town.resolve.specifyTownName=请指定城镇名称，或者使用您拥有的城镇的名称。
@@ -39,15 +39,27 @@ aetherhaven.ui.memberPermissions.title=成员权限
 aetherhaven.ui.memberPermissions.backTooltip=返回球员列表
 aetherhaven.ui.memberPermissions.placePlots=地块
 aetherhaven.ui.memberPermissions.manageConstructions=建造和管理建筑（集会、生产、宴会、宪章修订、建筑物搬迁）
+aetherhaven.ui.memberPermissions.removePlots=从城镇日志中移除建筑物
 aetherhaven.ui.memberPermissions.spendTreasuryGold=将城镇金库中的黄金用于建设成本
 aetherhaven.ui.memberPermissions.openTreasuryPanel=开放国库（存款/取款）
 aetherhaven.ui.memberPermissions.acceptQuests=接受/开始城镇任务
 aetherhaven.ui.memberPermissions.completeQuests=完成城镇任务并领取声望奖励
 aetherhaven.ui.memberPermissions.abandonQuests=放弃正在进行的城镇任务
 aetherhaven.ui.memberPermissions.reviveVillagers=在盖亚雕像前复活村民
+aetherhaven.ui.memberPermissions.useShopSpots=在玩家商店位置上架和出售商品
 aetherhaven.ui.memberPermissions.err.notOwner=只有城镇所有者才能编辑权限。
 aetherhaven.ui.memberPermissions.err.notInTown=那名球员不在这个城市。
 aetherhaven.town.rolecmd.playerMustBeOnline=玩家必须在线。
+
+# === /aetherhaven replace-charter ===
+aetherhaven.town.charterReplace.notOwner=只有城镇所有者才能修复宪章（除非您获得城镇管理部门的许可）。
+aetherhaven.town.charterReplace.wrongWorld=那个城镇并不存在。
+aetherhaven.town.charterReplace.chunkNotLoaded=宪章区块未加载——请靠近您所在城镇的宪章坐标，然后重试。
+aetherhaven.town.charterReplace.clearFirst=保存的航海位置仍然有一个实心方块——将其打破直到该单元格为空，然后再次运行此命令。
+aetherhaven.town.charterReplace.placeFailed=无法放置特许权转让块（位置被占用？）。
+aetherhaven.town.charterReplace.linkFailed=Charter Block 连接失败（请参阅服务器日志）。
+aetherhaven.town.charterReplace.alreadyOk=该宪章区块已与您的城镇关联。
+aetherhaven.town.charterReplace.done=“{town}”的宪章区块已恢复。
 aetherhaven.town.rolecmd.roleInvalid=角色必须是建造者、任务执行者或两者兼具。
 aetherhaven.town.leave.notInTown=你不在城镇里。
 aetherhaven.town.leave.ownerCannotLeave=业主无法离开；所有权转移尚未实施。

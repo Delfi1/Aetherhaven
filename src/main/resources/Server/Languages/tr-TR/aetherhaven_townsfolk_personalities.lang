@@ -1,0 +1,167 @@
+# Townsfolk personality greeting lines
+
+aetherhaven.townsfolk.personality.cheerful.greeting.1=Merhaba! Şehirde güler yüzlü birini görmek her zaman güzeldir.
+aetherhaven.townsfolk.personality.cheerful.greeting.2=Merhaba! Umarım gününüz iyi geçiyordur.
+aetherhaven.townsfolk.personality.cheerful.greeting.3=Merhaba! Tam da burada yaşadığımız için ne kadar şanslı olduğumuzu düşünüyordum.
+aetherhaven.townsfolk.personality.cheerful.greeting.4=Selam! Sana rastladığıma sevindim. Zaten keyfim yerindeydi, şimdi daha da güzel oldu.
+aetherhaven.townsfolk.personality.cheerful.greeting.5=Tekrar merhaba! Yol tarifi ya da gülümsemeye ihtiyacınız varsa, ikisinden de bolca var bende.
+
+aetherhaven.townsfolk.personality.shy.greeting.1=Merhaba. Bakmak istememiştim.
+aetherhaven.townsfolk.personality.shy.greeting.2=Merhaba. Üzgünüm, sohbet başlatmakta pek iyi değilim.
+aetherhaven.townsfolk.personality.shy.greeting.3=Merhaba. Sadece geçiyordum. Lütfen beni dert etmeyin.
+aetherhaven.townsfolk.personality.shy.greeting.4=Merhaba. Umarım yolunuzu tıkamıyorumdur.
+aetherhaven.townsfolk.personality.shy.greeting.5=Merhaba. Sizi çok konuşturmaya çalışmayacağım.
+
+aetherhaven.townsfolk.personality.curious.greeting.1=Son zamanlarda buralarda ilginç bir şey gördünüz mü?
+aetherhaven.townsfolk.personality.curious.greeting.2=Merhaba! Bugün insanların kasabaya gelme sebebinin ne olduğunu merak ediyordum.
+aetherhaven.townsfolk.personality.curious.greeting.3=Merhaba. Nereye gittiğinizi sorabilir miyim? Kasabanın bağlantı yollarını bilmek hoşuma gidiyor.
+aetherhaven.townsfolk.personality.curious.greeting.4=Merhaba! Her zaman yeni bir hikaye ya da üzerinde kafa yorabileceğim garip bir ayrıntı arıyorum.
+aetherhaven.townsfolk.personality.curious.greeting.5=Merhaba. Anlatmaya değer bir şey görmüşsünüz gibi görünüyor.
+
+aetherhaven.townsfolk.personality.stoic.greeting.1=Merhaba.
+aetherhaven.townsfolk.personality.stoic.greeting.2=MERHABA.
+aetherhaven.townsfolk.personality.stoic.greeting.3=Evet?
+aetherhaven.townsfolk.personality.stoic.greeting.4=Bir şeye ihtiyacınız olursa buradayım.
+aetherhaven.townsfolk.personality.stoic.greeting.5=Hadi bakalım.
+
+aetherhaven.townsfolk.personality.mischievous.greeting.1=Daha sonra bir çarpma sesi duyarsanız, o kesinlikle ben değildim.
+aetherhaven.townsfolk.personality.mischievous.greeting.2=Merhaba! Sadece zararsız bir şey planlıyordum. Muhtemelen.
+aetherhaven.townsfolk.personality.mischievous.greeting.3=Merhaba. Biraz heyecana ihtiyacınız var gibi görünüyor. Tanıdığım biri olabilir.
+aetherhaven.townsfolk.personality.mischievous.greeting.4=Tam zamanında oldu. İhbar etmeyecek bir tanığa ihtiyacım vardı.
+aetherhaven.townsfolk.personality.mischievous.greeting.5=Hey! Bunu bir daha tekrarlamayacağına söz ver, ama biri için bir sürpriz bırakmış olabilirim.
+
+aetherhaven.townsfolk.personality.homebody.greeting.1=Merhaba. Tam da yakında eve dönmeyi düşünüyordum.
+aetherhaven.townsfolk.personality.homebody.greeting.2=Merhaba. Oraya vardığımda kendi ocağımın yerini hiçbir şey tutamaz.
+aetherhaven.townsfolk.personality.homebody.greeting.3=Merhaba. Sadece kısa bir iş için dışarı çıktım. Benim için kısa bir işti yani.
+aetherhaven.townsfolk.personality.homebody.greeting.4=Merhaba. Evde su ısıtıcısını açık unuttum, bu yüzden uzun süre kalmayacağım.
+aetherhaven.townsfolk.personality.homebody.greeting.5=Merhaba. Şehir güzel, ama evdeki sandalyem benim adımı biliyor.
+
+aetherhaven.townsfolk.personality.sporty.greeting.1=Merhaba! Tam koşuya çıkmak üzereydim. Katılmak ister misin?
+aetherhaven.townsfolk.personality.sporty.greeting.2=Merhaba! Esnek kalmaya çalışıyorum. Şimdi yapacağım kısa bir esneme hareketi, daha sonra başıma bela açmaz.
+aetherhaven.townsfolk.personality.sporty.greeting.3=Merhaba. Aktif kalmaya özen gösteriyorum. Bu, moralimi yüksek tutuyor.
+aetherhaven.townsfolk.personality.sporty.greeting.4=Merhaba! İçimden adımları sayıyordum. Eski bir alışkanlık.
+aetherhaven.townsfolk.personality.sporty.greeting.5=Hey! Eğer bir sonraki viraja kadar yarışacak birine ihtiyacınız varsa, o kişi benim.
+
+# Hobby traits
+
+aetherhaven.townsfolk.personality.adventurer.greeting.1=Merhaba! Şehrin kenarından garip bir ses duydum. Belki daha sonra gidip bakarım.
+aetherhaven.townsfolk.personality.adventurer.greeting.2=Merhaba. Şehirden çıkan her yol, yaşanmayı bekleyen bir hikâye gibi geliyor.
+aetherhaven.townsfolk.personality.adventurer.greeting.3=Merhaba. Birçok yeri gezmişsiniz gibi görünüyorsunuz. Bunu takdir ediyorum.
+aetherhaven.townsfolk.personality.adventurer.greeting.4=Merhaba! Ufukta bir sürprizle karşılaşma ihtimaline karşı her zaman hafif bavul hazırlıyorum.
+aetherhaven.townsfolk.personality.adventurer.greeting.5=Merhaba. Henüz gitmediğim yerlerin bir listesini tutuyorum. Uzun bir liste.
+
+aetherhaven.townsfolk.personality.crafty.greeting.1=Merhaba. Sonunda tezgahımdaki bağlantı yerlerini tekrar düzgün bir şekilde hizalamayı başardım.
+aetherhaven.townsfolk.personality.crafty.greeting.2=Merhaba. Şu an projeler arasında geçiş yapıyorum ama kafamda bir sonraki projenin taslağını şimdiden çiziyorum.
+aetherhaven.townsfolk.personality.crafty.greeting.3=Merhaba. Eğer bir şeyin tamirine ihtiyacınız varsa, kibarca söyleyin, belki yardımcı olabilirim.
+aetherhaven.townsfolk.personality.crafty.greeting.4=Hey! Ellerimde yapıştırıcı var ve ceplerimde fikirler. Yoğun bir gün.
+aetherhaven.townsfolk.personality.crafty.greeting.5=Merhaba. Ben iki kere ölçerim, bu yüzden sadece bir kere özür dilerim.
+
+aetherhaven.townsfolk.personality.gardener.greeting.1=Merhaba! Evdeki bahçem yağmura ya da övgüye ihtiyaç duyuyor. Geri döndüğümde ikisini de sunacağım.
+aetherhaven.townsfolk.personality.gardener.greeting.2=Merhaba. Bitkilerle konuşuyorum. Çoğu insandan daha iyi dinliyorlar.
+aetherhaven.townsfolk.personality.gardener.greeting.3=Merhaba. Şehrin herhangi bir yerinde fidelerin üzerine basarsanız, fark ederim. Kibarca ama fark ederim.
+aetherhaven.townsfolk.personality.gardener.greeting.4=Merhaba! Kompost ve mutluluk hakkında düşünüyordum. Benim için aynı kategoriye giriyorlar.
+aetherhaven.townsfolk.personality.gardener.greeting.5=Merhaba. İyi bir hasat sabırla başlar. Bende bolca sabır var.
+
+aetherhaven.townsfolk.personality.fisher.greeting.1=Merhaba. Büyük olanlar, sizi izlediklerini her zaman bilirler.
+aetherhaven.townsfolk.personality.fisher.greeting.2=Merhaba. Balıkla ilgili bir hikayeyi, yeni bir dedikoduyla takas etmeye her zaman hazırım.
+aetherhaven.townsfolk.personality.fisher.greeting.3=Merhaba. Sabır işin özü. Gerisi şans ve yem.
+aetherhaven.townsfolk.personality.fisher.greeting.4=Hey! Yemin ederim, her anlattığımda kaçan balık daha da büyük geliyor.
+aetherhaven.townsfolk.personality.fisher.greeting.5=Merhaba. Sakin sular, gürültülü kalabalıklardan daha çok şey öğretir.
+
+aetherhaven.townsfolk.personality.bookworm.greeting.1=Özür dilerim, bir bölüme dalmıştım. Neye ihtiyacınız vardı?
+aetherhaven.townsfolk.personality.bookworm.greeting.2=Merhaba. Kitap ayracımı evde çok önemli bir yerde unuttum.
+aetherhaven.townsfolk.personality.bookworm.greeting.3=Merhaba. Fırsat buldukça kitap okuyorum. Lafı uzatmaktansa okumak daha iyi, kusura bakmayın.
+aetherhaven.townsfolk.personality.bookworm.greeting.4=Merhaba. Eğer iyi bir başlık biliyorsanız, her zaman önerilere açığım.
+aetherhaven.townsfolk.personality.bookworm.greeting.5=Merhaba. İsimlerden çok alıntıları daha iyi hatırlıyorum. Bu bazen sorun olabiliyor.
+
+aetherhaven.townsfolk.personality.foodie.greeting.1=Merhaba! Bilinçli beslenen biri gibi görünüyorsunuz. Buna saygı duyuyorum.
+aetherhaven.townsfolk.personality.foodie.greeting.2=Merhaba. Her zaman bir yerlerdeki mutfaklardan gelen güzel kokuları arıyorum.
+aetherhaven.townsfolk.personality.foodie.greeting.3=Merhaba. Baharatlar hakkında çoğu insanın nezaketsiz bulacağı kadar uzun süre konuşabilirim.
+aetherhaven.townsfolk.personality.foodie.greeting.4=Merhaba! Geçen sefer evde yemek pişirdiğimde çok güzel bir yemek yemiştim. Bunu tekrarlamayı hedefliyorum.
+aetherhaven.townsfolk.personality.foodie.greeting.5=Merhaba. Hayat, tatsız çorbalar için çok kısa.
+
+aetherhaven.townsfolk.personality.musical.greeting.1=Merhaba! Hafif bir esinti bir şeyleri salladığında istemsizce ayaklarımı yere vurmadan edemiyorum. Anlıyorsunuzdur herhalde.
+aetherhaven.townsfolk.personality.musical.greeting.2=Merhaba. Mutlu olduğumda mırıldanırım. Şu anda da mırıldanıyorum, bu yüzden kendi sonucunuzu çıkarın.
+aetherhaven.townsfolk.personality.musical.greeting.3=Merhaba. Enstrümanımı evde unuttum ama ritim hâlâ aklımda.
+aetherhaven.townsfolk.personality.musical.greeting.4=Hey! Eğer bir nota mırıldanırsan, muhtemelen istemeden de olsa ona eşlik ederim.
+aetherhaven.townsfolk.personality.musical.greeting.5=Merhaba. Güzel bir melodi birçok küçük sorunu çözer.
+
+# Negative and prickly traits
+
+aetherhaven.townsfolk.personality.lazy.greeting.1=Ha, senmişsin. Uyuklamıyordum. Sandalyeyi inceliyordum.
+aetherhaven.townsfolk.personality.lazy.greeting.2=Merhaba. Eğer bu konuşma merdivenlerle ilgiliyse, maalesef yardımcı olamam.
+aetherhaven.townsfolk.personality.lazy.greeting.3=Merhaba. Bir gün mutlaka verimli bir şey yapacaktım.
+aetherhaven.townsfolk.personality.lazy.greeting.4=Merhaba. Rahat bir yer buldum ve orayı terk etmek ayıp olurdu.
+aetherhaven.townsfolk.personality.lazy.greeting.5=Merhaba. Bunu da halledeceğim. Bütün felsefem bu zaten.
+
+aetherhaven.townsfolk.personality.grumpy.greeting.1=Ne? İnsanlar benimle konuşmaya başlayana kadar keyfim yerindeydi.
+aetherhaven.townsfolk.personality.grumpy.greeting.2=Merhaba. Durumu daha da kötüleştirmemeye çalışın.
+aetherhaven.townsfolk.personality.grumpy.greeting.3=Merhaba. Şu an hiç keyfim yok ama durum bu.
+aetherhaven.townsfolk.personality.grumpy.greeting.4=Harika. Şirket. Tam da ihtiyacım olan şey.
+aetherhaven.townsfolk.personality.grumpy.greeting.5=Hey. Kısa tutalım, ikimiz de bu durumdan sağ salim kurtulabiliriz.
+
+aetherhaven.townsfolk.personality.rude.greeting.1=Yolumu tıkıyorsun. Çekil kenara.
+aetherhaven.townsfolk.personality.rude.greeting.2=Boş sohbetlere ayıracak vaktim yok. Uzun uzun sohbetlere de. Aslında hiçbir sohbete.
+aetherhaven.townsfolk.personality.rude.greeting.3=Ne istiyorsun? Çabuk ol.
+aetherhaven.townsfolk.personality.rude.greeting.4=İnsanları görmezden gelmekle meşguldüm. Sen bunu böldün.
+aetherhaven.townsfolk.personality.rude.greeting.5=Merhaba. Hayır, sizi gördüğüme memnun değilim. Daha kibar birini deneyin.
+
+aetherhaven.townsfolk.personality.gloomy.greeting.1=Merhaba. Yağmur benim ruh halime daha uygun olurdu. Ya da kar. Herhangi bir loş hava.
+aetherhaven.townsfolk.personality.gloomy.greeting.2=Merhaba. Hiçbir şeyin kalıcı olmadığını düşünüyordum. Neşeli bir soru, biliyorum.
+aetherhaven.townsfolk.personality.gloomy.greeting.3=Merhaba. Umarım gününüz benimkinden daha iyi geçer.
+aetherhaven.townsfolk.personality.gloomy.greeting.4=Merhaba. Dünya dönmeye devam ediyor. Nedenini bilmiyorum.
+aetherhaven.townsfolk.personality.gloomy.greeting.5=Merhaba. Şemsiyemi ve şüphelerimi de yanıma aldım.
+
+aetherhaven.townsfolk.personality.snooty.greeting.1=Hmm. Çizmeleriniz modanın izin verdiğinden daha gösterişli.
+aetherhaven.townsfolk.personality.snooty.greeting.2=Merhaba. Sanırım bazı insanlar sıradan sohbetlerden hoşlanıyor. Ben onlardan biri değilim.
+aetherhaven.townsfolk.personality.snooty.greeting.3=Ah, yine sen. Ne kadar sıradan!
+aetherhaven.townsfolk.personality.snooty.greeting.4=Merhaba. Kendi başıma vakit geçirmekten keyif alıyordum. Bu harika bir şey.
+aetherhaven.townsfolk.personality.snooty.greeting.5=Merhaba. Lütfen takip etmeye çalışın. Herkes için aynı şeyleri tekrar etmem.
+
+aetherhaven.townsfolk.personality.impatient.greeting.1=Evet? Evet? Hadi başlayalım.
+aetherhaven.townsfolk.personality.impatient.greeting.2=Merhaba. Gitmem gereken yerler var. Hem de birkaç tanesi, hepsi birden.
+aetherhaven.townsfolk.personality.impatient.greeting.3=Merhaba. Zaman daralıyor. Ben de, mecazi anlamda, zaman daralıyor.
+aetherhaven.townsfolk.personality.impatient.greeting.4=Merhaba. Lütfen giriş kısmını atlayın.
+aetherhaven.townsfolk.personality.impatient.greeting.5=Hey. Sabrım çoktan tükendi. Şimdi de zaman kaybediyorum.
+
+aetherhaven.townsfolk.personality.gossipy.greeting.1=Kasabada kimin tartıştığını asla tahmin edemezsiniz. Aslında, belki de tahmin edebilirsiniz.
+aetherhaven.townsfolk.personality.gossipy.greeting.2=Dur, gitmeden önce, birilerinin yeni bir çit yaptırdığını duydun mu?
+aetherhaven.townsfolk.personality.gossipy.greeting.3=Merhaba! Haberlerim var. Daha doğrusu, söylentilerim. Çoğunlukla aynı şey.
+aetherhaven.townsfolk.personality.gossipy.greeting.4=Merhaba. Çok ilginç bir şey duydum ve bunu birine anlatmam gerek.
+aetherhaven.townsfolk.personality.gossipy.greeting.5=Ah, mükemmel. İzleyici kitlesi olmasını umuyordum.
+
+aetherhaven.townsfolk.personality.cynical.greeting.1=Elbette, bugün farklı olacak. Herkes öyle der.
+aetherhaven.townsfolk.personality.cynical.greeting.2=Merhaba. Eğer biri size indirimli bir ürün teklif ederse, sonrasında ceplerinizi kontrol edin.
+aetherhaven.townsfolk.personality.cynical.greeting.3=Merhaba. Bir depoyu dolduracak kadar çok vaat gördüm.
+aetherhaven.townsfolk.personality.cynical.greeting.4=Merhaba. Güven kazanılır. Benim güvenim ise pahalı.
+aetherhaven.townsfolk.personality.cynical.greeting.5=Merhaba. En iyisini um, olası sorunlara hazırlıklı ol. Benim yaşam felsefem bu.
+
+aetherhaven.townsfolk.personality.dramatic.greeting.1=Taşıdığım yükün ağırlığını kimse anlamıyor. Çoğunluğu market alışverişi, ama yine de...
+aetherhaven.townsfolk.personality.dramatic.greeting.2=Merhaba! Bu kasaba, o kaldırım taşına takılıp düştüğüm günü asla unutmayacak. Sözümü unutmayın.
+aetherhaven.townsfolk.personality.dramatic.greeting.3=Merhaba. Her şeyi son derece yoğun hissediyorum. Bu selamlaşmayı bile.
+aetherhaven.townsfolk.personality.dramatic.greeting.4=Ah, kader! Yine yoluma çıktın.
+aetherhaven.townsfolk.personality.dramatic.greeting.5=Merhaba! Hayatım bir destan ve sen de bu destanın son bölümündesin.
+
+aetherhaven.townsfolk.personality.bitter.greeting.1=Güzel hava. Bunu hak eden biri için, yani.
+aetherhaven.townsfolk.personality.bitter.greeting.2=Merhaba. Eskiden daha çok gülümsüyordum. Sonra takvimlerin nasıl çalıştığını öğrendim.
+aetherhaven.townsfolk.personality.bitter.greeting.3=Merhaba. Bazı insanlar şanslı oluyor. Ben ise hatırlatıcılar alıyorum.
+aetherhaven.townsfolk.personality.bitter.greeting.4=Merhaba. Bundan sonra olacak güzel şeylerin tadını çıkarmanızı umuyorum. Ben burada olacağım.
+aetherhaven.townsfolk.personality.bitter.greeting.5=Merhaba. Kızgın değilim. Sadece sürekli hayal kırıklığına uğramaktan bıktım.
+
+aetherhaven.townsfolk.personality.stingy.greeting.1=Yuvarlak köşeleri de almıyorum.
+aetherhaven.townsfolk.personality.stingy.greeting.2=Merhaba. Düşürdüğün o para mı? Bulanındır. Onu zihnimde buldum.
+aetherhaven.townsfolk.personality.stingy.greeting.3=Merhaba. Harcamalarımı iki kere sayarım, borç verdiklerimi ise asla.
+aetherhaven.townsfolk.personality.stingy.greeting.4=Merhaba. Eğer konu paylaşmaksa, ben hiçbir şey getirmedim.
+aetherhaven.townsfolk.personality.stingy.greeting.5=Merhaba. Çantam kapalı ve tavsiyelerim ücretsiz. Birini seçin.
+
+aetherhaven.townsfolk.personality.blunt.greeting.1=Yorgun görünüyorsun. Bunu düzeltmelisin.
+aetherhaven.townsfolk.personality.blunt.greeting.2=Merhaba. Başkalarının söylemeyeceği şeyi söyleyeceğim. Şapka bir tercih meselesidir.
+aetherhaven.townsfolk.personality.blunt.greeting.3=Merhaba. Lafı dolandırmam. Zaman kazandırır.
+aetherhaven.townsfolk.personality.blunt.greeting.4=Merhaba. Dürüstlük istediniz. İlk hatanız buydu.
+aetherhaven.townsfolk.personality.blunt.greeting.5=Merhaba. İyi niyetliyim. Sadece öyle değilmiş gibi görünüyorum.
+
+aetherhaven.townsfolk.personality.silly.greeting.1=Merhaba! Az önce bir tavuğa caz el hareketlerine tepki vermeyi öğrettim. Gayet iyi gidiyor.
+aetherhaven.townsfolk.personality.silly.greeting.2=Merhaba. Bu yoldaki her bir çakıl taşına isim verdim. Hepsini birden tanıtmamı istemeyin lütfen.
+aetherhaven.townsfolk.personality.silly.greeting.3=Aa, merhaba. Önemli biri geçerse diye ciddi yüz ifadesi provası yapıyorum. Bu nasıl oldu?
+aetherhaven.townsfolk.personality.silly.greeting.4=Merhaba. Bilerek iki farklı çorap giydim. Bu bir bütün kombin ve bunun arkasındayım.
+aetherhaven.townsfolk.personality.silly.greeting.5=Hey! Bahse girerim ki bu konuşma bitmeden seni güldürebilirim. Hiç baskı yok.

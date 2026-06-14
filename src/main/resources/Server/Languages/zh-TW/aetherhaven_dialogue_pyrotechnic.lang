@@ -1,0 +1,71 @@
+# Pyrotechnic dialogue (Grubble Sparkmatch)
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.body=哈哈！你把黏袋弄破了！格魯布爾被困在裡面好久了。你們鎮上有旅館？太好了。說不定格魯布爾想吃熱呼呼的食物和找個乾燥的長椅時就會來光顧。
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.c0=小心。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.fallback=如果 Grubble 需要談論生意上的事、家裡的事或爆炸的事，那就趁著粉末還沒冒出主意之前趕緊說出來。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.0=今天有大繁榮？也有小繁榮？格魯布爾兩者都遇到了。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.1=不要在奶粉架附近打噴嚏。格魯布爾已經吸取了教訓。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.2=你們鎮上瀰漫著木柴燃燒的香味。格魯布爾很喜歡這種味道。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.3=想要點兒勁兒的東西嗎？你來對地方了，小妖精。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.0=帶上格魯布爾爆炸粉或一枚漂亮的圓形炸彈。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.1=爆米花炸彈讓格魯布爾非常開心。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.0=格魯布爾不想要垃圾或骨頭當禮物。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.1=虛空之物會讓格魯布爾不寒而慄。離它遠點。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house=格魯布爾，你想談談房子的事。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house_done=你的名字已經寫在房子的架子上了。格魯布爾應該聽我說。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house_remind=房子還在建設中。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_done=格魯布爾，我想確認一下炸彈店是否已經建成。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_complete=炸彈店已經完工了。格魯布爾，我來收尾。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_building=店家還在籌備中。目前進展如何？
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_offer=格魯布爾，我想幫你在鎮上開一家像樣的店。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_goodbye=今天就到這裡吧。格魯布爾，回頭見。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=格魯布爾不可能永遠從口袋裡掏出爆炸物來賣。人們會感到不安。他需要一家真正的商店，有厚厚的牆壁、醒目的招牌，以及即使小炸彈打噴嚏也不會搖晃的貨架。格魯布爾用防火紙畫了設計圖。你負責為鎮上建造，格魯布爾把圖紙給你。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=我們會給格魯布爾弄到一家店。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1=現在還不是時候。格魯布爾在等著。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=拿走藍圖。到城鎮規劃桌學習。製作代幣。建造商店，位置要方便居民找到，避免迷路或意外爆炸。格拉布爾在旅館等候。火藥要等到城牆厚實後才能取出。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=等招牌掛出來再見。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=商店還沒蓋好？格魯布爾在等。格魯布爾等太久，粉末就不耐煩了。你還在學習設計圖和砌牆，還是格魯布爾該放棄希望了？
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c0=格魯布爾，我暫時得放棄這個任務了。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c1=還在努力中。唉，我會繼續的。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.body=今天沒店開門？好吧。格魯布爾把炸彈藏在包包裡，夢想著有貨架。如果改變主意，再跟我說。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.c0=好吧。格魯布爾，回頭見。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.body=店舖開張啦！貨架都擺好了！牆壁也砌好了！格魯布爾終於可以像個正經的商人一樣賣東西了，不用再躲在外套後面竊竊私語了。謝謝你，朋友。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.c0=樂意效勞。格魯布爾，如果鎮上需要更多人手，就來找我。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.body=就連轟隆地精也需要床。安靜的床。遠離粉末架和蜘蛛角落。商店是用來工作的。格魯布爾想要和其他人一樣的小房子。你打算建一個嗎？
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c0=格魯布爾，我會為你蓋一棟房子。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c1=下次吧。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.body=如果牆是真的，就照章程說的，把格魯布爾的名字寫在裡面的方塊上。然後用嘴告訴格魯布爾。格魯布爾想聽實話，而不是靠猜。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.c0=我會讓格魯布爾知道的。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.body=慢慢來，把房子立起來。等房子立好後，在裡面的架上寫下「Grubble」的名字，然後再回來。 Grubble並不著急，它只是想要牆上的名字。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.c0=明白了。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.body=牆壁不錯，屋頂也結實。格魯布爾可以安心睡覺，不用再玩蜘蛛夢或粉末噩夢了。這樣挺好。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.c0=很高興格魯布爾終於有了扇像樣的門。
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.confirm=你給了格魯布爾什麼東西？
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.love=太棒了！這簡直太讚了！格魯布爾肯定會感謝你的。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.like=好禮物。格魯布爾點頭贊同。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.neutral=嗯，不夠震撼。不過還是謝謝。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.dislike=格魯布爾不希望那樣。你再想想。

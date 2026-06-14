@@ -1,0 +1,37 @@
+aetherhaven.dialogue.aetherhaven_bard.main_hub.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.main_hub.fallback=As cordas estão quentes. Do que você precisa?
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.0=Bom dia. O salão da guilda tem uma acústica boa hoje.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.1=Olá, amigo. Eu estava afinando meu alaúde.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.2=Bem-vindo(a). A música dá vida a uma cidade.
+
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_play=Peça para ele tocar uma música.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_stop=Peça para ele parar de tocar.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house=Pergunte sobre um lar para Elias.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_finish=Confirme se Elias tem uma casa.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_remind=Pergunte novamente sobre a casa.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_goodbye=Diga adeus
+
+aetherhaven.dialogue.aetherhaven_bard.music_pick.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.music_pick.body=Qual música você gostaria de ouvir?
+aetherhaven.dialogue.aetherhaven_bard.music_pick.c_back=Volte
+
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.body=Silêncio total novamente. Me avise se quiser outra música.
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.c_ok=Voltar ao chat
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.body=Eu brinco aqui quase todos os dias, mas gostaria de ter uma casinha só minha para quando o sol se põe.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_yes=Ajude-o a encontrar um lar.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_later=Não agora.
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.body=Obrigado. Um teto que fosse meu significaria tudo para mim.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.c_ok=Adeus
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.body=Construa o terreno da casa e me designe para o bloco de administração quando estiver pronto.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.c_ok=Continuarei trabalhando nisso.
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.body=Meu pequeno canto na cidade. Manterei a sede da guilda animada para vocês.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.c_ok=Maravilhoso

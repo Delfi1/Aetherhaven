@@ -1,0 +1,37 @@
+aetherhaven.dialogue.aetherhaven_bard.main_hub.speaker=Еліас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.main_hub.fallback=Струни теплі. Що тобі потрібно?
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.0=Доброго дня. У залі гільдії сьогодні гарна акустика.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.1=Привіт, друже. Я щойно налаштовував свою лютню.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.2=Ласкаво просимо. Музика оживляє місто.
+
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_play=Попросіть його зіграти пісню
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_stop=Попросіть його перестати грати
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house=Запитайте про дім для Еліаса
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_finish=Підтвердьте, що в Еліаса є дім
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_remind=Запитай ще раз про будинок
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_goodbye=Скажи до побачення
+
+aetherhaven.dialogue.aetherhaven_bard.music_pick.speaker=Еліас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.music_pick.body=Яку мелодію ви б хотіли?
+aetherhaven.dialogue.aetherhaven_bard.music_pick.c_back=Повернутися назад
+
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.speaker=Еліас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.body=Знову тиша. Дай мені знати, якщо хочеш ще одну пісню.
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.c_ok=Назад до чату
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.speaker=Еліас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.body=Я граю тут майже щодня, але хотів би мати власний невеликий будиночок, коли сонце зайде.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_yes=Допоможіть йому знайти дім
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_later=Не зараз
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.speaker=Еліас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.body=Дякую. Дах, який належить мені, означав би для мене все.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.c_ok=Прощавай
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.speaker=Еліас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.body=Побудуйте ділянку під будинок і призначте мене на управлінні блоком, коли він буде готовий.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.c_ok=Я продовжуватиму над цим працювати
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.speaker=Еліас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.body=Мій маленький куточок міста. Я підтримуватиму жвавість у гільдійській залі для тебе.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.c_ok=Чудово

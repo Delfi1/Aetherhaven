@@ -1,0 +1,7 @@
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Stelle Wache {type} ein ({gold} Gold)
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=Auf Wiedersehen
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Zahle die Gebühr, und dieser Abenteurer wird deine Stadt bewachen. Er bleibt, bis er im Kampf fällt.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Ja, stellen Sie sie ein.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=Nicht jetzt.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=Sie gehören dir. Sorge dafür, dass sie gut gefüttert und untergebracht sind, wenn du willst, dass sie lange bleiben.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=Auf Wiedersehen

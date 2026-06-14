@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house=ここに住んでみたいですか？
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_finish=あなたの家は完成しました。
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind=私の家について…
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_waiting=引っ越しについて…
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.leave=さようなら
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.body=あなたの街が好きです。家を探していただけませんか？寝床さえ確保できたら、毎日税金を納めます。
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept=家を見つけてあげるよ
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline=後で
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.body=ありがとうございます。家の区画を確保して、建物を完成させて、家の看板に私の名前を入れてください。私がそこに住み始めたら、また連絡ください。
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.ok=します
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.body=私の家はもう見つかりましたか？ 建築を終えたら、家の看板で私を選んでください。
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.ok=右
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.body=別の訪問者がまず家の完成を待っている。その家を完成させてから、私に話しかけてくれ。
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.ok=理解した
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.body=ここはまるで我が家のようです。ありがとうございます。毎朝、自分の分を支払います。
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.ok=いらっしゃいませ

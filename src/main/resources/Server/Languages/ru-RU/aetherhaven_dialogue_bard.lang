@@ -1,0 +1,37 @@
+aetherhaven.dialogue.aetherhaven_bard.main_hub.speaker=Элиас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.main_hub.fallback=Струны тёплые. Что вам нужно?
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.0=Добрый день. Сегодня в зале гильдии хорошая акустика.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.1=Привет, друг. Я как раз настраивал свою лютню.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.2=Добро пожаловать. Музыка оживляет город.
+
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_play=Попросите его сыграть песню.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_stop=Попросите его прекратить играть.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house=Спросите о доме для Элиаса
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_finish=Подтвердите, что у Элиаса есть дом.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_remind=Спросите еще раз о доме.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_goodbye=Попрощайтесь
+
+aetherhaven.dialogue.aetherhaven_bard.music_pick.speaker=Элиас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.music_pick.body=Какую мелодию вы бы хотели услышать?
+aetherhaven.dialogue.aetherhaven_bard.music_pick.c_back=Возвращаться
+
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.speaker=Элиас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.body=Снова тишина. Дайте знать, если хотите ещё одну песню.
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.c_ok=Вернуться в чат
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.speaker=Элиас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.body=Я играю здесь почти каждый день, но мне бы хотелось иметь свой небольшой дом, когда садится солнце.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_yes=Помогите ему найти дом
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_later=Не сейчас
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.speaker=Элиас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.body=Спасибо. Крыша, которая будет принадлежать мне, значила бы для меня очень много.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.c_ok=До свидания
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.speaker=Элиас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.body=Постройте дом на участке и назначьте меня в управляющий блок, когда он будет готов.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.c_ok=Я продолжу над этим работать.
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.speaker=Элиас Торнвуд
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.body=Мой маленький уголок в городе. Я буду поддерживать оживленную атмосферу в здании гильдии для вас.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.c_ok=Замечательный

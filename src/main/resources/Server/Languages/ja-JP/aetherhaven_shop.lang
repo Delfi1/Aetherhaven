@@ -1,0 +1,72 @@
+# Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
+
+items.Aetherhaven_Shop_Spot.name=ショップスポット
+items.Aetherhaven_Shop_Spot.description=完成した建築区画に配置するとショップがオープンします。また、クリエイティブモードや区画作成モードでは、設定済みの屋台をプレハブに組み込むことができます。屋台は日中は営業し、夜間は閉店します。NPCの在庫は夜明けに補充されます。町民はプレイヤーのスポットにアイテムを出品できます。
+
+aetherhaven.shop.notInTown=これを町の中に置いてください。
+aetherhaven.shop.notInPlot=これを完成済みの建築用地内に設置してください。
+aetherhaven.shop.closed=完売
+aetherhaven.shop.closedNight=夜間は閉店となります
+aetherhaven.shop.holdItemToList=アイテムを手に持ち、（F）キーを押すか、屋台を右クリックして販売リストに出品します。
+aetherhaven.shop.cannotAfford=あなたにはそんな余裕はありません。
+aetherhaven.shop.inventoryFull=在庫がいっぱいです。
+aetherhaven.shop.cannotBuyOwnListing=Fを使って出品を取り下げてください。購入する代わりにFを使ってください。
+aetherhaven.shop.itemsDropped=在庫がいっぱいだったため、一部の商品は地面に落とされた。
+aetherhaven.shop.notTownMember=ここでは町民のみが販売できます。
+aetherhaven.shop.noShopSpotPermission=あなたはプレイヤーショップのスポットで販売する許可を持っていません。
+aetherhaven.shop.noPrice=その商品は当店では販売できません。
+aetherhaven.shop.wrongBatchSize=一度に{count}の倍数を販売します。
+aetherhaven.shop.damagedItem=販売に出す前に、その品物を鍛冶屋で修理してください。
+aetherhaven.shop.jewelryNeedsAppraisal=販売に出す前に、その宝石を鑑定してもらいましょう。
+aetherhaven.shop.listed=あなたの商品は現在販売中です。
+aetherhaven.shop.removedListing=掲載情報が削除されました。
+aetherhaven.shop.soldNotify={buyer} は {count} {item} を {gold} の金で購入しました
+
+aetherhaven.shop.safe.empty=金庫の中には、あなたのための金はありません。
+aetherhaven.shop.safe.makeRoom=まず、持ち物に空きスペースを作りましょう。
+aetherhaven.shop.safe.couldNotAddCoins=金貨をインベントリに追加できませんでした。
+aetherhaven.shop.safe.collected=金庫から{gold}個の金貨を回収しました。
+
+aetherhaven.shop.config.title=このショップを開設する
+aetherhaven.shop.config.intro=この屋台の仕組みを選択してください。NPCショップは、あなたが選択した在庫テーブルから夜明けに商品を補充します。
+aetherhaven.shop.config.playerControlled=町民がここで販売できるようにしよう
+aetherhaven.shop.config.npcHeading=NPCショップの在庫
+aetherhaven.shop.config.lootHeader=在庫テーブルファイル
+aetherhaven.shop.config.lootTableLabel=テーブル
+aetherhaven.shop.config.lootStockHint=各 shop_loot/*.json エントリにおけるエントリごとの stockMin と stockMax (省略した場合、デフォルトは 1 バッチ)。
+aetherhaven.shop.config.confirm=確認する
+aetherhaven.shop.config.cancel=キャンセル
+aetherhaven.shop.config.saved=店舗準備完了
+
+aetherhaven.shop.hud.title=店
+aetherhaven.shop.hud.closedNight=夜間は閉店となります
+aetherhaven.shop.hud.soldOut=完売しました。再入荷は夜明けです。
+aetherhaven.shop.hud.emptyListing=販売品はありません
+aetherhaven.shop.hud.seller=販売元：{seller}
+aetherhaven.shop.hud.item=購入: {item}
+aetherhaven.shop.hud.price={gold} 金 各
+aetherhaven.shop.hud.priceBatch={gold} ゴールド {count} {item}
+aetherhaven.shop.hud.stock={n} 左
+aetherhaven.shop.hud.stockBatches={batches} ロット残り（合計 {items}）
+aetherhaven.shop.hud.hintNpc=Fを買う — NPC株は夜明けに再入荷
+aetherhaven.shop.hud.hintPlayerBuy=F を購入する
+aetherhaven.shop.hud.hintPlayerList=F 手に持ったアイテムを販売リストに載せる
+aetherhaven.shop.hud.hintPlayerOwn=Fで商品を返品する
+aetherhaven.shop.hud.hintPlayerEmpty=販売品はありません
+
+aetherhaven.shop.buy.title=買う
+aetherhaven.shop.buy.item={item}
+aetherhaven.shop.buy.price={gold} 金 各
+aetherhaven.shop.buy.priceBatch={gold} ゴールド {count} {item}
+aetherhaven.shop.buy.stock={n} 左
+aetherhaven.shop.buy.stockBatches={batches}ロット（{items}個）
+aetherhaven.shop.buy.qty=金額: {n} — 合計: {total} 金
+aetherhaven.shop.buy.qtyBatches=ロット: {n} — 合計: {total} 金
+aetherhaven.shop.buy.step10=×10
+aetherhaven.shop.buy.max=マックス
+aetherhaven.shop.buy.buy=買う
+aetherhaven.shop.buy.cancel=キャンセル
+
+aetherhaven.shop.items.tooltipWithPrice={body}\n{price}
+aetherhaven.shop.items.tooltipPrice=金貨
+aetherhaven.shop.items.tooltipPriceBatch={amount} 金貨/{count}

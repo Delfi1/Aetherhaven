@@ -26,6 +26,7 @@ aetherhaven.common.invalidVillager=Aldeano inválido.
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter
 aetherhaven.charter.alreadyInTown=Ya formas parte de una ciudad en este mundo. Abandonala antes de fundar una nueva.
+aetherhaven.charter.notInPersistentWorld=No puedes fundar una ciudad aquí. Regresa primero a tu mundo principal.
 aetherhaven.charter.townFounded=Ciudad fundada: {name}. El anciano de la aldea ha llegado. Usa la carta fundacional para cambiar el nombre de la ciudad.
 aetherhaven.chartertown.info.notLinked=Charter aún no está vinculado a ninguna ciudad.
 aetherhaven.chartertown.info.invalidTownId=Identificador de ciudad no válido en el estatuto.

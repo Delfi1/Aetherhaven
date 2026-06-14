@@ -1,7 +1,140 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
-# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+# Bundle: town journal UI, npcRoles, workplace plot tokens
 
-# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+# === UI: town journal ===
+aetherhaven.ui.townJournal.shellTitle=Міський журнал
+aetherhaven.ui.townJournal.tab.town=Місто
+aetherhaven.ui.townJournal.tab.guide=Путівник
+aetherhaven.ui.townJournal.tab.quests=Квести
+aetherhaven.ui.townJournal.tab.settings=Налаштування
+aetherhaven.ui.townJournal.pageTitle.town=Місто
+aetherhaven.ui.townJournal.pageTitle.guide=Путівник
+aetherhaven.ui.townJournal.pageTitle.quests=Квести
+aetherhaven.ui.townJournal.pageTitle.settings=Налаштування
+aetherhaven.ui.journalSettings.tab.personal=Особисте
+aetherhaven.ui.journalSettings.tab.server=Сервер
+aetherhaven.ui.journalSettings.personalHeading=Ваші налаштування
+aetherhaven.ui.journalSettings.personalHint=Ці налаштування застосовуються лише до вас. Під час налаштування пікапу автоматично використовується ваша поточна висота польоту.
+aetherhaven.ui.journalSettings.rtsPickHeading=Клацання наземної команди охорони
+aetherhaven.ui.journalSettings.rtsPickHint=Налаштуйте відображення наказів про переміщення з екрана на землю. Налаштуйте, чи потрапляють маркери поза ціль на краї екрана або коли вони летять високо.
+aetherhaven.ui.journalSettings.rtsPickFovLabel=Вертикальне поле зору в градусах (типово від 60 до 90)
+aetherhaven.ui.journalSettings.rtsPickAspectLabel=Ширина області перегляду, поділена на висоту (наприклад, 1,6 для 16:10)
+aetherhaven.ui.journalSettings.personalSaveButton=Зберегти мої налаштування
+aetherhaven.ui.journalSettings.personalResetButton=Скинути мод до заводських налаштувань
+aetherhaven.ui.journalSettings.personalSaveOk=Збережено ваші особисті налаштування.
+aetherhaven.ui.journalSettings.personalResetOk=Скиньте налаштування кліків команди захисту до налаштувань мода за замовчуванням.
+aetherhaven.ui.journalSettings.serverRequiresOp=Налаштування сервера вимагають дозволу оператора.
+aetherhaven.ui.townJournal.placeholder.town=Тут поки що нічого немає.
+aetherhaven.ui.journalSettings.generalHeading=Світові нагороди та темпи нарощування
+aetherhaven.ui.journalSettings.passiveLabel=Дозвольте новим будівлям продовжувати рости самостійно після того, як ви їх розмістите
+aetherhaven.ui.journalSettings.constrHeading=Як швидко будівлі розміщують свої власні блоки
+aetherhaven.ui.journalSettings.constrBptLabel=Блоки, що розміщуються на кожному кроці під час завершення будівництва
+aetherhaven.ui.journalSettings.constrMsLabel=Коротка пауза в мілісекундах між цими кроками
+aetherhaven.ui.journalSettings.lootHeading=Бонуси скринь, предмети, що можна розбити, та удача у видобутку
+aetherhaven.ui.journalSettings.geodeLabel=Додатковий шанс отримання жеоди, коли ви розбиваєте блоки руди від нуля до одиниці
+aetherhaven.ui.journalSettings.chestJewelryLabel=Шанс отримати додатковий кидок коштовностей у світовій скрині від нуля до одиниці
+aetherhaven.ui.journalSettings.goldChanceLabel=Шанс отримати бонусні золоті монети у світовій скрині від нуля до одного
+aetherhaven.ui.journalSettings.goldMinLabel=Найменше золотих монет
+aetherhaven.ui.journalSettings.goldMaxLabel=Більшість золотих монет
+aetherhaven.ui.journalSettings.breakableHeading=Монети з ящиків, бочок, горщиків та трун
+aetherhaven.ui.journalSettings.breakableWeightNoneLabel=Як часто ви нічого не знаходите (чим вище, тим менше монет)
+aetherhaven.ui.journalSettings.breakableWeightOneLabel=Як часто ви знаходите одну монету
+aetherhaven.ui.journalSettings.breakableWeightTwoLabel=Як часто ви знаходите дві монети
+aetherhaven.ui.journalSettings.shopHeading=Магазини
+aetherhaven.ui.journalSettings.shopMemberPriceLabel=Відсоток ціни магазину для учасників від каталогу (від 1 до 100)
+aetherhaven.ui.journalSettings.giftHeading=Плаваючі подарункові повітряні кульки
+aetherhaven.ui.journalSettings.giftEnabledLabel=Породжуйте подарункові кульки у світі
+aetherhaven.ui.journalSettings.giftDaysMinLabel=Найшвидші дні між перекиданнями
+aetherhaven.ui.journalSettings.giftDaysMaxLabel=Останні дні між перегонами
+aetherhaven.ui.journalSettings.saveButton=Зберегти налаштування
+aetherhaven.ui.journalSettings.resetDefaultsButton=Скинути до налаштувань за замовчуванням
+aetherhaven.ui.journalSettings.resetModalTitle=Завантажити налаштування мода за замовчуванням у форму?
+aetherhaven.ui.journalSettings.resetModalBody=Це заповнить форму модифікованими значеннями за замовчуванням. Працюючий сервер все ще використовуватиме старі значення, доки ви не натиснете «Зберегти налаштування».
+aetherhaven.ui.journalSettings.resetModalConfirm=Скинути
+aetherhaven.ui.journalSettings.resetModalCancel=Скасувати
+aetherhaven.ui.journalSettings.resetApplied=Тепер форма відображає значення мода за замовчуванням. Натисніть «Зберегти налаштування», щоб застосувати їх до сервера та записати файл конфігурації.
+aetherhaven.ui.journalSettings.saveOk=Збережено ці налаштування світу.
+aetherhaven.ui.journalSettings.saveFail=Не вдалося зберегти налаштування сервера. Перевірте журнал сервера.
+aetherhaven.ui.journalSettings.toolsHeading=Інструменти для ремонту
+aetherhaven.ui.journalSettings.resetVillagers=Перезавантажити людей у місті
+aetherhaven.ui.journalSettings.fixInn=Виправити список відвідувачів готелю
+aetherhaven.ui.journalSettings.finishPlot=Завершіть одну будівлю зараз
+aetherhaven.ui.journalSettings.villagerReport=Зробіть інформаційний текст для селян
+aetherhaven.ui.journalSettings.plotModalTitle=Виберіть будівлю для завершення
+aetherhaven.ui.journalSettings.plotModalHint=У списку зазначено лише будівлі, що ще будуються. Стійте поруч із будівельним майданчиком, щоб шматки будівель були завантажені.
+aetherhaven.ui.journalSettings.plotFieldLabel=Будівля
+aetherhaven.ui.journalSettings.plotPickNone=Виберіть будівлю
+aetherhaven.ui.journalSettings.plotModalConfirm=Закінчити це
+aetherhaven.ui.journalSettings.plotModalCancel=Скасувати
+aetherhaven.ui.journalSettings.villagerModalTitle=Інформаційний текст для мешканців села
+aetherhaven.ui.journalSettings.villagerModalHint=Виберіть мешканця, а потім натисніть кнопку, щоб заповнити поле нижче. Виберіть усе в полі та скопіюйте за допомогою звичайних ключів копіювання, щоб поділитися з автором мода.
+aetherhaven.ui.journalSettings.villagerFieldLabel=Людина
+aetherhaven.ui.journalSettings.villagerPickNone=Виберіть людину
+aetherhaven.ui.journalSettings.villagerBuildReport=Заповніть поле
+aetherhaven.ui.journalSettings.villagerCopyHint=Виділіть весь текст у полі, а потім скопіюйте його за допомогою звичайних клавіш копіювання.
+aetherhaven.ui.journalSettings.villagerModalClose=Закрити
+aetherhaven.ui.journalSettings.innRepairDone=Список готелів виправлено. Заблокованих відвідувачів {locked} підвищили, {promoted} видалили випадкові записи {removed}
+aetherhaven.ui.innBell.notAllowed=Цей дзвін працює лише для членів клубу в їхньому міському заїзді.
+aetherhaven.ui.innBell.notOpen=Готель ще не відкритий.
+aetherhaven.ui.innBell.returned=Гості повернулися до гостьової зони.
+aetherhaven.ui.innBell.noVisitors=Зараз у готелі немає відвідувачів.
+aetherhaven.ui.innBell.noMoreGuests=Більше гостей немає.
+aetherhaven.ui.journalSettings.finishPlotOk=Ця будівля зараз завершена.
+aetherhaven.ui.journalSettings.finishPlotNotAssembling=Цей вибір не є будівлею, що будується.
+aetherhaven.ui.journalSettings.finishPlotNotLoaded=Станьте ближче до тієї будівлі та спробуйте ще раз.
+aetherhaven.ui.journalSettings.finishPlotNoJob=Наразі для цього вибору немає активних завдань зі збірки.
+aetherhaven.ui.journalSettings.finishPlotFailed=Не вдалося завершити цю конструкцію. Спробуйте ще раз, коли область буде повністю завантажена.
+aetherhaven.ui.townJournal.guide.listHeading=Теми
+aetherhaven.ui.townJournal.guide.pluginMissing=Завантажте мод Aetherhaven, щоб прочитати цей посібник.
+aetherhaven.ui.townJournal.guide.facts.questsHeading=Сюжетні квести для цього селянина
+aetherhaven.ui.townJournal.guide.facts.repHeading=Подарунки для дружби
+aetherhaven.ui.townJournal.guide.facts.scheduleHeading=Тижневий маршрут
+aetherhaven.ui.townJournal.guide.giftToggleShow=Ідеї подарунків (спойлери)
+aetherhaven.ui.townJournal.guide.giftToggleHide=Приховати ідеї подарунків
+aetherhaven.ui.townJournal.guide.scheduleToggleShow=Показати тижневий розклад
+aetherhaven.ui.townJournal.guide.scheduleToggleHide=Приховати тижневий розклад
+aetherhaven.ui.townJournal.guide.scheduleLegend=Кожен рядок відповідає одному ігровому дню. Кольорові сегменти проходять від першого запланованого часу цього дня до півночі (як у JSON). Ширина смуги відповідає часу в кожному сегменті; наведіть курсор, щоб переглянути точний час. Кольори: дім, робота, готель, спільне місце, вівтар. Червона лінія = поточний світовий годинник, відображений на цій смузі (ліворуч = час першого переходу).
+aetherhaven.ui.townJournal.guide.scheduleNowMarker=Поточний світовий годинник на момент відображення цього розкладу (той самий годинник, що й у villager JSON та час /aetherhaven).
+aetherhaven.ui.townJournal.guide.giftHeaderLoves=Дуже улюблені подарунки
+aetherhaven.ui.townJournal.guide.giftHeaderLikes=Подарунки, що сподобалися
+aetherhaven.ui.townJournal.guide.giftHeaderDislikes=Неподобані подарунки
+aetherhaven.ui.townJournal.guide.noQuests=Цей селянин ще не згаданий у жодному сюжетному квесті.
+aetherhaven.ui.townJournal.guide.noRepMilestones=Для цього селянина ще не розроблено жодних подарунків дружби.
+aetherhaven.ui.townJournal.guide.noSchedule=Для цього мешканця села ще немає файлу тижневого маршруту.
+aetherhaven.ui.townJournal.questListHeading=Активні квести
+aetherhaven.ui.townJournal.stepsHeading=Кроки
+aetherhaven.ui.townJournal.rewardHeading=Нагороди
+aetherhaven.ui.townJournal.rewardReputationLine=+{amount} репутація з {villager}
+aetherhaven.ui.townJournal.rewardFallback=Дивіться текст завдання, щоб дізнатися, скільки ви заробите.
+aetherhaven.ui.townJournal.abandon=Залишити квест
+aetherhaven.ui.townJournal.abandonConfirmTitle=Вийти з цього квесту?
+aetherhaven.ui.townJournal.abandonConfirmBody=Ви можете взяти цей квест пізніше у того, хто вам його дав.
+aetherhaven.ui.townJournal.abandonConfirm=Так, залиште це.
+aetherhaven.ui.townJournal.abandonCancel=Залишайтеся в пошуках
+aetherhaven.ui.townJournal.showTownBorders=Показати межі міста на карті
+aetherhaven.ui.townJournal.showTownBordersTooltip=Обводить лінією кожне місто цього світу на вашій карті
+aetherhaven.ui.townJournal.townVillagersHeading=Люди в місті
+aetherhaven.ui.townJournal.townPlotsHeading=Будівлі
+aetherhaven.ui.townJournal.scheduleUnknown=Маршрут не встановлено
+aetherhaven.ui.townJournal.scheduleHome=Вдома
+aetherhaven.ui.townJournal.scheduleWork=На роботі
+aetherhaven.ui.townJournal.scheduleInn=У корчмі
+aetherhaven.ui.townJournal.schedulePark=У парку
+aetherhaven.ui.townJournal.scheduleAltar=Біля вівтаря
+aetherhaven.ui.townJournal.plotStatusNotStarted=Не розпочато
+aetherhaven.ui.townJournal.plotStatusInProgress=У процесі
+aetherhaven.ui.townJournal.plotStatusComplete=Завершено
+aetherhaven.ui.townJournal.plotStatusUnknown=Невідомо
+aetherhaven.ui.townJournal.removePlot=Видалити
+aetherhaven.ui.townJournal.removePlotTooltip=Стійте біля міста, щоб будівлю можна було безпечно очистити.
+aetherhaven.ui.townJournal.plotRemoveConfirmTitle=Знести цю будівлю?
+aetherhaven.ui.townJournal.plotRemoveConfirmBody=Будівлю буде очищено від світу та видалено з вашого списку міст. Ви не можете скасувати цю дію.
+aetherhaven.ui.townJournal.plotRemoveConfirm=Так, видалити це
+aetherhaven.ui.townJournal.plotRemoveCancel=Тримай це
+aetherhaven.ui.townJournal.removePlotAreaNotLoaded=Підійдіть ближче до тієї будівлі та спробуйте ще раз.
+aetherhaven.ui.townJournal.removePlotFailed=Не вдалося оновити список міст. Спробуйте ще раз.
+
+# Legacy keys (other locales; unused in new UI)
 aetherhaven.ui.questjournal.title=Журнал квестів
 aetherhaven.ui.questjournal.hint=Виберіть квест для отримання детальної інформації.
 aetherhaven.ui.questjournal.abandon=Відмовитися
@@ -13,13 +146,17 @@ items.Aetherhaven_Management_Block.name=полиця міських записі
 items.Aetherhaven_Management_Block.description=Полиця клерка для завершеної будівлі. Відкриває статус будівництва для її ділянки.
 
 items.Aetherhaven_Sprinkler_Iron.name=Залізний розбризкувач
-items.Aetherhaven_Sprinkler_Iron.description=Поливає оброблену землю на один блок нижче на ділянці 3×3. Виконується один раз щоранку в грі. Найменше покриття.
+items.Aetherhaven_Sprinkler_Iron.description=Поливає оброблену землю на один блок нижче на ділянці <color is="#4ade80">3×3</color>. Виконується один раз щоранку в грі. Найменше покриття.
 items.Aetherhaven_Sprinkler_Thorium.name=Торієва спринклерна система
-items.Aetherhaven_Sprinkler_Thorium.description=Вотерс обробляв ґрунт на один блок нижче на ділянці 5×5. Один раз щоранку в грі. Більший за залізо.
+items.Aetherhaven_Sprinkler_Thorium.description=Поливає оброблену землю на один блок нижче в області <color is="#4ade80">5×5</color>. Один раз щоранку в грі. Більша за залізо.
 items.Aetherhaven_Sprinkler_Cobalt.name=Кобальтовий спринклер
-items.Aetherhaven_Sprinkler_Cobalt.description=Поливає обробляв ґрунт на один блок нижче на ділянці 7×7. Один раз щоранку в грі. Широке покриття.
+items.Aetherhaven_Sprinkler_Cobalt.description=Поливає оброблену землю на один блок нижче на ділянці <color is="#4ade80">7×7</color>. Один раз щоранку в грі. Широке покриття.
 items.Aetherhaven_Sprinkler_Adamantite.name=Адамантитовий розбризкувач
-items.Aetherhaven_Sprinkler_Adamantite.description=Вотерс обробляв ґрунт на один блок нижче на ділянці 9×9. Один раз щоранку в грі. Найширше покриття.
+items.Aetherhaven_Sprinkler_Adamantite.description=Поливає оброблену землю на один блок нижче на ділянці <color is="#4ade80">9×9</color>. Один раз щоранку в грі. Найширше покриття.
+
+items.Aetherhaven_Wood_Scaffold.name=Дерев'яні риштування
+items.Aetherhaven_Wood_Scaffold.description=Піднімайтеся, як по драбині. Клацніть правою кнопкою миші на місцях, як на звичайному блоці. Утримуйте клавішу Використовувати (F), прицілюючись до риштувань, щоб розширити вежу збоку або відгалужуватися горизонтально від верхньої грані. Зламання нижньої непідтримуваної частини призведе до зруйнування стека.
+items.Aetherhaven_Wood_Scaffold.legendUse=Використання (F): висунути вежу/гілку зверху, цілячись у риштування. Клацнути правою кнопкою миші: звичайне розміщення блоку.
 
 # === NPC role display names (npcRoles.*) ===
 npcRoles.Aetherhaven_Elder_Lyren.name=Старійшина Лірен
@@ -31,15 +168,38 @@ npcRoles.Aetherhaven_Priestess.name=Сера Торнвелл
 npcRoles.Aetherhaven_Miner.name=Кам'яна жила Горрука
 npcRoles.Aetherhaven_Logger.name=Серен Фейрхоллоу
 npcRoles.Aetherhaven_Rancher.name=Тален Медоуран
+npcRoles.Aetherhaven_Townsfolk.name=Містяни
+npcRoles.Aetherhaven_Guild_Master.name=Ліра Фейрхоллоу
+npcRoles.Aetherhaven_Bard.name=Еліас Торнвуд
+npcRoles.Aetherhaven_Crystal_Keeper.name=Ваеліт Призмотінь
+npcRoles.Aetherhaven_Pyrotechnic.name=Grubble Sparkmatch
+npcRoles.Aetherhaven_Florist.name=Айві Блумвелл
+npcRoles.Aetherhaven_Builder.name=Роуен Ріджкрафт
+npcRoles.Aetherhaven_Guard.name=Міська варта
+
+items.Aetherhaven_Quest_Board.name=Дошка квестів
+items.Aetherhaven_Quest_Board.description=Дерев'яна дошка, де містяни розміщують завдання та винагороди. Використовуйте її, щоб підбирати завдання для свого міста.
 
 items.Aetherhaven_Production_Storage.name=Магазини для робочих місць
-items.Aetherhaven_Production_Storage.description=Зберігає те, що приносять ваші працівники. Відкривається для встановлення виходів та стопок. Є частиною будівлі, забрати не можна.
-items.Aetherhaven_Plot_Token_Miners_Hut.name=Фішка ділянки шахтарської хатини
+items.Aetherhaven_Production_Storage.description=Зберігає те, що приносять ваші працівники. Відкривається, щоб виставляти результати та брати стопки. Частина будівлі та <color is="#ffa726">неможливо забрати</color>.
+items.Aetherhaven_Plot_Token_Miners_Hut.name=Фішка ділянки хатини шахтарів
 items.Aetherhaven_Plot_Token_Miners_Hut.description=Позначки, де можна побудувати збірну хатину шахтарів. Зробіть це за столом містобудування.
+items.Aetherhaven_Plot_Token_Builders_Hut.name=Жетон ділянки будівничої хатини
+items.Aetherhaven_Plot_Token_Builders_Hut.description=Позначає, де можна побудувати збірну хатину будівельника. Виготовляти за столом містобудування.
 items.Aetherhaven_Plot_Token_Lumbermill.name=Жетон ділянки лісопилки
 items.Aetherhaven_Plot_Token_Lumbermill.description=Позначки, де можна побудувати збірний будинок лісопилки. Зробіть це за столом містобудування.
 items.Aetherhaven_Plot_Token_Barn.name=Жетон ділянки сараю
 items.Aetherhaven_Plot_Token_Barn.description=Позначає, де можна побудувати збірний сарай. Зробіть це за столом містобудування.
+items.Aetherhaven_Plot_Token_Barn_Hytiny.name=Жетон ділянки сараю Гітіні
+items.Aetherhaven_Plot_Token_Barn_Hytiny.description=Позначки, де можна побудувати компактний збірний сарай Hytiny. Збірний будинок від HytinyBuilds. Не продається на столі планування. Здається на утилізації за п'ять золотих монет.
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.name=Жетон затишної ділянки котеджу Гітіні
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.description=Позначки, де можна побудувати затишний котедж Гітіні. Збірний будинок від HytinyBuilds. Зробіть його за столом містобудування. Зробіть у рятувальника за п'ять золотих монет.
+items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.name=Жетон ділянки японської чайної хатини Гітіні
+items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Позначки, де можна побудувати японський чайний будиночок Гітіні. Збірний будинок від HytinyBuilds. Зробити за столом містобудування. Зняти у рятувальника за п'ять золотих монет.
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Фішка затишної ділянки для кемпера Гітіні
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Позначки, де можна побудувати затишний кемпер Гітіні. Збірний варіант від HytinyBuilds. Зробити за столом містобудування. Зняти у рятувальника за п'ять золотих монет.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Жетон ділянки будиночка на дереві в горщику від Гітіні
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Попередження: це дуже великий префаб, який може помітно уповільнити або заблокувати клієнта та сервер під час складання. Розмістіть його, коли у вас буде час завершити його.</color> Позначає, де можна побудувати горщик на дереві від Hytiny (лише декоративний). Після завершення будівництва він не реєструється як міська ділянка — самостійно розбивайте або переміщуйте блоки, щоб видалити або перемістити його; його не можна забрати з міського журналу. Префаб від HytinyBuilds. Не продається на столі планування. Здається на збір у збірника за п'ять золотих монет.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Жетон сюжету вівтаря Гаї
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Позначки, де можна побудувати збірний вівтар Геї. Зробіть це за столом містобудування.

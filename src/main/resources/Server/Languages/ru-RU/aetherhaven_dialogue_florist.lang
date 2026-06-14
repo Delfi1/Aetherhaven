@@ -1,0 +1,67 @@
+# Florist dialogue (Ivy Bloomwell)
+
+aetherhaven.dialogue.aetherhaven_florist.root.speaker=Айви Блумвелл
+aetherhaven.dialogue.aetherhaven_florist.main_hub.fallback=Если вам нужно что-то для строительства магазина, для оформления дома или просто хотите узнать, что цветет, скажите об этом.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.0=Доброе утро. Листья сегодня выглядят довольными.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.1=Я взял с собой в кармане дополнительные семена. Старая привычка.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.2=В вашем городе хорошее освещение для роста растений.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.3=Извините, если от меня пахнет землей. Я пересаживала растения перед тем, как прийти.
+
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.0=Свежие цветы или орхидеи сделали бы мой день прекрасным.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.1=Принесите мне что-нибудь зеленое и цветущее, если хотите увидеть мою улыбку.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.0=Пожалуйста, не приносите мне мусор или засохшие растения.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.1=Пустота и кости не имеют места в саду.
+
+aetherhaven.dialogue.aetherhaven_florist.root.c_house=Вы хотели поговорить о доме.
+aetherhaven.dialogue.aetherhaven_florist.root.c_house_done=Ваше имя красуется на полке дома. Я хотел, чтобы вы услышали это от меня.
+aetherhaven.dialogue.aetherhaven_florist.root.c_house_remind=Строительство дома еще не завершено.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_done=Я хотела проверить, как там сейчас обстоят дела с цветочным магазином.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_complete=Работа над цветочным магазином завершена. Я здесь, чтобы подвести итог.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_building=Магазин еще находится в стадии обустройства. Хотел узнать, как обстоят дела на данный момент.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_offer=Я хочу помочь вам открыть цветочный магазин в городе.
+aetherhaven.dialogue.aetherhaven_florist.root.c_goodbye=На этом пока всё. Увидимся позже.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.speaker=Айви Блумвелл
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=Мои маленькие растения заслуживают лучшего, чем ящики и колеса от телег. Мне нужен настоящий цветочный магазин с местом для роста, демонстрации и свободного пространства. Я набросала план прямо у дороги. Если вы поднимете его для города, я смогу поделиться с вами этими планами.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c0=Мы построим ваш магазин.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c1=Не сейчас. Мне нужно еще немного времени.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.speaker=Айви Блумвелл
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.body=Вот мои планы магазина. Изучите их за столом городского планирования, изготовьте жетон участка, когда будете готовы, и установите магазин там, где солнечный свет сможет достигать черенков. Я подожду в гостинице со своими горшками, пока дверь не будет готова.
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.c0=Увидимся, когда полки откроются.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.speaker=Айви Блумвелл
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.body=Рассада в лотках начала капризничать. Вы уже изучили чертежи и начали строительство, или мне стоит перестать рассчитывать на мастерскую, которая может и не открыться?
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.c0=Мне нужно пока отложить этот квест.
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.c1=Я всё ещё работаю над этим и буду продолжать.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.speaker=Айви Блумвелл
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.body=Ничего страшного. Растения могут подождать еще немного в своих горшках. Если передумаете, найдите меня, и мы попробуем снова.
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.c0=Вполне справедливо. Увидимся.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.speaker=Айви Блумвелл
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.body=О, посмотрите! Теплый свет, надежные полки и место для каждого черенка, который я привезла с собой. Мои растения наконец-то обрели настоящий дом в вашем городе. Спасибо, что помогли им вырасти здесь.
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.c0=Рад помочь. Обращайтесь ко мне, если городу нужно больше зелени.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.speaker=Айви Блумвелл
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.body=Магазин — для работы. Я бы всё ещё мечтала о маленьком домике с солнечным окном для моих горшечных растений и полкой для чая после работы. Участок под застройку такой же, как у всех остальных, если вы не против.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c0=Я застолблю за тобой дом.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c1=В другой раз.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.speaker=Айви Блумвелл
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.body=Когда стены будут возведены, напишите мое имя внутри помещения, как того требует устав, а затем приходите и скажите мне об этом лично. Я хочу услышать это от вас, прежде чем я начну переставлять горшки.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.c0=Вы это услышите от меня.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.speaker=Айви Блумвелл
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.body=Не торопитесь с рамкой. Когда она встанет на место, зарегистрируйте меня на полке внутри, а затем вернитесь. Я вас не тороплю. Мне просто нужно, чтобы это было зафиксировано.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.c0=Понял.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.speaker=Айви Блумвелл
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.body=О, это чудесно. Теплый свет, тихие стены и как раз достаточно места для еще нескольких горшков на подоконнике. Наконец-то я могу назвать какой-то уголок вашего города своим.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.c0=Рад, что у вас есть нормальная дверь.
+
+aetherhaven.dialogue.aetherhaven_florist.gift.confirm=Хотите мне что-нибудь подарить?
+aetherhaven.dialogue.aetherhaven_florist.gift.love=О! Это просто идеально. Вы действительно знаете, что любит садовник.
+aetherhaven.dialogue.aetherhaven_florist.gift.like=Как мило. Спасибо, что вспомнили обо мне.
+aetherhaven.dialogue.aetherhaven_florist.gift.neutral=Хм. Не совсем в моем вкусе, но все равно спасибо.
+aetherhaven.dialogue.aetherhaven_florist.gift.dislike=Я бы предпочла этого не оставлять. Растения заслуживают лучшей компании.

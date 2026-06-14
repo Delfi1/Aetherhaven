@@ -11,22 +11,24 @@ aetherhaven.ui.treasury.makeRoom=Libere espaço no seu estoque.
 aetherhaven.ui.treasury.couldNotAddCoins=Não foi possível adicionar moedas.
 aetherhaven.ui.treasury.withdrew=Retiraram {count} moedas de ouro.
 aetherhaven.ui.treasury.tax.comfortPercent={pct}%
-aetherhaven.ui.treasury.debug.taxBreakdownIntro=Detalhamento de impostos (apenas para áreas com carga tributária; residentes sem carga tributária contribuem com 0 até a simulação):
+aetherhaven.ui.treasury.notificationTaxCollected={amount} em impostos arrecadados
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Detalhamento de impostos (os aldeões carregados usam as necessidades em tempo real; as linhas da lista que não estão em blocos carregados usam as últimas necessidades salvas, quando disponíveis):
 aetherhaven.ui.treasury.debug.titheNoHall=Dízimo: não há prefeitura completa nesta cidade.
-aetherhaven.ui.treasury.debug.titheZero=Dízimo: 0 ouro (sem residentes ricos ou 0 devido a cálculos de políticas). Descarregar/necessidades/detalhamento: /aetherhaven detalhamento de impostos
+aetherhaven.ui.treasury.debug.titheZero=Dízimo: 0 ouro (sem residentes elegíveis ou 0 devido a cálculos de política). Detalhamento: /aetherhaven detalhamento de impostos
 aetherhaven.ui.treasury.debug.titheApplied=Dízimo aplicado: +{amount} de ouro para o tesouro (mesmas regras da coleta matinal).
 aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
-aetherhaven.ui.treasury.debug.state3=política={a} máximoPorResidente={b} residentesCarregados={c}
+aetherhaven.ui.treasury.debug.state3=política={a} maxPorResidente={b} linhasDeResidentes={c} simuladoAgora={d}
 aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) conforto={comfort} ouro={gold}
 aetherhaven.ui.treasury.debug.state4=somaResidentes={a} fundadorAtivo={b} fundadorPermille={c} apósFundador={d}
 aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}
 
-# === UI: quest journal (log panel) ===
-# UI — quest journal
-aetherhaven.ui.questJournal.needTown=Neste mundo, você precisa de uma cidade para acompanhar as missões.
-aetherhaven.ui.questJournal.noPermission=Você não tem permissão para gerenciar missões da cidade.
-aetherhaven.ui.questJournal.noActive=Nenhuma missão ativa.
-aetherhaven.ui.questJournal.hint=Toque em uma missão para ver os detalhes. × remove a missão do seu registro (você pode aceitá-la novamente com quem a ofereceu).
+# === UI: town journal (quest list messages) ===
+aetherhaven.ui.questJournal.needTown=Você precisa de uma cidade neste mundo para usar esta aba.
+aetherhaven.ui.questJournal.noPermission=Você não pode gerenciar missões da cidade.
+aetherhaven.ui.questJournal.noActive=Não há missões ativas no momento.
+aetherhaven.ui.questJournal.hint=Selecione uma missão à esquerda para lê-la aqui.
+aetherhaven.ui.questJournal.questForName={title} para {name}
+aetherhaven.ui.questJournal.questDescriptionForName={body} Atribua {name} na placa da casa quando estiver pronta.
 
 # === UI: NPC dialogue page (shell / errors) ===
 # UI — dialogue
@@ -39,7 +41,7 @@ aetherhaven.ui.dialogue.missingNode=Nó ausente: {id}
 aetherhaven.ui.plotConstruction.buildingTitle=Prédio
 aetherhaven.ui.plotConstruction.plotSignTitle=Sinalização do terreno
 aetherhaven.ui.plotConstruction.noConstruction=Nenhuma construção está configurada para este terreno.
-aetherhaven.ui.plotConstruction.assignResidentHint=Atribua um aldeão que more aqui (ele completará a missão da casa quando houver correspondência).
+aetherhaven.ui.plotConstruction.assignResidentHint=Escolha quem vai morar nesta casa.
 aetherhaven.ui.plotConstruction.houseResidentUnassigned=Não atribuído
 aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=Não foi possível carregar os dados do jogador.
 aetherhaven.ui.plotConstruction.townDataMissing=Não foram encontrados dados municipais para este quarteirão.
@@ -47,6 +49,8 @@ aetherhaven.ui.plotConstruction.clearedHome=Tarefa para casa concluída.
 aetherhaven.ui.plotConstruction.updatedHome=Tarefa de casa atualizada.
 aetherhaven.ui.plotConstruction.plotRemoved=O terreno foi removido e o token do terreno foi retornado.
 aetherhaven.ui.plotConstruction.materialLine={item} x{need} (tem {have})
+aetherhaven.ui.plotConstruction.materialsProgress={ready} de materiais {total} prontos
+aetherhaven.ui.plotConstruction.treasuryGold=Moedas de ouro: {available} / {required}
 aetherhaven.ui.plotConstruction.couldNotLoadMembers=Não foi possível carregar os dados do jogador.
 
 # === UI: Gaia statue (small messages) ===

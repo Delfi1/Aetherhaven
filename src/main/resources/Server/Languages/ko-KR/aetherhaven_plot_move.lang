@@ -42,6 +42,6 @@ aetherhaven.ui.plotplacement.moveYpTooltip=한 블록 위로 살짝 옮기세요
 aetherhaven.ui.charterrelocation.title=이동 헌장
 aetherhaven.ui.charterrelocation.summary=도시 헌장 재정립
 aetherhaven.ui.charterrelocation.details=대상 블록 {sx}, {sy}, {sz} · 4단계 중 {step} (90°)
-aetherhaven.ui.charterrelocation.tips=영토는 헌장을 둘러싼 정사각형 모양의 구역입니다. 모든 건물은 확인 후 반드시 그 안에 있어야 합니다. 유령을 새로운 위치로 옮긴 다음 배치하세요.
+aetherhaven.ui.charterrelocation.tips=영토는 헌장을 둘러싼 사각형 모양의 구역입니다. 모든 건물은 확정 후 반드시 이 구역 안에 있어야 합니다. 유령을 새로운 위치로 옮긴 다음 배치하세요.
 aetherhaven.ui.charterrelocation.info=영토는 헌장 주변의 사각형 영역입니다. 모든 건물은 이동 후 해당 영역 안에 있어야 합니다. 유령 블록을 새 헌장 위치로 옮긴 다음 확인하세요.
 aetherhaven.ui.charterrelocation.place=장소 헌장

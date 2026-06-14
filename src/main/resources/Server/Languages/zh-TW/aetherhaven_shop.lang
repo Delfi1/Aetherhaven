@@ -1,0 +1,72 @@
+# Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
+
+items.Aetherhaven_Shop_Spot.name=購物點
+items.Aetherhaven_Shop_Spot.description=在已建成的建築地塊上放置攤位即可開設商店，或在創造模式/地塊創建器中將配置好的攤位嵌入預製件中。攤位白天營業，夜晚關閉。 NPC 的庫存會在黎明時分補充。城鎮成員可以在玩家攤位上架物品。
+
+aetherhaven.shop.notInTown=把它放在城鎮裡。
+aetherhaven.shop.notInPlot=將其放置在已建成的建築用地內。
+aetherhaven.shop.closed=售罄
+aetherhaven.shop.closedNight=商店當晚關門了。
+aetherhaven.shop.holdItemToList=手持物品，然後按 (F) 鍵或右鍵點擊攤位，即可將其掛牌出售。
+aetherhaven.shop.cannotAfford=你負擔不起。
+aetherhaven.shop.inventoryFull=您的庫存已滿。
+aetherhaven.shop.cannotBuyOwnListing=用 F 退回你的商品，而不是購買。
+aetherhaven.shop.itemsDropped=有些物品掉落在地上——庫存已滿。
+aetherhaven.shop.notTownMember=只有鎮上的居民才能在這裡出售商品。
+aetherhaven.shop.noShopSpotPermission=您沒有權限在玩家商店位置出售商品。
+aetherhaven.shop.noPrice=該物品不能在這裡出售。
+aetherhaven.shop.wrongBatchSize=一次賣出若干個{count}。
+aetherhaven.shop.damagedItem=出售前請先到鐵匠鋪修理好該物品。
+aetherhaven.shop.jewelryNeedsAppraisal=在將珠寶掛牌出售前，請先進行估價。
+aetherhaven.shop.listed=您的商品現已上架販售。
+aetherhaven.shop.removedListing=房源已移除。
+aetherhaven.shop.soldNotify={buyer} 用 {gold} 金幣購買了 {count} 和 {item}。
+
+aetherhaven.shop.safe.empty=保險箱裡沒有你的黃金。
+aetherhaven.shop.safe.makeRoom=首先要騰出庫存空間。
+aetherhaven.shop.safe.couldNotAddCoins=無法將金幣添加到您的物品欄中。
+aetherhaven.shop.safe.collected=你從保險箱中取出了{gold}黃金。
+
+aetherhaven.shop.config.title=開設這家商店
+aetherhaven.shop.config.intro=選擇此攤位的運作方式。 NPC 商店會在黎明時分根據您選擇的庫存表補充商品。
+aetherhaven.shop.config.playerControlled=讓鎮民在這裡出售商品
+aetherhaven.shop.config.npcHeading=NPC商店庫存
+aetherhaven.shop.config.lootHeader=股票表格文件
+aetherhaven.shop.config.lootTableLabel=桌子
+aetherhaven.shop.config.lootStockHint=每個 shop_loot/*.json 條目中的 stockMin 和 stockMax（如果省略，則預設為 1 批次）。
+aetherhaven.shop.config.confirm=確認
+aetherhaven.shop.config.cancel=取消
+aetherhaven.shop.config.saved=店舖位置已準備就緒
+
+aetherhaven.shop.hud.title=店鋪
+aetherhaven.shop.hud.closedNight=商店當晚關門了。
+aetherhaven.shop.hud.soldOut=已售罄——黎明時分補貨
+aetherhaven.shop.hud.emptyListing=無商品出售
+aetherhaven.shop.hud.seller=以 {seller} 出售
+aetherhaven.shop.hud.item=採購：{item}
+aetherhaven.shop.hud.price={gold} 金
+aetherhaven.shop.hud.priceBatch={gold} 金用於 {count} {item}
+aetherhaven.shop.hud.stock={n} 左側
+aetherhaven.shop.hud.stockBatches={batches} 剩餘地塊（{items} 總計）
+aetherhaven.shop.hud.hintNpc=F 買入－NPC 股票黎明時分補貨
+aetherhaven.shop.hud.hintPlayerBuy=F 購買
+aetherhaven.shop.hud.hintPlayerList=F 手裡拿著一件待售商品
+aetherhaven.shop.hud.hintPlayerOwn=F 取回您的物品
+aetherhaven.shop.hud.hintPlayerEmpty=無商品出售
+
+aetherhaven.shop.buy.title=買
+aetherhaven.shop.buy.item={item}
+aetherhaven.shop.buy.price={gold} 金
+aetherhaven.shop.buy.priceBatch={gold} 金用於 {count} {item}
+aetherhaven.shop.buy.stock={n} 左側
+aetherhaven.shop.buy.stockBatches={batches} 批次（{items} 件）
+aetherhaven.shop.buy.qty=數量：{n} — 總計：{total} 金
+aetherhaven.shop.buy.qtyBatches=批次：{n} — 總計：{total} 金
+aetherhaven.shop.buy.step10=×10
+aetherhaven.shop.buy.max=最大限度
+aetherhaven.shop.buy.buy=買
+aetherhaven.shop.buy.cancel=取消
+
+aetherhaven.shop.items.tooltipWithPrice={body}\n{price}
+aetherhaven.shop.items.tooltipPrice={amount} 金幣
+aetherhaven.shop.items.tooltipPriceBatch=每 1 個金幣（PH_0）

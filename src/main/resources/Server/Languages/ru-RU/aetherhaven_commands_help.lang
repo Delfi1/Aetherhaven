@@ -4,6 +4,9 @@
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
 commands.aetherhaven.towns.desc=Отладка: Список всех городов в текущем мире
 
+commands.aetherhaven.replace_charter.desc=Верните блок, соответствующий уставу вашего города, на сохраненное место.
+commands.aetherhaven.replace_charter.townName.desc=Дополнительно: название города (полное название с пробелами)
+
 commands.aetherhaven.town.desc=Членство в городском совете: приглашение, роли, выход
 commands.aetherhaven.town.invite.desc=Пригласите онлайн-игрока в свой город.
 commands.aetherhaven.town.invite.player.desc=Имя пользователя игрока (должен быть в сети)
@@ -16,11 +19,6 @@ commands.aetherhaven.town.role.player.desc=Имя пользователя уч�
 commands.aetherhaven.town.role.role.desc=СТРОИТЕЛЬСТВО, ВЫПОЛНЕНИЕ ЗАДАНИЙ или И ТО И ДРУГОЕ
 commands.aetherhaven.town.leave.desc=Покинуть город, членом которого вы являетесь (а не владельцем).
 commands.aetherhaven.town.townName.desc=Необязательное название города для отображения; используйте полное название, включая пробелы (остальная часть строки). Опустите, если у вас только одно ожидающее приглашение.
-
-commands.aetherhaven.poi.desc=Отладка: команды POI
-commands.aetherhaven.poi.list.desc=Список достопримечательностей (POI) для города (необязательный UUID города, или можно опустить/использовать \"me\" для обозначения вашего города).
-commands.aetherhaven.poi.town.desc=UUID города, или меня, или опустить для города, который вызывает вызов.
-commands.aetherhaven.poi.dump.desc=Перечислите все объекты POI, находящиеся в памяти этого мира (любой город).
 
 commands.aetherhaven.poi.desc=Отладка: вспомогательный инструмент для Точек Интереса
 commands.aetherhaven.poi.list.desc=Список всех Точек Интереса города
@@ -45,6 +43,7 @@ commands.aetherhaven.tax.desc=Отладка: утренний налоговы�
 commands.aetherhaven.tax.breakdown.desc=Отобразить строки и итоговые суммы налогов для каждого жителя вашего города (только в загруженных фрагментах).
 commands.aetherhaven.tax.now.desc=Утреннюю десятину следует перечислить в казну сейчас (это позволяет избежать утреннего времени и последнего дня сбора).
 
+commands.aetherhaven.quest.desc=Отладка: помощники в выполнении заданий в городе
 commands.aetherhaven.questdebug.desc=Отладка: обход городского квеста
 commands.aetherhaven.questdebug.grant.desc=Отметьте задание как активное в вашем городе
 commands.aetherhaven.questdebug.complete.desc=Отметьте завершение задания в вашем городе.
@@ -71,6 +70,7 @@ commands.aetherhaven.villager.target.desc=UUID сущности жителя д�
 commands.aetherhaven.villager.teleport.desc=Используйте значение true для телепортации к жителю деревни (только для операторов); или используйте --tp вместо этого.
 commands.aetherhaven.villager.tp_flag.desc=Телепортироваться к жителю деревни (только для операторов; то же самое, что и при прохождении через точку истина)
 commands.aetherhaven.villager.reset.desc=Удалите всех NPC-жителей города и создайте их заново рядом с вами (отладка; сохраняет квесты, репутацию, подарки; запускает ремонт бассейна в гостинице, чтобы привести жителей в соответствие с завершенными зданиями; обновляет бассейн посетителей гостиницы).
+commands.aetherhaven.villager.fixinn.desc=Отладка: исправить бассейн для посетителей гостиницы в вашем городе.
 aetherhaven.villager.resetDone=Жители города были перезагружены и появились снова рядом с вами.
 aetherhaven.villager.resetFailed=Не удалось сбросить жителей города: {reason}
 commands.aetherhaven.gift.desc=Отладка: сброс лимитов подарков или заполнение истории подарков (предварительный просмотр)
@@ -85,3 +85,64 @@ commands.aetherhaven.debug_autonomy.clear.desc=Очистить отладку �
 
 commands.aetherhaven.debug_lootchest.desc=Отладка: Бонусные броски сундука Этерхейвена для целевого контейнера.
 commands.aetherhaven.debug_lootchest.fill.desc=Примените принудительные броски кубиков для получения украшений, золота и сюжетных жетонов к контейнеру с предметом, который вы просматриваете.
+
+commands.aetherhaven.floatinggift.desc=Помощники для плавающих подарочных воздушных шаров
+commands.aetherhaven.floatinggift.spawn.desc=Отладка: создайте плавающий подарок в вашей позиции.
+commands.aetherhaven.floatinggift.next.desc=Укажите, когда может появиться ваш следующий плавающий подарок.
+
+commands.aetherhaven.time.desc=Творческий режим: установите внутриигровое расписание (эти часы используются в распорядке дня жителей деревни).
+commands.aetherhaven.time.set.desc=Творческий подход: установить таймер на один час (от 0 до 23).
+commands.aetherhaven.time.hour.desc=Час с 0 по 23 (например, 14 для 14:00)
+commands.aetherhaven.time.set.success=Часы установлены на {gameTime}
+commands.aetherhaven.time.dawn.desc=Креативный подход: установить таймер на 6:00 утра.
+commands.aetherhaven.time.dawn.success=Установлено время: {gameTime}
+commands.aetherhaven.time.noResource=В этом мире отсутствует ресурс времени.
+
+commands.aetherhaven.walldebug.desc=Творческий режим: отладочные строки в чате по размещению волшебной палочки на стене
+commands.aetherhaven.walldebug.on.desc=Включите отладку настенного измерителя.
+commands.aetherhaven.walldebug.off.desc=Отключите отладку настенного пульта.
+commands.aetherhaven.walldebug.dump.desc=Вывести текущее состояние сессии настенного пульта
+
+commands.aetherhaven.townsfolk.desc=Отладка: создание и управление общим пулом NPC-персонажей из числа жителей города.
+commands.aetherhaven.townsfolk.spawn.desc=Создайте в своем городе NPC-жителя (выберите его случайным образом или передайте ID персонажа).
+commands.aetherhaven.townsfolk.id.desc=Идентификатор персонажа-горожанки (например, female_elf_01)
+commands.aetherhaven.townsfolk.release.desc=Возвращить персонажа в общий пул персонажей.
+commands.aetherhaven.townsfolk.list.desc=Список доступных и проверенных жителей города в этом мире
+commands.aetherhaven.townsfolk.characterId.desc=Идентификатор персонажа из набора "Горожане" с сервера Server/Aetherhaven/Townsfolk/
+commands.aetherhaven.townsfolk.assignmentKind.desc=бездельник, турист или охранник
+commands.aetherhaven.townsfolk.despawn.desc=Также удалите созданный объект из мира.
+commands.aetherhaven.townsfolk.spawn.ok=Появились жители города {id} ({assignment})
+commands.aetherhaven.townsfolk.spawn.failed=Не удалось создать жителей города (неизвестный идентификатор, уже используется, нет совпадения в пуле или создание не удалось).
+commands.aetherhaven.townsfolk.release.ok=Выпущен обратно в бассейн {id}
+commands.aetherhaven.townsfolk.release.notCheckedOut=Этот персонаж не проверен в этом мире.
+commands.aetherhaven.townsfolk.list.available=Доступно для {assignment}: {ids}
+commands.aetherhaven.townsfolk.list.availableIdle=Доступно для режима ожидания: {ids}
+commands.aetherhaven.townsfolk.list.inUse=Выдано: {ids}
+commands.aetherhaven.townsfolk.clear.desc=Удалите всех жителей города в этом мире и перезапустите общий пул ресурсов.
+commands.aetherhaven.townsfolk.clear.ok=Удалили жителей города {count} и очистили бассейн для этого мира.
+commands.aetherhaven.guild.desc=Отладка: пул искателей приключений в гильдии и наемные охранники
+commands.aetherhaven.guild.respawn.desc=Исчезните искателей приключений из зала, сделайте ставки в сегодняшних слотах и немедленно возродитесь.
+commands.aetherhaven.guild.respawn.ok=Возрождение гильдии: восстановлены устаревшие кассы {reclaimed}, удалены {despawned}, выброшены слоты {slots}, возрождены {spawned} (доступен пул: {available})
+commands.aetherhaven.guild.clearguards.desc=Уничтожьте всех наемных охранников в вашем городе и откройте им доступ к бассейнам.
+commands.aetherhaven.guild.clearguards.ok=Удалены организации, нанимавшие охранников ({count}), и очищены записи городской охраны.
+commands.aetherhaven.guild.status.desc=Показать диагностику пула искателей приключений в зале гильдии для вашего города
+commands.aetherhaven.guild.status.ok=Активность зала гильдии = {active} День эпохи = {epochDay} Последнее утро = {lastMorning} Заполненные слоты = {filledSlots} Отслеживаемые идентификаторы NPC = {tracked} Наемные стражи = {hiredGuards} Пул (всего = {poolTotal} Страж = {poolGuards} Искатель приключений = {poolAdventurers} Другие = {poolOther})
+
+commands.aetherhaven.tourist.desc=Отладка: целевые показатели посещений туристического портала
+commands.aetherhaven.tourist.targets.desc=Отладка: список участков под туристические достопримечательности и дополнительных точек интереса в вашем городе.
+commands.aetherhaven.guild.notActive=В вашем городе нет действующего здания гильдии.
+
+commands.aetherhaven.plotcreator.desc=Создавайте собственные городские здания.
+commands.aetherhaven.plotcreator.start.desc=Откройте руководство по созданию сюжета.
+commands.aetherhaven.plotcreator.cancel.desc=Отменить сессию создания сюжета
+commands.aetherhaven.plotcreator.edit.desc=Редактировать пользовательское здание, сохраненное на этом сервере
+commands.aetherhaven.plotcreator.edit.constructionId=Идентификатор здания (plot_my_building)
+commands.aetherhaven.plotcreator.generateicon.desc=Сгенерируйте PNG-иконку токена участка из существующего префаба.
+commands.aetherhaven.plotcreator.generateicon.idOrPrefab=Идентификатор здания (plot_my_house) или ключ префаба (Guild_Hall.prefab.json)
+commands.aetherhaven.plotcreator.generateicon.outputId=Идентификатор выходного файла значка (по умолчанию — идентификатор здания или название префаба).
+
+commands.aetherhaven.plottoken.desc=Выдать и перечислить жетоны участков для зданий.
+commands.aetherhaven.plottoken.give.desc=Укажите токен участка для идентификатора здания.
+commands.aetherhaven.plottoken.give.constructionId=Идентификатор здания (например: plot_park)
+commands.aetherhaven.plottoken.give.amount=Размер стека (по умолчанию 1)
+commands.aetherhaven.plottoken.list.desc=Перечислите все идентификаторы зданий.

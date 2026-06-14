@@ -1,0 +1,69 @@
+# Builder dialogue (Rowan Ridgecraft)
+
+aetherhaven.dialogue.aetherhaven_builder.root.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.root.hc0=Ev hakkında bilgi alın.
+aetherhaven.dialogue.aetherhaven_builder.root.hc1=Ev görevini bitirin
+aetherhaven.dialogue.aetherhaven_builder.root.hc2=Ev görevini kontrol edin.
+aetherhaven.dialogue.aetherhaven_builder.root.c0=İnşaatçının kulübesinden bahsedelim.
+aetherhaven.dialogue.aetherhaven_builder.root.c1=Kulübe görevini bitirin
+aetherhaven.dialogue.aetherhaven_builder.root.c2=Kulübe yapımını kontrol edin.
+aetherhaven.dialogue.aetherhaven_builder.root.c3=Kulübenin yapımı hakkında bilgi alın.
+aetherhaven.dialogue.aetherhaven_builder.root.c4=Güle güle
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.body=Bu kasabada yükselen her duvarla gurur duyuyorum. Bana bir tezgah ve planlar içeren düzgün bir inşaatçı kulübesi verin, mesai saatlerim dahilinde arsalarınızın daha hızlı yükselmesine yardımcı olayım.
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c0=Görevi kabul et
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c1=Şimdi değil
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.body=Bu arsa jetonunu al. Kulübeyi kazığa yerleştir, tabelaya ödeme yap ve inşaatın başlamasına izin ver. Çatı tamamlandığında beni bankta bul.
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.c0=Anlaşıldı
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.body=Bitmiş kulübeyi şimdiden gözümde canlandırabiliyorum. Arsayı belirlediniz ve inşaata başladınız mı henüz?
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c0=Görevi bırakın
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c1=Üzerinde hala çalışıyorum.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.body=Sorun değil. Tekrar denemeye hazır olana kadar handa bekleyeceğim.
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.c0=Güle güle
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.body=İşte bu, imzamı atmaya değer bir kulübe. Diğer arsalar inşa edilirken, ben de çekiçimle orada yardım eli uzatacağım.
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.c0=Sizi burada görmekten mutluluk duyuyorum.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.body=Bu kulübe çalışma amaçlı. Vaktiniz olduğunda, kendime ait küçük bir ev edinmek isterim.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c0=Görevi kabul et
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c1=Şimdi değil
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.body=Ev jetonunu al ve bir arsa inşa et. Hazır olduğunda beni yönetim bloğuna ata.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.c0=Anlaşıldı
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.body=Yönetim bloğunda bana tahsis edilmiş bir eve hala ihtiyacım var.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.c0=Ben halledeceğim.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.body=Sıcak duvarlar ve sağlam bir çatı. Hem rahat uyuyabilirim hem de kasabadaki inşaatları gözlemleyebilirim.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.c0=Eve hoş geldiniz
+
+aetherhaven.dialogue.aetherhaven_builder.gift.love=Mükemmel. Kaliteli kereste ve temiz taş, bir binayı ayakta tutan unsurları anladığınızı gösteriyor.
+aetherhaven.dialogue.aetherhaven_builder.gift.like=Faydalı şeyler. Şantiyede her zaman bunun için bir yer bulabilirim.
+aetherhaven.dialogue.aetherhaven_builder.gift.neutral=Tam benim zevkime göre değil, ama yine de teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_builder.gift.dislike=Bunu kulübenin etrafında tutmayı tercih etmem.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.fallback=Kulübeye, eve veya arsa konusunda yardıma ihtiyacınız varsa, söylemeniz yeterli.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.0=Son çatıdaki çizgiler çok güzelmiş. Fark ettim.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.1=Kafamda bir kat planı çiziyordum. Eski bir alışkanlık.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.2=Her kasaba dimdik duran binaları hak eder. Sizinki de o yolda ilerliyor.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.3=Talaş için özür dilerim. Evden asla biraz talaşsız çıkmam.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.0=Bana kereste, taş veya düzgün bir inşaat tezgahı getirin, günümü güzelleştirirsiniz.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.1=İyi bir çekiç her zaman elimde olmasını istediğim bir şeydir.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.0=Lütfen bana çöp veya işe yaramaz eşya getirmeyin.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.1=Ölü bitkiler ve kemik yığınları çalışma tezgahımda yer almamalı.
+
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_50.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_100.speaker=Rowan Ridgecraft

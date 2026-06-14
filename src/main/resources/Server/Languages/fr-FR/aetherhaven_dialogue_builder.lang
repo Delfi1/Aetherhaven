@@ -1,0 +1,69 @@
+# Builder dialogue (Rowan Ridgecraft)
+
+aetherhaven.dialogue.aetherhaven_builder.root.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.root.hc0=Renseignez-vous sur une maison
+aetherhaven.dialogue.aetherhaven_builder.root.hc1=Terminez la quête du foyer
+aetherhaven.dialogue.aetherhaven_builder.root.hc2=Vérifiez l'avancement de la quête de la maison
+aetherhaven.dialogue.aetherhaven_builder.root.c0=Parlons de la cabane du constructeur
+aetherhaven.dialogue.aetherhaven_builder.root.c1=Terminez la quête de la cabane
+aetherhaven.dialogue.aetherhaven_builder.root.c2=Vérifier l'avancement de la construction de la cabane
+aetherhaven.dialogue.aetherhaven_builder.root.c3=Renseignez-vous sur la construction de la cabane
+aetherhaven.dialogue.aetherhaven_builder.root.c4=Au revoir
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.body=Je suis fier de chaque mur qui s'élève dans cette ville. Donnez-moi une vraie cabane de maçon avec un établi et des plans, et je vous aiderai à construire plus vite pendant mes heures de travail.
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c0=Acceptez la quête
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c1=Pas maintenant
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.body=Prenez ce jeton de parcelle. Plantez le piquet sur la cabane, payez le panneau et laissez la construction se faire. Une fois le toit posé, retrouvez-moi au banc.
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.c0=Compris
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.body=Je peux déjà imaginer la cabane terminée. Avez-vous déjà délimité le terrain et commencé la construction ?
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c0=Abandonnez la quête
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c1=J'y travaille encore
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.body=Parfait. Je vous attendrai à l'auberge jusqu'à ce que vous soyez prêt à réessayer.
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.c0=Au revoir
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.body=Voilà une cabane qui mérite que je signe le contrat. Quand d'autres parcelles seront construites, je serai là avec mon marteau pour donner un coup de main.
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.c0=Ravi de vous avoir ici
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.body=La cabane me sert pour travailler. J'aimerais bien avoir une petite maison à moi quand tu auras le temps d'en construire une.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c0=Acceptez la quête
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c1=Pas maintenant
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.body=Prenez le jeton de maison et construisez un terrain. Affectez-moi au bloc de gestion une fois qu'il sera prêt.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.c0=Compris
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.body=J'ai toujours besoin qu'on m'attribue une maison dans le quartier géré.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.c0=Je m'en occuperai.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.body=Des murs chauds et un toit solide. Je peux dormir tranquille tout en gardant un œil sur les constructions de la ville.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.c0=Bienvenue chez vous
+
+aetherhaven.dialogue.aetherhaven_builder.gift.love=Parfait. Du bois de qualité et des pierres propres témoignent de votre compréhension des éléments qui soutiennent un bâtiment.
+aetherhaven.dialogue.aetherhaven_builder.gift.like=C'est très utile. Je trouverai toujours une place pour ça sur le site.
+aetherhaven.dialogue.aetherhaven_builder.gift.neutral=Ce n'est pas vraiment à mon goût, mais merci quand même.
+aetherhaven.dialogue.aetherhaven_builder.gift.dislike=Je préférerais ne pas garder ça près de la cabane.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.fallback=Si vous avez besoin d'une cabane, d'une maison ou d'aide pour un terrain, dites-le.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.0=Belle ligne sur ce dernier toit. Je l'ai remarqué.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.1=Je dessinais mentalement le plan de l'étage. Une vieille habitude.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.2=Chaque ville mérite des bâtiments qui se tiennent droits. La vôtre s'en approche.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.3=Désolé pour la sciure. Je ne pars jamais de chez moi sans en emporter un peu.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.0=Apportez-moi du bois, des pierres ou un véritable établi de maçon et vous me ferez plaisir.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.1=Un bon marteau est toujours le bienvenu entre mes mains.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.0=Merci de ne pas m'apporter de déchets ou d'ordures ménagères.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.1=Les plantes mortes et les tas d'os n'ont pas leur place sur mon établi.
+
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_50.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_100.speaker=Rowan Ridgecraft

@@ -1,0 +1,71 @@
+# Pyrotechnic dialogue (Grubble Sparkmatch)
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.body=Ха! Ти відкрив липкий пакет! Грабл застряг там назавжди. У твоєму місті є корчма? Добре. Можливо, Грабл завітає, коли йому потрібна гаряча їжа та суха лавка.
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.c0=Бережіть себе.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.fallback=Якщо Граблу потрібна розмова про майстерність, дім чи щось інше, скажи це, перш ніж у Пудри з'являться ідеї.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.0=Великий бум сьогодні? Маленький бум? Граббл отримав і те, й інше.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.1=Не чхай біля полиці з пудрою. Граббл засвоїв цей урок.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.2=У твоєму місті пахне димом з деревини. Граблу це подобається.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.3=Потрібно щось яскраве? Ви звернулися саме до мене, гобліне.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.0=Візьміть порох для граблів або гарну круглу бомбу.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.1=Бомбочки з макберрі дуже тішать Грабла.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.0=Граббл не хоче сміття чи кісток як подарунків.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.1=Від порожнечі Грабла мурашки по шкірі. Тримайся від неї подалі.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house=Грабл, ти хотів поговорити про будинок.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house_done=Твоє ім'я на полиці будинку. Граббл має почути його від мене.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house_remind=Будинок все ще в процесі будівництва.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_done=Граббл, я хотів перевірити, що вибуховий магазин вже працює.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_complete=З магазином бомб закінчено. Грабл, я тут, щоб завершити справу.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_building=Магазин ще збирається в купу. Як справи?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_offer=Грабл, я хочу допомогти тобі відкрити нормальний магазин у місті.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_goodbye=Наразі це все. Грабл, побачимося пізніше.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=Граббл не може вічно продавати всяку всячину з кишені. Люди нервують. Потрібен справжній магазин з товстими стінами, гарною вивіскою, полицею, яка не хитається, коли чхає маленька бомба. Граббл малював креслення на вогнетривкому папері. Ти будуєш для міста, Граббл дає тобі сторінку.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=Ми знайдемо Граблу магазин.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1=Не зараз. Граббл чекає.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=Візьміть сторінку з кресленнями. Навчіться за столом містобудування. Створіть жетон. Побудуйте магазин там, де люди зможуть його знайти, не заблукавши та не підірвавшись випадково. Личинки чекають у корчмі. Порох залишається в мішку, поки стіни не стануть товстими.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=Побачимося, коли вивіску буде.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=Магазин ще не побудований? Грабл чекає. Порошок стає неспокійним, коли Грабл чекає занадто довго. Ви все ще вивчаєте плани та будуєте стіни, чи Граблу варто перестати сподіватися?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c0=Грабл, мені потрібно поки що відмовитися від квесту.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c1=Все ще працюю над цим. Граббл, я продовжуватиму.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.body=Сьогодні немає магазину? Гаразд. Граббл тримає бомби в сумці та мріє про полиці. Поговоримо ще, якщо передумаємо.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.c0=Цілком справедливо. Граббл, побачимося.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.body=Крамниця готова! Полиці готові! Стіни товсті! Граббл може продавати бум-штучки, як справжній бізнесмен-гоблін, а не шепотіти з пальта. Дякую, друже.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.c0=Радий допомогти. Граббл, приходь і шукай мене, якщо місту потрібно більше попоїсти.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.body=Навіть бум-гобліну потрібне ліжко. Тихе ліжко. Подалі від полиці з пудрою та павукового куточка. Крамниця для роботи. Граббл хоче такий самий маленький будиночок, як і інші люди. Ти його собі поставив?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c0=Грабл, я за тебе закладу будинок.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c1=Іншим разом.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.body=Коли стіни стануть справжніми, напишіть ім'я Грабла на блоці всередині, як наказано в статуті. Потім прийдіть і скажіть Граблу вустами. Грабл хоче це почути, а не здогадуватися.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.c0=Граббл почує це від мене.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.body=Приділіть час рамці. Коли будинок стоїть, напишіть "Граббл" на полиці всередині, а потім поверніться. "Граббл" не поспішає. Просто хоче, щоб ім'я було на стіні.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.c0=Зрозуміло.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.body=Гарні стіни. Гарний дах. Граббл може спати без павукових снів чи кошмарів про порошок. Цього цілком вистачить.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.c0=Радий, що Граббл отримав нормальні двері.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.confirm=Ти щось дав Граблу?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.love=Так! Це просто бум! Граббл тебе за це любить.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.like=Гарний подарунок. Грабл схвально киває.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.neutral=Хм. Недостатньо гучного враження. Але все одно дякую.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.dislike=Граббл цього не хоче. Згадайте це знову.

@@ -4,22 +4,30 @@
 # === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
 aetherhaven.blacksmith.repair.insufficientGold=Çantanız bu tamir için çok hafif.
 aetherhaven.blacksmith.repair.success={itemName} tekrar eski haline döndü. Yepyeni gibi.
-commands.aetherhaven.dialogue.desc=Test amacıyla, kimliğe göre bir diyalog ağacı açın.
-commands.aetherhaven.dialogue.treeId.desc=Diyalog ağacı kimliği (örneğin aetherhaven_dialogue_test)
-commands.aetherhaven.dialogue.entry.desc=İsteğe bağlı giriş düğümü kimliği (varsayılan: root)
+commands.aetherhaven.dialogue.desc=Hata ayıklama: Kimliğe göre bir diyalog ağacı açın
+commands.aetherhaven.dialogue.treeId.desc=Diyalog ağacı kimliği (örnek: aetherhaven_merchant)
+commands.aetherhaven.dialogue.entry.desc=İsteğe bağlı başlangıç düğümü (varsayılan kök)
 aetherhaven.interaction.dialogue=Konuşmak için [{key}] tuşuna basın.
-npcRoles.Aetherhaven_Test_Villager.name=Diyalog Testi Köylü
 aetherhaven.banner.quest.completed.primary=Görev Tamamlandı
 aetherhaven.banner.quest.completed.secondary={name}
 aetherhaven.banner.assembly.complete.primary=İnşaat Tamamlandı
 aetherhaven.banner.assembly.complete.secondary={name}
 aetherhaven.assembly.complete.chat={name} hazır.
 aetherhaven.assembly.tracer.none_in_range=Yakın çevrede montaj önizlemesi yok (yaklaşın veya kasaba inşa iznini kontrol edin).
+aetherhaven.assembly.staff.no_mana=Yapı taşlarını yerleştirmek için yeterli mana yok. Daha hızlı mana yenilenmesi için asayı tutun, sonra tekrar deneyin.
 aetherhaven.banner.quest.started.primary=Görev Başlatıldı
 aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=Kilidi Açıldı
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Bina Personeli
-items.Aetherhaven_Building_Staff.description=Birincil imleç, blokların arasından en yakın montaj önizleme noktasına yönlendirme oku gönderir. İkincil imleci basılı tutun ve montaj önizlemesine nişan alarak bir sonraki bloğu anında yerleştirin (kasaba inşa izni). Siz uzaktayken pasif yapılar kendi kendine ilerlemeye devam eder.
+items.Aetherhaven_Building_Staff.name=Bakır bina personeli
+items.Aetherhaven_Building_Staff.description=Birincil yetenek, bloklar arasından en yakın montaj önizlemesine yönlendirme oku gönderir. İkincil yeteneği basılı tutun ve bloklar arasından o önizlemeye nişan alarak kısa bir süre basılı tuttuktan sonra (kasaba inşa izni) bina düğümlerini yerleştirin. Nişan aldığınız alanın etrafındaki <color is="#4ade80">3×3×3</color> adet vurgulanmış bina düğümünü aynı anda doldurur. Basılı tutulduğunda <color is="#60a5fa">+150 maksimum mana</color> kazandırır; yerleştirilen her blok <color is="#60a5fa">1 mana</color> maliyetindedir. İkincil yeteneği birkaç saniye kullanmayı bırakırsanız mana daha hızlı dolar. Daha yüksek seviyeli asalar daha fazla mana verir ve daha hızlı geri kazandırır. Siz uzaktayken pasif arsa montajı ilerlemeye devam eder.
+items.Aetherhaven_Building_Staff_Iron.name=Demir işleme personeli
+items.Aetherhaven_Building_Staff_Iron.description=Bakır bina personeliyle aynı. İkincil, aynı anda <color is="#4ade80">5×5×5</color> vurgulanmış bina düğümünü doldurur. Basılı tutulduğunda <color is="#60a5fa">+250 maksimum mana</color> ve daha hızlı mana yenilenmesi sağlar; yerleştirilen her blok <color is="#60a5fa">1 mana</color> maliyetindedir.
+items.Aetherhaven_Building_Staff_Thorium.name=Thorium binası personeli
+items.Aetherhaven_Building_Staff_Thorium.description=Bakır bina personeliyle aynı. İkincil, aynı anda <color is="#4ade80">7×7×7</color> vurgulanmış bina düğümünü doldurur. Basılı tutulduğunda <color is="#60a5fa">+400 maksimum mana</color> ve daha hızlı mana yenilenmesi sağlar; yerleştirilen her blok <color is="#60a5fa">1 mana</color> maliyetindedir.
+items.Aetherhaven_Building_Staff_Cobalt.name=Kobalt binası personeli
+items.Aetherhaven_Building_Staff_Cobalt.description=Bakır bina personeliyle aynı. İkincil, aynı anda <color is="#4ade80">9×9×9</color> adet vurgulanmış bina düğümünü doldurur. Basılı tutulduğunda <color is="#60a5fa">+600 maksimum mana</color> ve daha hızlı mana yenilenmesi sağlar; yerleştirilen her blok <color is="#60a5fa">1 mana</color> maliyetindedir.
+items.Aetherhaven_Building_Staff_Adamantite.name=Adamantit bina personeli
+items.Aetherhaven_Building_Staff_Adamantite.description=Bakır bina personeliyle aynı. İkincil, aynı anda <color is="#4ade80">11×11×11</color> vurgulanmış bina düğümünü doldurur. Basılı tutulduğunda <color is="#60a5fa">+900 maksimum mana</color> ve daha hızlı mana yenilenmesi sağlar; yerleştirilen her blok <color is="#60a5fa">1 mana</color> maliyetindedir.

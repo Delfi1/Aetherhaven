@@ -1,0 +1,69 @@
+# Builder dialogue (Rowan Ridgecraft)
+
+aetherhaven.dialogue.aetherhaven_builder.root.speaker=로완 리지크래프트
+aetherhaven.dialogue.aetherhaven_builder.root.hc0=집에 대해 문의하세요
+aetherhaven.dialogue.aetherhaven_builder.root.hc1=홈 퀘스트를 완료하세요
+aetherhaven.dialogue.aetherhaven_builder.root.hc2=집 퀘스트를 확인해 보세요
+aetherhaven.dialogue.aetherhaven_builder.root.c0=건축업자의 오두막에 대해 이야기해 보세요.
+aetherhaven.dialogue.aetherhaven_builder.root.c1=오두막 퀘스트를 완료하세요
+aetherhaven.dialogue.aetherhaven_builder.root.c2=오두막 건축 진행 상황을 확인하세요
+aetherhaven.dialogue.aetherhaven_builder.root.c3=오두막 짓는 것에 대해 물어보세요
+aetherhaven.dialogue.aetherhaven_builder.root.c4=안녕히 가세요
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.speaker=로완 리지크래프트
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.body=저는 이 마을에 세워지는 모든 벽에 자부심을 느낍니다. 제대로 된 건축 작업실과 작업대, 설계도만 주시면, 근무 시간 동안 여러분의 부지에 건물이 더 빨리 세워지도록 도와드리겠습니다.
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c0=퀘스트를 수락하세요
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c1=지금은 안 돼
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.speaker=로완 리지크래프트
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.body=이 부지 토큰을 가져가세요. 오두막 부지에 말뚝을 박고, 표지판에 돈을 지불한 다음, 건축이 진행되도록 두세요. 지붕이 얹어지면 벤치에서 저를 찾아오세요.
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.c0=이해했다
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.speaker=로완 리지크래프트
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.body=완성된 오두막의 모습이 벌써 눈앞에 선하네요. 부지를 정하고 건축을 시작하셨나요?
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c0=퀘스트를 포기하세요
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c1=아직 작업 중입니다.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.speaker=로완 리지크래프트
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.body=괜찮아요. 다시 시도하실 준비가 되실 때까지 여관에서 기다릴게요.
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.c0=안녕히 가세요
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.speaker=로완 리지크래프트
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.body=이 오두막이라면 내 이름을 서명할 만하군. 다른 부지들이 지어질 때면 나도 망치를 들고 나가서 도울 거야.
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.c0=여기 와주셔서 기쁩니다
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.speaker=로완 리지크래프트
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.body=저 오두막은 작업용입니다. 나중에 시간 되시면 저만의 작은 집을 하나 마련해 주시면 좋겠습니다.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c0=퀘스트를 수락하세요
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c1=지금은 안 돼
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.speaker=로완 리지크래프트
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.body=집 토큰을 가져가서 부지를 건설하세요. 관리 구역이 준비되면 저를 관리자로 배정해 주세요.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.c0=이해했다
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.speaker=로완 리지크래프트
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.body=저는 아직 관리동에 있는 집을 배정받지 못했습니다.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.c0=제가 처리하겠습니다.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.speaker=로완 리지크래프트
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.body=따뜻한 벽과 견고한 지붕. 안심하고 쉴 수 있으면서도 마을의 건설 상황을 계속 지켜볼 수 있겠군.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.c0=집에 오신 것을 환영합니다
+
+aetherhaven.dialogue.aetherhaven_builder.gift.love=완벽해요. 좋은 목재와 깨끗한 돌을 보니 건물을 지탱하는 원리를 잘 이해하고 계신 것 같네요.
+aetherhaven.dialogue.aetherhaven_builder.gift.like=유용한 물건이네요. 현장에서 언제든 쓸 곳을 찾을 수 있을 거예요.
+aetherhaven.dialogue.aetherhaven_builder.gift.neutral=제 취향은 아니지만, 어쨌든 감사합니다.
+aetherhaven.dialogue.aetherhaven_builder.gift.dislike=나는 그런 물건을 오두막 주변에 두고 싶지 않아.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.fallback=오두막이나 집이 필요하거나 밭을 경작하는 데 도움이 필요하시면 말씀하세요.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.0=마지막 지붕의 라인이 훌륭하네요. 저도 알아봤어요.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.1=머릿속으로 평면도를 그리고 있었어요. 오래된 습관이죠.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.2=모든 도시는 똑바로 서 있는 건물을 가질 자격이 있습니다. 당신의 도시는 그 모습을 갖춰가고 있습니다.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.3=톱밥 때문에 죄송합니다. 저는 외출할 때 항상 톱밥을 조금씩 챙겨 다니거든요.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.0=내게 목재나 돌, 아니면 제대로 된 작업대를 가져다주면 정말 기쁠 거야.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.1=좋은 망치는 언제나 내 손에 들어오는 걸 환영한다.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.0=쓰레기나 쓸모없는 물건을 가져오지 마세요.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.1=죽은 식물이나 뼈 무더기는 내 작업대에 있으면 안 돼.
+
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_50.speaker=로완 리지크래프트
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_100.speaker=로완 리지크래프트

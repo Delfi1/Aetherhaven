@@ -1,5 +1,5 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_miner)
-# Full translation keys are aetherhaven_dialogue_miner.<lineKey> (see Hytale I18nModule).
+# Full translation keys are aetherhaven.dialogue.aetherhaven_miner.<lineKey> (see Hytale I18nModule).
 aetherhaven.dialogue.aetherhaven_miner.root.speaker=Горрук Стоунвейн
 aetherhaven.dialogue.aetherhaven_miner.root.body=Я добываю камень и руду для города, но мне нужна настоящая шахтерская хижина, прежде чем я смогу делать это как следует. Мне нужно сухое место для сна и верстак, который не будет подпрыгивать, когда я буду дробить камень. Моя старая бригада говорила: «Следуй за жилой», и я до сих пор придерживаюсь этого принципа. Дайте мне хижину, и я буду пополнять ваши запасы.
 aetherhaven.dialogue.aetherhaven_miner.root.hc0=Вы хотели поговорить о доме.
@@ -66,3 +66,5 @@ aetherhaven.dialogue.aetherhaven_miner.main_hub.hint.dislike.1=Декор из �
 aetherhaven.dialogue.aetherhaven_miner.main_hub.hint.dislike.2=Если оно рассыплется в песок, не предлагайте его как сокровище.
 aetherhaven.dialogue.aetherhaven_miner.main_hub.hint.dislike.3=Мусорный металлолом, которому здесь не место, только захламляет пол.
 aetherhaven.dialogue.aetherhaven_miner.main_hub.hint.dislike.4=Мне не нужна еще одна случайная куча камней, если только она не будет использоваться под фундамент.
+aetherhaven.dialogue.aetherhaven_miner.rep_reward_50.speaker=Горрук Стоунвейн
+aetherhaven.dialogue.aetherhaven_miner.rep_reward_100.speaker=Горрук Стоунвейн

@@ -39,15 +39,27 @@ aetherhaven.ui.memberPermissions.title=Permisos de los miembros
 aetherhaven.ui.memberPermissions.backTooltip=Volver a la lista de jugadores
 aetherhaven.ui.memberPermissions.placePlots=Parcelas de ubicación
 aetherhaven.ui.memberPermissions.manageConstructions=Construir y gestionar edificaciones (ensamblaje, producción, fiestas, modificaciones de estatutos, traslado de edificios).
+aetherhaven.ui.memberPermissions.removePlots=Eliminar edificios del registro municipal
 aetherhaven.ui.memberPermissions.spendTreasuryGold=Gastar el oro del tesoro municipal en los costos de construcción.
 aetherhaven.ui.memberPermissions.openTreasuryPanel=Tesorería abierta (depósito/retiro)
 aetherhaven.ui.memberPermissions.acceptQuests=Aceptar/iniciar misiones de la ciudad
 aetherhaven.ui.memberPermissions.completeQuests=Completa las misiones de la ciudad y reclama recompensas de reputación.
 aetherhaven.ui.memberPermissions.abandonQuests=Abandona las misiones activas de la ciudad.
 aetherhaven.ui.memberPermissions.reviveVillagers=Revivir a los aldeanos en la estatua de Gaia
+aetherhaven.ui.memberPermissions.useShopSpots=Publica y vende en los espacios de la tienda del jugador.
 aetherhaven.ui.memberPermissions.err.notOwner=Solo el propietario del pueblo puede editar los permisos.
 aetherhaven.ui.memberPermissions.err.notInTown=Ese jugador no está en esta ciudad.
 aetherhaven.town.rolecmd.playerMustBeOnline=El jugador debe estar conectado a internet.
+
+# === /aetherhaven replace-charter ===
+aetherhaven.town.charterReplace.notOwner=Solo el propietario del pueblo puede reparar el estatuto (a menos que tengas permiso del administrador del pueblo).
+aetherhaven.town.charterReplace.wrongWorld=Ese pueblo no está en este mundo.
+aetherhaven.town.charterReplace.chunkNotLoaded=El fragmento de la carta fundacional no se ha cargado; acérquese a las coordenadas de la carta fundacional de su ciudad e inténtelo de nuevo.
+aetherhaven.town.charterReplace.clearFirst=La posición de la carta constitutiva guardada aún tiene un bloque sólido; rómpalo hasta que esa celda esté vacía y luego ejecute este comando nuevamente.
+aetherhaven.town.charterReplace.placeFailed=No se pudo colocar el bloque de vuelos chárter (¿plaza bloqueada?).
+aetherhaven.town.charterReplace.linkFailed=El bloque Charter no se pudo enlazar (consulte el registro del servidor).
+aetherhaven.town.charterReplace.alreadyOk=Este bloque de viviendas ya está vinculado a su ciudad.
+aetherhaven.town.charterReplace.done=Bloqueo de la carta restaurado para "{town}".
 aetherhaven.town.rolecmd.roleInvalid=El rol debe ser CONSTRUCCIÓN, MISIÓN o AMBOS.
 aetherhaven.town.leave.notInTown=No estás en una ciudad.
 aetherhaven.town.leave.ownerCannotLeave=Los propietarios no pueden marcharse; la transferencia de propiedad aún no está implementada.

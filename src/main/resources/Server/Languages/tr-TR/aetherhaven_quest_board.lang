@@ -1,0 +1,135 @@
+aetherhaven.questBoard.miner.stone_haul.title=Depo için taş
+aetherhaven.questBoard.miner.stone_haul.description=Gorruk, bir sonraki yağmurdan önce kulübesinin yanına taş yığılmasını istiyor.
+aetherhaven.questBoard.miner.copper_ore.title=Tezgah için bakır
+aetherhaven.questBoard.miner.copper_ore.description=Gorruk'un kasaba aletleri için acilen bakır cevheri eritmesi gerekiyor.
+aetherhaven.questBoard.miner.iron_ore.title=Demir dövme hattı için demir
+aetherhaven.questBoard.miner.iron_ore.description=Gorruk'un demir cevheri sıkıntısı var ve yönetim kurulundan yardım istedi.
+aetherhaven.questBoard.miner.silver_ore.title=Kasa için gümüş
+aetherhaven.questBoard.miner.silver_ore.description=Gorruk'un şehir rezervi için ayrılmış gümüş cevherine ihtiyacı var.
+aetherhaven.questBoard.miner.gold_ore.title=Sözleşme sandığı için altın
+aetherhaven.questBoard.miner.gold_ore.description=Gorruk, güvenilir kişilere satılmak üzere nadir bulunan bir altın cevheri sözleşmesi yayınladı.
+
+aetherhaven.questBoard.farmer.wheat_bundle.title=Kiler için buğday
+aetherhaven.questBoard.farmer.wheat_bundle.description=Seren'in ekmeklik ve tohumluk olarak kullanmak üzere demetlenmiş buğdaya ihtiyacı var.
+aetherhaven.questBoard.farmer.carrot_crate.title=Mutfak için havuçlar
+aetherhaven.questBoard.farmer.carrot_crate.description=Seren, güveç ve takas kavanozları için taze havuç istiyor.
+aetherhaven.questBoard.farmer.potato_sack.title=Mahzen için patatesler
+aetherhaven.questBoard.farmer.potato_sack.description=Seren'in don tehlikesi başlamadan önce patatesleri depolaması gerekiyor.
+aetherhaven.questBoard.farmer.harvest_feast.title=Kare için hasat
+aetherhaven.questBoard.farmer.harvest_feast.description=Seren bir hasat şöleni planlıyor ve çeşitli ürünlere ihtiyacı var.
+
+aetherhaven.questBoard.blacksmith.iron_bars.title=Siparişler için demir çubuklar
+aetherhaven.questBoard.blacksmith.iron_bars.description=Demircinin birikmiş siparişleri var ve acilen demir çubuklara ihtiyacı var.
+aetherhaven.questBoard.blacksmith.coal_fuel.title=Demirci ocağı için odun kömürü
+aetherhaven.questBoard.blacksmith.coal_fuel.description=Demirci ocağının yakıtı gece boyunca azaldı. Kömür getirin.
+aetherhaven.questBoard.blacksmith.gold_bars.title=Lonca işleri için altın külçeleri
+aetherhaven.questBoard.blacksmith.gold_bars.description=Demirci, üst düzey bir sipariş için altın külçelerine ihtiyaç duyuyor.
+aetherhaven.questBoard.blacksmith.master_smithing.title=Usta Demirci Siparişi
+aetherhaven.questBoard.blacksmith.master_smithing.description=Efsanevi büyüklükte bir siparişi yerine getirmem için yardıma ihtiyacım var.
+
+aetherhaven.questBoard.logger.oak_logs.title=Tamir için meşe ağacı
+aetherhaven.questBoard.logger.oak_logs.description=Şehir çitlerine bir sonraki fırtınadan önce meşe kütükleri gerekiyor.
+aetherhaven.questBoard.logger.timber_contract.title=Salon çerçevesi için kereste
+aetherhaven.questBoard.logger.timber_contract.description=Meşe ve çam ağaçlarından oluşan karışık kereste için büyük bir sözleşme ilanı verildi.
+
+aetherhaven.questBoard.rancher.raw_meat.title=Fümeleme için et
+aetherhaven.questBoard.rancher.raw_meat.description=Thalen'in handaki mutfak için paketlenmiş çiğ ete ihtiyacı var.
+aetherhaven.questBoard.rancher.leather_hide.title=İğne için saklan
+aetherhaven.questBoard.rancher.leather_hide.description=Thalen koşum takımlarını tamir ediyor ve ince deriye ihtiyacı var.
+aetherhaven.questBoard.rancher.ranch_provisions.title=Çiftlik malzemeleri satışı
+aetherhaven.questBoard.rancher.ranch_provisions.description=Thalen'in lonca levazım deposu için ete ve deriye ihtiyacı var.
+
+aetherhaven.questBoard.priestess.life_essence.title=Sunak için yaşam özü
+aetherhaven.questBoard.priestess.life_essence.description=Rahibe içki hazırlıyor ve yaşam özüne ihtiyacı var.
+aetherhaven.questBoard.priestess.sacred_offering.title=Kutsal adak demeti
+aetherhaven.questBoard.priestess.sacred_offering.description=Rahibe, bir ayin için öz ve altın istedi.
+aetherhaven.questBoard.priestess.cull_undead.title=Huzursuz ölüleri temizleyin
+aetherhaven.questBoard.priestess.cull_undead.description={villager}, yolların yakınındaki ölümsüzlerin sayısını azaltmak için bir ödül koydu.
+aetherhaven.questBoard.priestess.purge_undead.title=Yürüyen ölüleri temizleyin
+aetherhaven.questBoard.priestess.purge_undead.description={villager}, bir sonraki ayinden önce daha fazla ölümsüzün ortadan kaldırılmasını istiyor.
+aetherhaven.questBoard.priestess.undead_raid.title=Ölümsüzler şehre doğru ilerliyor
+aetherhaven.questBoard.priestess.undead_raid.description={villager} ölümsüzlerin tüzüğe doğru ilerlediği konusunda uyarıyor.
+aetherhaven.questBoard.priestess.void_raid.title=Kasabaya boşluk istilası
+aetherhaven.questBoard.priestess.void_raid.description={villager} boşluk yaratıklarının tüzük taşına doğru ilerlediğini algılıyor.
+
+aetherhaven.questBoard.targets.undead=ölümsüzler
+aetherhaven.questBoard.targets.void=boşlukta doğan
+aetherhaven.questBoard.targets.trork=trorklar
+aetherhaven.questBoard.targets.outlander=yabancılar
+aetherhaven.questBoard.targets.goblin=goblinler
+aetherhaven.questBoard.targets.vermin=haşarat
+
+aetherhaven.questBoard.innkeeper.bread_loaves.title=Ortak kullanım alanı için ekmek
+aetherhaven.questBoard.innkeeper.bread_loaves.description=Corin, yolcular akşam karanlığında gelmeden önce ekmeklerin hazır olmasını istiyor.
+aetherhaven.questBoard.innkeeper.traveler_rations.title=Yolcu tayınları
+aetherhaven.questBoard.innkeeper.traveler_rations.description=Corin'in yorgun misafirleri için ekmek ve et paketlemesi gerekiyor.
+aetherhaven.questBoard.innkeeper.hearty_stew.title=Bol malzemeli güveç malzemeleri
+aetherhaven.questBoard.innkeeper.hearty_stew.description=Corin akşam yemeği için patates ve et istiyor.
+aetherhaven.questBoard.innkeeper.inn_feast.title=Han ziyafeti hazırlığı
+aetherhaven.questBoard.innkeeper.inn_feast.description=Corin kalabalık bir ev halkı için yemek pişiriyor ve tahıl ile ekmeğe ihtiyacı var.
+aetherhaven.questBoard.innkeeper.noble_banquet.title=Asil ziyafet stoğu
+aetherhaven.questBoard.innkeeper.noble_banquet.description=Corin, ekmek, et ve altından oluşan bir ziyafet listesi yayınladı.
+aetherhaven.questBoard.innkeeper.grand_hospitality.title=Muhteşem misafirperverlik
+aetherhaven.questBoard.innkeeper.grand_hospitality.description=Corin'in ziyaret eden tüccarlar için geniş bir alana ihtiyacı var.
+aetherhaven.questBoard.innkeeper.royal_table.title=Kraliyet sofra düzeni
+aetherhaven.questBoard.innkeeper.royal_table.description=Corin, onur konukları için altın külçeleri, esans ve ekmek istiyor.
+aetherhaven.questBoard.innkeeper.legendary_feast.title=Efsanevi ziyafet
+aetherhaven.questBoard.innkeeper.legendary_feast.description=Corin kasaba için görkemli bir ziyafet vermek istiyor.
+
+aetherhaven.questBoard.elder.foundation_stones.title=Temel taşları
+aetherhaven.questBoard.elder.foundation_stones.description=Lyren, yeni tüzük işaretleri için taş toplanmasını istiyor.
+aetherhaven.questBoard.elder.village_timber.title=Köy kerestesi
+aetherhaven.questBoard.elder.village_timber.description=Lyren'in lonca binasının yakınındaki banklar için meşe kütüklerine ihtiyacı var.
+aetherhaven.questBoard.elder.community_grain.title=Topluluk tahıl depoları
+aetherhaven.questBoard.elder.community_grain.description=Lyren, kasaba erzak deposu için buğday ve havuç istedi.
+aetherhaven.questBoard.elder.town_supplies.title=Kiralama işleri için malzemeler
+aetherhaven.questBoard.elder.town_supplies.description=Lyren, anıt taşının yakınındaki yollar için taş ve tahta yerleştirdi.
+aetherhaven.questBoard.elder.iron_tribute.title=Demir övgüsü
+aetherhaven.questBoard.elder.iron_tribute.description=Lyren'in kasaba savunma depoları için demir cevheri ve demir çubuklarına ihtiyacı var.
+aetherhaven.questBoard.elder.silver_tribute.title=Gümüş övgü
+aetherhaven.questBoard.elder.silver_tribute.description=Lyren, kasaba hazinesi için gümüşten bir haraç ayırdı.
+aetherhaven.questBoard.elder.gold_tribute.title=Altın övgü
+aetherhaven.questBoard.elder.gold_tribute.description=Lyren, vakıf kasası için altın değerinde bir anma mesajı yayınladı.
+aetherhaven.questBoard.elder.elder_legacy.title=Yaşlılara miras bırakma hizmeti
+aetherhaven.questBoard.elder.elder_legacy.description=Lyren, kuruluş ayini için altın, külçe ve öz arıyor.
+aetherhaven.questBoard.elder.vermin_clear.title=Haşerelerden kurtulun
+aetherhaven.questBoard.elder.vermin_clear.description={villager} kasaba çevresindeki yollardan haşerelerin temizlenmesini istiyor.
+aetherhaven.questBoard.elder.vermin_raid.title=Kapıların önünde haşereler cirit atıyor.
+aetherhaven.questBoard.elder.vermin_raid.description={villager} haşerelerin anıt taşına doğru akın ettiğini bildiriyor.
+
+aetherhaven.questBoard.guild_master.recruit_gear.title=Acemi başlangıç kiti
+aetherhaven.questBoard.guild_master.recruit_gear.description=Lonca ustasının yeni üyeler için taş ve kömüre ihtiyacı var.
+aetherhaven.questBoard.guild_master.apprentice_tools.title=Çırak aletleri
+aetherhaven.questBoard.guild_master.apprentice_tools.description=Lonca başkanı eğitim setleri için bakır cevheri istiyor.
+aetherhaven.questBoard.guild_master.journeyman_armor.title=Usta zırh stoğu
+aetherhaven.questBoard.guild_master.journeyman_armor.description=Lonca ustasının zırh için demir çubuklara ve deriye ihtiyacı var.
+aetherhaven.questBoard.guild_master.veteran_weapons.title=Gaziler silah siparişi
+aetherhaven.questBoard.guild_master.veteran_weapons.description=Lonca başkanı kıdemli askerler için demir ve deri teçhizat ilan etti.
+aetherhaven.questBoard.guild_master.adventurer_gear.title=Yeni çalışanlar için ekipman
+aetherhaven.questBoard.guild_master.adventurer_gear.description=Lonca ustası maceracılara teçhizat hazırlıyor ve demir ile deriye ihtiyacı var.
+aetherhaven.questBoard.guild_master.elite_contract.title=Elit sözleşme
+aetherhaven.questBoard.guild_master.elite_contract.description=Lonca ustasının elit teçhizatlar için altın külçelerine ve demire ihtiyacı var.
+aetherhaven.questBoard.guild_master.master_gear.title=Ana ekipman paketi
+aetherhaven.questBoard.guild_master.master_gear.description=Lonca lideri, üst düzey ekipman sözleşmesi yayınladı.
+aetherhaven.questBoard.guild_master.legendary_contract.title=Efsanevi sözleşme
+aetherhaven.questBoard.guild_master.legendary_contract.description=Lyra'nın yaklaşmakta olan destansı bir savaş için yüksek kaliteli kılıçlara ihtiyacı var.
+aetherhaven.questBoard.guild_master.goblin_trouble.title=Goblinlerin başı dertte
+aetherhaven.questBoard.guild_master.goblin_trouble.description={villager}, yollarda sorun çıkaran goblinler için ödül koydu.
+aetherhaven.questBoard.guild_master.trork_patrol.title=Trork devriyesi
+aetherhaven.questBoard.guild_master.trork_patrol.description={villager}, trorkların ticaret yollarından uzaklaştırılmasını istiyor.
+aetherhaven.questBoard.guild_master.outlander_raid.title=Outlander baskını
+aetherhaven.questBoard.guild_master.outlander_raid.description={villager} kasaba yakınlarındaki yabancıları uzaklaştırmak için ödeme yaptı.
+aetherhaven.questBoard.guild_master.goblin_raid.title=Goblinlerin kasabaya baskını
+aetherhaven.questBoard.guild_master.goblin_raid.description={villager} kasabaya doğru yürüyen bir goblin savaş birliğini fark etti.
+aetherhaven.questBoard.guild_master.trork_raid.title=Trork savaş grubu
+aetherhaven.questBoard.guild_master.trork_raid.description={villager}, trollerin imtiyazlı bölgeye doğru ilerlemesini durdurmak için yardım istiyor.
+aetherhaven.questBoard.guild_master.outlander_assault.title=Outlander saldırısı
+aetherhaven.questBoard.guild_master.outlander_assault.description={villager}, yabancıların tüzüğe saldırdığı konusunda uyarıda bulunuyor.
+
+aetherhaven.questBoard.builder.marble_statue.title=Muhteşem Bir Heykel
+
+aetherhaven.questBoard.builder.marble_statue.description=Rowan'ın sipariş üzerine yaptıracağı bir heykel için mermere ihtiyacı var.
+
+aetherhaven.questBoard.logger.fir_logs.title=İskele yapımında kullanılan köknar ağacı
+
+aetherhaven.questBoard.logger.fir_logs.description=İnşaatçılar yeni duvarın güçlendirilmesi için köknar kütükleri istediler.

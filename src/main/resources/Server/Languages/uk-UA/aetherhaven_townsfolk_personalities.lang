@@ -1,0 +1,167 @@
+# Townsfolk personality greeting lines
+
+aetherhaven.townsfolk.personality.cheerful.greeting.1=Привіт! Завжди приємно бачити привітне обличчя в місті.
+aetherhaven.townsfolk.personality.cheerful.greeting.2=Привіт! Сподіваюся, що в тебе поки що все добре.
+aetherhaven.townsfolk.personality.cheerful.greeting.3=О, привіт! Я якраз думав, як нам пощастило жити тут.
+aetherhaven.townsfolk.personality.cheerful.greeting.4=Привіт! Радий зустрітися з тобою. У мене вже був чудовий настрій, а тепер він ще кращий.
+aetherhaven.townsfolk.personality.cheerful.greeting.5=Знову вітаю! Якщо вам потрібна допомога чи посмішка, у мене є вдосталь і того, і іншого.
+
+aetherhaven.townsfolk.personality.shy.greeting.1=О, привіт. Я не хотів витріщатися.
+aetherhaven.townsfolk.personality.shy.greeting.2=Привіт. Вибачте, я не дуже добре вмію починати розмови.
+aetherhaven.townsfolk.personality.shy.greeting.3=Привіт. Я просто проходив повз. Будь ласка, не звертайте на мене уваги.
+aetherhaven.townsfolk.personality.shy.greeting.4=О. Привіт. Сподіваюся, я тобі не заважаю.
+aetherhaven.townsfolk.personality.shy.greeting.5=Привіт. Я постараюся не відмовляти тобі вуха.
+
+aetherhaven.townsfolk.personality.curious.greeting.1=Ви бачили щось цікаве тут останнім часом?
+aetherhaven.townsfolk.personality.curious.greeting.2=Привіт! Мені цікаво, що приваблює людей до міста сьогодні.
+aetherhaven.townsfolk.personality.curious.greeting.3=Привіт. Не проти, якщо я спитаю, куди ви прямуєте? Мені подобається знати, як місто сполучене.
+aetherhaven.townsfolk.personality.curious.greeting.4=О, привіт! Я завжди шукаю нову історію чи дивну деталь, над якою можна розібратися.
+aetherhaven.townsfolk.personality.curious.greeting.5=Привіт. Здається, ви побачили щось варте обговорення.
+
+aetherhaven.townsfolk.personality.stoic.greeting.1=Привіт.
+aetherhaven.townsfolk.personality.stoic.greeting.2=Привіт.
+aetherhaven.townsfolk.personality.stoic.greeting.3=Так?
+aetherhaven.townsfolk.personality.stoic.greeting.4=Я тут, якщо тобі щось знадобиться.
+aetherhaven.townsfolk.personality.stoic.greeting.5=Тоді давай.
+
+aetherhaven.townsfolk.personality.mischievous.greeting.1=Якщо ви пізніше почуєте гуркіт, це був точно не я.
+aetherhaven.townsfolk.personality.mischievous.greeting.2=Привіт! Я просто планував щось нешкідливе. Мабуть.
+aetherhaven.townsfolk.personality.mischievous.greeting.3=Привіт. Здається, тобі не завадить трохи хвилювання. Можливо, я знаю одного хлопця.
+aetherhaven.townsfolk.personality.mischievous.greeting.4=О, ідеальний час. Мені потрібен був свідок, який не буде доносити.
+aetherhaven.townsfolk.personality.mischievous.greeting.5=Гей! Пообіцяй, що ти цього не повториш, але, можливо, я залишив комусь сюрприз.
+
+aetherhaven.townsfolk.personality.homebody.greeting.1=Привіт. Я якраз думав про те, щоб незабаром повернутися додому.
+aetherhaven.townsfolk.personality.homebody.greeting.2=Привіт. Ніщо не зрівняється з моїм власним вогнищем, коли я нарешті туди потрапляю.
+aetherhaven.townsfolk.personality.homebody.greeting.3=О, привіт. Я вийшов лише з коротким дорученням. Коротким, принаймні, для мене.
+aetherhaven.townsfolk.personality.homebody.greeting.4=Привіт. Я залишив чайник увімкненим вдома, тому мені не варто довго залишатися.
+aetherhaven.townsfolk.personality.homebody.greeting.5=Привіт. У місті все гаразд, але мій стілець вдома знає моє ім'я.
+
+aetherhaven.townsfolk.personality.sporty.greeting.1=Гей! Я якраз збирався піти на пробіжку. Хочеш приєднатися?
+aetherhaven.townsfolk.personality.sporty.greeting.2=Привіт! Я намагаюся залишатися гнучким. Швидка розминка зараз позбавить мене клопоту пізніше.
+aetherhaven.townsfolk.personality.sporty.greeting.3=Привіт. Я підтримую активний спосіб життя. Це підтримує мій настрій.
+aetherhaven.townsfolk.personality.sporty.greeting.4=О, привіт! Я рахував кроки подумки. Стара звичка.
+aetherhaven.townsfolk.personality.sporty.greeting.5=Гей! Якщо тобі потрібен хтось, хто промчить до наступного повороту, я саме та людина, яка тобі потрібна.
+
+# Hobby traits
+
+aetherhaven.townsfolk.personality.adventurer.greeting.1=Алло! Я почув щось дивне за околицею міста. Можливо, пізніше піду подивлюся.
+aetherhaven.townsfolk.personality.adventurer.greeting.2=Привіт. Кожна дорога за місто — це історія, яка тільки й чекає на своє явище.
+aetherhaven.townsfolk.personality.adventurer.greeting.3=О, привіт. Здається, ти десь побував. Я це поважаю.
+aetherhaven.townsfolk.personality.adventurer.greeting.4=Гей! Я завжди беру з собою легкі речі на випадок, якщо щось не так.
+aetherhaven.townsfolk.personality.adventurer.greeting.5=Привіт. Я веду список місць, де я ще не був. Це довгий список.
+
+aetherhaven.townsfolk.personality.crafty.greeting.1=Привіт. Нарешті я вирівняв стики на своєму робочому столі.
+aetherhaven.townsfolk.personality.crafty.greeting.2=Привіт. Я поки що не завершив жодного проєкту, але вже малюю в голові начерки наступного.
+aetherhaven.townsfolk.personality.crafty.greeting.3=О, привіт. Якщо тобі потрібно щось полагодити, чемно попроси, і я можу допомогти.
+aetherhaven.townsfolk.personality.crafty.greeting.4=Гей! У мене клей на руках, а в кишенях ідеї. Насичений день.
+aetherhaven.townsfolk.personality.crafty.greeting.5=Привіт. Я вимірюю двічі, тому перепрошую лише один раз.
+
+aetherhaven.townsfolk.personality.gardener.greeting.1=Привіт! Моєму саду вдома не завадить дощ або похвала. Я пропоную і те, і інше, коли повернуся.
+aetherhaven.townsfolk.personality.gardener.greeting.2=Привіт. Я розмовляю з рослинами. Вони слухають краще, ніж більшість людей.
+aetherhaven.townsfolk.personality.gardener.greeting.3=О, привіт. Якщо ти десь у місті наступиш на розсаду, я помітю. Ввічливо, але помітю.
+aetherhaven.townsfolk.personality.gardener.greeting.4=Гей! Я думав про компост і щастя. Те саме стосується і мене.
+aetherhaven.townsfolk.personality.gardener.greeting.5=Привіт. Гарний урожай починається з терпіння. У мене його вдосталь.
+
+aetherhaven.townsfolk.personality.fisher.greeting.1=Привіт. Великі завжди знають, коли ви спостерігаєте.
+aetherhaven.townsfolk.personality.fisher.greeting.2=Привіт. Я б будь-коли проміняла історію про рибу на свіжу чутку.
+aetherhaven.townsfolk.personality.fisher.greeting.3=О, привіт. Терпіння — це головне. Решта — удача та наживка.
+aetherhaven.townsfolk.personality.fisher.greeting.4=Гей! Клянусь, той, що втік, був щоразу більшим, коли я його розповідаю.
+aetherhaven.townsfolk.personality.fisher.greeting.5=Привіт. Тиха вода вчить більше, ніж галасливі натовпи.
+
+aetherhaven.townsfolk.personality.bookworm.greeting.1=Вибачте, я заблукав у розділі. Що вам було потрібно?
+aetherhaven.townsfolk.personality.bookworm.greeting.2=Привіт. Я залишив закладку вдома у дуже важливому місці.
+aetherhaven.townsfolk.personality.bookworm.greeting.3=Привіт. Я читаю, коли маю можливість. Це краще, ніж просто світська балаканина, без образ.
+aetherhaven.townsfolk.personality.bookworm.greeting.4=О, привіт. Якщо знаєте гарну назву, я завжди збираю рекомендації.
+aetherhaven.townsfolk.personality.bookworm.greeting.5=Привіт. Я краще пам'ятаю цитати, ніж імена. Іноді це проблема.
+
+aetherhaven.townsfolk.personality.foodie.greeting.1=Привіт! Виглядаєш так, ніби їси навмисно. Я це поважаю.
+aetherhaven.townsfolk.personality.foodie.greeting.2=Привіт. Я завжди шукаю щось смачненьке з кухні.
+aetherhaven.townsfolk.personality.foodie.greeting.3=О, привіт. Я можу обговорювати приправи довше, ніж більшість людей вважає ввічливими.
+aetherhaven.townsfolk.personality.foodie.greeting.4=Гей! Я добре поїв минулого разу, коли готував удома. Планую повторити це.
+aetherhaven.townsfolk.personality.foodie.greeting.5=Привіт. Життя занадто коротке для прісного супу.
+
+aetherhaven.townsfolk.personality.musical.greeting.1=Привіт! Я не можу не вистукувати, коли вітерець щось колише. Розумієш.
+aetherhaven.townsfolk.personality.musical.greeting.2=Привіт. Я наспівую, коли мені добре. Я наспівую зараз, тож зробіть свій власний висновок.
+aetherhaven.townsfolk.personality.musical.greeting.3=О, привіт. Я залишив свій інструмент удома, але ритм досі в моїй голові.
+aetherhaven.townsfolk.personality.musical.greeting.4=Гей! Якщо ти наспівуєш ноту, я, мабуть, випадково її згармонізую.
+aetherhaven.townsfolk.personality.musical.greeting.5=Привіт. Гарна мелодія вирішує багато дрібних проблем.
+
+# Negative and prickly traits
+
+aetherhaven.townsfolk.personality.lazy.greeting.1=О. Це ти. Я не дрімав. Я оцінював стілець.
+aetherhaven.townsfolk.personality.lazy.greeting.2=Привіт. Якщо ця розмова стосується сходів, боюся, що нічим не можу допомогти.
+aetherhaven.townsfolk.personality.lazy.greeting.3=Привіт. Я збирався зайнятися чимось продуктивним. Зрештою.
+aetherhaven.townsfolk.personality.lazy.greeting.4=Гей. Я знайшов зручне місце, і було б неввічливо його покинути.
+aetherhaven.townsfolk.personality.lazy.greeting.5=О, привіт. Я візьмуся за це. Це вся моя філософія.
+
+aetherhaven.townsfolk.personality.grumpy.greeting.1=Що? У мене був гарний настрій, поки люди не почали зі мною розмовляти.
+aetherhaven.townsfolk.personality.grumpy.greeting.2=Привіт. Постарайся не погіршувати ситуацію.
+aetherhaven.townsfolk.personality.grumpy.greeting.3=Привіт. У мене немає настрою, але ось ми тут.
+aetherhaven.townsfolk.personality.grumpy.greeting.4=О, чудово. Компанія. Саме те, що мені було потрібно.
+aetherhaven.townsfolk.personality.grumpy.greeting.5=Гей. Пиши коротко, і ми обидва це переживемо.
+
+aetherhaven.townsfolk.personality.rude.greeting.1=Ти заважаєш. Рухайся далі.
+aetherhaven.townsfolk.personality.rude.greeting.2=У мене немає часу на світські розмови. Чи на серйозні. На будь-які розмови, насправді.
+aetherhaven.townsfolk.personality.rude.greeting.3=Чого ти хочеш? Зроби це швидко.
+aetherhaven.townsfolk.personality.rude.greeting.4=Я був зайнятий, ігноруючи людей. Ти перебив мене.
+aetherhaven.townsfolk.personality.rude.greeting.5=Привіт. Ні, я не радий тебе бачити. Спробуй когось приємнішого.
+
+aetherhaven.townsfolk.personality.gloomy.greeting.1=Привіт. Дощ би більше пасував до мого настрою. Або сніг. Щось похмуре.
+aetherhaven.townsfolk.personality.gloomy.greeting.2=Привіт. Я думав про те, що ніщо не вічне. Весело, я знаю.
+aetherhaven.townsfolk.personality.gloomy.greeting.3=О, привіт. Сподіваюся, твій день пройде краще, ніж я очікую.
+aetherhaven.townsfolk.personality.gloomy.greeting.4=Гей. Світ продовжує обертатися. Я не знаю чому.
+aetherhaven.townsfolk.personality.gloomy.greeting.5=Привіт. Я взяв свою парасольку та свої сумніви.
+
+aetherhaven.townsfolk.personality.snooty.greeting.1=Хм. Твої чоботи гучніші, ніж дозволяє мода.
+aetherhaven.townsfolk.personality.snooty.greeting.2=Привіт. Гадаю, деяким людям подобається спілкуватися простою мовою. Я не один з них.
+aetherhaven.townsfolk.personality.snooty.greeting.3=О. Знову ти. Який же ти педантичний.
+aetherhaven.townsfolk.personality.snooty.greeting.4=Привіт. Мені сподобалося бути наодинці. Це чудово.
+aetherhaven.townsfolk.personality.snooty.greeting.5=Привіт. Намагайся бути в курсі. Я не повторююся для кого завгодно.
+
+aetherhaven.townsfolk.personality.impatient.greeting.1=Так? Так? Давай продовжуй.
+aetherhaven.townsfolk.personality.impatient.greeting.2=Привіт. Мені потрібно бути в кількох місцях одночасно.
+aetherhaven.townsfolk.personality.impatient.greeting.3=Привіт. Годинник цокає. Я теж, образно кажучи.
+aetherhaven.townsfolk.personality.impatient.greeting.4=О, привіт. Будь ласка, пропустіть преамбулу.
+aetherhaven.townsfolk.personality.impatient.greeting.5=Гей. Я вже втратив терпіння. Тепер я втрачаю час.
+
+aetherhaven.townsfolk.personality.gossipy.greeting.1=Ви ніколи не здогадаєтеся, хто сварився в місті. Насправді, можливо, здогадаєтесь.
+aetherhaven.townsfolk.personality.gossipy.greeting.2=Зачекай, перш ніж ти підеш, ти чув про новий паркан, який хтось поставив?
+aetherhaven.townsfolk.personality.gossipy.greeting.3=Привіт! У мене новини. Ну, чутки. Здебільшого те саме.
+aetherhaven.townsfolk.personality.gossipy.greeting.4=Привіт. Я почув щось пікантне і мені потрібно комусь розповісти.
+aetherhaven.townsfolk.personality.gossipy.greeting.5=О, чудово. Я сподівався на аудиторію.
+
+aetherhaven.townsfolk.personality.cynical.greeting.1=Звичайно, сьогодні буде інакше. Всі так кажуть.
+aetherhaven.townsfolk.personality.cynical.greeting.2=Привіт. Якщо хтось пропонує вам вигідну покупку, перевірте потім свої кишені.
+aetherhaven.townsfolk.personality.cynical.greeting.3=Привіт. Я бачив достатньо обіцянок, щоб заповнити склад.
+aetherhaven.townsfolk.personality.cynical.greeting.4=О, привіт. Довіра заслужена. Моя дорога.
+aetherhaven.townsfolk.personality.cynical.greeting.5=Гей. Сподівайся на краще, готуйся до безладу. Це мій девіз.
+
+aetherhaven.townsfolk.personality.dramatic.greeting.1=Ніхто не розуміє, яку вагу я несу. Здебільшого це продукти, але все ж.
+aetherhaven.townsfolk.personality.dramatic.greeting.2=Привіт! Це місто пам'ятатиме той день, коли я спіткнувся об ту бруківку. Запам'ятайте мої слова.
+aetherhaven.townsfolk.personality.dramatic.greeting.3=Привіт. Я відчуваю все на повну силу. Навіть це вітання.
+aetherhaven.townsfolk.personality.dramatic.greeting.4=О, доле! Ти знову перетнула мені шлях.
+aetherhaven.townsfolk.personality.dramatic.greeting.5=Гей! Моє життя — це сага, а ти в останньому розділі.
+
+aetherhaven.townsfolk.personality.bitter.greeting.1=Гарна погода. Я маю на увазі, для того, хто її заслужив.
+aetherhaven.townsfolk.personality.bitter.greeting.2=Привіт. Раніше я більше посміхався. Потім я дізнався, як працюють календарі.
+aetherhaven.townsfolk.personality.bitter.greeting.3=Привіт. Деяким людям щастить. Я отримую нагадування.
+aetherhaven.townsfolk.personality.bitter.greeting.4=О, привіт. Сподіваюся, тобі сподобається все хороше, що станеться далі. Я буду тут.
+aetherhaven.townsfolk.personality.bitter.greeting.5=Гей. Я не злюся. Я просто втомився від розчарувань.
+
+aetherhaven.townsfolk.personality.stingy.greeting.1=Я не купую круглі. Я також не купую кутові.
+aetherhaven.townsfolk.personality.stingy.greeting.2=Привіт. Та монета, яку ти впустив? Хто знайшов, той і залишить. Я знайшов її подумки.
+aetherhaven.townsfolk.personality.stingy.greeting.3=Привіт. Я рахую витрати двічі, а позичаю — ніколи.
+aetherhaven.townsfolk.personality.stingy.greeting.4=О, привіт. Якщо це про спільне використання, то я нічого не приніс.
+aetherhaven.townsfolk.personality.stingy.greeting.5=Гей. Мій гаманець залишається закритим, а моя порада безкоштовна. Вибери один.
+
+aetherhaven.townsfolk.personality.blunt.greeting.1=Ти виглядаєш втомленим. Тобі слід це виправити.
+aetherhaven.townsfolk.personality.blunt.greeting.2=Привіт. Я скажу те, чого не скажуть інші. Цей капелюх – це вибір.
+aetherhaven.townsfolk.personality.blunt.greeting.3=Привіт. Я не прикрашаю. Це економить час.
+aetherhaven.townsfolk.personality.blunt.greeting.4=О, привіт. Ти просив про чесність. Це була твоя перша помилка.
+aetherhaven.townsfolk.personality.blunt.greeting.5=Гей. Я маю на увазі добрі наміри. Просто здається, що я цього не роблю.
+
+aetherhaven.townsfolk.personality.silly.greeting.1=Привіт! Я щойно навчив курку реагувати на рухи рукою. Все йде добре.
+aetherhaven.townsfolk.personality.silly.greeting.2=Привіт. Я назвав кожен камінчик на цій стежці. Не просіть мене представити їх усі одразу.
+aetherhaven.townsfolk.personality.silly.greeting.3=О, привіт. Я треную свій серйозний вираз обличчя на випадок, якщо хтось важливий проходитиме повз. Як тобі цей?
+aetherhaven.townsfolk.personality.silly.greeting.4=Привіт. Я навмисно одягла дві різні шкарпетки. Це цілісний образ, і я цього дотримуюся.
+aetherhaven.townsfolk.personality.silly.greeting.5=Гей! Б'юся об заклад на п'ять монет, що я зможу змусити тебе посміхнутися, перш ніж ця розмова закінчиться. Без тиску.

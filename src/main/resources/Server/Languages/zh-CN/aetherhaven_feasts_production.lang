@@ -39,9 +39,17 @@ aetherhaven.ui.production.err.permission=您无法为该城镇打开此存储空
 aetherhaven.ui.production.err.plot=该地块不在您城镇已建成的工作场所地块（农场、谷仓、磨坊或矿工小屋）内。
 aetherhaven.ui.production.err.catalog=该建筑未配置任何生产目录。
 aetherhaven.ui.production.err.inventoryFull=您的库存已满，无法容纳这么多东西。
-aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
+aetherhaven.ui.production.err.inventoryPartial=您的库存已满，所有物品都还没来得及搬走。剩余的物品则留在了工作场所的储藏室里。
 aetherhaven.ui.production.unlockButton=解锁
 aetherhaven.ui.production.unlockTooltip=查看并购买此建筑物的已锁定工作场所输出。
+aetherhaven.ui.production.pickTooltip=选择这条线代表什么
+aetherhaven.ui.production.collectAllButton=全部收集
+aetherhaven.ui.production.collectAllTooltip=把每一行存储的所有内容都取出来
+
+aetherhaven.ui.materialPicker.title=选择输出
+aetherhaven.ui.materialPicker.intro=请为该线路选择一个未锁定的输出端口。
+aetherhaven.ui.materialPicker.back=后退
+aetherhaven.ui.materialPicker.backTooltip=返回工作场所商店
 
 aetherhaven.ui.productionUnlocks.title=工作场所解锁
 aetherhaven.ui.productionUnlocks.intro=选择下方的输出项，即可在面板中查看其名称和要求。将鼠标悬停在图标上，即可查看已持有数量与所需数量。当您达到所需的物品和金币总数后，点击已锁定的输出项即可解锁。
@@ -53,7 +61,7 @@ aetherhaven.ui.productionUnlocks.err.empty=此工作场所未配置解锁列表�
 aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=此工作场所已解锁。
 aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=项目：{held} / {need}
 aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=金币：{held} / {need}
-aetherhaven.ui.productionUnlocks.notify.needResource=你的物品栏（合并背包）中至少需要有{need}个该物品。
+aetherhaven.ui.productionUnlocks.notify.needResource=你的物品栏（合并背包）中至少需要{need}个该物品。
 aetherhaven.ui.productionUnlocks.notify.needGold=城镇金库和你的库存之间需要有足够的金币（{need} 总计）。
 aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=无法从您的库存中移除所需物品。
 aetherhaven.ui.productionUnlocks.notify.payGoldFailed=无法支付黄金费用；您的物品已被退回。
@@ -61,7 +69,7 @@ aetherhaven.ui.productionUnlocks.notify.unlocked=已解锁此工作场所的{ite
 
 aetherhaven.feast.stewards.name=管家账簿晚宴
 aetherhaven.feast.stewards.description=准备面包、奶酪和一份正宗的南瓜派，这样一周的早晨奉献就会比较丰盛。
-aetherhaven.feast.hearthglass.name=炉边守夜
+aetherhaven.feast.hearthglass.name=炉边守望
 aetherhaven.feast.hearthglass.description=烤鱼、熟肉和蔬菜摆放在一起，作为一顿慢火熬制的守夜餐。村民们的需求在一周内逐渐消退。
 aetherhaven.feast.berrycircle.name=浆果圈康科德
 aetherhaven.feast.berrycircle.description=一圈轻盈的餐盘：浆果沙拉、水果串和爆米花，用来搭配吐司。邻居们会因此对你格外友善。下次再端上这道菜之前，请等待一周的清晨。

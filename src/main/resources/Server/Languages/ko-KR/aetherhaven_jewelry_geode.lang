@@ -16,6 +16,11 @@ items.Aetherhaven_Ring_Gold_Diamond.name=금반지 (다이아몬드)
 items.Aetherhaven_Ring_Gold_Sapphire.name=금반지 (사파이어)
 items.Aetherhaven_Ring_Gold_Ruby.name=금반지 (루비)
 items.Aetherhaven_Ring_Gold_Voidstone.name=금반지 (보이드스톤)
+items.Aetherhaven_Ring_Glow.name=빛나는 반지
+items.Aetherhaven_Ring_Glow.description=은은한 빛의 고리. 손거울의 반지 끼우는 곳에 끼우면 당신을 감싸는 빛이 납니다.
+items.Aetherhaven_Ring_Large_Glow.name=큰 발광 링
+items.Aetherhaven_Ring_Large_Glow.description=밝고 환한 빛의 고리입니다. 손거울의 반지 끼우는 곳에 끼우면 주변에 넓게 빛을 비춰줍니다.
+aetherhaven.jewelry.artifact.wornLight=착용 시 빛을 발산합니다.
 items.Aetherhaven_Necklace_Silver_Zephyr.name=은 목걸이 (제피르)
 items.Aetherhaven_Necklace_Silver_Topaz.name=은 목걸이 (토파즈)
 items.Aetherhaven_Necklace_Silver_Emerald.name=은 목걸이 (에메랄드)
@@ -40,11 +45,12 @@ items.Aetherhaven_Jewelry_Crafting_Bench.description=마무리 작업을 위한 
 items.Aetherhaven_Purification_Powder.name=정제 분말
 items.Aetherhaven_Purification_Powder.description=들고 있는 동안 주변의 잠재적 생성 지점들이 가이아의 기운이 담긴 입자들로 반짝입니다. 강조 표시된 생성 지점에 사용하면 해당 생성 지점을 추방하고 사용 횟수 1회를 소모합니다.
 items.Aetherhaven_Gaias_Draught.name=가이아의 음료
-items.Aetherhaven_Gaias_Draught.description=마을로 가져갈 수 있는 생명의 물병입니다. 다른 물약처럼 손에 들고 마십니다. 남은 물약량은 탄약량과 물병 내구도 표시줄에 따라 달라집니다. 제단에서 축복을 받으면 물약의 용량과 치유력이 증가합니다.
+items.Aetherhaven_Gaias_Draught.description=축복받은 생명의 물이 담긴 병이 오직 당신만을 따라다닙니다. 다른 물약처럼 손에 들고 마시면 재사용할 수 있습니다. 남은 물약량은 탄약량과 병 내구도 표시기에 따라 달라집니다. 제단에서 축복을 받으면 병에 담을 수 있는 물약의 범위가 넓어지고 치유력이 강해집니다.
+aetherhaven.gaiadraught.cannotStore=가이아의 물약은 영구적으로 소지할 수 있으며, 보관할 수 없습니다.
 items.Aetherhaven_Shard_Of_Gaia.name=가이아의 조각
-items.Aetherhaven_Shard_Of_Gaia.description=여사제 증표입니다. 제단 관리인에게 십일조와 함께 바치면 술잔을 더 오래 마실 수 있게 됩니다.
+items.Aetherhaven_Shard_Of_Gaia.description=여사제 토큰입니다. 가이아 제단에 십일조와 함께 바치면 술잔을 더 오래 마실 수 있습니다.
 items.Aetherhaven_Verdant_Catalyst.name=푸른 촉매
-items.Aetherhaven_Verdant_Catalyst.description=여사제 증표입니다. 제단 관리인에게 십일조와 함께 바치면 약효가 더욱 강해집니다.
+items.Aetherhaven_Verdant_Catalyst.description=여사제 토큰입니다. 가이아 제단에 십일조와 함께 바치면 물약의 치유력이 더욱 강해집니다.
 interactionHints.purifySpawn=[{key}]을 눌러 스폰을 정화하세요
 
 # === UI: Statue of Gaia (revival / resident list) ===
@@ -67,6 +73,13 @@ aetherhaven.profession.kind.priestess=여사제
 aetherhaven.profession.kind.miner=갱부
 aetherhaven.profession.kind.logger=나무꾼
 aetherhaven.profession.kind.rancher=목장 경영자
+aetherhaven.profession.kind.guild_master=길드 조합원
+aetherhaven.profession.kind.crystal_keeper=크리스탈 키퍼
+aetherhaven.profession.kind.pyrotechnic=불꽃
+aetherhaven.profession.kind.florist=꽃집
+aetherhaven.profession.kind.builder=건축업자
+aetherhaven.profession.kind.bard=음유 시인
+aetherhaven.profession.kind.townsfolk=읍민
 aetherhaven.profession.kind.unknown=거주자
 
 # === UI: town charter (held item: name, dissolve, relocate) ===
@@ -99,10 +112,10 @@ aetherhaven.ui.treasury.withdraw=금화를 인출하세요
 aetherhaven.ui.treasury.hint=매일 아침, 근처에 사는 쾌활한 마을 사람들이 조금씩 금화를 보태줍니다. 여관 투숙객은 포함되지 않습니다.
 aetherhaven.ui.treasury.tabCoinsTooltip=금: 잔액, 입금, 출금
 aetherhaven.ui.treasury.tabTitheTooltip=누가 계산하는지, 그리고 다음 날 아침에 무엇을 예상해야 하는지 알아보세요.
-aetherhaven.ui.treasury.tax.intro=해가 뜰 때, 마을 상자는 게임에 로드된 주변 마을 주민들로부터 약간의 금화를 모읍니다. 현재는 {count}명이 모였습니다. (마을을 돌아다니면 더 많은 마을이 로드되어 이 목록이 업데이트됩니다.)
+aetherhaven.ui.treasury.tax.intro={live} 마을 주민들은 현재 필요한 것들을 많이 가지고 있습니다. 이 십일조 미리보기에는 {count}개의 행이 있습니다(다른 구역 거주자는 가능한 경우 명단에서 마지막으로 저장된 필요 사항을 사용합니다).
 aetherhaven.ui.treasury.tax.policyShort.linear=마을 규칙: 음식, 휴식, 즐거움 수치가 높을 때는 1인당 최대 {max} 골드를 지급하고, 수치가 낮을 때는 그보다 적게 지급합니다.
-aetherhaven.ui.treasury.tax.policyShort.perCapita=마을 규칙: 모두가 형편이 어려운 날에도 소액의 기본 금액(상한액의 {flatPct}%)을 지불해야 하며, 상황이 좋을 때는 최대 {max} 골드까지 지불해야 합니다.
-aetherhaven.ui.treasury.tax.policyShort.happiness=마을 규칙: 심술궂은 마을 주민들은 훨씬 적은 돈을 지불합니다. 모든 욕구가 충족되었을 때 각 주민은 최대 {max} 골드({exp}로 조정됨)까지 지불할 수 있습니다.
+aetherhaven.ui.treasury.tax.policyShort.perCapita=마을 규칙: 각 주민은 아침마다 평균 필요량에 따라 {min}에서 {max} 사이의 금화를 지불합니다(필요량이 없더라도 항상 최소 {min}는 지불해야 합니다).
+aetherhaven.ui.treasury.tax.policyShort.happiness=마을 규칙: 평균 쾌적도가 {minComfortPct}% 이하일 때는 금을 만들지 않습니다. 그 이상일 경우, 세금은 거주자의 모든 필요를 충족했을 때 {peak} 골드까지 곡선적으로 증가합니다(이 정책이 없을 경우 단순한 선형 상한선은 {base} 골드입니다).
 aetherhaven.ui.treasury.tax.hallMissing=시청을 먼저 건설하세요. 그러면 아침 금화를 모을 수 있습니다.
 aetherhaven.ui.treasury.tax.sheetSubLabel=아래 마을 주민들로부터
 aetherhaven.ui.treasury.tax.sheetFounderLabel=창립자 동상 보너스 ({mult})
@@ -110,6 +123,7 @@ aetherhaven.ui.treasury.tax.sheetFeastLabel=스튜어드 장부 연회 보너스
 aetherhaven.ui.treasury.tax.sheetTotalLabel=다음날 아침에 무엇을 받게 될지에 대한 이야기입니다.
 aetherhaven.ui.treasury.tax.residentsHeader=이 목록에 있는 마을 사람들
 aetherhaven.ui.treasury.tax.residentLine={name} ({job})
+aetherhaven.ui.treasury.tax.townsfolkFlatGold={amount} 골드를 지불합니다
 aetherhaven.ui.treasury.tax.footerMore={total} 거주자 중 {shown}명만 여기에 표시됩니다. 마을의 다른 지역을 불러온 후 다시 열어 나머지를 확인하세요.
 
 # === UI: open geodes (blacksmith) + result / error lines ===

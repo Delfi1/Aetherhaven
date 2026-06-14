@@ -2,81 +2,147 @@
 # Bundle: /aetherhaven subcommand help (tab completion)
 
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
-commands.aetherhaven.towns.desc=列出目前世界中的以太港城鎮
+commands.aetherhaven.towns.desc=調試：列出世界上所有城鎮
 
-commands.aetherhaven.town.desc=鎮民成員資格：邀請、角色、退出
+commands.aetherhaven.replace_charter.desc=將憲章塊放回你所在城鎮的保存位置
+commands.aetherhaven.replace_charter.townName.desc=可選：城鎮名稱（全稱，含空格）
+
+commands.aetherhaven.town.desc=鎮民：邀請、接受、角色、離開
 commands.aetherhaven.town.invite.desc=邀請一位線上玩家到你的城鎮來。
 commands.aetherhaven.town.invite.player.desc=玩家用戶名（必須在線）
 commands.aetherhaven.town.accept.desc=接受城鎮的邀請
 commands.aetherhaven.town.decline.desc=拒絕即將到來的城鎮邀請
 commands.aetherhaven.town.kick.desc=從你的城鎮移除一名成員
 commands.aetherhaven.town.kick.player.desc=會員使用者名稱（必須在線上）
-commands.aetherhaven.town.role.desc=為成員應用權限預設（建造、任務或兩者兼具）。使用管理模組「玩家」標籤進行按旗幟設定權限。
+commands.aetherhaven.town.role.desc=設定成員角色：建造者、探索者或兩者兼具
 commands.aetherhaven.town.role.player.desc=會員使用者名稱（必須在線上）
 commands.aetherhaven.town.role.role.desc=建造、任務，或兩者兼有
-commands.aetherhaven.town.leave.desc=離開你所屬的城鎮（而非你作為所有者的身份）
-commands.aetherhaven.town.townName.desc=城鎮顯示名稱（可選）；請使用包含空格的完整名稱（佔行首）。如果只有一個待處理的邀請，則省略此項。
+commands.aetherhaven.town.leave.desc=離開你所屬的城鎮（並非作為創始人）
+commands.aetherhaven.town.townName.desc=可選的城鎮名稱（全稱，含空格）。如果您只有一個邀請人，請跳過此項目。
 
-commands.aetherhaven.poi.desc=調試：POI 命令
-commands.aetherhaven.poi.list.desc=列出城鎮的興趣點（城鎮 UUID 可選，或省略/使用“me”代表您的城鎮）
-commands.aetherhaven.poi.town.desc=城鎮 UUID，或者我，或省略以表示呼叫者所在城鎮
-commands.aetherhaven.poi.dump.desc=列出這個世界記憶體註冊表中的所有興趣點（任何城鎮）
+commands.aetherhaven.poi.desc=調試：興趣點助手
+commands.aetherhaven.poi.list.desc=列出城鎮的興趣點
+commands.aetherhaven.poi.town.desc=城鎮 ID，或省略您的城鎮 ID
+commands.aetherhaven.poi.dump.desc=列出世界上所有的興趣點
 
-commands.aetherhaven.plots.desc=地塊實例：list、finishassembly（創造模式）、remove plotId（創造模式）。使用地塊以避免與 /aetherhaven 地塊衝突。
-commands.aetherhaven.plots.list.desc=列出您所在城鎮的地塊實例（地塊 UUID、建築 ID、州/省、標誌位置）
-commands.aetherhaven.plots.finishassembly.desc=創造模式：立即完成城鎮中所有正在進行的組裝工作（需要已加載的區塊/正在進行的工作）
-commands.aetherhaven.plots.remove.desc=創意：根據 UUID 拆除一個地塊並將其從城鎮資料中刪除
-commands.aetherhaven.plots.remove.plotId.desc=從 /aetherhaven 繪圖清單中取得繪圖 UUID
+commands.aetherhaven.plots.desc=調試：繪圖實例助手（creative：完成組裝，移除）
+commands.aetherhaven.plots.list.desc=調試：列出您所在城鎮的建築用地
+commands.aetherhaven.plots.finishassembly.desc=創意：完成你城鎮中所有正在進行的建築
+commands.aetherhaven.plots.remove.desc=創意模式：從你的城鎮中移除一塊地
+commands.aetherhaven.plots.remove.plotId.desc=從圖表清單中尋找圖表 ID
 
-commands.aetherhaven.needs.desc=調試：村民需求
-commands.aetherhaven.needs.inspect.desc=列出已載入區塊中具有 VillagerNeeds 的實體
-commands.aetherhaven.needs.set.desc=設定需求計量表 0..100（目標：來自檢查、長老或 UUID 的句柄）
-commands.aetherhaven.needs.target.desc=句柄（例如 Villager_Elder_xxxxxxxx）、長老或實體 UUID
-commands.aetherhaven.needs.entity.desc=已棄用；請使用 target（handle、Elder 或 uuid）
+commands.aetherhaven.needs.desc=調試：村民需要米
+commands.aetherhaven.needs.inspect.desc=調試：列出附近有需求計量器的村民
+commands.aetherhaven.needs.set.desc=調試：設定村民的飢餓值、精力值或樂趣值
+commands.aetherhaven.needs.target.desc=村民句柄、長老或實體 ID
+commands.aetherhaven.needs.entity.desc=已棄用；請使用 target
 commands.aetherhaven.needs.which.desc=飢餓、精力或樂趣
-commands.aetherhaven.needs.value.desc=數值範圍為0到100（100 = 完全滿意）
+commands.aetherhaven.needs.value.desc=0 到 100（100 為滿）
 
 commands.aetherhaven.tax.desc=調試：財政部晨稅
-commands.aetherhaven.tax.breakdown.desc=顯示城鎮中每個村民的稅收明細和總額（僅限已加載區塊）
-commands.aetherhaven.tax.now.desc=現在就將早晨的什一奉獻存入庫房（跳過早晨時間和上次收取日）
+commands.aetherhaven.tax.breakdown.desc=調試：顯示您所在城鎮的稅務項目
+commands.aetherhaven.tax.now.desc=調試：立即收取早晨的稅款
 
-commands.aetherhaven.questdebug.desc=調試：城鎮任務繞過
-commands.aetherhaven.questdebug.grant.desc=在你的城鎮標記任務激活
-commands.aetherhaven.questdebug.complete.desc=在你的城鎮標記任務完成
-commands.aetherhaven.questdebug.clear.desc=從城鎮的活躍任務清單中移除任務
+commands.aetherhaven.quest.desc=調試：城鎮任務助手
+commands.aetherhaven.questdebug.desc=調試：城鎮任務助手
+commands.aetherhaven.questdebug.grant.desc=調試：將城鎮中的任務標記為啟動狀態
+commands.aetherhaven.questdebug.complete.desc=調試：標記城鎮中的任務已完成
+commands.aetherhaven.questdebug.clear.desc=調試：從城鎮的活躍任務清單中移除任務
 commands.aetherhaven.questdebug.id.desc=任務 ID（預設為 q_build_inn）
-commands.aetherhaven.questdebug.status.desc=顯示您城鎮（顯示名稱 + ID）的進行中和已完成的任務
+commands.aetherhaven.questdebug.status.desc=調試：顯示您城鎮的進行中和已完成的任務
 
-commands.aetherhaven.reputation.desc=調試：聲譽
-commands.aetherhaven.reputation.set.desc=與村民建立良好關係，並排隊等待達成里程碑獎勵以進行對話。
-commands.aetherhaven.reputation.villagerUuid.desc=村民 NPC 實體 UUID
-commands.aetherhaven.reputation.villagerTarget.desc=村民實體 UUID 或城鎮中的 NPC 角色 ID（例如 Aetherhaven_Blacksmith）
+commands.aetherhaven.reputation.desc=調試：村民聲望
+commands.aetherhaven.reputation.set.desc=調試：設定與村民的聲望
+commands.aetherhaven.reputation.villagerUuid.desc=村民實體ID
+commands.aetherhaven.reputation.villagerTarget.desc=村民實體 ID 或角色 ID（在您的城鎮中）
 commands.aetherhaven.reputation.value.desc=信譽值 0 到 100
-commands.aetherhaven.reputation.reward.desc=列出里程碑定義或直接授予一項獎勵
-commands.aetherhaven.reputation.reward.list.desc=列出聲望里程碑（可選：按NPC角色ID篩選）
-commands.aetherhaven.reputation.reward.roleFilter.desc=使用 NPC 角色 ID（例如 Aetherhaven_Merchant）來篩選列表
-commands.aetherhaven.reputation.reward.grant.desc=立即發放一個里程碑獎勵（已領取標記）；使用聲望獎勵清單取得 ID
-commands.aetherhaven.reputation.rewardId.desc=聲譽獎勵 ID（例如 rep_merchant_50）
+commands.aetherhaven.reputation.reward.desc=調試：列出或授予聲望獎勵
+commands.aetherhaven.reputation.reward.list.desc=調試：列出聲望里程碑獎勵
+commands.aetherhaven.reputation.reward.roleFilter.desc=可選的角色 ID，用於篩選列表
+commands.aetherhaven.reputation.reward.grant.desc=調試：立即授予一個聲望獎勵
+commands.aetherhaven.reputation.rewardId.desc=獎勵 ID（例如 rep_merchant_50）
 
 commands.aetherhaven.villager.desc=調試：城鎮村民助手
-commands.aetherhaven.villager.list.desc=列出城鎮村民NPC實體UUID（用於聲望/定位指令）
-commands.aetherhaven.villager.locate.desc=列印城鎮村民的位置；可選傳送（僅限操作員）
-commands.aetherhaven.villager.uuid.desc=村民 NPC 實體 UUID
-commands.aetherhaven.villager.target.desc=村民實體 UUID 或城鎮中的 NPC 角色 ID（例如 Aetherhaven_Merchant）
-commands.aetherhaven.villager.teleport.desc=設定為 true 可傳送至村民處（僅限操作員）；或使用 --tp 代替
-commands.aetherhaven.villager.tp_flag.desc=傳送至村民處（僅限操作符；效果等同於傳遞 true 參數）
-commands.aetherhaven.villager.reset.desc=移除所有城鎮村民 NPC 並讓他們在你附近重新生成（調試；保留任務、聲望、禮物；運行旅店池修復程序以使居民與已完成的建築保持一致；刷新旅店訪客池）
+commands.aetherhaven.villager.list.desc=調試：列出你城鎮中的村民 ID
+commands.aetherhaven.villager.locate.desc=調試：顯示村民所在位置（可選傳送）
+commands.aetherhaven.villager.uuid.desc=村民實體ID
+commands.aetherhaven.villager.target.desc=村民實體 ID 或角色 ID（在您的城鎮中）
+commands.aetherhaven.villager.teleport.desc=可傳送至村民處（僅限操作員）
+commands.aetherhaven.villager.tp_flag.desc=傳送至村民處（僅限操作員）
+commands.aetherhaven.villager.reset.desc=調試：重新生成你附近的所有村民
+commands.aetherhaven.villager.fixinn.desc=調試：修復您城鎮的旅館訪客泳池
 aetherhaven.villager.resetDone=城鎮村民已重置並重新出現在你附近。
 aetherhaven.villager.resetFailed=無法重置城鎮村民：{reason}
-commands.aetherhaven.gift.desc=調試：重置禮物限額或填充禮物歷史記錄預覽
-commands.aetherhaven.gift.resetLimits.desc=重置此世界中所有城鎮所有玩家和村民的每日/每週禮物上限
-commands.aetherhaven.gift.fillHistory.desc=為每個角色（你的城鎮）的喜愛/喜歡/不喜歡的物品添加一行日誌，以便禮物歷史記錄能夠顯示一些內容（調試）。
-commands.aetherhaven.gift.roleId.desc=NPC角色ID（例如：Aetherhaven_Merchant）
+commands.aetherhaven.gift.desc=調試：禮物限額和歷史記錄助手
+commands.aetherhaven.gift.resetLimits.desc=調試：重置此世界中所有人的禮物限額
+commands.aetherhaven.gift.fillHistory.desc=調試：填滿村民角色的禮物歷史記錄預覽
+commands.aetherhaven.gift.roleId.desc=村民角色 ID（例如 Aetherhaven_Merchant）
 
 commands.aetherhaven.debug_autonomy.desc=調試：村民自治覆蓋層
-commands.aetherhaven.debug_autonomy.toggle.desc=切換城鎮村民的自主性調試模式（查看 NPC 或使用 --ray 參數）
-commands.aetherhaven.debug_autonomy.show.desc=顯示是否已為此村民啟用自主調試模式
-commands.aetherhaven.debug_autonomy.clear.desc=清除此村民的以太港自治調試訊息
+commands.aetherhaven.debug_autonomy.toggle.desc=調試：切換村民的自主性調試
+commands.aetherhaven.debug_autonomy.show.desc=調試：顯示自主調試狀態
+commands.aetherhaven.debug_autonomy.clear.desc=調試：清除村民的自主調試訊息
 
-commands.aetherhaven.debug_lootchest.desc=調試：目標容器的以太港寶箱獎勵擲骰
-commands.aetherhaven.debug_lootchest.fill.desc=對您正在查看的物品容器應用強制珠寶、黃金和劇情代幣檢定。
+commands.aetherhaven.debug_lootchest.desc=調試：寶箱獎勵擲骰
+commands.aetherhaven.debug_lootchest.fill.desc=調試：強制顯示你正在查看的寶箱的額外戰利品
+
+commands.aetherhaven.floatinggift.desc=漂浮禮品氣球助手
+commands.aetherhaven.floatinggift.spawn.desc=調試：在你的位置產生一個漂浮禮物
+commands.aetherhaven.floatinggift.next.desc=顯示您的下一個浮動禮物何時出現
+
+commands.aetherhaven.time.desc=創意模式：設定遊戲內行程時鐘（村民的日常活動會用到這個時鐘）
+commands.aetherhaven.time.set.desc=創意：將行程時鐘設定為一小時（0 到 23）
+commands.aetherhaven.time.hour.desc=0 至 23 小時（例如，下午 2 點為 14 小時）
+commands.aetherhaven.time.set.success=時鐘設定為{gameTime}
+commands.aetherhaven.time.dawn.desc=創意：將行程安排時間設為早上6點
+commands.aetherhaven.time.dawn.success=時鐘設定：{gameTime}
+commands.aetherhaven.time.noResource=這個世界沒有載入時間資源。
+
+commands.aetherhaven.walldebug.desc=創意：牆魔杖放置調試線在聊天中
+commands.aetherhaven.walldebug.on.desc=開啟牆壁魔杖調試模式
+commands.aetherhaven.walldebug.off.desc=關閉牆壁魔杖調試
+commands.aetherhaven.walldebug.dump.desc=列印目前牆壁魔杖會話狀態
+
+commands.aetherhaven.townsfolk.desc=調試：產生和管理共享的城鎮居民池 NPC
+commands.aetherhaven.townsfolk.spawn.desc=在你的城鎮中產生一個城鎮居民NPC（隨機選擇，或傳遞角色ID）
+commands.aetherhaven.townsfolk.id.desc=城鎮居民角色 ID（例如 female_elf_01）
+commands.aetherhaven.townsfolk.release.desc=將角色放回世界池
+commands.aetherhaven.townsfolk.list.desc=列出這個世界上所有已登記在冊的鎮民
+commands.aetherhaven.townsfolk.characterId.desc=伺服器/Aetherhaven/Townsfolk/中的城鎮居民角色 ID
+commands.aetherhaven.townsfolk.assignmentKind.desc=閒散人員、遊客或保安
+commands.aetherhaven.townsfolk.despawn.desc=同時從世界中移除生成的實體。
+commands.aetherhaven.townsfolk.spawn.ok=產生的城鎮居民 {id} ({assignment})
+commands.aetherhaven.townsfolk.spawn.failed=無法產生城鎮居民（未知 ID、已被使用、無匹配或生成失敗）
+commands.aetherhaven.townsfolk.release.ok=已將{id}放回泳池
+commands.aetherhaven.townsfolk.release.notCheckedOut=這個世界上還沒有那個角色被淘汰。
+commands.aetherhaven.townsfolk.list.available=適用於 {assignment}: {ids}
+commands.aetherhaven.townsfolk.list.availableIdle=可用於空閒狀態：{ids}
+commands.aetherhaven.townsfolk.list.inUse=已簽出：{ids}
+commands.aetherhaven.townsfolk.clear.desc=讓這個世界中的所有村民消失，並重置共享池。
+commands.aetherhaven.townsfolk.clear.ok=移除了{count}鎮的居民，並清理了這個世界的游泳池。
+commands.aetherhaven.guild.desc=調試：公會大廳冒險者池和僱傭衛兵
+commands.aetherhaven.guild.respawn.desc=大廳冒險者消失後，擲骰決定今天的名額，然後立即復活
+commands.aetherhaven.guild.respawn.ok=公會刷新：回收了 {reclaimed} 個過期的結帳，刪除了 {despawned}，刷新了 {slots} 個位置，產生了 {spawned}（可用池子：{available}）
+commands.aetherhaven.guild.clearguards.desc=讓你的城鎮中所有僱傭的守衛消失，並釋放他們的泳池入口。
+commands.aetherhaven.guild.clearguards.ok=已移除{count}僱用的保全實體並清除市府保全記錄
+commands.aetherhaven.guild.status.desc=顯示你所在城鎮的公會大廳冒險者池診斷訊息
+commands.aetherhaven.guild.status.ok=公會大廳啟動={active} 紀元日={epochDay} 上個早晨={lastMorning} 已填滿槽位={filledSlots} 已追蹤NPC ID={tracked} 僱用守衛={hiredGuards} 池（總計={poolTotal} 守衛={poolGuards} 冒險者=__PH_89__ 其他守衛={poolGuards} 冒險者=__PH_89）。
+
+commands.aetherhaven.tourist.desc=調試：旅遊門戶網站訪問目標
+commands.aetherhaven.tourist.targets.desc=調試：列出您城鎮中的旅遊目的地地塊和可選興趣點
+commands.aetherhaven.guild.notActive=您的城鎮沒有活躍的公會大廳
+
+commands.aetherhaven.plotcreator.desc=創建自訂城鎮建築
+commands.aetherhaven.plotcreator.start.desc=開啟劇情建立指南
+commands.aetherhaven.plotcreator.cancel.desc=取消劇情建立會話
+commands.aetherhaven.plotcreator.edit.desc=編輯保存在此伺服器上的自訂建築
+commands.aetherhaven.plotcreator.edit.constructionId=建築編號（plot_my_building）
+commands.aetherhaven.plotcreator.generateicon.desc=從現有預製件產生圖例圖示 PNG 文件
+commands.aetherhaven.plotcreator.generateicon.idOrPrefab=建築 ID（plot_my_house）或預製件金鑰（Guild_Hall.prefab.json）
+commands.aetherhaven.plotcreator.generateicon.outputId=圖示檔案的輸出 ID（預設為建築物 ID 或預製件名稱）
+
+commands.aetherhaven.plottoken.desc=給予並列出建築物的地塊標記
+commands.aetherhaven.plottoken.give.desc=為建築物 ID 提供地塊令牌
+commands.aetherhaven.plottoken.give.constructionId=建築物 ID（例如：plot_park）
+commands.aetherhaven.plottoken.give.amount=堆疊大小（預設為 1）
+commands.aetherhaven.plottoken.list.desc=列出所有建築物 ID

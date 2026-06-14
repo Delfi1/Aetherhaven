@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house=Burada yaşamak ister misiniz?
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_finish=Eviniz hazır.
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind=Evim hakkında...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_waiting=Taşınma hakkında...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.leave=Güle güle
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.body=Şehrinizi beğendim. Bana bir ev bulabilir misiniz? Bir yatağım olduktan sonra her gün hazineye para yatırırım.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept=Sana bir ev bulacağım.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline=Belki daha sonra
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.body=Teşekkür ederim. Ev arsası belirleyin, inşaatı bitirin, sonra da ev tabelasına adımı yazın. Ben orada yaşamaya başladığımda tekrar gelin.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.ok=Yapacak
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.body=Bana bir ev buldunuz mu henüz? İnşaatı bitirin ve ev tabelasında beni seçin.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.ok=Sağ
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.body=Başka bir ziyaretçi önce bir evi bekliyor. O evi bitirdikten sonra benimle konuşmaya gel.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.ok=Anlaşıldı
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.body=Burası bana evimi hatırlattı. Teşekkür ederim. Her sabah kendi payımı ödeyeceğim.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.ok=Hoş geldin

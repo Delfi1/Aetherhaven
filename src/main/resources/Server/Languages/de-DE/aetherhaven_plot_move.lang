@@ -42,6 +42,6 @@ aetherhaven.ui.plotplacement.moveYpTooltip=Einen Block nach oben verschieben
 aetherhaven.ui.charterrelocation.title=Umzugscharter
 aetherhaven.ui.charterrelocation.summary=Neuausrichtung der Stadtverfassung
 aetherhaven.ui.charterrelocation.details=Zielblock {sx}, {sy}, {sz} · Schritt {step} von 4 (90°)
-aetherhaven.ui.charterrelocation.tips=Das Gebiet ist ein quadratischer Bereich um die Charta herum; jedes Gebäude muss nach der Bestätigung innerhalb dieses Bereichs bleiben. Schieben Sie den Geist an die neue Position und platzieren Sie ihn dann.
+aetherhaven.ui.charterrelocation.tips=Das Territorium ist ein quadratischer Bereich um die Charta herum; jedes Gebäude muss nach der Bestätigung innerhalb dieses Bereichs bleiben. Schieben Sie den Geist an die neue Position und platzieren Sie ihn dann.
 aetherhaven.ui.charterrelocation.info=Das Territorium ist ein quadratischer Bereich um die Charta herum. Alle deine Gebäude müssen nach dem Umzug innerhalb dieses Bereichs bleiben. Verschiebe den Geisterblock an die neue Charta-Position und bestätige.
 aetherhaven.ui.charterrelocation.place=Charta des Ortes

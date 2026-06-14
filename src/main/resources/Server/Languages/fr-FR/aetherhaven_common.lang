@@ -26,6 +26,7 @@ aetherhaven.common.invalidVillager=Villageois invalide.
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter
 aetherhaven.charter.alreadyInTown=Vous faites déjà partie d'une ville dans ce monde. Quittez-la avant d'en fonder une nouvelle.
+aetherhaven.charter.notInPersistentWorld=Vous ne pouvez pas fonder de ville ici. Retournez d'abord à votre monde principal.
 aetherhaven.charter.townFounded=Ville fondée : {name}. Le chef du village est arrivé. Utilisez la charte pour renommer la ville.
 aetherhaven.chartertown.info.notLinked=Charter n'est pas encore rattachée à une ville.
 aetherhaven.chartertown.info.invalidTownId=Identifiant de ville invalide sur la charte.

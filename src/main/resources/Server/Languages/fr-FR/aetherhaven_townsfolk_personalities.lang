@@ -1,0 +1,167 @@
+# Townsfolk personality greeting lines
+
+aetherhaven.townsfolk.personality.cheerful.greeting.1=Bonjour ! C'est toujours agréable de voir un visage amical en ville.
+aetherhaven.townsfolk.personality.cheerful.greeting.2=Salut ! J'espère que ta journée se passe bien jusqu'à présent.
+aetherhaven.townsfolk.personality.cheerful.greeting.3=Oh, bonjour ! Je me disais justement que nous avons beaucoup de chance de vivre ici.
+aetherhaven.townsfolk.personality.cheerful.greeting.4=Salut ! Ravi de te croiser. J'étais déjà de bonne humeur, et maintenant je le suis encore plus.
+aetherhaven.townsfolk.personality.cheerful.greeting.5=Bonjour à nouveau ! Si vous avez besoin d'indications ou d'un sourire, j'ai les deux en abondance.
+
+aetherhaven.townsfolk.personality.shy.greeting.1=Oh, bonjour. Je ne voulais pas vous fixer du regard.
+aetherhaven.townsfolk.personality.shy.greeting.2=Salut. Désolé, je ne suis pas très doué pour engager la conversation.
+aetherhaven.townsfolk.personality.shy.greeting.3=Bonjour. Je ne faisais que passer. Veuillez ne pas m'en occuper.
+aetherhaven.townsfolk.personality.shy.greeting.4=Oh. Bonjour. J'espère que je ne vous dérange pas.
+aetherhaven.townsfolk.personality.shy.greeting.5=Bonjour. Je vais essayer de ne pas vous assommer de paroles.
+
+aetherhaven.townsfolk.personality.curious.greeting.1=Avez-vous vu quelque chose d'intéressant dans le coin ces derniers temps ?
+aetherhaven.townsfolk.personality.curious.greeting.2=Bonjour ! Je me demandais ce qui amène les gens en ville aujourd'hui.
+aetherhaven.townsfolk.personality.curious.greeting.3=Salut. Ça te dérange si je te demande où tu vas ? J’aime bien savoir comment la ville est reliée aux autres endroits.
+aetherhaven.townsfolk.personality.curious.greeting.4=Oh, bonjour ! Je suis toujours à la recherche d'une nouvelle histoire ou d'un détail étrange à analyser.
+aetherhaven.townsfolk.personality.curious.greeting.5=Salut. On dirait que tu as vu quelque chose qui mérite d'être partagé.
+
+aetherhaven.townsfolk.personality.stoic.greeting.1=Bonjour.
+aetherhaven.townsfolk.personality.stoic.greeting.2=Salut.
+aetherhaven.townsfolk.personality.stoic.greeting.3=Oui?
+aetherhaven.townsfolk.personality.stoic.greeting.4=Je suis là si vous avez besoin de quoi que ce soit.
+aetherhaven.townsfolk.personality.stoic.greeting.5=Allez-y, alors.
+
+aetherhaven.townsfolk.personality.mischievous.greeting.1=Si vous entendez un bruit de fracas plus tard, ce n'était certainement pas moi.
+aetherhaven.townsfolk.personality.mischievous.greeting.2=Bonjour ! Je comptais faire quelque chose d'inoffensif. Enfin, je crois.
+aetherhaven.townsfolk.personality.mischievous.greeting.3=Salut. Tu as l'air d'avoir besoin d'un peu d'animation. Je connais peut-être quelqu'un.
+aetherhaven.townsfolk.personality.mischievous.greeting.4=Oh, ça tombe à pic. Il me fallait un témoin qui ne me dénoncerait pas.
+aetherhaven.townsfolk.personality.mischievous.greeting.5=Salut ! Promets-moi de ne pas recommencer, mais j'ai peut-être laissé une surprise à quelqu'un.
+
+aetherhaven.townsfolk.personality.homebody.greeting.1=Bonjour. Je pensais justement rentrer bientôt chez moi.
+aetherhaven.townsfolk.personality.homebody.greeting.2=Salut. Rien ne vaut le confort de mon propre foyer quand j'y suis enfin.
+aetherhaven.townsfolk.personality.homebody.greeting.3=Oh, bonjour. Je suis juste sorti pour une petite course. Enfin, courte pour moi.
+aetherhaven.townsfolk.personality.homebody.greeting.4=Bonjour. J'ai laissé la bouilloire allumée à la maison, je ne devrais donc pas rester longtemps.
+aetherhaven.townsfolk.personality.homebody.greeting.5=Bonjour. La ville va bien, mais ma chaise à la maison connaît mon nom.
+
+aetherhaven.townsfolk.personality.sporty.greeting.1=Salut ! J'allais justement aller courir. Ça te dit de t'accompagner ?
+aetherhaven.townsfolk.personality.sporty.greeting.2=Bonjour ! J'essaie de rester souple. Un petit étirement maintenant m'évitera des problèmes plus tard.
+aetherhaven.townsfolk.personality.sporty.greeting.3=Salut ! Je reste active. Ça me remonte le moral.
+aetherhaven.townsfolk.personality.sporty.greeting.4=Oh, bonjour ! Je comptais mes pas mentalement. Vieille habitude.
+aetherhaven.townsfolk.personality.sporty.greeting.5=Salut ! Si tu as besoin de quelqu'un pour foncer jusqu'au prochain virage, je suis la personne qu'il te faut.
+
+# Hobby traits
+
+aetherhaven.townsfolk.personality.adventurer.greeting.1=Salut ! J'ai entendu quelque chose d'étrange à la périphérie de la ville. J'irai peut-être voir plus tard.
+aetherhaven.townsfolk.personality.adventurer.greeting.2=Salut. Chaque route qui sort de la ville donne l'impression d'être le théâtre d'une histoire qui ne demande qu'à se produire.
+aetherhaven.townsfolk.personality.adventurer.greeting.3=Oh, bonjour. Vous avez l'air d'avoir beaucoup voyagé. Je respecte cela.
+aetherhaven.townsfolk.personality.adventurer.greeting.4=Salut ! Je voyage toujours léger, au cas où l'horizon m'appellerait.
+aetherhaven.townsfolk.personality.adventurer.greeting.5=Salut ! Je tiens une liste des endroits où je ne suis pas encore allé. C'est une longue liste.
+
+aetherhaven.townsfolk.personality.crafty.greeting.1=Bonjour. J'ai enfin réussi à remettre mes assemblages d'équerre sur mon établi.
+aetherhaven.townsfolk.personality.crafty.greeting.2=Salut. Je suis entre deux projets, mais je suis déjà en train d'esquisser le prochain dans ma tête.
+aetherhaven.townsfolk.personality.crafty.greeting.3=Oh, bonjour. Si vous avez besoin de faire réparer quelque chose, demandez gentiment et je pourrai peut-être vous aider.
+aetherhaven.townsfolk.personality.crafty.greeting.4=Salut ! J'ai de la colle sur les mains et des idées dans les poches. Journée chargée.
+aetherhaven.townsfolk.personality.crafty.greeting.5=Salut. Je mesure deux fois, donc je ne m'excuse qu'une seule fois.
+
+aetherhaven.townsfolk.personality.gardener.greeting.1=Bonjour ! Mon jardin a bien besoin de pluie, ou de compliments. Je vous offrirai les deux à mon retour.
+aetherhaven.townsfolk.personality.gardener.greeting.2=Salut. Je parle aux plantes. Elles écoutent mieux que la plupart des gens.
+aetherhaven.townsfolk.personality.gardener.greeting.3=Oh, bonjour. Si vous piétinez des semis n'importe où en ville, je le remarquerai. Poliment, certes, mais je le remarquerai.
+aetherhaven.townsfolk.personality.gardener.greeting.4=Salut ! Je pensais au compost et au bonheur. C'est du même ordre pour moi.
+aetherhaven.townsfolk.personality.gardener.greeting.5=Salut. Une bonne récolte commence par la patience. J'en ai à revendre.
+
+aetherhaven.townsfolk.personality.fisher.greeting.1=Bonjour. Les grands savent toujours quand vous les regardez.
+aetherhaven.townsfolk.personality.fisher.greeting.2=Salut. Je préfère de loin une rumeur fraîche à une histoire de poisson.
+aetherhaven.townsfolk.personality.fisher.greeting.3=Oh, bonjour. La patience est essentielle. Le reste, c'est de la chance et de l'appât.
+aetherhaven.townsfolk.personality.fisher.greeting.4=Hé ! Je jure que celui qui m'a échappé était plus gros à chaque fois que je le raconte.
+aetherhaven.townsfolk.personality.fisher.greeting.5=Salut. L'eau calme est plus instructive que la foule bruyante.
+
+aetherhaven.townsfolk.personality.bookworm.greeting.1=Excusez-moi, j'étais perdu dans un chapitre. De quoi aviez-vous besoin ?
+aetherhaven.townsfolk.personality.bookworm.greeting.2=Bonjour. J'ai laissé un marque-page chez moi, à un endroit très important.
+aetherhaven.townsfolk.personality.bookworm.greeting.3=Salut. Je lis dès que j'ai un moment. C'est mieux que les conversations superficielles, sans vouloir offenser personne.
+aetherhaven.townsfolk.personality.bookworm.greeting.4=Oh, bonjour. Si vous avez une bonne idée de titre, je suis toujours preneuse de suggestions.
+aetherhaven.townsfolk.personality.bookworm.greeting.5=Salut. Je retiens mieux les citations que les noms. C'est parfois un problème.
+
+aetherhaven.townsfolk.personality.foodie.greeting.1=Bonjour ! On dirait que vous mangez consciemment. Je respecte ça.
+aetherhaven.townsfolk.personality.foodie.greeting.2=Salut. Je suis toujours à la recherche de bonnes odeurs qui émanent d'une cuisine.
+aetherhaven.townsfolk.personality.foodie.greeting.3=Oh, bonjour. Je peux parler d'assaisonnement plus longtemps que la plupart des gens ne le jugent poli.
+aetherhaven.townsfolk.personality.foodie.greeting.4=Salut ! J'ai bien mangé la dernière fois que j'ai cuisiné à la maison. Je compte bien recommencer.
+aetherhaven.townsfolk.personality.foodie.greeting.5=Salut. La vie est trop courte pour manger de la soupe fade.
+
+aetherhaven.townsfolk.personality.musical.greeting.1=Bonjour ! Je ne peux m'empêcher de taper du pied quand le vent fait bruisser les objets. Vous comprenez.
+aetherhaven.townsfolk.personality.musical.greeting.2=Salut. Je fredonne quand je suis content. Je fredonne en ce moment, à vous d'en tirer vos propres conclusions.
+aetherhaven.townsfolk.personality.musical.greeting.3=Oh, bonjour. J'ai oublié mon instrument à la maison, mais le rythme me trotte toujours dans la tête.
+aetherhaven.townsfolk.personality.musical.greeting.4=Hé ! Si tu fredonnes une note, je vais probablement harmoniser par accident.
+aetherhaven.townsfolk.personality.musical.greeting.5=Salut. Une belle mélodie peut arranger bien des petits problèmes.
+
+# Negative and prickly traits
+
+aetherhaven.townsfolk.personality.lazy.greeting.1=Ah ! C'est vous. Je ne faisais pas la sieste. J'examinais la chaise.
+aetherhaven.townsfolk.personality.lazy.greeting.2=Bonjour. Si cette conversation concerne les escaliers, je crains de ne pouvoir vous aider.
+aetherhaven.townsfolk.personality.lazy.greeting.3=Salut. J'allais faire quelque chose de productif. Un jour.
+aetherhaven.townsfolk.personality.lazy.greeting.4=Salut. J'ai trouvé un endroit confortable et ce serait impoli de l'abandonner.
+aetherhaven.townsfolk.personality.lazy.greeting.5=Oh, bonjour. Je m'en occuperai. C'est toute ma philosophie.
+
+aetherhaven.townsfolk.personality.grumpy.greeting.1=Quoi ? J'étais de bonne humeur jusqu'à ce que les gens commencent à me parler.
+aetherhaven.townsfolk.personality.grumpy.greeting.2=Bonjour. Essayez de ne pas aggraver la situation.
+aetherhaven.townsfolk.personality.grumpy.greeting.3=Salut. Je n'en ai pas envie, mais bon, on y est.
+aetherhaven.townsfolk.personality.grumpy.greeting.4=Oh, super. De la compagnie. C'est exactement ce qu'il me fallait.
+aetherhaven.townsfolk.personality.grumpy.greeting.5=Salut. Fais court et on s'en sortira peut-être tous les deux.
+
+aetherhaven.townsfolk.personality.rude.greeting.1=Vous me gênez. Circulez.
+aetherhaven.townsfolk.personality.rude.greeting.2=Je n'ai pas le temps pour les banalités. Ni pour les grandes conversations. Pour aucune conversation, en fait.
+aetherhaven.townsfolk.personality.rude.greeting.3=Que voulez-vous ? Faites vite.
+aetherhaven.townsfolk.personality.rude.greeting.4=J'étais occupé à ignorer les gens. Tu as interrompu ça.
+aetherhaven.townsfolk.personality.rude.greeting.5=Bonjour. Non, je ne suis pas content(e) de vous voir. Essayez avec quelqu'un de plus sympathique.
+
+aetherhaven.townsfolk.personality.gloomy.greeting.1=Bonjour. La pluie me conviendrait mieux. Ou la neige. N'importe quelle ambiance tamisée.
+aetherhaven.townsfolk.personality.gloomy.greeting.2=Salut. Je pensais au fait que rien ne dure. C'est joyeux, je sais.
+aetherhaven.townsfolk.personality.gloomy.greeting.3=Oh, bonjour. J'espère que votre journée se passera mieux que la mienne.
+aetherhaven.townsfolk.personality.gloomy.greeting.4=Salut. Le monde continue de tourner. Je ne sais pas pourquoi.
+aetherhaven.townsfolk.personality.gloomy.greeting.5=Salut. J'ai apporté mon parapluie et mes doutes.
+
+aetherhaven.townsfolk.personality.snooty.greeting.1=Hmm. Vos bottes sont plus bruyantes que ce que la mode autorise.
+aetherhaven.townsfolk.personality.snooty.greeting.2=Bonjour. J'imagine que certaines personnes apprécient les conversations banales. Ce n'est pas mon cas.
+aetherhaven.townsfolk.personality.snooty.greeting.3=Ah. Encore vous. Quel manque de finesse.
+aetherhaven.townsfolk.personality.snooty.greeting.4=Salut. J'appréciais ma propre compagnie. C'est bien mieux.
+aetherhaven.townsfolk.personality.snooty.greeting.5=Bonjour. Essayez de suivre. Je ne me répète pas pour n'importe qui.
+
+aetherhaven.townsfolk.personality.impatient.greeting.1=Oui ? Oui ? Allez-y.
+aetherhaven.townsfolk.personality.impatient.greeting.2=Bonjour. J'ai des rendez-vous. Plusieurs à la fois.
+aetherhaven.townsfolk.personality.impatient.greeting.3=Salut. Le temps presse. Moi aussi, au sens figuré.
+aetherhaven.townsfolk.personality.impatient.greeting.4=Oh, bonjour. Veuillez passer le préambule.
+aetherhaven.townsfolk.personality.impatient.greeting.5=Écoutez. J'ai déjà perdu patience. Maintenant, je perds du temps.
+
+aetherhaven.townsfolk.personality.gossipy.greeting.1=Vous n'allez jamais deviner qui se disputait en ville. Enfin si, peut-être.
+aetherhaven.townsfolk.personality.gossipy.greeting.2=Attends, avant de partir, tu as entendu parler de la nouvelle clôture que quelqu'un a installée ?
+aetherhaven.townsfolk.personality.gossipy.greeting.3=Bonjour ! J'ai des nouvelles. Enfin, des rumeurs. C'est presque la même chose.
+aetherhaven.townsfolk.personality.gossipy.greeting.4=Salut ! J'ai entendu un truc croustillant et il faut que je le raconte à quelqu'un.
+aetherhaven.townsfolk.personality.gossipy.greeting.5=Oh, parfait. J'espérais avoir un public.
+
+aetherhaven.townsfolk.personality.cynical.greeting.1=Bien sûr, aujourd'hui sera différent. Ils disent tous ça.
+aetherhaven.townsfolk.personality.cynical.greeting.2=Bonjour. Si quelqu'un vous propose une bonne affaire, vérifiez vos poches ensuite.
+aetherhaven.townsfolk.personality.cynical.greeting.3=Salut. J'en ai vu assez des promesses pour remplir un entrepôt.
+aetherhaven.townsfolk.personality.cynical.greeting.4=Oh, bonjour. La confiance se gagne. La mienne est chère.
+aetherhaven.townsfolk.personality.cynical.greeting.5=Salut. Espérer le meilleur, se préparer au pire. Voilà ma devise.
+
+aetherhaven.townsfolk.personality.dramatic.greeting.1=Personne ne se rend compte du poids que je porte. Ce sont surtout des courses, mais quand même.
+aetherhaven.townsfolk.personality.dramatic.greeting.2=Salut ! Cette ville n'oubliera jamais le jour où j'ai trébuché sur ces pavés. Vous verrez.
+aetherhaven.townsfolk.personality.dramatic.greeting.3=Salut. Je ressens tout à plein volume. Même ce message de bienvenue.
+aetherhaven.townsfolk.personality.dramatic.greeting.4=Ô destin ! Te recroiser sur mon chemin.
+aetherhaven.townsfolk.personality.dramatic.greeting.5=Salut ! Ma vie est une saga et tu en es le dernier chapitre.
+
+aetherhaven.townsfolk.personality.bitter.greeting.1=Du beau temps. Enfin, pour quelqu'un qui le méritait bien.
+aetherhaven.townsfolk.personality.bitter.greeting.2=Bonjour. Avant, je souriais plus. Puis j'ai appris comment fonctionnent les calendriers.
+aetherhaven.townsfolk.personality.bitter.greeting.3=Salut. Certains ont de la chance. Moi, je reçois des rappels.
+aetherhaven.townsfolk.personality.bitter.greeting.4=Oh, bonjour. J'espère que vous apprécierez ce qui vous arrivera ensuite. Je serai par ici.
+aetherhaven.townsfolk.personality.bitter.greeting.5=Salut. Je ne suis pas en colère. J'en ai juste marre d'être déçue.
+
+aetherhaven.townsfolk.personality.stingy.greeting.1=Je n'achète pas de ronds. Je n'achète pas non plus de coins.
+aetherhaven.townsfolk.personality.stingy.greeting.2=Salut. La pièce que tu as laissée tomber ? Trouvée, c'est gagné. Je l'ai retrouvée mentalement.
+aetherhaven.townsfolk.personality.stingy.greeting.3=Salut. Je compte deux fois ce que je dépense et jamais ce que je prête.
+aetherhaven.townsfolk.personality.stingy.greeting.4=Oh, bonjour. Si c'est pour partager, je n'ai rien apporté.
+aetherhaven.townsfolk.personality.stingy.greeting.5=Salut. Mon sac reste fermé et mes conseils sont gratuits. À toi de choisir.
+
+aetherhaven.townsfolk.personality.blunt.greeting.1=Tu as l'air fatigué. Tu devrais y remédier.
+aetherhaven.townsfolk.personality.blunt.greeting.2=Bonjour. Je vais dire ce que d'autres n'oseront pas dire : ce chapeau est un choix.
+aetherhaven.townsfolk.personality.blunt.greeting.3=Salut. Je ne mâche pas mes mots. Ça fait gagner du temps.
+aetherhaven.townsfolk.personality.blunt.greeting.4=Oh, bonjour. Vous avez demandé de l'honnêteté. C'était votre première erreur.
+aetherhaven.townsfolk.personality.blunt.greeting.5=Salut. Je veux bien faire. C'est juste que je ne le parais pas.
+
+aetherhaven.townsfolk.personality.silly.greeting.1=Bonjour ! Je viens d'apprendre à une poule à réagir aux gestes de jazz. Ça se passe plutôt bien.
+aetherhaven.townsfolk.personality.silly.greeting.2=Salut ! J'ai donné un nom à chaque caillou de ce chemin. Ne me demandez pas de tous les présenter d'un coup.
+aetherhaven.townsfolk.personality.silly.greeting.3=Oh, salut. Je m'entraîne à avoir l'air sérieux au cas où une personne importante passerait. Qu'en penses-tu ?
+aetherhaven.townsfolk.personality.silly.greeting.4=Bonjour. J'ai volontairement mis deux chaussettes différentes. Ça fait partie intégrante du look et j'assume.
+aetherhaven.townsfolk.personality.silly.greeting.5=Hé ! Je parie cinq pièces que je peux te faire sourire avant la fin de cette conversation. Sans pression.

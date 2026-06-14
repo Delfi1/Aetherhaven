@@ -26,6 +26,8 @@ Run:
   python scripts/build_server_translations.py --workers 12
   python scripts/build_server_translations.py --workers 1
   python scripts/build_server_translations.py --sleep-between-langs 5
+  python scripts/build_server_translations.py --append-only ru-RU
+  python scripts/build_server_translations.py --only ru-RU --append-only ru-RU
 """
 from __future__ import annotations
 
@@ -166,6 +168,22 @@ def count_key_lines(path: Path) -> int:
     return n
 
 
+def parse_lang_key_values(path: Path) -> dict[str, str]:
+    """Return key -> value for every non-comment `key=value` line in a `.lang` file."""
+    values: dict[str, str] = {}
+    if not path.is_file():
+        return values
+    for ln in path.read_text(encoding="utf-8").splitlines():
+        st = ln.strip()
+        if not st or st.startswith("#") or "=" not in ln:
+            continue
+        key, val = ln.split("=", 1)
+        k = key.strip()
+        if k:
+            values[k] = val
+    return values
+
+
 def collect_items(lines: list[str]) -> list[tuple[int, str, list[str]]]:
     items: list[tuple[int, str, list[str]]] = []
     for i, line in enumerate(lines):
@@ -186,10 +204,29 @@ def build_for_lang_fixed(
     workers: int,
     serial_sleep_sec: float,
     gcloud_api_key: str | None,
+    existing_values: dict[str, str] | None = None,
 ) -> str:
     out = list(lines)
-    items = collect_items(lines)
+    existing_values = existing_values or {}
+    all_items = collect_items(lines)
+    preserved: list[tuple[int, str, str]] = []
+    items: list[tuple[int, str, list[str]]] = []
+    for line_i, tx, tlist in all_items:
+        key = lines[line_i].split("=", 1)[0].strip()
+        if key in existing_values:
+            preserved.append((line_i, key, existing_values[key]))
+        else:
+            items.append((line_i, tx, tlist))
+
+    for line_i, key, val in preserved:
+        out[line_i] = key + "=" + val
+
     total = len(items)
+    if preserved:
+        print(
+            f"  preserving {len(preserved)} existing key(s), translating {total} new key(s)",
+            flush=True,
+        )
     if total == 0:
         return "\n".join(out) + "\n"
 
@@ -281,6 +318,13 @@ def main() -> None:
         help="Sleep SEC seconds before each language after the first in this run (0=off). "
         "Helps avoid cumulative rate limits on the free backend when rebuilding many locales.",
     )
+    ap.add_argument(
+        "--append-only",
+        type=str,
+        default="",
+        help="Comma-separated folder names where existing translations are kept and only "
+        "missing keys are machine-translated, e.g. ru-RU,uk-UA",
+    )
     args = ap.parse_args()
     workers = max(1, min(32, args.workers))
     sleep_between = max(0.0, args.sleep_between_langs)
@@ -297,6 +341,13 @@ def main() -> None:
         sys.exit(1)
     src_key_total = sum(count_key_lines(p) for p in src_files)
     only_set = {x.strip() for x in args.only.split(",") if x.strip()}
+    append_only_set = {x.strip() for x in args.append_only.split(",") if x.strip()}
+    if append_only_set:
+        print(
+            "Append-only locales (preserve existing keys): "
+            + ", ".join(sorted(append_only_set)),
+            flush=True,
+        )
 
     print(
         f"Source en-US: {len(src_files)} file(s), {src_key_total} total key lines "
@@ -326,7 +377,9 @@ def main() -> None:
         if did_build_in_run and sleep_between > 0:
             print(f"  cooldown {sleep_between}s before {folder} ...", flush=True)
             time.sleep(sleep_between)
-        print(f"--- {folder} ({gt}) ---", flush=True)
+        append_only = folder in append_only_set
+        mode = "append-only" if append_only else "full rebuild"
+        print(f"--- {folder} ({gt}, {mode}) ---", flush=True)
         out_dir = OUT_BASE / folder
         out_dir.mkdir(parents=True, exist_ok=True)
         for src_path in src_files:
@@ -338,14 +391,16 @@ def main() -> None:
             )
             src_keys = count_key_lines(src_path)
             print(f"  {src_path.name}: {len(lines)} lines, {nval} key-ish lines, {src_keys} keys", flush=True)
+            dest = out_dir / src_path.name
+            existing_values = parse_lang_key_values(dest) if append_only else None
             text = build_for_lang_fixed(
                 lines,
                 gt,
                 workers=workers,
                 serial_sleep_sec=args.serial_sleep if workers <= 1 else 0.0,
                 gcloud_api_key=gcloud_key if gcloud_key else None,
+                existing_values=existing_values,
             )
-            dest = out_dir / src_path.name
             if folder == "es-419" and src_path.name == "server.lang":
                 header = (
                     "# Spanish (Latin America) — machine translation; "

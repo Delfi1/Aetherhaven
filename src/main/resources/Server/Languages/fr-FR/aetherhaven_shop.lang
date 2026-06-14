@@ -1,0 +1,72 @@
+# Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
+
+items.Aetherhaven_Shop_Spot.name=Emplacement de la boutique
+items.Aetherhaven_Shop_Spot.description=Placez-les sur un terrain constructible pour ouvrir une boutique, ou dans le mode Créatif/Créateur de terrains pour intégrer des étals configurés dans des bâtiments préfabriqués. Les étals sont ouverts le jour et fermés la nuit. Le stock des PNJ est réapprovisionné à l'aube. Les membres de la ville peuvent mettre des objets en vente sur les emplacements des joueurs.
+
+aetherhaven.shop.notInTown=Placez ceci à l'intérieur d'une ville.
+aetherhaven.shop.notInPlot=Placez ceci à l'intérieur d'un terrain constructible terminé.
+aetherhaven.shop.closed=Épuisé
+aetherhaven.shop.closedNight=Magasin fermé pour la nuit
+aetherhaven.shop.holdItemToList=Maintenez un article et utilisez (F) ou cliquez avec le bouton droit sur l'étal pour le mettre en vente.
+aetherhaven.shop.cannotAfford=Vous ne pouvez pas vous le permettre.
+aetherhaven.shop.inventoryFull=Votre stock est plein.
+aetherhaven.shop.cannotBuyOwnListing=Récupérez votre annonce avec F au lieu de l'acheter.
+aetherhaven.shop.itemsDropped=Certains articles sont tombés au sol — l'inventaire était plein.
+aetherhaven.shop.notTownMember=Seuls les membres de la ville peuvent vendre ici.
+aetherhaven.shop.noShopSpotPermission=Vous n'êtes pas autorisé à vendre dans les emplacements de la boutique des joueurs.
+aetherhaven.shop.noPrice=Cet article ne peut pas être vendu ici.
+aetherhaven.shop.wrongBatchSize=Vendez un multiple de {count} à la fois.
+aetherhaven.shop.damagedItem=Faites réparer cet objet chez le forgeron avant de le mettre en vente.
+aetherhaven.shop.jewelryNeedsAppraisal=Faites expertiser ces bijoux avant de les mettre en vente.
+aetherhaven.shop.listed=Vos articles sont maintenant en vente.
+aetherhaven.shop.removedListing=Annonce supprimée.
+aetherhaven.shop.soldNotify={buyer} a acheté {count} {item} contre de l'or {gold}
+
+aetherhaven.shop.safe.empty=Il n'y a pas d'or pour vous dans le coffre-fort.
+aetherhaven.shop.safe.makeRoom=Commencez par faire de la place dans votre inventaire.
+aetherhaven.shop.safe.couldNotAddCoins=Impossible d'ajouter de l'or à votre inventaire.
+aetherhaven.shop.safe.collected=Vous avez récupéré {gold} d'or dans le coffre-fort.
+
+aetherhaven.shop.config.title=Créez cette boutique
+aetherhaven.shop.config.intro=Choisissez le mode de fonctionnement de cet étal. Les boutiques des PNJ se réapprovisionnent à l'aube à partir de la table de stock que vous avez sélectionnée.
+aetherhaven.shop.config.playerControlled=Laissez les membres de la ville vendre ici
+aetherhaven.shop.config.npcHeading=Boutique PNJ
+aetherhaven.shop.config.lootHeader=fichier de tableau des stocks
+aetherhaven.shop.config.lootTableLabel=Tableau
+aetherhaven.shop.config.lootStockHint=StockMin et stockMax par entrée dans chaque entrée shop_loot/*.json (par défaut 1 lot si omis).
+aetherhaven.shop.config.confirm=Confirmer
+aetherhaven.shop.config.cancel=Annuler
+aetherhaven.shop.config.saved=Magasin prêt à l'emploi
+
+aetherhaven.shop.hud.title=Boutique
+aetherhaven.shop.hud.closedNight=Magasin fermé pour la nuit
+aetherhaven.shop.hud.soldOut=Épuisé — réapprovisionnement à l'aube
+aetherhaven.shop.hud.emptyListing=Rien à vendre
+aetherhaven.shop.hud.seller=Vendu par {seller}
+aetherhaven.shop.hud.item=Achat : {item}
+aetherhaven.shop.hud.price={gold} or chacun
+aetherhaven.shop.hud.priceBatch={gold} or pour {count} {item}
+aetherhaven.shop.hud.stock={n} gauche
+aetherhaven.shop.hud.stockBatches={batches} lots restants ({items} au total)
+aetherhaven.shop.hud.hintNpc=F à acheter — Réapprovisionnement des actions NPC à l'aube
+aetherhaven.shop.hud.hintPlayerBuy=F à acheter
+aetherhaven.shop.hud.hintPlayerList=F avec un article en main à mettre en vente
+aetherhaven.shop.hud.hintPlayerOwn=F pour reprendre vos articles
+aetherhaven.shop.hud.hintPlayerEmpty=Rien à vendre
+
+aetherhaven.shop.buy.title=Acheter
+aetherhaven.shop.buy.item={item}
+aetherhaven.shop.buy.price={gold} or chacun
+aetherhaven.shop.buy.priceBatch={gold} or pour {count} {item}
+aetherhaven.shop.buy.stock={n} gauche
+aetherhaven.shop.buy.stockBatches={batches} lots ({items} articles)
+aetherhaven.shop.buy.qty=Montant : {n} — Total : {total} or
+aetherhaven.shop.buy.qtyBatches=Lots : {n} — Total : {total} or
+aetherhaven.shop.buy.step10=×10
+aetherhaven.shop.buy.max=Max
+aetherhaven.shop.buy.buy=Acheter
+aetherhaven.shop.buy.cancel=Annuler
+
+aetherhaven.shop.items.tooltipWithPrice={body}\n{price}
+aetherhaven.shop.items.tooltipPrice={amount} Pièces d'or
+aetherhaven.shop.items.tooltipPriceBatch={amount} Pièces d'or par {count}

@@ -1,0 +1,72 @@
+# Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
+
+items.Aetherhaven_Shop_Spot.name=Місце для магазину
+items.Aetherhaven_Shop_Spot.description=Розмістіть на готовій будівельній ділянці, щоб відкрити магазин, або в креативі / конструкторі сюжетів, щоб вбудувати налаштовані кіоски в збірні будівлі. Кіоски відкриті вдень і зачинені вночі. Запаси NPC поповнюються на світанку. Мешканці міста можуть розміщувати предмети на місцях гравців.
+
+aetherhaven.shop.notInTown=Розмістіть це всередині міста.
+aetherhaven.shop.notInPlot=Розмістіть це всередині готової будівельної ділянки.
+aetherhaven.shop.closed=Розпродано
+aetherhaven.shop.closedNight=Магазин зачинено на ніч
+aetherhaven.shop.holdItemToList=Тримайте предмет і скористайтеся клавішею (F) або клацніть правою кнопкою миші на кіоску, щоб виставити його на продаж.
+aetherhaven.shop.cannotAfford=Ви не можете собі цього дозволити.
+aetherhaven.shop.inventoryFull=Ваш інвентар повний.
+aetherhaven.shop.cannotBuyOwnListing=Замість того, щоб купувати своє оголошення, заберіть його назад у F.
+aetherhaven.shop.itemsDropped=Деякі предмети були впали на землю — інвентар був повний.
+aetherhaven.shop.notTownMember=Тут можуть продавати лише члени міста.
+aetherhaven.shop.noShopSpotPermission=Ви не маєте дозволу продавати в магазинах гравців.
+aetherhaven.shop.noPrice=Цей товар не можна тут продавати.
+aetherhaven.shop.wrongBatchSize=Продавайте за раз кількість, кратну {count}.
+aetherhaven.shop.damagedItem=Відремонтуйте цей предмет у коваля, перш ніж виставляти його на продаж.
+aetherhaven.shop.jewelryNeedsAppraisal=Оцініть ці ювелірні вироби, перш ніж виставляти їх на продаж.
+aetherhaven.shop.listed=Ваші товари тепер продаються.
+aetherhaven.shop.removedListing=Список видалено.
+aetherhaven.shop.soldNotify={buyer} купив {count} {item} за {gold} золота
+
+aetherhaven.shop.safe.empty=У сейфі для тебе немає золота.
+aetherhaven.shop.safe.makeRoom=Спочатку звільніть місце в інвентарі.
+aetherhaven.shop.safe.couldNotAddCoins=Не вдалося додати золото до вашого інвентарю.
+aetherhaven.shop.safe.collected=Ви зібрали {gold} золота з сейфа.
+
+aetherhaven.shop.config.title=Створіть цей магазин
+aetherhaven.shop.config.intro=Оберіть, як працюватиме цей кіоск. Магазини NPC поповнюють запаси на світанку з вибраного вами столу.
+aetherhaven.shop.config.playerControlled=Дозвольте членам міста продавати тут
+aetherhaven.shop.config.npcHeading=Інвентар магазину NPC
+aetherhaven.shop.config.lootHeader=Файл таблиці запасів
+aetherhaven.shop.config.lootTableLabel=Стіл
+aetherhaven.shop.config.lootStockHint=Значення stockMin та stockMax для кожного запису shop_loot/*.json (якщо значення пропущено, за замовчуванням використовується 1 партія).
+aetherhaven.shop.config.confirm=Підтвердити
+aetherhaven.shop.config.cancel=Скасувати
+aetherhaven.shop.config.saved=Готове місце для магазину
+
+aetherhaven.shop.hud.title=Магазин
+aetherhaven.shop.hud.closedNight=Магазин зачинено на ніч
+aetherhaven.shop.hud.soldOut=Розпродано — поповнення запасів на світанку
+aetherhaven.shop.hud.emptyListing=Нічого на продаж
+aetherhaven.shop.hud.seller=Продавець: {seller}
+aetherhaven.shop.hud.item=Купівля: {item}
+aetherhaven.shop.hud.price={gold} золота кожен
+aetherhaven.shop.hud.priceBatch={gold} золото за {count} {item}
+aetherhaven.shop.hud.stock=Залишилося {n}
+aetherhaven.shop.hud.stockBatches=Залишилося {batches} партій ({items} всього)
+aetherhaven.shop.hud.hintNpc=F купити — акції NPC поповнюються на світанку
+aetherhaven.shop.hud.hintPlayerBuy=F купити
+aetherhaven.shop.hud.hintPlayerList=F з предметом у руці, який хоче виставити на продаж
+aetherhaven.shop.hud.hintPlayerOwn=F, щоб забрати ваші речі назад
+aetherhaven.shop.hud.hintPlayerEmpty=Нічого на продаж
+
+aetherhaven.shop.buy.title=Купити
+aetherhaven.shop.buy.item={item}
+aetherhaven.shop.buy.price={gold} золота кожен
+aetherhaven.shop.buy.priceBatch={gold} золото за {count} {item}
+aetherhaven.shop.buy.stock=Залишилося {n}
+aetherhaven.shop.buy.stockBatches={batches} лотів ({items} товарів)
+aetherhaven.shop.buy.qty=Сума: {n} — Всього: {total} золота
+aetherhaven.shop.buy.qtyBatches=Лоти: {n} — Всього: {total} золото
+aetherhaven.shop.buy.step10=×10
+aetherhaven.shop.buy.max=Макс
+aetherhaven.shop.buy.buy=Купити
+aetherhaven.shop.buy.cancel=Скасувати
+
+aetherhaven.shop.items.tooltipWithPrice={body}\n{price}
+aetherhaven.shop.items.tooltipPrice={amount} Золоті монети
+aetherhaven.shop.items.tooltipPriceBatch={amount} Золотих монет за {count}

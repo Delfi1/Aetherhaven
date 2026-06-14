@@ -1,21 +1,47 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
+items.Aetherhaven_Firewood.name=Bois de chauffage
+items.Aetherhaven_Firewood.description=Faisceaux de bois séché. Brûlent environ deux fois plus longtemps que le charbon de bois dans les fourneaux et les feux de camp.
+
+items.Aetherhaven_Root_Remover.name=Déracinateur
+items.Aetherhaven_Root_Remover.description=Faites un clic droit sur un tronc d'arbre pour déterrer les racines enfouies sous terre. Le bois retombe à vos pieds et le trou se remplit de terre.
+
+items.Aetherhaven_Growth_Serum.name=Sérum de croissance
+items.Aetherhaven_Growth_Serum.description=À utiliser sur un jeune animal pour favoriser sa croissance rapide. Utiliser une fiole.
+
+items.Aetherhaven_Hunting_Knife.name=Couteau de chasse
+items.Aetherhaven_Hunting_Knife.description=Un couteau tranchant pour les chasseurs. On l'utilise pour tuer des animaux et parfois obtenir un supplément de viande crue, de peau et de plumes.
+
+items.Aetherhaven_Lute.name=Luth
+items.Aetherhaven_Lute.description=Un luth en bois aux cordes chaudes. Elias Thornwood en garde un à portée de main lorsqu'il joue à la salle de la guilde.
+
+items.Aetherhaven_Wood_Scaffold.name=échafaudages en bois
+items.Aetherhaven_Wood_Scaffold.description=Grimpez comme sur une échelle. Cliquez avec le bouton droit sur les emplacements comme sur un bloc normal. Maintenez la touche Utiliser (F) enfoncée tout en visant un échafaudage pour étendre la tour latéralement ou créer une ramification horizontale depuis la face supérieure. Casser la partie inférieure non soutenue fait s'effondrer la structure.
+items.Aetherhaven_Wood_Scaffold.legendUse=Utiliser (F) : étendre la tour/branche depuis le haut en visant l’échafaudage. Clic droit : placement normal du bloc.
+
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
 items.Aetherhaven_Plot_Sign.name=Panneau de l'intrigue
-items.Aetherhaven_Plot_Sign.description=Indique les emplacements où un préfabriqué peut être construit. Utilisez la commande /aetherhaven plot pour configurer.
+items.Aetherhaven_Plot_Sign.description=Indique l'emplacement possible d'un bâtiment. Fabriquez des jetons de parcelle à un établi de création de parcelles.
 
 items.Aetherhaven_Charter.name=Charte municipale
 items.Aetherhaven_Charter.description=Emplacement pour fonder une ville. Chaque joueur peut avoir une ville par monde. Utilisez-le pour afficher les informations de la ville.
 
 items.Aetherhaven_Town_Planning_Desk.name=Bureau d'urbanisme
-items.Aetherhaven_Town_Planning_Desk.description=Fabriquez les chartes de la ville, le bâton de placement de parcelles, le bâton de construction (qui accélère la construction passive des parcelles), le journal de quêtes, l'enclume géode, la table des modifications de chartes et les jetons de parcelle. Construisez-en une à un établi.
+items.Aetherhaven_Town_Planning_Desk.description=Établi d'urbanisme. Chartes, permis de construire, établi de création d'intrigues et recettes associées. Fabriquez à un établi.
+items.Aetherhaven_Plot_Crafting_Bench.name=Établi de création d'intrigues
+items.Aetherhaven_Plot_Crafting_Bench.description=Fabriquez des jetons de terrain pour les bâtiments et les décorations. Utilisez-les pour choisir un bâtiment, le prévisualiser et payer en or pour obtenir un jeton. Fabriquez-les à votre bureau d'urbanisme.
 items.Aetherhaven_Charter_Amendments_Table.name=tableau des amendements à la charte
-items.Aetherhaven_Charter_Amendments_Table.description=Ce document consigne le calcul de la dîme et les activités commerciales favorisées par la charte. Il permet de proposer des amendements une fois que la population les approuve. Vous pouvez le rédiger à votre bureau d'urbanisme ; vous devez connaître le schéma.
+items.Aetherhaven_Charter_Amendments_Table.description=Ce document indique comment la dîme de la ville est calculée et quel commerce la charte favorise. Il permet de proposer des amendements une fois que la population les approuve. À fabriquer à votre bureau d'urbanisme ; <color is="#ffa726">vous devez connaître le schéma</color>.
 items.Aetherhaven_Banquet_Table.name=Table de banquet
 items.Aetherhaven_Banquet_Table.description=Une longue table pour les festins de la ville. Placez-la sur votre territoire et utilisez-la pour un festin civique. Fabriquez-la au bureau d'urbanisme une fois que quelqu'un en ville vous aura partagé le modèle.
 items.Aetherhaven_Founder_Monument.name=Monument du fondateur
-items.Aetherhaven_Founder_Monument.description=Un piédestal de pierre portant l'effigie du fondateur. À placer sur le territoire de la ville en son honneur ; la part du trésor dans la rentrée matinale augmente légèrement tant qu'il est là. Un seul par ville.
+items.Aetherhaven_Founder_Monument.description=Un piédestal de pierre portant l'effigie du fondateur. À placer sur le territoire de la ville en son honneur ; la part du trésor du matin augmente légèrement tant qu'il est là. Un seul par ville.
+items.Aetherhaven_Inn_Bell.name=Auberge Bell
+items.Aetherhaven_Inn_Bell.description=Sonnez pour rappeler les visiteurs de l'auberge dans l'espace réservé aux clients.
+
+items.Aetherhaven_Smokestack.name=Cheminée
+items.Aetherhaven_Smokestack.description=À placer sur les cheminées et les toits pour un filet de fumée constant. Invisible une fois en place.
 
 benchCategories.aetherhaven.town_planning=Urbanisme
 benchCategories.aetherhaven.plot_tokens=Jetons de l'intrigue
@@ -23,25 +49,52 @@ benchCategories.aetherhaven.plot_tokens=Jetons de l'intrigue
 items.Aetherhaven_Plot_Placement_Tool.name=Personnel de placement des parcelles
 items.Aetherhaven_Plot_Placement_Tool.description=Conservez le jeton de parcelle correspondant dans votre inventaire. Utilisez ce bâton en visant le sol pour apercevoir le fantôme du bâtiment. Ajustez-le jusqu'à ce qu'il corresponde, puis confirmez pour marquer la parcelle. Annulez pour effacer l'aperçu et réutilisez le bâton si vous souhaitez un autre emplacement.
 
+items.Aetherhaven_Wall_Wand.name=Baguette murale
+items.Aetherhaven_Wall_Wand.description=Planifiez des murs de pierre autour de votre ville. L'utilisation secondaire permet d'afficher une vue de dessus des éléments de muraille, de porte et de tour. L'utilisation principale sur un élément existant vous permet d'agrandir ou de supprimer le mur. Chaque élément utilise un panneau de parcelle et se construit comme les autres parcelles de la ville.
+items.Aetherhaven_Token_Wall.name=Marqueur mural
+items.Aetherhaven_Token_Wall.description=S'affiche sur les panneaux muraux lors du placement. Ne peut pas être utilisé depuis votre inventaire.
+items.Aetherhaven_Token_Wall_Gate.name=marqueur de pièce de porte
+items.Aetherhaven_Token_Wall_Gate.description=Affiché sur les panneaux de signalisation lors de la mise en place. Ne peut être utilisé depuis votre inventaire.
+items.Aetherhaven_Token_Wall_Tower.name=marqueur de pièce de tour
+items.Aetherhaven_Token_Wall_Tower.description=Affiché sur les panneaux de la tour lors de son placement. Ne peut être utilisé depuis votre inventaire.
+
 items.Aetherhaven_Poi_Tool.name=Outil de débogage des points d'intérêt
-items.Aetherhaven_Poi_Tool.description=Affiche les points d'intérêt de la ville lorsqu'il est maintenu enfoncé (autorisation : aetherhaven.poi.tool). Principal : sélectionne le point d'intérêt le plus proche. Secondaire : déplace l'ancre du point d'intérêt vers ce bloc. Utilisation : définit/efface la cible du chemin d'autonomie pour le point d'intérêt sélectionné (cliquez à nouveau sur le bloc du point d'intérêt pour effacer).
+items.Aetherhaven_Poi_Tool.description=Modifiez les points d'intérêt de la ville, placez de nouveaux marqueurs de points d'intérêt dans les bâtiments préfabriqués et définissez les points d'apparition des aventuriers (autorisation : <color is="#5AB5B5">aetherhaven.poi.tool</color>). Appuyez sur Q pour changer de mode.
 items.Aetherhaven_Poi_Tool.legendTitle=Outil POI
 items.Aetherhaven_Poi_Tool.legendPrimary=Primaire : sélectionnez le point d’intérêt le plus proche du bloc
 items.Aetherhaven_Poi_Tool.legendSecondary=Secondaire : déplacer le point d’intérêt sélectionné vers le bloc
 items.Aetherhaven_Poi_Tool.legendUse=Utilisation : définir la cible du chemin du PNJ pour le point d’intérêt sélectionné (à utiliser lors de la suppression du bloc de point d’intérêt)
 
 aetherhaven.poiTool.legendTitle=Outil POI
+aetherhaven.poiTool.legendModeCycle=Q : basculer entre les points d'intérêt et les lieux d'aventure
+aetherhaven.poiTool.legendPoiHeader=Mode de spots POI
 aetherhaven.poiTool.legendPrimary=Primaire : sélectionnez le point d’intérêt le plus proche du bloc
-aetherhaven.poiTool.legendSecondary=Secondaire : déplacer le point d’intérêt sélectionné vers le bloc
+aetherhaven.poiTool.legendSecondaryPoi=Secondaire : déplacer le point d’intérêt sélectionné vers le bloc
 aetherhaven.poiTool.legendUse=Utilisation : définir la cible du chemin du PNJ pour le point d’intérêt sélectionné (à utiliser lors de la suppression du bloc de point d’intérêt)
+aetherhaven.poiTool.legendSpawnHeader=Mode des lieux d'aventure
+aetherhaven.poiTool.legendSecondarySpawn=Action secondaire : placer un point au-dessus du bloc ou supprimer un point que vous cliquez
+aetherhaven.poiTool.modeCycledToEdit=Passage en mode d'édition de points d'intérêt.
+aetherhaven.poiTool.modeCycledToPlacement=Passage en mode de placement des points d'intérêt.
+aetherhaven.poiTool.modeCycledToRemove=Passage en mode suppression des points d'intérêt.
+aetherhaven.poiTool.modeCycledToAdventurerSpots=Passage en mode zones d'aventuriers.
+aetherhaven.poiTool.hudTitle=Outil POI
+aetherhaven.poiTool.hudNameEdit=Modifier le point d'intérêt
+aetherhaven.poiTool.hudNamePlacement=placement des points d'intérêt
+aetherhaven.poiTool.hudNameRemove=Suppression des points d'intérêt
+aetherhaven.poiTool.hudNameAdventurerSpots=Lieux d'aventure
+aetherhaven.poiTool.hudHelpEdit=Fonction principale : sélectionner le point d’intérêt. Fonction secondaire : déplacer le point d’intérêt sélectionné vers le bloc. Utilisation : définir la cible du chemin du PNJ.
+aetherhaven.poiTool.hudHelpPlacement=Secondaire : ouvrir la configuration du point d’intérêt sur un bloc à l’intérieur d’une parcelle terminée.
+aetherhaven.poiTool.hudHelpRemove=Secondaire : supprimer le marqueur de point d’intérêt le plus proche ou le point d’intérêt enregistré près du bloc.
+aetherhaven.poiTool.hudHelpAdventurerSpots=Secondaire : placez un emplacement au-dessus du bloc qui vous fait face, ou supprimez un emplacement voisin.
+aetherhaven.poiTool.hudHint=Q : Modification/placement/suppression de cycle/emplacements d'aventuriers
 
 aetherhaven.pathTool.legendPageTitle=Outil Chemin
-aetherhaven.pathTool.legendBlurb=Créez une spline, prévisualisez-la, puis placez des blocs de chemin. Un panneau d'état apparaît dans le coin lorsque vous maintenez l'outil enfoncé.
-aetherhaven.pathTool.legendHotkeyAdd=L'action secondaire au sol ajoute une image clé (sphère dorée). L'action secondaire en visant supprime une image clé. Les nouvelles images clés sont orientées dans la direction du regard.
-aetherhaven.pathTool.legendHotkeyAim=Utilisez une image clé pour la sélectionner. En mode déplacement, un clic principal sur le sol déplace le point. Un clic principal sur le même nœud est sans effet.
-aetherhaven.pathTool.legendHotkeyUse=F : en mode rotation, déplace le nœud sélectionné par pas de lacet. En mode déplacement, F est inactif. En mode placement, F place le tracé (deux nœuds sont nécessaires). Q : changement de mode. E : largeur (1 à 8). Troisième fonctionnalité : style de tracé (blocs internes ; voir PathToolStyles dans la configuration). Un appui secondaire sur une image clé permet de le supprimer.
-aetherhaven.pathTool.legendHotkeyCrouchUse=Optionnel : il n'est plus nécessaire de s'accroupir pour changer de mode ; utilisez plutôt la capacité d'outil (Q).
-aetherhaven.pathTool.legendVisuals=Aperçu : blanc = nœuds et spline, marron = bande de chemin, vert = bordure d'herbe ; rouge = bloqué. Les dalles reposent sur la surface. Largeur : deuxième capacité d'outil (1-8). Style : troisième capacité d'outil. La commande « Valider » supprime les plantes hautes (Plant_Grass) au-dessus du chemin.
+aetherhaven.pathTool.legendBlurb=Créez un tracé, prévisualisez-le, puis placez-le. Un panneau d'état s'affiche lorsque vous maintenez l'outil enfoncé.
+aetherhaven.pathTool.legendHotkeyAdd=L'arme secondaire au sol ajoute un nœud. L'arme secondaire utilisée pour viser un nœud le supprime.
+aetherhaven.pathTool.legendHotkeyAim=Le nœud principal est sélectionné. En mode déplacement, le nœud principal au sol déplace le nœud sélectionné.
+aetherhaven.pathTool.legendHotkeyUse=Q permet de changer de mode : Déplacer, Rotation, Placer, Supprimer, Créateur de style. F permet de changer de mode : ajuster la direction, placer un tracé, supprimer un tracé ou ouvrir le gestionnaire de styles. E permet de changer la largeur. R permet de changer le style.
+aetherhaven.pathTool.legendHotkeyCrouchUse=Utilisez la touche Q pour changer de mode au lieu de vous accroupir.
+aetherhaven.pathTool.legendVisuals=Aperçu : nœuds et ligne blancs, tracé marron, bords verts. Le mode Supprimer affiche les tracés placés en orange. L’éditeur de style ouvre une grille pour créer des styles de tracé.
 aetherhaven.pathTool.statusHeader=Tout en tenant l'outil
 aetherhaven.pathTool.statusLine1=Des notifications et des discussions s'affichent lorsque vous ajoutez des points, changez de mode (Q) ou passez en mode validation.
 aetherhaven.pathTool.statusLine2=Sélection : visez une sphère. En cas d’échec, conservez votre sélection actuelle. Q permet de changer de mode ; la deuxième capacité permet de changer la largeur ; la troisième capacité permet de changer le style de trajectoire.
@@ -50,78 +103,232 @@ aetherhaven.pathTool.hudTitle=Outil Chemin
 aetherhaven.pathTool.hudNameTranslate=Se déplacer
 aetherhaven.pathTool.hudNameRotate=Tourner
 aetherhaven.pathTool.hudNameCommit=Lieu
-aetherhaven.pathTool.hudHelpTranslate=Principal : visez un nœud pour le sélectionner, puis appuyez de nouveau sur un bloc pour le déplacer. Secondaire : le clic au sol ajoute un nœud ; viser un nœud le supprime. Q : mode suivant.
-aetherhaven.pathTool.hudHelpRotate=Principale : viser un nœud pour le sélectionner. Secondaire : ajouter un nœud au sol ; le viser le supprime. F : ajuster l’orientation du nœud sélectionné. Q : mode suivant.
-aetherhaven.pathTool.hudHelpCommit=Principale : visez un nœud pour le sélectionner. Secondaire : le déplacement au sol ajoute un nœud ; viser un nœud le supprime. F place le chemin (2 nœuds ou plus). Q : mode suivant.
+aetherhaven.pathTool.hudNameRemove=Retirer
+aetherhaven.pathTool.hudNameStyleDesigner=styliste
+aetherhaven.pathTool.hudDescTranslate=Ajoutez et déplacez des nœuds pour façonner votre chemin.
+aetherhaven.pathTool.hudDescRotate=Tournez le nœud sélectionné pour courber le chemin.
+aetherhaven.pathTool.hudDescCommit=Tracez le chemin au sol lorsque vous serez prêt.
+aetherhaven.pathTool.hudDescRemove=Consultez les tracés créés et supprimez ceux dont vous n'avez plus besoin.
+aetherhaven.pathTool.hudDescStyleDesigner=Créez et modifiez les styles de tracé avec la grille du coffre.
 aetherhaven.pathTool.hudStyle=Style : {style}
-aetherhaven.pathTool.hudWidth=Largeur : {w} blocs (E pour cycler)
+aetherhaven.pathTool.hudWidth=Largeur : {w} blocs
 aetherhaven.pathTool.hudNodes=Nœuds : {n}
-aetherhaven.pathTool.hudHint=Primaire = sélectionner/déplacer | Secondaire = ajouter au sol, supprimer sur un nœud | Q : mode | E : largeur | R : style | F : rotation/placement
+aetherhaven.pathTool.hudPlaceReminder=Passez en mode Placer pour placer le tracé.
+
+aetherhaven.pathTool.hud.move.primary=Sélectionnez un nœud, puis cliquez sur le sol pour le déplacer.
+aetherhaven.pathTool.hud.move.secondary=Cliquez sur le sol pour ajouter un nœud, ou visez un nœud pour le supprimer.
+aetherhaven.pathTool.hud.move.q=Mode suivant
+aetherhaven.pathTool.hud.move.e=largeur de la piste cyclable
+aetherhaven.pathTool.hud.move.r=style piste cyclable
+
+aetherhaven.pathTool.hud.rotate.primary=Sélectionnez un nœud
+aetherhaven.pathTool.hud.rotate.secondary=Cliquez sur le sol pour ajouter un nœud, ou visez un nœud pour le supprimer.
+aetherhaven.pathTool.hud.rotate.f=Déplacer la direction du nœud sélectionné
+aetherhaven.pathTool.hud.rotate.q=Mode suivant
+aetherhaven.pathTool.hud.rotate.e=largeur de la piste cyclable
+aetherhaven.pathTool.hud.rotate.r=style piste cyclable
+
+aetherhaven.pathTool.hud.place.primary=Sélectionnez un nœud
+aetherhaven.pathTool.hud.place.secondary=Cliquez sur le sol pour ajouter un nœud, ou visez un nœud pour le supprimer.
+aetherhaven.pathTool.hud.place.f=Placez le chemin
+aetherhaven.pathTool.hud.place.q=Mode suivant
+aetherhaven.pathTool.hud.place.e=largeur de la piste cyclable
+aetherhaven.pathTool.hud.place.r=style piste cyclable
+
+aetherhaven.pathTool.hud.remove.primary=Sélectionnez un chemin
+aetherhaven.pathTool.hud.remove.f=Supprimer le chemin sélectionné
+aetherhaven.pathTool.hud.remove.q=Mode suivant
+
+aetherhaven.pathTool.hud.styleDesigner.f=Ouvrez le gestionnaire de style
+aetherhaven.pathTool.hud.styleDesigner.e=largeur de la piste cyclable
+aetherhaven.pathTool.hud.styleDesigner.fContinue=Ouvrez le coffre pour continuer à modifier
+aetherhaven.pathTool.hud.styleDesigner.eSave=Enregistrer le style du chemin
+aetherhaven.pathTool.hud.styleDesigner.q=Mode suivant
+aetherhaven.pathTool.hud.styleDesigner.infoColumns=Les colonnes de gauche remplissent le chemin à partir du bord gauche, les colonnes de droite à partir du bord droit, et la colonne centrale remplit le centre du chemin.
+aetherhaven.pathTool.hud.styleDesigner.infoRows=Empilez les blocs en colonne pour choisir entre eux.
+aetherhaven.pathTool.hud.styleDesigner.infoWeight=Plus un même bloc est présent dans une colonne, plus il apparaît souvent.
 
 aetherhaven.pathTool.addedNode=Nœud {n} ajouté.
-aetherhaven.pathTool.modeCycledToTranslate=Mode : déplacer et placer les images clés.
-aetherhaven.pathTool.modeCycledToRotate=Mode : rotation — F modifie légèrement le lacet du nœud sélectionné.
-aetherhaven.pathTool.modeCycledToCommit=Mode : placer — F place le chemin (lorsque vous avez 2 nœuds ou plus).
-aetherhaven.pathTool.widthCycled=Largeur du chemin : {w} (1-8)
+aetherhaven.pathTool.modeCycledToTranslate=Mode : Déplacement
+aetherhaven.pathTool.modeCycledToRotate=Mode : Rotation
+aetherhaven.pathTool.modeCycledToCommit=Mode : Place
+aetherhaven.pathTool.modeCycledToRemove=Mode : Supprimer
+aetherhaven.pathTool.modeCycledToStyleDesigner=Mode : Créateur de style
+aetherhaven.pathTool.widthCycled=Largeur du chemin : {w}
 aetherhaven.pathTool.styleCycled=Style de chemin : {style}
 aetherhaven.pathTool.toastStyleCycled=Le style du chemin a été modifié.
-aetherhaven.pathTool.useInTranslateMode=En mode déplacement, la touche F est inactive. Appuyez sur Q pour passer en mode placement, puis sur F pour placer, ou sur Q pour faire pivoter et F pour ajuster légèrement le lacet.
-aetherhaven.pathTool.rotateNoSelection=Sélectionnez une image clé (visez la sphère dorée) à faire pivoter, ou appuyez sur Q pour changer de mode.
+aetherhaven.pathTool.useInTranslateMode=Appuyez sur Q jusqu'à atteindre le mode Placer, puis appuyez sur F pour placer le tracé.
+aetherhaven.pathTool.rotateNoSelection=Sélectionnez d'abord un nœud, ou appuyez sur Q pour changer de mode.
+aetherhaven.pathTool.wrongMode=Cette entrée ne fonctionne pas dans ce mode. Appuyez sur Q pour changer de mode.
 aetherhaven.pathTool.modeToggled=Mode : {m}
 aetherhaven.pathTool.selectedNode=Nœud sélectionné.
 aetherhaven.pathTool.movedNode=Nœud déplacé.
-aetherhaven.pathTool.noNodeHit=Aucun nœud de contrôle à portée. En mode translation avec un nœud sélectionné, essayez le nœud principal au sol pour vous déplacer.
-aetherhaven.pathTool.noNodeOnAim=Aucune image clé sur le réticule. Visez le disque doré pour sélectionner. La sélection reste inchangée.
+aetherhaven.pathTool.noNodeHit=Aucun nœud de contrôle à portée. En mode déplacement avec un nœud sélectionné, essayez le nœud principal au sol pour vous déplacer.
+aetherhaven.pathTool.noNodeOnAim=Aucun point sur le réticule. Sélection inchangée.
 aetherhaven.pathTool.toastAdd=Point de contrôle ajouté
-aetherhaven.pathTool.toastModeTranslate=Déplacement : le déplacement principal sur le bloc déplace la sélection ; le déplacement secondaire ajoute une image clé.
-aetherhaven.pathTool.toastModeRotate=Rotation : F effectue une légère rotation de lacet pour le nœud sélectionné.
-aetherhaven.pathTool.toastModeCommit=Placer : F place le chemin (2+ nœuds). Échanger avec Q.
+aetherhaven.pathTool.toastModeTranslate=Mode déplacement
+aetherhaven.pathTool.toastModeRotate=Mode de rotation
+aetherhaven.pathTool.toastModeCommit=Mode de placement
+aetherhaven.pathTool.toastModeRemove=Supprimer le mode
+aetherhaven.pathTool.toastModeStyleDesigner=Mode créateur de style
 aetherhaven.pathTool.toastMoved=Position du nœud mise à jour
 aetherhaven.pathTool.toastRemoved=Point de contrôle supprimé
-aetherhaven.pathTool.toastRotated=Yaw a poussé
-aetherhaven.pathTool.toastCemented=Chemin scellé. Consultez la conversation pour l'identifiant de retour.
-aetherhaven.pathTool.rotated=Rotation {deg}°.
+aetherhaven.pathTool.toastRotated=Direction légèrement modifiée
+aetherhaven.pathTool.toastCemented=Chemin placé
+aetherhaven.pathTool.toastRemovedPath=Chemin supprimé
+aetherhaven.pathTool.rotated=Rotation de {deg} degrés.
 aetherhaven.pathTool.removedNode=Nœud supprimé. {n} nœud(s) restant(s).
-aetherhaven.pathTool.needTwoNodes=Il vous faut au moins deux images clés. Ajoutez-en une autre avec l'option « secondaire », ou appuyez sur Q pour quitter le mode de validation et continuer l'édition.
-aetherhaven.pathTool.emptyPlan=Aucun terrain trouvé le long du chemin (pentes abruptes/vides/morceaux non chargés).
-aetherhaven.pathTool.cementFail=Rien à placer : aucun terrain remplaçable trouvé ou placement impossible.
-aetherhaven.pathTool.cemented=Chemin placé. ID de restauration : {id} (restauration du chemin aetherhaven <id> avec aetherhaven.path.revert)
+aetherhaven.pathTool.needTwoNodes=Il faut au moins deux nœuds. Ajoutez-en un autre avec un nœud secondaire, ou appuyez sur Q pour changer de mode.
+aetherhaven.pathTool.emptyPlan=Aucun terrain trouvé le long du chemin.
+aetherhaven.pathTool.cementFail=Rien à placer le long du chemin.
+aetherhaven.pathTool.cemented=Chemin placé.
+aetherhaven.pathTool.removeSelected=Chemin sélectionné.
+aetherhaven.pathTool.removeNoHit=Aucun chemin sur le réticule.
+aetherhaven.pathTool.removeNeedSelection=Sélectionnez d'abord un chemin avec le chemin principal.
+aetherhaven.pathTool.removeUnknown=Ce chemin n'existe plus.
+aetherhaven.pathTool.removedPath=Chemin supprimé. Blocs {cells} restaurés.
 aetherhaven.pathTool.revertNoPerm=Vous n'avez pas la permission aetherhaven.path.revert
 aetherhaven.pathTool.badUuid=Identifiant invalide : {raw}
 aetherhaven.pathTool.unknownId=Aucun chemin enregistré avec cet identifiant.
 aetherhaven.pathTool.reverted=Bloc(s) {cells} rétabli(s) pour {id}
-aetherhaven.pathTool.navvizOn=Débogage de la navigation par chemin : activé (le serveur affiche les nœuds de chemin validés sous forme de lignes ; relancez la commande pour désactiver)
+aetherhaven.pathTool.navvizOn=Débogage de la navigation par chemin : activé
 aetherhaven.pathTool.navvizOff=Débogage de la navigation par chemin : désactivé
 aetherhaven.pathTool.navvizNoPerm=Le débogage de la navigation par chemin nécessite l'outil aetherhaven.path.tool
 
-commands.aetherhaven.path.root.desc=Assistants de placement de chemins/splines
-commands.aetherhaven.path.revert.desc=Restaurez un chemin définitif à partir du fichier d'annulation (aetherhaven.path.revert)
-commands.aetherhaven.path.revert.id=Identifiant du commit du chemin (UUID du message de chat Cement)
-commands.aetherhaven.path.navviz.desc=Activer/désactiver le rendu de débogage des polylignes de navigation (aetherhaven.path.tool ; sous-routine : navviz)
+aetherhaven.pathTool.styleListTitle=Styles de chemin
+aetherhaven.pathTool.styleListSelected=Sélectionné : {name}
+aetherhaven.pathTool.styleListEmpty=Aucun style de tracé n'est encore disponible. Appuyez sur Nouveau pour en créer un.
+aetherhaven.pathTool.styleListRowSelected=Choisi
+aetherhaven.pathTool.styleListPickOne=Choisissez d'abord un style dans la liste.
+aetherhaven.pathTool.styleListCreate=Nouveau
+aetherhaven.pathTool.styleListEdit=Modifier
+aetherhaven.pathTool.styleListCancel=Annuler
+aetherhaven.pathTool.styleNameTitle=Nouveau style de chemin
+aetherhaven.pathTool.styleNameHint=Indiquez votre style, puis rendez-vous au coffre pour choisir les blocs.
+aetherhaven.pathTool.styleNameContinue=Continuer
+aetherhaven.pathTool.styleEditNameLabel=Nom du style
+aetherhaven.pathTool.styleEditNamePlaceholder=Mon style de chemin
+aetherhaven.pathTool.toastStyleSaved=Style de chemin enregistré
+aetherhaven.pathTool.styleEditNeedBlocks=Ajoutez au moins un bloc dans le coffre avant de sauvegarder.
+aetherhaven.pathTool.styleEditNoSession=La session de l'éditeur de styles a expiré. Veuillez rouvrir le gestionnaire de styles.
+aetherhaven.pathTool.styleSaved=Style de chemin enregistré : {name}
+
+commands.aetherhaven.path.root.desc=Assistants d'outils de chemin
+commands.aetherhaven.path.revert.desc=Annuler un chemin placé en utilisant l'identifiant fourni dans la conversation lors de son placement.
+commands.aetherhaven.path.revert.id=L'identifiant du chemin provient de la conversation lorsque vous avez placé le chemin.
+commands.aetherhaven.path.navviz.desc=Débogage : activer/désactiver les lignes de débogage de la navigation dans le chemin
 
 items.Aetherhaven_Path_Tool.name=pelle de conception de chemin
-items.Aetherhaven_Path_Tool.description=Crée des chemins spline (aetherhaven.path.tool). Fonction secondaire : ajouter des nœuds. Fonction principale : sélectionner ; en mode déplacement, cliquez sur le sol pour déplacer. Q : changer de mode. Deuxième fonction : largeur du chemin (1 à 8). Troisième fonction : style du chemin (blocs internes ; PathToolStyles dans la configuration). F : ajuster l’orientation en mode rotation, ou placer en mode position (2 nœuds ou plus). Annuler : annuler le chemin initial d’aetherhaven. Configuration : PathToolStyles, raycast et listes de remplacement.
+items.Aetherhaven_Path_Tool.description=Crée des chemins pour votre ville. Q change de mode. Secondaire ajoute ou supprime des nœuds. F place, supprime ou ouvre le gestionnaire de styles selon le mode. E définit la largeur. R définit le style.
+
+items.Aetherhaven_Patrol_Wand.name=baguette de patrouille
+items.Aetherhaven_Patrol_Wand.description=Définit les itinéraires de patrouille des gardes de votre ville (baguette de patrouille d'Aetherhaven). À fabriquer au bureau d'urbanisme. Consultez la légende à l'écran en la tenant en main.
+
+aetherhaven.patrolWand.legendPageTitle=baguette de patrouille
+aetherhaven.patrolWand.legendBlurb=Placez des points de patrouille, enregistrez un itinéraire, puis affectez un garde. Les étincelles bleues indiquent les itinéraires uniquement lorsque vous tenez cette baguette.
+aetherhaven.patrolWand.legendHotkeyAdd=Mode construction : cliquez avec le bouton droit sur le sol pour ajouter un point. Cliquez avec le bouton droit sur un point pour le supprimer.
+aetherhaven.patrolWand.legendHotkeySelect=Cliquez avec le bouton gauche sur un point d'un itinéraire enregistré pour sélectionner et modifier cet itinéraire.
+aetherhaven.patrolWand.legendHotkeyUse=Mode Création : F ouvre une invite de nommage et enregistre l’itinéraire (nécessite au moins deux points). Mode Affectation : F ouvre une liste de gardes pour l’itinéraire sélectionné.
+aetherhaven.patrolWand.legendHotkeyAbility=Q permet de basculer entre le mode construction et le mode affectation. E crée un nouvel itinéraire en mode construction ou supprime le garde de l'itinéraire sélectionné en mode affectation. R active/désactive la boucle fermée en mode construction.
+aetherhaven.patrolWand.legendVisuals=Les itinéraires sélectionnés apparaissent en vert. Les autres restent bleus. Les gardes affectés à plusieurs itinéraires patrouillent chaque boucle à tour de rôle.
+aetherhaven.patrolWand.nameRouteTitle=Nom du parcours de patrouille
+aetherhaven.patrolWand.nameRouteHint=Cet itinéraire comporte {n} points. Choisissez un nom, puis enregistrez.
+aetherhaven.patrolWand.nameRouteLabel=Nom de la route
+aetherhaven.patrolWand.nameRoutePlaceholder=patrouille à l'entrée
+aetherhaven.patrolWand.nameRouteSave=Enregistrer l'itinéraire
+aetherhaven.patrolWand.nameRouteCancel=Annuler
+
+aetherhaven.patrolWand.hudTitle=baguette de patrouille
+aetherhaven.patrolWand.hudNameBuild=Construire l'itinéraire
+aetherhaven.patrolWand.hudNameAssign=Affecter un garde
+aetherhaven.patrolWand.hudHelpBuild=Cliquez avec le bouton droit sur le sol pour ajouter un point. Cliquez avec le bouton droit sur un point pour le supprimer. F nomme et enregistre. R active/désactive la boucle fermée. E redémarre. Q change de mode.
+aetherhaven.patrolWand.hudHelpAssign=Cliquez sur un point d'itinéraire pour le sélectionner. F ouvre la liste des gardes. E supprime le garde. Q change de mode.
+aetherhaven.patrolWand.hudRoute=Itinéraire : {name}
+aetherhaven.patrolWand.hudNodes=Points : {n}
+aetherhaven.patrolWand.hudLoopClosed=Chemin : boucle fermée
+aetherhaven.patrolWand.hudLoopOpen=Trajet : aller-retour
+aetherhaven.patrolWand.hudGuard=Garde : {guard}
+aetherhaven.patrolWand.hudGuardNone=Pas de garde
+aetherhaven.patrolWand.hudGuardAssigned=Attribué
+aetherhaven.patrolWand.hudRouteNew=Nouvelle route
+aetherhaven.patrolWand.hudHint=Construire : ajouter des points, boucle R, nom F et enregistrer | Affecter : liste des gardes F | Q : mode | E : nouvel itinéraire ou libérer les gardes
+
+aetherhaven.patrolWand.addedNode=Point ajouté. {n} sur cet itinéraire.
+aetherhaven.patrolWand.removedNode=Point supprimé. {n} restant sur cet itinéraire.
+aetherhaven.patrolWand.needBuildMode=Passez en mode construction avec la touche Q pour ajouter ou supprimer des points.
+aetherhaven.patrolWand.notInTown=Placez-vous à l'intérieur de votre ville pour utiliser la baguette de patrouille.
+aetherhaven.patrolWand.notMember=Vous devez être membre de la municipalité pour modifier les itinéraires de patrouille.
+aetherhaven.patrolWand.noRouteHit=Aucun point de route dans votre viseur.
+aetherhaven.patrolWand.selectedRoute=Sélectionnez {name}. Appuyez sur F pour enregistrer en mode construction, ou sur F pour assigner une protection en mode assignation.
+aetherhaven.patrolWand.needTwoNodes=Il faut au moins deux points avant de pouvoir sauvegarder.
+aetherhaven.patrolWand.needTwoNodesForLoop=Il faut au moins deux points avant de basculer la boucle.
+aetherhaven.patrolWand.loopClosed=Route fermée — les gardes font une boucle depuis le dernier point jusqu'au premier.
+aetherhaven.patrolWand.loopOpen=Voie ouverte — des gardes patrouillent le long du chemin.
+aetherhaven.patrolWand.savedRoute=Sauvetage réussi avec {name} points. Choisissez un garde à assigner.
+aetherhaven.patrolWand.selectRouteFirst=Sélectionnez d'abord un itinéraire. Cliquez ensuite sur l'un de ses points.
+aetherhaven.patrolWand.routeMissing=Cette route n'existe plus.
+aetherhaven.patrolWand.invalidGuard=Ce n'est pas un garde de cette ville.
+aetherhaven.patrolWand.assignedGuard=Mettre {name} sur {route}.
+aetherhaven.patrolWand.clearedGuard=Protection retirée de {route}.
+aetherhaven.patrolWand.modeBuild=Mode construction. Placez des points de patrouille.
+aetherhaven.patrolWand.modeAssign=Mode d'affectation. Choisissez un itinéraire, puis appuyez sur F pour choisir un garde.
+aetherhaven.patrolWand.newRoute=J'ai commencé un nouvel itinéraire.
+aetherhaven.patrolWand.assignPageTitle=Affecter un garde
+aetherhaven.patrolWand.assignPageHint=Choisissez une protection pour {route}.
+aetherhaven.patrolWand.assignPageNoGuards=Il n'y a pas de gardes en ville. Engagez-en d'abord à la guilde.
+aetherhaven.patrolWand.assignPageAssignButton=Attribuer
+aetherhaven.patrolWand.guardTypeKnight=Chevalier
+aetherhaven.patrolWand.guardTypeArcher=Archer
+aetherhaven.patrolWand.guardTypeMage=Mage
+aetherhaven.patrolWand.toastAdded=Point ajouté
+aetherhaven.patrolWand.toastRemoved=Point supprimé
+aetherhaven.patrolWand.toastSelected=Itinéraire sélectionné
+aetherhaven.patrolWand.toastSaved=Itinéraire enregistré
+aetherhaven.patrolWand.toastAssigned=Garde affecté
+aetherhaven.patrolWand.toastCleared=Garde retirée
+aetherhaven.patrolWand.toastNewRoute=Nouvelle route
 
 items.Aetherhaven_Plot_Token_Inn.name=jeton de parcelle d'auberge
 items.Aetherhaven_Plot_Token_Inn.description=Nécessaire dans l'inventaire pour utiliser le personnel de placement de parcelles pour l'emprise de l'auberge.
 
 items.Aetherhaven_Plot_Token_Market_Stall.name=jeton d'emplacement d'étal de marché
 items.Aetherhaven_Plot_Token_Market_Stall.description=Il est nécessaire de positionner l'emplacement de l'étal de marché en fonction des besoins du personnel chargé de l'implantation des parcelles.
+items.Aetherhaven_Plot_Token_Player_Shop.name=jeton de parcelle de la boutique du joueur
+items.Aetherhaven_Plot_Token_Player_Shop.description=Il est nécessaire de placer l'emplacement de la boutique du joueur à l'aide du personnel chargé du placement des parcelles.
 
 items.Aetherhaven_Plot_Token_Farm.name=jeton de parcelle agricole
 items.Aetherhaven_Plot_Token_Farm.description=Il est nécessaire de placer l'empreinte de la parcelle agricole à l'aide du personnel chargé du placement des parcelles.
+
+items.Aetherhaven_Plot_Token.name=Jeton de l'intrigue
+items.Aetherhaven_Plot_Token.description=Place un bâtiment personnalisé de la ville à l'aide de l'outil de placement de parcelles. Chaque jeton est associé à un type de bâtiment.
+items.Aetherhaven_Plot_Token.instance.name=jeton de tracé {building}
+items.Aetherhaven_Plot_Token.instance.description=Il est nécessaire de placer l'empreinte {building} à partir du personnel de placement de la parcelle.
+items.Aetherhaven_Plot_Token.instance.descriptionDecoration=Il est nécessaire de placer l'empreinte {building} fournie par l'équipe de placement de parcelles. Une fois la construction terminée, cette décoration n'est pas enregistrée comme parcelle de ville. Pour la retirer ou la déplacer, cassez ou déplacez les blocs vous-même ; elle ne peut pas être récupérée depuis le journal de la ville.
+
+items.Aetherhaven_Plot_Token_Unlock_Page.name=Plan de l'intrigue
+items.Aetherhaven_Plot_Token_Unlock_Page.description=Une page de plan spéciale. Utilisez-la pour apprendre une nouvelle intrigue à votre établi de création d'intrigues.
+items.Aetherhaven_Plot_Token_Unlock_Page.instance.name=Plan de l'intrigue : {building}
+items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=Lisez ceci pour débloquer définitivement le scénario {building} à votre établi de création de scénarios.
+
+items.Aetherhaven_Plot_Creator_Staff.name=Équipe de création de l'intrigue
+items.Aetherhaven_Plot_Creator_Staff.description=Transformez une construction en bâtiment personnalisé pour votre ville. Consultez le guide du journal de la ville. F lance l'étape en cours. Cliquez sur les blocs pour définir les limites et les emplacements. Q/E : précédent/suivant. R : annule.
 
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=jeton de parcelle de la forge
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Il est nécessaire de placer l'emplacement de la forge à l'aide du personnel chargé du placement des parcelles.
 
 items.Aetherhaven_Plot_Token_Park.name=jeton de parcelle de parc
 items.Aetherhaven_Plot_Token_Park.description=Il est nécessaire de placer l'empreinte du parc à partir des indications du personnel chargé de l'implantation des parcelles.
+items.Aetherhaven_Plot_Token_Tourist_Portal.name=jeton de parcelle du portail touristique
+items.Aetherhaven_Plot_Token_Tourist_Portal.description=Il est nécessaire de placer l'empreinte du portail touristique à partir des coordonnées du personnel chargé de l'implantation des parcelles.
 
 items.Aetherhaven_Plot_Token_House.name=jeton de parcelle de maison
 items.Aetherhaven_Plot_Token_House.description=Il est nécessaire de placer l'empreinte au sol de la maison partagée selon les directives du personnel chargé de l'implantation des parcelles.
 
 items.Aetherhaven_Plot_Token_Town_Hall.name=jeton de parcelle de l'hôtel de ville
 items.Aetherhaven_Plot_Token_Town_Hall.description=Il est nécessaire de placer l'emplacement de l'hôtel de ville à l'aide du personnel chargé du placement des parcelles.
+
+items.Aetherhaven_Plot_Token_Guild_Hall.name=jeton de parcelle de la salle de guilde
+items.Aetherhaven_Plot_Token_Guild_Hall.description=Emplacements indiqués pour la construction du bâtiment préfabriqué de la guilde. À fabriquer au bureau d'urbanisme.
 
 items.Aetherhaven_Gold_Coin.name=pièce d'or
 items.Aetherhaven_Gold_Coin.description=La monnaie de la ville est stockée dans le trésor.
@@ -130,10 +337,14 @@ items.Aetherhaven_Geode.name=Géode
 items.Aetherhaven_Geode.description=Une pierre creuse pouvant contenir des cristaux, des gemmes ou du minerai. Payez un forgeron pour la casser.
 
 items.Aetherhaven_Geode_Anvil.name=enclume en géode
-items.Aetherhaven_Geode_Anvil.description=Permet d'ouvrir des géodes sans frais de forge. Emplacement et utilisation : vous devez connaître le schéma pour la fabriquer à votre bureau d'urbanisme.
+items.Aetherhaven_Geode_Anvil.description=Ouvre les géodes sans frais de forge. Placement et utilisation ; <color is="#ffa726">vous devez connaître le schéma</color> pour la fabriquer à votre bureau d'urbanisme.
+
+items.Aetherhaven_Crystallized_Person.name=Personne cristallisée
 
 items.Aetherhaven_Treasury.name=trésor municipal
 items.Aetherhaven_Treasury.description=Contient les pièces d'or de la ville. Sert à déposer ou à retirer (propriétaire de la ville).
+items.Aetherhaven_Shop_Safe.name=Achetez en toute sécurité
+items.Aetherhaven_Shop_Safe.description=Contient l'or provenant des ventes de votre boutique de joueur. Utilisez-le pour encaisser vos gains.
 
-items.Aetherhaven_Quest_Journal.name=Journal de quête de la ville
-items.Aetherhaven_Quest_Journal.description=Utilisation secondaire : consulter les quêtes en cours dans la ville. L’Ancien pourra vous en confier une une fois l’auberge construite.
+items.Aetherhaven_Quest_Journal.name=Journal de la ville
+items.Aetherhaven_Quest_Journal.description=Utilisation secondaire : ouvrez le journal de votre ville. Vous pouvez y consulter les quêtes.

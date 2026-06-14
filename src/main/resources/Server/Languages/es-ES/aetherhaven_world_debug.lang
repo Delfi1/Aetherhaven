@@ -12,6 +12,32 @@ aetherhaven.poi.clearedInteractionTarget=Objetivo de interacción despejado; los
 aetherhaven.poi.setInteractionTarget=Establezca el objetivo de interacción en {x}, {y}, {z}.
 aetherhaven.poi.selected=Punto de interés seleccionado {id} en {x}, {y}, {z}
 aetherhaven.poi.targetBlockMismatch=El bloque de destino debe coincidir con el tipo esperado {type} para este punto de interés.
+aetherhaven.poi.removed=Punto de interés eliminado.
+aetherhaven.poi.noTownPlot=No hay ninguna parcela urbana terminada en esa manzana.
+
+aetherhaven.adventurerSpawnMarker.label=Lugar de aventureros
+aetherhaven.adventurerSpawnMarker.placed=Lugar para aventureros ubicado.
+aetherhaven.adventurerSpawnMarker.removed=Se ha eliminado el espacio para aventureros.
+aetherhaven.adventurerSpawnMarker.alreadyHere=Ya existe un lugar para aventureros.
+
+aetherhaven.poiMarker.label=Punto de interés
+
+aetherhaven.poiMarkerConfig.title=Configurar punto de interés
+aetherhaven.poiMarkerConfig.needHeader=Necesidad satisfecha
+aetherhaven.poiMarkerConfig.presetSleep=Dormir
+aetherhaven.poiMarkerConfig.presetEat=Comer
+aetherhaven.poiMarkerConfig.presetSit=Sentarse / divertirse
+aetherhaven.poiMarkerConfig.presetWork=Trabajar
+aetherhaven.poiMarkerConfig.summary={preset} ({kind})
+aetherhaven.poiMarkerConfig.capacity=Espacios para PNJ (1–4)
+aetherhaven.poiMarkerConfig.mountToggle=Se monta en muebles (camas, sillas).
+aetherhaven.poiMarkerConfig.workAction=Acción laboral
+aetherhaven.poiMarkerConfig.workNone=Ninguno
+aetherhaven.poiMarkerConfig.workMine=Mío
+aetherhaven.poiMarkerConfig.workChop=Cortar
+aetherhaven.poiMarkerConfig.confirm=Punto de interés
+aetherhaven.poiMarkerConfig.cancel=Cancelar
+aetherhaven.poiMarkerConfig.placed=Punto de interés ubicado.
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
@@ -75,12 +101,23 @@ aetherhaven.debug.plots.finishassemblyNone=No se deben ensamblar parcelas con un
 aetherhaven.debug.plots.finishassemblyDone=Se finalizaron instantáneamente las construcciones de parcelas en curso de {count}.
 aetherhaven.debug.plots.removeBadUuid=UUID de parcela no válido. Utilice el ID de la lista de parcelas de /aetherhaven.
 aetherhaven.debug.plots.removeNotFound=No hay parcela {plotId} en tu ciudad.
-aetherhaven.debug.plots.removeDataFailed=El mundo se ha despejado, pero la eliminación de la parcela de los datos de la ciudad ha fallado (verificar los registros).
+aetherhaven.debug.plots.removeDataFailed=El mundo se ha despejado, pero la eliminación de la parcela de los datos de la ciudad ha fallado (verifique los registros).
 aetherhaven.debug.plots.removedPlot=Se eliminó la parcela {plotId} del municipio y se limpió su huella.
 aetherhaven.debug.poi.invalidTownUuid=UUID de ciudad no válido: {raw}
 aetherhaven.debug.poi.noTownArg=No tienes ninguna ciudad en este mundo (usa un argumento UUID de ciudad).
 aetherhaven.debug.poi.listHeader=Puntos de interés para la ciudad {town} ({count}):
 aetherhaven.debug.poi.listEmpty=No hay ninguno registrado para esta ciudad (complete un edificio o revise pois.json).
-aetherhaven.debug.poi.listLine={x},{y},{z} tipo={kind} blockTypeId={block} etiquetas={tags} tapa={cap} trazado={plot}
+aetherhaven.debug.poi.listLine={x},{y},{z} tipo={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
 aetherhaven.debug.poi.dumpHeader=Todos los puntos de interés en el registro mundial ({count}):
 aetherhaven.debug.poi.dumpLine=ciudad={town} {x},{y},{z} tipo={kind} blockTypeId={block} etiquetas={tags} parcela={plot}
+
+aetherhaven.debug.tourist.noTown=No tienes ciudad en este mundo.
+aetherhaven.debug.tourist.targetsHeader=Objetivos de visitas turísticas para {town} (parcelas {count}):
+aetherhaven.debug.tourist.targetsEmpty=No hay parcelas terminadas con touristDestination habilitado (verifique el creador de la parcela o el JSON del edificio).
+aetherhaven.debug.tourist.plotLine={building} plot={plot} entry=({entryX},{entryY},{entryZ}) preferred={preferred} visitPois={poiCount}
+aetherhaven.debug.tourist.poiLine=poi {x},{y},{z} tipo={kind} etiquetas={tags}
+
+# Wall wand placement debug (/ah walldebug)
+aetherhaven.debug.wall.on=Depuración de la varita de pared ACTIVADA (chat + registro del servidor).
+aetherhaven.debug.wall.off=Desactivación de la varita de pared.
+aetherhaven.debug.wall.noSession=No hay ninguna sesión activa con el control remoto de pared. Primero, abre el control remoto de pared.

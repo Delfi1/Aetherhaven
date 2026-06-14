@@ -1,0 +1,7 @@
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire={type} 警備員を雇う（{gold} ゴールド）
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=さようなら
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=料金を支払えば、この冒険者があなたの町を巡回します。彼らは戦闘で倒れるまでそこに留まります。
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=はい、彼らを雇ってください。
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=今じゃない
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=彼らはあなたのものです。長く滞在させたいなら、餌を与え、住む場所を確保してあげてください。
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=さようなら

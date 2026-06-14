@@ -1,7 +1,140 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
-# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+# Bundle: town journal UI, npcRoles, workplace plot tokens
 
-# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+# === UI: town journal ===
+aetherhaven.ui.townJournal.shellTitle=タウンジャーナル
+aetherhaven.ui.townJournal.tab.town=町
+aetherhaven.ui.townJournal.tab.guide=ガイド
+aetherhaven.ui.townJournal.tab.quests=クエスト
+aetherhaven.ui.townJournal.tab.settings=設定
+aetherhaven.ui.townJournal.pageTitle.town=町
+aetherhaven.ui.townJournal.pageTitle.guide=ガイド
+aetherhaven.ui.townJournal.pageTitle.quests=クエスト
+aetherhaven.ui.townJournal.pageTitle.settings=設定
+aetherhaven.ui.journalSettings.tab.personal=個人的
+aetherhaven.ui.journalSettings.tab.server=サーバ
+aetherhaven.ui.journalSettings.personalHeading=あなたの好み
+aetherhaven.ui.journalSettings.personalHint=これらの設定はあなただけに適用されます。ピックのチューニングは、現在の飛行高度を自動的に使用します。
+aetherhaven.ui.journalSettings.rtsPickHeading=ガードコマンドの地面クリック
+aetherhaven.ui.journalSettings.rtsPickHint=移動指示が画面から地上にどのように反映されるかを調整します。マーカーが画面端や高高度で目標から外れて着地する場合を調整します。
+aetherhaven.ui.journalSettings.rtsPickFovLabel=垂直視野角（度）（標準値：60～90度）
+aetherhaven.ui.journalSettings.rtsPickAspectLabel=ビューポートの幅を高さで割った値（例：16:10の場合は1.6）
+aetherhaven.ui.journalSettings.personalSaveButton=設定を保存する
+aetherhaven.ui.journalSettings.personalResetButton=モジュールのデフォルト設定にリセット
+aetherhaven.ui.journalSettings.personalSaveOk=個人設定を保存しました。
+aetherhaven.ui.journalSettings.personalResetOk=ガードコマンドのクリック設定をMODのデフォルト設定にリセットしてください。
+aetherhaven.ui.journalSettings.serverRequiresOp=サーバー設定にはオペレーターの許可が必要です。
+aetherhaven.ui.townJournal.placeholder.town=まだここには何もありません。
+aetherhaven.ui.journalSettings.generalHeading=世界的な報酬とペースアップ
+aetherhaven.ui.journalSettings.passiveLabel=建物を配置した後は、新しい建物は自動的に成長し続けます。
+aetherhaven.ui.journalSettings.constrHeading=建物がブロックを配置する速さ
+aetherhaven.ui.journalSettings.constrBptLabel=建物が完成する各段階で配置されるブロック
+aetherhaven.ui.journalSettings.constrMsLabel=これらのステップの間には、数ミリ秒の短い間隔を置く。
+aetherhaven.ui.journalSettings.lootHeading=宝箱ボーナス、破壊可能なアイテム、そして採掘運
+aetherhaven.ui.journalSettings.geodeLabel=鉱石ブロックを破壊した際に、ジオードが出現する確率が0から1に増加します。
+aetherhaven.ui.journalSettings.chestJewelryLabel=ワールドチェストが0から1の追加ジュエリーロールを獲得する確率
+aetherhaven.ui.journalSettings.goldChanceLabel=ワールドチェストからボーナスゴールドコインが0～1枚手に入る確率
+aetherhaven.ui.journalSettings.goldMinLabel=最小の金貨
+aetherhaven.ui.journalSettings.goldMaxLabel=ほとんどの金貨
+aetherhaven.ui.journalSettings.breakableHeading=木箱、樽、壺、棺桶から見つかった硬貨
+aetherhaven.ui.journalSettings.breakableWeightNoneLabel=何も見つからない頻度（数値が高いほどコインが少ない）
+aetherhaven.ui.journalSettings.breakableWeightOneLabel=コインを1枚見つける頻度
+aetherhaven.ui.journalSettings.breakableWeightTwoLabel=2枚のコインを見つける頻度
+aetherhaven.ui.journalSettings.shopHeading=ショップスポット
+aetherhaven.ui.journalSettings.shopMemberPriceLabel=会員ショップ価格（カタログ価格に対する割合、1～100％）
+aetherhaven.ui.journalSettings.giftHeading=浮かぶギフトバルーン
+aetherhaven.ui.journalSettings.giftEnabledLabel=世界にギフトバルーンを出現させる
+aetherhaven.ui.journalSettings.giftDaysMinLabel=ロール間の最短日数
+aetherhaven.ui.journalSettings.giftDaysMaxLabel=ロール間の最新の日数
+aetherhaven.ui.journalSettings.saveButton=設定を保存
+aetherhaven.ui.journalSettings.resetDefaultsButton=初期設定に戻す
+aetherhaven.ui.journalSettings.resetModalTitle=フォームでmodのデフォルト設定を読み込みますか？
+aetherhaven.ui.journalSettings.resetModalBody=これにより、フォームにMODのデフォルト値が入力されます。設定を保存するまでは、実行中のサーバーは古い値を使用します。
+aetherhaven.ui.journalSettings.resetModalConfirm=リセット
+aetherhaven.ui.journalSettings.resetModalCancel=キャンセル
+aetherhaven.ui.journalSettings.resetApplied=フォームにMODのデフォルト設定が表示されます。「設定を保存」をクリックすると、設定がサーバーに適用され、設定ファイルが書き込まれます。
+aetherhaven.ui.journalSettings.saveOk=これらのワールド設定を保存しました。
+aetherhaven.ui.journalSettings.saveFail=サーバー設定を保存できませんでした。サーバーログを確認してください。
+aetherhaven.ui.journalSettings.toolsHeading=修理ツール
+aetherhaven.ui.journalSettings.resetVillagers=町の人々をリセットする
+aetherhaven.ui.journalSettings.fixInn=宿の宿泊客リストを修正する
+aetherhaven.ui.journalSettings.finishPlot=建物を1つ完成させよう
+aetherhaven.ui.journalSettings.villagerReport=村人の情報テキストを作成する
+aetherhaven.ui.journalSettings.plotModalTitle=完成させる建物を一つ選んでください。
+aetherhaven.ui.journalSettings.plotModalHint=掲載されているのは建設中の建物のみです。建物の区画が読み込まれるように、建設現場の近くに立ってください。
+aetherhaven.ui.journalSettings.plotFieldLabel=建物
+aetherhaven.ui.journalSettings.plotPickNone=建物を選択してください
+aetherhaven.ui.journalSettings.plotModalConfirm=終わらせる
+aetherhaven.ui.journalSettings.plotModalCancel=キャンセル
+aetherhaven.ui.journalSettings.villagerModalTitle=村人情報テキスト
+aetherhaven.ui.journalSettings.villagerModalHint=住民を一人選び、ボタンを押して下のボックスに入力してください。ボックス内のすべてを選択し、通常のコピーキーでコピーして、MOD作者と共有してください。
+aetherhaven.ui.journalSettings.villagerFieldLabel=人
+aetherhaven.ui.journalSettings.villagerPickNone=人を選ぶ
+aetherhaven.ui.journalSettings.villagerBuildReport=箱に記入してください
+aetherhaven.ui.journalSettings.villagerCopyHint=ボックス内のテキストをすべて選択し、通常のコピーキーでコピーしてください。
+aetherhaven.ui.journalSettings.villagerModalClose=近い
+aetherhaven.ui.journalSettings.innRepairDone=宿屋リストを修正しました。ロックされた訪問者 {locked} を昇格 {promoted} し、不要なエントリ {removed} を削除しました。
+aetherhaven.ui.innBell.notAllowed=このベルは、その町の宿屋の会員のみが使用できます。
+aetherhaven.ui.innBell.notOpen=その宿はまだ営業していません。
+aetherhaven.ui.innBell.returned=訪問者たちはゲストエリアに戻った。
+aetherhaven.ui.innBell.noVisitors=現在、この宿には宿泊客はおりません。
+aetherhaven.ui.innBell.noMoreGuests=もう宿泊客はいません。
+aetherhaven.ui.journalSettings.finishPlotOk=あの建物はもう完成しました。
+aetherhaven.ui.journalSettings.finishPlotNotAssembling=そのピックは建設中の建物ではありません。
+aetherhaven.ui.journalSettings.finishPlotNotLoaded=その建物にもっと近づいて、もう一度試してみてください。
+aetherhaven.ui.journalSettings.finishPlotNoJob=現在、そのピックに対するアクティブなビルドジョブはありません。
+aetherhaven.ui.journalSettings.finishPlotFailed=ビルドを完了できませんでした。エリアが完全にロードされたら、もう一度お試しください。
+aetherhaven.ui.townJournal.guide.listHeading=トピック
+aetherhaven.ui.townJournal.guide.pluginMissing=このガイドを読むには、Aetherhaven modをロードしてください。
+aetherhaven.ui.townJournal.guide.facts.questsHeading=この村人のストーリークエスト
+aetherhaven.ui.townJournal.guide.facts.repHeading=友情の贈り物
+aetherhaven.ui.townJournal.guide.facts.scheduleHeading=週間ルート
+aetherhaven.ui.townJournal.guide.giftToggleShow=プレゼントのアイデアを紹介（ネタバレあり）
+aetherhaven.ui.townJournal.guide.giftToggleHide=ギフトアイデアを隠す
+aetherhaven.ui.townJournal.guide.scheduleToggleShow=週間スケジュールを表示
+aetherhaven.ui.townJournal.guide.scheduleToggleHide=週間スケジュールを非表示にする
+aetherhaven.ui.townJournal.guide.scheduleLegend=各行はゲーム内の1日を表します。色付きのセグメントは、その日の最初のスケジュール時刻から深夜0時まで（JSONと同じ）です。ストリップの幅は各セグメントの時刻に対応しています。正確な時刻はマウスオーバーで確認できます。色は、自宅、職場、宿屋、共有スペース、祭壇を表します。赤い線は、そのストリップにマッピングされた現在のワールドクロックを示します（左端は最初の遷移時刻）。
+aetherhaven.ui.townJournal.guide.scheduleNowMarker=このスケジュールが表示された時点での現在の世界時計（村人のJSONおよび/aetherhavenの時刻と同じ時計）。
+aetherhaven.ui.townJournal.guide.giftHeaderLoves=とても愛されている贈り物
+aetherhaven.ui.townJournal.guide.giftHeaderLikes=気に入ったギフト
+aetherhaven.ui.townJournal.guide.giftHeaderDislikes=嫌いな贈り物
+aetherhaven.ui.townJournal.guide.noQuests=この村人が登場するストーリークエストはまだありません。
+aetherhaven.ui.townJournal.guide.noRepMilestones=この村人に対する友情の贈り物は、まだ設定されていません。
+aetherhaven.ui.townJournal.guide.noSchedule=この住民の週間ルートファイルはまだ作成されていません。
+aetherhaven.ui.townJournal.questListHeading=進行中のクエスト
+aetherhaven.ui.townJournal.stepsHeading=手順
+aetherhaven.ui.townJournal.rewardHeading=報酬
+aetherhaven.ui.townJournal.rewardReputationLine=+{amount} と {villager} の評判
+aetherhaven.ui.townJournal.rewardFallback=報酬についてはクエストの説明文を参照してください。
+aetherhaven.ui.townJournal.abandon=クエストを終了
+aetherhaven.ui.townJournal.abandonConfirmTitle=このクエストを放棄しますか？
+aetherhaven.ui.townJournal.abandonConfirmBody=このクエストは、最初にクエストを与えてくれた人から後で再び受けることができます。
+aetherhaven.ui.townJournal.abandonConfirm=はい、そのままにしておいてください。
+aetherhaven.ui.townJournal.abandonCancel=探求を続けよう
+aetherhaven.ui.townJournal.showTownBorders=地図上に町の境界線を表示する
+aetherhaven.ui.townJournal.showTownBordersTooltip=この世界のすべての町を地図上に線で囲みます
+aetherhaven.ui.townJournal.townVillagersHeading=町の人々
+aetherhaven.ui.townJournal.townPlotsHeading=建物
+aetherhaven.ui.townJournal.scheduleUnknown=ルートが設定されていません
+aetherhaven.ui.townJournal.scheduleHome=自宅で
+aetherhaven.ui.townJournal.scheduleWork=仕事で
+aetherhaven.ui.townJournal.scheduleInn=宿で
+aetherhaven.ui.townJournal.schedulePark=公園で
+aetherhaven.ui.townJournal.scheduleAltar=祭壇で
+aetherhaven.ui.townJournal.plotStatusNotStarted=開始されていません
+aetherhaven.ui.townJournal.plotStatusInProgress=進行中
+aetherhaven.ui.townJournal.plotStatusComplete=完了
+aetherhaven.ui.townJournal.plotStatusUnknown=未知
+aetherhaven.ui.townJournal.removePlot=取り除く
+aetherhaven.ui.townJournal.removePlotTooltip=建物を安全に撤去できるよう、町の近くに立っていてください。
+aetherhaven.ui.townJournal.plotRemoveConfirmTitle=この建物を撤去しますか？
+aetherhaven.ui.townJournal.plotRemoveConfirmBody=この建物はゲーム世界から削除され、あなたの街のリストからも削除されます。この操作は元に戻せません。
+aetherhaven.ui.townJournal.plotRemoveConfirm=はい、削除してください
+aetherhaven.ui.townJournal.plotRemoveCancel=そのままにしておいてください
+aetherhaven.ui.townJournal.removePlotAreaNotLoaded=その建物にもっと近づいて、もう一度試してみてください。
+aetherhaven.ui.townJournal.removePlotFailed=町名リストを更新できませんでした。もう一度お試しください。
+
+# Legacy keys (other locales; unused in new UI)
 aetherhaven.ui.questjournal.title=クエストジャーナル
 aetherhaven.ui.questjournal.hint=詳細を確認するには、クエストを選択してください。
 aetherhaven.ui.questjournal.abandon=放棄する
@@ -13,16 +146,20 @@ items.Aetherhaven_Management_Block.name=町の記録棚
 items.Aetherhaven_Management_Block.description=完成した建物の事務用棚。その区画の建設状況を表示します。
 
 items.Aetherhaven_Sprinkler_Iron.name=鉄製スプリンクラー
-items.Aetherhaven_Sprinkler_Iron.description=3×3の範囲内の、1ブロック下の耕された土壌に水を撒きます。ゲーム内の毎朝1回実行されます。最小範囲です。
+items.Aetherhaven_Sprinkler_Iron.description=1ブロック下の<color is="#4ade80">3×3</color>の範囲に水を撒いて耕します。ゲーム内の毎朝1回実行されます。最小範囲。
 items.Aetherhaven_Sprinkler_Thorium.name=トリウム散水器
-items.Aetherhaven_Sprinkler_Thorium.description=水は5×5の範囲で、1ブロック下の土壌を耕します。ゲーム内の毎朝1回。鉄よりも大きい。
+items.Aetherhaven_Sprinkler_Thorium.description=水は、<color is="#4ade80">5×5</color> の範囲で、1 ブロック下の土壌を耕します。ゲーム内の毎朝 1 回。鉄よりも大きい。
 items.Aetherhaven_Sprinkler_Cobalt.name=コバルト製スプリンクラー
-items.Aetherhaven_Sprinkler_Cobalt.description=7×7の範囲内で、1ブロック下の土壌を水で耕します。ゲーム内の毎朝1回。広範囲をカバーします。
+items.Aetherhaven_Sprinkler_Cobalt.description=水は、7×7のエリアの1ブロック下の土壌を耕します。ゲーム内の毎朝1回。広範囲をカバーします。
 items.Aetherhaven_Sprinkler_Adamantite.name=アダマンタイト製スプリンクラー
-items.Aetherhaven_Sprinkler_Adamantite.description=9×9の範囲で、1ブロック下の土壌を水で耕します。ゲーム内の毎朝1回。最も広い範囲をカバーします。
+items.Aetherhaven_Sprinkler_Adamantite.description=水は、<color is="#4ade80">9×9</color> の範囲で、1 ブロック下の土壌を耕します。ゲーム内の毎朝 1 回。最も広い範囲をカバーします。
+
+items.Aetherhaven_Wood_Scaffold.name=木製足場
+items.Aetherhaven_Wood_Scaffold.description=はしごのように登ります。通常のブロックと同じように右クリックします。足場を狙ってUseキー（F）を押し続けると、タワーを側面から拡張したり、上面から水平方向に枝分かれさせたりできます。一番下の支えのないピースを破壊すると、積み重ねたタワーが崩れます。
+items.Aetherhaven_Wood_Scaffold.legendUse=（F）キーを押すと、足場を狙いながらタワー／枝を上部から伸ばします。右クリックすると、通常のブロック配置ができます。
 
 # === NPC role display names (npcRoles.*) ===
-npcRoles.Aetherhaven_Elder_Lyren.name=長老リレン
+npcRoles.Aetherhaven_Elder_Lyren.name=エルダー・ライレン
 npcRoles.Aetherhaven_Innkeeper.name=コリン・モスカップ
 npcRoles.Aetherhaven_Merchant.name=ベックス・サンダーレーン
 npcRoles.Aetherhaven_Blacksmith.name=ギャレン・ヴェイル
@@ -31,15 +168,38 @@ npcRoles.Aetherhaven_Priestess.name=セラ・ソーンウェル
 npcRoles.Aetherhaven_Miner.name=ゴルク・ストーンベイン
 npcRoles.Aetherhaven_Logger.name=セレン・フェアホロー
 npcRoles.Aetherhaven_Rancher.name=ターレン・メドウラン
+npcRoles.Aetherhaven_Townsfolk.name=町の人々
+npcRoles.Aetherhaven_Guild_Master.name=ライラ・フェアホロー
+npcRoles.Aetherhaven_Bard.name=エリアス・ソーンウッド
+npcRoles.Aetherhaven_Crystal_Keeper.name=ヴァエリス・プリズムシェード
+npcRoles.Aetherhaven_Pyrotechnic.name=グラブル・スパークマッチ
+npcRoles.Aetherhaven_Florist.name=アイビー・ブルームウェル
+npcRoles.Aetherhaven_Builder.name=ローワン・リッジクラフト
+npcRoles.Aetherhaven_Guard.name=町の警備隊
+
+items.Aetherhaven_Quest_Board.name=クエストボード
+items.Aetherhaven_Quest_Board.description=町の人々が仕事や懸賞金を掲示する木製の掲示板。これを使って町の仕事を探しましょう。
 
 items.Aetherhaven_Production_Storage.name=職場の売店
-items.Aetherhaven_Production_Storage.description=作業員が持ち込んだものを保管します。出力設定や積み重ねた物の取り出しが可能です。建物の一部であり、持ち上げることはできません。
+items.Aetherhaven_Production_Storage.description=作業員が持ち込んだものを保管します。出力を設定したり、スタックを取り出したりするために開きます。建物の一部であり、<color is="#ffa726">拾うことはできません</color>。
 items.Aetherhaven_Plot_Token_Miners_Hut.name=鉱夫小屋区画トークン
 items.Aetherhaven_Plot_Token_Miners_Hut.description=鉱夫小屋のプレハブを建設できる場所を示すマーク。都市計画デスクでの作業。
+items.Aetherhaven_Plot_Token_Builders_Hut.name=建築小屋区画トークン
+items.Aetherhaven_Plot_Token_Builders_Hut.description=プレハブ式の建築小屋を建設できる場所を示すマーク。都市計画デスクでの作業。
 items.Aetherhaven_Plot_Token_Lumbermill.name=製材所区画トークン
 items.Aetherhaven_Plot_Token_Lumbermill.description=製材所のプレハブを建設できる場所を示すマーク。都市計画デスクでの作業風景。
 items.Aetherhaven_Plot_Token_Barn.name=納屋区画トークン
 items.Aetherhaven_Plot_Token_Barn.description=納屋のプレハブを建設できる場所を示すマーク。都市計画デスクでの作業。
+items.Aetherhaven_Plot_Token_Barn_Hytiny.name=ヒティニーの納屋区画トークン
+items.Aetherhaven_Plot_Token_Barn_Hytiny.description=コンパクトなHytiny製プレハブ納屋を建設できる場所を示すマーク。HytinyBuilds社製プレハブ。設計事務所では販売されていません。解体業者から5枚の金貨で引き取ることができます。
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.name=Hytinyの居心地の良いコテージ区画トークン
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.description=Hytinyの居心地の良いコテージを建てられる場所を示すマーク。HytinyBuildsによるプレハブ住宅。都市計画デスクで製作可能。解体業者から5ゴールドコインで回収可能。
+items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.name=ヒティニーの日本茶屋区画トークン
+items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Hytinyの日本式茶室を建設できる場所を示すマーク。HytinyBuildsによるプレハブ。都市計画デスクで製作可能。解体業者から5ゴールドコインで回収可能。
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Hytinyの居心地の良いキャンピングカーのプロットトークン
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Hytinyの居心地の良いキャンピングカーを建てられる場所を示します。HytinyBuildsによるプレハブです。都市計画デスクで製作できます。解体業者から5ゴールドコインで回収できます。
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=ヒティニーの鉢植えツリーハウス区画トークン
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">警告：これは非常に大きなプレハブであり、組み立て中にクライアントとサーバーの動作が著しく遅くなったり、停止したりする可能性があります。組み立てが完了するまで時間があるときに配置してください。</color> Hytiny の鉢植えツリーハウスを建設できる場所を示します (装飾のみ)。建設が完了すると、町の区画として登録されません。ブロックを自分で破壊または移動して削除または移動します。町のジャーナルから取得することはできません。HytinyBuilds によるプレハブ。計画デスクでは販売されていません。サルベージ業者から回収すると、5 ゴールド コインが戻ってきます。
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=ガイア祭壇区画トークン
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=ガイア祭壇のプレハブを設置できる場所を示すマーク。都市計画デスクでの工作。

@@ -1,0 +1,135 @@
+aetherhaven.questBoard.miner.stone_haul.title=헛간에 쓸 돌
+aetherhaven.questBoard.miner.stone_haul.description=고루크는 다음 비가 오기 전에 오두막 옆에 돌을 쌓아두고 싶어합니다.
+aetherhaven.questBoard.miner.copper_ore.title=벤치용 구리
+aetherhaven.questBoard.miner.copper_ore.description=고루크는 마을 도구를 만들기 위해 곧 구리 광석을 제련해야 합니다.
+aetherhaven.questBoard.miner.iron_ore.title=단조 라인용 철
+aetherhaven.questBoard.miner.iron_ore.description=고루크는 철광석이 부족하여 이사회에 지원을 요청했습니다.
+aetherhaven.questBoard.miner.silver_ore.title=금고용 은
+aetherhaven.questBoard.miner.silver_ore.description=고루크는 마을 비축량을 위해 은광석을 따로 확보해야 합니다.
+aetherhaven.questBoard.miner.gold_ore.title=헌장 보관함에 넣을 금
+aetherhaven.questBoard.miner.gold_ore.description=고루크는 신뢰할 수 있는 인력을 찾기 위해 희귀 금광석 채굴 계약을 공고했습니다.
+
+aetherhaven.questBoard.farmer.wheat_bundle.title=식량 저장용 밀
+aetherhaven.questBoard.farmer.wheat_bundle.description=세렌은 빵과 종자용으로 묶음으로 된 밀이 필요합니다.
+aetherhaven.questBoard.farmer.carrot_crate.title=주방에서 쓰는 당근
+aetherhaven.questBoard.farmer.carrot_crate.description=세렌은 스튜에 넣을 신선한 당근을 원하고, 당근을 담은 병을 교환하고 싶어합니다.
+aetherhaven.questBoard.farmer.potato_sack.title=지하실용 감자
+aetherhaven.questBoard.farmer.potato_sack.description=세렌은 서리가 내리기 전 주간에 감자를 저장해야 합니다.
+aetherhaven.questBoard.farmer.harvest_feast.title=광장을 위한 수확
+aetherhaven.questBoard.farmer.harvest_feast.description=세렌은 수확 축제를 계획 중인데, 여러 종류의 작물이 필요해요.
+
+aetherhaven.questBoard.blacksmith.iron_bars.title=주문용 철근
+aetherhaven.questBoard.blacksmith.iron_bars.description=대장간에는 주문이 밀려 있어서 지금 당장 철근이 필요하다.
+aetherhaven.questBoard.blacksmith.coal_fuel.title=대장간용 숯
+aetherhaven.questBoard.blacksmith.coal_fuel.description=대장간에 연료가 부족해졌으니 숯을 가져오세요.
+aetherhaven.questBoard.blacksmith.gold_bars.title=길드 작업에 필요한 금괴
+aetherhaven.questBoard.blacksmith.gold_bars.description=대장장이는 고액 의뢰를 위해 금괴가 필요합니다.
+aetherhaven.questBoard.blacksmith.master_smithing.title=대장장이 길드
+aetherhaven.questBoard.blacksmith.master_smithing.description=엄청난 규모의 주문을 완료하는 데 도움이 필요합니다.
+
+aetherhaven.questBoard.logger.oak_logs.title=수리용 참나무
+aetherhaven.questBoard.logger.oak_logs.description=다음 폭풍이 오기 전에 마을 울타리에는 참나무 통나무가 필요합니다.
+aetherhaven.questBoard.logger.timber_contract.title=홀 골조용 목재
+aetherhaven.questBoard.logger.timber_contract.description=참나무와 소나무가 섞인 대규모 목재 계약이 공고되었습니다.
+
+aetherhaven.questBoard.rancher.raw_meat.title=훈제용 고기
+aetherhaven.questBoard.rancher.raw_meat.description=탈렌은 여관 주방에 공급할 생고기를 포장해야 합니다.
+aetherhaven.questBoard.rancher.leather_hide.title=압정용 가죽
+aetherhaven.questBoard.rancher.leather_hide.description=탈렌은 마구를 수선하고 있는데 밝은 색 가죽이 필요합니다.
+aetherhaven.questBoard.rancher.ranch_provisions.title=목장 식량 공급
+aetherhaven.questBoard.rancher.ranch_provisions.description=탈렌은 길드 보급창고에 필요한 고기와 가죽을 구해야 합니다.
+
+aetherhaven.questBoard.priestess.life_essence.title=제단에 바치는 생명의 정수
+aetherhaven.questBoard.priestess.life_essence.description=여사제는 약을 빚고 있는데 생명 정수가 필요합니다.
+aetherhaven.questBoard.priestess.sacred_offering.title=성스러운 제물 묶음
+aetherhaven.questBoard.priestess.sacred_offering.description=여사제는 의식을 위해 정수와 금을 요구했습니다.
+aetherhaven.questBoard.priestess.cull_undead.title=불안한 죽은 자들을 치워라
+aetherhaven.questBoard.priestess.cull_undead.description={villager}는 도로 근처의 언데드를 줄이기 위해 현상금을 걸었습니다.
+aetherhaven.questBoard.priestess.purge_undead.title=좀비들을 소탕하라
+aetherhaven.questBoard.priestess.purge_undead.description={villager}는 다음 의식 전에 더 많은 언데드를 처치하기를 원합니다.
+aetherhaven.questBoard.priestess.undead_raid.title=언데드들이 마을로 행진해 들어온다
+aetherhaven.questBoard.priestess.undead_raid.description={villager}는 언데드들이 헌장을 향해 행진하고 있다고 경고합니다.
+aetherhaven.questBoard.priestess.void_raid.title=마을에 공허가 침입했다
+aetherhaven.questBoard.priestess.void_raid.description={villager}는 공허의 존재가 헌장석을 향해 찢어발기는 것을 감지합니다.
+
+aetherhaven.questBoard.targets.undead=언데드
+aetherhaven.questBoard.targets.void=보이드스폰
+aetherhaven.questBoard.targets.trork=트록스
+aetherhaven.questBoard.targets.outlander=이방인들
+aetherhaven.questBoard.targets.goblin=고블린
+aetherhaven.questBoard.targets.vermin=해충
+
+aetherhaven.questBoard.innkeeper.bread_loaves.title=공용실용 빵
+aetherhaven.questBoard.innkeeper.bread_loaves.description=코린은 여행객들이 해질녘에 도착하기 전에 빵을 준비해 두고 싶어합니다.
+aetherhaven.questBoard.innkeeper.traveler_rations.title=여행자 식량
+aetherhaven.questBoard.innkeeper.traveler_rations.description=코린은 장거리 여행으로 지친 손님들을 위해 빵과 고기를 포장해 달라고 부탁했습니다.
+aetherhaven.questBoard.innkeeper.hearty_stew.title=푸짐한 스튜 재료
+aetherhaven.questBoard.innkeeper.hearty_stew.description=코린은 저녁 찜 요리에 감자와 고기를 넣고 싶어해요.
+aetherhaven.questBoard.innkeeper.inn_feast.title=여관 연회 준비
+aetherhaven.questBoard.innkeeper.inn_feast.description=코린은 만석인 집을 위해 요리를 해야 해서 곡물과 빵이 필요합니다.
+aetherhaven.questBoard.innkeeper.noble_banquet.title=귀족 연회용 주식
+aetherhaven.questBoard.innkeeper.noble_banquet.description=코린은 빵, 고기, 금을 포함한 연회 목록을 게시했습니다.
+aetherhaven.questBoard.innkeeper.grand_hospitality.title=훌륭한 환대
+aetherhaven.questBoard.innkeeper.grand_hospitality.description=코린은 방문하는 상인들을 위해 넓은 공간을 마련해야 합니다.
+aetherhaven.questBoard.innkeeper.royal_table.title=왕실 식탁 세팅
+aetherhaven.questBoard.innkeeper.royal_table.description=코린은 귀빈들을 위해 금괴, 향유, 그리고 빵을 원합니다.
+aetherhaven.questBoard.innkeeper.legendary_feast.title=전설적인 만찬
+aetherhaven.questBoard.innkeeper.legendary_feast.description=코린은 마을 사람들을 위해 성대한 잔치를 열고 싶어한다.
+
+aetherhaven.questBoard.elder.foundation_stones.title=기초석
+aetherhaven.questBoard.elder.foundation_stones.description=라이렌은 새로운 헌장 표지석을 위해 돌을 모으기를 원합니다.
+aetherhaven.questBoard.elder.village_timber.title=마을 목재
+aetherhaven.questBoard.elder.village_timber.description=라이렌은 길드 회관 근처에 벤치를 놓을 참나무 통나무가 필요합니다.
+aetherhaven.questBoard.elder.community_grain.title=공동 곡물 저장소
+aetherhaven.questBoard.elder.community_grain.description=라이렌은 마을 식량 창고에 넣을 밀과 당근을 요청했다.
+aetherhaven.questBoard.elder.town_supplies.title=전세 작업에 필요한 물품
+aetherhaven.questBoard.elder.town_supplies.description=라이렌은 헌장석 근처에 길을 낼 돌과 나무를 쌓아 놓았습니다.
+aetherhaven.questBoard.elder.iron_tribute.title=철의 공물
+aetherhaven.questBoard.elder.iron_tribute.description=라이렌은 마을 방어 시설에 필요한 철광석과 철괴를 구해야 합니다.
+aetherhaven.questBoard.elder.silver_tribute.title=실버 트리뷰트
+aetherhaven.questBoard.elder.silver_tribute.description=라이렌은 마을 재정에 은화를 공물로 바쳤다.
+aetherhaven.questBoard.elder.gold_tribute.title=금빛 헌정
+aetherhaven.questBoard.elder.gold_tribute.description=라이렌은 헌장 보관소에 금으로 된 헌정물을 게시했습니다.
+aetherhaven.questBoard.elder.elder_legacy.title=고령자의 유산 기증
+aetherhaven.questBoard.elder.elder_legacy.description=라이렌은 창립 의식을 위해 금, 금괴, 그리고 정수를 찾고 있습니다.
+aetherhaven.questBoard.elder.vermin_clear.title=해충을 없애세요
+aetherhaven.questBoard.elder.vermin_clear.description={villager}는 마을 주변 산책로에서 해충을 없애기를 원합니다.
+aetherhaven.questBoard.elder.vermin_raid.title=해충들이 문 앞에 떼를 지어 몰려든다
+aetherhaven.questBoard.elder.vermin_raid.description={villager}는 해충들이 헌장석으로 몰려드는 것을 목격했다고 보고했습니다.
+
+aetherhaven.questBoard.guild_master.recruit_gear.title=신입 사원 모집용 스타터 키트
+aetherhaven.questBoard.guild_master.recruit_gear.description=길드장은 신입 단원들을 위해 돌과 숯이 필요합니다.
+aetherhaven.questBoard.guild_master.apprentice_tools.title=견습 도구
+aetherhaven.questBoard.guild_master.apprentice_tools.description=길드장은 훈련 키트 제작에 필요한 구리 광석을 원합니다.
+aetherhaven.questBoard.guild_master.journeyman_armor.title=견습생용 갑옷 재고
+aetherhaven.questBoard.guild_master.journeyman_armor.description=길드장은 갑옷을 만들기 위해 철괴와 가죽이 필요합니다.
+aetherhaven.questBoard.guild_master.veteran_weapons.title=참전 용사 무기 주문
+aetherhaven.questBoard.guild_master.veteran_weapons.description=길드장은 베테랑 장비 제작에 필요한 철과 가죽을 게시했습니다.
+aetherhaven.questBoard.guild_master.adventurer_gear.title=신입 사원을 위한 장비
+aetherhaven.questBoard.guild_master.adventurer_gear.description=길드 마스터가 모험가들을 위한 장비를 제작 중인데 철과 가죽이 필요합니다.
+aetherhaven.questBoard.guild_master.elite_contract.title=엘리트 계약
+aetherhaven.questBoard.guild_master.elite_contract.description=길드 마스터는 정예 키트를 제작하기 위해 금괴와 철이 필요합니다.
+aetherhaven.questBoard.guild_master.master_gear.title=마스터 기어 번들
+aetherhaven.questBoard.guild_master.master_gear.description=길드장이 최고급 장비 제작 의뢰를 올렸습니다.
+aetherhaven.questBoard.guild_master.legendary_contract.title=전설적인 계약
+aetherhaven.questBoard.guild_master.legendary_contract.description=라이라는 곧 있을 엄청난 규모의 전투를 위해 고품질 검이 필요합니다.
+aetherhaven.questBoard.guild_master.goblin_trouble.title=고블린 소동
+aetherhaven.questBoard.guild_master.goblin_trouble.description={villager}님이 도로를 배회하는 고블린에게 현상금을 걸었습니다.
+aetherhaven.questBoard.guild_master.trork_patrol.title=트로크 순찰대
+aetherhaven.questBoard.guild_master.trork_patrol.description={villager}는 교역로에서 트로크를 몰아내고 싶어합니다.
+aetherhaven.questBoard.guild_master.outlander_raid.title=아웃랜더 레이드
+aetherhaven.questBoard.guild_master.outlander_raid.description={villager}님이 마을 근처에서 외지인을 소탕하는 데 대한 보수를 게시했습니다.
+aetherhaven.questBoard.guild_master.goblin_raid.title=고블린이 마을을 습격했다
+aetherhaven.questBoard.guild_master.goblin_raid.description={villager}는 마을로 행진해 오는 고블린 전사 무리를 발견했습니다.
+aetherhaven.questBoard.guild_master.trork_raid.title=트로크 전쟁단
+aetherhaven.questBoard.guild_master.trork_raid.description={villager}는 헌장에 대한 트롤의 진격을 막는 데 도움을 요청합니다.
+aetherhaven.questBoard.guild_master.outlander_assault.title=아웃랜더 공격
+aetherhaven.questBoard.guild_master.outlander_assault.description={villager}는 외지인들이 헌장을 공격하고 있다고 경고합니다.
+
+aetherhaven.questBoard.builder.marble_statue.title=영광스러운 조각상
+
+aetherhaven.questBoard.builder.marble_statue.description=로완은 의뢰받은 조각상을 만들기 위해 대리석이 필요합니다.
+
+aetherhaven.questBoard.logger.fir_logs.title=비계용 전나무
+
+aetherhaven.questBoard.logger.fir_logs.description=건축업자들이 새 벽을 보강하기 위해 전나무 통나무를 요청했습니다.

@@ -2,24 +2,32 @@
 # Bundle: blacksmith repair, dialogue command, banners, building staff items
 
 # === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
-aetherhaven.blacksmith.repair.insufficientGold=你的钱包太轻了，不适合这种维修。
+aetherhaven.blacksmith.repair.insufficientGold=你的钱包太轻了，不适合这次维修。
 aetherhaven.blacksmith.repair.success={itemName} 已恢复完整。跟新的一样。
-commands.aetherhaven.dialogue.desc=通过 ID 打开对话树（用于测试）
-commands.aetherhaven.dialogue.treeId.desc=对话树 ID（例如 aetherhaven_dialogue_test）
-commands.aetherhaven.dialogue.entry.desc=可选的入口节点 ID（默认值：root）
+commands.aetherhaven.dialogue.desc=调试：通过 ID 打开对话树
+commands.aetherhaven.dialogue.treeId.desc=对话树 ID（例如 aetherhaven_merchant）
+commands.aetherhaven.dialogue.entry.desc=可选起始节点（默认为根节点）
 aetherhaven.interaction.dialogue=按 [{key}] 通话
-npcRoles.Aetherhaven_Test_Villager.name=对话测试村民
 aetherhaven.banner.quest.completed.primary=任务完成
 aetherhaven.banner.quest.completed.secondary={name}
 aetherhaven.banner.assembly.complete.primary=建筑竣工
 aetherhaven.banner.assembly.complete.secondary={name}
 aetherhaven.assembly.complete.chat={name} 已准备就绪。
 aetherhaven.assembly.tracer.none_in_range=范围内没有组装预览（请靠近或检查城镇建设权限）。
+aetherhaven.assembly.staff.no_mana=法力值不足，无法放置建筑模块。握住法杖可以加快法力恢复速度，然后再试一次。
 aetherhaven.banner.quest.started.primary=任务开始
 aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=已解锁
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=楼宇工作人员
-items.Aetherhaven_Building_Staff.description=主武器会发射一道引导螺栓穿过方块，到达范围内最近的组装预览区域。按住副武器，瞄准组装预览，即可立即放置下一个方块（城镇建造权限）。被动建造区域在你离开时仍会自动推进。
+items.Aetherhaven_Building_Staff.name=铜建筑人员
+items.Aetherhaven_Building_Staff.description=主技能会发射一道引导箭穿过方块，射向范围内最近的建筑预览区域。按住副技能，瞄准该预览区域，穿过方块即可引导并放置建筑节点（需要城镇建造权限）。同时，瞄准点周围最多会放置 3×3×3 个高亮显示的建筑节点。按住副技能时，最大法力值+150；每个放置的方块消耗1点法力值。停止使用副技能几秒钟，法力值恢复速度会更快。更高级的法杖提供的法力值更多，恢复速度也更快。即使你离开，被动地块的建造进度也会继续。
+items.Aetherhaven_Building_Staff_Iron.name=钢铁建筑人员
+items.Aetherhaven_Building_Staff_Iron.description=与铜制建筑杖相同。次级效果可同时填充最多 5×5×5 个高亮显示的建筑节点。持有期间，可获得 +250 最大法力值并加快法力恢复速度；每个放置的方块消耗 1 点法力值。
+items.Aetherhaven_Building_Staff_Thorium.name=钍大楼工作人员
+items.Aetherhaven_Building_Staff_Thorium.description=与铜制建筑杖相同。次级效果可同时填充最多 7×7×7 个高亮显示的建筑节点。持有时，可获得 400 点最大法力值，并加快法力恢复速度；每个放置的方块消耗 1 点法力值。
+items.Aetherhaven_Building_Staff_Cobalt.name=钴建筑员工
+items.Aetherhaven_Building_Staff_Cobalt.description=与铜制建筑杖相同。次级效果可同时填充最多 9×9×9 个高亮显示的建筑节点。持有时，可获得 600 点最大法力值，并加快法力恢复速度；每个放置的方块消耗 1 点法力值。
+items.Aetherhaven_Building_Staff_Adamantite.name=金刚石建筑人员
+items.Aetherhaven_Building_Staff_Adamantite.description=与铜制建筑杖相同。次级技能可一次性填充最多 11×11×11 个高亮显示的建筑节点。持有该技能时，可获得 900 点最大法力值加成和更快的法力恢复速度；每个放置的方块消耗 1 点法力值。

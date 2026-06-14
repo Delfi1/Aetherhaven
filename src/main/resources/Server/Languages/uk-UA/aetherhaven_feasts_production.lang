@@ -39,9 +39,17 @@ aetherhaven.ui.production.err.permission=Ви не можете відкрити
 aetherhaven.ui.production.err.plot=Цей блок не знаходиться всередині завершеної робочої ділянки (ферми, сараю, млина чи шахтарської хатини) для вашого міста.
 aetherhaven.ui.production.err.catalog=Для цієї будівлі не налаштовано виробничий каталог.
 aetherhaven.ui.production.err.inventoryFull=Ваш інвентар занадто повний, щоб витримати стільки.
-aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
+aetherhaven.ui.production.err.inventoryPartial=Ваш інвентар заповнився ще до того, як все встигли перемістити. Решта залишилася на цьому робочому місці.
 aetherhaven.ui.production.unlockButton=Розблоковує
-aetherhaven.ui.production.unlockTooltip=Перегляньте та придбайте заблоковані виходи на робочому місці для цієї будівлі.
+aetherhaven.ui.production.unlockTooltip=Перегляньте та придбайте заблоковані робочі виходи для цієї будівлі.
+aetherhaven.ui.production.pickTooltip=Виберіть, що створює ця лінія
+aetherhaven.ui.production.collectAllButton=Зібрати все
+aetherhaven.ui.production.collectAllTooltip=Візьміть усе, що зберігається в кожному рядку
+
+aetherhaven.ui.materialPicker.title=Виберіть вихід
+aetherhaven.ui.materialPicker.intro=Виберіть один із розблокованих виходів для цієї лінії.
+aetherhaven.ui.materialPicker.back=Назад
+aetherhaven.ui.materialPicker.backTooltip=Повернення до магазинів на робочому місці
 
 aetherhaven.ui.productionUnlocks.title=Розблокування робочого місця
 aetherhaven.ui.productionUnlocks.intro=Виберіть вихідний елемент нижче, щоб побачити його назву та вимоги на панелі. Наведіть курсор на значок, щоб переглянути кількість затриманих та необхідних елементів. Коли ви досягнете необхідної кількості предметів та золота, натисніть на заблокований вихідний елемент, щоб розблокувати його.

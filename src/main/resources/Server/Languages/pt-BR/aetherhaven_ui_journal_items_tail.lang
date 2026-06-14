@@ -1,7 +1,140 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
-# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+# Bundle: town journal UI, npcRoles, workplace plot tokens
 
-# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+# === UI: town journal ===
+aetherhaven.ui.townJournal.shellTitle=Jornal da cidade
+aetherhaven.ui.townJournal.tab.town=Cidade
+aetherhaven.ui.townJournal.tab.guide=Guia
+aetherhaven.ui.townJournal.tab.quests=Missões
+aetherhaven.ui.townJournal.tab.settings=Configurações
+aetherhaven.ui.townJournal.pageTitle.town=Cidade
+aetherhaven.ui.townJournal.pageTitle.guide=Guia
+aetherhaven.ui.townJournal.pageTitle.quests=Missões
+aetherhaven.ui.townJournal.pageTitle.settings=Configurações
+aetherhaven.ui.journalSettings.tab.personal=Pessoal
+aetherhaven.ui.journalSettings.tab.server=Servidor
+aetherhaven.ui.journalSettings.personalHeading=Suas preferências
+aetherhaven.ui.journalSettings.personalHint=Essas configurações se aplicam somente a você. A seleção de ajuste usa automaticamente sua altura de voo atual.
+aetherhaven.ui.journalSettings.rtsPickHeading=Comando de guarda no solo clica
+aetherhaven.ui.journalSettings.rtsPickHint=Ajuste a forma como os comandos de movimento são exibidos na tela e no solo. Corrija se os marcadores pousam fora do alvo nas bordas da tela ou quando o avião está voando alto.
+aetherhaven.ui.journalSettings.rtsPickFovLabel=Campo de visão vertical em graus (normalmente de 60 a 90)
+aetherhaven.ui.journalSettings.rtsPickAspectLabel=Largura da janela de visualização dividida pela altura (por exemplo, 1,6 para 16:10)
+aetherhaven.ui.journalSettings.personalSaveButton=Salvar minhas configurações
+aetherhaven.ui.journalSettings.personalResetButton=Restaurar às configurações padrão do mod
+aetherhaven.ui.journalSettings.personalSaveOk=Suas configurações pessoais foram salvas.
+aetherhaven.ui.journalSettings.personalResetOk=Redefina o comando de guarda clicando na sintonia para os padrões do mod.
+aetherhaven.ui.journalSettings.serverRequiresOp=As configurações do servidor exigem permissão do operador.
+aetherhaven.ui.townJournal.placeholder.town=Ainda não há nada aqui.
+aetherhaven.ui.journalSettings.generalHeading=Recompensas mundiais e ritmo de construção
+aetherhaven.ui.journalSettings.passiveLabel=Deixe que os novos edifícios continuem a crescer por conta própria depois de serem colocados.
+aetherhaven.ui.journalSettings.constrHeading=Com que rapidez os edifícios colocam seus próprios blocos?
+aetherhaven.ui.journalSettings.constrBptLabel=Blocos colocados a cada etapa da construção de um edifício.
+aetherhaven.ui.journalSettings.constrMsLabel=Breve pausa em milissegundos entre essas etapas.
+aetherhaven.ui.journalSettings.lootHeading=Bônus de baús, itens quebráveis e sorte na mineração
+aetherhaven.ui.journalSettings.geodeLabel=Chance extra de obter geodos ao quebrar blocos de minério de zero a um.
+aetherhaven.ui.journalSettings.chestJewelryLabel=A chance de um baú mundial receber uma joia extra aumenta de zero para um.
+aetherhaven.ui.journalSettings.goldChanceLabel=Ao abrir um baú mundial, você ganha moedas de ouro bônus, passando de zero para uma.
+aetherhaven.ui.journalSettings.goldMinLabel=Menos moedas de ouro
+aetherhaven.ui.journalSettings.goldMaxLabel=A maioria das moedas de ouro
+aetherhaven.ui.journalSettings.breakableHeading=Moedas retiradas de caixas, barris, potes e caixões.
+aetherhaven.ui.journalSettings.breakableWeightNoneLabel=Com que frequência você não encontra nada (quanto maior, menos moedas).
+aetherhaven.ui.journalSettings.breakableWeightOneLabel=Com que frequência você encontra uma moeda?
+aetherhaven.ui.journalSettings.breakableWeightTwoLabel=Com que frequência você encontra duas moedas?
+aetherhaven.ui.journalSettings.shopHeading=Lojas
+aetherhaven.ui.journalSettings.shopMemberPriceLabel=Percentual do preço de catálogo na loja para membros (de 1 a 100)
+aetherhaven.ui.journalSettings.giftHeading=balões flutuantes de presente
+aetherhaven.ui.journalSettings.giftEnabledLabel=Gere balões de presente no mundo
+aetherhaven.ui.journalSettings.giftDaysMinLabel=Dias mais curtos entre as rolagens
+aetherhaven.ui.journalSettings.giftDaysMaxLabel=Últimos dias entre rolos
+aetherhaven.ui.journalSettings.saveButton=Salvar configurações
+aetherhaven.ui.journalSettings.resetDefaultsButton=Restaurar padrões de fábrica
+aetherhaven.ui.journalSettings.resetModalTitle=Carregar as configurações padrão do mod no formulário?
+aetherhaven.ui.journalSettings.resetModalBody=Isso preenche o formulário com as configurações padrão do mod. O servidor em execução ainda usa os valores antigos até que você clique em Salvar configurações.
+aetherhaven.ui.journalSettings.resetModalConfirm=Reiniciar
+aetherhaven.ui.journalSettings.resetModalCancel=Cancelar
+aetherhaven.ui.journalSettings.resetApplied=O formulário agora exibe as configurações padrão do mod. Clique em Salvar configurações para aplicá-las ao servidor e gravar o arquivo de configuração.
+aetherhaven.ui.journalSettings.saveOk=Essas configurações do mundo foram salvas.
+aetherhaven.ui.journalSettings.saveFail=Não foi possível salvar as configurações do servidor. Verifique o registro do servidor.
+aetherhaven.ui.journalSettings.toolsHeading=Ferramentas de reparo
+aetherhaven.ui.journalSettings.resetVillagers=Reorganizar pessoas na cidade
+aetherhaven.ui.journalSettings.fixInn=Corrigir lista de visitantes da pousada
+aetherhaven.ui.journalSettings.finishPlot=Termine um prédio agora
+aetherhaven.ui.journalSettings.villagerReport=Criar texto informativo sobre os aldeões
+aetherhaven.ui.journalSettings.plotModalTitle=Escolha um edifício para terminar.
+aetherhaven.ui.journalSettings.plotModalHint=Apenas os edifícios ainda em construção estão listados. Posicione-se perto do local para que os blocos sejam carregados.
+aetherhaven.ui.journalSettings.plotFieldLabel=Prédio
+aetherhaven.ui.journalSettings.plotPickNone=Escolha um edifício
+aetherhaven.ui.journalSettings.plotModalConfirm=Termine
+aetherhaven.ui.journalSettings.plotModalCancel=Cancelar
+aetherhaven.ui.journalSettings.villagerModalTitle=Texto informativo do aldeão
+aetherhaven.ui.journalSettings.villagerModalHint=Escolha um residente e pressione o botão para preencher a caixa abaixo. Selecione todos os itens na caixa e copie usando suas teclas de cópia usuais para compartilhar com o autor do mod.
+aetherhaven.ui.journalSettings.villagerFieldLabel=Pessoa
+aetherhaven.ui.journalSettings.villagerPickNone=Escolha uma pessoa
+aetherhaven.ui.journalSettings.villagerBuildReport=Preencha a caixa
+aetherhaven.ui.journalSettings.villagerCopyHint=Selecione todo o texto na caixa e copie usando as teclas de copiar habituais.
+aetherhaven.ui.journalSettings.villagerModalClose=Fechar
+aetherhaven.ui.journalSettings.innRepairDone=Lista de visitantes corrigida. Visitantes bloqueados {locked} promovidos {promoted} entradas perdidas removidas {removed}
+aetherhaven.ui.innBell.notAllowed=Este sino só funciona para os membros da taverna local.
+aetherhaven.ui.innBell.notOpen=A pousada ainda não está aberta.
+aetherhaven.ui.innBell.returned=Os visitantes retornaram à área reservada aos hóspedes.
+aetherhaven.ui.innBell.noVisitors=Não há hóspedes hospedados na pousada neste momento.
+aetherhaven.ui.innBell.noMoreGuests=Não há mais hóspedes.
+aetherhaven.ui.journalSettings.finishPlotOk=Aquele prédio já está concluído.
+aetherhaven.ui.journalSettings.finishPlotNotAssembling=Essa imagem não mostra um prédio em construção.
+aetherhaven.ui.journalSettings.finishPlotNotLoaded=Aproxime-se do prédio e tente novamente.
+aetherhaven.ui.journalSettings.finishPlotNoJob=Não há nenhuma tarefa de compilação ativa para essa opção no momento.
+aetherhaven.ui.journalSettings.finishPlotFailed=Não foi possível concluir essa construção. Tente novamente quando a área estiver totalmente carregada.
+aetherhaven.ui.townJournal.guide.listHeading=Tópicos
+aetherhaven.ui.townJournal.guide.pluginMissing=Carregue o mod Aetherhaven para ler este guia.
+aetherhaven.ui.townJournal.guide.facts.questsHeading=Missões da história para este aldeão
+aetherhaven.ui.townJournal.guide.facts.repHeading=Presentes de amizade
+aetherhaven.ui.townJournal.guide.facts.scheduleHeading=Rota semanal
+aetherhaven.ui.townJournal.guide.giftToggleShow=Mostrar ideias de presentes (spoilers)
+aetherhaven.ui.townJournal.guide.giftToggleHide=Esconder ideias de presentes
+aetherhaven.ui.townJournal.guide.scheduleToggleShow=Mostrar programação semanal
+aetherhaven.ui.townJournal.guide.scheduleToggleHide=Ocultar programação semanal
+aetherhaven.ui.townJournal.guide.scheduleLegend=Cada linha representa um dia do jogo. Os segmentos coloridos vão do primeiro horário programado do dia até a meia-noite (igual ao JSON). A largura da faixa corresponde ao horário em cada segmento; passe o cursor sobre ela para ver os horários exatos. Cores: casa, trabalho, estalagem, praça, altar. Linha vermelha = relógio mundial atual mapeado nessa faixa (esquerda = primeiro horário de transição).
+aetherhaven.ui.townJournal.guide.scheduleNowMarker=Relógio mundial atual no momento em que esta programação foi exibida (mesmo relógio do JSON do aldeão e horário de /aetherhaven).
+aetherhaven.ui.townJournal.guide.giftHeaderLoves=Presentes muito apreciados
+aetherhaven.ui.townJournal.guide.giftHeaderLikes=Presentes que gostei
+aetherhaven.ui.townJournal.guide.giftHeaderDislikes=Presentes que não gostaram
+aetherhaven.ui.townJournal.guide.noQuests=Nenhuma missão da história lista esse aldeão ainda.
+aetherhaven.ui.townJournal.guide.noRepMilestones=Ainda não há presentes de amizade programados para este aldeão.
+aetherhaven.ui.townJournal.guide.noSchedule=Ainda não existe um arquivo de rota semanal para este aldeão.
+aetherhaven.ui.townJournal.questListHeading=Missões ativas
+aetherhaven.ui.townJournal.stepsHeading=Passos
+aetherhaven.ui.townJournal.rewardHeading=Recompensas
+aetherhaven.ui.townJournal.rewardReputationLine=+{amount} reputação com {villager}
+aetherhaven.ui.townJournal.rewardFallback=Veja o texto da missão para saber o que você ganha.
+aetherhaven.ui.townJournal.abandon=Sair da missão
+aetherhaven.ui.townJournal.abandonConfirmTitle=Abandonar esta missão?
+aetherhaven.ui.townJournal.abandonConfirmBody=Você poderá aceitar essa missão novamente mais tarde, com quem a deu a você.
+aetherhaven.ui.townJournal.abandonConfirm=Sim, deixe assim
+aetherhaven.ui.townJournal.abandonCancel=Continue sua jornada.
+aetherhaven.ui.townJournal.showTownBorders=Mostrar os limites da cidade no mapa
+aetherhaven.ui.townJournal.showTownBordersTooltip=Desenha uma linha em volta de cada cidade deste mundo no seu mapa.
+aetherhaven.ui.townJournal.townVillagersHeading=Pessoas na cidade
+aetherhaven.ui.townJournal.townPlotsHeading=Edifícios
+aetherhaven.ui.townJournal.scheduleUnknown=Nenhuma rota definida
+aetherhaven.ui.townJournal.scheduleHome=Em casa
+aetherhaven.ui.townJournal.scheduleWork=No trabalho
+aetherhaven.ui.townJournal.scheduleInn=Na pousada
+aetherhaven.ui.townJournal.schedulePark=No parque
+aetherhaven.ui.townJournal.scheduleAltar=No altar
+aetherhaven.ui.townJournal.plotStatusNotStarted=Não iniciado
+aetherhaven.ui.townJournal.plotStatusInProgress=Em andamento
+aetherhaven.ui.townJournal.plotStatusComplete=Completo
+aetherhaven.ui.townJournal.plotStatusUnknown=Desconhecido
+aetherhaven.ui.townJournal.removePlot=Remover
+aetherhaven.ui.townJournal.removePlotTooltip=Posicione-se perto da cidade para que o prédio possa ser removido com segurança.
+aetherhaven.ui.townJournal.plotRemoveConfirmTitle=Remover este edifício?
+aetherhaven.ui.townJournal.plotRemoveConfirmBody=O edifício será removido do mapa e da sua lista de cidades. Essa ação é irreversível.
+aetherhaven.ui.townJournal.plotRemoveConfirm=Sim, remova-o.
+aetherhaven.ui.townJournal.plotRemoveCancel=Guarde-o
+aetherhaven.ui.townJournal.removePlotAreaNotLoaded=Aproxime-se desse prédio e tente novamente.
+aetherhaven.ui.townJournal.removePlotFailed=Não foi possível atualizar a lista de cidades. Tente novamente.
+
+# Legacy keys (other locales; unused in new UI)
 aetherhaven.ui.questjournal.title=Diário de busca
 aetherhaven.ui.questjournal.hint=Selecione uma missão para obter detalhes.
 aetherhaven.ui.questjournal.abandon=Abandonar
@@ -13,13 +146,17 @@ items.Aetherhaven_Management_Block.name=Prateleira de registros da cidade
 items.Aetherhaven_Management_Block.description=Prateleira de informações para um edifício concluído. Exibe o status da construção do respectivo lote.
 
 items.Aetherhaven_Sprinkler_Iron.name=Aspersor de ferro
-items.Aetherhaven_Sprinkler_Iron.description=A irrigação ara o solo um bloco abaixo, em uma área de 3x3. Executa uma vez por manhã no jogo. Menor área de cobertura.
+items.Aetherhaven_Sprinkler_Iron.description=A irrigação ara o solo um bloco abaixo, em uma área de 3×3. Executa uma vez por manhã no jogo. Menor área de cobertura.
 items.Aetherhaven_Sprinkler_Thorium.name=Aspersor de tório
-items.Aetherhaven_Sprinkler_Thorium.description=Waters revolveu o solo um bloco abaixo, numa área de 5x5. Uma vez por manhã, dentro do jogo. Maior que ferro.
+items.Aetherhaven_Sprinkler_Thorium.description=Waters revolveu o solo um bloco abaixo em uma área de <color is="#4ade80">5×5</color>. Uma vez por manhã no jogo. Maior que ferro.
 items.Aetherhaven_Sprinkler_Cobalt.name=Sprinkler de cobalto
-items.Aetherhaven_Sprinkler_Cobalt.description=A água revolveu o solo um bloco abaixo, numa área de 7x7. Uma vez por manhã, dentro do jogo. Ampla cobertura.
+items.Aetherhaven_Sprinkler_Cobalt.description=A água revolveu o solo um bloco abaixo, numa área de 7×7. Uma vez por manhã, dentro do jogo. Ampla cobertura.
 items.Aetherhaven_Sprinkler_Adamantite.name=Aspersor de adamantita
-items.Aetherhaven_Sprinkler_Adamantite.description=A água revolveu o solo um bloco abaixo, numa área de 9x9. Uma vez por manhã, dentro do jogo. Cobertura máxima.
+items.Aetherhaven_Sprinkler_Adamantite.description=A água revolveu o solo um bloco abaixo em uma área de <color is="#4ade80">9×9</color>. Uma vez por manhã no jogo. Cobertura mais ampla.
+
+items.Aetherhaven_Wood_Scaffold.name=andaimes de madeira
+items.Aetherhaven_Wood_Scaffold.description=Suba como uma escada. Clique com o botão direito em locais como um bloco normal. Segure (F) enquanto mira no andaime para estender a torre pela lateral ou criar um ramal horizontal a partir da face superior. Quebrar a peça inferior sem suporte fará a pilha desmoronar.
+items.Aetherhaven_Wood_Scaffold.legendUse=Usar (F): estender a torre/ramo a partir do topo enquanto mira no andaime. Clique com o botão direito: colocação normal de blocos.
 
 # === NPC role display names (npcRoles.*) ===
 npcRoles.Aetherhaven_Elder_Lyren.name=Ancião Lyren
@@ -31,15 +168,38 @@ npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
 npcRoles.Aetherhaven_Miner.name=Veia de pedra Gorruk
 npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
 npcRoles.Aetherhaven_Rancher.name=Thalen Meadowrun
+npcRoles.Aetherhaven_Townsfolk.name=moradores da cidade
+npcRoles.Aetherhaven_Guild_Master.name=Lyra Fairhollow
+npcRoles.Aetherhaven_Bard.name=Elias Thornwood
+npcRoles.Aetherhaven_Crystal_Keeper.name=Vaelith Prismshade
+npcRoles.Aetherhaven_Pyrotechnic.name=Grubble Sparkmatch
+npcRoles.Aetherhaven_Florist.name=Hera Bloomwell
+npcRoles.Aetherhaven_Builder.name=Rowan Ridgecraft
+npcRoles.Aetherhaven_Guard.name=Guarda da cidade
+
+items.Aetherhaven_Quest_Board.name=Quadro de missões
+items.Aetherhaven_Quest_Board.description=Um quadro de madeira onde os moradores anunciam trabalhos e recompensas. Use-o para conseguir tarefas para sua cidade.
 
 items.Aetherhaven_Production_Storage.name=Lojas no local de trabalho
-items.Aetherhaven_Production_Storage.description=Armazena o que seus trabalhadores trazem. Abra para definir as saídas e pegar pilhas. Faz parte do edifício e não pode ser recolhido.
-items.Aetherhaven_Plot_Token_Miners_Hut.name=Ficha de loteamento da cabana dos mineiros
+items.Aetherhaven_Production_Storage.description=Armazena o que seus trabalhadores trazem. Abra para definir as saídas e pegar pilhas. Faz parte do prédio e <color is="#ffa726">não pode ser coletado</color>.
+items.Aetherhaven_Plot_Token_Miners_Hut.name=Ficha de terreno da cabana dos mineiros
 items.Aetherhaven_Plot_Token_Miners_Hut.description=Indica onde a cabana pré-fabricada dos mineiros pode ser construída. Fabricada na mesa de planejamento urbano.
+items.Aetherhaven_Plot_Token_Builders_Hut.name=Ficha de lote para cabana de construtor
+items.Aetherhaven_Plot_Token_Builders_Hut.description=Indica onde a cabana pré-fabricada do construtor pode ser construída. Fabricada na mesa de planejamento urbano.
 items.Aetherhaven_Plot_Token_Lumbermill.name=Ficha de terreno da serraria
 items.Aetherhaven_Plot_Token_Lumbermill.description=Indica onde a estrutura pré-fabricada da serraria pode ser construída. Faça o pedido na secretaria de planejamento urbano.
 items.Aetherhaven_Plot_Token_Barn.name=Ficha de lote de celeiro
 items.Aetherhaven_Plot_Token_Barn.description=Indica onde o celeiro pré-fabricado pode ser construído. Faça a solicitação na secretaria de planejamento urbano.
+items.Aetherhaven_Plot_Token_Barn_Hytiny.name=Ficha do terreno do celeiro de Hytiny
+items.Aetherhaven_Plot_Token_Barn_Hytiny.description=Marcas indicam onde o celeiro pré-fabricado compacto Hytiny pode ser construído. Pré-fabricado pela HytinyBuilds. Não vendido no balcão de planejamento. Reaproveite em um ferro-velho por cinco moedas de ouro.
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.name=Token de terreno para a aconchegante cabana de Hytiny
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.description=Indica onde a aconchegante cabana de Hytiny pode ser construída. Pré-fabricado por HytinyBuilds. Crie na mesa de planejamento urbano. Recupere com um catador de sucata por cinco moedas de ouro.
+items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.name=Ficha de localização da casa de chá japonesa de Hytiny
+items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Indica onde a casa de chá japonesa de Hytiny pode ser construída. Pré-fabricado por HytinyBuilds. Fabricado na mesa de planejamento urbano. Reciclado em um ferro-velho para receber cinco moedas de ouro de volta.
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Token de enredo de trailer aconchegante de Hytiny
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Indica onde a aconchegante caravana de Hytiny pode ser construída. Pré-fabricada por HytinyBuilds. Fabricada na mesa de planejamento urbano. Desmontada em um ferro-velho para receber cinco moedas de ouro de volta.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Ficha de lote da casa na árvore em vaso de Hytiny
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Aviso: este é um pré-fabricado muito grande e pode causar lentidão ou travamentos perceptíveis no cliente e no servidor durante a montagem. Coloque-o quando tiver tempo para aguardar a conclusão.</color> Marca o local onde a casa na árvore em vaso de Hytiny pode ser construída (apenas decorativa). Após a conclusão da construção, ela não é registrada como um lote urbano — quebre ou mova os blocos você mesmo para removê-la ou realocá-la; ela não pode ser selecionada no diário da cidade. Pré-fabricado por HytinyBuilds. Não é vendido na mesa de planejamento. Desmonte-o com um catador de sucata por cinco moedas de ouro.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia altar plot token
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Indica onde o altar pré-fabricado de Gaia pode ser construído. Fabricado na mesa de planejamento urbano.

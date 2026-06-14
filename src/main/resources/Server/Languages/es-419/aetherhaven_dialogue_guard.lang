@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house=Sobre un lugar para vivir...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_finish=Tu casa está terminada.
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_remind=Acerca de tu casa...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_waiting=Sobre la vivienda...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.leave=Adiós
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.body=Me uní a tu pueblo, pero sigo durmiendo a la intemperie. ¿Podrías construirme una casa y poner mi nombre en el letrero?
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.accept=Te construiré una casa.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.decline=Quizás más tarde
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.body=Gracias. Reserva un terreno, termina la construcción y luego elige mi nombre en el letrero. Vuelve cuando esté viviendo allí.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.ok=Servirá
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.body=Todavía necesito un techo. Terminen la casa y pónganme el letrero.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.ok=Bien
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.body=Otro guardia está esperando en una casa primero. Termina esa casa y luego ven a hablar conmigo.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.ok=Comprendido
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.body=Bien. Tengo una puerta y una cama. Pagaré mi parte como todos los demás.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.ok=Gracias

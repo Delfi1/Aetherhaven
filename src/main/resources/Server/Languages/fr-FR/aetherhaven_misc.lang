@@ -4,22 +4,30 @@
 # === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
 aetherhaven.blacksmith.repair.insufficientGold=Votre sac est trop léger pour cette réparation.
 aetherhaven.blacksmith.repair.success={itemName} est de nouveau intact. Comme neuf.
-commands.aetherhaven.dialogue.desc=Ouvrir un arbre de dialogue par identifiant (pour les tests)
-commands.aetherhaven.dialogue.treeId.desc=Identifiant de l'arbre de dialogue (par exemple, aetherhaven_dialogue_test)
-commands.aetherhaven.dialogue.entry.desc=Identifiant du nœud d'entrée facultatif (par défaut : racine)
+commands.aetherhaven.dialogue.desc=Débogage : ouvrir un arbre de dialogue par identifiant
+commands.aetherhaven.dialogue.treeId.desc=Identifiant de l'arbre de dialogue (exemple : aetherhaven_merchant)
+commands.aetherhaven.dialogue.entry.desc=Nœud de départ optionnel (racine par défaut)
 aetherhaven.interaction.dialogue=Appuyez sur [{key}] pour parler
-npcRoles.Aetherhaven_Test_Villager.name=Test de dialogue avec le villageois
 aetherhaven.banner.quest.completed.primary=Quête terminée
 aetherhaven.banner.quest.completed.secondary={name}
 aetherhaven.banner.assembly.complete.primary=Bâtiment terminé
 aetherhaven.banner.assembly.complete.secondary={name}
 aetherhaven.assembly.complete.chat={name} est prêt.
 aetherhaven.assembly.tracer.none_in_range=Aucun aperçu d'assemblage à portée (rapprochez-vous ou vérifiez l'autorisation de construction de la ville).
+aetherhaven.assembly.staff.no_mana=Vous n'avez pas assez de mana pour placer les blocs de construction. Utilisez le bâton pour récupérer du mana plus rapidement, puis réessayez.
 aetherhaven.banner.quest.started.primary=Quête commencée
 aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=Déverrouillé
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Personnel du bâtiment
-items.Aetherhaven_Building_Staff.description=L'attaque principale envoie un projectile à travers les blocs jusqu'à l'aperçu d'assemblage le plus proche. Maintenez la touche secondaire enfoncée et visez à travers les blocs l'aperçu d'assemblage pour placer instantanément le bloc suivant (autorisation de construction en ville requise). Les constructions passives progressent automatiquement même en votre absence.
+items.Aetherhaven_Building_Staff.name=Personnel du bâtiment Copper
+items.Aetherhaven_Building_Staff.description=Le pouvoir principal envoie un projectile à travers les blocs jusqu'à l'aperçu d'assemblage le plus proche. Maintenez le pouvoir secondaire enfoncé et visez cet aperçu à travers les blocs pour canaliser et placer des nœuds de construction après un bref maintien (autorisation de construction en ville). Remplit jusqu'à 3×3×3 nœuds de construction mis en évidence autour de votre visée simultanément. Maintenu enfoncé, ce pouvoir octroie +150 points de mana maximum ; chaque bloc placé coûte 1 point de mana. Le mana se recharge plus rapidement si vous cessez d'utiliser le pouvoir secondaire pendant quelques secondes. Les bâtons de niveau supérieur octroient plus de mana et le récupèrent plus rapidement. L'assemblage passif des parcelles continue de progresser même en votre absence.
+items.Aetherhaven_Building_Staff_Iron.name=Personnel du bâtiment Iron
+items.Aetherhaven_Building_Staff_Iron.description=Identique au bâton de construction en cuivre. Le secondaire remplit jusqu'à 5×5×5 nœuds de construction mis en évidence simultanément. Lorsqu'il est tenu, il confère +250 mana maximum et une récupération de mana plus rapide ; chaque bloc placé coûte 1 mana.
+items.Aetherhaven_Building_Staff_Thorium.name=Personnel du bâtiment Thorium
+items.Aetherhaven_Building_Staff_Thorium.description=Identique au bâton de construction en cuivre. Le secondaire remplit jusqu'à 7×7×7 nœuds de construction mis en évidence simultanément. Lorsqu'il est tenu, il confère +400 mana maximum et une récupération de mana plus rapide ; chaque bloc placé coûte 1 mana.
+items.Aetherhaven_Building_Staff_Cobalt.name=Personnel du bâtiment Cobalt
+items.Aetherhaven_Building_Staff_Cobalt.description=Identique au bâton de construction en cuivre. Le secondaire remplit jusqu'à 9×9×9 nœuds de construction mis en évidence simultanément. Lorsqu'il est tenu, il confère +600 points de mana maximum et une récupération de mana plus rapide ; chaque bloc placé coûte 1 point de mana.
+items.Aetherhaven_Building_Staff_Adamantite.name=Personnel de construction d'Adamantite
+items.Aetherhaven_Building_Staff_Adamantite.description=Identique au bâton de construction en cuivre. Le secondaire remplit jusqu'à 11×11×11 nœuds de construction mis en évidence simultanément. Lorsqu'il est tenu, il confère +900 points de mana maximum et une récupération de mana plus rapide ; chaque bloc placé coûte 1 point de mana.

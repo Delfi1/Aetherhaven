@@ -1,0 +1,58 @@
+items.Aetherhaven_Command_Post.name=경비 지휘소
+items.Aetherhaven_Command_Post.description=이 의자에 앉아 위에서 마을 경비병들을 지휘하십시오.
+
+items.Aetherhaven_Rts_Flag.name=명령 플래그
+items.Aetherhaven_Rts_Flag.description=지상의 특정 지점에 경비병을 보내십시오.
+
+items.Aetherhaven_Rts_Sword.name=커맨드 소드
+items.Aetherhaven_Rts_Sword.description=경비병들을 한 생물에 집중시키세요.
+
+items.Aetherhaven_Rts_Select_All.name=모든 경비원을 선택하세요
+items.Aetherhaven_Rts_Select_All.description=마을에 고용된 경비원을 모두 선택하세요.
+
+items.Aetherhaven_Rts_Select_Knight.name=기사들을 선택하세요
+items.Aetherhaven_Rts_Select_Knight.description=모든 기사 경비병을 선택하세요.
+
+items.Aetherhaven_Rts_Select_Archer.name=궁수들을 선택하세요
+items.Aetherhaven_Rts_Select_Archer.description=궁수 경비병을 모두 선택하세요.
+
+items.Aetherhaven_Rts_Select_Mage.name=마법사를 선택하세요
+items.Aetherhaven_Rts_Select_Mage.description=마법사 경비병을 모두 선택하세요.
+
+items.Aetherhaven_Rts_Stance_Banner.name=스탠스 배너
+items.Aetherhaven_Rts_Stance_Banner.description=선택한 경비병들의 전투 방식을 설정하세요.
+
+items.Aetherhaven_Rts_Free.name=직원을 석방하세요
+items.Aetherhaven_Rts_Free.description=선발된 경비원들을 정상 근무에 복귀시키십시오.
+
+items.Aetherhaven_Rts_Exit.name=명령을 종료하세요
+items.Aetherhaven_Rts_Exit.description=경비 명령 모드를 종료하고 일반 플레이로 돌아가세요.
+
+aetherhaven.rts.hudTitle=경비 사령부
+aetherhaven.rts.rosterTitle=마을 경비대
+aetherhaven.rts.orderAttackMove=순서: 공격 이동
+aetherhaven.rts.orderMove=순서: 이동
+aetherhaven.rts.orderFocusAttack=명령: 집중 사격
+aetherhaven.rts.stanceDefensive=자세: 수비적
+aetherhaven.rts.stanceAggressive=태도: 공격적
+aetherhaven.rts.stanceStandGround=자세: 지면에 서기
+aetherhaven.rts.stanceHoldFire=자세: 사격 금지
+aetherhaven.rts.hudSelected={n} 경비원이 선정되었습니다
+aetherhaven.rts.hudControls=WASD 키로 전장을 이동합니다. 스페이스 키와 Ctrl 키를 누르면 위아래로 이동하여 확대/축소합니다. 스크롤 키나 숫자 키를 누르면 도구를 전환할 수 있습니다. 경비병을 클릭하여 선택합니다. Shift 키를 누른 상태에서 클릭하면 경비병을 추가하거나 제거할 수 있습니다. 상자를 드래그하여 여러 경비병을 선택합니다. 나가기 명령 도구(단축키 8번 슬롯)를 사용하여 종료합니다.
+aetherhaven.rts.helpFlag=땅을 마우스 오른쪽 버튼으로 클릭하여 경비병을 보내세요. 능력 1은 공격 이동과 이동 모드를 전환합니다. 능력 2는 선택한 경비병을 멈추게 합니다.
+aetherhaven.rts.helpSword=몬스터를 마우스 오른쪽 버튼으로 클릭하면 경비병들이 해당 몬스터를 집중 공격합니다. 경비병들은 마을 주민, 관광객, 경비병을 공격하지 않습니다.
+aetherhaven.rts.helpSelectAll=클릭하여 마을의 모든 경비원을 선택하고 나머지는 선택을 해제하세요.
+aetherhaven.rts.helpStance=능력1은 전투 자세를 순환시키고 선택한 경비병에게 적용합니다.
+aetherhaven.rts.helpFree=마우스 오른쪽 버튼을 클릭하여 선택한 경비원을 명령에서 해제하세요.
+aetherhaven.rts.helpSelectType=클릭하여 마을에 있는 해당 유형의 경비원을 모두 선택하고 나머지는 선택을 해제하세요.
+aetherhaven.rts.helpExit=경비 지휘 모드를 종료하려면 클릭하십시오.
+aetherhaven.rts.errorUseExitTool=명령 모드를 종료하려면 핫바의 '나가기' 명령 도구를 사용하십시오.
+aetherhaven.rts.errorNoGuards=이것을 사용하려면 경비원을 고용해야 합니다.
+aetherhaven.rts.errorNoSelection=경비원을 먼저 선발하세요.
+aetherhaven.rts.errorNotEnemy=당신의 경비병들은 그것을 공격하지 않을 겁니다.
+aetherhaven.rts.errorNotInTown=지휘소는 사용하려면 마을 영토 내에 있어야 합니다.
+aetherhaven.rts.errorCommandPostInUse=이미 다른 누군가가 이 마을의 지휘소를 사용하고 있습니다.
+aetherhaven.rts.recoverInventorySuccess=마지막 경비 명령 세션에서 사용하던 핫바를 복원했습니다.
+aetherhaven.rts.recoverInventorySuccessExited=핫바를 복원하고 경비 명령 모드를 종료했습니다.
+aetherhaven.rts.recoverInventoryNone=경비 명령 모드에서 저장된 핫바를 찾을 수 없습니다.
+aetherhaven.rts.recoverInventoryAuto=경비 명령 실행이 중단된 후 핫바가 복원되었습니다.

@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house=Möchten Sie hier wohnen?
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_finish=Ihr Haus ist bezugsfertig.
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind=Über mein Zuhause...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_waiting=Über den Einzug...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.leave=Auf Wiedersehen
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.body=Mir gefällt Ihre Stadt. Könnten Sie mir ein Haus besorgen? Sobald ich ein Bett habe, würde ich täglich einen Beitrag an die Stadtkasse leisten.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept=Ich werde Ihnen ein Zuhause finden.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline=Vielleicht später
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.body=Danke. Sichern Sie sich ein Baugrundstück, bauen Sie das Haus fertig und bringen Sie dann meinen Namen am Hausschild an. Kommen Sie wieder, wenn ich dort wohne.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.ok=Wird tun
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.body=Hast du schon ein Haus für mich gefunden? Schließe den Bau ab und wähle mich auf dem Hausschild aus.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.ok=Rechts
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.body=Ein anderer Besucher wartet zunächst auf ein Haus. Stellen Sie dieses Haus fertig, dann können Sie mit mir sprechen.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.ok=Verstanden
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.body=Hier fühle ich mich wie zu Hause. Danke. Ich werde jeden Morgen meinen Anteil bezahlen.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.ok=Willkommen

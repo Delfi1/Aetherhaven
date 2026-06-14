@@ -1,0 +1,7 @@
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire={type} muhafızını işe alın ({gold} altın)
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=Güle güle
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Ücreti ödeyin ve bu maceracı kasabanızda devriye gezecek. Savaşta ölene kadar orada kalacaklar.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Evet, onları işe alın.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=Şimdi değil
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=Onlar sizin. Uzun süre kalmalarını istiyorsanız, onları besleyin ve barındırın.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=Güle güle

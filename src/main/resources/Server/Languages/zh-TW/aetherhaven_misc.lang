@@ -4,22 +4,30 @@
 # === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
 aetherhaven.blacksmith.repair.insufficientGold=你的錢包太輕了，不適合這次維修。
 aetherhaven.blacksmith.repair.success={itemName} 已恢復完整。跟新的一樣。
-commands.aetherhaven.dialogue.desc=透過 ID 開啟對話樹（用於測試）
-commands.aetherhaven.dialogue.treeId.desc=對話樹 ID（例如 aetherhaven_dialogue_test）
-commands.aetherhaven.dialogue.entry.desc=可選的入口節點 ID（預設值：root）
+commands.aetherhaven.dialogue.desc=調試：透過 ID 開啟對話樹
+commands.aetherhaven.dialogue.treeId.desc=對話樹 ID（例如 aetherhaven_merchant）
+commands.aetherhaven.dialogue.entry.desc=可選起始節點（預設為根節點）
 aetherhaven.interaction.dialogue=按 [{key}] 通話
-npcRoles.Aetherhaven_Test_Villager.name=對話測試村民
 aetherhaven.banner.quest.completed.primary=任務完成
 aetherhaven.banner.quest.completed.secondary={name}
 aetherhaven.banner.assembly.complete.primary=建築竣工
 aetherhaven.banner.assembly.complete.secondary={name}
 aetherhaven.assembly.complete.chat={name} 已準備就緒。
 aetherhaven.assembly.tracer.none_in_range=範圍內沒有組裝預覽（請靠近或檢查城鎮建造權限）。
+aetherhaven.assembly.staff.no_mana=法力值不足，無法放置建築模組。握住法杖可以加快法力恢復速度，然後再試一次。
 aetherhaven.banner.quest.started.primary=任務開始
 aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=已解鎖
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=樓宇工作人員
-items.Aetherhaven_Building_Staff.description=主武器會發射一道引導螺栓穿過方塊，到達範圍內最近的組裝預覽區域。按住副武器，瞄準組裝預覽，即可立即放置下一個方塊（城鎮建造權限）。被動建造區域在你離開時仍會自動推進。
+items.Aetherhaven_Building_Staff.name=銅建築人員
+items.Aetherhaven_Building_Staff.description=主技能會發射一道引導箭穿過方塊，並射向範圍內最近的建築預覽區域。按住副技能，瞄準該預覽區域，穿過方塊即可引導並放置建築節點（需要城鎮建造權限）。最多可一次填滿瞄準點周圍 3×3×3 個高亮顯示的建築節點。按住副技能時，可獲得 150 點最大法力值；每個放置的方塊消耗 1 點法力值。停止使用副技能幾秒鐘，法力值恢復速度會更快。更高級的法杖提供更多法力值，恢復速度也更快。即使你離開，被動地塊的建造進度也會持續下去。
+items.Aetherhaven_Building_Staff_Iron.name=鋼鐵建築人員
+items.Aetherhaven_Building_Staff_Iron.description=與銅製建築杖相同。次級效果可同時填入最多 5×5×5 個高亮顯示的建築節點。持有期間，可獲得 +250 最大法力值並加快法力恢復速度；每個放置的方塊消耗 1 點法力值。
+items.Aetherhaven_Building_Staff_Thorium.name=釷大樓工作人員
+items.Aetherhaven_Building_Staff_Thorium.description=與銅製建築杖相同。次級效果可同時填入最多 7×7×7 個高亮顯示的建築節點。持有時，可獲得 400 點最大法力值，並加快法力恢復速度；每個放置的方塊消耗 1 點法力值。
+items.Aetherhaven_Building_Staff_Cobalt.name=鈷建築員工
+items.Aetherhaven_Building_Staff_Cobalt.description=與銅製建築杖相同。次級效果可同時填入最多 9×9×9 個高亮顯示的建築節點。持有時，可獲得 600 點最大法力值，並加快法力恢復速度；每個放置的方塊消耗 1 點法力值。
+items.Aetherhaven_Building_Staff_Adamantite.name=鑽石建築人員
+items.Aetherhaven_Building_Staff_Adamantite.description=與銅製建築杖相同。次級技能可一次填入最多 11×11×11 個高亮顯示的建築節點。持有該技能時，可獲得 900 點最大法力值加成和更快的法力恢復速度；每個放置的方塊消耗 1 點法力值。

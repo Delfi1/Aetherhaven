@@ -1,5 +1,7 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_logger)
 # Full translation keys are aetherhaven_dialogue_logger.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_logger.rep_reward_50.speaker=Серен Фэйрхоллоу
+aetherhaven.dialogue.aetherhaven_logger.rep_reward_100.speaker=Серен Фэйрхоллоу
 aetherhaven.dialogue.aetherhaven_logger.root.speaker=Серен Фэйрхоллоу
 aetherhaven.dialogue.aetherhaven_logger.root.body=Я валю деревья и перерабатываю бревна в пиломатериалы для поселения, что намного проще, когда есть настоящая лесопилка с пилами, местом для складирования и верстаком для обработки. Если вы построите для меня это здание, я смогу постоянно пополнять стеллажи для досок, вместо того чтобы оставлять хорошую древесину в беспорядочных кучах за стеной. Острое железо, ровные доски — вот как мне нравится работать.
 aetherhaven.dialogue.aetherhaven_logger.root.hc0=Вы хотели поговорить о доме.

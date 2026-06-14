@@ -1,0 +1,37 @@
+aetherhaven.dialogue.aetherhaven_bard.main_hub.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.main_hub.fallback=Teller sıcak. Neye ihtiyacınız var?
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.0=İyi günler. Bugün dernek binasının akustiği çok iyi.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.1=Merhaba arkadaşım. Az önce lavtamı akort ediyordum.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.2=Hoş geldiniz. Müzik bir şehre hayat verir.
+
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_play=Ondan bir şarkı çalmasını isteyin.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_stop=Ondan oynamayı bırakmasını isteyin.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house=Elias için bir yuva olup olmadığını sorun.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_finish=Elias'ın bir evi olduğunu doğrulayın.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_remind=Evi tekrar sorun.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_goodbye=Hoşça kalın
+
+aetherhaven.dialogue.aetherhaven_bard.music_pick.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.music_pick.body=Hangi melodiyi istersiniz?
+aetherhaven.dialogue.aetherhaven_bard.music_pick.c_back=Geri gitmek
+
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.body=Her şey yeniden sessizleşti. Başka bir şarkı isterseniz bana bildirin.
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.c_ok=Sohbete geri dön
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.body=Günlerin çoğunu burada geçiriyorum ama güneş batınca kendime ait küçük bir evim olsun isterdim.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_yes=Ona bir ev bulmasına yardım edin.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_later=Şu an değil.
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.body=Teşekkür ederim. Bana ait bir çatı benim için dünyalar anlamına gelir.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.c_ok=Güle güle
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.body=Konut arsasını inşa edin ve hazır olduğunda beni yönetim bloğuna atayın.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.c_ok=Üzerinde çalışmaya devam edeceğim.
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.body=Şehrin benim küçük köşem. Lonca binasını sizin için canlı tutacağım.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.c_ok=Müthiş

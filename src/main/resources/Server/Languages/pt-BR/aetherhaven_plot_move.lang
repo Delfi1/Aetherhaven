@@ -42,6 +42,6 @@ aetherhaven.ui.plotplacement.moveYpTooltip=Suba um quarteirão.
 aetherhaven.ui.charterrelocation.title=Transferir carta náutica
 aetherhaven.ui.charterrelocation.summary=Reposicionando a carta municipal
 aetherhaven.ui.charterrelocation.details=Bloco alvo {sx}, {sy}, {sz} · Etapa {step} de 4 (90°)
-aetherhaven.ui.charterrelocation.tips=O território é um quadrado formado por blocos ao redor da área delimitada; todas as construções devem permanecer dentro desse quadrado após a confirmação. Mova o fantasma para o novo local e, em seguida, coloque-o.
+aetherhaven.ui.charterrelocation.tips=O território é um quadrado formado por blocos ao redor da área delimitada; cada construção deve permanecer dentro desse quadrado após a confirmação. Mova o fantasma para o novo local e, em seguida, coloque-o.
 aetherhaven.ui.charterrelocation.info=O território é uma área quadrada delimitada pela carta de fundação. Todas as suas construções devem permanecer dentro dessa área após a mudança. Mova o bloco fantasma para a nova posição da carta de fundação e confirme.
 aetherhaven.ui.charterrelocation.place=Carta de local

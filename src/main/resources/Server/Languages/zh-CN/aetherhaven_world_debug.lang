@@ -12,6 +12,32 @@ aetherhaven.poi.clearedInteractionTarget=已清除互动目标；NPC 使用 POI 
 aetherhaven.poi.setInteractionTarget=将交互目标设置为 {x}、{y}、{z}。
 aetherhaven.poi.selected=选定的兴趣点 {id} 位于 {x}、{y}、{z}
 aetherhaven.poi.targetBlockMismatch=目标块必须与此兴趣点的预期类型 {type} 匹配。
+aetherhaven.poi.removed=兴趣点已移除。
+aetherhaven.poi.noTownPlot=该街区没有已建成的城镇规划用地。
+
+aetherhaven.adventurerSpawnMarker.label=冒险之地
+aetherhaven.adventurerSpawnMarker.placed=冒险者聚集地已设好。
+aetherhaven.adventurerSpawnMarker.removed=冒险者地点已移除。
+aetherhaven.adventurerSpawnMarker.alreadyHere=这里已经是一个冒险者的天堂。
+
+aetherhaven.poiMarker.label=兴趣点
+
+aetherhaven.poiMarkerConfig.title=配置 POI
+aetherhaven.poiMarkerConfig.needHeader=需求已满足
+aetherhaven.poiMarkerConfig.presetSleep=睡觉
+aetherhaven.poiMarkerConfig.presetEat=吃
+aetherhaven.poiMarkerConfig.presetSit=坐着/乐趣
+aetherhaven.poiMarkerConfig.presetWork=工作
+aetherhaven.poiMarkerConfig.summary={preset} ({kind})
+aetherhaven.poiMarkerConfig.capacity=NPC 位置（1-4）
+aetherhaven.poiMarkerConfig.mountToggle=安装在家具（床、椅子）上
+aetherhaven.poiMarkerConfig.workAction=工作行动
+aetherhaven.poiMarkerConfig.workNone=没有任何
+aetherhaven.poiMarkerConfig.workMine=矿
+aetherhaven.poiMarkerConfig.workChop=劈
+aetherhaven.poiMarkerConfig.confirm=地点兴趣点
+aetherhaven.poiMarkerConfig.cancel=取消
+aetherhaven.poiMarkerConfig.placed=兴趣点已放置。
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
@@ -84,3 +110,14 @@ aetherhaven.debug.poi.listEmpty=该城镇没有已登记的建筑物（请填写
 aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
 aetherhaven.debug.poi.dumpHeader=世界注册表中的所有兴趣点 ({count}):
 aetherhaven.debug.poi.dumpLine=城镇={town} {x},{y},{z} 类型={kind} 区块类型ID={block} 标签={tags} 地块={plot}
+
+aetherhaven.debug.tourist.noTown=你在这个世界上没有自己的城镇。
+aetherhaven.debug.tourist.targetsHeader={town}（{count} 地块）的游客访问目标：
+aetherhaven.debug.tourist.targetsEmpty=没有已完成的启用 TouristDestination 的地块（请检查地块创建器或构建 JSON）。
+aetherhaven.debug.tourist.plotLine={building} 地块={plot} 入口=({entryX},{entryY},{entryZ}) 首选={preferred} 访问点={poiCount}
+aetherhaven.debug.tourist.poiLine=poi {x},{y},{z} kind={kind} tags={tags}
+
+# Wall wand placement debug (/ah walldebug)
+aetherhaven.debug.wall.on=开启墙魔杖调试（聊天记录+服务器日志）。
+aetherhaven.debug.wall.off=墙棒调试已关闭。
+aetherhaven.debug.wall.noSession=当前没有正在使用的墙面魔杖。请先打开墙面魔杖。

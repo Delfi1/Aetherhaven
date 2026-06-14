@@ -1,0 +1,135 @@
+aetherhaven.questBoard.miner.stone_haul.title=Камень для сарая
+aetherhaven.questBoard.miner.stone_haul.description=Горрук хочет, чтобы перед следующим дождем у его хижины сложили камни.
+aetherhaven.questBoard.miner.copper_ore.title=Медь для скамейки
+aetherhaven.questBoard.miner.copper_ore.description=Горруку в ближайшее время нужна переплавка медной руды для изготовления городских инструментов.
+aetherhaven.questBoard.miner.iron_ore.title=Железо для кузнечного производства
+aetherhaven.questBoard.miner.iron_ore.description=У Горрука не хватает железной руды, и он попросил совет директоров найти помощь.
+aetherhaven.questBoard.miner.silver_ore.title=Серебро в хранилище
+aetherhaven.questBoard.miner.silver_ore.description=Горруку необходимо отложить запасы серебряной руды для создания городского резерва.
+aetherhaven.questBoard.miner.gold_ore.title=Золото для сундука с уставом
+aetherhaven.questBoard.miner.gold_ore.description=Компания Gorruk разместила редкий контракт на поставку золотой руды для проверенных специалистов.
+
+aetherhaven.questBoard.farmer.wheat_bundle.title=Пшеница для кладовой
+aetherhaven.questBoard.farmer.wheat_bundle.description=Серену нужна пшеница в снопах для хлеба и для заготовки семян.
+aetherhaven.questBoard.farmer.carrot_crate.title=Морковь для кухни
+aetherhaven.questBoard.farmer.carrot_crate.description=Серен нужна свежая морковь для рагу и для торговли в банках.
+aetherhaven.questBoard.farmer.potato_sack.title=Картофель для погреба
+aetherhaven.questBoard.farmer.potato_sack.description=Серену необходимы картофельные клубни, которые следует заготовить до наступления заморозков.
+aetherhaven.questBoard.farmer.harvest_feast.title=Урожай для площади
+aetherhaven.questBoard.farmer.harvest_feast.description=Серен планирует устроить праздник урожая и нуждается в смешанных культурах.
+
+aetherhaven.questBoard.blacksmith.iron_bars.title=Железные прутья на заказ
+aetherhaven.questBoard.blacksmith.iron_bars.description=У кузнеца накопилось много заказов, и ему срочно нужны железные прутки.
+aetherhaven.questBoard.blacksmith.coal_fuel.title=Древесный уголь для кузницы
+aetherhaven.questBoard.blacksmith.coal_fuel.description=В кузнице за ночь закончилось топливо. Принесите древесный уголь.
+aetherhaven.questBoard.blacksmith.gold_bars.title=Золотые слитки для гильдейской работы
+aetherhaven.questBoard.blacksmith.gold_bars.description=Кузнецу нужны золотые слитки для выполнения высокооплачиваемых заказов.
+aetherhaven.questBoard.blacksmith.master_smithing.title=Мастер-кузнец
+aetherhaven.questBoard.blacksmith.master_smithing.description=Мне нужна помощь в исполнении заказа легендарного масштаба.
+
+aetherhaven.questBoard.logger.oak_logs.title=Дуб для ремонта
+aetherhaven.questBoard.logger.oak_logs.description=Для городских заборов до следующего шторма необходимы дубовые бревна.
+aetherhaven.questBoard.logger.timber_contract.title=Деревянные балки для каркаса прихожей
+aetherhaven.questBoard.logger.timber_contract.description=Был размещен крупный контракт на поставку древесины, в том числе дуба и сосны.
+
+aetherhaven.questBoard.rancher.raw_meat.title=Мясо для коптильни
+aetherhaven.questBoard.rancher.raw_meat.description=Талену нужно сырое мясо, упакованное для кухни гостиницы.
+aetherhaven.questBoard.rancher.leather_hide.title=Шкура для снаряжения
+aetherhaven.questBoard.rancher.leather_hide.description=Тален чинит упряжь и нуждается в легкой коже.
+aetherhaven.questBoard.rancher.ranch_provisions.title=Запасы провизии на ранчо
+aetherhaven.questBoard.rancher.ranch_provisions.description=Талену нужны мясо и кожа для снабжения гильдии.
+
+aetherhaven.questBoard.priestess.life_essence.title=Жизненная сила для алтаря
+aetherhaven.questBoard.priestess.life_essence.description=Жрица варит напитки и нуждается в жизненной силе.
+aetherhaven.questBoard.priestess.sacred_offering.title=Набор священных подношений
+aetherhaven.questBoard.priestess.sacred_offering.description=Жрица попросила эссенцию и золото для проведения ритуала.
+aetherhaven.questBoard.priestess.cull_undead.title=Уберите беспокойных мертвецов
+aetherhaven.questBoard.priestess.cull_undead.description={villager} назначил награду за уничтожение нежити возле дорог.
+aetherhaven.questBoard.priestess.purge_undead.title=Уничтожить ходячих мертвецов
+aetherhaven.questBoard.priestess.purge_undead.description={villager} хочет, чтобы перед следующим ритуалом было уничтожено больше нежити.
+aetherhaven.questBoard.priestess.undead_raid.title=Нежить наступает на город
+aetherhaven.questBoard.priestess.undead_raid.description={villager} предупреждает, что нежить наступает на устав.
+aetherhaven.questBoard.priestess.void_raid.title=Вторжение Пустоты в город
+aetherhaven.questBoard.priestess.void_raid.description={villager} чувствует, как порождения пустоты устремляются к камню устава.
+
+aetherhaven.questBoard.targets.undead=нежить
+aetherhaven.questBoard.targets.void=пустотный порожден
+aetherhaven.questBoard.targets.trork=троркс
+aetherhaven.questBoard.targets.outlander=чужеземцы
+aetherhaven.questBoard.targets.goblin=гоблины
+aetherhaven.questBoard.targets.vermin=вредители
+
+aetherhaven.questBoard.innkeeper.bread_loaves.title=Хлеб для общей комнаты
+aetherhaven.questBoard.innkeeper.bread_loaves.description=Корин хочет, чтобы буханки хлеба были готовы до прибытия путешественников на закате.
+aetherhaven.questBoard.innkeeper.traveler_rations.title=Пайки для путешественников
+aetherhaven.questBoard.innkeeper.traveler_rations.description=Корину нужны упакованные хлеб и мясо для уставших от дороги гостей.
+aetherhaven.questBoard.innkeeper.hearty_stew.title=Ингредиенты для сытного рагу
+aetherhaven.questBoard.innkeeper.hearty_stew.description=Корин хочет картошку и мясо для вечернего чайника.
+aetherhaven.questBoard.innkeeper.inn_feast.title=подготовка к пиру в гостинице
+aetherhaven.questBoard.innkeeper.inn_feast.description=Корин готовит еду на всех гостей и ей нужны крупа и хлеб.
+aetherhaven.questBoard.innkeeper.noble_banquet.title=Благородные банкетные акции
+aetherhaven.questBoard.innkeeper.noble_banquet.description=Корин вывесил список блюд для банкета, в который входили хлеб, мясо и золото.
+aetherhaven.questBoard.innkeeper.grand_hospitality.title=Великолепное гостеприимство
+aetherhaven.questBoard.innkeeper.grand_hospitality.description=Корину нужен большой выбор товаров для посетителей-торговцев.
+aetherhaven.questBoard.innkeeper.royal_table.title=Королевская сервировка стола
+aetherhaven.questBoard.innkeeper.royal_table.description=Корин хочет, чтобы почетным гостям были предложены золотые слитки, эссенция и хлеб.
+aetherhaven.questBoard.innkeeper.legendary_feast.title=Легендарный пир
+aetherhaven.questBoard.innkeeper.legendary_feast.description=Корин хочет устроить грандиозный пир для всего города.
+
+aetherhaven.questBoard.elder.foundation_stones.title=Фундаментные камни
+aetherhaven.questBoard.elder.foundation_stones.description=Лирен хочет, чтобы для новых памятных знаков были собраны камни.
+aetherhaven.questBoard.elder.village_timber.title=Деревенская древесина
+aetherhaven.questBoard.elder.village_timber.description=Лирен нужны дубовые бревна для скамеек возле здания гильдии.
+aetherhaven.questBoard.elder.community_grain.title=Общественные зернохранилища
+aetherhaven.questBoard.elder.community_grain.description=Лирен попросила принести пшеницу и морковь для городской кладовой.
+aetherhaven.questBoard.elder.town_supplies.title=Поставки для чартерных перевозок
+aetherhaven.questBoard.elder.town_supplies.description=Лирен разместил камни и деревянные бруски для дорожек возле камня, установленного в соответствии с уставом.
+aetherhaven.questBoard.elder.iron_tribute.title=Железная дань
+aetherhaven.questBoard.elder.iron_tribute.description=Лирену нужны железная руда и слитки для нужд городской обороны.
+aetherhaven.questBoard.elder.silver_tribute.title=Серебряная дань памяти
+aetherhaven.questBoard.elder.silver_tribute.description=Лирен выделил серебряную дань для городской казны.
+aetherhaven.questBoard.elder.gold_tribute.title=Золотая дань уважения
+aetherhaven.questBoard.elder.gold_tribute.description=Лайрен опубликовала трогательное сообщение в честь чартерного хранилища.
+aetherhaven.questBoard.elder.elder_legacy.title=Наследственное предложение старейшины
+aetherhaven.questBoard.elder.elder_legacy.description=Лирен ищет золото, слитки и эссенцию для обряда основания.
+aetherhaven.questBoard.elder.vermin_clear.title=Уничтожьте вредителей
+aetherhaven.questBoard.elder.vermin_clear.description={villager} хочет, чтобы с дорожек вокруг города убрали вредителей.
+aetherhaven.questBoard.elder.vermin_raid.title=У ворот роятся вредители.
+aetherhaven.questBoard.elder.vermin_raid.description={villager} сообщает о нашествии вредителей к камню, являющемуся частью устава.
+
+aetherhaven.questBoard.guild_master.recruit_gear.title=Стартовый набор для новобранца
+aetherhaven.questBoard.guild_master.recruit_gear.description=Мастеру гильдии нужны камень и древесный уголь для новых рекрутов.
+aetherhaven.questBoard.guild_master.apprentice_tools.title=Инструменты для учеников
+aetherhaven.questBoard.guild_master.apprentice_tools.description=Глава гильдии хочет получить медную руду для тренировочных наборов.
+aetherhaven.questBoard.guild_master.journeyman_armor.title=Запас доспехов подмастерья
+aetherhaven.questBoard.guild_master.journeyman_armor.description=Для изготовления доспехов гильдмастеру необходимы железные слитки и кожа.
+aetherhaven.questBoard.guild_master.veteran_weapons.title=Заказ оружия для ветеранов
+aetherhaven.questBoard.guild_master.veteran_weapons.description=Глава гильдии выставил на продажу железо и кожу для изготовления снаряжения ветеранов.
+aetherhaven.questBoard.guild_master.adventurer_gear.title=Оборудование для новых сотрудников
+aetherhaven.questBoard.guild_master.adventurer_gear.description=Глава гильдии экипирует искателей приключений и нуждается в железе и коже.
+aetherhaven.questBoard.guild_master.elite_contract.title=Элитный контракт
+aetherhaven.questBoard.guild_master.elite_contract.description=Для создания элитных наборов гильдмастеру необходимы золотые слитки и железо.
+aetherhaven.questBoard.guild_master.master_gear.title=Мастер-комплект снаряжения
+aetherhaven.questBoard.guild_master.master_gear.description=Глава гильдии разместил контракт на изготовление снаряжения мастерского уровня.
+aetherhaven.questBoard.guild_master.legendary_contract.title=Легендарный контракт
+aetherhaven.questBoard.guild_master.legendary_contract.description=Лире нужны высококачественные мечи для предстоящей битвы эпических масштабов.
+aetherhaven.questBoard.guild_master.goblin_trouble.title=Проблемы с гоблинами
+aetherhaven.questBoard.guild_master.goblin_trouble.description={villager} объявил награду за поимку гоблинов, терроризирующих дороги.
+aetherhaven.questBoard.guild_master.trork_patrol.title=патруль Трорк
+aetherhaven.questBoard.guild_master.trork_patrol.description={villager} хочет, чтобы трорк был изгнан с торговых путей.
+aetherhaven.questBoard.guild_master.outlander_raid.title=Набег чужеземцев
+aetherhaven.questBoard.guild_master.outlander_raid.description={villager} выплатил зарплату за расчистку территории от посторонних лиц вблизи города.
+aetherhaven.questBoard.guild_master.goblin_raid.title=Нападение гоблинов на город
+aetherhaven.questBoard.guild_master.goblin_raid.description={villager} заметил отряд гоблинов, марширующих на город.
+aetherhaven.questBoard.guild_master.trork_raid.title=отряд Трорк
+aetherhaven.questBoard.guild_master.trork_raid.description={villager} просит помощи в предотвращении наступления троллей на территорию чартерного судна.
+aetherhaven.questBoard.guild_master.outlander_assault.title=Нападение Чужеземца
+aetherhaven.questBoard.guild_master.outlander_assault.description={villager} предупреждает, что чужеземцы посягают на хартию.
+
+aetherhaven.questBoard.builder.marble_statue.title=Величественная статуя
+
+aetherhaven.questBoard.builder.marble_statue.description=Роуэну нужен мрамор для заказанной статуи.
+
+aetherhaven.questBoard.logger.fir_logs.title=Ель для строительных лесов
+
+aetherhaven.questBoard.logger.fir_logs.description=Строители запросили сосновые бревна для укрепления нового участка стены.

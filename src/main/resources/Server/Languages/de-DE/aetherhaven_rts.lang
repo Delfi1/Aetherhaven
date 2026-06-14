@@ -1,0 +1,58 @@
+items.Aetherhaven_Command_Post.name=Wachkommandostelle
+items.Aetherhaven_Command_Post.description=Nimm auf diesem Hocker Platz, um von oben die Stadtwachen zu befehligen.
+
+items.Aetherhaven_Rts_Flag.name=Befehlsflag
+items.Aetherhaven_Rts_Flag.description=Schickt Wachen an einen bestimmten Ort am Boden.
+
+items.Aetherhaven_Rts_Sword.name=Befehlsschwert
+items.Aetherhaven_Rts_Sword.description=Konzentriere deine Wachen auf ein einziges Wesen.
+
+items.Aetherhaven_Rts_Select_All.name=Alle Wachen auswählen
+items.Aetherhaven_Rts_Select_All.description=Wähle jeden angeheuerten Wachmann in der Stadt aus.
+
+items.Aetherhaven_Rts_Select_Knight.name=Ritter auswählen
+items.Aetherhaven_Rts_Select_Knight.description=Wähle alle Ritterwachen aus.
+
+items.Aetherhaven_Rts_Select_Archer.name=Bogenschützen auswählen
+items.Aetherhaven_Rts_Select_Archer.description=Wähle alle Bogenschützenwachen aus.
+
+items.Aetherhaven_Rts_Select_Mage.name=Magier auswählen
+items.Aetherhaven_Rts_Select_Mage.description=Wähle alle Magierwachen aus.
+
+items.Aetherhaven_Rts_Stance_Banner.name=Standing-Banner
+items.Aetherhaven_Rts_Stance_Banner.description=Lege fest, wie die ausgewählten Wachen kämpfen.
+
+items.Aetherhaven_Rts_Free.name=Mitarbeiter entlassen
+items.Aetherhaven_Rts_Free.description=Ausgewählte Wachen sollen wieder ihren normalen Dienst aufnehmen.
+
+items.Aetherhaven_Rts_Exit.name=Befehl verlassen
+items.Aetherhaven_Rts_Exit.description=Beenden Sie den Wächtermodus und kehren Sie zum normalen Spiel zurück.
+
+aetherhaven.rts.hudTitle=Wachkommando
+aetherhaven.rts.rosterTitle=Stadtwachen
+aetherhaven.rts.orderAttackMove=Befehl: Angriffsbewegung
+aetherhaven.rts.orderMove=Befehl: Bewegen
+aetherhaven.rts.orderFocusAttack=Befehl: Feuer konzentrieren
+aetherhaven.rts.stanceDefensive=Haltung: Defensiv
+aetherhaven.rts.stanceAggressive=Haltung: Aggressiv
+aetherhaven.rts.stanceStandGround=Haltung: Standhaft bleiben
+aetherhaven.rts.stanceHoldFire=Haltung: Feuer einstellen
+aetherhaven.rts.hudSelected={n} Wachen ausgewählt
+aetherhaven.rts.hudControls=Mit WASD verschiebt man die Schlachtfeldansicht. Mit Leertaste und Strg zoomt man nach oben und unten. Mit dem Mausrad oder den Zifferntasten wechselt man die Werkzeuge. Klickt man Wachen an, wählt man sie aus. Hält man die Umschalttaste gedrückt und klickt, fügt man eine Wache hinzu oder entfernt sie. Zieht man ein Kästchen, wählt man mehrere Wachen aus. Mit dem Befehl „Verlassen“ (Taste 8 in der Aktionsleiste) verlässt man das Schlachtfeld.
+aetherhaven.rts.helpFlag=Rechtsklicke auf den Boden, um Wachen zu entsenden. Fähigkeit 1 wechselt zwischen Angriffs- und Bewegungsmodus. Fähigkeit 2 stoppt ausgewählte Wachen.
+aetherhaven.rts.helpSword=Klicken Sie mit der rechten Maustaste auf eine Kreatur, um Ihre Wachen darauf zu konzentrieren. Diese greifen weder Dorfbewohner noch Touristen oder Wachen an.
+aetherhaven.rts.helpSelectAll=Klicken Sie, um alle Wachen in der Stadt auszuwählen und die Auswahl der anderen aufzuheben.
+aetherhaven.rts.helpStance=Fähigkeit1 wechselt die Kampfhaltung und wendet sie auf ausgewählte Wachen an.
+aetherhaven.rts.helpFree=Klicken Sie mit der rechten Maustaste, um die ausgewählten Wachen aus Ihren Befehlen zu entlassen.
+aetherhaven.rts.helpSelectType=Klicken Sie, um alle Wachen dieses Typs in der Stadt auszuwählen und die Auswahl der anderen aufzuheben.
+aetherhaven.rts.helpExit=Klicken Sie hier, um den Wächter-Befehlsmodus zu verlassen.
+aetherhaven.rts.errorUseExitTool=Verwenden Sie das Befehlstool „Verlassen“ in Ihrer Aktionsleiste, um den Befehlsmodus zu verlassen.
+aetherhaven.rts.errorNoGuards=Sie benötigen angeheuerte Wachleute, um dies nutzen zu können.
+aetherhaven.rts.errorNoSelection=Wählen Sie zuerst die Wachen aus.
+aetherhaven.rts.errorNotEnemy=Ihre Wachen werden das nicht angreifen.
+aetherhaven.rts.errorNotInTown=Der Kommandoposten muss sich innerhalb eures Stadtgebiets befinden, um genutzt werden zu können.
+aetherhaven.rts.errorCommandPostInUse=Jemand anderes nutzt den Kommandoposten in dieser Stadt bereits.
+aetherhaven.rts.recoverInventorySuccess=Deine Aktionsleiste aus der letzten Wachen-Befehlssitzung wurde wiederhergestellt.
+aetherhaven.rts.recoverInventorySuccessExited=Die Schnellzugriffsleiste wurde wiederhergestellt und der Wächter-Befehlsmodus beendet.
+aetherhaven.rts.recoverInventoryNone=Es wurde keine gespeicherte Aktionsleiste aus dem Wächter-Befehlsmodus gefunden.
+aetherhaven.rts.recoverInventoryAuto=Ihre Aktionsleiste wurde nach einer unterbrochenen Wächterbefehlssitzung wiederhergestellt.

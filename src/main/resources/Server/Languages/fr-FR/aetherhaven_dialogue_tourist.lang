@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house=Aimeriez-vous vivre ici ?
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_finish=Votre maison est prête.
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind=À propos de ma maison...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_waiting=À propos du déménagement...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.leave=Au revoir
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.body=J'aime votre ville. Pourriez-vous me trouver une maison ? Je verserais une contribution journalière au trésor public une fois que j'aurais un lit.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept=Je te trouverai un logement
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline=Peut-être plus tard
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.body=Merci. Réservez le terrain, terminez la construction, puis apposez mon nom sur le panneau. Revenez me voir quand j'y habiterai.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.ok=Ça ira
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.body=As-tu déjà trouvé une maison pour moi ? Termine la construction et choisis-moi sur le panneau « Maison à vendre ».
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.ok=Droite
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.body=Un autre visiteur attend d'abord une maison. Termine celle-ci, puis viens me parler.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.ok=Compris
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.body=Je me sens comme chez moi. Merci. Je paierai ma part chaque matin.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.ok=Accueillir

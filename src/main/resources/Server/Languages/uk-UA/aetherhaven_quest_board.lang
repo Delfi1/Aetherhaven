@@ -1,0 +1,135 @@
+aetherhaven.questBoard.miner.stone_haul.title=Камінь для сараю
+aetherhaven.questBoard.miner.stone_haul.description=Горрук хоче, щоб каміння склали біля його хатини до наступного дощу.
+aetherhaven.questBoard.miner.copper_ore.title=Мідь для лавки
+aetherhaven.questBoard.miner.copper_ore.description=Горруку потрібна мідна руда, яку невдовзі потрібно виплавити для міських інструментів.
+aetherhaven.questBoard.miner.iron_ore.title=Залізо для кузні
+aetherhaven.questBoard.miner.iron_ore.description=Горруку не вистачає залізної руди, і він звернувся до ради директорів з проханням допомогти.
+aetherhaven.questBoard.miner.silver_ore.title=Срібло для сховища
+aetherhaven.questBoard.miner.silver_ore.description=Горруку потрібна срібна руда, відкладена для міського резерву.
+aetherhaven.questBoard.miner.gold_ore.title=Золото для скрині статуту
+aetherhaven.questBoard.miner.gold_ore.description=Горрук опублікував рідкісний контракт на золоту руду для надійних рук.
+
+aetherhaven.questBoard.farmer.wheat_bundle.title=Пшениця для комори
+aetherhaven.questBoard.farmer.wheat_bundle.description=Серен потрібна пшениця в зв'язках для хліба та насіння.
+aetherhaven.questBoard.farmer.carrot_crate.title=Морква для кухні
+aetherhaven.questBoard.farmer.carrot_crate.description=Серен хоче свіжої моркви для рагу та обміну банок.
+aetherhaven.questBoard.farmer.potato_sack.title=Картопля для льоху
+aetherhaven.questBoard.farmer.potato_sack.description=Картоплю Серен потрібно зберігати до тижня заморозків.
+aetherhaven.questBoard.farmer.harvest_feast.title=Збір врожаю для площі
+aetherhaven.questBoard.farmer.harvest_feast.description=Серен планує свято врожаю та потребує змішаних культур.
+
+aetherhaven.questBoard.blacksmith.iron_bars.title=Залізні прути для замовлень
+aetherhaven.questBoard.blacksmith.iron_bars.description=Коваль має накопичені замовлення і йому зараз потрібні залізні прути.
+aetherhaven.questBoard.blacksmith.coal_fuel.title=Деревне вугілля для кузні
+aetherhaven.questBoard.blacksmith.coal_fuel.description=У кузні за ніч закінчилося паливо. Принесіть деревне вугілля.
+aetherhaven.questBoard.blacksmith.gold_bars.title=Золоті злитки для роботи в гільдії
+aetherhaven.questBoard.blacksmith.gold_bars.description=Ковалю потрібні золоті злитки для отримання високої комісії.
+aetherhaven.questBoard.blacksmith.master_smithing.title=Орден майстра ковалів
+aetherhaven.questBoard.blacksmith.master_smithing.description=Мені потрібна допомога у виконанні замовлення легендарної величини.
+
+aetherhaven.questBoard.logger.oak_logs.title=Дуб для ремонту
+aetherhaven.questBoard.logger.oak_logs.description=Міським парканам потрібні дубові колоди до наступної бурі.
+aetherhaven.questBoard.logger.timber_contract.title=Деревина для каркаса залу
+aetherhaven.questBoard.logger.timber_contract.description=Було опубліковано великий контракт на лісозаготівлю змішаних дубових та соснових матеріалів.
+
+aetherhaven.questBoard.rancher.raw_meat.title=М'ясо для коптильні
+aetherhaven.questBoard.rancher.raw_meat.description=Талену потрібне сире м'ясо, упаковане для кухні заїзду.
+aetherhaven.questBoard.rancher.leather_hide.title=Сховати для приклеювання
+aetherhaven.questBoard.rancher.leather_hide.description=Тален лагодить упряж і йому потрібна легка шкіра.
+aetherhaven.questBoard.rancher.ranch_provisions.title=Запаси провізією на ранчо
+aetherhaven.questBoard.rancher.ranch_provisions.description=Талену потрібні м'ясо та шкіра для складів квартирмейстера гільдії.
+
+aetherhaven.questBoard.priestess.life_essence.title=Життєва есенція для вівтаря
+aetherhaven.questBoard.priestess.life_essence.description=Жриця варить зливки і потребує життєвої сутності.
+aetherhaven.questBoard.priestess.sacred_offering.title=Священний пакунок для пожертвування
+aetherhaven.questBoard.priestess.sacred_offering.description=Жриця попросила есенцію та золото для обряду.
+aetherhaven.questBoard.priestess.cull_undead.title=Очистіть неспокійних мертвих
+aetherhaven.questBoard.priestess.cull_undead.description={villager} оголосив винагороду за знищення нежиті біля доріг.
+aetherhaven.questBoard.priestess.purge_undead.title=Очистіть ходячих мерців
+aetherhaven.questBoard.priestess.purge_undead.description={villager} хоче позбутися більше нежиті перед наступним обрядом.
+aetherhaven.questBoard.priestess.undead_raid.title=Нежить марширує по місту
+aetherhaven.questBoard.priestess.undead_raid.description={villager} попереджає, що нежить наступає на статут.
+aetherhaven.questBoard.priestess.void_raid.title=Вторгнення Пустоти в місто
+aetherhaven.questBoard.priestess.void_raid.description={villager} відчуває, як породження порожнечі рветься до каменя статуту.
+
+aetherhaven.questBoard.targets.undead=нежить
+aetherhaven.questBoard.targets.void=породження порожнечі
+aetherhaven.questBoard.targets.trork=троки
+aetherhaven.questBoard.targets.outlander=чужинці
+aetherhaven.questBoard.targets.goblin=гобліни
+aetherhaven.questBoard.targets.vermin=шкідники
+
+aetherhaven.questBoard.innkeeper.bread_loaves.title=Хліб для спільної кімнати
+aetherhaven.questBoard.innkeeper.bread_loaves.description=Корін хоче, щоб хлібини були готові до прибуття мандрівників у сутінках.
+aetherhaven.questBoard.innkeeper.traveler_rations.title=Пайки для мандрівників
+aetherhaven.questBoard.innkeeper.traveler_rations.description=Коріну потрібні хліб і м'ясо, упаковані для гостей, які втомилися від дороги.
+aetherhaven.questBoard.innkeeper.hearty_stew.title=Припаси для ситного рагу
+aetherhaven.questBoard.innkeeper.hearty_stew.description=Корін хоче картоплі та м'яса для вечірнього чайника.
+aetherhaven.questBoard.innkeeper.inn_feast.title=Підготовка до бенкету в готелі
+aetherhaven.questBoard.innkeeper.inn_feast.description=Корін готує на повний будинок і йому потрібні зерно та хліб.
+aetherhaven.questBoard.innkeeper.noble_banquet.title=Благородний банкетний запас
+aetherhaven.questBoard.innkeeper.noble_banquet.description=Корін розвісив список для бенкету з хлібом, м’ясом та золотом.
+aetherhaven.questBoard.innkeeper.grand_hospitality.title=Велика гостинність
+aetherhaven.questBoard.innkeeper.grand_hospitality.description=Коріну потрібен великий розклад для приїжджих торговців.
+aetherhaven.questBoard.innkeeper.royal_table.title=Королівське сервірування столу
+aetherhaven.questBoard.innkeeper.royal_table.description=Корін хоче золоті злитки, есенцію та хліб для почесних гостей.
+aetherhaven.questBoard.innkeeper.legendary_feast.title=Легендарне свято
+aetherhaven.questBoard.innkeeper.legendary_feast.description=Корін хоче влаштувати грандіозне свято для міста.
+
+aetherhaven.questBoard.elder.foundation_stones.title=Наріжні камені
+aetherhaven.questBoard.elder.foundation_stones.description=Лірен хоче зібрати каміння для нових пам'ятників статуту.
+aetherhaven.questBoard.elder.village_timber.title=Сільська деревина
+aetherhaven.questBoard.elder.village_timber.description=Лірен потрібні дубові колоди для лавок біля зали гільдії.
+aetherhaven.questBoard.elder.community_grain.title=Громадські зернові магазини
+aetherhaven.questBoard.elder.community_grain.description=Лірен попросила пшениці та моркви для міської комори.
+aetherhaven.questBoard.elder.town_supplies.title=Приладдя для чартерних робіт
+aetherhaven.questBoard.elder.town_supplies.description=Лірен розмістила каміння та дерево для доріжок біля статутного каменя.
+aetherhaven.questBoard.elder.iron_tribute.title=Залізна данина
+aetherhaven.questBoard.elder.iron_tribute.description=Лірену потрібна залізна руда та злитки для складів оборони міста.
+aetherhaven.questBoard.elder.silver_tribute.title=Срібна данина
+aetherhaven.questBoard.elder.silver_tribute.description=Лірен відклала срібну данину для міської скарбниці.
+aetherhaven.questBoard.elder.gold_tribute.title=Золота данина
+aetherhaven.questBoard.elder.gold_tribute.description=Лірен внесла золоту данину за сховище статуту.
+aetherhaven.questBoard.elder.elder_legacy.title=Пропозиція старійшини
+aetherhaven.questBoard.elder.elder_legacy.description=Лірен шукає золото, злитки та есенцію для обряду заснування.
+aetherhaven.questBoard.elder.vermin_clear.title=Очистіть від шкідників
+aetherhaven.questBoard.elder.vermin_clear.description={villager} хоче позбутися шкідників на доріжках міста.
+aetherhaven.questBoard.elder.vermin_raid.title=Шкодники рояться біля воріт
+aetherhaven.questBoard.elder.vermin_raid.description={villager} повідомляє про рої шкідників, що насувалися до статутного каменя.
+
+aetherhaven.questBoard.guild_master.recruit_gear.title=Стартовий комплект для рекрутів
+aetherhaven.questBoard.guild_master.recruit_gear.description=Майстру гільдії потрібен камінь та вугілля для нових рекрутів.
+aetherhaven.questBoard.guild_master.apprentice_tools.title=Інструменти для учнів
+aetherhaven.questBoard.guild_master.apprentice_tools.description=Майстер гільдії хоче мідну руду для тренувальних наборів.
+aetherhaven.questBoard.guild_master.journeyman_armor.title=Запас обладунків підмайстра
+aetherhaven.questBoard.guild_master.journeyman_armor.description=Майстру гільдії потрібні залізні прути та шкіра для обладунків.
+aetherhaven.questBoard.guild_master.veteran_weapons.title=Замовлення на зброю для ветеранів
+aetherhaven.questBoard.guild_master.veteran_weapons.description=Майстер гільдії відправив залізо та шкіру на спорядження ветеранів.
+aetherhaven.questBoard.guild_master.adventurer_gear.title=Спорядження для нових співробітників
+aetherhaven.questBoard.guild_master.adventurer_gear.description=Майстер гільдії споряджає шукачів пригод і йому потрібні залізо та шкіра.
+aetherhaven.questBoard.guild_master.elite_contract.title=Елітний контракт
+aetherhaven.questBoard.guild_master.elite_contract.description=Майстру гільдії потрібні золоті злитки та залізо для елітних наборів.
+aetherhaven.questBoard.guild_master.master_gear.title=Комплект головного спорядження
+aetherhaven.questBoard.guild_master.master_gear.description=Майстер гільдії опублікував контракт на спорядження майстер-рівня.
+aetherhaven.questBoard.guild_master.legendary_contract.title=Легендарний контракт
+aetherhaven.questBoard.guild_master.legendary_contract.description=Лірі потрібні високоякісні мечі для майбутньої битви епічних масштабів.
+aetherhaven.questBoard.guild_master.goblin_trouble.title=Проблеми з гоблінами
+aetherhaven.questBoard.guild_master.goblin_trouble.description={villager} оголосив винагороду за гоблінів, які заважають дорогам.
+aetherhaven.questBoard.guild_master.trork_patrol.title=Трокський патруль
+aetherhaven.questBoard.guild_master.trork_patrol.description={villager} хоче, щоб троків вигнали з торгових шляхів.
+aetherhaven.questBoard.guild_master.outlander_raid.title=Рейд на Чужоземців
+aetherhaven.questBoard.guild_master.outlander_raid.description={villager} виставив оплату за розчищення прибульців поблизу міста.
+aetherhaven.questBoard.guild_master.goblin_raid.title=Наліт гоблінів на місто
+aetherhaven.questBoard.guild_master.goblin_raid.description={villager} помітив військовий загін гоблінів, що йшов містом.
+aetherhaven.questBoard.guild_master.trork_raid.title=Військовий оркестр Трорк
+aetherhaven.questBoard.guild_master.trork_raid.description={villager} хоче допомогти зупинити троків, які просуваються проти хартії.
+aetherhaven.questBoard.guild_master.outlander_assault.title=Напад Чужоземки
+aetherhaven.questBoard.guild_master.outlander_assault.description={villager} попереджає, що чужинці порушують статут.
+
+aetherhaven.questBoard.builder.marble_statue.title=Славна статуя
+
+aetherhaven.questBoard.builder.marble_statue.description=Роуену потрібен мармур для статуї, яку виготовили на замовлення.
+
+aetherhaven.questBoard.logger.fir_logs.title=Ялиця для риштувань
+
+aetherhaven.questBoard.logger.fir_logs.description=Будівельники попросили ялицеві колоди для кріплення нової стіни.

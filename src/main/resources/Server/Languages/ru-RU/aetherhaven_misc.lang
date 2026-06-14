@@ -8,13 +8,13 @@ commands.aetherhaven.dialogue.desc=Откройте дерево диалого�
 commands.aetherhaven.dialogue.treeId.desc=Id дерева диалогов (например, aetherhaven_dialogue_test)
 commands.aetherhaven.dialogue.entry.desc=Необязательный идентификатор узла записи (по умолчанию: root)
 aetherhaven.interaction.dialogue=Нажмите [{key}], чтобы поговорить.
-npcRoles.Aetherhaven_Test_Villager.name=Тест диалога Жителя деревни
 aetherhaven.banner.quest.completed.primary=Задание выполнено
 aetherhaven.banner.quest.completed.secondary={name}
 aetherhaven.banner.assembly.complete.primary=Строительство завершено.
 aetherhaven.banner.assembly.complete.secondary={name}
 aetherhaven.assembly.complete.chat={name} готово.
 aetherhaven.assembly.tracer.none_in_range=Предварительный просмотр здания недоступен (приблизьтесь или проверьте разрешение на строительство в городе).
+aetherhaven.assembly.staff.no_mana=Не хватает маны для установки строительных блоков. Удерживайте посох для более быстрого восстановления маны, затем попробуйте снова.
 aetherhaven.banner.quest.started.primary=Задание начато
 aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=Разблокировано
@@ -23,3 +23,11 @@ aetherhaven.banner.reputation.unlock.item={item} x{count}
 
 items.Aetherhaven_Building_Staff.name=Посох строительства
 items.Aetherhaven_Building_Staff.description=ЛКМ создаёт пролетающий сквозь блоки снаряд летящий к ближайшей точке строительства в пределах досягаемости. Удерживайте ПКМ и наведите прицел на здание, чтобы быстро установить блоки (при наличии разрешения на строительство в городе). Здания продолжат возводиться самостоятельно, даже когда вас нет рядом.
+items.Aetherhaven_Building_Staff_Iron.name=Железный строительный персонал
+items.Aetherhaven_Building_Staff_Iron.description=Аналогично медному строительному посоху. Вторичное заполнение позволяет одновременно заполнить до <color is="#4ade80">5×5×5</color> выделенных строительных узлов. При удержании дает <color is="#60a5fa">+250 максимальной маны</color> и ускоряет восстановление маны; каждый установленный блок стоит <color is="#60a5fa">1 маны</color>.
+items.Aetherhaven_Building_Staff_Thorium.name=Персонал здания Thorium
+items.Aetherhaven_Building_Staff_Thorium.description=Аналогично медному строительному посоху. Вторичное заполнение позволяет одновременно заполнить до <color is="#4ade80">7×7×7</color> выделенных строительных узлов. При удержании дает <color is="#60a5fa">+400 максимальной маны</color> и ускоряет восстановление маны; каждый установленный блок стоит <color is="#60a5fa">1 маны</color>.
+items.Aetherhaven_Building_Staff_Cobalt.name=Персонал здания Cobalt
+items.Aetherhaven_Building_Staff_Cobalt.description=Аналогично медному строительному посоху. Вторичное заполнение позволяет одновременно заполнить до <color is="#4ade80">9×9×9</color> выделенных строительных узлов. Во время удержания дает <color is="#60a5fa">+600 максимальной маны</color> и ускоряет восстановление маны; каждый установленный блок стоит <color is="#60a5fa">1 ману</color>.
+items.Aetherhaven_Building_Staff_Adamantite.name=Адамантитовый персонал здания
+items.Aetherhaven_Building_Staff_Adamantite.description=Аналогично медному строительному посоху. Вторичное заполнение позволяет одновременно заполнить до <color is="#4ade80">11×11×11</color> выделенных строительных узлов. Во время удержания дает <color is="#60a5fa">+900 максимальной маны</color> и ускоряет восстановление маны; каждый установленный блок стоит <color is="#60a5fa">1 ману</color>.

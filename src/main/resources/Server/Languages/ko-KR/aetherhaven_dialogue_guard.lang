@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house=거주할 곳에 관하여...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_finish=당신의 집이 완공되었습니다.
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_remind=당신의 집에 관해서...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_waiting=주택에 관하여...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.leave=안녕히 가세요
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.body=저는 마을 주민이 되었지만 여전히 노숙하고 있습니다. 집을 지어주시고 제 이름을 간판에 달아주실 수 있을까요?
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.accept=내가 너를 위해 집을 지어주겠다
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.decline=나중에요
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.body=감사합니다. 집터를 정하고, 건축을 완료한 다음, 집 표지판에 저를 적어주세요. 제가 입주하면 다시 오세요.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.ok=알겠습니다.
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.body=아직 지붕이 필요해요. 집 완공하시고, 집 표지판에 제 이름을 넣어주세요.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.ok=오른쪽
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.body=다른 경비원이 먼저 집 하나를 지키고 있어요. 그 집 일을 마무리하고 나서 저랑 얘기하러 오세요.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.ok=이해했다
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.body=좋아요. 문도 있고 침대도 있네요. 저도 다른 사람들처럼 제 몫을 낼게요.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.ok=감사합니다

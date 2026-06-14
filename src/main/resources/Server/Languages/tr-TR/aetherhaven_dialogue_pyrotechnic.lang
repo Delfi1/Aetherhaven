@@ -1,0 +1,71 @@
+# Pyrotechnic dialogue (Grubble Sparkmatch)
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.body=Ha! Yapışkan poşeti patlattın! Grubble sonsuza kadar orada sıkışıp kaldı. Kasabanızda bir han mı var? Güzel. Belki Grubble sıcak yemek ve kuru bir bank istediğinde oraya gider.
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.c0=Dikkatli ol.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.fallback=Grubble'ın iş, ev veya silah kullanımıyla ilgili konuşmaya ihtiyacı varsa, barut aklına bir şey gelmeden önce söyleyin.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.0=Bugün büyük bir patlama mı oldu? Küçük bir patlama mı? Grubble ikisini de yaşadı.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.1=Pudra rafının yakınında hapşırmayın. Grubble bu dersi öğrendi.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.2=Kasabanız odun dumanı kokuyor. Grubble bundan hoşlanıyor.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.3=Patlayan bir şeye mi ihtiyacınız var? Doğru yere geldiniz goblin.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.0=Grubble patlayıcı tozu veya güzel yuvarlak bir bomba getirin.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.1=Popberry bombaları Grubble'ı çok mutlu ediyor.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.0=Grubble hediye olarak çöp veya kemik istemez.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.1=Boşlukla ilgili şeyler Grubble'ı ürpertir. Ondan uzak tutun.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house=Grubble, sen bir ev hakkında konuşmak istiyordun.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house_done=Adın evin rafında yazılı. Grubble bunu benden duymalı.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house_remind=Ev hala yapım aşamasında.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_done=Grubble, bomba dükkanı açıldığına göre bir haber vermek istedim.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_complete=Bomba dükkanı bitti. Grubble, işleri kapatmak için buradayım.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_building=Dükkan hâlâ yapım aşamasında. Son durum nedir?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_offer=Grubble, kasabada düzgün bir dükkan açmana yardım etmek istiyorum.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_goodbye=Şimdilik bu kadar. Grubble, sonra görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=Grubble, cebinden sonsuza kadar patlayıcı madde satamaz. İnsanlar tedirgin olur. Kalın duvarlı, iyi bir tabelası olan, küçük bir bomba hapşırdığında bile sallanmayan rafları olan gerçek bir dükkana ihtiyaç var. Grubble, planları yanmaz kağıda çizdi. Sen kasaba için inşa et, Grubble sana sayfayı ver.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=Grubble'a bir dükkan açacağız.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1=Şu an değil. Grubble bekliyor.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=Proje planını alın. Şehir planlama masasından bilgi alın. Jeton üretin. İnsanların kaybolmadan veya yanlışlıkla havaya uçurulmadan bulabileceği bir yere dükkan inşa edin. Grubble handa bekliyor. Barut, duvarlar kalınlaşana kadar torbada kalıyor.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=Tabela asıldığında görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=Dükkan henüz inşa edilmedi mi? Grubble bekliyor. Grubble çok uzun süre beklediğinde Powder huzursuzlanıyor. Hala planları öğrenip duvarları mı örüyorsunuz, yoksa Grubble umut etmeyi bırakmalı mı?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c0=Grubble, şimdilik görevi bırakmam gerekiyor.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c1=Üzerinde çalışmaya devam ediyorum. Grubble, devam edeceğim.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.body=Bugün alışverişe gitmeyecek misin? Tamam. Grubble çantasında bombalar taşıyor ve raflarda yer almayı hayal ediyor. Fikrin değişirse tekrar konuşalım.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.c0=Tamamdır. Grubble, görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.body=Dükkan açıldı! Raflar hazır! Duvarlar kalın! Grubble, paltosunun arkasından fısıldamak yerine, gerçek bir iş adamı goblin gibi patlamaya hazır şeyler satabilir. Teşekkürler dostum.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.c0=Yardımcı olmaktan mutluluk duyarım. Grubble, eğer kasabaya daha fazla insan gerekirse beni bulmaya gel.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.body=Hatta patlama cini bile yatağa ihtiyaç duyar. Sessiz bir yatağa. Toz rafından ve örümcek köşesinden uzakta. Dükkan iş içindir. Grubble da diğer insanlar gibi küçük bir ev istiyor. Sen bir tane tahsis eder misin?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c0=Grubble, senin için bir ev ayırtacağım.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c1=Başka bir zaman.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.body=Duvarlar gerçek olduğunda, tüzükte yazdığı gibi Grubble'ın adını içerideki bloğun üzerine yazın. Sonra gelip Grubble'a sözlü olarak anlatın. Grubble duymak istiyor, tahmin etmek değil.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.c0=Grubble benden bunu duyacak.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.body=Çerçeveyle zaman geçirin. Ev dikildiğinde, iç rafa Grubble yazın, sonra geri gelin. Grubble acele etmiyor. Sadece isminin duvara yazılmasını istiyor.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.c0=Anlaşıldı.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.body=Güzel duvarlar. İyi çatı. Grubble örümcek rüyaları veya toz kabusları olmadan uyuyabilir. Bu gayet iyi olacak.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.c0=Grubble'ın nihayet düzgün bir kapıya kavuşmasına sevindim.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.confirm=Grubble'a bir şey mi verdin?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.love=Evet! Bu harika bir şey! Grubble bunun için sana bayılıyor.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.like=İyi hediye. Grubble başıyla onaylıyor.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.neutral=Hım. Yeterince etkileyici değil. Ama yine de teşekkürler.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.dislike=Grubble bunu istemiyor. Aklını başına topla.

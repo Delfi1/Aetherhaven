@@ -15,8 +15,14 @@
 #   aetherhaven_ui_journal_items_tail.lang — quest journal detail UI; npcRoles; more items
 #   aetherhaven_jewelry_geode.lang   — jewelry; Gaia statue panel; charter town UI; treasury panel; geode; mirror; appraisal; trait/rarity
 #   aetherhaven_plot_move.lang       — plot placement; move charter relocation UI
+#   aetherhaven_wall_placement.lang  — wall wand placement UI (en-US)
 #   aetherhaven_commands_help.lang — /aetherhaven subcommand descriptions (tab help)
 #   aetherhaven_feasts_production.lang — feasts; workplace production / unlocks
 #   aetherhaven_misc.lang            — blacksmith repair; dialogue test command; banners; building staff
+#   aetherhaven_shop.lang            — shop spot block, config UI, HUD, purchases
+#   aetherhaven_rts.lang             — RTS guard command mode HUD, tools, command post
+#   aetherhaven_plot_crafting.lang   — plot crafting bench UI
 #
 # Villager dialogue trees: aetherhaven_dialogue_<tree>.lang (see docs/DIALOGUE_WRITING.md).
+
+memories.categories.Aetherhaven.title=村人たち

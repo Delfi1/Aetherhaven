@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house=Yaşanacak bir yer hakkında...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_finish=Eviniz tamamlandı.
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_remind=Evinizle ilgili...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_waiting=Konutlarla ilgili...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.leave=Güle güle
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.body=Kasabanıza yerleştim ama hala açık havada uyuyorum. Bana bir ev inşa edip tabelasına adımı yazabilir misiniz?
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.accept=Sana bir ev inşa edeceğim.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.decline=Belki daha sonra
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.body=Teşekkür ederim. Ev arsası belirleyin, inşaatı bitirin, sonra ev tabelasında benim ismimi seçin. Ben orada yaşamaya başladığımda tekrar gelin.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.ok=Yapacak
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.body=Hâlâ bir çatıya ihtiyacım var. Evi bitirin ve ev tabelasında beni seçin.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.ok=Sağ
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.body=Önce bir başka bekçi evde bekliyor. O evi bitirdikten sonra gel benimle konuş.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.ok=Anlaşıldı
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.body=Güzel. Bir kapım ve bir yatağım var. Herkes gibi ben de payımı ödeyeceğim.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.ok=Teşekkür ederim

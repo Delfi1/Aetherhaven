@@ -1,0 +1,7 @@
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Contratar guardia {type} (oro {gold})
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=Adiós
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Paga la cuota y este aventurero patrullará tu ciudad. Permanecerá allí hasta que caiga en combate.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Sí, contrátalos.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=Ahora no
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=Son tuyos. Si quieres que se queden mucho tiempo, asegúrate de alimentarlos y darles un techo.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=Adiós

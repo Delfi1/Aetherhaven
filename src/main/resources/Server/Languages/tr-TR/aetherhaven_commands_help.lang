@@ -2,81 +2,147 @@
 # Bundle: /aetherhaven subcommand help (tab completion)
 
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
-commands.aetherhaven.towns.desc=Günümüz dünyasında Aetherhaven'deki kasabaları listeleyin.
+commands.aetherhaven.towns.desc=Hata ayıklama: Bu dünyadaki her kasabayı listele
 
-commands.aetherhaven.town.desc=Kasaba üyeliği: davet, görevler, ayrılma
+commands.aetherhaven.replace_charter.desc=Tüzük bloğunu kasabanızın kayıtlı yerine geri koyun.
+commands.aetherhaven.replace_charter.townName.desc=İsteğe bağlı şehir adı (boşluklu tam ad)
+
+commands.aetherhaven.town.desc=Kasaba sakinleri: davet et, kabul et, görevleri üstlen, ayrıl
 commands.aetherhaven.town.invite.desc=Çevrimiçi bir oyuncuyu kasabanıza davet edin.
 commands.aetherhaven.town.invite.player.desc=Oyuncu kullanıcı adı (çevrimiçi olmanız gerekir)
 commands.aetherhaven.town.accept.desc=Bekleyen şehir davetini kabul et
 commands.aetherhaven.town.decline.desc=Bekleyen şehir davetini reddedin
 commands.aetherhaven.town.kick.desc=Kasabanızdan bir üyeyi çıkarın
 commands.aetherhaven.town.kick.player.desc=Üye kullanıcı adı (çevrimiçi olmanız gerekir)
-commands.aetherhaven.town.role.desc=Bir üyeye önceden ayarlanmış bir izin uygulayın (İNŞA ET, GÖREV veya HER İKİSİ). Bayrak başına izinler için Yönetim bloğunun Oyuncular sekmesini kullanın.
+commands.aetherhaven.town.role.desc=Üye rolü belirleyin: İNŞA ET, GÖREV YAP veya HER İKİSİ
 commands.aetherhaven.town.role.player.desc=Üye kullanıcı adı (çevrimiçi olmanız gerekir)
 commands.aetherhaven.town.role.role.desc=İNŞA ET, GÖREVİ TAMAMLA veya HER İKİSİ BİRDEN
-commands.aetherhaven.town.leave.desc=Üyesi olduğunuz (sahibi olmadığınız) bir kasabayı terk edin.
-commands.aetherhaven.town.townName.desc=İsteğe bağlı şehir görüntüleme adı; boşluklar dahil tam adı kullanın (satırın geri kalanı). Yalnızca bir bekleyen davetiniz varsa bu alanı atlayın.
+commands.aetherhaven.town.leave.desc=Kurucusu olmadığınız halde ait olduğunuz bir kasabayı terk edin.
+commands.aetherhaven.town.townName.desc=İsteğe bağlı şehir adı (boşluklu tam ad). Sadece bir davetiyeniz varsa bu kısmı atlayın.
 
-commands.aetherhaven.poi.desc=Hata ayıklama: POI komutları
-commands.aetherhaven.poi.list.desc=Bir kasaba için ilgi noktalarını listeleyin (isteğe bağlı olarak kasaba UUID'si veya UUID'yi atlayın / kasabanız için "me" kullanın)
-commands.aetherhaven.poi.town.desc=Arayan şehrin UUID'si, veya ben, veya arayanın şehri için belirtme.
-commands.aetherhaven.poi.dump.desc=Bu dünyanın hafızadaki kayıt defterinde yer alan tüm ilgi noktalarını (herhangi bir kasaba) listeleyin.
+commands.aetherhaven.poi.desc=Hata ayıklama: ilgi noktası yardımcıları
+commands.aetherhaven.poi.list.desc=Bir kasaba için ilgi noktalarını listeleyin.
+commands.aetherhaven.poi.town.desc=Kasaba kimliği, ben veya kasabanız için bu bilgileri atlayın.
+commands.aetherhaven.poi.dump.desc=Bu dünyadaki tüm ilgi noktalarını listeleyin.
 
-commands.aetherhaven.plots.desc=Grafik örnekleri: liste, montajı tamamla (yaratıcı), grafik kimliğini kaldır (yaratıcı). /aetherhaven grafiğiyle çakışmayı önlemek için grafikler kullanın.
-commands.aetherhaven.plots.list.desc=Şehrinizdeki arsa örneklerini listeleyin (arsa UUID'si, inşaat kimliği, eyalet, tabela konumu)
-commands.aetherhaven.plots.finishassembly.desc=Yaratıcı: Kasabanızdaki devam eden tüm montaj işlemlerini anında tamamlayın (yüklenmiş bloklar / aktif işler gerektirir)
-commands.aetherhaven.plots.remove.desc=Yaratıcı: UUID'ye göre bir arsayı yıkın ve kasaba verilerinizden kaldırın.
-commands.aetherhaven.plots.remove.plotId.desc=/aetherhaven plots listesinden UUID'yi çiz
+commands.aetherhaven.plots.desc=Hata ayıklama: örnek yardımcılarını çiz (yaratıcı: montajı tamamla, kaldır)
+commands.aetherhaven.plots.list.desc=Hata ayıklama: Şehrinizdeki bina arsalarını listele
+commands.aetherhaven.plots.finishassembly.desc=Yaratıcı: Şehrinizdeki yapım aşamasındaki tüm yapıları tamamlayın.
+commands.aetherhaven.plots.remove.desc=Yaratıcı: Kasabanızdan bir arsayı kaldırın
+commands.aetherhaven.plots.remove.plotId.desc=Grafik listesinden grafik kimliği
 
-commands.aetherhaven.needs.desc=Hata ayıklama: köylünün ihtiyaçları
-commands.aetherhaven.needs.inspect.desc=Yüklenen öbeklerdeki VillagerNeeds özelliğine sahip varlıkları listeleyin.
-commands.aetherhaven.needs.set.desc=İhtiyaç ölçerini 0..100 olarak ayarlayın (hedef: incelemeden, Elder'dan veya uuid'den gelen tanıtıcı)
-commands.aetherhaven.needs.target.desc=Tanıtıcı (örneğin Villager_Elder_xxxxxxxx), Yaşlı veya varlık UUID'si
-commands.aetherhaven.needs.entity.desc=Kullanımdan kaldırıldı; bunun yerine hedef (işleyici, Elder veya uuid) kullanın.
+commands.aetherhaven.needs.desc=Hata ayıklama: köylünün metreye ihtiyacı var
+commands.aetherhaven.needs.inspect.desc=Hata ayıklama: Yakınlarda metreye ihtiyaç duyan köylüleri listele
+commands.aetherhaven.needs.set.desc=Hata ayıklama: Bir köylünün açlık, enerji veya eğlence seviyesini ayarlayın.
+commands.aetherhaven.needs.target.desc=Köy sakini kullanıcı adı, Yaşlı veya varlık kimliği
+commands.aetherhaven.needs.entity.desc=Kullanımdan kaldırıldı; bunun yerine hedef kullanın.
 commands.aetherhaven.needs.which.desc=açlık, enerji veya eğlence
-commands.aetherhaven.needs.value.desc=0 ile 100 arasında bir değer (100 = tamamen memnun)
+commands.aetherhaven.needs.value.desc=0 ile 100 arası (100 tam doluluk anlamına gelir)
 
 commands.aetherhaven.tax.desc=Hata ayıklama: hazine sabah vergisi
-commands.aetherhaven.tax.breakdown.desc=Kasabanızdaki köylü başına vergi kalemlerini ve toplamlarını göster (yalnızca yüklenmiş bölümler için)
-commands.aetherhaven.tax.now.desc=Sabah vergisini şimdi hazineye yatırın (sabah zamanını ve son tahsilat gününü atlar).
+commands.aetherhaven.tax.breakdown.desc=Hata ayıklama: kasabanız için vergi satırlarını göster
+commands.aetherhaven.tax.now.desc=Hata ayıklama: Sabah vergisini hemen tahsil et
 
-commands.aetherhaven.questdebug.desc=Hata ayıklama: kasaba görevi atlama
-commands.aetherhaven.questdebug.grant.desc=Kasabanızda görev işaretini aktif hale getirin.
-commands.aetherhaven.questdebug.complete.desc=Kasabanızda görevi tamamladığınıza göre işaretleyin.
-commands.aetherhaven.questdebug.clear.desc=Kasabanızdaki aktif görevler listesinden görevi kaldırın.
+commands.aetherhaven.quest.desc=Hata ayıklama: kasaba görevi yardımcıları
+commands.aetherhaven.questdebug.desc=Hata ayıklama: kasaba görevi yardımcıları
+commands.aetherhaven.questdebug.grant.desc=Hata ayıklama: Kasabanızda bir görevi aktif olarak işaretleyin.
+commands.aetherhaven.questdebug.complete.desc=Hata ayıklama: Kasabanızda bir görevi tamamlandı olarak işaretleyin.
+commands.aetherhaven.questdebug.clear.desc=Hata ayıklama: Kasabanızın aktif görev listesinden bir görevi kaldırın.
 commands.aetherhaven.questdebug.id.desc=Görev kimliği (varsayılan q_build_inn)
-commands.aetherhaven.questdebug.status.desc=Kasabanız için aktif ve tamamlanmış görevleri göster (görüntüleme adı + kimlik)
+commands.aetherhaven.questdebug.status.desc=Hata ayıklama: Kasabanızdaki aktif ve tamamlanmış görevleri göster
 
-commands.aetherhaven.reputation.desc=Hata ayıklama: itibar
-commands.aetherhaven.reputation.set.desc=Köy sakiniyle aranızdaki itibarı artırın ve diyalog için geçilen aşama ödüllerini sıraya koyun.
-commands.aetherhaven.reputation.villagerUuid.desc=Köylü NPC varlığı UUID'si
-commands.aetherhaven.reputation.villagerTarget.desc=Kasabanızdaki köylü varlığının UUID'si veya NPC rol kimliği (örneğin, Aetherhaven_Blacksmith)
+commands.aetherhaven.reputation.desc=Hata ayıklama: köylü itibarı
+commands.aetherhaven.reputation.set.desc=Hata ayıklama: Bir köylüyle itibar seviyesini ayarlama
+commands.aetherhaven.reputation.villagerUuid.desc=Köylü varlık kimliği
+commands.aetherhaven.reputation.villagerTarget.desc=Kasabanızdaki köylü varlık kimliği veya rol kimliği
 commands.aetherhaven.reputation.value.desc=İtibar 0 - 100
-commands.aetherhaven.reputation.reward.desc=Dönüm noktası tanımlarını listeleyin veya doğrudan bir ödül verin.
-commands.aetherhaven.reputation.reward.list.desc=İtibar kazanımlarını listeleyin (isteğe bağlı: NPC rol kimliğine göre filtreleyin)
-commands.aetherhaven.reputation.reward.roleFilter.desc=Listeyi filtrelemek için NPC rol kimliğini (örneğin Aetherhaven_Merchant) kullanın.
-commands.aetherhaven.reputation.reward.grant.desc=Şimdi bir dönüm noktası ödülü verin (talep edilen puanlar); kimlikler için itibar ödülü listesini kullanın.
-commands.aetherhaven.reputation.rewardId.desc=İtibar ödülü kimliği (ör. rep_merchant_50)
+commands.aetherhaven.reputation.reward.desc=Hata ayıklama: itibar ödüllerini listele veya ver
+commands.aetherhaven.reputation.reward.list.desc=Hata ayıklama: itibar kilometre taşı ödüllerini listele
+commands.aetherhaven.reputation.reward.roleFilter.desc=Listeyi filtrelemek için isteğe bağlı rol kimliği.
+commands.aetherhaven.reputation.reward.grant.desc=Hata ayıklama: Şimdi bir itibar ödülü verin
+commands.aetherhaven.reputation.rewardId.desc=Ödül kimliği (örnek: rep_merchant_50)
 
 commands.aetherhaven.villager.desc=Hata ayıklama: kasaba köylü yardımcıları
-commands.aetherhaven.villager.list.desc=Kasaba sakinlerinin NPC varlıklarının UUID'lerini listeleyin (itibar/konum belirleme komutları için).
-commands.aetherhaven.villager.locate.desc=Kasaba sakininin konumunu yazdır; isteğe bağlı ışınlanma (yalnızca operatörler)
-commands.aetherhaven.villager.uuid.desc=Köylü NPC varlığı UUID'si
-commands.aetherhaven.villager.target.desc=Kasabanızdaki köylü varlığının UUID'si veya NPC rol kimliği (örneğin, Aetherhaven_Merchant)
-commands.aetherhaven.villager.teleport.desc=Köy sakinine ışınlanmak için true komutunu kullanın (sadece operatörler); veya bunun yerine --tp komutunu kullanın.
-commands.aetherhaven.villager.tp_flag.desc=Köy sakinine ışınlan (sadece operatörler için; doğru geçmekle aynı)
-commands.aetherhaven.villager.reset.desc=Kasabadaki tüm köylü NPC'leri kaldırın ve onları yakınınızda yeniden oluşturun (hata ayıklama; görevleri, itibarı, hediyeleri korur; sakinleri tamamlanmış binalarla hizalamak için han havuzu onarımını çalıştırır; han ziyaretçi havuzunu yeniler)
+commands.aetherhaven.villager.list.desc=Hata ayıklama: Kasabanızdaki köylülerin kimlik numaralarını listeleyin
+commands.aetherhaven.villager.locate.desc=Hata ayıklama: Bir köylünün nerede olduğunu göster (isteğe bağlı ışınlanma)
+commands.aetherhaven.villager.uuid.desc=Köylü varlık kimliği
+commands.aetherhaven.villager.target.desc=Kasabanızdaki köylü varlık kimliği veya rol kimliği
+commands.aetherhaven.villager.teleport.desc=Köy sakinine ışınlanma özelliği etkinleştirildi (sadece operatörler için).
+commands.aetherhaven.villager.tp_flag.desc=Köy sakinine ışınlan (sadece operatörler için)
+commands.aetherhaven.villager.reset.desc=Hata ayıklama: Yakınınızdaki tüm kasaba sakinlerini yeniden canlandırın
+commands.aetherhaven.villager.fixinn.desc=Hata ayıklama: Kasabanızdaki otel ziyaretçi havuzunu onarın
 aetherhaven.villager.resetDone=Kasaba sakinleri sıfırlandı ve yakınınızda yeniden ortaya çıktı.
 aetherhaven.villager.resetFailed=Kasaba sakinlerini sıfırlayamadı: {reason}
-commands.aetherhaven.gift.desc=Hata ayıklama: hediye limitlerini sıfırlama veya hediye geçmişi önizlemesini doldurma
-commands.aetherhaven.gift.resetLimits.desc=Bu dünyadaki her kasabadaki tüm oyuncular ve tüm köylüler için günlük/haftalık hediye limitlerini sıfırlayın.
-commands.aetherhaven.gift.fillHistory.desc=Rolünüz (kasabanız) için her bir sevgi/beğeni/beğenmeme öğesi için bir günlük kaydı satırı ekleyin, böylece hediye geçmişinde gösterilecek bir şey olsun (hata ayıklama).
-commands.aetherhaven.gift.roleId.desc=NPC rol kimliği (örneğin Aetherhaven_Merchant)
+commands.aetherhaven.gift.desc=Hata ayıklama: hediye limiti ve geçmiş yardımcıları
+commands.aetherhaven.gift.resetLimits.desc=Hata ayıklama: Bu dünyadaki herkes için hediye limitlerini sıfırla
+commands.aetherhaven.gift.fillHistory.desc=Hata ayıklama: Köylü rolü için hediye geçmişi önizlemesini doldurma
+commands.aetherhaven.gift.roleId.desc=Köylü rol kimliği (örnek: Aetherhaven_Merchant)
 
 commands.aetherhaven.debug_autonomy.desc=Hata ayıklama: köylü özerkliği katmanı
-commands.aetherhaven.debug_autonomy.toggle.desc=Kasaba sakini üzerinde özerklik hata ayıklamasını açıp kapatın (NPC'ye bakın veya --ray kullanın)
-commands.aetherhaven.debug_autonomy.show.desc=Bu köylü için özerklik hata ayıklamasının etkin olup olmadığını göster.
-commands.aetherhaven.debug_autonomy.clear.desc=Bu köylü için Aetherhaven özerklik hata ayıklamasını temizle.
+commands.aetherhaven.debug_autonomy.toggle.desc=Hata ayıklama: Bir köylüde özerklik hata ayıklamasını açıp kapatma
+commands.aetherhaven.debug_autonomy.show.desc=Hata ayıklama: özerklik hata ayıklama durumunu göster
+commands.aetherhaven.debug_autonomy.clear.desc=Hata ayıklama: Bir köylüde özerklik hata ayıklamasını temizle
 
-commands.aetherhaven.debug_lootchest.desc=Hata ayıklama: Aetherhaven sandığı bonusu, hedeflenen konteynerde ortaya çıkıyor.
-commands.aetherhaven.debug_lootchest.fill.desc=İncelediğiniz eşya kabına zorunlu mücevher, altın ve olay belirteci zarlarını uygulayın.
+commands.aetherhaven.debug_lootchest.desc=Hata ayıklama: sandık bonus zarları
+commands.aetherhaven.debug_lootchest.fill.desc=Hata ayıklama: Baktığınız sandıkta bonus ganimetini zorla gösterin.
+
+commands.aetherhaven.floatinggift.desc=Yüzen hediye balonu yardımcıları
+commands.aetherhaven.floatinggift.spawn.desc=Hata ayıklama: Bulunduğunuz konumda yüzen bir hediye oluşturun.
+commands.aetherhaven.floatinggift.next.desc=Bir sonraki yüzen hediyenizin ne zaman görünebileceğini gösterin.
+
+commands.aetherhaven.time.desc=Yaratıcı: Oyun içi zaman çizelgesi saatini ayarlayın (köylülerin rutinleri bu saati kullanır)
+commands.aetherhaven.time.set.desc=Yaratıcı: Zamanlama saatini bir saate ayarlayın (0 ila 23)
+commands.aetherhaven.time.hour.desc=Saat 0 ile 23 arası (örneğin, saat 14:00 için 14)
+commands.aetherhaven.time.set.success=Saat {gameTime} olarak ayarlandı.
+commands.aetherhaven.time.dawn.desc=Yaratıcı: Zamanlama saatini sabah 6:00'ya ayarlayın.
+commands.aetherhaven.time.dawn.success=Saat ayarı: {gameTime}
+commands.aetherhaven.time.noResource=Bu dünyaya zaman kaynağı yüklenmedi.
+
+commands.aetherhaven.walldebug.desc=Yaratıcı: Duvara asa yerleştirme hata ayıklama satırları sohbette
+commands.aetherhaven.walldebug.on.desc=Duvar çubuğu hata ayıklamasını açın.
+commands.aetherhaven.walldebug.off.desc=Duvar çubuğu hata ayıklama özelliğini kapatın.
+commands.aetherhaven.walldebug.dump.desc=Mevcut duvar çubuğu oturum durumunu yazdırın
+
+commands.aetherhaven.townsfolk.desc=Hata ayıklama: Ortak kasaba halkı havuzundaki NPC'leri oluşturma ve yönetme
+commands.aetherhaven.townsfolk.spawn.desc=Kasabanızda bir kasaba sakini NPC oluşturun (rastgele havuzdan seçim yapın veya karakter kimliğini geçirin).
+commands.aetherhaven.townsfolk.id.desc=Kasaba sakini karakter kimliği (ör. female_elf_01)
+commands.aetherhaven.townsfolk.release.desc=Bir karakteri tekrar dünya havuzuna bırakın.
+commands.aetherhaven.townsfolk.list.desc=Bu dünyadaki müsait ve ziyaret edilmiş kasaba sakinlerinin listesi
+commands.aetherhaven.townsfolk.characterId.desc=Server/Aetherhaven/Townsfolk/ adresinden Townsfolk karakter kimliği.
+commands.aetherhaven.townsfolk.assignmentKind.desc=boşta, turist veya bekçi
+commands.aetherhaven.townsfolk.despawn.desc=Ayrıca oluşturulan varlığı dünyadan kaldırın.
+commands.aetherhaven.townsfolk.spawn.ok=Kasaba halkı ortaya çıktı {id} ({assignment})
+commands.aetherhaven.townsfolk.spawn.failed=Kasaba sakini oluşturulamadı (kimliği bilinmiyor, zaten kullanımda, havuz eşleşmesi yok veya oluşturma başarısız oldu).
+commands.aetherhaven.townsfolk.release.ok={id} tekrar havuza bırakıldı.
+commands.aetherhaven.townsfolk.release.notCheckedOut=O karakter bu dünyada kontrol edilmiyor.
+commands.aetherhaven.townsfolk.list.available={assignment} için kullanılabilir: {ids}
+commands.aetherhaven.townsfolk.list.availableIdle=Boşta bekleme için kullanılabilir: {ids}
+commands.aetherhaven.townsfolk.list.inUse=Çıkış yapıldı: {ids}
+commands.aetherhaven.townsfolk.clear.desc=Bu dünyadaki tüm kasaba sakinlerini yok et ve ortak havuzu sıfırla.
+commands.aetherhaven.townsfolk.clear.ok={count} kasaba sakinleri kaldırıldı ve bu dünya için havuz temizlendi.
+commands.aetherhaven.guild.desc=Hata ayıklama: lonca binası maceracı havuzu ve kiralık muhafızlar
+commands.aetherhaven.guild.respawn.desc=Maceracıları yok edin, bugünün slotlarını atın ve anında yeniden doğun.
+commands.aetherhaven.guild.respawn.ok=Lonca yeniden doğuşu: {reclaimed} eski kasalar geri alındı, {despawned} kaldırıldı, {slots} yuva yeniden oluşturuldu, {spawned} oluşturuldu (mevcut havuz: {available})
+commands.aetherhaven.guild.clearguards.desc=Şehrinizdeki tüm paralı muhafızları yok edin ve havuz kayıtlarını serbest bırakın.
+commands.aetherhaven.guild.clearguards.ok={count} numaralı kiralık güvenlik görevlileri kaldırıldı ve kasaba güvenlik kayıtları temizlendi.
+commands.aetherhaven.guild.status.desc=Kasabanız için lonca salonu maceracı havuzu teşhislerini göster
+commands.aetherhaven.guild.status.ok=Lonca salonu aktif={active} dönemGünü={epochDay} sonSabah={lastMorning} doluYuvalar={filledSlots} takip edilenNpcKimlikleri={tracked} kiralanmışMuhafızlar={hiredGuards} havuz(toplam={poolTotal} muhafız={poolGuards} maceracı={poolAdventurers} diğer={poolOther})
+
+commands.aetherhaven.tourist.desc=Hata ayıklama: turist portalı ziyaret hedefleri
+commands.aetherhaven.tourist.targets.desc=Hata ayıklama: Şehrinizdeki turistik yerlerin ve isteğe bağlı ilgi noktalarının listesini oluşturma
+commands.aetherhaven.guild.notActive=Kasabanızda aktif bir lonca binası bulunmamaktadır.
+
+commands.aetherhaven.plotcreator.desc=Özel kasaba binaları oluşturun
+commands.aetherhaven.plotcreator.start.desc=Hikaye oluşturma kılavuzunu açın.
+commands.aetherhaven.plotcreator.cancel.desc=Hikaye oluşturma oturumunu iptal et
+commands.aetherhaven.plotcreator.edit.desc=Bu sunucuda kaydedilmiş özel bir binayı düzenleyin.
+commands.aetherhaven.plotcreator.edit.constructionId=Bina kimliği (plot_my_building)
+commands.aetherhaven.plotcreator.generateicon.desc=Mevcut bir prefab'dan bir arsa belirteci simgesi PNG'si oluşturun.
+commands.aetherhaven.plotcreator.generateicon.idOrPrefab=Bina kimliği (plot_my_house) veya prefabrik anahtar (Guild_Hall.prefab.json)
+commands.aetherhaven.plotcreator.generateicon.outputId=Simge dosyası için çıktı kimliği (varsayılan olarak bina kimliği veya prefab adı)
+
+commands.aetherhaven.plottoken.desc=Binalar için arsa belirteçlerini verin ve listeleyin.
+commands.aetherhaven.plottoken.give.desc=Bir bina kimliği için bir arsa belirteci verin.
+commands.aetherhaven.plottoken.give.constructionId=Bina kimliği (örnek: plot_park)
+commands.aetherhaven.plottoken.give.amount=Yığın boyutu (varsayılan 1)
+commands.aetherhaven.plottoken.list.desc=Tüm bina kimliklerini listeleyin

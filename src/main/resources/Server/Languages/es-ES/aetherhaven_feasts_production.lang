@@ -39,9 +39,17 @@ aetherhaven.ui.production.err.permission=No puedes abrir este almacén para esta
 aetherhaven.ui.production.err.plot=Este bloque no se encuentra dentro de una parcela de lugar de trabajo terminada (granja, establo, molino o cabaña de minero) para tu ciudad.
 aetherhaven.ui.production.err.catalog=No hay ningún catálogo de producción configurado para este edificio.
 aetherhaven.ui.production.err.inventoryFull=Tu inventario está demasiado lleno para aceptar tanto.
-aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
+aetherhaven.ui.production.err.inventoryPartial=Tu inventario se llenó antes de que pudieras trasladarlo todo. El resto se quedó en este almacén de la oficina.
 aetherhaven.ui.production.unlockButton=Desbloquea
 aetherhaven.ui.production.unlockTooltip=Vea y compre los permisos de salida restringidos para el lugar de trabajo en este edificio.
+aetherhaven.ui.production.pickTooltip=Elige lo que hace esta línea
+aetherhaven.ui.production.collectAllButton=Recoger todo
+aetherhaven.ui.production.collectAllTooltip=Toma todo lo almacenado en cada línea
+
+aetherhaven.ui.materialPicker.title=Seleccione la salida
+aetherhaven.ui.materialPicker.intro=Seleccione una de sus salidas desbloqueadas para esta línea.
+aetherhaven.ui.materialPicker.back=Atrás
+aetherhaven.ui.materialPicker.backTooltip=Regreso a las tiendas del lugar de trabajo
 
 aetherhaven.ui.productionUnlocks.title=El lugar de trabajo desbloquea
 aetherhaven.ui.productionUnlocks.intro=Seleccione una salida a continuación para ver su nombre y requisitos en el panel. Pase el cursor sobre un icono para ver la cantidad de unidades disponibles frente a las necesarias. Cuando alcance los totales de objetos y oro, haga clic en una salida bloqueada para desbloquearla.

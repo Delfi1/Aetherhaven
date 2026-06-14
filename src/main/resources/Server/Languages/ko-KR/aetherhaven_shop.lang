@@ -1,0 +1,72 @@
+# Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
+
+items.Aetherhaven_Shop_Spot.name=쇼핑 장소
+items.Aetherhaven_Shop_Spot.description=완성된 건물 부지에 배치하여 상점을 열거나, 크리에이티브 모드/부지 생성기를 사용하여 미리 구성된 가판대를 프리팹에 삽입할 수 있습니다. 가판대는 낮에는 영업하고 밤에는 문을 닫습니다. NPC의 재고는 새벽에 보충됩니다. 마을 구성원은 플레이어의 가판대에 상품을 등록할 수 있습니다.
+
+aetherhaven.shop.notInTown=이것을 마을 안에 배치하세요.
+aetherhaven.shop.notInPlot=이것을 완공된 건물 부지 안에 놓으십시오.
+aetherhaven.shop.closed=매진되었습니다
+aetherhaven.shop.closedNight=가게는 오늘 밤 영업을 종료합니다.
+aetherhaven.shop.holdItemToList=아이템을 들고 (F) 키를 누르거나 가판대를 마우스 오른쪽 버튼으로 클릭하여 판매 목록에 올리세요.
+aetherhaven.shop.cannotAfford=당신은 그럴 여유가 없어요.
+aetherhaven.shop.inventoryFull=보유 재고가 가득 찼습니다.
+aetherhaven.shop.cannotBuyOwnListing=F에서 상품을 구매하는 대신 상품 등록을 취소하세요.
+aetherhaven.shop.itemsDropped=일부 물품이 바닥에 떨어졌습니다. 재고는 가득 찼습니다.
+aetherhaven.shop.notTownMember=이곳에서는 마을 구성원만 판매할 수 있습니다.
+aetherhaven.shop.noShopSpotPermission=플레이어 상점 위치에서 판매할 권한이 없습니다.
+aetherhaven.shop.noPrice=해당 상품은 이곳에서 판매할 수 없습니다.
+aetherhaven.shop.wrongBatchSize=한 번에 {count}의 배수만큼 판매하세요.
+aetherhaven.shop.damagedItem=판매하기 전에 대장간에서 그 물건을 수리하세요.
+aetherhaven.shop.jewelryNeedsAppraisal=판매 목록에 올리기 전에 해당 보석의 감정을 받으세요.
+aetherhaven.shop.listed=귀하의 상품이 이제 판매 목록에 등록되었습니다.
+aetherhaven.shop.removedListing=게시물이 삭제되었습니다.
+aetherhaven.shop.soldNotify={buyer}님이 {count}님과 {item}님을 {gold}개의 금으로 구매했습니다.
+
+aetherhaven.shop.safe.empty=금고 안에는 당신을 위한 금은 없습니다.
+aetherhaven.shop.safe.makeRoom=먼저 인벤토리에 공간을 확보하세요.
+aetherhaven.shop.safe.couldNotAddCoins=인벤토리에 금을 추가할 수 없습니다.
+aetherhaven.shop.safe.collected=당신은 금고에서 {gold}개의 금을 꺼냈습니다.
+
+aetherhaven.shop.config.title=이 가게를 차리세요
+aetherhaven.shop.config.intro=이 상점의 운영 방식을 선택하세요. NPC 상점은 선택한 재고 목록에서 새벽에 상품을 다시 채워 넣습니다.
+aetherhaven.shop.config.playerControlled=마을 주민들이 여기서 판매하도록 하세요.
+aetherhaven.shop.config.npcHeading=NPC 상점 재고
+aetherhaven.shop.config.lootHeader=주식 테이블 파일
+aetherhaven.shop.config.lootTableLabel=테이블
+aetherhaven.shop.config.lootStockHint=각 shop_loot/*.json 항목별 최소 재고량(stockMin) 및 최대 재고량(stockMax) (생략 시 기본값은 1 배치입니다).
+aetherhaven.shop.config.confirm=확인하다
+aetherhaven.shop.config.cancel=취소
+aetherhaven.shop.config.saved=매장 준비 완료
+
+aetherhaven.shop.hud.title=가게
+aetherhaven.shop.hud.closedNight=가게는 오늘 밤 영업을 종료합니다.
+aetherhaven.shop.hud.soldOut=품절되었습니다. 새벽에 재입고됩니다.
+aetherhaven.shop.hud.emptyListing=판매할 상품 없음
+aetherhaven.shop.hud.seller=판매자: {seller}
+aetherhaven.shop.hud.item=구매: {item}
+aetherhaven.shop.hud.price={gold} 금 각각
+aetherhaven.shop.hud.priceBatch={gold} 골드는 {count} {item}에 해당합니다.
+aetherhaven.shop.hud.stock={n} 왼쪽
+aetherhaven.shop.hud.stockBatches={batches}개 남음 ({items}개)
+aetherhaven.shop.hud.hintNpc=F를 매수하세요 — NPC 주식은 새벽에 재입고됩니다
+aetherhaven.shop.hud.hintPlayerBuy=F를 구매하세요
+aetherhaven.shop.hud.hintPlayerList=F는 판매 목록에 올릴 물건을 손에 들고 있습니다.
+aetherhaven.shop.hud.hintPlayerOwn=F가 당신의 물건을 돌려받으러 갑니다
+aetherhaven.shop.hud.hintPlayerEmpty=판매할 상품 없음
+
+aetherhaven.shop.buy.title=구입하다
+aetherhaven.shop.buy.item={item}
+aetherhaven.shop.buy.price={gold} 금 각각
+aetherhaven.shop.buy.priceBatch={gold} 골드는 {count} {item}에 해당합니다.
+aetherhaven.shop.buy.stock={n} 왼쪽
+aetherhaven.shop.buy.stockBatches={batches}개 ({items}개 품목)
+aetherhaven.shop.buy.qty=수량: {n} — 총액: {total} 금
+aetherhaven.shop.buy.qtyBatches=로트 수: {n} — 총계: {total} 금
+aetherhaven.shop.buy.step10=10배
+aetherhaven.shop.buy.max=맥스
+aetherhaven.shop.buy.buy=구입하다
+aetherhaven.shop.buy.cancel=취소
+
+aetherhaven.shop.items.tooltipWithPrice={body}\n{price}
+aetherhaven.shop.items.tooltipPrice={amount} 금화
+aetherhaven.shop.items.tooltipPriceBatch={amount}당 금화 {count}개

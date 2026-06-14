@@ -1,0 +1,72 @@
+# Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
+
+items.Aetherhaven_Shop_Spot.name=Ladenplatz
+items.Aetherhaven_Shop_Spot.description=Platziere deine Stände auf einem fertigen Baugrundstück, um einen Laden zu eröffnen, oder integriere sie im Kreativmodus/Grundstückseditor in vorgefertigte Gebäude. Die Stände sind tagsüber geöffnet und nachts geschlossen. Das Sortiment der NPCs wird bei Tagesanbruch aufgefüllt. Stadtbewohner können Gegenstände auf den Spielerplätzen anbieten.
+
+aetherhaven.shop.notInTown=Platziere dies innerhalb einer Stadt.
+aetherhaven.shop.notInPlot=Platzieren Sie dies innerhalb eines fertigen Baugrundstücks.
+aetherhaven.shop.closed=Ausverkauft
+aetherhaven.shop.closedNight=Das Geschäft ist für heute Abend geschlossen.
+aetherhaven.shop.holdItemToList=Halten Sie einen Gegenstand in der Hand und drücken Sie (F) oder klicken Sie mit der rechten Maustaste auf den Stand, um ihn zum Verkauf anzubieten.
+aetherhaven.shop.cannotAfford=Das kannst du dir nicht leisten.
+aetherhaven.shop.inventoryFull=Ihr Lager ist voll.
+aetherhaven.shop.cannotBuyOwnListing=Nehmen Sie Ihr Angebot mit F zurück, anstatt es zu kaufen.
+aetherhaven.shop.itemsDropped=Einige Gegenstände lagen auf dem Boden – das Lager war voll.
+aetherhaven.shop.notTownMember=Nur Einwohner der Stadt dürfen hier verkaufen.
+aetherhaven.shop.noShopSpotPermission=Sie haben keine Berechtigung, auf den Plätzen im Spielershop zu verkaufen.
+aetherhaven.shop.noPrice=Dieser Artikel kann hier nicht verkauft werden.
+aetherhaven.shop.wrongBatchSize=Verkaufen Sie jeweils ein Vielfaches von {count}.
+aetherhaven.shop.damagedItem=Lassen Sie den Gegenstand vom Schmied reparieren, bevor Sie ihn zum Verkauf anbieten.
+aetherhaven.shop.jewelryNeedsAppraisal=Lassen Sie den Schmuck begutachten, bevor Sie ihn zum Verkauf anbieten.
+aetherhaven.shop.listed=Ihre Artikel stehen jetzt zum Verkauf.
+aetherhaven.shop.removedListing=Eintrag entfernt.
+aetherhaven.shop.soldNotify={buyer} kaufte {count} {item} für {gold} Gold
+
+aetherhaven.shop.safe.empty=Im Safe ist kein Gold für dich.
+aetherhaven.shop.safe.makeRoom=Schaffen Sie zunächst Platz in Ihrem Lagerbestand.
+aetherhaven.shop.safe.couldNotAddCoins=Gold konnte Ihrem Inventar nicht hinzugefügt werden.
+aetherhaven.shop.safe.collected=Du hast {gold} Gold aus dem Safe entnommen.
+
+aetherhaven.shop.config.title=Richten Sie diesen Shop ein
+aetherhaven.shop.config.intro=Wähle die Funktionsweise dieses Standes. Die Waren der NPC-Läden werden bei Tagesanbruch anhand der von dir gewählten Warenliste aufgefüllt.
+aetherhaven.shop.config.playerControlled=Hier sollen die Einwohner ihre Waren verkaufen.
+aetherhaven.shop.config.npcHeading=NPC-Shop-Lagerbestand
+aetherhaven.shop.config.lootHeader=Aktientabellendatei
+aetherhaven.shop.config.lootTableLabel=Tisch
+aetherhaven.shop.config.lootStockHint=Einzeln festgelegte Werte für stockMin und stockMax in jedem shop_loot/*.json-Eintrag (standardmäßig 1 Batch, falls nicht angegeben).
+aetherhaven.shop.config.confirm=Bestätigen
+aetherhaven.shop.config.cancel=Stornieren
+aetherhaven.shop.config.saved=Ladenplatz bereit
+
+aetherhaven.shop.hud.title=Geschäft
+aetherhaven.shop.hud.closedNight=Das Geschäft ist für heute Abend geschlossen.
+aetherhaven.shop.hud.soldOut=Ausverkauft – Nachschub im Morgengrauen
+aetherhaven.shop.hud.emptyListing=Nichts zu verkaufen
+aetherhaven.shop.hud.seller=Verkauft von {seller}
+aetherhaven.shop.hud.item=Kauf: {item}
+aetherhaven.shop.hud.price={gold} Gold jeweils
+aetherhaven.shop.hud.priceBatch={gold} Gold für {count} {item}
+aetherhaven.shop.hud.stock={n} links
+aetherhaven.shop.hud.stockBatches={batches} verbleibende Grundstücke ({items} Gesamt)
+aetherhaven.shop.hud.hintNpc=F zum Kauf – NPC-Aktien werden im Morgengrauen wieder aufgefüllt
+aetherhaven.shop.hud.hintPlayerBuy=F zum Kaufen
+aetherhaven.shop.hud.hintPlayerList=F mit einem Artikel in der Hand, den er zum Verkauf anbieten möchte
+aetherhaven.shop.hud.hintPlayerOwn=F, um Ihre Artikel zurückzugeben
+aetherhaven.shop.hud.hintPlayerEmpty=Nichts zu verkaufen
+
+aetherhaven.shop.buy.title=Kaufen
+aetherhaven.shop.buy.item={item}
+aetherhaven.shop.buy.price={gold} Gold jeweils
+aetherhaven.shop.buy.priceBatch={gold} Gold für {count} {item}
+aetherhaven.shop.buy.stock={n} links
+aetherhaven.shop.buy.stockBatches={batches} Lose ({items} Artikel)
+aetherhaven.shop.buy.qty=Menge: {n} — Gesamt: {total} Gold
+aetherhaven.shop.buy.qtyBatches=Lose: {n} — Gesamt: {total} Gold
+aetherhaven.shop.buy.step10=×10
+aetherhaven.shop.buy.max=Max
+aetherhaven.shop.buy.buy=Kaufen
+aetherhaven.shop.buy.cancel=Stornieren
+
+aetherhaven.shop.items.tooltipWithPrice={body}\n{price}
+aetherhaven.shop.items.tooltipPrice={amount} Goldmünzen
+aetherhaven.shop.items.tooltipPriceBatch={amount} Goldmünzen pro {count}

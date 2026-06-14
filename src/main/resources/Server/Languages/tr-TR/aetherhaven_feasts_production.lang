@@ -39,9 +39,17 @@ aetherhaven.ui.production.err.permission=Bu kasaba için bu depoyu açamazsını
 aetherhaven.ui.production.err.plot=Bu blok, kasabanızdaki tamamlanmış bir iş yeri arsası (çiftlik, ahır, değirmen veya madenci kulübesi) içinde yer almıyor.
 aetherhaven.ui.production.err.catalog=Bu bina için yapılandırılmış bir üretim kataloğu bulunmamaktadır.
 aetherhaven.ui.production.err.inventoryFull=Envanteriniz o kadar miktarı kaldıramayacak kadar dolu.
-aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
+aetherhaven.ui.production.err.inventoryPartial=Envanteriniz, her şey taşınmadan önce doldu. Geri kalanı bu iş yeri deposunda kaldı.
 aetherhaven.ui.production.unlockButton=Kilidi açar
 aetherhaven.ui.production.unlockTooltip=Bu binaya ait kilitli iş yeri çıktılarını görüntüleyin ve satın alın.
+aetherhaven.ui.production.pickTooltip=Bu çizginin ne ürettiğini seçin.
+aetherhaven.ui.production.collectAllButton=Hepsini topla
+aetherhaven.ui.production.collectAllTooltip=Her satırda saklanan her şeyi alın.
+
+aetherhaven.ui.materialPicker.title=Çıktıyı seçin
+aetherhaven.ui.materialPicker.intro=Bu satır için kilidi açık olan çıkışlarınızdan birini seçin.
+aetherhaven.ui.materialPicker.back=Geri
+aetherhaven.ui.materialPicker.backTooltip=İşyeri mağazalarına geri dön
 
 aetherhaven.ui.productionUnlocks.title=İş yeri kilitlerini açar
 aetherhaven.ui.productionUnlocks.intro=Panelde adını ve gereksinimlerini görmek için aşağıdaki çıktılardan birini seçin. Elde tutulan ve gereken miktarları görmek için bir simgenin üzerine gelin. Öğe ve altın toplamlarına ulaştığınızda, kilitli bir çıktıyı kilidini açmak için tıklayın.
@@ -62,6 +70,6 @@ aetherhaven.ui.productionUnlocks.notify.unlocked=Bu iş yeri için {item} kilidi
 aetherhaven.feast.stewards.name=Vekil'in Defteri Akşam Yemeği
 aetherhaven.feast.stewards.description=Ekmek, peynir ve güzel bir balkabağı turtası sürün ki, sabahları verilen zekât bir hafta boyunca bol olsun.
 aetherhaven.feast.hearthglass.name=Hearthglass Nöbeti
-aetherhaven.feast.hearthglass.description=Izgara balık, pişmiş etler ve sebzeler, yavaş yavaş pişen bir nöbet yemeği gibi sergileniyor. Köylülerin ihtiyaçları bir hafta boyunca daha yavaş yavaş azalıyor.
+aetherhaven.feast.hearthglass.description=Izgara balık, pişmiş et ve sebzeler, yavaş yavaş pişen bir nöbet yemeği gibi sergileniyor. Köylülerin ihtiyaçları bir hafta boyunca daha yavaş yavaş azalıyor.
 aetherhaven.feast.berrycircle.name=Berrycircle Concord
 aetherhaven.feast.berrycircle.description=Hafif tabaklardan oluşan bir çember: meyve salatası, meyve şişleri ve kızarmış mısır. Komşularınız sizi bu sayede biraz daha iyi hatırlayacaklar. Tekrar servis etmeden önce bir hafta beklemeniz gerekiyor.

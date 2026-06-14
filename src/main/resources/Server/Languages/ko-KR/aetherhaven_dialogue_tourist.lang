@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house=여기에서 살고 싶으세요?
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_finish=당신의 집은 준비되었습니다.
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind=제 집에 대해...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_waiting=이사 관련해서...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.leave=안녕히 가세요
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.body=저는 당신 마을이 마음에 듭니다. 집을 구해 주시겠어요? 침대만 생기면 매일 세금을 납부하겠습니다.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept=내가 너를 위해 집을 찾아줄게
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline=나중에요
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.body=감사합니다. 집터를 정하고, 건축을 완료한 후, 집 표지판에 제 이름을 적어주세요. 제가 입주하면 다시 찾아와 주세요.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.ok=알겠습니다.
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.body=제 집을 찾으셨나요? 건축을 완료하시고 집 표지판에 저를 적어주세요.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.ok=오른쪽
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.body=다른 방문객이 먼저 집을 구하려고 기다리고 있어요. 그 집 공사가 끝나면 저랑 얘기하러 오세요.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.ok=이해했다
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.body=여기는 마치 집처럼 편안하네요. 감사합니다. 매일 아침 제 몫을 내겠습니다.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.ok=환영

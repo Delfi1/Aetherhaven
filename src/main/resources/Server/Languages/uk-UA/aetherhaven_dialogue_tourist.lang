@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house=Ви б хотіли тут жити?
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_finish=Ваш будинок готовий.
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind=Про мій дім...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_waiting=Щодо переїзду...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.leave=Прощавай
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.body=Мені подобається ваше місто. Чи не знайдете ви мені будинок? Я буду щодня платити внески до скарбниці, як тільки матиму ліжко.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept=Я знайду тобі дім
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline=Можливо, пізніше
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.body=Дякую. Розмітьте ділянку під будинком, завершіть будівництво, а потім поставте моє ім'я на табличці. Повертайтеся, коли я буду там жити.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.ok=Зроблю
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.body=Ти вже знайшов мені будинок? Закінчи будівництво та обери мене на табличці.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.ok=Праворуч
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.body=Ще один відвідувач чекає на будинок. Спочатку закінчи його, а потім приходь поговорити зі мною.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_waiting.ok=Зрозуміло
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.body=Тут як удома. Дякую. Я плачу свою частку щоранку.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_finish.ok=Ласкаво просимо

@@ -1,19 +1,19 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
-# Bundle: /aetherhaven reload, plot admin, starter kit, export skin
+# Bundle: /aetherhaven reload, starter kit, export skin
 
-# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
-commands.aetherhaven.root.desc=Commandes du mod Aetherhaven
-commands.aetherhaven.reload.desc=Recharger les fichiers config.json et les catalogues JSON d'Aetherhaven depuis le disque (mode créatif)
+# === Commands: /aetherhaven (reload, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Commandes d'Aetherhaven (/ah)
+commands.aetherhaven.difficulty.desc=Créatif : difficulté en monde ouvert pour les coûts de construction
+commands.aetherhaven.reload.desc=Créatif : recharger la configuration et les données du mod depuis le disque
 commands.aetherhaven.reload.success=Les catalogues de configuration et de ressources d'Aetherhaven ont été rechargés.
 commands.aetherhaven.reload.failure=Échec du rechargement : {detail}
 commands.aetherhaven.reload.noPlugin=Le plugin Aetherhaven n'est pas chargé.
-commands.aetherhaven.plot.desc=Ouvrir l'interface d'administration du panneau de chantier (sélectionner la construction, obtenir l'élément)
-commands.aetherhaven.starterkit.desc=Offrez-vous le kit de démarrage d'Aetherhaven (personnel de placement des parcelles, charte, bureau d'urbanisme, personnel de construction ; mode créatif)
+commands.aetherhaven.starterkit.desc=Créatif : procurez-vous le kit de démarrage (personnel de placement, charte, bureau de planification, personnel de construction)
 commands.aetherhaven.starterkit.success=Kit de démarrage ajouté à votre inventaire.
 commands.aetherhaven.starterkit.partial=Kit de démarrage partiellement accordé ; {failed} article(s) ne rentrait pas (faire de la place dans l'inventaire).
 
-commands.aetherhaven.exportskin.desc=Exportez le skin de votre avatar au format JSON (Parent : Joueur)
-commands.aetherhaven.exportskin.other.desc=Exporter le skin de l'avatar d'un autre joueur au format JSON.
+commands.aetherhaven.exportskin.desc=Créatif : exportez le skin de votre avatar sous forme de fichier modèle
+commands.aetherhaven.exportskin.other.desc=Créatif : exporter l'apparence de l'avatar d'un autre joueur
 commands.aetherhaven.exportskin.arg.path=Chemin d'accès au fichier de sortie (optionnel) (par défaut : plugin data/avatar_exports/)
 commands.aetherhaven.exportskin.noSkin=Aucun skin de personnage n'est disponible pour ce joueur.
 commands.aetherhaven.exportskin.invalidSkin=Échec de la validation de la peau : {detail}

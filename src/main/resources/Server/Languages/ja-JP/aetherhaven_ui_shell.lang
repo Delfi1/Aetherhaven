@@ -11,22 +11,24 @@ aetherhaven.ui.treasury.makeRoom=持ち物に空きを作ってください。
 aetherhaven.ui.treasury.couldNotAddCoins=コインを追加できませんでした。
 aetherhaven.ui.treasury.withdrew=金貨{count}枚を引き出しました。
 aetherhaven.ui.treasury.tax.comfortPercent={pct}%
-aetherhaven.ui.treasury.debug.taxBreakdownIntro=税金の内訳（ロードされたチャンクのみ。ロードされていない住民はシミュレーションされるまで0を負担します）：
+aetherhaven.ui.treasury.notificationTaxCollected=徴収された税金 {amount}
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=税金の内訳（読み込まれた村人は現在のニーズを使用し、読み込まれたチャンクに含まれていない名簿行は、利用可能な場合は最後に保存されたニーズを使用します）：
 aetherhaven.ui.treasury.debug.titheNoHall=十分の一税：この町には完全な町役場がありません。
-aetherhaven.ui.treasury.debug.titheZero=十分の一税: 0 ゴールド (居住者がいない場合、または政策計算による 0)。 荷降ろし/必要/内訳: /aetherhaven tax breakdown
+aetherhaven.ui.treasury.debug.titheZero=十分の一税：0ゴールド（対象となる住民がいないか、政策計算により0）。内訳：/aetherhaven tax breakdown
 aetherhaven.ui.treasury.debug.titheApplied=十分の一税の適用：+{amount} 金が国庫に納められます（朝の徴収と同じルールです）。
 aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
-aetherhaven.ui.treasury.debug.state3=ポリシー={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.state3=ポリシー={a} maxPerResident={b} residentRows={c} simulatedNow={d}
 aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) 快適={comfort} ゴールド={gold}
 aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
 aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}
 
-# === UI: quest journal (log panel) ===
-# UI — quest journal
-aetherhaven.ui.questJournal.needTown=この世界では、クエストを追跡するために町が必要です。
-aetherhaven.ui.questJournal.noPermission=あなたは町のクエストを管理する権限を持っていません。
-aetherhaven.ui.questJournal.noActive=進行中のクエストはありません。
-aetherhaven.ui.questJournal.hint=クエストをタップすると詳細が表示されます。×印をタップするとログから削除されます（依頼者から再度依頼を受けることができます）。
+# === UI: town journal (quest list messages) ===
+aetherhaven.ui.questJournal.needTown=このタブを使用するには、この世界に町が必要です。
+aetherhaven.ui.questJournal.noPermission=町のクエストを管理することはできません。
+aetherhaven.ui.questJournal.noActive=現在、進行中のクエストはありません。
+aetherhaven.ui.questJournal.hint=左側のクエストを選択して、こちらでお読みください。
+aetherhaven.ui.questJournal.questForName={title} を {name} に使用
+aetherhaven.ui.questJournal.questDescriptionForName=準備ができたら、家の看板に {body} を割り当ててください。
 
 # === UI: NPC dialogue page (shell / errors) ===
 # UI — dialogue
@@ -39,7 +41,7 @@ aetherhaven.ui.dialogue.missingNode=ノードが見つかりません: {id}
 aetherhaven.ui.plotConstruction.buildingTitle=建物
 aetherhaven.ui.plotConstruction.plotSignTitle=区画標識
 aetherhaven.ui.plotConstruction.noConstruction=この区画には建築物は設定されていません。
-aetherhaven.ui.plotConstruction.assignResidentHint=ここに住んでいる村人を割り当てます（一致すると、その村人の家のクエストが完了します）。
+aetherhaven.ui.plotConstruction.assignResidentHint=この家に誰を住まわせるかを選びましょう。
 aetherhaven.ui.plotConstruction.houseResidentUnassigned=未割り当て
 aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=プレイヤーデータを読み込めませんでした。
 aetherhaven.ui.plotConstruction.townDataMissing=この区画の町データが見つかりませんでした。
@@ -47,6 +49,8 @@ aetherhaven.ui.plotConstruction.clearedHome=自宅待機命令が解除されま
 aetherhaven.ui.plotConstruction.updatedHome=自宅学習の割り当てが更新されました。
 aetherhaven.ui.plotConstruction.plotRemoved=プロットが削除され、プロットトークンが返されました。
 aetherhaven.ui.plotConstruction.materialLine={item} x{need} ({have}あり)
+aetherhaven.ui.plotConstruction.materialsProgress={ready} の {total} の材料が準備できました
+aetherhaven.ui.plotConstruction.treasuryGold=金貨：{available} / {required}
 aetherhaven.ui.plotConstruction.couldNotLoadMembers=プレイヤーデータを読み込めませんでした。
 
 # === UI: Gaia statue (small messages) ===

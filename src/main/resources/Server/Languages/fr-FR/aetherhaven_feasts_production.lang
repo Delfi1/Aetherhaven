@@ -39,9 +39,17 @@ aetherhaven.ui.production.err.permission=Vous ne pouvez pas ouvrir cet entrepôt
 aetherhaven.ui.production.err.plot=Ce bloc ne se trouve pas à l'intérieur d'un terrain de travail achevé (ferme, grange, moulin ou cabane de mineur) de votre ville.
 aetherhaven.ui.production.err.catalog=Aucun catalogue de production n'est configuré pour ce bâtiment.
 aetherhaven.ui.production.err.inventoryFull=Votre stock est déjà trop plein pour accepter autant.
-aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
+aetherhaven.ui.production.err.inventoryPartial=Votre stock a été complet avant que tout puisse être déplacé. Le reste est resté dans cet entrepôt de l'entreprise.
 aetherhaven.ui.production.unlockButton=Déverrouille
 aetherhaven.ui.production.unlockTooltip=Consultez et achetez les livrables verrouillés de ce bâtiment.
+aetherhaven.ui.production.pickTooltip=Choisissez ce que cette ligne produit
+aetherhaven.ui.production.collectAllButton=Collectionnez tout
+aetherhaven.ui.production.collectAllTooltip=Prenez tout ce qui est stocké dans chaque ligne
+
+aetherhaven.ui.materialPicker.title=Choisissez la sortie
+aetherhaven.ui.materialPicker.intro=Choisissez l'une de vos sorties déverrouillées pour cette ligne.
+aetherhaven.ui.materialPicker.back=Dos
+aetherhaven.ui.materialPicker.backTooltip=Retour aux magasins du lieu de travail
 
 aetherhaven.ui.productionUnlocks.title=Déverrouillage de l'espace de travail
 aetherhaven.ui.productionUnlocks.intro=Sélectionnez une sortie ci-dessous pour afficher son nom et ses exigences dans le panneau. Survolez une icône pour comparer les quantités détenues et requises. Une fois les totaux d'objets et d'or atteints, cliquez sur une sortie verrouillée pour la déverrouiller.

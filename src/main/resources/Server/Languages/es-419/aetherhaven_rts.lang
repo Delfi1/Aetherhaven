@@ -1,0 +1,58 @@
+items.Aetherhaven_Command_Post.name=puesto de mando de la guardia
+items.Aetherhaven_Command_Post.description=Siéntate en este taburete para dar órdenes a los guardias de tu ciudad desde lo alto.
+
+items.Aetherhaven_Rts_Flag.name=Bandera de comando
+items.Aetherhaven_Rts_Flag.description=Enviar guardias a un punto del suelo.
+
+items.Aetherhaven_Rts_Sword.name=Espada de mando
+items.Aetherhaven_Rts_Sword.description=Concentra a tus guardias en una sola criatura.
+
+items.Aetherhaven_Rts_Select_All.name=Seleccionar todos los guardias
+items.Aetherhaven_Rts_Select_All.description=Seleccione a todos los guardias contratados en la ciudad.
+
+items.Aetherhaven_Rts_Select_Knight.name=Caballeros selectos
+items.Aetherhaven_Rts_Select_Knight.description=Seleccione a todos los caballeros guardias.
+
+items.Aetherhaven_Rts_Select_Archer.name=Seleccionar arqueros
+items.Aetherhaven_Rts_Select_Archer.description=Seleccione a todos los guardias arqueros.
+
+items.Aetherhaven_Rts_Select_Mage.name=Seleccionar imágenes
+items.Aetherhaven_Rts_Select_Mage.description=Seleccione a todos los guardias magos.
+
+items.Aetherhaven_Rts_Stance_Banner.name=Banner de postura
+items.Aetherhaven_Rts_Stance_Banner.description=Configura cómo luchan los guardias seleccionados.
+
+items.Aetherhaven_Rts_Free.name=Personal de prensa
+items.Aetherhaven_Rts_Free.description=Reincorporar a los guardias seleccionados a sus funciones habituales.
+
+items.Aetherhaven_Rts_Exit.name=Comando de salida
+items.Aetherhaven_Rts_Exit.description=Salga del modo de comando de guardia y vuelva al juego normal.
+
+aetherhaven.rts.hudTitle=Comando de la Guardia
+aetherhaven.rts.rosterTitle=Guardias de la ciudad
+aetherhaven.rts.orderAttackMove=Orden: Ataque-movimiento
+aetherhaven.rts.orderMove=Orden: Mover
+aetherhaven.rts.orderFocusAttack=Orden: Concentrar el fuego
+aetherhaven.rts.stanceDefensive=Postura: Defensiva
+aetherhaven.rts.stanceAggressive=Postura: Agresiva
+aetherhaven.rts.stanceStandGround=Postura: Mantenerse firme
+aetherhaven.rts.stanceHoldFire=Postura: Mantener el fuego
+aetherhaven.rts.hudSelected=Guardias {n} seleccionados
+aetherhaven.rts.hudControls=WASD desplaza la vista del campo de batalla. Espacio y Ctrl mueven la vista hacia arriba y hacia abajo para hacer zoom. Las teclas de rueda o numéricas cambian de herramienta. Haz clic en los guardias para seleccionarlos. Mantén pulsada la tecla Mayús y haz clic para añadir o eliminar uno. Arrastra un cuadro para seleccionar varios. Usa la herramienta de comando Salir (ranura 8 de la barra de acceso rápido) para salir.
+aetherhaven.rts.helpFlag=Haz clic derecho en el suelo para enviar guardias. La habilidad 1 alterna entre ataque y movimiento. La habilidad 2 detiene a los guardias seleccionados.
+aetherhaven.rts.helpSword=Haz clic derecho sobre una criatura para concentrar a tus guardias en ella. No atacarán a aldeanos, turistas ni guardias.
+aetherhaven.rts.helpSelectAll=Haz clic para seleccionar a todos los guardias de la ciudad y deseleccionar a los demás.
+aetherhaven.rts.helpStance=La habilidad 1 cambia la postura de combate y la aplica a los guardias seleccionados.
+aetherhaven.rts.helpFree=Haz clic con el botón derecho para liberar a los guardias seleccionados de tus órdenes.
+aetherhaven.rts.helpSelectType=Haz clic para seleccionar a todos los guardias de este tipo en la ciudad y deseleccionar a los demás.
+aetherhaven.rts.helpExit=Haz clic para salir del modo de comando de guardia.
+aetherhaven.rts.errorUseExitTool=Utilice la herramienta de comando "Salir" en su barra de acceso rápido para salir del modo de comandos.
+aetherhaven.rts.errorNoGuards=Necesitas contratar guardias de seguridad para usar esto.
+aetherhaven.rts.errorNoSelection=Seleccione primero a los guardias.
+aetherhaven.rts.errorNotEnemy=Tus guardias no atacarán eso.
+aetherhaven.rts.errorNotInTown=Para poder utilizar el puesto de mando, este debe estar dentro de los terrenos de tu ciudad.
+aetherhaven.rts.errorCommandPostInUse=Alguien más ya está utilizando el puesto de mando en esta ciudad.
+aetherhaven.rts.recoverInventorySuccess=Se ha restaurado la barra de acceso rápido de la última sesión de comandos de guardia.
+aetherhaven.rts.recoverInventorySuccessExited=Se ha restaurado la barra de acceso rápido y se ha salido del modo de comando de guardia.
+aetherhaven.rts.recoverInventoryNone=No se encontró ninguna barra de acceso rápido guardada del modo de comando de guardia.
+aetherhaven.rts.recoverInventoryAuto=Tu barra de acceso rápido se restauró después de una sesión de comandos de guardia interrumpida.

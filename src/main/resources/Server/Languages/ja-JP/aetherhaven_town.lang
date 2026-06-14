@@ -39,15 +39,27 @@ aetherhaven.ui.memberPermissions.title=メンバーの権限
 aetherhaven.ui.memberPermissions.backTooltip=プレイヤー一覧に戻る
 aetherhaven.ui.memberPermissions.placePlots=区画を配置する
 aetherhaven.ui.memberPermissions.manageConstructions=建造物の構築と管理（組み立て、生産、宴会、憲章改正、建物の移動）
+aetherhaven.ui.memberPermissions.removePlots=町の記録から建物を削除する
 aetherhaven.ui.memberPermissions.spendTreasuryGold=町の財源である金を建設費用に充てる
 aetherhaven.ui.memberPermissions.openTreasuryPanel=資金管理（預け入れ／引き出し）
 aetherhaven.ui.memberPermissions.acceptQuests=町のクエストを受諾／開始する
 aetherhaven.ui.memberPermissions.completeQuests=町のクエストを完了して、評判報酬を獲得しよう
 aetherhaven.ui.memberPermissions.abandonQuests=進行中の町のクエストを放棄する
 aetherhaven.ui.memberPermissions.reviveVillagers=ガイア像で村人を蘇らせよう
+aetherhaven.ui.memberPermissions.useShopSpots=プレイヤーショップの出品と販売
 aetherhaven.ui.memberPermissions.err.notOwner=町の所有者のみが権限を編集できます。
 aetherhaven.ui.memberPermissions.err.notInTown=その選手はこの町にはいません。
 aetherhaven.town.rolecmd.playerMustBeOnline=プレイヤーはオンラインである必要があります。
+
+# === /aetherhaven replace-charter ===
+aetherhaven.town.charterReplace.notOwner=町の所有者のみが憲章を修復できます（町の管理者の許可がある場合を除く）。
+aetherhaven.town.charterReplace.wrongWorld=その町は、この世には存在しない。
+aetherhaven.town.charterReplace.chunkNotLoaded=チャーター区画が読み込まれていません。町のチャーター座標に近づいて、もう一度お試しください。
+aetherhaven.town.charterReplace.clearFirst=保存されたチャーターポジションにはまだブロックが残っています。そのセルが空になるまでブロックを破壊し、その後、このコマンドを再度実行してください。
+aetherhaven.town.charterReplace.placeFailed=チャーターブロックを配置できませんでした（場所がブロックされている？）。
+aetherhaven.town.charterReplace.linkFailed=チャーターブロックのリンクに失敗しました（サーバーログを参照してください）。
+aetherhaven.town.charterReplace.alreadyOk=この区画は既にあなたの町と紐づいています。
+aetherhaven.town.charterReplace.done=チャーターブロックが「{town}」用に復元されました。
 aetherhaven.town.rolecmd.roleInvalid=役割は「建設」、「クエスト」、またはその両方である必要があります。
 aetherhaven.town.leave.notInTown=あなたは町にいません。
 aetherhaven.town.leave.ownerCannotLeave=所有者は退去できません。所有権の移転はまだ実施されていません。

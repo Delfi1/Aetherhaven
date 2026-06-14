@@ -42,6 +42,14 @@ aetherhaven.ui.production.err.inventoryFull=Ваш склад переполне
 aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
 aetherhaven.ui.production.unlockButton=Разблокирует
 aetherhaven.ui.production.unlockTooltip=Просмотрите и приобретите заблокированные рабочие места в этом здании.
+aetherhaven.ui.production.pickTooltip=Выберите, что делает эта строка
+aetherhaven.ui.production.collectAllButton=Соберите все
+aetherhaven.ui.production.collectAllTooltip=Возьмите все, что хранится в каждой строке.
+
+aetherhaven.ui.materialPicker.title=Выберите выход
+aetherhaven.ui.materialPicker.intro=Выберите один из разблокированных выходов для этой линии.
+aetherhaven.ui.materialPicker.back=Назад
+aetherhaven.ui.materialPicker.backTooltip=Возврат в магазины на рабочем месте
 
 aetherhaven.ui.productionUnlocks.title=Открытие рабочего места
 aetherhaven.ui.productionUnlocks.intro=Выберите нужный вариант ниже, чтобы увидеть его название и требования на панели. Наведите курсор на значок, чтобы увидеть количество заблокированных и необходимых элементов. Когда вы достигнете необходимого количества предметов и золота, щелкните по заблокированному варианту, чтобы разблокировать его.

@@ -1,0 +1,67 @@
+# Florist dialogue (Ivy Bloomwell)
+
+aetherhaven.dialogue.aetherhaven_florist.root.speaker=Hiedra Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.main_hub.fallback=Si necesitas ayuda con la construcción del taller, el trazado de la casa o información sobre qué está floreciendo, dilo.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.0=Buenos días. Las hojas se ven felices hoy.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.1=Llevaba semillas de sobra en el bolsillo. Vieja costumbre.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.2=Tu ciudad tiene buena luz para cultivar plantas.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.3=Perdón si huelo a tierra. Estaba trasplantando antes de venir.
+
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.0=Unas flores frescas o unas orquídeas me alegrarían el día.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.1=Tráeme algo verde y florecido si quieres verme sonreír.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.0=Por favor, no me traiga basura ni plantas muertas.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.1=Los desechos y los huesos no tienen cabida en un jardín.
+
+aetherhaven.dialogue.aetherhaven_florist.root.c_house=Querías hablar de una casa.
+aetherhaven.dialogue.aetherhaven_florist.root.c_house_done=Tu nombre está en la estantería de la casa. Quería que lo supieras de mí.
+aetherhaven.dialogue.aetherhaven_florist.root.c_house_remind=La casa aún está en construcción.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_done=Quería comprobar que la floristería ya está en pie.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_complete=La floristería está terminada. Estoy aquí para cerrar el trato con ustedes.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_building=La tienda aún está en proceso de organización. Quería preguntar en qué punto se encuentra el proyecto.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_offer=Quiero ayudarte a abrir una floristería en la ciudad.
+aetherhaven.dialogue.aetherhaven_florist.root.c_goodbye=Eso es todo por ahora. Nos vemos luego.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.speaker=Hiedra Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=Mis plantitas merecen algo mejor que cajas y ruedas de carreta. Necesito una floristería de verdad, con espacio para crecer, exhibir y respirar. He dibujado el diseño en la calle. Si lo recaudas para el municipio, puedo compartir los planos contigo.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c0=Nosotros nos encargaremos de construir su tienda.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c1=Ahora mismo no. Necesito un poco más de tiempo.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.speaker=Hiedra Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.body=Aquí están los planos de mi tienda. Estúdialos en la oficina de planificación urbana, crea una ficha de parcela cuando estés listo y coloca la tienda donde la luz del sol pueda llegar a los esquejes. Esperaré en la posada con mis macetas hasta que la puerta esté terminada.
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.c0=Nos vemos cuando los estantes estén instalados.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.speaker=Hiedra Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.body=Las plántulas se están inquietando en sus bandejas. ¿Ya aprendiste los planos y comenzaste la construcción, o debería dejar de contar con una tienda que tal vez nunca se concrete?
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.c0=Necesito dejar la misión por ahora.
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.c1=Sigo trabajando en ello y continuaré haciéndolo.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.speaker=Hiedra Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.body=No hay problema. Las plantas pueden esperar un poco más en sus macetas. Si cambias de opinión, ven a buscarme y lo intentaremos de nuevo.
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.c0=De acuerdo. Nos vemos por ahí.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.speaker=Hiedra Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.body=¡Miren qué bonito! Luz cálida, estantes acogedores y espacio para todos los esquejes que traje de viaje. Mis plantas por fin tienen un hogar en su ciudad. Gracias por ayudarlas a crecer aquí.
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.c0=Encantado de ayudar. Si el pueblo necesita más zonas verdes, búscame.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.speaker=Hiedra Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.body=La tienda es para trabajar. Aun así, me encantaría tener una casita con una ventana soleada para mis plantas y una repisa para el té al final del día. En la misma parcela que los demás, si te parece bien.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c0=Te reservaré una casa.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c1=Otra vez.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.speaker=Hiedra Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.body=Cuando las paredes estén levantadas, pon mi nombre en el bloque interior como lo pide el reglamento, y luego ven a decírmelo en persona. Quiero oírte decirlo antes de que empiece a mover macetas.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.c0=Lo oirás de mí.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.speaker=Hiedra Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.body=Tómate tu tiempo con el marco. Cuando esté listo, anota mi nombre en el estante interior y luego regresa. No te estoy apurando. Solo quiero que lo anotes.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.c0=Comprendido.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.speaker=Hiedra Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.body=Oh, esto es encantador. Luz cálida, paredes tranquilas y espacio suficiente para unas cuantas macetas más en el alféizar. Por fin puedo decir que un rincón de tu ciudad es mío.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.c0=Me alegro de que tengas una puerta decente.
+
+aetherhaven.dialogue.aetherhaven_florist.gift.confirm=¿Te gustaría darme algo?
+aetherhaven.dialogue.aetherhaven_florist.gift.love=¡Oh! Esto es perfecto. Realmente sabes lo que le gusta a un jardinero.
+aetherhaven.dialogue.aetherhaven_florist.gift.like=Qué amable. Gracias por pensar en mí.
+aetherhaven.dialogue.aetherhaven_florist.gift.neutral=Mmm. No es del todo de mi gusto, pero gracias de todos modos.
+aetherhaven.dialogue.aetherhaven_florist.gift.dislike=Prefiero no conservarlo. Las plantas merecen mejor compañía.

@@ -2,81 +2,147 @@
 # Bundle: /aetherhaven subcommand help (tab completion)
 
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
-commands.aetherhaven.towns.desc=Liste des villes d'Aetherhaven dans le monde actuel
+commands.aetherhaven.towns.desc=Débogage : lister toutes les villes de ce monde
 
-commands.aetherhaven.town.desc=Adhésion à la ville : invitation, rôles, départ
+commands.aetherhaven.replace_charter.desc=Remettez le bloc de la charte à l'endroit réservé à votre ville.
+commands.aetherhaven.replace_charter.townName.desc=Nom de la ville (facultatif) (nom complet avec espaces)
+
+commands.aetherhaven.town.desc=Membres de la ville : inviter, accepter, rôles, quitter
 commands.aetherhaven.town.invite.desc=Invitez un joueur en ligne dans votre ville
 commands.aetherhaven.town.invite.player.desc=Nom d'utilisateur du joueur (doit être en ligne)
 commands.aetherhaven.town.accept.desc=Accepter une invitation en attente de la ville
 commands.aetherhaven.town.decline.desc=Refuser une invitation de la ville en attente
 commands.aetherhaven.town.kick.desc=Retirez un membre de votre ville
 commands.aetherhaven.town.kick.player.desc=Nom d'utilisateur du membre (doit être en ligne)
-commands.aetherhaven.town.role.desc=Appliquez un préréglage d'autorisations à un membre (CONSTRUCTION, QUÊTE ou LES DEUX). Utilisez l'onglet Joueurs du bloc de gestion pour les autorisations par type de drapeau.
+commands.aetherhaven.town.role.desc=Attribuez un rôle à un membre : CONSTRUCTION, QUÊTE ou LES DEUX
 commands.aetherhaven.town.role.player.desc=Nom d'utilisateur du membre (doit être en ligne)
 commands.aetherhaven.town.role.role.desc=CONSTRUIRE, QUÊTER, ou LES DEUX
-commands.aetherhaven.town.leave.desc=Quittez une ville dont vous êtes membre (mais pas propriétaire).
-commands.aetherhaven.town.townName.desc=Nom de la ville (facultatif) ; indiquez le nom complet, espaces compris (reste de la ligne). Omettez ce champ si vous n’avez qu’une seule invitation en attente.
+commands.aetherhaven.town.leave.desc=Quittez une ville à laquelle vous appartenez (pas en tant que fondateur).
+commands.aetherhaven.town.townName.desc=Nom de la ville (facultatif, en entier avec les espaces). À ignorer si vous n'avez qu'une seule invitation.
 
-commands.aetherhaven.poi.desc=Débogage : commandes POI
-commands.aetherhaven.poi.list.desc=Liste des points d'intérêt d'une ville (UUID de la ville facultatif, ou omettez-le / utilisez « moi » pour votre ville)
-commands.aetherhaven.poi.town.desc=UUID de la ville, ou moi, ou omettre pour la ville de l'appelant
-commands.aetherhaven.poi.dump.desc=Lister tous les points d'intérêt (POI) enregistrés dans la mémoire de ce monde (n'importe quelle ville).
+commands.aetherhaven.poi.desc=Débogage : assistants de points d’intérêt
+commands.aetherhaven.poi.list.desc=Liste des points d'intérêt d'une ville
+commands.aetherhaven.poi.town.desc=Identifiant de la ville, moi, ou omettez-le pour votre ville
+commands.aetherhaven.poi.dump.desc=Dressez la liste de tous les points d'intérêt du monde.
 
-commands.aetherhaven.plots.desc=Instances de tracé : liste, finishassembly (créatif), remove plotId (créatif). Utilisez des tracés pour éviter les conflits avec le tracé /aetherhaven.
-commands.aetherhaven.plots.list.desc=Liste des parcelles disponibles dans votre ville (UUID de la parcelle, identifiant de construction, état, position du panneau)
-commands.aetherhaven.plots.finishassembly.desc=Mode Créatif : terminez instantanément tous les assemblages en cours dans votre ville (nécessite des chunks chargés / des tâches actives)
-commands.aetherhaven.plots.remove.desc=Créatif : démolir une parcelle par son UUID et la supprimer des données de votre ville
-commands.aetherhaven.plots.remove.plotId.desc=UUID du tracé de la liste des tracés /aetherhaven
+commands.aetherhaven.plots.desc=Débogage : fonctions d’assistance pour l’instance de tracé (créatives : finishassembly, remove)
+commands.aetherhaven.plots.list.desc=Débogage : liste des parcelles de construction dans votre ville
+commands.aetherhaven.plots.finishassembly.desc=Créatif : terminez tous les chantiers en cours dans votre ville
+commands.aetherhaven.plots.remove.desc=Créatif : retirez une parcelle de votre ville
+commands.aetherhaven.plots.remove.plotId.desc=Identifiant du tracé dans la liste des tracés
 
-commands.aetherhaven.needs.desc=Débogage : le villageois a besoin de
-commands.aetherhaven.needs.inspect.desc=Lister les entités dans les chunks chargés qui ont des besoins de villageois
-commands.aetherhaven.needs.set.desc=Définir un indicateur de besoin de 0 à 100 (cible : poignée issue de l’inspection, d’Elder ou d’un UUID)
-commands.aetherhaven.needs.target.desc=Identifiant (par exemple, Villager_Elder_xxxxxxxx), Ancien ou UUID de l'entité
-commands.aetherhaven.needs.entity.desc=Déprécié ; utilisez la cible (handle, Elder ou uuid).
+commands.aetherhaven.needs.desc=Débogage : les villageois ont besoin de mètres
+commands.aetherhaven.needs.inspect.desc=Débogage : lister les villageois dont les jauges de besoin sont proches
+commands.aetherhaven.needs.set.desc=Débogage : définir la faim, l’énergie ou le divertissement d’un villageois
+commands.aetherhaven.needs.target.desc=Identifiant du villageois, de l'aîné ou de l'entité
+commands.aetherhaven.needs.entity.desc=Déprécié ; utilisez la cible
 commands.aetherhaven.needs.which.desc=faim, énergie ou plaisir
-commands.aetherhaven.needs.value.desc=Valeur de 0 à 100 (100 = entièrement satisfait)
+commands.aetherhaven.needs.value.desc=De 0 à 100 (100 étant le maximum)
 
 commands.aetherhaven.tax.desc=Débogage : taxe du matin du Trésor
-commands.aetherhaven.tax.breakdown.desc=Afficher les lignes et les totaux des taxes par villageois pour votre ville (parties chargées uniquement)
-commands.aetherhaven.tax.now.desc=Versez dès maintenant la dîme du matin au trésor (sans tenir compte du moment du matin et du dernier jour de collecte).
+commands.aetherhaven.tax.breakdown.desc=Débogage : afficher les lignes fiscales de votre ville
+commands.aetherhaven.tax.now.desc=Débogage : percevoir immédiatement la taxe du matin
 
-commands.aetherhaven.questdebug.desc=Débogage : contournement de la quête de la ville
-commands.aetherhaven.questdebug.grant.desc=Quête active sur votre ville
-commands.aetherhaven.questdebug.complete.desc=Marquez la quête terminée dans votre ville
-commands.aetherhaven.questdebug.clear.desc=Supprimez la quête de la liste active de votre ville
+commands.aetherhaven.quest.desc=Débogage : assistants de quête de ville
+commands.aetherhaven.questdebug.desc=Débogage : assistants de quête de ville
+commands.aetherhaven.questdebug.grant.desc=Débogage : marquer une quête active dans votre ville
+commands.aetherhaven.questdebug.complete.desc=Débogage : marquer une quête comme terminée dans votre ville
+commands.aetherhaven.questdebug.clear.desc=Débogage : supprimer une quête de la liste active de votre ville
 commands.aetherhaven.questdebug.id.desc=Identifiant de la quête (par défaut q_build_inn)
-commands.aetherhaven.questdebug.status.desc=Afficher les quêtes actives et terminées pour votre ville (nom d'affichage + identifiant)
+commands.aetherhaven.questdebug.status.desc=Débogage : afficher les quêtes actives et terminées pour votre ville
 
-commands.aetherhaven.reputation.desc=Débogage : réputation
-commands.aetherhaven.reputation.set.desc=Établissez votre réputation auprès d'un villageois et mettez en file d'attente les récompenses liées aux étapes franchies pour le dialogue.
-commands.aetherhaven.reputation.villagerUuid.desc=UUID de l'entité PNJ villageoise
-commands.aetherhaven.reputation.villagerTarget.desc=UUID de l'entité villageoise ou identifiant du rôle PNJ dans votre ville (par exemple, Aetherhaven_Blacksmith)
+commands.aetherhaven.reputation.desc=Débogage : réputation des villageois
+commands.aetherhaven.reputation.set.desc=Débogage : définir la réputation auprès d’un villageois
+commands.aetherhaven.reputation.villagerUuid.desc=ID de l'entité villageoise
+commands.aetherhaven.reputation.villagerTarget.desc=Identifiant de l'entité ou du rôle du villageois dans votre ville
 commands.aetherhaven.reputation.value.desc=Réputation de 0 à 100
-commands.aetherhaven.reputation.reward.desc=Énumérez les définitions des étapes clés ou accordez directement une récompense.
-commands.aetherhaven.reputation.reward.list.desc=Liste des étapes clés de réputation (facultatif : filtrer par ID de rôle du PNJ)
-commands.aetherhaven.reputation.reward.roleFilter.desc=Identifiant du rôle du PNJ (par exemple, Aetherhaven_Merchant) pour filtrer la liste
-commands.aetherhaven.reputation.reward.grant.desc=Attribuez dès maintenant une récompense d'étape (points obtenus) ; utilisez la liste des récompenses de réputation pour les identifiants.
-commands.aetherhaven.reputation.rewardId.desc=Identifiant de récompense de réputation (par exemple, rep_merchant_50)
+commands.aetherhaven.reputation.reward.desc=Débogage : lister ou attribuer des récompenses de réputation
+commands.aetherhaven.reputation.reward.list.desc=Débogage : liste des récompenses d’étape de réputation
+commands.aetherhaven.reputation.reward.roleFilter.desc=ID de rôle facultatif pour filtrer la liste
+commands.aetherhaven.reputation.reward.grant.desc=Débogage : accorder une récompense de réputation maintenant
+commands.aetherhaven.reputation.rewardId.desc=Identifiant de la récompense (exemple : rep_merchant_50)
 
 commands.aetherhaven.villager.desc=Débogage : villageois auxiliaires
-commands.aetherhaven.villager.list.desc=Liste des UUID des entités PNJ villageoises (pour les commandes de réputation/localisation)
-commands.aetherhaven.villager.locate.desc=Afficher la position d'un villageois ; téléportation optionnelle (opérateurs uniquement)
-commands.aetherhaven.villager.uuid.desc=UUID de l'entité PNJ villageoise
-commands.aetherhaven.villager.target.desc=UUID de l'entité villageoise ou identifiant du rôle PNJ dans votre ville (par exemple, Aetherhaven_Merchant)
-commands.aetherhaven.villager.teleport.desc=Utilisez cette option pour vous téléporter auprès du villageois (opérateurs uniquement) ; ou utilisez plutôt --tp.
-commands.aetherhaven.villager.tp_flag.desc=Téléportation vers le villageois (opérateurs uniquement ; équivalent à passer la valeur « vrai »)
-commands.aetherhaven.villager.reset.desc=Supprime tous les PNJ villageois de la ville et les fait réapparaître près de vous (débogage ; préserve les quêtes, la réputation et les cadeaux ; effectue la réparation de la piscine de l'auberge pour aligner les résidents avec les bâtiments terminés ; actualise la piscine des visiteurs de l'auberge)
+commands.aetherhaven.villager.list.desc=Débogage : liste les identifiants des villageois de votre ville
+commands.aetherhaven.villager.locate.desc=Débogage : afficher la position d’un villageois (téléportation optionnelle)
+commands.aetherhaven.villager.uuid.desc=ID de l'entité villageoise
+commands.aetherhaven.villager.target.desc=Identifiant de l'entité ou du rôle du villageois dans votre ville
+commands.aetherhaven.villager.teleport.desc=Permet de se téléporter auprès du villageois (opérateurs uniquement).
+commands.aetherhaven.villager.tp_flag.desc=Téléportation vers le villageois (opérateurs uniquement)
+commands.aetherhaven.villager.reset.desc=Débogage : faire réapparaître tous les villageois de la ville à proximité.
+commands.aetherhaven.villager.fixinn.desc=Débogage : réparer le bassin de visiteurs de l’auberge de votre ville
 aetherhaven.villager.resetDone=Les villageois de la ville ont été réinitialisés et ont réapparu près de vous.
 aetherhaven.villager.resetFailed=Impossible de réinitialiser les villageois de la ville : {reason}
-commands.aetherhaven.gift.desc=Débogage : réinitialiser les limites de cadeaux ou prévisualiser l’historique des cadeaux
-commands.aetherhaven.gift.resetLimits.desc=Réinitialiser les limites de cadeaux quotidiennes/hebdomadaires pour tous les joueurs et tous les villageois dans chaque ville de ce monde
-commands.aetherhaven.gift.fillHistory.desc=Ajoutez une ligne de journal par élément aimé/apprécié/détesté pour un rôle (votre ville) afin que l'historique des cadeaux ait quelque chose à afficher (débogage).
-commands.aetherhaven.gift.roleId.desc=Identifiant du rôle du PNJ (par exemple, Aetherhaven_Merchant)
+commands.aetherhaven.gift.desc=Débogage : limite de cadeaux et outils d’historique
+commands.aetherhaven.gift.resetLimits.desc=Débogage : réinitialisation des limites de cadeaux pour tous les habitants de ce monde
+commands.aetherhaven.gift.fillHistory.desc=Débogage : prévisualisation de l’historique des cadeaux pour un rôle de villageois
+commands.aetherhaven.gift.roleId.desc=Identifiant du rôle de villageois (exemple : Aetherhaven_Merchant)
 
 commands.aetherhaven.debug_autonomy.desc=Débogage : superposition de l’autonomie des villageois
-commands.aetherhaven.debug_autonomy.toggle.desc=Activer/désactiver le débogage de l'autonomie d'un villageois (consultez le PNJ ou utilisez --ray).
-commands.aetherhaven.debug_autonomy.show.desc=Afficher si le débogage d'autonomie est activé pour ce villageois
-commands.aetherhaven.debug_autonomy.clear.desc=Effacer le débogage d'autonomie d'Aetherhaven pour ce villageois
+commands.aetherhaven.debug_autonomy.toggle.desc=Débogage : activer/désactiver le débogage d’autonomie d’un villageois
+commands.aetherhaven.debug_autonomy.show.desc=Débogage : afficher l’état de débogage d’autonomie
+commands.aetherhaven.debug_autonomy.clear.desc=Débogage : effacer le débogage d’autonomie d’un villageois
 
-commands.aetherhaven.debug_lootchest.desc=Débogage : Les bonus de coffre d’Aetherhaven sont générés sur le conteneur ciblé.
-commands.aetherhaven.debug_lootchest.fill.desc=Appliquez les jets de bijoux forcés, d'or et de jetons d'intrigue au conteneur d'objets que vous examinez.
+commands.aetherhaven.debug_lootchest.desc=Débogage : bonus de coffre
+commands.aetherhaven.debug_lootchest.fill.desc=Débogage : forcer le butin bonus sur le coffre que vous regardez
+
+commands.aetherhaven.floatinggift.desc=ballons cadeaux flottants
+commands.aetherhaven.floatinggift.spawn.desc=Débogage : faire apparaître un cadeau flottant à votre position
+commands.aetherhaven.floatinggift.next.desc=Indiquez quand votre prochain cadeau flottant peut apparaître
+
+commands.aetherhaven.time.desc=Créatif : paramétrer l'horloge du jeu (les routines des villageois utilisent cette horloge).
+commands.aetherhaven.time.set.desc=Créatif : régler l'horloge sur une heure (de 0 à 23)
+commands.aetherhaven.time.hour.desc=Heures de 0 à 23 (exemple 14 pour 14h)
+commands.aetherhaven.time.set.success=Horloge réglée sur {gameTime}
+commands.aetherhaven.time.dawn.desc=Astuce créative : programmer l’horloge à 6 h du matin
+commands.aetherhaven.time.dawn.success=Réglage de l'horloge : {gameTime}
+commands.aetherhaven.time.noResource=Ce monde ne dispose d'aucune ressource temporelle chargée.
+
+commands.aetherhaven.walldebug.desc=Créatif : lignes de débogage du placement de la baguette murale dans le chat
+commands.aetherhaven.walldebug.on.desc=Activer le débogage de la baguette murale
+commands.aetherhaven.walldebug.off.desc=Désactiver le débogage de la baguette murale
+commands.aetherhaven.walldebug.dump.desc=Imprimer l'état actuel de la session du terminal mural
+
+commands.aetherhaven.townsfolk.desc=Débogage : faire apparaître et gérer les PNJ du groupe de villageois partagé
+commands.aetherhaven.townsfolk.spawn.desc=Faites apparaître un PNJ habitant de votre ville (choix aléatoire ou en fournissant l'identifiant du personnage).
+commands.aetherhaven.townsfolk.id.desc=Identifiant du personnage citadin (par exemple, femelle_elfe_01)
+commands.aetherhaven.townsfolk.release.desc=Relâchez un personnage dans le bassin mondial
+commands.aetherhaven.townsfolk.list.desc=Liste des habitants disponibles et de ceux qui ont quitté la ville dans ce monde
+commands.aetherhaven.townsfolk.characterId.desc=Identifiant du personnage Townsfolk du serveur/Aetherhaven/Townsfolk/
+commands.aetherhaven.townsfolk.assignmentKind.desc=oisif, touriste ou garde
+commands.aetherhaven.townsfolk.despawn.desc=Supprimez également l'entité générée du monde.
+commands.aetherhaven.townsfolk.spawn.ok=Citadins engendrés {id} ({assignment})
+commands.aetherhaven.townsfolk.spawn.failed=Impossible de faire apparaître les villageois (identifiant inconnu, déjà utilisé, aucune correspondance dans le groupe, ou échec de l'apparition).
+commands.aetherhaven.townsfolk.release.ok=Relâché {id} dans la piscine
+commands.aetherhaven.townsfolk.release.notCheckedOut=Ce personnage n'est pas vérifié dans ce monde
+commands.aetherhaven.townsfolk.list.available=Disponible pour {assignment}: {ids}
+commands.aetherhaven.townsfolk.list.availableIdle=Disponible en mode veille : {ids}
+commands.aetherhaven.townsfolk.list.inUse=Vérifié : {ids}
+commands.aetherhaven.townsfolk.clear.desc=Faites disparaître tous les habitants de ce monde et réinitialisez la piscine partagée.
+commands.aetherhaven.townsfolk.clear.ok=Les habitants de {count} ont été supprimés et la piscine a été vidée pour ce monde.
+commands.aetherhaven.guild.desc=Débogage : réserve d'aventuriers de la guilde et gardes mercenaires
+commands.aetherhaven.guild.respawn.desc=Aventuriers du hall de réapparition, lancez les dés du jour et réapparaissez immédiatement.
+commands.aetherhaven.guild.respawn.ok=Réapparition de la guilde : récupération des créneaux horaires obsolètes {reclaimed}, suppression des créneaux {despawned}, tirage des créneaux {slots}, apparition des créneaux {spawned} (pool disponible : {available})
+commands.aetherhaven.guild.clearguards.desc=Supprimez tous les gardes engagés dans votre ville et libérez leurs entrées de piscine
+commands.aetherhaven.guild.clearguards.ok=Suppression des entités de gardes embauchées par {count} et effacement des dossiers des gardes municipaux
+commands.aetherhaven.guild.status.desc=Afficher les diagnostics de la piscine d'aventuriers de la salle de guilde pour votre ville
+commands.aetherhaven.guild.status.ok=Guilde active={active} epochDay={epochDay} lastMorning={lastMorning} filledSlots={filledSlots} trackedNpcIds={tracked} hiredGuards={hiredGuards} pool(total={poolTotal} guard={poolGuards} adventurer={poolAdventurers} other={poolOther})
+
+commands.aetherhaven.tourist.desc=Débogage : cibles de visite du portail touristique
+commands.aetherhaven.tourist.targets.desc=Débogage : listez les emplacements des destinations touristiques et les points d’intérêt optionnels de votre ville
+commands.aetherhaven.guild.notActive=Votre ville ne possède pas de guilde active.
+
+commands.aetherhaven.plotcreator.desc=Créez des bâtiments de ville personnalisés
+commands.aetherhaven.plotcreator.start.desc=Ouvrez le guide du créateur d'intrigue
+commands.aetherhaven.plotcreator.cancel.desc=Annuler la session de création d'intrigue
+commands.aetherhaven.plotcreator.edit.desc=Modifier un bâtiment personnalisé enregistré sur ce serveur
+commands.aetherhaven.plotcreator.edit.constructionId=Identifiant du bâtiment (plot_my_building)
+commands.aetherhaven.plotcreator.generateicon.desc=Générer une icône PNG de jeton de tracé à partir d'un prefab existant
+commands.aetherhaven.plotcreator.generateicon.idOrPrefab=Identifiant du bâtiment (plot_my_house) ou clé du préfabriqué (Guild_Hall.prefab.json)
+commands.aetherhaven.plotcreator.generateicon.outputId=Identifiant de sortie pour le fichier icône (par défaut : identifiant du bâtiment ou nom du préfabriqué)
+
+commands.aetherhaven.plottoken.desc=Attribuez et listez les jetons de parcelle pour les bâtiments
+commands.aetherhaven.plottoken.give.desc=Attribuez un jeton de parcelle à un identifiant de bâtiment
+commands.aetherhaven.plottoken.give.constructionId=Identifiant du bâtiment (exemple : plot_park)
+commands.aetherhaven.plottoken.give.amount=Taille de la pile (par défaut 1)
+commands.aetherhaven.plottoken.list.desc=Liste de tous les identifiants de bâtiments

@@ -1,0 +1,67 @@
+# Florist dialogue (Ivy Bloomwell)
+
+aetherhaven.dialogue.aetherhaven_florist.root.speaker=아이비 블룸웰
+aetherhaven.dialogue.aetherhaven_florist.main_hub.fallback=가게 건축이나 집 외관 디자인, 혹은 지금 어떤 꽃이 피었는지에 대한 정보가 필요하시면 말씀해 주세요.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.0=좋은 아침입니다. 오늘 나뭇잎들이 아주 생기 넘쳐 보이네요.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.1=주머니에 여분의 씨앗을 챙겨왔어요. 오래된 습관이죠.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.2=당신이 사는 곳은 작물을 키우기에 햇빛이 잘 들어오는 곳이네요.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.3=흙 냄새가 나서 죄송해요. 오기 전에 분갈이를 하고 있었거든요.
+
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.0=싱싱한 꽃이나 난초를 받으면 하루가 정말 행복해질 거예요.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.1=내가 웃는 모습을 보고 싶다면 푸르고 활짝 핀 꽃을 가져다 주세요.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.0=쓰레기나 죽은 식물은 가져오지 마세요.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.1=정원에는 허무한 것들과 뼈들이 있을 자리가 없습니다.
+
+aetherhaven.dialogue.aetherhaven_florist.root.c_house=당신은 집에 대해 이야기하고 싶어했잖아요.
+aetherhaven.dialogue.aetherhaven_florist.root.c_house_done=집 선반에 당신 이름이 적혀 있어요. 제가 직접 당신에게 알려주고 싶었어요.
+aetherhaven.dialogue.aetherhaven_florist.root.c_house_remind=집은 아직 공사 중입니다.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_done=꽃집이 다시 문을 열었으니 상황을 확인하고 싶었습니다.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_complete=꽃집 공사는 끝났습니다. 이제 마무리를 위해 왔습니다.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_building=가게는 아직 완성 단계는 아닙니다. 현재 상황이 어떤지 여쭤보고 싶었습니다.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_offer=저는 당신이 시내에 꽃집을 여는 것을 돕고 싶습니다.
+aetherhaven.dialogue.aetherhaven_florist.root.c_goodbye=오늘은 여기까지입니다. 나중에 뵙겠습니다.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.speaker=아이비 블룸웰
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=제 작은 식물들은 상자나 수레바퀴에 담겨 있는 것보다 더 나은 대접을 받아야 해요. 자라고, 진열되고, 숨 쉴 공간이 있는 제대로 된 꽃집이 필요해요. 제가 여기 길가에 설계도를 그려봤어요. 마을에서 모금 활동을 지원해 주신다면, 그 설계도를 공유해 드릴게요.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c0=저희가 가게를 지어드리겠습니다.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c1=지금은 안 돼요. 좀 더 시간이 필요해요.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.speaker=아이비 블룸웰
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.body=여기 제 가게 설계도가 있습니다. 도시 계획 데스크에서 설계도를 꼼꼼히 살펴보시고, 준비가 되면 부지 토큰을 만드세요. 그리고 햇빛이 삽목에 잘 닿는 곳에 가게를 세워주세요. 가게 문이 완성될 때까지 저는 여관에서 화분들을 기다리겠습니다.
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.c0=진열대가 설치되면 다시 뵙겠습니다.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.speaker=아이비 블룸웰
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.body=모종들이 트레이에서 불안해하고 있어요. 설계도를 숙지하고 제작을 시작하셨나요? 아니면 아직 가게가 열리지 않을 수도 있으니 기대를 접는 게 좋을까요?
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.c0=지금은 퀘스트를 포기해야겠어요.
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.c1=저는 아직 작업 중이며 계속해서 진행할 것입니다.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.speaker=아이비 블룸웰
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.body=괜찮아요. 식물들은 화분에서 조금 더 기다려도 돼요. 만약 마음이 바뀌시면 저를 찾아오세요. 다시 시도해 볼게요.
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.c0=좋습니다. 다음에 뵙겠습니다.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.speaker=아이비 블룸웰
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.body=어머, 보세요. 따뜻한 햇살, 깔끔한 선반, 그리고 제가 여행길에 가져온 모든 삽목묘를 놓을 공간까지. 제 식물들이 드디어 이 동네에서 제대로 된 보금자리를 찾았네요. 여기서 잘 자랄 수 있도록 도와주셔서 정말 감사합니다.
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.c0=기꺼이 도와드리겠습니다. 마을에 녹지가 더 필요하시면 저를 찾아오세요.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.speaker=아이비 블룸웰
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.body=가게는 제 일터입니다. 화분들을 놓을 수 있는 햇살 좋은 창가와 하루 일과를 마치고 차를 마실 수 있는 선반이 있는 작은 집을 여전히 갖고 싶어요. 다른 분들과 같은 부지에 집을 지을 수 있다면 좋겠습니다.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c0=내가 너를 위해 집을 하나 사주겠다.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c1=다음에.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.speaker=아이비 블룸웰
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.body=벽이 다 세워지면 정관에 적힌 대로 안쪽 명패에 내 이름을 적어주고, 직접 와서 말해줘. 화분 옮기기 전에 네 목소리를 듣고 싶어.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.c0=그건 내 입으로 직접 듣게 될 거야.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.speaker=아이비 블룸웰
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.body=액자를 천천히 세워주세요. 다 세우시면 안쪽 선반에 제 이름을 적어두시고 다시 오세요. 재촉하는 게 아니에요. 그냥 적어두기만 하면 돼요.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.c0=이해했다.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.speaker=아이비 블룸웰
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.body=와, 정말 멋지네요. 따뜻한 햇살, 차분한 벽, 그리고 창틀에 화분 몇 개 더 놓을 공간도 딱 적당해요. 드디어 이 동네의 한 구석을 제 공간이라고 부를 수 있게 됐어요.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.c0=제대로 된 문이 생겨서 다행이네요.
+
+aetherhaven.dialogue.aetherhaven_florist.gift.confirm=제게 뭐 좀 주시겠어요?
+aetherhaven.dialogue.aetherhaven_florist.gift.love=오! 이거 정말 완벽하네요. 당신은 정원사가 뭘 좋아하는지 정말 잘 아시는군요.
+aetherhaven.dialogue.aetherhaven_florist.gift.like=정말 친절하시네요. 저를 생각해 주셔서 감사합니다.
+aetherhaven.dialogue.aetherhaven_florist.gift.neutral=음. 제 취향은 아니지만, 어쨌든 감사합니다.
+aetherhaven.dialogue.aetherhaven_florist.gift.dislike=저건 안 키우고 싶어요. 식물들은 더 나은 친구들을 만날 자격이 있어요.

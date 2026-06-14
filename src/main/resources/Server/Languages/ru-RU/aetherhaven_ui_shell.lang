@@ -11,6 +11,7 @@ aetherhaven.ui.treasury.makeRoom=Освободите место в своем �
 aetherhaven.ui.treasury.couldNotAddCoins=Не удалось добавить монеты.
 aetherhaven.ui.treasury.withdrew=Снял золотые монеты {count}.
 aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.notificationTaxCollected={amount} в собранных налогах
 aetherhaven.ui.treasury.debug.taxBreakdownIntro=Распределение налогов (только загруженные участки; незагруженные жители не вносят 0% до момента моделирования):
 aetherhaven.ui.treasury.debug.titheNoHall=Десятина: в этом городе нет полноценной ратуши.
 aetherhaven.ui.treasury.debug.titheZero=Десятина: 0 золота (нет загруженных жителей или 0 по результатам расчетов политики). Разгрузка/потребности/разборка: /aetherhaven tax breakdown
@@ -21,12 +22,13 @@ aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) комфорт={comfo
 aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
 aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}
 
-# === UI: quest journal (log panel) ===
-# UI — quest journal
+# === UI: town journal (quest list messages) ===
 aetherhaven.ui.questJournal.needTown=В этом мире вам нужен город, чтобы отслеживать задания.
 aetherhaven.ui.questJournal.noPermission=У вас нет разрешения на управление городскими заданиями.
 aetherhaven.ui.questJournal.noActive=Активных заданий нет.
 aetherhaven.ui.questJournal.hint=Нажмите на задание, чтобы узнать подробности. × удаляет его из вашего журнала (вы можете взять его снова у того, кто его выдал).
+aetherhaven.ui.questJournal.questForName={title} для {name}
+aetherhaven.ui.questJournal.questDescriptionForName={body} Присвойте {name} табличке дома, когда она будет готова.
 
 # === UI: NPC dialogue page (shell / errors) ===
 # UI — dialogue
@@ -47,6 +49,8 @@ aetherhaven.ui.plotConstruction.clearedHome=Завершено назначен�
 aetherhaven.ui.plotConstruction.updatedHome=Информация о домашнем задании обновлена.
 aetherhaven.ui.plotConstruction.plotRemoved=Удалён участок, возвращен токен участка.
 aetherhaven.ui.plotConstruction.materialLine={item} x{need} (имеют {have})
+aetherhaven.ui.plotConstruction.materialsProgress={ready} из {total} материалов готовы
+aetherhaven.ui.plotConstruction.treasuryGold=Золотые монеты: {available} / {required}
 aetherhaven.ui.plotConstruction.couldNotLoadMembers=Не удалось загрузить данные игрока.
 
 # === UI: Gaia statue (small messages) ===

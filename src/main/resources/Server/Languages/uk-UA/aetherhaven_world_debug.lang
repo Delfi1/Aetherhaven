@@ -12,6 +12,32 @@ aetherhaven.poi.clearedInteractionTarget=Очищено ціль взаємод�
 aetherhaven.poi.setInteractionTarget=Встановити ціль взаємодії на {x}, {y}, {z}.
 aetherhaven.poi.selected=Вибраний пункт призначення {id} о {x}, {y}, {z}
 aetherhaven.poi.targetBlockMismatch=Цільовий блок має відповідати очікуваному типу {type} для цієї точки інтересу.
+aetherhaven.poi.removed=Точку інтересу видалено.
+aetherhaven.poi.noTownPlot=На цьому кварталі немає завершеної міської ділянки.
+
+aetherhaven.adventurerSpawnMarker.label=Місце для шукачів пригод
+aetherhaven.adventurerSpawnMarker.placed=Розміщено місце для шукача пригод.
+aetherhaven.adventurerSpawnMarker.removed=Місце шукача пригод видалено.
+aetherhaven.adventurerSpawnMarker.alreadyHere=Місце для шукачів пригод вже тут.
+
+aetherhaven.poiMarker.label=Точка інтересу
+
+aetherhaven.poiMarkerConfig.title=Налаштувати точку призначення
+aetherhaven.poiMarkerConfig.needHeader=Потреба задоволена
+aetherhaven.poiMarkerConfig.presetSleep=Сон
+aetherhaven.poiMarkerConfig.presetEat=Їсти
+aetherhaven.poiMarkerConfig.presetSit=Сидіти / веселитися
+aetherhaven.poiMarkerConfig.presetWork=Робота
+aetherhaven.poiMarkerConfig.summary={preset} ({kind})
+aetherhaven.poiMarkerConfig.capacity=Слоти для NPC (1–4)
+aetherhaven.poiMarkerConfig.mountToggle=Кріплення на меблі (ліжка, стільці)
+aetherhaven.poiMarkerConfig.workAction=Робоча дія
+aetherhaven.poiMarkerConfig.workNone=Жоден
+aetherhaven.poiMarkerConfig.workMine=Шахта
+aetherhaven.poiMarkerConfig.workChop=Чоп
+aetherhaven.poiMarkerConfig.confirm=Місце об'єкта
+aetherhaven.poiMarkerConfig.cancel=Скасувати
+aetherhaven.poiMarkerConfig.placed=Розміщено точку інтересу.
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
@@ -84,3 +110,14 @@ aetherhaven.debug.poi.listEmpty=У цьому місті немає зареєс
 aetherhaven.debug.poi.listLine={x},{y},{z} вид={kind} ідентифікатор типу блоку={block} теги={tags} кепка={cap} графік={plot}
 aetherhaven.debug.poi.dumpHeader=Усі POI у світовому реєстрі ({count}):
 aetherhaven.debug.poi.dumpLine=місто={town} {x},{y},{z} вид={kind} blockTypeId={block} теги={tags} ділянка={plot}
+
+aetherhaven.debug.tourist.noTown=У тебе немає міста в цьому світі.
+aetherhaven.debug.tourist.targetsHeader=Цілі туристичних відвідувань для {town} ({count} ділянки):
+aetherhaven.debug.tourist.targetsEmpty=Немає завершених ділянок з увімкненим touristDestination (перевірте конструктор ділянок або створення JSON).
+aetherhaven.debug.tourist.plotLine={building} графік={plot} запис=({entryX},{entryY},{entryZ}) бажаний={preferred} позиція_візиту={poiCount}
+aetherhaven.debug.tourist.poiLine=точки зору {x},{y},{z} вид={kind} теги={tags}
+
+# Wall wand placement debug (/ah walldebug)
+aetherhaven.debug.wall.on=Налагодження настінної палички УВІМКНЕНО (чат + журнал сервера).
+aetherhaven.debug.wall.off=Налагодження настінного зонда ВИМКНЕНО.
+aetherhaven.debug.wall.noSession=Немає активного сеансу настінного зонда. Спочатку відкрийте настінний зонд.

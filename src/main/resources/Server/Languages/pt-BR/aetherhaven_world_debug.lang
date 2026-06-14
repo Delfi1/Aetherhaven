@@ -12,6 +12,32 @@ aetherhaven.poi.clearedInteractionTarget=Alvo de interação liberado; NPCs usam
 aetherhaven.poi.setInteractionTarget=Defina o alvo de interação para {x}, {y}, {z}.
 aetherhaven.poi.selected=Pontos de interesse selecionados: {id} em {x}, {y}, {z}
 aetherhaven.poi.targetBlockMismatch=O bloco de destino deve corresponder ao tipo esperado {type} para este ponto de interesse.
+aetherhaven.poi.removed=Ponto de interesse removido.
+aetherhaven.poi.noTownPlot=Não há loteamento urbanístico concluído nesse quarteirão.
+
+aetherhaven.adventurerSpawnMarker.label=Lugar para aventureiros
+aetherhaven.adventurerSpawnMarker.placed=Local para aventureiro definido.
+aetherhaven.adventurerSpawnMarker.removed=Vaga para aventureiro removida.
+aetherhaven.adventurerSpawnMarker.alreadyHere=Aqui já existe um local para aventureiros.
+
+aetherhaven.poiMarker.label=Ponto de interesse
+
+aetherhaven.poiMarkerConfig.title=Configurar Ponto de Interesse
+aetherhaven.poiMarkerConfig.needHeader=Necessidade atendida
+aetherhaven.poiMarkerConfig.presetSleep=Dormir
+aetherhaven.poiMarkerConfig.presetEat=Comer
+aetherhaven.poiMarkerConfig.presetSit=Sentar / diversão
+aetherhaven.poiMarkerConfig.presetWork=Trabalhar
+aetherhaven.poiMarkerConfig.summary={preset} ({kind})
+aetherhaven.poiMarkerConfig.capacity=Espaços para NPCs (1–4)
+aetherhaven.poiMarkerConfig.mountToggle=Fixar em móveis (camas, cadeiras)
+aetherhaven.poiMarkerConfig.workAction=Ação de trabalho
+aetherhaven.poiMarkerConfig.workNone=Nenhum
+aetherhaven.poiMarkerConfig.workMine=Meu
+aetherhaven.poiMarkerConfig.workChop=Cortar
+aetherhaven.poiMarkerConfig.confirm=Localizar POI
+aetherhaven.poiMarkerConfig.cancel=Cancelar
+aetherhaven.poiMarkerConfig.placed=Ponto de interesse posicionado.
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
@@ -84,3 +110,14 @@ aetherhaven.debug.poi.listEmpty=Nenhum registro para esta cidade (complete um ed
 aetherhaven.debug.poi.listLine={x},{y},{z} tipo={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
 aetherhaven.debug.poi.dumpHeader=Todos os POIs no registro mundial ({count}):
 aetherhaven.debug.poi.dumpLine=cidade={town} {x},{y},{z} tipo={kind} blockTypeId={block} tags={tags} lote={plot}
+
+aetherhaven.debug.tourist.noTown=Você não tem cidade neste mundo.
+aetherhaven.debug.tourist.targetsHeader=Metas de visitação turística para {town} (parcelas {count}):
+aetherhaven.debug.tourist.targetsEmpty=Não há lotes concluídos com o touristDestination ativado (verifique o criador do lote ou o JSON do edifício).
+aetherhaven.debug.tourist.plotLine={building} plot={plot} entry=({entryX},{entryY},{entryZ}) preferred={preferred} visitPois={poiCount}
+aetherhaven.debug.tourist.poiLine=poi {x},{y},{z} tipo={kind} tags={tags}
+
+# Wall wand placement debug (/ah walldebug)
+aetherhaven.debug.wall.on=Depuração da varinha de parede ATIVADA (bate-papo + registro do servidor).
+aetherhaven.debug.wall.off=Depuração da varinha de parede DESLIGADA.
+aetherhaven.debug.wall.noSession=Nenhuma sessão ativa com o dispositivo de estimulação vibratória de parede. Abra o dispositivo primeiro.

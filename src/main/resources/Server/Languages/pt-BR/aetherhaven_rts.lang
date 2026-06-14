@@ -1,0 +1,58 @@
+items.Aetherhaven_Command_Post.name=Posto de comando da guarda
+items.Aetherhaven_Command_Post.description=Sente-se neste banquinho para comandar os guardas da sua cidade de cima.
+
+items.Aetherhaven_Rts_Flag.name=Flag de comando
+items.Aetherhaven_Rts_Flag.description=Envie guardas para um ponto específico no chão.
+
+items.Aetherhaven_Rts_Sword.name=Espada de comando
+items.Aetherhaven_Rts_Sword.description=Concentre seus guardas em uma única criatura.
+
+items.Aetherhaven_Rts_Select_All.name=Selecione todos os guardas
+items.Aetherhaven_Rts_Select_All.description=Selecione todos os guardas contratados da cidade.
+
+items.Aetherhaven_Rts_Select_Knight.name=Selecione os cavaleiros
+items.Aetherhaven_Rts_Select_Knight.description=Selecione todos os cavaleiros guardas.
+
+items.Aetherhaven_Rts_Select_Archer.name=Selecionar arqueiros
+items.Aetherhaven_Rts_Select_Archer.description=Selecione todos os guardas arqueiros.
+
+items.Aetherhaven_Rts_Select_Mage.name=Selecione magos
+items.Aetherhaven_Rts_Select_Mage.description=Selecione todos os guardas magos.
+
+items.Aetherhaven_Rts_Stance_Banner.name=Banner de posição
+items.Aetherhaven_Rts_Stance_Banner.description=Defina como os guardas selecionados lutam.
+
+items.Aetherhaven_Rts_Free.name=Equipe de lançamento
+items.Aetherhaven_Rts_Free.description=Retornar os guardas selecionados às suas funções normais.
+
+items.Aetherhaven_Rts_Exit.name=Comando de saída
+items.Aetherhaven_Rts_Exit.description=Saia do modo de comando de guarda e retorne ao jogo normal.
+
+aetherhaven.rts.hudTitle=Comando da Guarda
+aetherhaven.rts.rosterTitle=Guardas da cidade
+aetherhaven.rts.orderAttackMove=Ordem: Movimento de ataque
+aetherhaven.rts.orderMove=Ordem: Mover
+aetherhaven.rts.orderFocusAttack=Ordem: Fogo concentrado
+aetherhaven.rts.stanceDefensive=Postura: Defensiva
+aetherhaven.rts.stanceAggressive=Postura: Agressiva
+aetherhaven.rts.stanceStandGround=Postura: Mantenha-se firme
+aetherhaven.rts.stanceHoldFire=Postura: Manter distância
+aetherhaven.rts.hudSelected=Guardas {n} selecionados
+aetherhaven.rts.hudControls=WASD move a visão do campo de batalha. Espaço e Ctrl movem a visão para cima e para baixo para dar zoom. Use a barra de rolagem ou as teclas numéricas para alternar entre as ferramentas. Clique nos guardas para selecioná-los. Segure Shift e clique para adicionar ou remover um. Arraste uma caixa para selecionar vários. Use a ferramenta Sair (slot 8 da barra de atalhos) para sair.
+aetherhaven.rts.helpFlag=Clique com o botão direito no chão para enviar guardas. A habilidade 1 alterna entre ataque e movimento. A habilidade 2 para os guardas selecionados.
+aetherhaven.rts.helpSword=Clique com o botão direito em uma criatura para concentrar seus guardas nela. Eles não atacarão aldeões, turistas ou outros guardas.
+aetherhaven.rts.helpSelectAll=Clique para selecionar todos os guardas da cidade e desmarcar os demais.
+aetherhaven.rts.helpStance=A habilidade 1 alterna a postura de combate e a aplica aos guardas selecionados.
+aetherhaven.rts.helpFree=Clique com o botão direito para liberar os guardas selecionados das suas ordens.
+aetherhaven.rts.helpSelectType=Clique para selecionar todos os guardas deste tipo na cidade e desmarcar os demais.
+aetherhaven.rts.helpExit=Clique para sair do modo de comando de guarda.
+aetherhaven.rts.errorUseExitTool=Use a ferramenta de comando "Sair" na sua barra de atalhos para sair do modo de comando.
+aetherhaven.rts.errorNoGuards=Você precisa contratar seguranças para usar isso.
+aetherhaven.rts.errorNoSelection=Selecione primeiro os guardas.
+aetherhaven.rts.errorNotEnemy=Seus guardas não atacarão isso.
+aetherhaven.rts.errorNotInTown=O posto de comando precisa estar dentro dos limites da sua cidade para ser utilizado.
+aetherhaven.rts.errorCommandPostInUse=Outra pessoa já está usando o posto de comando nesta cidade.
+aetherhaven.rts.recoverInventorySuccess=Sua barra de atalhos foi restaurada da última sessão de comando de guarda.
+aetherhaven.rts.recoverInventorySuccessExited=Sua barra de acesso rápido foi restaurada e o modo de comando de guarda foi encerrado.
+aetherhaven.rts.recoverInventoryNone=Nenhuma barra de atalhos salva do modo de comando de guarda foi encontrada.
+aetherhaven.rts.recoverInventoryAuto=Sua barra de atalhos foi restaurada após uma sessão de comando de guarda interrompida.

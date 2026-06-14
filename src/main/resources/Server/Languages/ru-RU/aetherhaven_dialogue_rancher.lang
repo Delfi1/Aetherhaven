@@ -1,5 +1,5 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_rancher)
-# Full translation keys are aetherhaven_dialogue_rancher.<lineKey> (see Hytale I18nModule).
+# Full translation keys are aetherhaven.dialogue.aetherhaven_rancher.<lineKey> (see Hytale I18nModule).
 aetherhaven.dialogue.aetherhaven_rancher.root.speaker=Тален Медоуран
 aetherhaven.dialogue.aetherhaven_rancher.root.body=Я занимаюсь животными и продуктами животного происхождения, которые жители города употребляют в пищу и используют для ремесел, такими как шерсть, шкуры, яйца и мясо, но эта работа быстро становится грязной без сарая, чистых ящиков и верстака для обработки. Гостиница подходит для еды, но не для соломы и следов копыт, поэтому мне от вас нужно надлежащее обустройство сарая. Сено на чердаке, товары на складе — вот и все.
 aetherhaven.dialogue.aetherhaven_rancher.root.hc0=Вы хотели поговорить о доме.
@@ -66,3 +66,5 @@ aetherhaven.dialogue.aetherhaven_rancher.main_hub.hint.dislike.1=Уличные 
 aetherhaven.dialogue.aetherhaven_rancher.main_hub.hint.dislike.2=Если этому место только в подземелье, то пусть оно не попадает в мой раздел с кормами.
 aetherhaven.dialogue.aetherhaven_rancher.main_hub.hint.dislike.3=Гнилая еда рядом с животными – это совсем не смешно. Не пытайтесь это пробовать.
 aetherhaven.dialogue.aetherhaven_rancher.main_hub.hint.dislike.4=Мне не нужны безделушки, которые пугают скот. Держите подальше колокольчики и прочий хлам.
+aetherhaven.dialogue.aetherhaven_rancher.rep_reward_50.speaker=Тален Медоуран
+aetherhaven.dialogue.aetherhaven_rancher.rep_reward_100.speaker=Тален Медоуран

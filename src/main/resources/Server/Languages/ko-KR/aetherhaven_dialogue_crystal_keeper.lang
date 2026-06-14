@@ -1,0 +1,71 @@
+# Crystal Keeper dialogue (Vaelith Prismshade)
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.speaker=베일리스 프리즘셰이드
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.body=마침내 수정이 산산조각이 났다. 고맙습니다. 당신네 마을에 이름조차 없던 시절부터 저는 그 돌 속에 갇혀 있었습니다. 여관이라고요? 길이 뚫리면 한번 가봐야겠네요.
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.c0=잘 지내세요.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.speaker=베일리스 프리즘셰이드
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.fallback=성소 건축, 주택 설계, 또는 돌들이 간직한 의미에 대한 한마디가 필요하시면 말씀해 주세요.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.0=각각의 수정은 당신의 탄생석보다 더 오래된 기억을 품고 있습니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.1=나는 최초의 동굴들이 빛을 내기 시작한 이후로 프리즘을 분류해 왔다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.2=당신이 사는 마을은 조용하면서도 정겨운 분위기를 자아냅니다. 저는 그곳이… 참 좋다고 생각해요.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.3=커다란 파란색 물체를 건드리지 마세요. 그건 꿈을 꿔요.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.0=깊은 곳의 기억을 간직한 보석을 내게 가져다주시오.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.1=색색의 수정 조각들이 내 늙은 마음을 환하게 밝혀줄 거야.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.0=나는 뼈나 쓰레기를 놓고 의례적인 대화를 나누지 않겠다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.1=공허함과 더러움은 빛의 격자를 모독한다.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house=당신은 집에 대해 이야기하고 싶어했잖아요.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house_done=당신 이름이 집 선반에 적혀 있어요. 제가 직접 알려드리는 게 좋을 것 같아서요.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house_remind=집은 아직 공사 중입니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_done=수정 가게가 이제 문을 열었으니, 상황을 확인하고 싶었습니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_complete=수정 상점은 완성되었습니다. 저는 당신과 함께 이 퀘스트를 마무리하기 위해 왔습니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_building=성소는 아직 완성 단계는 아닙니다. 현재 상황이 어떤지 여쭤보고 싶었습니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_offer=저는 당신이 시내에 크리스탈 가게를 여는 것을 돕고 싶습니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_goodbye=오늘은 여기까지입니다. 나중에 뵙겠습니다.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.speaker=베일리스 프리즘셰이드
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.body=내 소장품들이 마치 어두운 방 안의 낯선 사람들처럼 가방 속에 빽빽하게 담겨 영원히 방치될 수는 없습니다. 다른 사람들이 땅이 자라낸 것들을 감상할 수 있는 안식처가 필요합니다. 가게의 격자 구조는 오래전에 설계했습니다. 마을을 위해 그 건물을 지어주신다면, 그 설계도를 공유하겠습니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c0=우리가 당신의 성소를 지어드리겠습니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c1=지금은 안 돼요. 좀 더 시간이 필요해요.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.speaker=베일리스 프리즘셰이드
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.body=이 설계도를 가져가세요. 도시 계획 사무소에서 설계도를 숙지하고, 격자 구조가 허락하면 부지 표시를 만들어서, 유리 상자 안에 잠들어 있는 것을 건드리지 않고 사람들이 쉽게 드나들 수 있는 곳에 가게를 세우세요. 벽이 제대로 작동할 때까지 여관에서 기다리겠습니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.c0=성소가 빛날 때 다시 만나요.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.speaker=베일리스 프리즘셰이드
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.body=돌들은 기다리고 있다. 나도 마찬가지다. 설계도를 숙지하고 건축을 시작했는가, 아니면 잠시 희망을 가방 속에 다시 넣어두어야 할까?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c0=지금은 퀘스트를 포기해야겠어요.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c1=저는 아직 작업 중이며 계속해서 진행할 것입니다.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.speaker=베일리스 프리즘셰이드
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.body=격자가 아직 준비되지 않았을지도 모릅니다. 프리즘은 조금 더 인내심을 가질 겁니다. 마음이 바뀌면 다시 말씀해 주세요.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.c0=좋습니다. 다음에 뵙겠습니다.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.speaker=베일리스 프리즘셰이드
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.body=가게가 이제 제대로 밝아졌네요. 빛이 있어야 할 곳에 비추고, 주머니에서 꺼내지 않고도 제 수정들을 드디어 볼 수 있게 되었어요. 이 마을에 제 수정들이 자리 잡을 수 있도록 해주셔서 정말 감사합니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.c0=기꺼이 도와드리겠습니다. 마을에 조명이 더 필요하시면 저를 찾아오세요.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.speaker=베일리스 프리즘셰이드
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.body=빛을 지키는 자들조차도 프리즘이 꺼진 후에는 쉴 수 있는 조용한 공간이 필요합니다. 그곳은 일을 위한 공간입니다. 저도 다른 가족들처럼 작은 집에 살고 싶어요. 벽이 완성되면 제 이름이 적힌 선반도 있었으면 좋겠네요.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c0=내가 너를 위해 집을 하나 사주겠다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c1=다음에.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.speaker=베일리스 프리즘셰이드
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.body=장소가 확정되면 정관에 따라 안쪽 블록에 제 이름을 적어주시고, 직접 오셔서 말씀해 주세요. 멀리서 추측하는 것보다는 목소리를 직접 듣는 게 훨씬 낫습니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.c0=그건 내 입으로 직접 듣게 될 거야.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.speaker=베일리스 프리즘셰이드
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.body=액자를 천천히 만드세요. 나무와 돌로 정성껏 만들면 안쪽 선반에 제 이름을 적어주시고, 다시 돌려주세요. 저는 서두르지 않습니다. 그저 제 이름이 적혀 있기를 바랄 뿐입니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.c0=이해했다.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.speaker=베일리스 프리즘셰이드
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.body=벽에서 은은한 진동이 느껴진다. 이 정도면 괜찮겠다. 굳이 온갖 프리즘을 등에 메고 다니지 않아도 여기서 마을의 불빛을 볼 수 있겠군.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.c0=제대로 된 문이 생겨서 다행이네요.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.confirm=제게 뭐 좀 주시겠어요?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.love=이 돌은 노래한다. 당신은 무엇이 중요한지 알고 있다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.like=사려 깊은 선물입니다. 격자도 마음에 들어 합니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.neutral=음. 제 취향은 아니지만, 감사합니다.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.dislike=그것은 내가 간직하고 싶은 빛을 담고 있지 않다.

@@ -1,0 +1,167 @@
+# Townsfolk personality greeting lines
+
+aetherhaven.townsfolk.personality.cheerful.greeting.1=Olá! É sempre bom ver um rosto amigo pela cidade.
+aetherhaven.townsfolk.personality.cheerful.greeting.2=Olá! Espero que seu dia esteja indo bem até agora.
+aetherhaven.townsfolk.personality.cheerful.greeting.3=Ah, olá! Eu estava justamente pensando em como temos sorte de morar aqui.
+aetherhaven.townsfolk.personality.cheerful.greeting.4=Olá! Que bom te encontrar. Eu já estava de ótimo humor e agora estou ainda melhor.
+aetherhaven.townsfolk.personality.cheerful.greeting.5=Olá novamente! Se precisar de indicações ou de um sorriso, tenho ambos de sobra.
+
+aetherhaven.townsfolk.personality.shy.greeting.1=Ah, olá. Não queria ficar encarando.
+aetherhaven.townsfolk.personality.shy.greeting.2=Olá. Desculpe, não sou muito bom em iniciar conversas.
+aetherhaven.townsfolk.personality.shy.greeting.3=Olá. Eu estava apenas de passagem. Por favor, não se incomode com a minha presença.
+aetherhaven.townsfolk.personality.shy.greeting.4=Ah, olá. Espero não estar atrapalhando.
+aetherhaven.townsfolk.personality.shy.greeting.5=Olá. Vou tentar não te cansar falando sem parar.
+
+aetherhaven.townsfolk.personality.curious.greeting.1=Você viu algo interessante por aqui ultimamente?
+aetherhaven.townsfolk.personality.curious.greeting.2=Olá! Gostaria de saber o que traz as pessoas à cidade hoje.
+aetherhaven.townsfolk.personality.curious.greeting.3=Olá. Posso perguntar para onde você está indo? Gosto de saber como a cidade se conecta.
+aetherhaven.townsfolk.personality.curious.greeting.4=Ah, olá! Estou sempre à procura de uma nova história ou de um detalhe curioso para desvendar.
+aetherhaven.townsfolk.personality.curious.greeting.5=Olá. Parece que você viu algo que vale a pena comentar.
+
+aetherhaven.townsfolk.personality.stoic.greeting.1=Olá.
+aetherhaven.townsfolk.personality.stoic.greeting.2=Oi.
+aetherhaven.townsfolk.personality.stoic.greeting.3=Sim?
+aetherhaven.townsfolk.personality.stoic.greeting.4=Estou aqui se você precisar de alguma coisa.
+aetherhaven.townsfolk.personality.stoic.greeting.5=Então vá em frente.
+
+aetherhaven.townsfolk.personality.mischievous.greeting.1=Se você ouvir um estrondo mais tarde, com certeza não fui eu.
+aetherhaven.townsfolk.personality.mischievous.greeting.2=Olá! Eu estava apenas planejando algo inofensivo. Provavelmente.
+aetherhaven.townsfolk.personality.mischievous.greeting.3=Olá! Parece que você precisa de um pouco de emoção. Talvez eu conheça um cara.
+aetherhaven.townsfolk.personality.mischievous.greeting.4=Ah, que timing perfeito. Eu precisava de uma testemunha que não fosse dedurar.
+aetherhaven.townsfolk.personality.mischievous.greeting.5=Ei! Prometo que não vou repetir isso, mas talvez eu tenha deixado uma surpresa para alguém.
+
+aetherhaven.townsfolk.personality.homebody.greeting.1=Olá. Estava pensando em voltar para casa em breve.
+aetherhaven.townsfolk.personality.homebody.greeting.2=Olá. Nada se compara ao aconchego da minha própria lareira quando finalmente chego lá.
+aetherhaven.townsfolk.personality.homebody.greeting.3=Ah, olá. Só saí para fazer um pequeno recado. Pequeno para os meus padrões, pelo menos.
+aetherhaven.townsfolk.personality.homebody.greeting.4=Olá. Deixei a chaleira ligada em casa, então não devo demorar muito.
+aetherhaven.townsfolk.personality.homebody.greeting.5=Olá. A cidade é ótima, mas minha cadeira em casa sabe meu nome.
+
+aetherhaven.townsfolk.personality.sporty.greeting.1=Ei! Eu estava prestes a sair para correr. Quer vir comigo?
+aetherhaven.townsfolk.personality.sporty.greeting.2=Olá! Tento manter a flexibilidade. Um alongamento rápido agora evita problemas mais tarde.
+aetherhaven.townsfolk.personality.sporty.greeting.3=Olá! Tenho me mantido ativo. Isso melhora meu humor.
+aetherhaven.townsfolk.personality.sporty.greeting.4=Ah, olá! Estava contando os passos mentalmente. Velho hábito.
+aetherhaven.townsfolk.personality.sporty.greeting.5=Ei! Se você precisar de alguém para correr até a próxima esquina, eu sou a pessoa certa.
+
+# Hobby traits
+
+aetherhaven.townsfolk.personality.adventurer.greeting.1=Olá! Ouvi algo estranho depois da saída da cidade. Talvez eu vá dar uma olhada mais tarde.
+aetherhaven.townsfolk.personality.adventurer.greeting.2=Olá. Cada estrada que sai da cidade parece uma história prestes a acontecer.
+aetherhaven.townsfolk.personality.adventurer.greeting.3=Ah, olá. Você parece ter viajado bastante. Respeito isso.
+aetherhaven.townsfolk.personality.adventurer.greeting.4=Olá! Eu sempre viajo com pouca bagagem, caso o horizonte me chame.
+aetherhaven.townsfolk.personality.adventurer.greeting.5=Olá! Eu mantenho uma lista de lugares que ainda não visitei. É uma lista longa.
+
+aetherhaven.townsfolk.personality.crafty.greeting.1=Olá. Finalmente consegui alinhar as juntas na minha bancada.
+aetherhaven.townsfolk.personality.crafty.greeting.2=Olá. Estou entre projetos, mas já estou esboçando o próximo na minha cabeça.
+aetherhaven.townsfolk.personality.crafty.greeting.3=Ah, olá. Se precisar de algum conserto, peça com educação e talvez eu possa ajudar.
+aetherhaven.townsfolk.personality.crafty.greeting.4=Ei! Estou com cola nas mãos e ideias nos bolsos. Dia corrido.
+aetherhaven.townsfolk.personality.crafty.greeting.5=Olá. Medi duas vezes, então peço desculpas apenas uma vez.
+
+aetherhaven.townsfolk.personality.gardener.greeting.1=Olá! Meu jardim em casa precisa de chuva, ou de elogios. Ofereço ambos quando voltar.
+aetherhaven.townsfolk.personality.gardener.greeting.2=Olá. Eu converso com as plantas. Elas me ouvem melhor do que a maioria das pessoas.
+aetherhaven.townsfolk.personality.gardener.greeting.3=Ah, olá. Se você pisar em alguma muda de planta em qualquer lugar da cidade, eu vou notar. Com educação, mas vou notar.
+aetherhaven.townsfolk.personality.gardener.greeting.4=Ei! Estava pensando em compostagem e felicidade. Para mim, é a mesma coisa.
+aetherhaven.townsfolk.personality.gardener.greeting.5=Olá. Uma boa colheita começa com paciência. E disso eu tenho de sobra.
+
+aetherhaven.townsfolk.personality.fisher.greeting.1=Olá. Os grandões sempre sabem quando você está observando.
+aetherhaven.townsfolk.personality.fisher.greeting.2=Olá. Eu trocaria uma história sobre peixes por um boato recente a qualquer dia.
+aetherhaven.townsfolk.personality.fisher.greeting.3=Ah, olá. Paciência é tudo. O resto é sorte e isca.
+aetherhaven.townsfolk.personality.fisher.greeting.4=Ei! Juro que a vez que contei a história, aquela que escapou era maior.
+aetherhaven.townsfolk.personality.fisher.greeting.5=Olá. Águas tranquilas ensinam mais do que multidões barulhentas.
+
+aetherhaven.townsfolk.personality.bookworm.greeting.1=Desculpe, eu estava perdido em um capítulo. Do que você precisa?
+aetherhaven.townsfolk.personality.bookworm.greeting.2=Olá. Deixei um marcador de livros em casa num lugar muito importante.
+aetherhaven.townsfolk.personality.bookworm.greeting.3=Olá. Eu leio sempre que posso. É melhor do que conversa fiada, sem ofensas.
+aetherhaven.townsfolk.personality.bookworm.greeting.4=Ah, olá. Se você souber de um bom título, estou sempre aberto a recomendações.
+aetherhaven.townsfolk.personality.bookworm.greeting.5=Olá. Eu me lembro melhor de citações do que de nomes. Às vezes isso é um problema.
+
+aetherhaven.townsfolk.personality.foodie.greeting.1=Olá! Você parece ser alguém que come de propósito. Respeito isso.
+aetherhaven.townsfolk.personality.foodie.greeting.2=Olá. Estou sempre à procura de qualquer coisa que tenha um cheiro bom vindo de alguma cozinha.
+aetherhaven.townsfolk.personality.foodie.greeting.3=Ah, olá. Posso falar sobre temperos por mais tempo do que a maioria das pessoas considera educado.
+aetherhaven.townsfolk.personality.foodie.greeting.4=Ei! Da última vez que cozinhei em casa, comi muito bem. Pretendo repetir a dose.
+aetherhaven.townsfolk.personality.foodie.greeting.5=Olá. A vida é muito curta para sopa sem graça.
+
+aetherhaven.townsfolk.personality.musical.greeting.1=Olá! Não consigo evitar de bater os pés quando a brisa faz as coisas chacoalharem. Você entende.
+aetherhaven.townsfolk.personality.musical.greeting.2=Oi. Eu cantarolo quando estou feliz. Estou cantarolando agora, então tire suas próprias conclusões.
+aetherhaven.townsfolk.personality.musical.greeting.3=Ah, olá. Deixei meu instrumento em casa, mas o ritmo ainda está na minha cabeça.
+aetherhaven.townsfolk.personality.musical.greeting.4=Ei! Se você cantarolar uma nota, provavelmente eu vou harmonizar sem querer.
+aetherhaven.townsfolk.personality.musical.greeting.5=Olá. Uma boa melodia resolve muitos pequenos problemas.
+
+# Negative and prickly traits
+
+aetherhaven.townsfolk.personality.lazy.greeting.1=Ah, é você. Eu não estava cochilando. Estava avaliando a cadeira.
+aetherhaven.townsfolk.personality.lazy.greeting.2=Olá. Se esta conversa envolver escadas, receio não poder ajudar.
+aetherhaven.townsfolk.personality.lazy.greeting.3=Oi. Eu ia fazer algo produtivo. Eventualmente.
+aetherhaven.townsfolk.personality.lazy.greeting.4=Olá. Encontrei um lugar confortável e seria falta de educação abandoná-lo.
+aetherhaven.townsfolk.personality.lazy.greeting.5=Ah, olá. Eu vou dar um jeito nisso. Essa é toda a minha filosofia.
+
+aetherhaven.townsfolk.personality.grumpy.greeting.1=O quê? Eu estava de ótimo humor até as pessoas começarem a falar comigo.
+aetherhaven.townsfolk.personality.grumpy.greeting.2=Olá. Tente não piorar a situação.
+aetherhaven.townsfolk.personality.grumpy.greeting.3=Olá. Não estou com vontade, mas enfim.
+aetherhaven.townsfolk.personality.grumpy.greeting.4=Ah, ótimo. Companhia. Era exatamente o que eu precisava.
+aetherhaven.townsfolk.personality.grumpy.greeting.5=Ei. Seja breve e talvez ambos sobrevivamos a isso.
+
+aetherhaven.townsfolk.personality.rude.greeting.1=Você está atrapalhando. Saia da frente.
+aetherhaven.townsfolk.personality.rude.greeting.2=Não tenho tempo para conversa fiada. Nem para conversa fiada. Na verdade, para nenhum tipo de conversa.
+aetherhaven.townsfolk.personality.rude.greeting.3=O que você quer? Seja rápido.
+aetherhaven.townsfolk.personality.rude.greeting.4=Eu estava ocupado ignorando as pessoas. Você interrompeu isso.
+aetherhaven.townsfolk.personality.rude.greeting.5=Olá. Não, não fico feliz em te ver. Tente com alguém mais simpático.
+
+aetherhaven.townsfolk.personality.gloomy.greeting.1=Olá. Chuva combinaria mais com meu humor. Ou neve. Qualquer coisa em tons escuros.
+aetherhaven.townsfolk.personality.gloomy.greeting.2=Oi. Estava pensando em como nada dura para sempre. Alegre, eu sei.
+aetherhaven.townsfolk.personality.gloomy.greeting.3=Ah, olá. Espero que seu dia seja melhor do que o meu.
+aetherhaven.townsfolk.personality.gloomy.greeting.4=Ei. O mundo continua girando. Não sei bem porquê.
+aetherhaven.townsfolk.personality.gloomy.greeting.5=Olá. Trouxe meu guarda-chuva e minhas dúvidas.
+
+aetherhaven.townsfolk.personality.snooty.greeting.1=Hum. Suas botas são mais chamativas do que a moda permite.
+aetherhaven.townsfolk.personality.snooty.greeting.2=Olá. Imagino que algumas pessoas gostem de conversar. Eu não sou uma delas.
+aetherhaven.townsfolk.personality.snooty.greeting.3=Ah, você de novo. Que coisa mais banal.
+aetherhaven.townsfolk.personality.snooty.greeting.4=Olá. Estava curtindo minha própria companhia. É ótima.
+aetherhaven.townsfolk.personality.snooty.greeting.5=Olá. Tente acompanhar. Não me repito para qualquer pessoa.
+
+aetherhaven.townsfolk.personality.impatient.greeting.1=Sim? Sim? Então prossiga.
+aetherhaven.townsfolk.personality.impatient.greeting.2=Olá. Tenho compromissos. Vários compromissos, todos ao mesmo tempo.
+aetherhaven.townsfolk.personality.impatient.greeting.3=Olá. O tempo está passando. Eu também, figurativamente.
+aetherhaven.townsfolk.personality.impatient.greeting.4=Ah, olá. Por favor, ignore o preâmbulo.
+aetherhaven.townsfolk.personality.impatient.greeting.5=Ei. Já perdi a paciência. Agora estou perdendo tempo.
+
+aetherhaven.townsfolk.personality.gossipy.greeting.1=Você nunca vai adivinhar quem estava discutindo na cidade. Na verdade, talvez consiga.
+aetherhaven.townsfolk.personality.gossipy.greeting.2=Espere, antes de ir, você ouviu falar da nova cerca que alguém construiu?
+aetherhaven.townsfolk.personality.gossipy.greeting.3=Olá! Tenho novidades. Bem, rumores. É praticamente a mesma coisa.
+aetherhaven.townsfolk.personality.gossipy.greeting.4=Olá! Ouvi uma novidade interessante e preciso contar para alguém.
+aetherhaven.townsfolk.personality.gossipy.greeting.5=Ah, perfeito. Eu estava esperando por uma plateia.
+
+aetherhaven.townsfolk.personality.cynical.greeting.1=Claro, hoje será diferente. Todos dizem isso.
+aetherhaven.townsfolk.personality.cynical.greeting.2=Olá. Se alguém lhe oferecer uma pechincha, verifique seus bolsos depois.
+aetherhaven.townsfolk.personality.cynical.greeting.3=Olá. Já vi promessas suficientes para encher um armazém.
+aetherhaven.townsfolk.personality.cynical.greeting.4=Ah, olá. Confiança se conquista. A minha é cara.
+aetherhaven.townsfolk.personality.cynical.greeting.5=Ei. Esperar o melhor, estar preparado para o pior. Esse é o meu lema.
+
+aetherhaven.townsfolk.personality.dramatic.greeting.1=Ninguém entende o peso que eu carrego. É principalmente comida, mas mesmo assim.
+aetherhaven.townsfolk.personality.dramatic.greeting.2=Olá! Esta cidade jamais se esquecerá do dia em que tropecei naquele paralelepípedo. Anotem o que eu digo.
+aetherhaven.townsfolk.personality.dramatic.greeting.3=Olá. Sinto tudo em volume máximo. Até mesmo esta saudação.
+aetherhaven.townsfolk.personality.dramatic.greeting.4=Ó, destino! Cruzaste meu caminho novamente.
+aetherhaven.townsfolk.personality.dramatic.greeting.5=Ei! Minha vida é uma saga e você está no capítulo mais recente.
+
+aetherhaven.townsfolk.personality.bitter.greeting.1=Tempo bom. Para quem merecia, claro.
+aetherhaven.townsfolk.personality.bitter.greeting.2=Olá. Eu costumava sorrir mais. Depois aprendi como funcionam os calendários.
+aetherhaven.townsfolk.personality.bitter.greeting.3=Olá. Algumas pessoas têm sorte. Eu recebo lembretes.
+aetherhaven.townsfolk.personality.bitter.greeting.4=Ah, olá. Espero que você aproveite tudo de bom que vier pela frente. Estarei por aqui.
+aetherhaven.townsfolk.personality.bitter.greeting.5=Ei. Não estou com raiva. Só estou cansado de me decepcionar.
+
+aetherhaven.townsfolk.personality.stingy.greeting.1=Não compro lotes redondos. Nem lotes de canto.
+aetherhaven.townsfolk.personality.stingy.greeting.2=Olá. Aquela moeda que você deixou cair? Quem acha não é o dono. Eu a encontrei mentalmente.
+aetherhaven.townsfolk.personality.stingy.greeting.3=Olá. Eu conto duas vezes o que gasto e nunca empresto nada.
+aetherhaven.townsfolk.personality.stingy.greeting.4=Ah, olá. Se o objetivo é compartilhar, eu não trouxe nada.
+aetherhaven.townsfolk.personality.stingy.greeting.5=Ei. Minha bolsa não fecha e meus conselhos são gratuitos. Escolha um.
+
+aetherhaven.townsfolk.personality.blunt.greeting.1=Você parece cansado(a). Deveria melhorar isso.
+aetherhaven.townsfolk.personality.blunt.greeting.2=Olá. Vou dizer o que outros não dirão. Esse chapéu é uma escolha.
+aetherhaven.townsfolk.personality.blunt.greeting.3=Olá. Não vou dourar a pílula. Isso economiza tempo.
+aetherhaven.townsfolk.personality.blunt.greeting.4=Ah, olá. Você pediu honestidade. Esse foi o seu primeiro erro.
+aetherhaven.townsfolk.personality.blunt.greeting.5=Ei. Minhas intenções são boas. Só que parece que não.
+
+aetherhaven.townsfolk.personality.silly.greeting.1=Olá! Acabei de ensinar uma galinha a reagir a gestos de "mãos no jazz". Está indo bem.
+aetherhaven.townsfolk.personality.silly.greeting.2=Olá! Dei nome a cada pedrinha neste caminho. Não me peçam para apresentá-las todas de uma vez.
+aetherhaven.townsfolk.personality.silly.greeting.3=Ah, olá. Estou praticando minha cara séria caso alguém importante passe por aqui. O que acha desta?
+aetherhaven.townsfolk.personality.silly.greeting.4=Olá. Coloquei duas meias diferentes de propósito. É um look completo e eu o defendo.
+aetherhaven.townsfolk.personality.silly.greeting.5=Ei! Aposto cinco moedas que consigo te fazer sorrir antes que essa conversa termine. Sem pressão.

@@ -1,0 +1,71 @@
+# Crystal Keeper dialogue (Vaelith Prismshade)
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.body=El cristal finalmente se hace añicos. Gracias. He estado encerrado en esa piedra desde antes de que tu pueblo tuviera nombre. ¿Una posada, dices? Quizás me acerque cuando los caminos estén despejados.
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.c0=Cuidarse.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.fallback=Si necesitas que se construya el santuario, que se trace la línea de la casa o que se diga algo sobre lo que recuerdan las piedras, dilo.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.0=Cada cristal vibra con un recuerdo más antiguo que tu piedra fundacional.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.1=He catalogado prismas desde que las primeras cavernas aprendieron a brillar.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.2=Tu ciudad tiene una resonancia tranquila. Me resulta... agradable.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.3=No toques el azul grande. Sueña.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.0=Tráeme una joya que aún recuerde los lugares más recónditos.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.1=Fragmentos de cristal de colores alegrarían mi viejo corazón.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.0=No intercambiaré cortesías por huesos ni me negaré.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.1=La impureza y la suciedad del vacío ofenden la red de luz.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house=Querías hablar de una casa.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house_done=Tu nombre está en la estantería de la casa. Pensé que debías saberlo de mí.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house_remind=La casa aún está en construcción.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_done=Quería comprobar que la tienda de cristales ya está abierta.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_complete=La tienda de cristales está terminada. Estoy aquí para concluir la misión contigo.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_building=El santuario aún está en construcción. Quería preguntar en qué punto se encuentra todo.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_offer=Quiero ayudarte a abrir una tienda de cristales en la ciudad.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_goodbye=Eso es todo por ahora. Nos vemos luego.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.body=Mi colección no puede permanecer guardada en bolsas para siempre, amontonada como extraños en una habitación oscura. Necesito un santuario donde otros puedan admirar lo que la tierra ha creado. Dibujé la celosía de la tienda hace mucho tiempo. Si la construyes para el pueblo, compartiré esos planos.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c0=Construiremos tu santuario.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c1=Ahora mismo no. Necesito un poco más de tiempo.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.body=Toma estos planos. Apréndelos en la oficina de planificación urbana, crea una ficha de parcela cuando la estructura lo permita y ubica la tienda en un lugar accesible sin molestar a quienes duermen dentro del cristal. Esperaré en la posada hasta que las paredes vibren adecuadamente.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.c0=Nos vemos cuando el santuario resplandezca.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.body=Las piedras esperan. Yo también. ¿Has aprendido los planos y comenzado la construcción, o debo guardar mis esperanzas en la mochila por un tiempo?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c0=Necesito dejar la misión por ahora.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c1=Sigo trabajando en ello y continuaré haciéndolo.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.body=Quizás la estructura reticular no estaba lista. Los prismas tendrán que esperar un poco más. Si cambias de opinión, vuelve a hablar conmigo.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.c0=De acuerdo. Nos vemos por ahí.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.body=La tienda ahora luce como debe. La luz incide donde corresponde, y por fin puedo ver mis cristales sin tener que sacarlos del bolsillo. Gracias por darles un hogar en tu ciudad.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.c0=Encantado de ayudar. Si el pueblo necesita más luz, búscame.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.body=Incluso los guardianes de la luz necesitan un rincón tranquilo para descansar cuando los prismas están cerrados. El santuario es para trabajar. Me gustaría una casita igual que la de los demás, con un estante para mi nombre cuando las paredes sean reales.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c0=Te reservaré una casa.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c1=Otra vez.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.body=Cuando el lugar esté listo, inscríbeme en el registro interior como lo solicita el contrato, y luego ven a decírmelo en persona. Prefiero oír tu voz a adivinar desde la distancia.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.c0=Lo oirás de mí.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.body=Tómate tu tiempo con el marco. Cuando sea de madera y piedra auténticas, pon mi nombre en el estante interior y luego regresa. No tengo prisa. Simplemente quiero que quede escrito.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.c0=Comprendido.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.speaker=Vaelith Prismshade
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.body=Las paredes vibran suavemente. Esto me viene de maravilla. Desde aquí puedo contemplar las luces de la ciudad sin tener que cargar con todos los prismas a cuestas.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.c0=Me alegro de que tengas una puerta decente.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.confirm=¿Te gustaría darme algo?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.love=Esta piedra canta. Tú entiendes lo que importa.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.like=Un regalo considerado. La celosía lo aprueba.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.neutral=Mmm. No es del todo de mi gusto, pero gracias.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.dislike=Eso no conlleva ninguna luz que me interese conservar.

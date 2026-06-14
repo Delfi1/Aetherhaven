@@ -26,6 +26,7 @@ aetherhaven.common.invalidVillager=Житель деревни с огранич
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter
 aetherhaven.charter.alreadyInTown=Вы уже являетесь участником города в этом мире. Покиньте его, прежде чем основывать новый.
+aetherhaven.charter.notInPersistentWorld=Здесь нельзя основать город. Сначала вернитесь в свой основной мир.
 aetherhaven.charter.townFounded=Город основан: {name}. Прибыл старейшина. Используйте устав, чтобы переименовать город.
 aetherhaven.chartertown.info.notLinked=Устав пока не связан с каким-либо городом.
 aetherhaven.chartertown.info.invalidTownId=В уставе указан неверный идентификатор города.

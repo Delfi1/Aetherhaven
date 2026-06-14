@@ -1,0 +1,72 @@
+# Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
+
+items.Aetherhaven_Shop_Spot.name=Место для магазина
+items.Aetherhaven_Shop_Spot.description=Разместите торговую точку на уже построенном участке, чтобы открыть магазин, или в творческом режиме/конструкторе участков, чтобы встроить настроенные торговые точки в готовые здания. Торговые точки открыты днем и закрыты ночью. Ассортимент товаров, принадлежащих NPC, пополняется на рассвете. Жители города могут выставлять товары на продажу на местах, предназначенных для игроков.
+
+aetherhaven.shop.notInTown=Разместите это внутри города.
+aetherhaven.shop.notInPlot=Разместите это на участке под застройку.
+aetherhaven.shop.closed=Распроданный
+aetherhaven.shop.closedNight=Магазин закрыт на ночь
+aetherhaven.shop.holdItemToList=Возьмите товар в руки и используйте клавишу (F) или щелкните правой кнопкой мыши по прилавку, чтобы выставить его на продажу.
+aetherhaven.shop.cannotAfford=Вы не можете себе этого позволить.
+aetherhaven.shop.inventoryFull=Ваш склад заполнен.
+aetherhaven.shop.cannotBuyOwnListing=Заберите свой товар обратно, нажав кнопку F, вместо того чтобы покупать его.
+aetherhaven.shop.itemsDropped=Некоторые товары упали на землю — запасы были исчерпаны.
+aetherhaven.shop.notTownMember=Продавать здесь могут только члены городского совета.
+aetherhaven.shop.noShopSpotPermission=Вам запрещено продавать товары в местах, отведенных под магазин игрока.
+aetherhaven.shop.noPrice=Этот товар здесь продать нельзя.
+aetherhaven.shop.wrongBatchSize=Продавайте по кратному числу {count} за раз.
+aetherhaven.shop.damagedItem=Перед тем как выставлять вещь на продажу, отремонтируйте её у кузнеца.
+aetherhaven.shop.jewelryNeedsAppraisal=Оцените ювелирные изделия, прежде чем выставлять их на продажу.
+aetherhaven.shop.listed=Ваши товары выставлены на продажу.
+aetherhaven.shop.removedListing=Объявление удалено.
+aetherhaven.shop.soldNotify={buyer} купил {count} {item} за {gold} золото
+
+aetherhaven.shop.safe.empty=В сейфе для тебя нет золота.
+aetherhaven.shop.safe.makeRoom=Сначала освободите место в инвентаре.
+aetherhaven.shop.safe.couldNotAddCoins=Не удалось добавить золото в ваш инвентарь.
+aetherhaven.shop.safe.collected=Вы забрали из сейфа {gold} золото.
+
+aetherhaven.shop.config.title=Создайте этот магазин
+aetherhaven.shop.config.intro=Выберите, как работает этот прилавок. Магазины NPC пополняют запасы на рассвете из выбранного вами стола товаров.
+aetherhaven.shop.config.playerControlled=Пусть члены городского совета продают здесь свои товары.
+aetherhaven.shop.config.npcHeading=Ассортимент магазина NPC
+aetherhaven.shop.config.lootHeader=Файл таблицы запасов
+aetherhaven.shop.config.lootTableLabel=Стол
+aetherhaven.shop.config.lootStockHint=Минимальное и максимальное количество товаров на единицу товара в каждой записи файла shop_loot/*.json (по умолчанию — 1 партия, если параметр опущен).
+aetherhaven.shop.config.confirm=Подтверждать
+aetherhaven.shop.config.cancel=Отмена
+aetherhaven.shop.config.saved=Магазин готов к открытию
+
+aetherhaven.shop.hud.title=Магазин
+aetherhaven.shop.hud.closedNight=Магазин закрыт на ночь
+aetherhaven.shop.hud.soldOut=Распродано — пополнение запасов на рассвете.
+aetherhaven.shop.hud.emptyListing=Ничего не продаётся
+aetherhaven.shop.hud.seller=Продавец: {seller}
+aetherhaven.shop.hud.item=Покупка: {item}
+aetherhaven.shop.hud.price={gold} золота каждый
+aetherhaven.shop.hud.priceBatch={gold} золото для {count} {item}
+aetherhaven.shop.hud.stock={n} слева
+aetherhaven.shop.hud.stockBatches=Осталось {batches} лотов (всего {items})
+aetherhaven.shop.hud.hintNpc=F для покупки — Акции NPC пополнятся на рассвете
+aetherhaven.shop.hud.hintPlayerBuy=F купить
+aetherhaven.shop.hud.hintPlayerList=F с товаром в руках для выставления на продажу
+aetherhaven.shop.hud.hintPlayerOwn=F, чтобы забрать ваши товары обратно
+aetherhaven.shop.hud.hintPlayerEmpty=Ничего не продаётся
+
+aetherhaven.shop.buy.title=Купить
+aetherhaven.shop.buy.item={item}
+aetherhaven.shop.buy.price={gold} золота каждый
+aetherhaven.shop.buy.priceBatch={gold} золото для {count} {item}
+aetherhaven.shop.buy.stock={n} слева
+aetherhaven.shop.buy.stockBatches={batches} лотов ({items} товаров)
+aetherhaven.shop.buy.qty=Сумма: {n} — Итого: {total} золота
+aetherhaven.shop.buy.qtyBatches=Лоты: {n} — Всего: {total} золота
+aetherhaven.shop.buy.step10=×10
+aetherhaven.shop.buy.max=Макс
+aetherhaven.shop.buy.buy=Купить
+aetherhaven.shop.buy.cancel=Отмена
+
+aetherhaven.shop.items.tooltipWithPrice={body}\n{price}
+aetherhaven.shop.items.tooltipPrice={amount} Золотые монеты
+aetherhaven.shop.items.tooltipPriceBatch={amount} Золотых монет за {count}

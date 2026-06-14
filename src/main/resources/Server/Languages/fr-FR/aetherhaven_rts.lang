@@ -1,0 +1,58 @@
+items.Aetherhaven_Command_Post.name=poste de commandement de la garde
+items.Aetherhaven_Command_Post.description=Asseyez-vous sur ce tabouret pour commander vos gardes de la ville depuis les hauteurs.
+
+items.Aetherhaven_Rts_Flag.name=drapeau de commande
+items.Aetherhaven_Rts_Flag.description=Envoyez des gardes à un endroit précis au sol.
+
+items.Aetherhaven_Rts_Sword.name=Épée de commandement
+items.Aetherhaven_Rts_Sword.description=Concentrez vos gardes sur une seule créature.
+
+items.Aetherhaven_Rts_Select_All.name=Sélectionnez tous les gardes
+items.Aetherhaven_Rts_Select_All.description=Sélectionnez tous les gardes engagés de la ville.
+
+items.Aetherhaven_Rts_Select_Knight.name=chevaliers sélectionnés
+items.Aetherhaven_Rts_Select_Knight.description=Sélectionnez tous les gardes chevaliers.
+
+items.Aetherhaven_Rts_Select_Archer.name=Sélectionner les archers
+items.Aetherhaven_Rts_Select_Archer.description=Sélectionnez tous les gardes archers.
+
+items.Aetherhaven_Rts_Select_Mage.name=mages sélectionnés
+items.Aetherhaven_Rts_Select_Mage.description=Sélectionnez tous les gardes mages.
+
+items.Aetherhaven_Rts_Stance_Banner.name=Bannière de position
+items.Aetherhaven_Rts_Stance_Banner.description=Définissez le mode de combat des gardes sélectionnés.
+
+items.Aetherhaven_Rts_Free.name=Personnel de libération
+items.Aetherhaven_Rts_Free.description=Remettre les gardes sélectionnés à leur service normal.
+
+items.Aetherhaven_Rts_Exit.name=Quitter la commande
+items.Aetherhaven_Rts_Exit.description=Quittez le mode de commande de garde et retournez au jeu normal.
+
+aetherhaven.rts.hudTitle=Commandement de la Garde
+aetherhaven.rts.rosterTitle=Gardes de la ville
+aetherhaven.rts.orderAttackMove=Ordre : Attaque-mouvement
+aetherhaven.rts.orderMove=Ordre : Déplacer
+aetherhaven.rts.orderFocusAttack=Ordre : Concentrez vos tirs
+aetherhaven.rts.stanceDefensive=Position : Défensive
+aetherhaven.rts.stanceAggressive=Posture : Agressive
+aetherhaven.rts.stanceStandGround=Position : Tenir debout
+aetherhaven.rts.stanceHoldFire=Position : Ne tirez pas
+aetherhaven.rts.hudSelected=gardes {n} sélectionnés
+aetherhaven.rts.hudControls=WASD permet de se déplacer dans la vue du champ de bataille. Espace et Ctrl permettent de zoomer. La molette de la souris ou les touches numériques permettent de changer d'outil. Cliquez sur les gardes pour les sélectionner. Maintenez Maj enfoncé et cliquez pour en ajouter ou en supprimer un. Tracez un rectangle pour en sélectionner plusieurs. Utilisez la commande Quitter (emplacement 8 de la barre d'accès rapide) pour quitter la zone.
+aetherhaven.rts.helpFlag=Un clic droit au sol permet d'envoyer des gardes. La capacité 1 permet de basculer entre l'attaque et le déplacement. La capacité 2 immobilise les gardes sélectionnés.
+aetherhaven.rts.helpSword=Faites un clic droit sur une créature pour y concentrer vos gardes. Ils n'attaqueront ni les villageois, ni les touristes, ni les gardes.
+aetherhaven.rts.helpSelectAll=Cliquez pour sélectionner tous les gardes de la ville et désélectionnez les autres.
+aetherhaven.rts.helpStance=La capacité 1 permet de faire varier la posture de combat et de l'appliquer aux gardes sélectionnés.
+aetherhaven.rts.helpFree=Cliquez avec le bouton droit pour libérer les gardes sélectionnés de vos ordres.
+aetherhaven.rts.helpSelectType=Cliquez pour sélectionner tous les gardes de ce type en ville et désélectionnez les autres.
+aetherhaven.rts.helpExit=Cliquez pour quitter le mode de commande de garde.
+aetherhaven.rts.errorUseExitTool=Utilisez l'outil de commande Quitter dans votre barre d'accès rapide pour sortir du mode commande.
+aetherhaven.rts.errorNoGuards=Il vous faut des gardes engagés pour utiliser ceci.
+aetherhaven.rts.errorNoSelection=Sélectionnez d'abord les gardes.
+aetherhaven.rts.errorNotEnemy=Vos gardes n'attaqueront pas cela.
+aetherhaven.rts.errorNotInTown=Le poste de commandement doit se trouver à l'intérieur des terres de votre ville pour pouvoir être utilisé.
+aetherhaven.rts.errorCommandPostInUse=Quelqu'un d'autre utilise déjà le poste de commandement dans cette ville.
+aetherhaven.rts.recoverInventorySuccess=Votre barre d'accès rapide a été restaurée à partir de la dernière session de commandes de garde.
+aetherhaven.rts.recoverInventorySuccessExited=Votre barre d'accès rapide a été restaurée et vous avez quitté le mode de commande de garde.
+aetherhaven.rts.recoverInventoryNone=Aucune barre d'accès rapide sauvegardée du mode de commande de garde n'a été trouvée.
+aetherhaven.rts.recoverInventoryAuto=Votre barre d'accès rapide a été restaurée après une interruption de session de commandes de garde.

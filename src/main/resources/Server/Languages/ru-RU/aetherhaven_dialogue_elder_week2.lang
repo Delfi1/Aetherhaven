@@ -1,5 +1,5 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_elder_week2)
-# Full translation keys are aetherhaven_dialogue_elder_week2.<lineKey> (see Hytale I18nModule).
+# Full translation keys are aetherhaven.dialogue.aetherhaven_elder_week2.<lineKey> (see Hytale I18nModule).
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=Золото можно получить несколькими способами. Вы зарабатываете его, выполняя задания. Если вы исследуете мир, вы можете найти его в сундуках и тайниках, в руинах и других древних местах. Город хранит собственное золото в казне. После постройки ратуши казна находится внутри неё. Каждое утро небольшой ежедневный налог с жителей поступает в эту казну, а не от проезжающих мимо гостей. Размер налога зависит от их самочувствия. Если они сыты, отдохнули и в хорошем настроении, мы получаем больше. Если они голодны, устали или нервничают, мы получаем меньше. Используйте этот блок, чтобы положить своё золото или забрать городское золото, если это разрешено уставом.
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=Полезная информация. Спасибо.
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker=Старейшина Лирен
@@ -53,6 +53,22 @@ aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker=Старе�
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=Строительство требует времени. Зал можно достроить и без волшебной палочки, если просто подождать. Когда будет готово, скажите мне. Я буду здесь.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=Я всё ещё над этим работаю.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker=Старейшина Лирен
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_offer.body=Зал возведен, и казначейство работает. Люди за пределами небес должны видеть, что мы строим, а не только слышать об этом. Туристический портал ежедневно привлекает путешественников. Они бродят по нашим магазинам и лавкам, тратят деньги, и некоторые могут решить остаться. Зарезервируйте место для своих сотрудников, платите столько, сколько указано на табличке, и пусть строительство идет своим чередом. Когда портал будет закончен, приходите и сами все расскажите.
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_offer.c0=Я установлю портал.
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_offer.c1=Еще нет.
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_offer.speaker=Старейшина Лирен
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_accepted.body=Используйте жетон портала со своими сотрудниками и оплатите материалы. Если подождете, все завершится само собой. Если хотите ускорить процесс, изготовьте строительную палочку за столом городского планирования. Когда путешественники смогут проходить сквозь порталы, приходите и найдите меня.
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_accepted.c0=Я сообщу вам, когда будет готово.
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_accepted.speaker=Старейшина Лирен
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_remind.body=Создание портала, как и любой другой проект, требует времени. Если вы проявите терпение, он завершится и без волшебной палочки. Когда закончите, сообщите мне лично.
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_remind.c0=Я всё ещё над этим работаю.
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_remind.speaker=Старейшина Лирен
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_done.body=Хорошо. Пусть придут и осмотрятся. Город, который кормит только себя, — это лагерь. Город, который приветствует незнакомцев, становится чем-то настоящим.
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_done.c0=Рад помочь.
+aetherhaven.dialogue.aetherhaven_elder_week2.tourist_portal_done.speaker=Старейшина Лирен
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c11=О приеме посетителей.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c12=Туристический портал все еще находится в стадии строительства.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c13=Туристический портал завершен.
 aetherhaven.dialogue.aetherhaven_elder_week2.gift.love=Спасибо. Такой подарок здесь очень много значит.
 aetherhaven.dialogue.aetherhaven_elder_week2.gift.like=Это было очень мило с вашей стороны. Спасибо.
 aetherhaven.dialogue.aetherhaven_elder_week2.gift.neutral=Спасибо. Я восприму это в том духе, в котором это было отправлено.

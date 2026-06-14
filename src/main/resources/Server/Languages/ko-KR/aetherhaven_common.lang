@@ -15,7 +15,7 @@ aetherhaven.common.townNotInThisWorld=마을은 이 세상에 존재하지 않�
 aetherhaven.common.noMoveBuildingsPermission=당신은 이 마을의 건물을 옮길 권한이 없습니다.
 aetherhaven.common.buildingCannotMove=이 건물은 옮길 수 없습니다 (부지가 부족하거나 미완성 상태입니다).
 aetherhaven.common.lookAtBlockPlot=플롯 표시 위치를 설정하고 미리보기를 시작하려면 블록을 살펴보세요.
-aetherhaven.common.carryPlotToken=배치를 시작하려면 도구에 나열된 건물 유형에 해당하는 부지 토큰(예: 여관 부지 토큰)을 소지하십시오.
+aetherhaven.common.carryPlotToken=건물을 배치하려면 도구에 나열된 건물 유형에 해당하는 부지 토큰(예: 여관 부지 토큰)을 소지해야 합니다.
 aetherhaven.common.statueNotLinked=이 동상은 특정 마을과 연관이 없습니다.
 aetherhaven.common.ownerOnlyStatue=이 조각상은 마을 소유주만 사용할 수 있습니다.
 aetherhaven.common.noReviveVillagersPermission=당신은 이 동상 앞에서 마을 사람들을 되살릴 권한이 없습니다.
@@ -26,6 +26,7 @@ aetherhaven.common.invalidVillager=몸이 불편한 마을 주민.
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter
 aetherhaven.charter.alreadyInTown=당신은 이미 이 세상의 한 마을의 일원입니다. 새로운 마을을 세우기 전에 그곳을 떠나십시오.
+aetherhaven.charter.notInPersistentWorld=이곳에는 마을을 건설할 수 없습니다. 먼저 본세계로 돌아가십시오.
 aetherhaven.charter.townFounded=마을 설립일: {name}. 마을 원로가 도착했습니다. 헌장을 사용하여 마을 이름을 변경하세요.
 aetherhaven.chartertown.info.notLinked=차터는 아직 어떤 마을과도 연결되어 있지 않습니다.
 aetherhaven.chartertown.info.invalidTownId=전세에 기재된 도시 ID가 잘못되었습니다.

@@ -1,21 +1,47 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
+items.Aetherhaven_Firewood.name=柴
+items.Aetherhaven_Firewood.description=乾柴捆。在爐子和篝火中燃燒時間大約是木炭的兩倍。
+
+items.Aetherhaven_Root_Remover.name=根部清除劑
+items.Aetherhaven_Root_Remover.description=右鍵點擊樹幹，即可拔出埋在地下的樹根。木頭會落在你的腳邊，樹坑會被泥土填滿。
+
+items.Aetherhaven_Growth_Serum.name=生長血清
+items.Aetherhaven_Growth_Serum.description=用於幼年動物，可幫助其快速成長。使用一瓶。
+
+items.Aetherhaven_Hunting_Knife.name=獵刀
+items.Aetherhaven_Hunting_Knife.description=一把鋒利的獵刀。用它來獵殺動物，有時還能獲得額外的生肉、皮毛和羽毛。
+
+items.Aetherhaven_Lute.name=琵琶
+items.Aetherhaven_Lute.description=一把琴弦音色溫暖的木製魯特琴。伊萊亞斯·索恩伍德在公會大廳演奏時，總是隨身帶著一把。
+
+items.Aetherhaven_Wood_Scaffold.name=木製鷹架
+items.Aetherhaven_Wood_Scaffold.description=像爬梯子一樣攀爬。右鍵點擊放置物品，就像點擊普通方塊一樣。按住使用按鍵 (F) 並瞄準鷹架，可以從側面延伸塔身，或從頂部水平分支。破壞底部未支撐的部分會使整個塔身坍塌。
+items.Aetherhaven_Wood_Scaffold.legendUse=使用（F）：瞄準鷹架時，從頂部延伸塔樓/樹枝。右鍵單擊：正常放置方塊。
+
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
 items.Aetherhaven_Plot_Sign.name=地塊標誌
-items.Aetherhaven_Plot_Sign.description=標記預製件的建造位置。使用 /aetherhaven plot 進行設定。
+items.Aetherhaven_Plot_Sign.description=標記可建造建築物的位置。在建造台製作地塊標記。
 
 items.Aetherhaven_Charter.name=城鎮憲章
 items.Aetherhaven_Charter.description=建立城鎮的地點。每個玩家在每個世界只能擁有一座城鎮。用於開啟城鎮資訊。
 
 items.Aetherhaven_Town_Planning_Desk.name=城鎮計畫處
-items.Aetherhaven_Town_Planning_Desk.description=製作城鎮憲章、地塊放置法杖、建築法杖（加快被動地塊建造速度）、任務日誌、晶洞鐵砧、憲章修訂台和地塊標記。在工作台上製作一個。
+items.Aetherhaven_Town_Planning_Desk.description=城鎮規劃工作台。憲章、建築法杖、地塊製作工作台及相關配方。在工作台上製作。
+items.Aetherhaven_Plot_Crafting_Bench.name=地塊製作台
+items.Aetherhaven_Plot_Crafting_Bench.description=製作建築和裝飾用地塊代幣。使用代幣選擇建築、預覽，並支付金幣獲得一個代幣。在城鎮規劃台製作。
 items.Aetherhaven_Charter_Amendments_Table.name=憲章修正案表
-items.Aetherhaven_Charter_Amendments_Table.description=記錄城鎮什一稅的計算方式以及特許狀所鼓勵的貿易類型。一旦人口支持，即可用於開啟修正案。在城鎮規劃桌前製作；您必須了解示意圖。
+items.Aetherhaven_Charter_Amendments_Table.description=記錄城鎮什一稅的計算方式以及憲章所鼓勵的貿易類型。一旦人口支持，即可用於開啟憲章修正案。在城鎮規劃桌前製作；<color is="#ffa726">你必須知道示意圖</color>。
 items.Aetherhaven_Banquet_Table.name=宴會桌
 items.Aetherhaven_Banquet_Table.description=一張用於城鎮宴會的長桌。將其放置在您的領地內，用於舉辦市政宴會。待鎮上有人分享了圖紙後，即可在城鎮規劃桌處製作。
 items.Aetherhaven_Founder_Monument.name=奠基人紀念碑
 items.Aetherhaven_Founder_Monument.description=一座石基座，上面刻有創始人的肖像。將其放置在城鎮範圍內以示敬意；基座矗立期間，國庫的晨間收入會略有增長。每個城鎮僅限一座。
+items.Aetherhaven_Inn_Bell.name=旅館鈴鐺
+items.Aetherhaven_Inn_Bell.description=呼叫旅館客人返回客房區。
+
+items.Aetherhaven_Smokestack.name=煙囪
+items.Aetherhaven_Smokestack.description=放置在煙囪和屋頂上，可產生持續的縷縷煙。放置後隱形。
 
 benchCategories.aetherhaven.town_planning=城鎮計畫
 benchCategories.aetherhaven.plot_tokens=地塊標記
@@ -23,25 +49,52 @@ benchCategories.aetherhaven.plot_tokens=地塊標記
 items.Aetherhaven_Plot_Placement_Tool.name=場地佈置人員
 items.Aetherhaven_Plot_Placement_Tool.description=將對應的地塊標記放在背包裡。使用法杖瞄準地面，可以看到建築物的輪廓。調整法杖位置，直到與建築物輪廓吻合，然後確認即可標記地塊。取消操作即可清除預覽，需要標記其他位置時可以再次使用法杖。
 
+items.Aetherhaven_Wall_Wand.name=牆杖
+items.Aetherhaven_Wall_Wand.description=規劃城鎮周圍的石牆。次要功能可開啟俯視圖，顯示城牆、城門和塔樓組件。主要功能可對現有組件進行擴充或移除。每個組件都使用地塊標誌，建造方式與其他城鎮地塊相同。
+items.Aetherhaven_Token_Wall.name=牆貼標記
+items.Aetherhaven_Token_Wall.description=放置時會在牆上顯示標記。不會從您的物品欄中取出。
+items.Aetherhaven_Token_Wall_Gate.name=門板標記
+items.Aetherhaven_Token_Wall_Gate.description=放置時會在大門地塊標誌上顯示。不會從您的物品欄中使用。
+items.Aetherhaven_Token_Wall_Tower.name=塔樓標記
+items.Aetherhaven_Token_Wall_Tower.description=放置塔樓時會在塔樓地塊標誌牌上顯示。不會從您的物品欄中使用。
+
 items.Aetherhaven_Poi_Tool.name=POI調試工具
-items.Aetherhaven_Poi_Tool.description=持有工具時顯示城鎮興趣點（權限：aetherhaven.poi.tool）。主要功能：選擇最近的興趣點。次要功能：將興趣點錨點移到該方塊。用途：設定/清除所選興趣點的自主路徑目標（再次點擊興趣點方塊即可清除）。
+items.Aetherhaven_Poi_Tool.description=編輯城鎮興趣點，在預製件中放置新的興趣點標記，並設定冒險者產生標記（權限：<color is="#5AB5B5">aetherhaven.poi.tool</color>）。按 Q 鍵切換模式。
 items.Aetherhaven_Poi_Tool.legendTitle=POI 工具
 items.Aetherhaven_Poi_Tool.legendPrimary=主要選項：選擇街區附近最近的興趣點。
 items.Aetherhaven_Poi_Tool.legendSecondary=次要操作：將選定的興趣點移至區塊。
 items.Aetherhaven_Poi_Tool.legendUse=用途：為選定的興趣點設定NPC路徑目標（用於興趣點區域清除時）
 
 aetherhaven.poiTool.legendTitle=POI 工具
+aetherhaven.poiTool.legendModeCycle=Q：如何在興趣點和冒險者地點之間切換
+aetherhaven.poiTool.legendPoiHeader=POI 地點模式
 aetherhaven.poiTool.legendPrimary=主要選項：選擇街區附近最近的興趣點。
-aetherhaven.poiTool.legendSecondary=次要操作：將選定的興趣點移至區塊。
+aetherhaven.poiTool.legendSecondaryPoi=次要操作：將選定的興趣點移至區塊。
 aetherhaven.poiTool.legendUse=用途：為選定的興趣點設定NPC路徑目標（用於興趣點區域清除時）
+aetherhaven.poiTool.legendSpawnHeader=冒險者地點模式
+aetherhaven.poiTool.legendSecondarySpawn=次要功能：在方塊上方放置一個標記，或移除你點擊的標記。
+aetherhaven.poiTool.modeCycledToEdit=已切換到興趣點編輯模式。
+aetherhaven.poiTool.modeCycledToPlacement=已切換到興趣點放置模式。
+aetherhaven.poiTool.modeCycledToRemove=已切換到興趣點移除模式。
+aetherhaven.poiTool.modeCycledToAdventurerSpots=切換到冒險地點模式。
+aetherhaven.poiTool.hudTitle=POI 工具
+aetherhaven.poiTool.hudNameEdit=POI 編輯
+aetherhaven.poiTool.hudNamePlacement=POI放置
+aetherhaven.poiTool.hudNameRemove=移除興趣點
+aetherhaven.poiTool.hudNameAdventurerSpots=探險勝地
+aetherhaven.poiTool.hudHelpEdit=主要功能：選擇興趣點。次要功能：將選定的興趣點移動到目標區域。用途：設定NPC路徑目標。
+aetherhaven.poiTool.hudHelpPlacement=次要：在已完成地塊內的區塊上開啟 POI 配置。
+aetherhaven.poiTool.hudHelpRemove=次要目標：移除街區附近最近的興趣點標記或註冊興趣點。
+aetherhaven.poiTool.hudHelpAdventurerSpots=次要：在面向你的方塊上方放置一個點，或移除附近的點。
+aetherhaven.poiTool.hudHint=Q：循環編輯/放置/移除/冒險者地點
 
 aetherhaven.pathTool.legendPageTitle=路徑工具
-aetherhaven.pathTool.legendBlurb=建立樣條曲線，預覽，然後放置路徑塊。握住工具時，角落會顯示一個狀態面板。安裝
-aetherhaven.pathTool.legendHotkeyAdd=地面上的輔助技能會增加一個關鍵影格（金色球體）。瞄準時，輔助技能會移除一個關鍵影格。新新增的關鍵影格會朝向你的視線方向。
-aetherhaven.pathTool.legendHotkeyAim=查看關鍵影格即可選取它。在移動模式下，地面上的主要元素會移動該點。同一節點上的主要元素則不會執行任何操作。
-aetherhaven.pathTool.legendHotkeyUse=F：在旋轉模式下，對選定節點進行偏航步進。在移動模式下，F 鍵無作用。在放置模式下，F 鍵放置路徑（需要兩個節點）。 Q：模式切換。 E：寬度 1-8。第三個工具功能：路徑樣式（內部區塊；請參閱配置中的 PathToolStyles）。在關鍵影格上按輔助鍵可移除該路徑。
-aetherhaven.pathTool.legendHotkeyCrouchUse=可選：不再需要蹲伏切換模式；改用工具技能（Q）。
-aetherhaven.pathTool.legendVisuals=預覽：白色 = 節點和樣條線，棕色 = 路徑帶，綠色 = 邊緣草；紅色 = 被阻擋。石板位於表面上。寬度：第二個工具能力（1-8）。樣式：第三個工具能力。提交作業會清除路徑上方的大型植物（Plant_Grass）。
+aetherhaven.pathTool.legendBlurb=建立路徑，預覽，然後放置。按住工具時會顯示狀態面板。
+aetherhaven.pathTool.legendHotkeyAdd=副武器在地面上會增加一個節點。瞄準節點時使用副武器會移除該節點。
+aetherhaven.pathTool.legendHotkeyAim=主節點選擇一個節點。在移動模式下，地面上的主節點會移動所選節點。
+aetherhaven.pathTool.legendHotkeyUse=Q 鍵切換模式：移動、旋轉、放置、移除、樣式設計器。 F 鍵按模式切換：微調方向、放置路徑、移除路徑或開啟樣式管理器。 E 鍵切換寬度。 R 鍵切換樣式。
+aetherhaven.pathTool.legendHotkeyCrouchUse=使用 Q 鍵切換模式，而不是蹲伏。
+aetherhaven.pathTool.legendVisuals=預覽：白色節點和線條，棕色路徑，綠色邊緣。移除模式下，已放置的路徑以橘色顯示。樣式設計器會開啟一個網格面板，用於建立路徑樣式。
 aetherhaven.pathTool.statusHeader=握住工具
 aetherhaven.pathTool.statusLine1=新增積分、切換模式 (Q) 或在提交模式下進行水泥操作時，會彈出提示和聊天視窗。
 aetherhaven.pathTool.statusLine2=選擇：瞄準一個球體。未命中則保持目前選擇不變。 Q 技能切換模式；二技能切換寬度；三技能切換路徑樣式。
@@ -50,78 +103,232 @@ aetherhaven.pathTool.hudTitle=路徑工具
 aetherhaven.pathTool.hudNameTranslate=移動
 aetherhaven.pathTool.hudNameRotate=旋轉
 aetherhaven.pathTool.hudNameCommit=地方
-aetherhaven.pathTool.hudHelpTranslate=主遊標：瞄準節點進行選擇，然後瞄準方塊進行移動。次遊標：地面遊標新增節點；瞄準節點移除節點。 Q：進入下一模式。
-aetherhaven.pathTool.hudHelpRotate=主鍵：瞄準節點進行選擇。副鍵：地面新增節點；瞄準節點移除節點。 F 鍵微調選取節點的偏航角。 Q 鍵：進入下一模式。
-aetherhaven.pathTool.hudHelpCommit=主鍵：瞄準節點進行選擇。副鍵：地面新增節點；瞄準節點移除節點。 F 鍵放置路徑（2 個或更多節點）。 Q 鍵：進入下一模式。
+aetherhaven.pathTool.hudNameRemove=消除
+aetherhaven.pathTool.hudNameStyleDesigner=風格設計師
+aetherhaven.pathTool.hudDescTranslate=新增和移動節點以塑造路徑。
+aetherhaven.pathTool.hudDescRotate=旋轉選定的節點以彎曲路徑。
+aetherhaven.pathTool.hudDescCommit=準備好後，將路徑鋪設在地面上。
+aetherhaven.pathTool.hudDescRemove=查看已放置的路徑，並刪除不再需要的路徑。
+aetherhaven.pathTool.hudDescStyleDesigner=使用箱體網格建立和編輯路徑樣式。
 aetherhaven.pathTool.hudStyle=樣式：{style}
-aetherhaven.pathTool.hudWidth=寬度：{w} 區塊（E 循環）
+aetherhaven.pathTool.hudWidth=寬度：{w}區塊
 aetherhaven.pathTool.hudNodes=節點：{n}
-aetherhaven.pathTool.hudHint=主要功能：選擇/移動 | 次要功能：新增至地面，從節點移除 | Q：模式 | E：寬度 | R：樣式 | F：旋轉/放置
+aetherhaven.pathTool.hudPlaceReminder=切換到放置模式以放置路徑。
+
+aetherhaven.pathTool.hud.move.primary=選擇一個節點，然後點擊地面將其移動。
+aetherhaven.pathTool.hud.move.secondary=點選地面新增節點，或瞄準節點移除節點。
+aetherhaven.pathTool.hud.move.q=下一模式
+aetherhaven.pathTool.hud.move.e=循環路徑寬度
+aetherhaven.pathTool.hud.move.r=自行車道風格
+
+aetherhaven.pathTool.hud.rotate.primary=選擇一個節點
+aetherhaven.pathTool.hud.rotate.secondary=點選地面新增節點，或瞄準節點移除節點。
+aetherhaven.pathTool.hud.rotate.f=微調選定節點的方向
+aetherhaven.pathTool.hud.rotate.q=下一模式
+aetherhaven.pathTool.hud.rotate.e=循環路徑寬度
+aetherhaven.pathTool.hud.rotate.r=自行車道風格
+
+aetherhaven.pathTool.hud.place.primary=選擇一個節點
+aetherhaven.pathTool.hud.place.secondary=點選地面新增節點，或瞄準節點移除節點。
+aetherhaven.pathTool.hud.place.f=放置路徑
+aetherhaven.pathTool.hud.place.q=下一模式
+aetherhaven.pathTool.hud.place.e=循環路徑寬度
+aetherhaven.pathTool.hud.place.r=自行車道風格
+
+aetherhaven.pathTool.hud.remove.primary=選擇路徑
+aetherhaven.pathTool.hud.remove.f=移除選定路徑
+aetherhaven.pathTool.hud.remove.q=下一模式
+
+aetherhaven.pathTool.hud.styleDesigner.f=開啟樣式管理器
+aetherhaven.pathTool.hud.styleDesigner.e=循環路徑寬度
+aetherhaven.pathTool.hud.styleDesigner.fContinue=打開箱子繼續編輯
+aetherhaven.pathTool.hud.styleDesigner.eSave=儲存路徑樣式
+aetherhaven.pathTool.hud.styleDesigner.q=下一模式
+aetherhaven.pathTool.hud.styleDesigner.infoColumns=左側列從左邊緣向內填充，右側列從右邊緣向內填充，中間列填充路徑中心。
+aetherhaven.pathTool.hud.styleDesigner.infoRows=將方塊堆疊成一列，以便從中選擇。
+aetherhaven.pathTool.hud.styleDesigner.infoWeight=同一列中相同區塊的數量越多，其顯示頻率就越高。
 
 aetherhaven.pathTool.addedNode=已新增節點{n}。
-aetherhaven.pathTool.modeCycledToTranslate=模式：移動和放置關鍵影格。
-aetherhaven.pathTool.modeCycledToRotate=模式：旋轉 — F 鍵可微調選定節點的偏航角。
-aetherhaven.pathTool.modeCycledToCommit=模式：放置 — F 放置路徑（當有 2 個或更多節點時）。
-aetherhaven.pathTool.widthCycled=路徑寬度：{w}（1-8）
+aetherhaven.pathTool.modeCycledToTranslate=模式：移動
+aetherhaven.pathTool.modeCycledToRotate=模式：旋轉
+aetherhaven.pathTool.modeCycledToCommit=模式：放置
+aetherhaven.pathTool.modeCycledToRemove=模式：移除
+aetherhaven.pathTool.modeCycledToStyleDesigner=模式：風格設計師
+aetherhaven.pathTool.widthCycled=路徑寬度：{w}
 aetherhaven.pathTool.styleCycled=路徑樣式：{style}
 aetherhaven.pathTool.toastStyleCycled=路徑樣式已更改
-aetherhaven.pathTool.useInTranslateMode=在移動模式下，F鍵不起作用。按Q鍵切換到放置模式，再按F鍵放置物體，或按Q鍵旋轉物體，再按F鍵微調偏航角。
-aetherhaven.pathTool.rotateNoSelection=選擇關鍵影格（瞄準金色球體）進行旋轉，或按 Q 鍵變更模式。
+aetherhaven.pathTool.useInTranslateMode=按 Q 直到進入放置模式，然後按 F 放置路徑。
+aetherhaven.pathTool.rotateNoSelection=先選擇一個節點，或按 Q 鍵切換模式。
+aetherhaven.pathTool.wrongMode=此輸入方式在此模式下無效。按 Q 鍵切換模式。
 aetherhaven.pathTool.modeToggled=模式：{m}
 aetherhaven.pathTool.selectedNode=節點已選取。
 aetherhaven.pathTool.movedNode=節點已移動。
-aetherhaven.pathTool.noNodeHit=範圍內沒有控制節點。在平移模式下，選取一個節點後，嘗試將主節點移到地面上進行移動。
-aetherhaven.pathTool.noNodeOnAim=準星上沒有關鍵影格。瞄準金色圓盤進行選取。選取狀態未改變。
+aetherhaven.pathTool.noNodeHit=範圍內沒有控制節點。在移動模式下，如果選取了節點，請嘗試將主節點放置在地面上進行移動。
+aetherhaven.pathTool.noNodeOnAim=十字準星上沒有節點。選擇狀態未改變。
 aetherhaven.pathTool.toastAdd=已新增控制點
-aetherhaven.pathTool.toastModeTranslate=移動：主操作移動選取範圍；輔助操作新增關鍵影格。
-aetherhaven.pathTool.toastModeRotate=旋轉：F 鍵可微調所選節點的偏航角。
-aetherhaven.pathTool.toastModeCommit=放置：F 放置路徑（2 個或更多節點）。與 Q 交換位置。
+aetherhaven.pathTool.toastModeTranslate=移動模式
+aetherhaven.pathTool.toastModeRotate=旋轉模式
+aetherhaven.pathTool.toastModeCommit=放置模式
+aetherhaven.pathTool.toastModeRemove=移除模式
+aetherhaven.pathTool.toastModeStyleDesigner=風格設計師模式
 aetherhaven.pathTool.toastMoved=節點位置已更新
 aetherhaven.pathTool.toastRemoved=控制點已移除
-aetherhaven.pathTool.toastRotated=偏航
-aetherhaven.pathTool.toastCemented=路徑已確定。請查看聊天記錄以取得回滾 ID。
-aetherhaven.pathTool.rotated=旋轉至 {deg}°。
+aetherhaven.pathTool.toastRotated=方向調整
+aetherhaven.pathTool.toastCemented=路徑已放置
+aetherhaven.pathTool.toastRemovedPath=路徑已移除
+aetherhaven.pathTool.rotated=旋轉了{deg}度。
 aetherhaven.pathTool.removedNode=節點已移除。剩餘 {n} 節點。
-aetherhaven.pathTool.needTwoNodes=至少需要兩個關鍵影格。使用輔助關鍵幀新增另一個關鍵幀，或按 Q 鍵退出提交模式並繼續編輯。
-aetherhaven.pathTool.emptyPlan=沿途未發現地面（陡峭/虛空/未載入區塊）。
-aetherhaven.pathTool.cementFail=沒有可放置的接地裝置：未找到可替換的接地裝置或放置失敗。
-aetherhaven.pathTool.cemented=路徑已放置。還原 ID：{id}（使用 aetherhaven.path.revert 還原 aetherhaven 路徑 <id>）
+aetherhaven.pathTool.needTwoNodes=至少需要兩個節點。新增第二個節點時使用輔助節點，或按 Q 鍵切換模式。
+aetherhaven.pathTool.emptyPlan=沿途未發現地面。
+aetherhaven.pathTool.cementFail=路邊無需放置任何東西。
+aetherhaven.pathTool.cemented=路徑已設定。
+aetherhaven.pathTool.removeSelected=已選擇路徑。
+aetherhaven.pathTool.removeNoHit=準星上沒有路徑。
+aetherhaven.pathTool.removeNeedSelection=首先選擇主路徑。
+aetherhaven.pathTool.removeUnknown=那條路已經不存在了。
+aetherhaven.pathTool.removedPath=路徑已移除。 {cells} 區塊已恢復。
 aetherhaven.pathTool.revertNoPerm=您沒有 aetherhaven.path.revert 權限
 aetherhaven.pathTool.badUuid=無效 ID：{raw}
 aetherhaven.pathTool.unknownId=沒有具有該 ID 的已儲存路徑。
 aetherhaven.pathTool.reverted=已將 {cells} 區塊還原為 {id}
-aetherhaven.pathTool.navvizOn=路徑導航調試：開啟（伺服器將已提交的路徑節點顯示為線條；再次運行即可關閉）
+aetherhaven.pathTool.navvizOn=路徑導航調試：開啟
 aetherhaven.pathTool.navvizOff=路徑導航調試：關閉
 aetherhaven.pathTool.navvizNoPerm=路徑導航調試需要 aetherhaven.path.tool
 
-commands.aetherhaven.path.root.desc=路徑/樣條線放置輔助函數
-commands.aetherhaven.path.revert.desc=從撤銷檔案 (aetherhaven.path.revert) 恢復已固化的路徑
-commands.aetherhaven.path.revert.id=路徑提交 ID（來自 Cement 聊天訊息的 UUID）
-commands.aetherhaven.path.navviz.desc=切換路徑導覽折線的調試繪製（aetherhaven.path.tool；子程式：navviz）
+aetherhaven.pathTool.styleListTitle=路徑樣式
+aetherhaven.pathTool.styleListSelected=已選擇：{name}
+aetherhaven.pathTool.styleListEmpty=尚未建立路徑樣式。按下“新建”按鈕建立一個。
+aetherhaven.pathTool.styleListRowSelected=已選
+aetherhaven.pathTool.styleListPickOne=請先從清單中選擇一種風格。
+aetherhaven.pathTool.styleListCreate=新的
+aetherhaven.pathTool.styleListEdit=編輯
+aetherhaven.pathTool.styleListCancel=取消
+aetherhaven.pathTool.styleNameTitle=新路徑樣式
+aetherhaven.pathTool.styleNameHint=為你的風格命名，然後前往寶箱挑選方塊。
+aetherhaven.pathTool.styleNameContinue=繼續
+aetherhaven.pathTool.styleEditNameLabel=樣式名稱
+aetherhaven.pathTool.styleEditNamePlaceholder=我的路徑樣式
+aetherhaven.pathTool.toastStyleSaved=已儲存的路徑樣式
+aetherhaven.pathTool.styleEditNeedBlocks=保存前，至少在箱子裡放入一個方塊。
+aetherhaven.pathTool.styleEditNoSession=樣式編輯器會話已過期。請重新開啟樣式管理器。
+aetherhaven.pathTool.styleSaved=儲存路徑樣式：{name}
+
+commands.aetherhaven.path.root.desc=路徑工具助手
+commands.aetherhaven.path.revert.desc=使用放置路徑時聊天記錄中的 ID 撤銷已放置的路徑。
+commands.aetherhaven.path.revert.id=您放置路徑時聊天記錄中的路徑 ID
+commands.aetherhaven.path.navviz.desc=調試：切換路徑導航調試行
 
 items.Aetherhaven_Path_Tool.name=路徑設計師鏟子
-items.Aetherhaven_Path_Tool.description=設計樣條路徑（aetherhaven.path.tool）。輔助功能：新增節點。主要功能：選擇；在移動模式下，點選地面即可移動。 Q：模式切換。第二個功能：路徑寬度 1-8。第三個功能：路徑樣式（內部方塊；配置中的 PathToolStyles）。 F：在旋轉模式下微調偏航角，或在放置模式下放置（2 個或更多節點）。還原：aetherhaven 路徑還原。配置：PathToolStyles、raycast 和 replace 清單。
+items.Aetherhaven_Path_Tool.description=為您的城鎮設計道路。 Q 鍵切換模式。 Secondary 鍵新增或移除節點。 F 鍵依模式放置、移除或開啟樣式管理器。 E 鍵設定寬度。 R 鍵設定樣式。
+
+items.Aetherhaven_Patrol_Wand.name=巡邏魔杖
+items.Aetherhaven_Patrol_Wand.description=設定城鎮的守衛巡邏路線（<color is="#5AB5B5">aetherhaven.patrol.wand</color>）。在城鎮規劃台製作。持有此物品時，螢幕上會顯示圖例。
+
+aetherhaven.patrolWand.legendPageTitle=巡邏魔杖
+aetherhaven.patrolWand.legendBlurb=設置巡邏點，儲存路線，然後指派守衛。只有當你持有這根魔杖時，藍色閃光才會顯示路線。
+aetherhaven.patrolWand.legendHotkeyAdd=建造模式：右鍵單擊地面新增節點。右鍵單擊節點移除節點。
+aetherhaven.patrolWand.legendHotkeySelect=點擊已儲存路線上的點，即可選擇並編輯該路線。
+aetherhaven.patrolWand.legendHotkeyUse=建置模式：按 F 鍵開啟名稱提示方塊並儲存路由（至少需要兩個節點）。分配模式：按 F 鍵開啟所選路由的保護清單。
+aetherhaven.patrolWand.legendHotkeyAbility=Q 鍵切換建置模式和指派模式。 E 鍵在建置模式下新路由，或在分配模式下移除所選路由的保護層。 R 鍵在建置模式下切換閉環狀態。
+aetherhaven.patrolWand.legendVisuals=選定的路線會亮起綠燈，其他路線則保持藍色。負責多條路線的守衛會輪流巡邏每條路線。
+aetherhaven.patrolWand.nameRouteTitle=巡邏路線名稱
+aetherhaven.patrolWand.nameRouteHint=這條路線有{n}個點。選擇一個名稱，然後儲存。
+aetherhaven.patrolWand.nameRouteLabel=路線名稱
+aetherhaven.patrolWand.nameRoutePlaceholder=門衛巡邏
+aetherhaven.patrolWand.nameRouteSave=保存路線
+aetherhaven.patrolWand.nameRouteCancel=取消
+
+aetherhaven.patrolWand.hudTitle=巡邏魔杖
+aetherhaven.patrolWand.hudNameBuild=建構路線
+aetherhaven.patrolWand.hudNameAssign=指派警衛
+aetherhaven.patrolWand.hudHelpBuild=右鍵單擊地面新增一個點。右鍵單擊一個點刪除它。 F 鍵命名並儲存。 R 鍵切換閉環狀態。 E 鍵重新開始。 Q 鍵切換模式。
+aetherhaven.patrolWand.hudHelpAssign=左鍵點選路由點進行選擇。 F 開啟保護清單。 E 清除保護。 Q 切換模式。
+aetherhaven.patrolWand.hudRoute=路線：{name}
+aetherhaven.patrolWand.hudNodes=積分：{n}
+aetherhaven.patrolWand.hudLoopClosed=路徑：閉環
+aetherhaven.patrolWand.hudLoopOpen=路徑：來回
+aetherhaven.patrolWand.hudGuard=守衛：{guard}
+aetherhaven.patrolWand.hudGuardNone=沒有守衛
+aetherhaven.patrolWand.hudGuardAssigned=已分配
+aetherhaven.patrolWand.hudRouteNew=新路線
+aetherhaven.patrolWand.hudHint=建造：新增點、R 循環、F 名稱並儲存 | 分配：F 防禦清單 | Q：模式 | E：新路線或清除防禦
+
+aetherhaven.patrolWand.addedNode=新增點位。 {n} 在此路線上。
+aetherhaven.patrolWand.removedNode=點已移除。 {n} 已離開此路線。
+aetherhaven.patrolWand.needBuildMode=按 Q 鍵切換到建造模式，即可新增或移除點。
+aetherhaven.patrolWand.notInTown=站在城鎮內即可使用巡邏魔杖。
+aetherhaven.patrolWand.notMember=您必須是鎮民才能編輯巡邏路線。
+aetherhaven.patrolWand.noRouteHit=準星中沒有路徑點。
+aetherhaven.patrolWand.selectedRoute=已選擇 {name}。在建置模式下按 F 儲存，或在指派模式下按 F 指派保護。
+aetherhaven.patrolWand.needTwoNodes=至少需要兩分才能保存。
+aetherhaven.patrolWand.needTwoNodesForLoop=至少需要兩個點才能切換循環。
+aetherhaven.patrolWand.loopClosed=路線封閉－守衛從最後一個點繞回第一個點。
+aetherhaven.patrolWand.loopOpen=路線開放－衛兵沿路來回巡邏。
+aetherhaven.patrolWand.savedRoute=已救回{name}，獲得{n}積分。請選擇一名守衛進行分配。
+aetherhaven.patrolWand.selectRouteFirst=首先選擇一條路線。左鍵點選路線上的一個點。
+aetherhaven.patrolWand.routeMissing=那條路線已經不存在了。
+aetherhaven.patrolWand.invalidGuard=那不是我們鎮上的守衛。
+aetherhaven.patrolWand.assignedGuard=將 {name} 置於 {route} 上。
+aetherhaven.patrolWand.clearedGuard=移除了{route}的防護罩。
+aetherhaven.patrolWand.modeBuild=建造模式。設置巡邏點。
+aetherhaven.patrolWand.modeAssign=分配模式。選擇路線，然後按 F 鍵選擇一名守衛。
+aetherhaven.patrolWand.newRoute=開闢了一條新路線。
+aetherhaven.patrolWand.assignPageTitle=指派警衛
+aetherhaven.patrolWand.assignPageHint=為{route}選擇一個守衛。
+aetherhaven.patrolWand.assignPageNoGuards=城裡沒有守衛。請先到公會大廳僱用守衛。
+aetherhaven.patrolWand.assignPageAssignButton=分配
+aetherhaven.patrolWand.guardTypeKnight=騎士
+aetherhaven.patrolWand.guardTypeArcher=射手
+aetherhaven.patrolWand.guardTypeMage=法師
+aetherhaven.patrolWand.toastAdded=加分
+aetherhaven.patrolWand.toastRemoved=點已移除
+aetherhaven.patrolWand.toastSelected=已選路線
+aetherhaven.patrolWand.toastSaved=路線已儲存
+aetherhaven.patrolWand.toastAssigned=指派警衛
+aetherhaven.patrolWand.toastCleared=警衛已撤離
+aetherhaven.patrolWand.toastNewRoute=新路線
 
 items.Aetherhaven_Plot_Token_Inn.name=旅館地塊代幣
 items.Aetherhaven_Plot_Token_Inn.description=庫存中需要使用地塊放置人員來規劃旅館的佔地面積。
 
 items.Aetherhaven_Plot_Token_Market_Stall.name=市場攤位地塊代幣
 items.Aetherhaven_Plot_Token_Market_Stall.description=需依照場地佈置人員的指示放置市場攤位輪廓。
+items.Aetherhaven_Plot_Token_Player_Shop.name=玩家商店地塊代幣
+items.Aetherhaven_Plot_Token_Player_Shop.description=需要由地塊放置人員放置玩家商店的佔地面積。
 
 items.Aetherhaven_Plot_Token_Farm.name=農地代幣
 items.Aetherhaven_Plot_Token_Farm.description=需根據地塊放置人員提供的農田地塊輪廓進行放置。
+
+items.Aetherhaven_Plot_Token.name=地塊標記
+items.Aetherhaven_Plot_Token.description=從地塊放置人員處放置自訂城鎮建築。每個標記對應一種建築類型。
+items.Aetherhaven_Plot_Token.instance.name={building} 繪圖標記
+items.Aetherhaven_Plot_Token.instance.description=需依照場地佈置人員的指示放置 {building} 足跡。
+items.Aetherhaven_Plot_Token.instance.descriptionDecoration=需要放置地塊放置人員提供的{building}地塊。建造完成後，此裝飾物不會被登記為城鎮地塊。如需移除或重新定位，請自行破壞或移動方塊－無法從城鎮日誌中擷取。
+
+items.Aetherhaven_Plot_Token_Unlock_Page.name=地塊藍圖
+items.Aetherhaven_Plot_Token_Unlock_Page.description=一張特殊的藍圖頁面。使用它可以在你的地塊製作台上學習新的地塊。
+items.Aetherhaven_Plot_Token_Unlock_Page.instance.name=地塊藍圖：{building}
+items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=閱讀此文可永久解鎖地塊製作台上的 {building} 地塊。
+
+items.Aetherhaven_Plot_Creator_Staff.name=劇情創作團隊
+items.Aetherhaven_Plot_Creator_Staff.description=將建築轉換為自訂城鎮建築。請參閱城鎮日誌指南。 F 鍵開始或執行目前步驟。點選方塊可設定邊界和位置。 Q/E 鍵切換上一步驟/下一步。 R 鍵取消。
 
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=鐵匠鋪地塊代幣
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=需要由地塊放置人員放置鐵匠舖的地基。
 
 items.Aetherhaven_Plot_Token_Park.name=公園地塊代幣
-items.Aetherhaven_Plot_Token_Park.description=需要根據場地規劃人員的指示來確定公園佔地面積。
+items.Aetherhaven_Plot_Token_Park.description=需依照場地規劃人員的指示放置公園用地平面圖。
+items.Aetherhaven_Plot_Token_Tourist_Portal.name=旅遊門戶網站地塊代幣
+items.Aetherhaven_Plot_Token_Tourist_Portal.description=需要由場地佈置人員放置旅遊門戶網站的佔地面積。
 
 items.Aetherhaven_Plot_Token_House.name=房屋地塊代幣
 items.Aetherhaven_Plot_Token_House.description=需要將共享房屋的佔地面積從地塊放置人員移出。
 
 items.Aetherhaven_Plot_Token_Town_Hall.name=市政廳地塊代幣
 items.Aetherhaven_Plot_Token_Town_Hall.description=需要根據場地規劃人員的指示放置市政廳的佔地面積。
+
+items.Aetherhaven_Plot_Token_Guild_Hall.name=公會大廳地塊代幣
+items.Aetherhaven_Plot_Token_Guild_Hall.description=標記公會大廳預製件的建造位置。在城鎮規劃台製作。
 
 items.Aetherhaven_Gold_Coin.name=金幣
 items.Aetherhaven_Gold_Coin.description=城鎮貨幣儲存在國庫中。
@@ -130,10 +337,14 @@ items.Aetherhaven_Geode.name=晶洞
 items.Aetherhaven_Geode.description=一塊空心石頭，裡面可能藏有水晶、寶石或礦石。付錢請鐵匠把它敲開。
 
 items.Aetherhaven_Geode_Anvil.name=晶洞砧
-items.Aetherhaven_Geode_Anvil.description=無需支付鐵匠費用即可開啟晶洞。放置後即可使用；您必須知道圖紙才能在城鎮規劃桌上製作。
+items.Aetherhaven_Geode_Anvil.description=無需支付鐵匠費即可開啟晶洞。放置並使用；<color is="#ffa726">你必須知道原理圖</color>才能在你的城鎮規劃桌上製作它。
+
+items.Aetherhaven_Crystallized_Person.name=結晶人
 
 items.Aetherhaven_Treasury.name=鎮財政
 items.Aetherhaven_Treasury.description=存放城鎮金幣。用於訪問（城鎮所有者）。
+items.Aetherhaven_Shop_Safe.name=購物安全
+items.Aetherhaven_Shop_Safe.description=存放您玩家商店銷售所得的金幣。用於收取您的收入。
 
-items.Aetherhaven_Quest_Journal.name=城鎮任務日誌
-items.Aetherhaven_Quest_Journal.description=次要用途：查看城鎮中的活躍任務。旅館建成後，長老可能會給你一個任務。
+items.Aetherhaven_Quest_Journal.name=城鎮日報
+items.Aetherhaven_Quest_Journal.description=次要用途：開啟城鎮日誌。你可以在這裡查看任務。

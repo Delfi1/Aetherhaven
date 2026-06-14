@@ -1,0 +1,69 @@
+# Builder dialogue (Rowan Ridgecraft)
+
+aetherhaven.dialogue.aetherhaven_builder.root.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.root.hc0=Erkundigen Sie sich nach einem Haus
+aetherhaven.dialogue.aetherhaven_builder.root.hc1=Schließe die Heimquest ab
+aetherhaven.dialogue.aetherhaven_builder.root.hc2=Hausquest überprüfen
+aetherhaven.dialogue.aetherhaven_builder.root.c0=Sprechen wir über die Bauhütte.
+aetherhaven.dialogue.aetherhaven_builder.root.c1=Schließe die Hüttenquest ab
+aetherhaven.dialogue.aetherhaven_builder.root.c2=Überprüfen Sie den Hüttenbau.
+aetherhaven.dialogue.aetherhaven_builder.root.c3=Erkundigen Sie sich nach dem Bau der Hütte.
+aetherhaven.dialogue.aetherhaven_builder.root.c4=Auf Wiedersehen
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.body=Ich bin stolz auf jede Mauer, die in dieser Stadt errichtet wird. Gebt mir eine ordentliche Bauarbeiterhütte mit Werkbank und Bauplänen, und ich helfe euch, eure Grundstücke schneller in die Höhe zu treiben, solange ich im Dienst bin.
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c0=Nimm die Quest an
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c1=Nicht jetzt.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.body=Nimm diesen Baustein. Platziere die Hütte, bezahle die Gebühr und lass den Bauvorgang laufen. Sobald das Dach fertig ist, findest du mich an der Bank.
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.c0=Verstanden
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.body=Ich kann mir die fertige Hütte schon vorstellen. Habt ihr das Grundstück schon abgesteckt und mit dem Bau begonnen?
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c0=Gib die Suche auf
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c1=Ich arbeite noch daran.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.body=Das ist in Ordnung. Ich warte im Gasthaus, bis Sie es erneut versuchen möchten.
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.c0=Auf Wiedersehen
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.body=Das ist mal eine Hütte, für die ich meinen Namen unterschreiben möchte. Wenn weitere Grundstücke entstehen, werde ich mit meinem Hammer mit anpacken.
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.c0=Schön, dass Sie da sind
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.body=Die Hütte dient der Arbeit. Ich hätte gern ein kleines eigenes Haus, wenn Sie Zeit haben, eines abzustecken.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c0=Nimm die Quest an
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c1=Nicht jetzt.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.body=Nimm den Haus-Token und baue ein Grundstück. Weise mir den Verwaltungsblock zu, sobald es fertig ist.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.c0=Verstanden
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.body=Ich brauche noch ein mir zugewiesenes Haus im Verwaltungsblock.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.c0=Ich kümmere mich darum.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.body=Warme Wände und ein solides Dach. Ich kann beruhigt schlafen und trotzdem die Bauarbeiten in der Stadt im Auge behalten.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.c0=Willkommen zu Hause
+
+aetherhaven.dialogue.aetherhaven_builder.gift.love=Perfekt. Gutes Holz und saubere Steine zeigen mir, dass Sie verstehen, was ein Gebäude trägt.
+aetherhaven.dialogue.aetherhaven_builder.gift.like=Nützliches Zeug. Dafür finde ich immer einen Platz auf der Website.
+aetherhaven.dialogue.aetherhaven_builder.gift.neutral=Nicht ganz mein Geschmack, aber trotzdem danke.
+aetherhaven.dialogue.aetherhaven_builder.gift.dislike=Ich würde das lieber nicht in der Nähe der Hütte aufbewahren.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.fallback=Wenn Sie eine Hütte, ein Haus oder Hilfe bei einem Grundstück benötigen, sagen Sie einfach Bescheid.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.0=Die Linienführung des letzten Daches ist mir aufgefallen.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.1=Ich skizzierte im Kopf einen Grundriss. Alte Angewohnheit.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.2=Jede Stadt verdient Gebäude, die gerade stehen. Ihre ist auf dem besten Weg dorthin.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.3=Tut mir leid wegen des Sägemehls. Ich gehe nie ohne ein bisschen davon aus dem Haus.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.0=Bringt mir Holz, Steine oder eine ordentliche Werkbank und ihr werdet mir eine große Freude machen.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.1=Ein guter Hammer ist in meinen Händen immer willkommen.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.0=Bitte bringen Sie mir keinen Müll oder Abfall.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.1=Abgestorbene Pflanzen und Knochenhaufen haben nichts auf meiner Werkbank zu suchen.
+
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_50.speaker=Rowan Ridgecraft
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_100.speaker=Rowan Ridgecraft

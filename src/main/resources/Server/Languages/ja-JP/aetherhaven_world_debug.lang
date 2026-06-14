@@ -12,6 +12,32 @@ aetherhaven.poi.clearedInteractionTarget=インタラクション対象がクリ
 aetherhaven.poi.setInteractionTarget=相互作用のターゲットを{x}、{y}、{z}に設定します。
 aetherhaven.poi.selected=選択されたPOI {id} ({x}、{y}、{z})
 aetherhaven.poi.targetBlockMismatch=対象ブロックは、このPOIの想定されるタイプ{type}と一致する必要があります。
+aetherhaven.poi.removed=POI（重要地点）は削除されました。
+aetherhaven.poi.noTownPlot=その区画には完成した宅地造成地はありません。
+
+aetherhaven.adventurerSpawnMarker.label=冒険スポット
+aetherhaven.adventurerSpawnMarker.placed=冒険者スポットを設置しました。
+aetherhaven.adventurerSpawnMarker.removed=冒険者スポットが削除されました。
+aetherhaven.adventurerSpawnMarker.alreadyHere=ここは既に冒険スポットとなっている。
+
+aetherhaven.poiMarker.label=POIスポット
+
+aetherhaven.poiMarkerConfig.title=POIの設定
+aetherhaven.poiMarkerConfig.needHeader=ニーズが満たされる
+aetherhaven.poiMarkerConfig.presetSleep=寝る
+aetherhaven.poiMarkerConfig.presetEat=食べる
+aetherhaven.poiMarkerConfig.presetSit=座る／楽しい
+aetherhaven.poiMarkerConfig.presetWork=仕事
+aetherhaven.poiMarkerConfig.summary={preset} ({kind})
+aetherhaven.poiMarkerConfig.capacity=NPCスロット（1～4）
+aetherhaven.poiMarkerConfig.mountToggle=家具（ベッド、椅子など）に取り付ける
+aetherhaven.poiMarkerConfig.workAction=労働行動
+aetherhaven.poiMarkerConfig.workNone=なし
+aetherhaven.poiMarkerConfig.workMine=私の
+aetherhaven.poiMarkerConfig.workChop=チョップ
+aetherhaven.poiMarkerConfig.confirm=POIを配置する
+aetherhaven.poiMarkerConfig.cancel=キャンセル
+aetherhaven.poiMarkerConfig.placed=POI（重要地点）を設定しました。
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
@@ -75,7 +101,7 @@ aetherhaven.debug.plots.finishassemblyNone=町で作業が進行中の場合は�
 aetherhaven.debug.plots.finishassemblyDone=進行中の {count} プロット構築が即座に完了しました。
 aetherhaven.debug.plots.removeBadUuid=無効なプロットUUIDです。/aetherhaven plots list のIDを使用してください。
 aetherhaven.debug.plots.removeNotFound=あなたの町には区画 {plotId} がありません。
-aetherhaven.debug.plots.removeDataFailed=ワールドはクリアされましたが、町のデータから区画を削除するのに失敗しました（ログを確認してください）。
+aetherhaven.debug.plots.removeDataFailed=ワールドはクリアされましたが、町データから区画を削除するのに失敗しました（ログを確認してください）。
 aetherhaven.debug.plots.removedPlot=区画 {plotId} を町から削除し、その占有範囲をクリアしました。
 aetherhaven.debug.poi.invalidTownUuid=無効な町のUUID: {raw}
 aetherhaven.debug.poi.noTownArg=この世界にはあなたの町がありません（町のUUID引数を使用してください）。
@@ -84,3 +110,14 @@ aetherhaven.debug.poi.listEmpty=この町には登録されている建物があ
 aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} tag={tags} cap={cap} plot={plot}
 aetherhaven.debug.poi.dumpHeader=世界登録簿に登録されているすべてのPOI（{count}）：
 aetherhaven.debug.poi.dumpLine=town={town} {x},{y},{z} kind={kind} blockTypeId={block} tag={tags} plot={plot}
+
+aetherhaven.debug.tourist.noTown=この世に、あなたには故郷はない。
+aetherhaven.debug.tourist.targetsHeader={town}（{count}区画）の観光客訪問目標：
+aetherhaven.debug.tourist.targetsEmpty=touristDestinationが有効になっている完了済みの区画はありません（区画作成ツールまたは構築JSONを確認してください）。
+aetherhaven.debug.tourist.plotLine={building} プロット={plot} エントリ=({entryX},{entryY},{entryZ}) 優先={preferred} 訪問ポイズ={poiCount}
+aetherhaven.debug.tourist.poiLine=poi {x},{y},{z} kind={kind} tag={tags}
+
+# Wall wand placement debug (/ah walldebug)
+aetherhaven.debug.wall.on=壁掛けワンドのデバッグをオンにします（チャットログとサーバーログ）。
+aetherhaven.debug.wall.off=壁面センサーのデバッグはオフにしてください。
+aetherhaven.debug.wall.noSession=アクティブなウォールワンドセッションがありません。まずウォールワンドを開いてください。

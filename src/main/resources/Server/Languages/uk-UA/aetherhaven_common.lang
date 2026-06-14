@@ -18,7 +18,7 @@ aetherhaven.common.lookAtBlockPlot=Подивіться на блок, щоб в
 aetherhaven.common.carryPlotToken=Візьміть із собою жетон ділянки для типу будівлі, зазначеного в інструменті (наприклад, жетон ділянки заїзду), щоб розпочати розміщення.
 aetherhaven.common.statueNotLinked=Пам'ятник не пов'язаний з містом.
 aetherhaven.common.ownerOnlyStatue=Тільки власник міста може користуватися цією статуєю.
-aetherhaven.common.noReviveVillagersPermission=Ви не маєте дозволу оживляти жителів села біля цієї статуї.
+aetherhaven.common.noReviveVillagersPermission=Ви не маєте дозволу оживляти селян біля цієї статуї.
 aetherhaven.common.noPlayerId=Без ідентифікатора гравця.
 aetherhaven.common.playersOnly=Тільки гравці.
 aetherhaven.common.invalidVillager=Недійсний житель села.
@@ -26,6 +26,7 @@ aetherhaven.common.invalidVillager=Недійсний житель села.
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter
 aetherhaven.charter.alreadyInTown=Ти вже є частиною міста в цьому світі. Покинь його, перш ніж засновувати нове.
+aetherhaven.charter.notInPersistentWorld=Ви не можете тут заснувати місто. Спочатку поверніться до свого основного світу.
 aetherhaven.charter.townFounded=Місто засновано: {name}. Старійшина села прибув. Використайте статут, щоб перейменувати місто.
 aetherhaven.chartertown.info.notLinked=Хартія ще не прив'язана до міста.
 aetherhaven.chartertown.info.invalidTownId=Недійсний ідентифікатор міста в статуті.

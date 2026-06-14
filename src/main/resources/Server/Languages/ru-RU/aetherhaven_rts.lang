@@ -1,0 +1,58 @@
+items.Aetherhaven_Command_Post.name=Командный пункт охраны
+items.Aetherhaven_Command_Post.description=Сядьте на этот стул, чтобы командовать городской стражей сверху.
+
+items.Aetherhaven_Rts_Flag.name=Флаг команды
+items.Aetherhaven_Rts_Flag.description=Отправьте охранников на определённое место на земле.
+
+items.Aetherhaven_Rts_Sword.name=Командный меч
+items.Aetherhaven_Rts_Sword.description=Сосредоточьте своих охранников на одном существе.
+
+items.Aetherhaven_Rts_Select_All.name=Выбрать всех охранников
+items.Aetherhaven_Rts_Select_All.description=Выберите всех наемных охранников в городе.
+
+items.Aetherhaven_Rts_Select_Knight.name=Избранные рыцари
+items.Aetherhaven_Rts_Select_Knight.description=Выбрать всех рыцарей-стражей.
+
+items.Aetherhaven_Rts_Select_Archer.name=Отбор лучников
+items.Aetherhaven_Rts_Select_Archer.description=Выбрать всех охранников-лучников.
+
+items.Aetherhaven_Rts_Select_Mage.name=Выберите магов
+items.Aetherhaven_Rts_Select_Mage.description=Выбрать всех магов-охранников.
+
+items.Aetherhaven_Rts_Stance_Banner.name=Баннер позиции
+items.Aetherhaven_Rts_Stance_Banner.description=Настройте стиль боя выбранных охранников.
+
+items.Aetherhaven_Rts_Free.name=Сотрудники отдела выпуска
+items.Aetherhaven_Rts_Free.description=Верните выбранных охранников к выполнению своих обычных обязанностей.
+
+items.Aetherhaven_Rts_Exit.name=Команда "Выход"
+items.Aetherhaven_Rts_Exit.description=Выйдите из режима управления охраной и вернитесь к обычной игре.
+
+aetherhaven.rts.hudTitle=Командование охраны
+aetherhaven.rts.rosterTitle=Городская стража
+aetherhaven.rts.orderAttackMove=Порядок действий: Атака-ход
+aetherhaven.rts.orderMove=Порядок: Перемещение
+aetherhaven.rts.orderFocusAttack=Приказ: Прицельный огонь
+aetherhaven.rts.stanceDefensive=Позиция: Оборонительная
+aetherhaven.rts.stanceAggressive=Позиция: Агрессивная
+aetherhaven.rts.stanceStandGround=Позиция: Стойте на месте
+aetherhaven.rts.stanceHoldFire=Позиция: Не стрелять
+aetherhaven.rts.hudSelected={n} выбраны охранники
+aetherhaven.rts.hudControls=Клавиши WASD перемещают обзор поля боя. Клавиши Space и Ctrl позволяют быстро увеличивать и уменьшать масштаб. Клавиши прокрутки или цифровые клавиши переключают инструменты. Щелкните по охранникам, чтобы выбрать их. Удерживайте Shift и щелкните, чтобы добавить или удалить одного. Перетащите рамку, чтобы выбрать несколько охранников. Используйте инструмент «Выход» (слот 8 на панели быстрого доступа), чтобы выйти.
+aetherhaven.rts.helpFlag=Щелкните правой кнопкой мыши по земле, чтобы отправить охранников. Способность 1 переключает режимы атаки и перемещения. Способность 2 останавливает выбранных охранников.
+aetherhaven.rts.helpSword=Щелкните правой кнопкой мыши по существу, чтобы сосредоточить на нем внимание ваших охранников. Они не будут нападать на жителей деревни, туристов или охранников.
+aetherhaven.rts.helpSelectAll=Нажмите, чтобы выбрать всех охранников в городе и снять выделение с остальных.
+aetherhaven.rts.helpStance=Способность 1 переключает боевую стойку и применяет её к выбранным охранникам.
+aetherhaven.rts.helpFree=Щелкните правой кнопкой мыши, чтобы освободить выбранных охранников от ваших приказов.
+aetherhaven.rts.helpSelectType=Нажмите, чтобы выбрать всех охранников этого типа в городе и снять выделение с остальных.
+aetherhaven.rts.helpExit=Нажмите, чтобы выйти из режима управления охраной.
+aetherhaven.rts.errorUseExitTool=Для выхода из командного режима используйте инструмент «Выход» на панели быстрого доступа.
+aetherhaven.rts.errorNoGuards=Для использования этого устройства вам понадобятся наемные охранники.
+aetherhaven.rts.errorNoSelection=Сначала выберите охранников.
+aetherhaven.rts.errorNotEnemy=Ваши охранники не будут нападать на это.
+aetherhaven.rts.errorNotInTown=Для использования командный пункт должен находиться на территории вашего поселения.
+aetherhaven.rts.errorCommandPostInUse=Командный пункт в этом городе уже используется кем-то другим.
+aetherhaven.rts.recoverInventorySuccess=Восстановлена панель быстрого доступа из последней сессии команд охраны.
+aetherhaven.rts.recoverInventorySuccessExited=Восстановил панель быстрого доступа и вышел из режима управления охранником.
+aetherhaven.rts.recoverInventoryNone=Сохранённых кнопок панели быстрого доступа из режима командной защиты не найдено.
+aetherhaven.rts.recoverInventoryAuto=Ваша панель быстрого доступа была восстановлена после прерванной сессии управления охранником.

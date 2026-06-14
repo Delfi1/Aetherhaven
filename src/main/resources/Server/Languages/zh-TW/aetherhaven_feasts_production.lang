@@ -37,11 +37,19 @@ aetherhaven.ui.production.genInterval={time} 製作一個
 aetherhaven.ui.production.err.plugin=此伺服器上未載入 Aetherhaven。
 aetherhaven.ui.production.err.permission=您無法為該城鎮開啟此儲存空間。
 aetherhaven.ui.production.err.plot=該地塊不在您城鎮已建成的工作場所地塊（農場、穀倉、磨坊或礦工小屋）內。
-aetherhaven.ui.production.err.catalog=該建築未配置任何生產目錄。
+aetherhaven.ui.production.err.catalog=該建築未配置任何產品目錄。
 aetherhaven.ui.production.err.inventoryFull=您的庫存已滿，無法容納這麼多東西。
-aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
+aetherhaven.ui.production.err.inventoryPartial=您的庫存已滿，所有物品都還來不及搬走。剩餘的物品則留在了工作場所的儲藏室裡。
 aetherhaven.ui.production.unlockButton=解鎖
 aetherhaven.ui.production.unlockTooltip=查看並購買此建築物的已鎖定工作場所輸出。
+aetherhaven.ui.production.pickTooltip=選擇這條線代表什麼
+aetherhaven.ui.production.collectAllButton=全部收集
+aetherhaven.ui.production.collectAllTooltip=把每一行儲存的所有內容都取出來
+
+aetherhaven.ui.materialPicker.title=選擇輸出
+aetherhaven.ui.materialPicker.intro=請為該線路選擇一個未鎖定的輸出連接埠。
+aetherhaven.ui.materialPicker.back=後退
+aetherhaven.ui.materialPicker.backTooltip=返回工作場所商店
 
 aetherhaven.ui.productionUnlocks.title=工作場所解鎖
 aetherhaven.ui.productionUnlocks.intro=選擇下方的輸出項，即可在面板中查看其名稱和要求。將滑鼠懸停在圖示上，即可查看已持有數量與所需數量。當您達到所需的物品和金幣總數後，點擊已鎖定的輸出項目即可解鎖。

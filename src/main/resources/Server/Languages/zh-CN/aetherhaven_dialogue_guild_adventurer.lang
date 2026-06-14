@@ -1,0 +1,7 @@
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=雇佣{type}保安（{gold}金币）
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=再见
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=支付费用后，这位冒险者将在你的城镇巡逻。他们会一直待到战死沙场为止。
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=是的，雇佣他们
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=现在不要
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=它们是你的了。如果你想让它们长久留下，就得保证它们吃饱穿暖。
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=再见

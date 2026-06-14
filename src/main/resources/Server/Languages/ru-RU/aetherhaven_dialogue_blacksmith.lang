@@ -1,5 +1,5 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_blacksmith)
-# Full translation keys are aetherhaven_dialogue_blacksmith.<lineKey> (see Hytale I18nModule).
+# Full translation keys are aetherhaven.dialogue.blacksmith.<lineKey> (see Hytale I18nModule).
 aetherhaven.dialogue.blacksmith.repairGear=Почините мне снаряжение (оплата золотыми монетами)
 aetherhaven.dialogue.blacksmith.openGeodes=Расколите жеоды (по 5 золотых каждая)
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.body=Никаких обид. Если вы по-прежнему хотите покурить в городе, спросите ещё раз.

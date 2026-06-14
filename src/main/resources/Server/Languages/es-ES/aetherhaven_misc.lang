@@ -4,22 +4,30 @@
 # === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
 aetherhaven.blacksmith.repair.insufficientGold=Tu bolso es demasiado ligero para esta reparación.
 aetherhaven.blacksmith.repair.success={itemName} está completo de nuevo. Como nuevo.
-commands.aetherhaven.dialogue.desc=Abrir un árbol de diálogo por ID (para pruebas)
-commands.aetherhaven.dialogue.treeId.desc=ID del árbol de diálogo (p. ej., aetherhaven_dialogue_test)
-commands.aetherhaven.dialogue.entry.desc=ID de nodo de entrada opcional (predeterminado: raíz)
+commands.aetherhaven.dialogue.desc=Depuración: abrir un árbol de diálogo por ID
+commands.aetherhaven.dialogue.treeId.desc=ID del árbol de diálogo (ejemplo: aetherhaven_merchant)
+commands.aetherhaven.dialogue.entry.desc=Nodo de inicio opcional (raíz por defecto)
 aetherhaven.interaction.dialogue=Pulsa [{key}] para hablar
-npcRoles.Aetherhaven_Test_Villager.name=Prueba de diálogo del aldeano
 aetherhaven.banner.quest.completed.primary=Misión completada
 aetherhaven.banner.quest.completed.secondary={name}
 aetherhaven.banner.assembly.complete.primary=Edificio terminado
 aetherhaven.banner.assembly.complete.secondary={name}
 aetherhaven.assembly.complete.chat={name} está listo.
 aetherhaven.assembly.tracer.none_in_range=No hay vista previa de ensamblaje dentro del alcance (acérquese o verifique el permiso de construcción de la ciudad).
+aetherhaven.assembly.staff.no_mana=No tienes suficiente maná para colocar bloques de construcción. Mantén pulsado el bastón para recuperar maná más rápido y vuelve a intentarlo.
 aetherhaven.banner.quest.started.primary=Misión iniciada
 aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=Desbloqueado
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Personal del edificio
-items.Aetherhaven_Building_Staff.description=El botón principal lanza un rayo guía a través de los bloques hasta la vista previa de ensamblaje más cercana dentro del alcance. Mantén pulsado el botón secundario y apunta a través de los bloques hacia la vista previa de ensamblaje para colocar el siguiente bloque al instante (permiso de construcción de ciudad). Las construcciones pasivas siguen avanzando automáticamente cuando no estás presente.
+items.Aetherhaven_Building_Staff.name=Personal del edificio Copper
+items.Aetherhaven_Building_Staff.description=El botón principal envía un rayo guía a través de los bloques hasta la vista previa de ensamblaje más cercana dentro del alcance. Mantén presionado el botón secundario y apunta a través de los bloques en esa vista previa para canalizar y colocar nodos de construcción después de una breve pausa (permiso de construcción de ciudad). Llena hasta <color is="#4ade80">3×3×3</color> nodos de construcción resaltados alrededor de tu objetivo a la vez. Mientras se mantiene presionado, otorga <color is="#60a5fa">+150 de maná máximo</color>; cada bloque colocado cuesta <color is="#60a5fa">1 de maná</color>. El maná se recarga más rápido si dejas de usar el botón secundario durante un par de segundos. Los bastones de nivel superior otorgan más maná y lo recuperan más rápido. El ensamblaje de parcelas pasivas sigue progresando mientras estás ausente.
+items.Aetherhaven_Building_Staff_Iron.name=Personal de la construcción de hierro
+items.Aetherhaven_Building_Staff_Iron.description=Igual que el bastón de construcción de cobre. El secundario llena hasta <color is="#4ade80">5×5×5</color> nodos de construcción resaltados a la vez. Mientras se sostiene, otorga <color is="#60a5fa">+250 de maná máximo</color> y recuperación de maná más rápida; cada bloque colocado cuesta <color is="#60a5fa">1 de maná</color>.
+items.Aetherhaven_Building_Staff_Thorium.name=Personal del edificio Thorium
+items.Aetherhaven_Building_Staff_Thorium.description=Igual que el bastón de construcción de cobre. El secundario llena hasta <color is="#4ade80">7×7×7</color> nodos de construcción resaltados a la vez. Mientras se sostiene, otorga <color is="#60a5fa">+400 de maná máximo</color> y recuperación de maná más rápida; cada bloque colocado cuesta <color is="#60a5fa">1 de maná</color>.
+items.Aetherhaven_Building_Staff_Cobalt.name=Personal del edificio Cobalt
+items.Aetherhaven_Building_Staff_Cobalt.description=Igual que el bastón de construcción de cobre. El secundario llena hasta <color is="#4ade80">9×9×9</color> nodos de construcción resaltados a la vez. Mientras se sostiene, otorga <color is="#60a5fa">+600 de maná máximo</color> y recuperación de maná más rápida; cada bloque colocado cuesta <color is="#60a5fa">1 de maná</color>.
+items.Aetherhaven_Building_Staff_Adamantite.name=Personal del edificio Adamantite
+items.Aetherhaven_Building_Staff_Adamantite.description=Igual que el bastón de construcción de cobre. El secundario llena hasta <color is="#4ade80">11×11×11</color> nodos de construcción resaltados a la vez. Mientras se sostiene, otorga <color is="#60a5fa">+900 de maná máximo</color> y recuperación de maná más rápida; cada bloque colocado cuesta <color is="#60a5fa">1 de maná</color>.

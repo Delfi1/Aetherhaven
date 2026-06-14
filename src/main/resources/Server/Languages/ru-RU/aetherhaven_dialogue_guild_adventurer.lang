@@ -1,0 +1,7 @@
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Нанять охранника {type} (золото {gold})
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=До свидания
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Заплатите взнос, и этот искатель приключений будет патрулировать ваш город. Он останется там до тех пор, пока не падет в бою.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Да, наймите их.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=Не сейчас
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=Они ваши. Кормите и обеспечивайте им жилье, если хотите, чтобы они остались надолго.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=До свидания

@@ -1,5 +1,22 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_inn_welcome)
-# Full translation keys are aetherhaven_dialogue_inn_welcome.<lineKey> (see Hytale I18nModule).
+# Full translation keys are aetherhaven.dialogue.aetherhaven_inn_welcome.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_abandoned.body=Вполне справедливо. Я пока отложу эту идею, пока вы не будете готовы. Городу еще не помешала бы пара скамеек, когда у вас будет время их построить.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_abandoned.c0=Хорошо. Может быть, позже.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_abandoned.speaker=Корин Москуп
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_accepted.body=Хорошо. Когда дорожки будут проложены и скамейки установлены, приходите и расскажите мне.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_accepted.c0=Вы это услышите от меня.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_accepted.speaker=Корин Москуп
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.body=Парк еще находится в стадии обустройства. Доделайте то, что написано на табличке, или прямо скажите, если вам нужно отложить эту идею на время. Я не против подождать.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.c0=Мне нужно пока отложить посещение парка.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.c1=Я всё ещё строю его.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_building.speaker=Корин Москуп
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_done.body=Вот и всё. Зелёная зона, дорожка и удобные скамейки. С нетерпением жду, когда услышу все сплетни!
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_done.c0=Рад, что в городе есть место, где можно посидеть.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_done.speaker=Корин Москуп
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.body=У нас нет хорошего места на открытом воздухе, где люди могли бы отдохнуть. Деревне бы не помешал небольшой парк с деревьями, дорожкой и парой скамеек. Вот. Берите это и заявляйте права на это место для парка.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.c0=Мы построим этот парк.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.c1=Не сейчас.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_park_offer.speaker=Корин Москуп
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body=Тогда я оставлю чайник здесь, пока участок не станет вашим. Как только мое имя появится на полке, приходите и найдите меня. Я хочу пожать вам руку, прежде чем мы сочтем дело решенным.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0=Можете не сомневаться.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker=Корин Москуп
@@ -21,6 +38,10 @@ aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_50.speaker=Корин М
 aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_75.speaker=Корин Москуп
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.body=Заходите, спрячьтесь от ветра. Меня зовут Корин. Я поддерживаю этот очаг, и пока вы находитесь под нашей крышей, мы кормим вас настолько хорошо, насколько это в наших силах. Это по-прежнему важно, даже когда внешний мир забывает об этом.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0=Как устроена система гостевых кроватей?
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.p0=Городу бы не помешал парк со скамейками.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.p1=Парк завершен. Я здесь, чтобы закрыть этот запрос.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.p2=Строительство парка всё ещё продолжается. Какова ситуация на данный момент?
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.p3=Я хотел бы заглянуть сюда теперь, когда парк полностью готов.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1=Ты хотел настоящую собственную комнату.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=Я включила тебя в свой список любимых книг. Подумала, тебе стоит услышать это от меня.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=Ваш дом всё ещё достраивается. Я этим занимаюсь.

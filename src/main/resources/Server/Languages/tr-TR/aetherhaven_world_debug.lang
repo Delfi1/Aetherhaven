@@ -12,6 +12,32 @@ aetherhaven.poi.clearedInteractionTarget=Etkileşim hedefi temizlendi; NPC'ler i
 aetherhaven.poi.setInteractionTarget=Etkileşim hedefi olarak {x}, {y}, {z} değerlerini ayarlayın.
 aetherhaven.poi.selected=Seçilen ilgi noktası {id}, {x}, {y}, {z} konumlarındadır.
 aetherhaven.poi.targetBlockMismatch=Hedef blok, bu ilgi noktası (POI) için beklenen {type} türüyle eşleşmelidir.
+aetherhaven.poi.removed=POI kaldırıldı.
+aetherhaven.poi.noTownPlot=O blokta tamamlanmış bir şehir arsası bulunmamaktadır.
+
+aetherhaven.adventurerSpawnMarker.label=Maceracıların uğrak yeri
+aetherhaven.adventurerSpawnMarker.placed=Maceracı noktası yerleştirildi.
+aetherhaven.adventurerSpawnMarker.removed=Maceracı bölümü kaldırıldı.
+aetherhaven.adventurerSpawnMarker.alreadyHere=Macera severler için ideal bir yer burası zaten.
+
+aetherhaven.poiMarker.label=POI noktası
+
+aetherhaven.poiMarkerConfig.title=POI'yi yapılandırın
+aetherhaven.poiMarkerConfig.needHeader=İhtiyaç karşılandı
+aetherhaven.poiMarkerConfig.presetSleep=Uyumak
+aetherhaven.poiMarkerConfig.presetEat=Yemek yemek
+aetherhaven.poiMarkerConfig.presetSit=Otur / eğlen
+aetherhaven.poiMarkerConfig.presetWork=İş
+aetherhaven.poiMarkerConfig.summary={preset} ({kind})
+aetherhaven.poiMarkerConfig.capacity=NPC yuvaları (1–4)
+aetherhaven.poiMarkerConfig.mountToggle=Mobilyaların (yatakların, sandalyelerin) üzerine monte edilebilir.
+aetherhaven.poiMarkerConfig.workAction=Çalışma eylemi
+aetherhaven.poiMarkerConfig.workNone=Hiçbiri
+aetherhaven.poiMarkerConfig.workMine=Bana ait
+aetherhaven.poiMarkerConfig.workChop=Kesmek
+aetherhaven.poiMarkerConfig.confirm=POI'yi Yerleştir
+aetherhaven.poiMarkerConfig.cancel=İptal etmek
+aetherhaven.poiMarkerConfig.placed=POI yerleştirildi.
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
@@ -84,3 +110,14 @@ aetherhaven.debug.poi.listEmpty=Bu kasaba için kayıtlı kimse yok (bir binayı
 aetherhaven.debug.poi.listLine={x},{y},{z} tür={kind} blokTürüKimliği={block} etiketler={tags} başlık={cap} çizim={plot}
 aetherhaven.debug.poi.dumpHeader=Dünya kayıt defterindeki tüm ilgi noktaları ({count}):
 aetherhaven.debug.poi.dumpLine=kasaba={town} {x},{y},{z} tür={kind} blokTürüKimliği={block} etiketler={tags} arsa={plot}
+
+aetherhaven.debug.tourist.noTown=Bu dünyada hiçbir şehriniz yok.
+aetherhaven.debug.tourist.targetsHeader={town} için turist ziyareti hedefleri ({count} parselleri):
+aetherhaven.debug.tourist.targetsEmpty=TouristDestination özelliği etkinleştirilmiş tamamlanmış arsa bulunmamaktadır (arsa oluşturucuya veya bina JSON dosyasına bakın).
+aetherhaven.debug.tourist.plotLine={building} arsa={plot} giriş=({entryX},{entryY},{entryZ}) tercih edilen={preferred} ziyaret noktası={poiCount}
+aetherhaven.debug.tourist.poiLine=poi {x},{y},{z} kind={kind} tags={tags}
+
+# Wall wand placement debug (/ah walldebug)
+aetherhaven.debug.wall.on=Duvar çubuğu hata ayıklaması AÇIK (sohbet + sunucu günlüğü).
+aetherhaven.debug.wall.off=Duvar çubuğu hata ayıklama KAPALI.
+aetherhaven.debug.wall.noSession=Şu anda aktif bir duvar çubuğu oturumu yok. Öncelikle duvar çubuğunu açın.

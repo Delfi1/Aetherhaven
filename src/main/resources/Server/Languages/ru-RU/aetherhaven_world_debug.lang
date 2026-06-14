@@ -12,6 +12,32 @@ aetherhaven.poi.clearedInteractionTarget=Цель взаимодействия �
 aetherhaven.poi.setInteractionTarget=Установите целевые объекты взаимодействия на {x}, {y}, {z}.
 aetherhaven.poi.selected=Выбранная точка интереса {id} в {x}, {y}, {z}
 aetherhaven.poi.targetBlockMismatch=Целевой блок должен соответствовать ожидаемому типу {type} для данной точки интереса.
+aetherhaven.poi.removed=Точка интереса удалена.
+aetherhaven.poi.noTownPlot=На этом квартале нет завершенного плана застройки поселка.
+
+aetherhaven.adventurerSpawnMarker.label=Место для искателей приключений
+aetherhaven.adventurerSpawnMarker.placed=Место для искателя приключений установлено.
+aetherhaven.adventurerSpawnMarker.removed=Место для искателя приключений удалено.
+aetherhaven.adventurerSpawnMarker.alreadyHere=Место для искателей приключений уже здесь.
+
+aetherhaven.poiMarker.label=Точка интереса (POI spot)
+
+aetherhaven.poiMarkerConfig.title=Настройка точек интереса
+aetherhaven.poiMarkerConfig.needHeader=Потребность удовлетворена
+aetherhaven.poiMarkerConfig.presetSleep=Спать
+aetherhaven.poiMarkerConfig.presetEat=Есть
+aetherhaven.poiMarkerConfig.presetSit=Сидеть / веселиться
+aetherhaven.poiMarkerConfig.presetWork=Работа
+aetherhaven.poiMarkerConfig.summary={preset} ({kind})
+aetherhaven.poiMarkerConfig.capacity=Слоты для NPC (1–4)
+aetherhaven.poiMarkerConfig.mountToggle=Крепится на мебели (кроватях, стульях).
+aetherhaven.poiMarkerConfig.workAction=Действие по выполнению работы
+aetherhaven.poiMarkerConfig.workNone=Никто
+aetherhaven.poiMarkerConfig.workMine=Мой
+aetherhaven.poiMarkerConfig.workChop=Нарезать
+aetherhaven.poiMarkerConfig.confirm=Местоположение POI
+aetherhaven.poiMarkerConfig.cancel=Отмена
+aetherhaven.poiMarkerConfig.placed=Объект интереса установлен.
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
@@ -84,3 +110,14 @@ aetherhaven.debug.poi.listEmpty=В этом городе ничего не за�
 aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
 aetherhaven.debug.poi.dumpHeader=Все объекты POI в мировом реестре ({count}):
 aetherhaven.debug.poi.dumpLine=town={town} {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} plot={plot}
+
+aetherhaven.debug.tourist.noTown=В этом мире нет города.
+aetherhaven.debug.tourist.targetsHeader=Целевые показатели посещаемости туристами участков {town} ({count}):
+aetherhaven.debug.tourist.targetsEmpty=Нет завершенных участков с включенной опцией touristDestination (проверьте JSON-файл создателя участка или здания).
+aetherhaven.debug.tourist.plotLine={building} plot={plot} entry=({entryX},{entryY},{entryZ}) preferred={preferred} visitPois={poiCount}
+aetherhaven.debug.tourist.poiLine=poi {x},{y},{z} kind={kind} tags={tags}
+
+# Wall wand placement debug (/ah walldebug)
+aetherhaven.debug.wall.on=Отладка настенного пульта включена (чат + лог сервера).
+aetherhaven.debug.wall.off=Отладка настенного излучателя отключена.
+aetherhaven.debug.wall.noSession=Активный сеанс работы с настенным устройством отсутствует. Сначала откройте настенное устройство.

@@ -1,0 +1,7 @@
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Embaucher {type} garde ({gold} or)
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=Au revoir
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Payez les frais et cet aventurier patrouillera dans votre ville. Il restera jusqu'à sa mort au combat.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Oui, embauchez-les
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=Pas maintenant
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=Ils sont à vous. Nourrissez-les et logez-les correctement si vous voulez qu'ils restent longtemps.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=Au revoir

@@ -26,6 +26,7 @@ aetherhaven.common.invalidVillager=Ungültiger Dorfbewohner.
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter
 aetherhaven.charter.alreadyInTown=Du gehörst bereits einer Stadt in dieser Welt an. Verlasse sie, bevor du eine neue gründest.
+aetherhaven.charter.notInPersistentWorld=Hier gibt es keine Stadt. Kehre zuerst in deine Hauptwelt zurück.
 aetherhaven.charter.townFounded=Stadtgründung: {name}. Der Dorfälteste ist eingetroffen. Benutze die Gründungsurkunde, um die Stadt umzubenennen.
 aetherhaven.chartertown.info.notLinked=Charter ist noch keiner Stadt zugeordnet.
 aetherhaven.chartertown.info.invalidTownId=Ungültige Orts-ID in der Charta.

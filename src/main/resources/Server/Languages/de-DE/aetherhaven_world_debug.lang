@@ -12,6 +12,32 @@ aetherhaven.poi.clearedInteractionTarget=Interaktionsziel freigegeben; NPCs nutz
 aetherhaven.poi.setInteractionTarget=Interaktionsziel auf {x}, {y}, {z} setzen.
 aetherhaven.poi.selected=Ausgewählter POI {id} bei {x}, {y}, {z}
 aetherhaven.poi.targetBlockMismatch=Der Zielblock muss dem erwarteten Typ {type} für diesen POI entsprechen.
+aetherhaven.poi.removed=POI entfernt.
+aetherhaven.poi.noTownPlot=In diesem Block gibt es kein fertiggestelltes Stadtgrundstück.
+
+aetherhaven.adventurerSpawnMarker.label=Abenteuerort
+aetherhaven.adventurerSpawnMarker.placed=Abenteurerplatz platziert.
+aetherhaven.adventurerSpawnMarker.removed=Abenteurer-Bereich entfernt.
+aetherhaven.adventurerSpawnMarker.alreadyHere=Ein Abenteuerort ist bereits vorhanden.
+
+aetherhaven.poiMarker.label=POI-Punkt
+
+aetherhaven.poiMarkerConfig.title=POI konfigurieren
+aetherhaven.poiMarkerConfig.needHeader=Bedürfnis erfüllt
+aetherhaven.poiMarkerConfig.presetSleep=Schlafen
+aetherhaven.poiMarkerConfig.presetEat=Essen
+aetherhaven.poiMarkerConfig.presetSit=Sitzen / Spaß
+aetherhaven.poiMarkerConfig.presetWork=Arbeiten
+aetherhaven.poiMarkerConfig.summary={preset} ({kind})
+aetherhaven.poiMarkerConfig.capacity=NPC-Plätze (1–4)
+aetherhaven.poiMarkerConfig.mountToggle=Zur Montage an Möbeln (Betten, Stühlen)
+aetherhaven.poiMarkerConfig.workAction=Arbeitsaktion
+aetherhaven.poiMarkerConfig.workNone=Keiner
+aetherhaven.poiMarkerConfig.workMine=Meins
+aetherhaven.poiMarkerConfig.workChop=Hacken
+aetherhaven.poiMarkerConfig.confirm=Platzieren Sie POI
+aetherhaven.poiMarkerConfig.cancel=Stornieren
+aetherhaven.poiMarkerConfig.placed=POI platziert.
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
@@ -84,3 +110,14 @@ aetherhaven.debug.poi.listEmpty=Für diese Stadt ist noch kein Gebäude registri
 aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
 aetherhaven.debug.poi.dumpHeader=Alle POIs im Weltregister ({count}):
 aetherhaven.debug.poi.dumpLine=Stadt={town} {x},{y},{z} Art={kind} Blocktyp-ID={block} Tags={tags} Grundstück={plot}
+
+aetherhaven.debug.tourist.noTown=Du hast keine Stadt in dieser Welt.
+aetherhaven.debug.tourist.targetsHeader=Touristenbesuchsziele für {town} ({count} Parzellen):
+aetherhaven.debug.tourist.targetsEmpty=Keine abgeschlossenen Parzellen mit aktivierter Touristenziel-Funktion (prüfen Sie den Parzellenersteller oder die Gebäude-JSON-Datei).
+aetherhaven.debug.tourist.plotLine={building} plot={plot} entry=({entryX},{entryY},{entryZ}) preferred={preferred} visitPois={poiCount}
+aetherhaven.debug.tourist.poiLine=poi {x},{y},{z} kind={kind} tags={tags}
+
+# Wall wand placement debug (/ah walldebug)
+aetherhaven.debug.wall.on=Wandstab-Debugging EIN (Chat + Serverprotokoll).
+aetherhaven.debug.wall.off=Wandstab-Debugging AUS.
+aetherhaven.debug.wall.noSession=Keine aktive Wandstab-Sitzung. Schalten Sie zuerst den Wandstab ein.

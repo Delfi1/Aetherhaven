@@ -1,7 +1,140 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
-# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+# Bundle: town journal UI, npcRoles, workplace plot tokens
 
-# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+# === UI: town journal ===
+aetherhaven.ui.townJournal.shellTitle=Şehir Dergisi
+aetherhaven.ui.townJournal.tab.town=Şehir
+aetherhaven.ui.townJournal.tab.guide=Rehber
+aetherhaven.ui.townJournal.tab.quests=Görevler
+aetherhaven.ui.townJournal.tab.settings=Ayarlar
+aetherhaven.ui.townJournal.pageTitle.town=Şehir
+aetherhaven.ui.townJournal.pageTitle.guide=Rehber
+aetherhaven.ui.townJournal.pageTitle.quests=Görevler
+aetherhaven.ui.townJournal.pageTitle.settings=Ayarlar
+aetherhaven.ui.journalSettings.tab.personal=Kişisel
+aetherhaven.ui.journalSettings.tab.server=Sunucu
+aetherhaven.ui.journalSettings.personalHeading=Tercihleriniz
+aetherhaven.ui.journalSettings.personalHint=Bu ayarlar yalnızca sizin için geçerlidir. Ayarlama işlemi, mevcut uçuş yüksekliğinizi otomatik olarak kullanır.
+aetherhaven.ui.journalSettings.rtsPickHeading=Muhafız komuta merkezi tıklamaları
+aetherhaven.ui.journalSettings.rtsPickHint=Hareket emirlerinin ekranınızdan yere nasıl yansıtılacağını ayarlayın. İşaretçilerin ekran kenarlarında veya yüksekten uçarken hedef dışı kalmasını düzeltin.
+aetherhaven.ui.journalSettings.rtsPickFovLabel=Dikey görüş alanı (derece cinsinden, tipik olarak 60 ila 90)
+aetherhaven.ui.journalSettings.rtsPickAspectLabel=Görüntü alanının genişliğinin yüksekliğine bölünmesi (örneğin 16:10 için 1,6)
+aetherhaven.ui.journalSettings.personalSaveButton=Ayarlarımı Kaydet
+aetherhaven.ui.journalSettings.personalResetButton=Mod varsayılan ayarlarına sıfırla
+aetherhaven.ui.journalSettings.personalSaveOk=Kişisel ayarlarınız kaydedildi.
+aetherhaven.ui.journalSettings.personalResetOk=Koruma komutu tıklama ayarlarınızı mod varsayılanlarına sıfırlayın.
+aetherhaven.ui.journalSettings.serverRequiresOp=Sunucu ayarları operatör izni gerektirir.
+aetherhaven.ui.townJournal.placeholder.town=Henüz burada bir şey yok.
+aetherhaven.ui.journalSettings.generalHeading=Dünya çapında ödüller ve gelişim hızı
+aetherhaven.ui.journalSettings.passiveLabel=Yeni binaları yerleştirdikten sonra kendi kendilerine büyümeye devam etmelerine izin verin.
+aetherhaven.ui.journalSettings.constrHeading=Binaların kendi bloklarını ne kadar hızlı yerleştirdiği
+aetherhaven.ui.journalSettings.constrBptLabel=Bir binanın tamamlanma aşamasında yerleştirilen bloklar.
+aetherhaven.ui.journalSettings.constrMsLabel=Bu adımlar arasında milisaniye cinsinden kısa bir duraklama
+aetherhaven.ui.journalSettings.lootHeading=Sandık bonusları, kırılabilir eşyalar ve madencilik şansı
+aetherhaven.ui.journalSettings.geodeLabel=Cevher bloklarını sıfırdan bire kırdığınızda ekstra jeod elde etme şansı.
+aetherhaven.ui.journalSettings.chestJewelryLabel=Bir dünya sandığından ekstra mücevher çıkma olasılığı sıfırdan bire yükselir.
+aetherhaven.ui.journalSettings.goldChanceLabel=Dünya sandığından sıfırdan bire kadar bonus altın para çıkma olasılığı.
+aetherhaven.ui.journalSettings.goldMinLabel=En az altın para
+aetherhaven.ui.journalSettings.goldMaxLabel=Altın paraların çoğu
+aetherhaven.ui.journalSettings.breakableHeading=Kasalardan, fıçılardan, çömleklerden ve tabutlardan çıkan paralar.
+aetherhaven.ui.journalSettings.breakableWeightNoneLabel=Hiçbir şey bulmama sıklığınız (daha yüksek oran, daha az para anlamına gelir).
+aetherhaven.ui.journalSettings.breakableWeightOneLabel=Bir madeni parayı ne sıklıkla buluyorsunuz?
+aetherhaven.ui.journalSettings.breakableWeightTwoLabel=İki madeni parayı ne sıklıkla buluyorsunuz?
+aetherhaven.ui.journalSettings.shopHeading=Alışveriş noktaları
+aetherhaven.ui.journalSettings.shopMemberPriceLabel=Üye mağaza fiyatının katalog fiyatına oranı (1 ila 100 arası)
+aetherhaven.ui.journalSettings.giftHeading=Uçan hediye balonları
+aetherhaven.ui.journalSettings.giftEnabledLabel=Dünyada hediye balonları üretin.
+aetherhaven.ui.journalSettings.giftDaysMinLabel=Rulolar arasındaki en kısa günler
+aetherhaven.ui.journalSettings.giftDaysMaxLabel=Rulolar arasındaki son günler
+aetherhaven.ui.journalSettings.saveButton=Ayarları Kaydet
+aetherhaven.ui.journalSettings.resetDefaultsButton=Varsayılan ayarlara sıfırla
+aetherhaven.ui.journalSettings.resetModalTitle=Formda varsayılan mod ayarlarını yükle?
+aetherhaven.ui.journalSettings.resetModalBody=Bu işlem, formu mod varsayılanlarıyla doldurur. Çalışan sunucu, "Ayarları Kaydet" düğmesine basana kadar eski değerleri kullanmaya devam eder.
+aetherhaven.ui.journalSettings.resetModalConfirm=Sıfırla
+aetherhaven.ui.journalSettings.resetModalCancel=İptal etmek
+aetherhaven.ui.journalSettings.resetApplied=Formda artık mod varsayılan ayarları gösteriliyor. Ayarları sunucuya uygulamak ve yapılandırma dosyasını yazmak için "Ayarları Kaydet" düğmesine basın.
+aetherhaven.ui.journalSettings.saveOk=Bu dünya ayarlarını kaydettim.
+aetherhaven.ui.journalSettings.saveFail=Sunucu ayarları kaydedilemedi. Sunucu günlüklerini kontrol edin.
+aetherhaven.ui.journalSettings.toolsHeading=Tamir aletleri
+aetherhaven.ui.journalSettings.resetVillagers=Şehirdeki insanları sıfırla
+aetherhaven.ui.journalSettings.fixInn=Fix Inn ziyaretçi listesi
+aetherhaven.ui.journalSettings.finishPlot=Şimdi bir binayı bitirin.
+aetherhaven.ui.journalSettings.villagerReport=Köylü bilgisi metni oluştur
+aetherhaven.ui.journalSettings.plotModalTitle=Bitirmek istediğiniz binayı seçin.
+aetherhaven.ui.journalSettings.plotModalHint=Sadece yapım aşamasında olan binalar listelenmiştir. Parçaların yüklenmesi için şantiyenin yakınında durun.
+aetherhaven.ui.journalSettings.plotFieldLabel=Bina
+aetherhaven.ui.journalSettings.plotPickNone=Bir bina seçin
+aetherhaven.ui.journalSettings.plotModalConfirm=Bitir
+aetherhaven.ui.journalSettings.plotModalCancel=İptal etmek
+aetherhaven.ui.journalSettings.villagerModalTitle=Köylü bilgi metni
+aetherhaven.ui.journalSettings.villagerModalHint=Bir sakin seçin ve ardından aşağıdaki kutuyu doldurmak için düğmeye basın. Kutudaki tümünü seçin ve mod yazarıyla paylaşmak için her zamanki kopyalama tuşlarınızla kopyalayın.
+aetherhaven.ui.journalSettings.villagerFieldLabel=Kişi
+aetherhaven.ui.journalSettings.villagerPickNone=Bir kişi seçin
+aetherhaven.ui.journalSettings.villagerBuildReport=Kutuyu doldurun
+aetherhaven.ui.journalSettings.villagerCopyHint=Kutudaki tüm metni seçin ve ardından her zamanki kopyalama tuşlarınızı kullanarak kopyalayın.
+aetherhaven.ui.journalSettings.villagerModalClose=Kapalı
+aetherhaven.ui.journalSettings.innRepairDone=Han listesi düzeltildi. Kilitli ziyaretçiler {locked}, yükseltildi {promoted}, gereksiz girişler kaldırıldı {removed}.
+aetherhaven.ui.innBell.notAllowed=Bu zil sadece kasabadaki handa kalan üyeler için geçerlidir.
+aetherhaven.ui.innBell.notOpen=Otel henüz açılmadı.
+aetherhaven.ui.innBell.returned=Ziyaretçiler konuk alanına geri döndüler.
+aetherhaven.ui.innBell.noVisitors=Şu anda handa konaklayan hiçbir ziyaretçi yok.
+aetherhaven.ui.innBell.noMoreGuests=Başka misafir kalmadı.
+aetherhaven.ui.journalSettings.finishPlotOk=O bina artık tamamlandı.
+aetherhaven.ui.journalSettings.finishPlotNotAssembling=O fotoğraftaki bina yapım aşamasında değil.
+aetherhaven.ui.journalSettings.finishPlotNotLoaded=Binaya daha yaklaşın ve tekrar deneyin.
+aetherhaven.ui.journalSettings.finishPlotNoJob=Şu anda o seçim için aktif bir yapım görevi bulunmuyor.
+aetherhaven.ui.journalSettings.finishPlotFailed=Yapım işlemi tamamlanamadı. Alan tamamen yüklendiğinde tekrar deneyin.
+aetherhaven.ui.townJournal.guide.listHeading=Konular
+aetherhaven.ui.townJournal.guide.pluginMissing=Bu kılavuzu okuyabilmek için Aetherhaven modunu yükleyin.
+aetherhaven.ui.townJournal.guide.facts.questsHeading=Bu köylü için hikaye görevleri
+aetherhaven.ui.townJournal.guide.facts.repHeading=Arkadaşlık hediyeleri
+aetherhaven.ui.townJournal.guide.facts.scheduleHeading=Haftalık rota
+aetherhaven.ui.townJournal.guide.giftToggleShow=Hediye fikirleri göster (ipucu)
+aetherhaven.ui.townJournal.guide.giftToggleHide=Hediye fikirlerini gizle
+aetherhaven.ui.townJournal.guide.scheduleToggleShow=Haftalık programı göster
+aetherhaven.ui.townJournal.guide.scheduleToggleHide=Haftalık programı gizle
+aetherhaven.ui.townJournal.guide.scheduleLegend=Her satır bir oyun içi günü temsil eder. Renkli bölümler, o günün ilk planlanan saatinden gece yarısına kadar uzanır (JSON ile aynı). Şerit genişliği, her bölümdeki zamana eşittir; tam zamanlar için fareyi üzerine getirin. Renkler: ev, iş, han, ortak alan, sunak. Kırmızı çizgi = o şeride eşlenmiş mevcut dünya saati (sol = ilk geçiş zamanı).
+aetherhaven.ui.townJournal.guide.scheduleNowMarker=Bu programın gösterildiği sırada geçerli olan dünya saati (köylü JSON'undaki ve /aetherhaven zamanındakiyle aynı saat).
+aetherhaven.ui.townJournal.guide.giftHeaderLoves=Çok sevilen hediyeler
+aetherhaven.ui.townJournal.guide.giftHeaderLikes=Hediyeleri beğendim.
+aetherhaven.ui.townJournal.guide.giftHeaderDislikes=Sevilmeyen hediyeler
+aetherhaven.ui.townJournal.guide.noQuests=Hikaye görevlerinde bu köylü henüz listelenmiyor.
+aetherhaven.ui.townJournal.guide.noRepMilestones=Bu köylü için henüz hiçbir arkadaşlık hediyesi senaryosu oluşturulmadı.
+aetherhaven.ui.townJournal.guide.noSchedule=Bu köy sakini için henüz haftalık rota dosyası oluşturulmadı.
+aetherhaven.ui.townJournal.questListHeading=Aktif görevler
+aetherhaven.ui.townJournal.stepsHeading=Adımlar
+aetherhaven.ui.townJournal.rewardHeading=Ödüller
+aetherhaven.ui.townJournal.rewardReputationLine=+{amount} itibarı {villager} ile
+aetherhaven.ui.townJournal.rewardFallback=Ne kazanacağınızı görev metninde görebilirsiniz.
+aetherhaven.ui.townJournal.abandon=Görevi terk et
+aetherhaven.ui.townJournal.abandonConfirmTitle=Bu görevi bırakmak mı istiyorsunuz?
+aetherhaven.ui.townJournal.abandonConfirmBody=Bu görevi size veren kişiden daha sonra tekrar alabilirsiniz.
+aetherhaven.ui.townJournal.abandonConfirm=Evet, öyle kalsın.
+aetherhaven.ui.townJournal.abandonCancel=Göreve devam edin
+aetherhaven.ui.townJournal.showTownBorders=Haritada kasaba sınırlarını göster
+aetherhaven.ui.townJournal.showTownBordersTooltip=Haritanızda dünyanın her şehrinin etrafına bir çizgi çizer.
+aetherhaven.ui.townJournal.townVillagersHeading=Kasabadaki insanlar
+aetherhaven.ui.townJournal.townPlotsHeading=Binalar
+aetherhaven.ui.townJournal.scheduleUnknown=Rota belirlenmedi.
+aetherhaven.ui.townJournal.scheduleHome=Evde
+aetherhaven.ui.townJournal.scheduleWork=İş yerinde
+aetherhaven.ui.townJournal.scheduleInn=Han'da
+aetherhaven.ui.townJournal.schedulePark=Parkta
+aetherhaven.ui.townJournal.scheduleAltar=Sunakta
+aetherhaven.ui.townJournal.plotStatusNotStarted=Başlamadı
+aetherhaven.ui.townJournal.plotStatusInProgress=Devam etmekte
+aetherhaven.ui.townJournal.plotStatusComplete=Tamamlamak
+aetherhaven.ui.townJournal.plotStatusUnknown=Bilinmiyor
+aetherhaven.ui.townJournal.removePlot=Kaldırmak
+aetherhaven.ui.townJournal.removePlotTooltip=Bina güvenli bir şekilde boşaltılabilsin diye kasabaya yakın bir yerde durun.
+aetherhaven.ui.townJournal.plotRemoveConfirmTitle=Bu binayı yıkalım mı?
+aetherhaven.ui.townJournal.plotRemoveConfirmBody=Bina dünyadan silinecek ve kasaba listenizden kaldırılacaktır. Bunu geri alamazsınız.
+aetherhaven.ui.townJournal.plotRemoveConfirm=Evet, kaldırın.
+aetherhaven.ui.townJournal.plotRemoveCancel=Saklayın
+aetherhaven.ui.townJournal.removePlotAreaNotLoaded=Binaya biraz daha yaklaşın ve tekrar deneyin.
+aetherhaven.ui.townJournal.removePlotFailed=Şehir listesi güncellenemedi. Tekrar deneyin.
+
+# Legacy keys (other locales; unused in new UI)
 aetherhaven.ui.questjournal.title=Görev günlüğü
 aetherhaven.ui.questjournal.hint=Ayrıntılar için bir görev seçin.
 aetherhaven.ui.questjournal.abandon=Terk etmek
@@ -13,13 +146,17 @@ items.Aetherhaven_Management_Block.name=Kasaba kayıtları rafı
 items.Aetherhaven_Management_Block.description=Tamamlanmış bir bina için katip rafı. Bulunduğu arsanın inşaat durumunu gösterir.
 
 items.Aetherhaven_Sprinkler_Iron.name=Demir sulama başlığı
-items.Aetherhaven_Sprinkler_Iron.description=3x3'lük bir alanda, bir blok aşağıda bulunan sürülmüş toprağı sular. Oyun içi her sabah bir kez çalışır. En küçük kapsama alanı.
+items.Aetherhaven_Sprinkler_Iron.description=Bir blok aşağıda bulunan <color is="#4ade80">3×3</color>'lük bir alanda işlenmiş toprağı sular. Oyun içi her sabah bir kez çalışır. En küçük kapsama alanı.
 items.Aetherhaven_Sprinkler_Thorium.name=Toryum fıskiyesi
-items.Aetherhaven_Sprinkler_Thorium.description=Oyun içi her sabah bir kez, 5x5'lik bir alanda, bir blok aşağıda bulunan işlenmiş toprağı sular. Demirden daha büyüktür.
+items.Aetherhaven_Sprinkler_Thorium.description=Oyun içi her sabah bir kez, bir blok aşağıda bulunan <color is="#4ade80">5×5</color>'lik bir alanda işlenmiş toprağı sular. Demirden daha büyüktür.
 items.Aetherhaven_Sprinkler_Cobalt.name=Kobalt sulama sistemi
-items.Aetherhaven_Sprinkler_Cobalt.description=Oyun içi her sabah bir kez, 7x7'lik bir alanda, bir blok aşağıda bulunan sürülmüş toprağı sular. Geniş bir alanı kapsar.
+items.Aetherhaven_Sprinkler_Cobalt.description=Oyun içi her sabah bir kez, bir blok aşağıda bulunan 7x7'lik bir alanda işlenmiş toprağı sular. Geniş bir alanı kapsar.
 items.Aetherhaven_Sprinkler_Adamantite.name=Adamantit fıskiyesi
-items.Aetherhaven_Sprinkler_Adamantite.description=Oyun içi her sabah bir kez, 9x9'luk bir alanda, bir blok aşağıda bulunan işlenmiş toprağı sular. En geniş alanı kapsar.
+items.Aetherhaven_Sprinkler_Adamantite.description=Oyun içi her sabah bir kez, bir blok aşağıda bulunan 9x9'luk bir alanda işlenmiş toprağı sular. En geniş kapsama alanı için.
+
+items.Aetherhaven_Wood_Scaffold.name=Ahşap iskele
+items.Aetherhaven_Wood_Scaffold.description=Merdiven gibi tırmanın. Normal bir blok gibi yerlere sağ tıklayın. İskeleyi yandan uzatmak veya üst yüzeyden yatay olarak dallanmak için iskeleye nişan alırken Kullan (F) tuşunu basılı tutun. Alttaki desteksiz parçayı kırmak, yığını çökertir.
+items.Aetherhaven_Wood_Scaffold.legendUse=(F) tuşunu kullanın: İskeleyi hedefleyerek kuleyi/dalı yukarıdan uzatın. Sağ tıklayın: Normal blok yerleştirme.
 
 # === NPC role display names (npcRoles.*) ===
 npcRoles.Aetherhaven_Elder_Lyren.name=Yaşlı Lyren
@@ -31,15 +168,38 @@ npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
 npcRoles.Aetherhaven_Miner.name=Gorruk Taş Damarı
 npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
 npcRoles.Aetherhaven_Rancher.name=Thalen Çayır Koşusu
+npcRoles.Aetherhaven_Townsfolk.name=Kasaba halkı
+npcRoles.Aetherhaven_Guild_Master.name=Lyra Fairhollow
+npcRoles.Aetherhaven_Bard.name=Elias Thornwood
+npcRoles.Aetherhaven_Crystal_Keeper.name=Vaelith Prizma Gölgesi
+npcRoles.Aetherhaven_Pyrotechnic.name=Grubble Sparkmatch
+npcRoles.Aetherhaven_Florist.name=Ivy Bloomwell
+npcRoles.Aetherhaven_Builder.name=Rowan Ridgecraft
+npcRoles.Aetherhaven_Guard.name=Şehir muhafızları
+
+items.Aetherhaven_Quest_Board.name=Görev panosu
+items.Aetherhaven_Quest_Board.description=Kasaba halkının iş ve ödül ilanlarını yayınladığı tahta bir levha. Kasabanız için iş almak üzere bunu kullanın.
 
 items.Aetherhaven_Production_Storage.name=İşyeri mağazaları
-items.Aetherhaven_Production_Storage.description=İşçilerinizin getirdiği malzemeleri depolar. Çıkışları ayarlamak ve yığınları almak için açılır. Binanın bir parçasıdır ve kaldırılamaz.
+items.Aetherhaven_Production_Storage.description=İşçilerinizin getirdiği malzemeleri tutar. Çıkışları ayarlamak ve yığınları almak için açılır. Binanın bir parçasıdır ve alınamaz.
 items.Aetherhaven_Plot_Token_Miners_Hut.name=Madenci kulübesi arsa jetonu
 items.Aetherhaven_Plot_Token_Miners_Hut.description=Madenci kulübesi prefabrik yapısının inşa edilebileceği yerleri işaretler. Şehir planlama masasında üretilir.
+items.Aetherhaven_Plot_Token_Builders_Hut.name=İnşaatçı kulübesi arsa jetonu
+items.Aetherhaven_Plot_Token_Builders_Hut.description=İnşaatçı kulübesi prefabrik yapısının kurulabileceği yerleri işaretler. Şehir planlama masasında yapılan iş.
 items.Aetherhaven_Plot_Token_Lumbermill.name=Kereste fabrikası arsa jetonu
 items.Aetherhaven_Plot_Token_Lumbermill.description=Kereste fabrikası prefabrik yapısının inşa edilebileceği yerleri işaretler. Şehir planlama masasında yapılan iş.
 items.Aetherhaven_Plot_Token_Barn.name=Ahır arsası belirteci
 items.Aetherhaven_Plot_Token_Barn.description=Hazır ahırın inşa edilebileceği yerleri işaretler. Şehir planlama masasında yapılan iş.
+items.Aetherhaven_Plot_Token_Barn_Hytiny.name=Hytiny'nin ahır arsası jetonu
+items.Aetherhaven_Plot_Token_Barn_Hytiny.description=Kompakt Hytiny ahır prefabrikinin inşa edilebileceği yerleri işaretler. Prefabrik yapı HytinyBuilds tarafından üretilmiştir. Planlama masasında satılmamaktadır. Hurdacıdan beş altın karşılığında geri alınabilir.
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.name=Hytiny'nin şirin kır evi arsa jetonu
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.description=Hytiny'nin şirin kulübesinin inşa edilebileceği yerleri işaretler. HytinyBuilds tarafından önceden üretilmiştir. Şehir planlama masasında üretilebilir. Beş altın karşılığında hurda toplayıcısında geri alınabilir.
+items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.name=Hytiny'nin Japon çay evi arsa jetonu
+items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Hytiny'nin Japon çay evinin inşa edilebileceği yerleri işaretler. HytinyBuilds tarafından önceden üretilmiştir. Şehir planlama masasında üretilebilir. Beş altın sikke karşılığında hurda toplayıcısında geri alınabilir.
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Hytiny'nin şirin karavanı, olay örgüsünün simgesi.
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Hytiny'nin şirin karavanının inşa edilebileceği yerleri işaretler. HytinyBuilds tarafından önceden üretilmiştir. Şehir planlama masasında üretilebilir. Beş altın karşılığında hurda toplayıcısında geri alınabilir.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Hytiny'nin saksıda ağaç ev arsası jetonu
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Uyarı: Bu çok büyük bir prefabrik yapıdır ve montajı sırasında istemci ve sunucuyu belirgin şekilde yavaşlatabilir veya takılmalara neden olabilir. Montajın tamamlanması için zamanınız olduğunda yerleştirin.</color> Hytiny'nin saksılı ağaç evinin inşa edilebileceği yerleri işaretler (sadece dekoratif amaçlı). İnşaatı tamamlandıktan sonra, kasaba arsası olarak kaydedilmez; kaldırmak veya yerini değiştirmek için blokları kendiniz kırın veya taşıyın; kasaba günlüğünden alınamaz. HytinyBuilds tarafından prefabrik olarak üretilmiştir. Planlama masasında satılmaz. Beş altın karşılığında hurdacıdan geri alın.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia sunağı arsa jetonu
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Gaia sunağı prefabrik yapısının inşa edilebileceği yerleri işaretler. Şehir planlama masasında üretim.

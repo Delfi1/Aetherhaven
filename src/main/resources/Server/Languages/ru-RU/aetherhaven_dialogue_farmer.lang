@@ -1,5 +1,5 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_farmer)
-# Full translation keys are aetherhaven_dialogue_farmer.<lineKey> (see Hytale I18nModule).
+# Full translation keys are aetherhaven.dialogue.aetherhaven_farmer.<lineKey> (see Hytale I18nModule).
 aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.body=Хорошо. Если вам всё ещё нужны ряды здесь, скажите об этом.
 aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.c0=Сделаю.
 aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.speaker=Ириенн Моссмарк

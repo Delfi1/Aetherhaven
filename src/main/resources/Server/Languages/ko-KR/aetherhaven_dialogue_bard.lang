@@ -1,0 +1,37 @@
+aetherhaven.dialogue.aetherhaven_bard.main_hub.speaker=엘리아스 손우드
+aetherhaven.dialogue.aetherhaven_bard.main_hub.fallback=현악기 소리가 따뜻하네요. 뭐가 필요하세요?
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.0=안녕하세요. 오늘 길드 홀의 음향 효과가 좋네요.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.1=안녕하세요 친구. 방금 류트 조율을 하고 있었어요.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.2=환영합니다. 음악은 도시에 생기를 불어넣습니다.
+
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_play=그에게 노래를 연주해달라고 부탁하세요.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_stop=그에게 연주를 멈추라고 하세요
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house=엘리아스를 위한 집에 대해 문의해 보세요.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_finish=엘리아스에게 집이 있는지 확인하세요
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_remind=집에 대해 다시 물어보세요
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_goodbye=작별 인사를 하세요
+
+aetherhaven.dialogue.aetherhaven_bard.music_pick.speaker=엘리아스 손우드
+aetherhaven.dialogue.aetherhaven_bard.music_pick.body=어떤 곡을 듣고 싶으세요?
+aetherhaven.dialogue.aetherhaven_bard.music_pick.c_back=돌아가기
+
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.speaker=엘리아스 손우드
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.body=다시 조용해졌네요. 다른 노래를 원하시면 말씀해주세요.
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.c_ok=채팅으로 돌아가기
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.speaker=엘리아스 손우드
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.body=저는 거의 매일 여기서 놀지만, 해가 지면 저만의 작은 집이 있었으면 좋겠어요.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_yes=그가 집을 찾도록 도와주세요
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_later=지금은 아니에요
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.speaker=엘리아스 손우드
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.body=감사합니다. 제 소유의 지붕은 제게 세상 무엇보다 소중한 의미를 가질 거예요.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.c_ok=안녕히 가세요
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.speaker=엘리아스 손우드
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.body=주택 부지를 건설하고 준비가 완료되면 저를 관리 구역에 배정해 주세요.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.c_ok=계속해서 노력하겠습니다.
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.speaker=엘리아스 손우드
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.body=이곳은 제가 아끼는 마을의 작은 공간입니다. 제가 길드 회관을 활기차게 유지해 드리겠습니다.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.c_ok=아주 멋진

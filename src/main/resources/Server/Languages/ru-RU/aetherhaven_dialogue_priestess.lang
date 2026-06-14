@@ -1,5 +1,5 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_priestess)
-# Full translation keys are aetherhaven_dialogue_priestess.<lineKey> (see Hytale I18nModule).
+# Full translation keys are aetherhaven.dialogue.aetherhaven_priestess.<lineKey> (see Hytale I18nModule).
 aetherhaven.dialogue.aetherhaven_priestess.root.body=Сера Торнуэлл. Я провожу обряды Геи для этого города. Гостиница — моя крыша над головой, и я благодарна за это, но я не могу проводить службы, втиснутые между ужином и карточными играми. Мне нужен настоящий алтарь на улице: дорожки, несколько табуретов и статуя, где люди могли бы молиться, не задерживая дыхание от кухонного дыма.
 aetherhaven.dialogue.aetherhaven_priestess.root.c0=Вы хотели поговорить о доме.
 aetherhaven.dialogue.aetherhaven_priestess.root.c1=Теперь ты в запасе. Я подумал, что тебе стоит об этом знать.
@@ -102,3 +102,8 @@ aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.dislike.1=Я не хо�
 aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.dislike.2=Сырые костяные диковинки не место на столе для благословения.
 aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.dislike.3=Не допускайте попадания гнили и мусора в пищу и на то, к чему прикасаются люди.
 aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.dislike.4=Если этому место на сточной канаве, не стоит выдавать это за благочестие.
+aetherhaven.dialogue.aetherhaven_priestess.main_hub.c_draught=Охоте нежити за Напитком Гайи.
+aetherhaven.dialogue.aetherhaven_priestess.main_hub.c_services=Зелье Гайи, пополнения запасов и канал алтаря.
+aetherhaven.dialogue.aetherhaven_priestess.main_hub.c_heal=Исцели меня. Я заплачу десятину.
+aetherhaven.dialogue.aetherhaven_priestess.main_hub.opener.accepted=Отлично. Устраните угрозы, подстерегающие за пределами святилища, пока не будет выполнена квота, затем вернитесь, чтобы мы могли завершить производство «Напитка Гайи» от вашего имени.
+aetherhaven.dialogue.aetherhaven_priestess.main_hub.opener.declined=Жаль, но я понимаю. Беспокойные мертвецы будут жить вечно, но предложение останется в силе, если вы передумаете.

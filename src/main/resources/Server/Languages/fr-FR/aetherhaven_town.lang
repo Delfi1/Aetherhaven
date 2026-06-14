@@ -39,15 +39,27 @@ aetherhaven.ui.memberPermissions.title=Autorisations des membres
 aetherhaven.ui.memberPermissions.backTooltip=Retour à la liste des joueurs
 aetherhaven.ui.memberPermissions.placePlots=Placer les parcelles
 aetherhaven.ui.memberPermissions.manageConstructions=Construire et gérer des édifices (assemblage, production, festins, modifications de la charte, déplacement de bâtiments)
+aetherhaven.ui.memberPermissions.removePlots=Retirer les bâtiments du journal municipal
 aetherhaven.ui.memberPermissions.spendTreasuryGold=Dépenser l'or du trésor municipal pour les coûts de construction
 aetherhaven.ui.memberPermissions.openTreasuryPanel=Ouvrir le compte de trésorerie (dépôt / retrait)
 aetherhaven.ui.memberPermissions.acceptQuests=Accepter / commencer les quêtes de la ville
 aetherhaven.ui.memberPermissions.completeQuests=Accomplissez les quêtes de la ville et obtenez des récompenses de réputation.
 aetherhaven.ui.memberPermissions.abandonQuests=Abandonnez les quêtes en cours dans la ville.
 aetherhaven.ui.memberPermissions.reviveVillagers=Raviver les villageois à la statue de Gaïa
+aetherhaven.ui.memberPermissions.useShopSpots=Mettez en vente et proposez vos produits sur les emplacements de la boutique des joueurs.
 aetherhaven.ui.memberPermissions.err.notOwner=Seul le propriétaire de la ville peut modifier les autorisations.
 aetherhaven.ui.memberPermissions.err.notInTown=Ce joueur n'est pas dans cette ville.
 aetherhaven.town.rolecmd.playerMustBeOnline=Le joueur doit être en ligne.
+
+# === /aetherhaven replace-charter ===
+aetherhaven.town.charterReplace.notOwner=Seul le propriétaire de la ville peut réparer la charte (sauf si vous disposez des droits d'administrateur de la ville).
+aetherhaven.town.charterReplace.wrongWorld=Cette ville n'est pas de ce monde.
+aetherhaven.town.charterReplace.chunkNotLoaded=Le fragment de charte n'est pas chargé — rapprochez-vous des coordonnées de la charte de votre ville et réessayez.
+aetherhaven.town.charterReplace.clearFirst=La position de la charte enregistrée contient encore un bloc solide ; cassez-le jusqu’à ce que cette cellule soit vide, puis exécutez à nouveau cette commande.
+aetherhaven.town.charterReplace.placeFailed=Impossible de placer le bloc charter (emplacement bloqué ?).
+aetherhaven.town.charterReplace.linkFailed=Le bloc de charte n'a pas pu être lié (voir le journal du serveur).
+aetherhaven.town.charterReplace.alreadyOk=Ce bloc de charte est déjà lié à votre ville.
+aetherhaven.town.charterReplace.done=Bloc de charte rétabli pour "{town}".
 aetherhaven.town.rolecmd.roleInvalid=Le rôle doit être CONSTRUCTION, QUÊTE ou LES DEUX.
 aetherhaven.town.leave.notInTown=Vous n'êtes pas dans une ville.
 aetherhaven.town.leave.ownerCannotLeave=Les propriétaires ne peuvent pas quitter les lieux ; le transfert de propriété n'est pas encore mis en œuvre.

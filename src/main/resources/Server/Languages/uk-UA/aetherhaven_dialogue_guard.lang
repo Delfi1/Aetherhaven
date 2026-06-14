@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house=Про місце для життя...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_finish=Ваш будинок завершено.
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_remind=Про твій будинок...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_waiting=Про житло...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.leave=Прощавай
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.body=Я приєднався до вашого міста, але все ще сплю просто неба. Чи не могли б ви побудувати мені будинок і написати моє ім'я на вивісці?
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.accept=Я збудую тобі дім
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.decline=Можливо, пізніше
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.body=Дякую. Розмітьте ділянку під будинком, завершіть будівництво, а потім виберіть мене на табличці. Повертайтеся, коли я буду там жити.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.ok=Зроблю
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.body=Мені ще потрібен дах. Закінчи будинок і вибери мене на табличці.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.ok=Праворуч
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.body=Ще один охоронець чекає спочатку на будинку. Закінчи той будинок, а потім приходь поговорити зі мною.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.ok=Зрозуміло
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.body=Добре. У мене є двері та ліжко. Я заплачу свою частку, як і всі інші.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.ok=Дякую.

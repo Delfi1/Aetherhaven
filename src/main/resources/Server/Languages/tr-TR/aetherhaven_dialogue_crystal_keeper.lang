@@ -1,0 +1,71 @@
+# Crystal Keeper dialogue (Vaelith Prismshade)
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.speaker=Vaelith Prizma Gölgesi
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.body=Kristal sonunda parçalandı. Teşekkür ederim. Kasabanızın adı bile yokken o taşın içinde hapsolmuştum. Bir han mı diyorsunuz? Belki yollar açıldığında oraya giderim.
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.c0=Dikkatli ol.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.speaker=Vaelith Prizma Gölgesi
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.fallback=Eğer kutsal alanın inşası, evin dış cephesiyle ilgili bir açıklama veya taşların neyi hatırlattığına dair bir söz söylemeniz gerekiyorsa, söyleyin.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.0=Her kristal, sizin doğum taşınızdan daha eski bir anıyla titreşir.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.1=İlk mağaralar ışık saçmaya başladığından beri prizmaları katalogluyorum.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.2=Şehrinizde sessiz bir yankı var. Ben bunu... hoş buluyorum.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.3=Büyük mavi olana dokunmayın. O hayal görüyor.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.0=Bana hâlâ derin yerleri hatırlayan bir mücevher getir.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.1=Renkli kristal parçaları yaşlı kalbimi aydınlatırdı.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.0=Kemikler veya reddetmeler yüzünden nezaket gösterisinde bulunmayacağım.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.1=Boşluk, kirlilik ve pislik, ışığın ağını kirletir.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house=Bir ev hakkında konuşmak istiyordunuz.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house_done=Adın evin rafında yazılı. Bunu benden duyman gerektiğini düşündüm.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house_remind=Ev hala yapım aşamasında.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_done=Kristal dükkanı açıldığına göre bir kontrol yapmak istedim.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_complete=Kristal dükkanı tamamlandı. Sizinle olan görevi sonlandırmak için buradayım.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_building=Kutsal alanın yapımı henüz tamamlanmadı. Durumun ne olduğunu sormak istedim.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_offer=Şehirde bir kristal dükkanı açmanıza yardımcı olmak istiyorum.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_goodbye=Şimdilik bu kadar. Daha sonra görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.speaker=Vaelith Prizma Gölgesi
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.body=Koleksiyonum sonsuza dek çantalarda, karanlık bir odadaki yabancılar gibi birbirine sıkışmış halde kalamaz. Başkalarının da toprağın yetiştirdiği şeylere hayran kalabileceği bir kutsal mekana ihtiyacım var. Dükkanın kafes yapısını çok uzun zaman önce çizmiştim. Eğer onu kasaba için inşa ederseniz, bu planları sizinle paylaşırım.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c0=Kutsal mekanınızı inşa edeceğiz.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c1=Şu an olmaz. Biraz daha zamana ihtiyacım var.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.speaker=Vaelith Prizma Gölgesi
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.body=Bu planları alın. Şehir planlama masasında bunları öğrenin, kafes yapısı izin verdiğinde bir arsa belirteci oluşturun ve dükkanı, içeride uyuyan şeye zarar vermeden insanların ulaşabileceği bir yere yerleştirin. Duvarlar düzgün bir şekilde titreşene kadar handa bekleyeceğim.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.c0=Kutsal mekan ışıl ışıl parladığında görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.speaker=Vaelith Prizma Gölgesi
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.body=Taşlar bekliyor. Ben de öyle. Planları öğrendin ve inşaata başladın mı, yoksa umutlarımı bir süreliğine çantama geri mi koymalıyım?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c0=Şimdilik bu görevi bırakmam gerekiyor.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c1=Üzerinde çalışmaya devam ediyorum ve devam edeceğim.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.speaker=Vaelith Prizma Gölgesi
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.body=Belki de kafes henüz hazır değildi. Prizmalar biraz daha sabırlı olacaklar. Fikrinizi değiştirirseniz, tekrar benimle konuşun.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.c0=Anlaştık. Görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.speaker=Vaelith Prizma Gölgesi
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.body=Dükkan artık düzgün bir şekilde parlıyor. Işık olması gereken yere düşüyor ve kristallerim nihayet cebimden çıkarmak zorunda kalmadan görülebiliyor. Onlara şehrinizde bir yuva verdiğiniz için teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.c0=Yardımcı olmaktan mutluluk duyarım. Kasabanın daha fazla ışığa ihtiyacı olursa beni bulun.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.speaker=Vaelith Prizma Gölgesi
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.body=Işık bekçilerinin bile prizmalar kapalıyken dinlenmek için sessiz bir köşeye ihtiyacı vardır. Kutsal alan çalışma içindir. Duvarlar gerçek olduğunda ismimi yazabileceğim bir rafı olan, sizin diğer insanlar gibi küçük bir ev istiyorum.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c0=Senin için bir ev rezervasyonu yapacağım.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c1=Başka bir zaman.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.speaker=Vaelith Prizma Gölgesi
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.body=Yer hazır olduğunda, tüzükte belirtildiği gibi beni içerideki blokta kaydedin, sonra da şahsen gelip bana bildirin. Uzaktan tahmin etmektense sesinizi duymayı tercih ederim.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.c0=Bunu benden duyacaksınız.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.speaker=Vaelith Prizma Gölgesi
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.body=Çerçeveyle acele etmeyin. Gerçek ahşap ve taştan yapılmışsa, içindeki rafa adımı yazın, sonra geri verin. Acelem yok. Sadece yazılı olmasını istiyorum.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.c0=Anlaşıldı.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.speaker=Vaelith Prizma Gölgesi
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.body=Duvarlar hafifçe uğulduyor. Bu gayet iyi olacak. Şehrin ışıklarını buradan, tüm prizmaları sırtımda taşımak zorunda kalmadan izleyebilirim.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.c0=İyi ki düzgün bir kapınız var.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.confirm=Bana bir şey vermek ister misiniz?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.love=Bu taş şarkı söylüyor. Neyin önemli olduğunu anlıyorsunuz.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.like=Düşünceli bir hediye. Kafes de onaylıyor.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.neutral=Hmm. Tam benim zevkime göre değil, ama teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.dislike=Bu, korumak istediğim hiçbir ışık taşımıyor.

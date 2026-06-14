@@ -1,0 +1,69 @@
+# Builder dialogue (Rowan Ridgecraft)
+
+aetherhaven.dialogue.aetherhaven_builder.root.speaker=Роуэн Риджкрафт
+aetherhaven.dialogue.aetherhaven_builder.root.hc0=Спросите о доме
+aetherhaven.dialogue.aetherhaven_builder.root.hc1=Завершите домашнее задание
+aetherhaven.dialogue.aetherhaven_builder.root.hc2=Проверьте ход выполнения задания по дому.
+aetherhaven.dialogue.aetherhaven_builder.root.c0=Поговорим о хижине строителя
+aetherhaven.dialogue.aetherhaven_builder.root.c1=Завершите задание с хижиной.
+aetherhaven.dialogue.aetherhaven_builder.root.c2=Проверьте ход строительства хижины.
+aetherhaven.dialogue.aetherhaven_builder.root.c3=Поинтересуйтесь о строительстве хижины.
+aetherhaven.dialogue.aetherhaven_builder.root.c4=До свидания
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.speaker=Роуэн Риджкрафт
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.body=Я горжусь каждой стеной, возведенной в этом городе. Дайте мне нормальную строительную хижину со верстаком и чертежами, и я помогу вам быстрее построить дом на вашем участке, пока у меня есть время.
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c0=Примите задание
+aetherhaven.dialogue.aetherhaven_builder.rowan_quest_hut.c1=Не сейчас
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.speaker=Роуэн Риджкрафт
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.body=Возьмите этот жетон участка. Закрепите хижину, оплатите знак и дайте строиться. Когда крыша будет готова, найдите меня за скамейкой.
+aetherhaven.dialogue.aetherhaven_builder.rowan_accepted.c0=Понял
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.speaker=Роуэн Риджкрафт
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.body=Я уже представляю себе готовую хижину. Вы уже разметили участок и начали строительство?
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c0=Откажитесь от поиска
+aetherhaven.dialogue.aetherhaven_builder.rowan_building.c1=Я всё ещё над этим работаю.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.speaker=Роуэн Риджкрафт
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.body=Ничего страшного. Я подожду в гостинице, пока вы не будете готовы попробовать снова.
+aetherhaven.dialogue.aetherhaven_builder.rowan_abandoned.c0=До свидания
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.speaker=Роуэн Риджкрафт
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.body=Вот эта хижина достойна моей подписи. Когда будут строиться другие участки, я буду там со своим молотком и помогу.
+aetherhaven.dialogue.aetherhaven_builder.rowan_done.c0=Рады вас видеть здесь.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.speaker=Роуэн Риджкрафт
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.body=Хижина предназначена для работы. Я бы хотел иметь свой небольшой дом, когда у вас будет время его занять.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c0=Примите задание
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_offer.c1=Не сейчас
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.speaker=Роуэн Риджкрафт
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.body=Возьмите жетон дома и постройте участок. Назначьте меня в управляющий блок, когда он будет готов.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_accepted.c0=Понял
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.speaker=Роуэн Риджкрафт
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.body=Мне по-прежнему нужно, чтобы мне выделили дом в управляющем квартале.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_remind.c0=Я позабочусь об этом.
+
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.speaker=Роуэн Риджкрафт
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.body=Теплые стены и прочная крыша. Я могу спокойно отдыхать и при этом следить за застройкой города.
+aetherhaven.dialogue.aetherhaven_builder.rowan_house_finish.c0=Добро пожаловать домой!
+
+aetherhaven.dialogue.aetherhaven_builder.gift.love=Отлично. Хорошая древесина и чистый камень говорят о том, что вы понимаете, что поддерживает здание.
+aetherhaven.dialogue.aetherhaven_builder.gift.like=Полезные вещи. Я всегда найду им место на объекте.
+aetherhaven.dialogue.aetherhaven_builder.gift.neutral=Не совсем в моём вкусе, но всё равно спасибо.
+aetherhaven.dialogue.aetherhaven_builder.gift.dislike=Я бы предпочёл не хранить это в хижине.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.fallback=Если вам нужна хижина, дом или помощь с участком, скажите об этом.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.0=Хорошие линии на последней крыше. Я это заметил.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.1=Я мысленно набрасывал план этажа. Старая привычка.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.2=В каждом городе должны быть здания, которые стоят ровно. Ваш город к этому приближается.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.greeting.3=Извините за опилки. Я никогда не выхожу из дома без них.
+
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.0=Принесите мне пиломатериалы, камень или настоящий строительный верстак, и вы сделаете мой день прекрасным.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.love.1=Хороший молоток всегда пригодится мне в руках.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.0=Пожалуйста, не приносите мне мусор или отходы из туалета.
+aetherhaven.dialogue.aetherhaven_builder.main_hub.hint.dislike.1=Засохшие растения и груды костей не место на моем верстаке.
+
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_50.speaker=Роуэн Риджкрафт
+aetherhaven.dialogue.aetherhaven_builder.rep_reward_100.speaker=Роуэн Риджкрафт

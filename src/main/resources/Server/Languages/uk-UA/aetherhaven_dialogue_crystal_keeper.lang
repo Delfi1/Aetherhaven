@@ -1,0 +1,71 @@
+# Crystal Keeper dialogue (Vaelith Prismshade)
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.speaker=Ваеліт Призмотінь
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.body=Кришталь нарешті розколюється. Дякую. Я був утримуваний всередині цього каменю ще з тих пір, як ваше місто мало назву. Гостиниця, кажете? Можливо, я забреду туди, коли стежки звільняться.
+aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.c0=Бережіть себе.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.speaker=Ваеліт Призмотінь
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.fallback=Якщо вам потрібна інформація про будівництво святилища, лінію будинку або слово про те, що пам'ятають камені, скажіть це.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.0=Кожен кристал гуде пам'яттю, давнішою за ваш статутний камінь.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.1=Я каталогізував призми з того часу, як перші печери навчилися світитися.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.2=Ваше місто має тихий відтінок. Я вважаю його... приємним.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.3=Не торкайтеся великого синього. Він бачить сни.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.0=Принеси мені перлину, яка досі пам'ятає глибокі місця.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.love.1=Кольорові кришталеві уламки змусили б моє старе серце світлішим.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.0=Я не обмінюватиму люб'язності заради кісток чи відмови.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.hint.dislike.1=Порожнеча скверна та бруд ображають решітку світла.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house=Ви хотіли поговорити про будинок.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house_done=Твоє ім'я на полиці будинку. Я подумав, що ти маєш почути його від мене.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_house_remind=Будинок все ще в процесі будівництва.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_done=Я хотів перевірити, що крамниця з кришталем вже працює.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_complete=Кришталевий магазин завершено. Я тут, щоб завершити квест з тобою.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_building=Святилище все ще будується. Я хотів запитати, як справи.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_shop_offer=Я хочу допомогти тобі відкрити магазин кришталю в місті.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.root.c_goodbye=Наразі це все. Побачимося пізніше.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.speaker=Ваеліт Призмотінь
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.body=Моя колекція не може вічно лежати в сумках, притиснутих одна до одної, як незнайомці в темній кімнаті. Мені потрібне святилище, де інші могли б милуватися тим, що виростила земля. Я давно намалював ґрати крамниці. Якщо ви зробите їх для міста, я поділюся цими планами.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c0=Ми збудуємо ваше святилище.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c1=Не зараз. Мені потрібно трохи більше часу.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.speaker=Ваеліт Призмотінь
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.body=Візьміть ці плани. Вивчіть їх за столом містобудування, зробіть жетон ділянки, коли дозволить решітка, і позначте крамницю так, щоб люди могли до неї дістатися, не штовхаючи того, що спить усередині скла. Я чекатиму в корчмі, поки стіни як слід не загудять.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.c0=Побачимося, коли святилище засяє.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.speaker=Ваеліт Призмотінь
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.body=Камені чекають. Я теж. Ти вже вивчив плани та почав будівництво, чи мені на деякий час знову сховати свої надії в сумку?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c0=Мені потрібно поки що відмовитися від квесту.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c1=Я все ще над цим працюю і продовжуватиму.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.speaker=Ваеліт Призмотінь
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.body=Можливо, решітка була ще трохи готова. Призми ще трохи потерплять. Якщо ви передумаєте, поговоріть зі мною ще раз.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.c0=Досить справедливо. Ще побачимося.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.speaker=Ваеліт Призмотінь
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.body=Крамниця тепер світиться як слід. Світло падає туди, куди має падати, і мої кристали нарешті можна буде побачити, не дістаючи їх з кишені. Дякую, що дали їм дім у вашому місті.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.c0=Радий допомогти. Приходьте до мене, якщо місту потрібно більше світла.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.speaker=Ваеліт Призмотінь
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.body=Навіть хранителям світла потрібен тихий куточок для відпочинку, коли призми зачинені. Святилище призначене для роботи. Я б хотів такий самий маленький будиночок, як і ваші інші мешканці, з полицею для мого імені, коли стіни стануть справжніми.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c0=Я заставлю для тебе будинок.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c1=Іншим разом.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.speaker=Ваеліт Призмотінь
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.body=Коли місце буде готове, зареєструйте мене на блоці всередині, як вимагає статут, а потім приходьте і розповідайте мені особисто. Я краще почую ваш голос, ніж буду здогадуватися здалеку.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.c0=Ви почуєте це від мене.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.speaker=Ваеліт Призмотінь
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.body=Не поспішайте з рамкою. Коли вона стане справжньою деревиною та каменем, поставте моє ім'я на полицю всередині, а потім поверніться. Я не поспішаю. Я просто хочу, щоб воно було записано.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_remind.c0=Зрозуміло.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.speaker=Ваеліт Призмотінь
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.body=Стіни тихо гудуть. Це чудово підійде. Я можу спостерігати за вогнями міста звідси, не тягнучи на спині кожну призму.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_finish.c0=Радий, що у тебе є нормальні двері.
+
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.confirm=Хочеш мені щось дати?
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.love=Цей камінь співає. Ти розумієш, що важливо.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.like=Продуманий подарунок. Решітка схвалює.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.neutral=Хм. Не зовсім в моєму смаку, але дякую.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.gift.dislike=Це не несе в собі жодного світла, яке я хотів би зберегти.

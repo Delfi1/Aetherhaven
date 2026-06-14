@@ -1,19 +1,19 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
-# Bundle: /aetherhaven reload, plot admin, starter kit, export skin
+# Bundle: /aetherhaven reload, starter kit, export skin
 
-# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
-commands.aetherhaven.root.desc=Aetherhaven mod 命令
-commands.aetherhaven.reload.desc=从磁盘重新加载 config.json 和 Aetherhaven JSON 目录（创造模式）
+# === Commands: /aetherhaven (reload, starter kit, export skin) ===
+commands.aetherhaven.root.desc=以太港命令（/ah）
+commands.aetherhaven.difficulty.desc=创意：开放世界会增加建造成本的难度
+commands.aetherhaven.reload.desc=创造模式：从磁盘重新加载模组配置和数据
 commands.aetherhaven.reload.success=Aetherhaven 配置和资源目录已重新加载。
 commands.aetherhaven.reload.failure=重新加载失败：{detail}
 commands.aetherhaven.reload.noPlugin=Aetherhaven插件未加载。
-commands.aetherhaven.plot.desc=打开地块标志管理界面（选择建筑，获取物品）
-commands.aetherhaven.starterkit.desc=给自己准备一套以太港新手包（地块放置人员、宪章、城镇规划桌、建筑人员；创造模式）
+commands.aetherhaven.starterkit.desc=创意：给自己配备入门工具包（人员配备、章程、规划桌、建筑人员）
 commands.aetherhaven.starterkit.success=入门套件已添加到您的库存。
 commands.aetherhaven.starterkit.partial=入门套件部分发放；{failed} 物品不合适（腾出库存空间）。
 
-commands.aetherhaven.exportskin.desc=将您的头像皮肤导出为模型 JSON（父级：玩家）
-commands.aetherhaven.exportskin.other.desc=将其他玩家的头像皮肤导出为模型 JSON
+commands.aetherhaven.exportskin.desc=创意模式：将您的头像皮肤导出为模型文件
+commands.aetherhaven.exportskin.other.desc=创意模式：导出其他玩家的头像皮肤
 commands.aetherhaven.exportskin.arg.path=可选的输出文件路径（默认值：plugin data/avatar_exports/）
 commands.aetherhaven.exportskin.noSkin=该玩家没有可用的角色皮肤。
 commands.aetherhaven.exportskin.invalidSkin=皮肤验证失败：{detail}

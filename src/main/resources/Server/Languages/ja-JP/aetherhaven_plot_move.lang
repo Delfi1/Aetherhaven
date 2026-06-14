@@ -36,7 +36,7 @@ aetherhaven.ui.plotplacement.moveXpTooltip=俯瞰視点：東方向（+X）。�
 aetherhaven.ui.plotplacement.moveZmTooltip=鳥瞰図：北（-Z）。一人称視点：前方へ移動（視点に対して）。
 aetherhaven.ui.plotplacement.moveZpTooltip=俯瞰視点：南方向（+Z）。一人称視点：後方へ移動（視点に対して）。
 aetherhaven.ui.plotplacement.moveYmTooltip=1ブロック下へ
-aetherhaven.ui.plotplacement.moveYpTooltip=1ブロック上にずらす
+aetherhaven.ui.plotplacement.moveYpTooltip=1ブロック前にずらす
 
 # === UI: move town charter (relocate territory center) ===
 aetherhaven.ui.charterrelocation.title=チャーター便を移動

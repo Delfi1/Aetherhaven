@@ -1,0 +1,7 @@
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Contrate um guarda {type} ({gold} ouro)
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=Adeus
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Pague a taxa e este aventureiro patrulhará sua cidade. Ele permanecerá lá até ser derrotado em batalha.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Sim, contrate-os.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=Agora não
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=Eles são seus. Mantenha-os alimentados e abrigados se quiser que fiquem por muito tempo.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=Adeus

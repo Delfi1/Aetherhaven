@@ -1,0 +1,58 @@
+items.Aetherhaven_Command_Post.name=Nöbet komuta merkezi
+items.Aetherhaven_Command_Post.description=Bu tabureye oturarak kasaba muhafızlarınıza yukarıdan komuta edin.
+
+items.Aetherhaven_Rts_Flag.name=Komut bayrağı
+items.Aetherhaven_Rts_Flag.description=Muhafızları yerdeki bir noktaya gönderin.
+
+items.Aetherhaven_Rts_Sword.name=Komuta kılıcı
+items.Aetherhaven_Rts_Sword.description=Muhafızlarınızı tek bir yaratığa odaklayın.
+
+items.Aetherhaven_Rts_Select_All.name=Tüm güvenlik görevlilerini seçin
+items.Aetherhaven_Rts_Select_All.description=Şehirdeki tüm kiralık güvenlik görevlilerini seçin.
+
+items.Aetherhaven_Rts_Select_Knight.name=Seçilmiş şövalyeler
+items.Aetherhaven_Rts_Select_Knight.description=Tüm şövalye muhafızlarını seçin.
+
+items.Aetherhaven_Rts_Select_Archer.name=Okçuları seçin
+items.Aetherhaven_Rts_Select_Archer.description=Tüm okçu muhafızlarını seçin.
+
+items.Aetherhaven_Rts_Select_Mage.name=Görüntüleri seçin
+items.Aetherhaven_Rts_Select_Mage.description=Tüm büyücü muhafızlarını seçin.
+
+items.Aetherhaven_Rts_Stance_Banner.name=Duruş afişi
+items.Aetherhaven_Rts_Stance_Banner.description=Seçilen muhafızların nasıl savaşacağını ayarlayın.
+
+items.Aetherhaven_Rts_Free.name=Personeli serbest bırakın
+items.Aetherhaven_Rts_Free.description=Seçilen güvenlik görevlilerini normal görevlerine geri döndürün.
+
+items.Aetherhaven_Rts_Exit.name=Komutu bırak
+items.Aetherhaven_Rts_Exit.description=Koruma komut modundan çıkın ve normal oyuna geri dönün.
+
+aetherhaven.rts.hudTitle=Muhafız Komutanlığı
+aetherhaven.rts.rosterTitle=Şehir Muhafızları
+aetherhaven.rts.orderAttackMove=Emir: Saldırı hamlesi
+aetherhaven.rts.orderMove=Sipariş: Taşı
+aetherhaven.rts.orderFocusAttack=Emir: Odaklanmış ateş
+aetherhaven.rts.stanceDefensive=Duruş: Savunmacı
+aetherhaven.rts.stanceAggressive=Duruş: Agresif
+aetherhaven.rts.stanceStandGround=Duruş: Yerde durun
+aetherhaven.rts.stanceHoldFire=Duruş: Ateş etmeyin
+aetherhaven.rts.hudSelected={n} muhafız seçildi
+aetherhaven.rts.hudControls=WASD tuşları savaş alanı görünümünü kaydırır. Boşluk ve Ctrl tuşları yakınlaştırmak için yukarı ve aşağı hareket eder. Kaydırma çubuğu veya sayı tuşları araçlar arasında geçiş yapar. Seçmek için muhafızlara tıklayın. Bir muhafız eklemek veya kaldırmak için Shift tuşunu basılı tutarak tıklayın. Birden fazla muhafız seçmek için bir kutu sürükleyin. Çıkmak için Ayrıl komut aracını (kısayol çubuğu yuvası 8) kullanın.
+aetherhaven.rts.helpFlag=Yere sağ tıklayarak muhafızları gönderin. Yetenek 1, saldırı hareketi ve hareket arasında geçiş yapar. Yetenek 2, seçili muhafızları durdurur.
+aetherhaven.rts.helpSword=Sağ tıklayarak bir yaratığa odaklanabilir ve muhafızlarınızı ona yönlendirebilirsiniz. Köylülere, turistlere veya muhafızlara saldırmayacaklardır.
+aetherhaven.rts.helpSelectAll=Kasabadaki tüm muhafızları seçmek ve diğerlerinin seçimini kaldırmak için tıklayın.
+aetherhaven.rts.helpStance=Ability1, savaş duruşunu değiştirir ve seçili muhafızlara uygular.
+aetherhaven.rts.helpFree=Seçili muhafızları emirlerinizden çıkarmak için sağ tıklayın.
+aetherhaven.rts.helpSelectType=Kasabadaki bu türdeki tüm muhafızları seçmek ve diğerlerinin seçimini kaldırmak için tıklayın.
+aetherhaven.rts.helpExit=Koruma komut modundan çıkmak için tıklayın.
+aetherhaven.rts.errorUseExitTool=Komut modundan çıkmak için hızlı erişim çubuğunuzdaki "Çıkış" komut aracını kullanın.
+aetherhaven.rts.errorNoGuards=Bunu kullanmak için güvenlik görevlisi tutmanız gerekiyor.
+aetherhaven.rts.errorNoSelection=Önce muhafızları seçin.
+aetherhaven.rts.errorNotEnemy=Muhafızlarınız ona saldırmayacak.
+aetherhaven.rts.errorNotInTown=Komuta merkezi kullanılabilmesi için kasabanızın sınırları içinde bulunmalıdır.
+aetherhaven.rts.errorCommandPostInUse=Bu kasabadaki komuta merkezini zaten başka biri kullanıyor.
+aetherhaven.rts.recoverInventorySuccess=Hızlı erişim çubuğunuz son koruma komutu oturumundan geri yüklendi.
+aetherhaven.rts.recoverInventorySuccessExited=Hızlı erişim çubuğunuz geri yüklendi ve koruma komut modundan çıkıldı.
+aetherhaven.rts.recoverInventoryNone=Koruma komut modundan kaydedilmiş bir hızlı erişim çubuğu bulunamadı.
+aetherhaven.rts.recoverInventoryAuto=Kesintiye uğrayan bir koruma komuta oturumunun ardından hızlı erişim çubuğunuz geri yüklendi.

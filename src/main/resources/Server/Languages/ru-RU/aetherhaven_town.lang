@@ -39,15 +39,27 @@ aetherhaven.ui.memberPermissions.title=Разрешения участников
 aetherhaven.ui.memberPermissions.backTooltip=Вернуться к списку игроков
 aetherhaven.ui.memberPermissions.placePlots=Разместить здания
 aetherhaven.ui.memberPermissions.manageConstructions=Строительство и управление (здания, крафт, мероприятия, внесение поправок в устав, перемещение зданий).
+aetherhaven.ui.memberPermissions.removePlots=Удалить здания из городского журнала
 aetherhaven.ui.memberPermissions.spendTreasuryGold=Потратьте золото из городской казны на строительные расходы.
 aetherhaven.ui.memberPermissions.openTreasuryPanel=Открыть казну (внести/снять средства)
 aetherhaven.ui.memberPermissions.acceptQuests=Принять квесты
 aetherhaven.ui.memberPermissions.completeQuests=Выполняйте квесты и получайте репутацию в награду.
 aetherhaven.ui.memberPermissions.abandonQuests=Отменить активные квесты
 aetherhaven.ui.memberPermissions.reviveVillagers=Оживите жителей деревни у статуи Гайи.
+aetherhaven.ui.memberPermissions.useShopSpots=Размещайте объявления и продавайте товары в магазинах игроков.
 aetherhaven.ui.memberPermissions.err.notOwner=Изменять права может только владелец города.
 aetherhaven.ui.memberPermissions.err.notInTown=Этот игрок не находится в данном городе.
 aetherhaven.town.rolecmd.playerMustBeOnline=Игрок должен быть онлайн.
+
+# === /aetherhaven replace-charter ===
+aetherhaven.town.charterReplace.notOwner=Только владелец города может ремонтировать устав (если только у вас нет разрешения администрации города).
+aetherhaven.town.charterReplace.wrongWorld=Этот город не существует в этом мире.
+aetherhaven.town.charterReplace.chunkNotLoaded=Не загружен фрагмент карты города — переместитесь ближе к координатам карты вашего города и попробуйте снова.
+aetherhaven.town.charterReplace.clearFirst=Сохраненная позиция в чартере по-прежнему представляет собой сплошной блок — разбейте его, пока эта ячейка не опустеет, затем снова выполните эту команду.
+aetherhaven.town.charterReplace.placeFailed=Не удалось разместить блок чартерных билетов (место заблокировано?).
+aetherhaven.town.charterReplace.linkFailed=Не удалось связать блок данных Charter (см. журнал сервера).
+aetherhaven.town.charterReplace.alreadyOk=Этот район, включенный в устав, уже связан с вашим городом.
+aetherhaven.town.charterReplace.done=Блок устава восстановлен для "{town}".
 aetherhaven.town.rolecmd.roleInvalid=Роль должна быть либо «BUILD», «QUEST» или «BOTH».
 aetherhaven.town.leave.notInTown=Вы не находитесь в городе.
 aetherhaven.town.leave.ownerCannotLeave=Владельцы не могут покинуть здание; передача права на собственность пока не реализована.

@@ -4,22 +4,30 @@
 # === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
 aetherhaven.blacksmith.repair.insufficientGold=Sua bolsa é muito leve para esse conserto.
 aetherhaven.blacksmith.repair.success={itemName} está inteiro novamente. Como novo.
-commands.aetherhaven.dialogue.desc=Abrir uma árvore de diálogo por ID (para teste)
-commands.aetherhaven.dialogue.treeId.desc=ID da árvore de diálogo (ex.: aetherhaven_dialogue_test)
-commands.aetherhaven.dialogue.entry.desc=ID do nó de entrada opcional (padrão: raiz)
+commands.aetherhaven.dialogue.desc=Depuração: abrir uma árvore de diálogo por ID
+commands.aetherhaven.dialogue.treeId.desc=ID da árvore de diálogo (exemplo: aetherhaven_merchant)
+commands.aetherhaven.dialogue.entry.desc=Nó inicial opcional (raiz padrão)
 aetherhaven.interaction.dialogue=Pressione [{key}] para falar
-npcRoles.Aetherhaven_Test_Villager.name=Teste de diálogo Aldeão
 aetherhaven.banner.quest.completed.primary=Missão concluída
 aetherhaven.banner.quest.completed.secondary={name}
 aetherhaven.banner.assembly.complete.primary=Prédio concluído
 aetherhaven.banner.assembly.complete.secondary={name}
 aetherhaven.assembly.complete.chat={name} está pronto.
 aetherhaven.assembly.tracer.none_in_range=Não há pré-visualização de montagem ao alcance (aproxime-se ou verifique a permissão de construção da cidade).
+aetherhaven.assembly.staff.no_mana=Você não tem mana suficiente para colocar os blocos de construção. Segure o cajado para recuperar mana mais rapidamente e tente novamente.
 aetherhaven.banner.quest.started.primary=Missão iniciada
 aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=Desbloqueado
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Equipe de Construção
-items.Aetherhaven_Building_Staff.description=O disparo primário envia um projétil guia através dos blocos até a pré-visualização de montagem mais próxima dentro do alcance. Segure o disparo secundário e mire através dos blocos na pré-visualização de montagem para colocar o próximo bloco instantaneamente (permissão de construção na cidade). As construções passivas continuam avançando sozinhas mesmo quando você está ausente.
+items.Aetherhaven_Building_Staff.name=Equipe de construção de cobre
+items.Aetherhaven_Building_Staff.description=A habilidade primária envia um raio guia através dos blocos até a pré-visualização de montagem mais próxima dentro do alcance. Segure a habilidade secundária e mire através dos blocos nessa pré-visualização para canalizar e posicionar nós de construção após um breve momento (permissão de construção na cidade). Preenche até 3x3x3 nós de construção destacados ao redor da sua mira de uma só vez. Enquanto segura, concede +150 de mana máxima; cada bloco posicionado custa 1 de mana. A mana recarrega mais rápido se você parar de usar a habilidade secundária por alguns segundos. Cajados de nível superior concedem mais mana e a recuperam mais rapidamente. A montagem passiva do terreno continua progredindo enquanto você estiver ausente.
+items.Aetherhaven_Building_Staff_Iron.name=Equipe de construção de ferro
+items.Aetherhaven_Building_Staff_Iron.description=Igual à equipe de construção de cobre. O secundário preenche até <color is="#4ade80">5×5×5</color> nós de construção destacados de uma só vez. Enquanto estiver equipado, concede <color is="#60a5fa">+250 de mana máxima</color> e recuperação de mana mais rápida; cada bloco colocado custa <color is="#60a5fa">1 de mana</color>.
+items.Aetherhaven_Building_Staff_Thorium.name=Equipe do prédio de tório
+items.Aetherhaven_Building_Staff_Thorium.description=Igual à equipe de construção de cobre. O secundário preenche até 7x7x7 nós de construção destacados de uma só vez. Enquanto estiver equipado, concede +400 de mana máxima e recuperação de mana mais rápida; cada bloco colocado custa 1 de mana.
+items.Aetherhaven_Building_Staff_Cobalt.name=Equipe do prédio Cobalt
+items.Aetherhaven_Building_Staff_Cobalt.description=Igual à equipe de construção de cobre. O secundário preenche até 9x9x9 nós de construção destacados de uma só vez. Enquanto estiver equipado, concede +600 de mana máxima e recuperação de mana mais rápida; cada bloco colocado custa 1 de mana.
+items.Aetherhaven_Building_Staff_Adamantite.name=Equipe de construção adamantita
+items.Aetherhaven_Building_Staff_Adamantite.description=Igual à equipe de construção de cobre. O secundário preenche até 11x11x11 nós de construção destacados de uma só vez. Enquanto estiver equipado, concede +900 de mana máxima e recuperação de mana mais rápida; cada bloco colocado custa 1 de mana.

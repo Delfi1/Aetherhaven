@@ -39,9 +39,17 @@ aetherhaven.ui.production.err.permission=この町では、この倉庫を開放
 aetherhaven.ui.production.err.plot=この区画は、あなたの町の完成済みの職場区画（農場、納屋、製粉所、鉱夫小屋など）内にはありません。
 aetherhaven.ui.production.err.catalog=この建物には、生産カタログが設定されていません。
 aetherhaven.ui.production.err.inventoryFull=あなたの持ち物は満杯なので、そんなにたくさん持ち込むことはできません。
-aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
+aetherhaven.ui.production.err.inventoryPartial=在庫がいっぱいになってしまい、すべてを移動させることができませんでした。残りは職場の倉庫に保管されています。
 aetherhaven.ui.production.unlockButton=アンロック
 aetherhaven.ui.production.unlockTooltip=この建物のロックされた作業スペースの出力内容を表示および購入します。
+aetherhaven.ui.production.pickTooltip=このラインが何を作るかを選択してください
+aetherhaven.ui.production.collectAllButton=すべて集める
+aetherhaven.ui.production.collectAllTooltip=各行に格納されているすべてのものを取得する
+
+aetherhaven.ui.materialPicker.title=出力先を選択
+aetherhaven.ui.materialPicker.intro=この回線には、ロック解除済みの出力のうちいずれかを選択してください。
+aetherhaven.ui.materialPicker.back=戻る
+aetherhaven.ui.materialPicker.backTooltip=職場に戻る
 
 aetherhaven.ui.productionUnlocks.title=職場のロックを解除
 aetherhaven.ui.productionUnlocks.intro=下記の出力を選択すると、パネルにその名前と要件が表示されます。アイコンにカーソルを合わせると、所持数と必要数が表示されます。アイテムとゴールドの合計数が条件を満たしたら、ロックされている出力をクリックしてロックを解除してください。

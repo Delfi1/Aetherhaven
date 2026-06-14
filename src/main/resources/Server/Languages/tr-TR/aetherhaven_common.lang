@@ -26,10 +26,11 @@ aetherhaven.common.invalidVillager=Engelli köylü.
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter
 aetherhaven.charter.alreadyInTown=Bu dünyada zaten bir şehrin parçasısınız. Yeni bir şehir kurmadan önce bu şehri terk edin.
+aetherhaven.charter.notInPersistentWorld=Burada bir kasaba kuramazsınız. Önce ana dünyanıza geri dönün.
 aetherhaven.charter.townFounded=Kasaba kuruldu: {name}. Köyün ileri geleni geldi. Kasabanın adını değiştirmek için tüzüğü kullanın.
 aetherhaven.chartertown.info.notLinked=Charter henüz bir kasabaya bağlı değil.
 aetherhaven.chartertown.info.invalidTownId=Kiralama sözleşmesinde geçersiz şehir kimliği.
-aetherhaven.chartertown.info.townDataMissing=Şehir verileri bulunamadı (sunucu günlüğüne bakın).
+aetherhaven.chartertown.info.townDataMissing=Kasaba verileri bulunamadı (sunucu günlüğüne bakın).
 aetherhaven.chartertown.townInfoBlock=Kasaba adı: {name}\nKasaba Kimliği: {id}\nSeviye: {tier}\nBölge (parça yarıçapı): {radius}\nŞehir merkezi: {cx}, {cy}, {cz}
 aetherhaven.chartertown.nameEmpty=Şehir adı alanı boş bırakılamaz.
 aetherhaven.chartertown.nameDuplicate=Bu isim, dünyadaki başka bir şehir tarafından zaten kullanılıyor.

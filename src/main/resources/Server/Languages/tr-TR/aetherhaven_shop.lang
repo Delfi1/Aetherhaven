@@ -1,0 +1,72 @@
+# Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
+
+items.Aetherhaven_Shop_Spot.name=Dükkan yeri
+items.Aetherhaven_Shop_Spot.description=Tamamlanmış bir arsaya yerleştirerek dükkan açabilir veya yaratıcı/arsa oluşturucu modunda önceden hazırlanmış yapılara yapılandırılmış tezgahlar yerleştirebilirsiniz. Tezgahlar gündüz açık, gece kapalıdır. NPC stokları şafakta yenilenir. Kasaba sakinleri, oyuncuların yerlerine eşya listeleyebilir.
+
+aetherhaven.shop.notInTown=Bunu bir kasabanın içine yerleştirin.
+aetherhaven.shop.notInPlot=Bunu tamamlanmış bir bina arsasının içine yerleştirin.
+aetherhaven.shop.closed=Hepsi satıldı
+aetherhaven.shop.closedNight=Dükkan gece için kapalı.
+aetherhaven.shop.holdItemToList=Bir eşyayı tutun ve (F) tuşunu kullanın veya satışa sunmak için tezgaha sağ tıklayın.
+aetherhaven.shop.cannotAfford=Bunu karşılayamazsınız.
+aetherhaven.shop.inventoryFull=Stoklarınız dolu.
+aetherhaven.shop.cannotBuyOwnListing=İlanı satın almak yerine F ile geri çekin.
+aetherhaven.shop.itemsDropped=Bazı eşyalar yere düşmüştü; stok doluydu.
+aetherhaven.shop.notTownMember=Burada sadece kasaba sakinleri satış yapabilir.
+aetherhaven.shop.noShopSpotPermission=Oyuncu dükkanı alanlarında satış yapma izniniz yok.
+aetherhaven.shop.noPrice=Bu ürün burada satılamaz.
+aetherhaven.shop.wrongBatchSize=Bir seferde {count}'ın katlarını sat
+aetherhaven.shop.damagedItem=O eşyayı satışa çıkarmadan önce demircide tamir ettirin.
+aetherhaven.shop.jewelryNeedsAppraisal=Satışa çıkarmadan önce o mücevherin değerini belirleyin.
+aetherhaven.shop.listed=Ürünleriniz artık satışta.
+aetherhaven.shop.removedListing=İlan kaldırıldı.
+aetherhaven.shop.soldNotify={buyer}, {count} {item}'yi {gold} altın karşılığında satın aldı.
+
+aetherhaven.shop.safe.empty=Kasada sizin için altın yok.
+aetherhaven.shop.safe.makeRoom=Öncelikle envanterinizde yer açın.
+aetherhaven.shop.safe.couldNotAddCoins=Envanterinize altın eklenemedi.
+aetherhaven.shop.safe.collected=Kasadan {gold} altın topladınız.
+
+aetherhaven.shop.config.title=Bu dükkanı kurun
+aetherhaven.shop.config.intro=Bu tezgahın nasıl çalışacağını seçin. NPC dükkanları, seçtiğiniz stok tablosundan şafak vakti stoklarını yeniler.
+aetherhaven.shop.config.playerControlled=Kasaba sakinlerinin burada satış yapmasına izin verin.
+aetherhaven.shop.config.npcHeading=NPC dükkanı stoğu
+aetherhaven.shop.config.lootHeader=Hisse senedi tablosu dosyası
+aetherhaven.shop.config.lootTableLabel=Masa
+aetherhaven.shop.config.lootStockHint=Her bir shop_loot/*.json girdisi için giriş başına stockMin ve stockMax değerleri (atlanırsa varsayılan olarak 1 parti).
+aetherhaven.shop.config.confirm=Onaylamak
+aetherhaven.shop.config.cancel=İptal etmek
+aetherhaven.shop.config.saved=Dükkan yeri hazır
+
+aetherhaven.shop.hud.title=Mağaza
+aetherhaven.shop.hud.closedNight=Dükkan gece için kapalı.
+aetherhaven.shop.hud.soldOut=Tükendi — stoklar şafak vakti yenilenecek
+aetherhaven.shop.hud.emptyListing=Satılık bir şey yok
+aetherhaven.shop.hud.seller={seller} tarafından satılmaktadır.
+aetherhaven.shop.hud.item=Satın alma: {item}
+aetherhaven.shop.hud.price={gold} altın her biri
+aetherhaven.shop.hud.priceBatch={gold} altın {count} {item} için
+aetherhaven.shop.hud.stock={n} kaldı
+aetherhaven.shop.hud.stockBatches={batches} lot kaldı ({items} toplam)
+aetherhaven.shop.hud.hintNpc=F ile satın alın — NPC hisseleri şafak vakti yeniden stoklanıyor
+aetherhaven.shop.hud.hintPlayerBuy=F satın almak için
+aetherhaven.shop.hud.hintPlayerList=F, satışa sunmak üzere elinde bir ürünle birlikte.
+aetherhaven.shop.hud.hintPlayerOwn=F harfiyle eşyalarınızı geri alabilirsiniz.
+aetherhaven.shop.hud.hintPlayerEmpty=Satılık bir şey yok
+
+aetherhaven.shop.buy.title=Satın almak
+aetherhaven.shop.buy.item={item}
+aetherhaven.shop.buy.price={gold} altın her biri
+aetherhaven.shop.buy.priceBatch={gold} altın {count} {item} için
+aetherhaven.shop.buy.stock={n} kaldı
+aetherhaven.shop.buy.stockBatches={batches} lot ({items} ürün)
+aetherhaven.shop.buy.qty=Miktar: {n} — Toplam: {total} altın
+aetherhaven.shop.buy.qtyBatches=Lotlar: {n} — Toplam: {total} altın
+aetherhaven.shop.buy.step10=×10
+aetherhaven.shop.buy.max=Maksimum
+aetherhaven.shop.buy.buy=Satın almak
+aetherhaven.shop.buy.cancel=İptal etmek
+
+aetherhaven.shop.items.tooltipWithPrice={body}\n{price}
+aetherhaven.shop.items.tooltipPrice={amount} Altın Paralar
+aetherhaven.shop.items.tooltipPriceBatch={amount} Altın Para başına {count}

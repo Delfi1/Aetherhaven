@@ -1,21 +1,47 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
+items.Aetherhaven_Firewood.name=薪
+items.Aetherhaven_Firewood.description=乾燥させた薪の束。炉やキャンプファイヤーでは、木炭の約2倍の時間燃焼します。
+
+items.Aetherhaven_Root_Remover.name=根っこ除去剤
+items.Aetherhaven_Root_Remover.description=木の幹を右クリックすると、地中に埋まっている根を引き抜くことができます。木片は足元に落ち、穴は土で埋まります。
+
+items.Aetherhaven_Growth_Serum.name=成長血清
+items.Aetherhaven_Growth_Serum.description=幼齢動物に使用すると、成長促進に効果があります。1バイアル分です。
+
+items.Aetherhaven_Hunting_Knife.name=ハンティングナイフ
+items.Aetherhaven_Hunting_Knife.description=狩猟用の鋭利なナイフ。これで動物を仕留めれば、時折、追加の生肉、皮、羽毛が手に入る。
+
+items.Aetherhaven_Lute.name=リュート
+items.Aetherhaven_Lute.description=温かみのある弦を持つ木製のリュート。エリアス・ソーンウッドは、ギルドホールで演奏する際にいつもこのリュートをそばに置いている。
+
+items.Aetherhaven_Wood_Scaffold.name=木製足場
+items.Aetherhaven_Wood_Scaffold.description=はしごのように登ります。通常のブロックと同じように右クリックします。足場を狙ってUseキー（F）を押し続けると、側面からタワーを拡張したり、上面から水平方向に枝分かれさせたりできます。一番下の支えのないピースを破壊すると、積み重ねたタワーが崩れます。
+items.Aetherhaven_Wood_Scaffold.legendUse=（F）キーを押すと、足場を狙いながらタワー／枝を上部から伸ばします。右クリックすると、通常のブロック配置ができます。
+
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
 items.Aetherhaven_Plot_Sign.name=区画標識
-items.Aetherhaven_Plot_Sign.description=プレハブを建設できる場所を示すマークです。設定するには /aetherhaven plot コマンドを使用してください。
+items.Aetherhaven_Plot_Sign.description=建物を配置できる場所を示すマーク。区画作成台で区画トークンを作成します。
 
 items.Aetherhaven_Charter.name=町憲章
 items.Aetherhaven_Charter.description=町を建設する場所。各プレイヤーはワールドごとに1つの町を持つことができます。町の情報を表示するには、こちらを使用してください。
 
 items.Aetherhaven_Town_Planning_Desk.name=都市計画デスク
-items.Aetherhaven_Town_Planning_Desk.description=町憲章、区画配置スタッフ、建築スタッフ（区画建設を加速）、クエストジャーナル、晶洞金床、憲章修正表、区画トークンを作成します。作業台で1つ作成します。
+items.Aetherhaven_Town_Planning_Desk.description=都市計画作業台。憲章、建築用杖、区画作成作業台、および関連するレシピ。作業台で製作します。
+items.Aetherhaven_Plot_Crafting_Bench.name=プロット作成ベンチ
+items.Aetherhaven_Plot_Crafting_Bench.description=建物や装飾品用の区画トークンを作成しましょう。建物を選択してプレビューし、ゴールドを支払ってトークンを入手します。作成は街づくりデスクで行えます。
 items.Aetherhaven_Charter_Amendments_Table.name=憲章改正表
-items.Aetherhaven_Charter_Amendments_Table.description=町の十分の一税の計算方法と、憲章で優遇されている貿易を記録します。人口がそれを支持したら、修正案を公開するために使用します。都市計画デスクで作成します。設計図を理解している必要があります。
+items.Aetherhaven_Charter_Amendments_Table.description=町の十分の一税の計算方法と、憲章が優遇する貿易を記録します。人口がそれを支持したら、修正案を公開するために使用します。町の計画デスクで作成します。<color is="#ffa726">設計図を知っている必要があります</color>。
 items.Aetherhaven_Banquet_Table.name=宴会テーブル
 items.Aetherhaven_Banquet_Table.description=町の宴会用の長いテーブル。自分の領地に設置して、市民の宴会で料理を振る舞うのに使いましょう。町の誰かが型紙を共有したら、町の計画デスクで作成できます。
 items.Aetherhaven_Founder_Monument.name=創設者記念碑
 items.Aetherhaven_Founder_Monument.description=創設者の肖像を収めた石の台座。町の領地内に設置することで創設者を称え、設置されている間は町の財政への朝の分配金がわずかに増加する。町ごとに1つのみ設置可能。
+items.Aetherhaven_Inn_Bell.name=宿の鐘
+items.Aetherhaven_Inn_Bell.description=宿泊客をゲストエリアへ呼び戻すための呼び出しベル。
+
+items.Aetherhaven_Smokestack.name=煙突
+items.Aetherhaven_Smokestack.description=煙突や屋根に設置すると、一定の煙が立ち上ります。設置時は見えません。
 
 benchCategories.aetherhaven.town_planning=都市計画
 benchCategories.aetherhaven.plot_tokens=プロットトークン
@@ -23,25 +49,52 @@ benchCategories.aetherhaven.plot_tokens=プロットトークン
 items.Aetherhaven_Plot_Placement_Tool.name=区画配置スタッフ
 items.Aetherhaven_Plot_Placement_Tool.description=対応する区画トークンはバッグに入れておいてください。この杖を地面に向けて使用すると、建物の幻影が表示されます。建物が合うまで微調整して回転させ、確定すると区画が確保されます。キャンセルするとプレビューがクリアされ、別の場所に区画を設定したい場合は再び杖を使用できます。
 
+items.Aetherhaven_Wall_Wand.name=壁掛け杖
+items.Aetherhaven_Wall_Wand.description=町の周囲に石垣を計画しましょう。二次利用では、鎖壁、門、塔などのパーツを上空から見下ろすビューが開きます。既存のパーツに一次利用を適用すると、壁を拡張したり、削除したりできます。各パーツは区画標識を使用し、他の町の区画と同様に構築できます。
+items.Aetherhaven_Token_Wall.name=壁面マーカー
+items.Aetherhaven_Token_Wall.description=設置時に壁面の区画標識に表示されます。在庫からは使用されません。
+items.Aetherhaven_Token_Wall_Gate.name=ゲートピースマーカー
+items.Aetherhaven_Token_Wall_Gate.description=設置時にゲート区画の看板に表示されます。在庫からは使用されません。
+items.Aetherhaven_Token_Wall_Tower.name=タワーピースマーカー
+items.Aetherhaven_Token_Wall_Tower.description=設置時にタワーの区画標識に表示されます。インベントリからは使用されません。
+
 items.Aetherhaven_Poi_Tool.name=POIデバッグツール
-items.Aetherhaven_Poi_Tool.description=保持中に町のPOIを表示します（権限：aetherhaven.poi.tool）。プライマリ：最寄りのPOIを選択します。セカンダリ：POIアンカーをそのブロックに移動します。使用：選択したPOIの自律パスターゲットを設定/クリアします（クリアするにはPOIブロックをもう一度クリックします）。
+items.Aetherhaven_Poi_Tool.description=町のPOIスポットを編集したり、プレハブに新しいPOIマーカーを配置したり、冒険者のスポーンマーカーを設定したりできます（権限：<color is="#5AB5B5">aetherhaven.poi.tool</color>）。Qキーを押してモードを切り替えます。
 items.Aetherhaven_Poi_Tool.legendTitle=POIツール
 items.Aetherhaven_Poi_Tool.legendPrimary=プライマリ: ブロックの近くにある最寄りのPOIを選択してください
 items.Aetherhaven_Poi_Tool.legendSecondary=二次: 選択したPOIをブロックに移動
 items.Aetherhaven_Poi_Tool.legendUse=使用方法：選択したPOIのNPCパスターゲットを設定します（POIブロッククリア時に使用）。
 
 aetherhaven.poiTool.legendTitle=POIツール
+aetherhaven.poiTool.legendModeCycle=Q: POIスポットとアドベンチャースポットを切り替える
+aetherhaven.poiTool.legendPoiHeader=POIスポットモード
 aetherhaven.poiTool.legendPrimary=プライマリ: ブロックの近くにある最寄りのPOIを選択してください
-aetherhaven.poiTool.legendSecondary=二次: 選択したPOIをブロックに移動
+aetherhaven.poiTool.legendSecondaryPoi=二次: 選択したPOIをブロックに移動
 aetherhaven.poiTool.legendUse=使用方法：選択したPOIのNPCパスターゲットを設定します（POIブロッククリア時に使用）。
+aetherhaven.poiTool.legendSpawnHeader=冒険スポットモード
+aetherhaven.poiTool.legendSecondarySpawn=二次的: ブロックの上にスポットを配置するか、クリックしたスポットを削除します
+aetherhaven.poiTool.modeCycledToEdit=POI編集モードに切り替えました。
+aetherhaven.poiTool.modeCycledToPlacement=POI配置モードに切り替えました。
+aetherhaven.poiTool.modeCycledToRemove=POI削除モードに切り替えました。
+aetherhaven.poiTool.modeCycledToAdventurerSpots=冒険スポットモードに切り替えました。
+aetherhaven.poiTool.hudTitle=POIツール
+aetherhaven.poiTool.hudNameEdit=POI編集
+aetherhaven.poiTool.hudNamePlacement=POI配置
+aetherhaven.poiTool.hudNameRemove=POI削除
+aetherhaven.poiTool.hudNameAdventurerSpots=冒険スポット
+aetherhaven.poiTool.hudHelpEdit=プライマリ：POIを選択します。セカンダリ：選択したPOIをブロックに移動します。使用：NPCのパスターゲットを設定します。
+aetherhaven.poiTool.hudHelpPlacement=二次的: 完成した区画内のブロックでPOI設定を開く。
+aetherhaven.poiTool.hudHelpRemove=二次的な対策：ブロック付近にある最も近いPOIマーカーまたは登録済みのPOIを削除します。
+aetherhaven.poiTool.hudHelpAdventurerSpots=二次的な対処法：自分の方を向いているブロックの上にスポットを配置するか、近くのスポットを削除します。
+aetherhaven.poiTool.hudHint=Q: サイクル編集/配置/削除/冒険スポット
 
 aetherhaven.pathTool.legendPageTitle=パスツール
-aetherhaven.pathTool.legendBlurb=スプラインを作成し、プレビューしてから、パスウェイブロックを配置します。ツールを保持している間、画面の隅にステータスパネルが表示されます。
-aetherhaven.pathTool.legendHotkeyAdd=地面にセカンダリーキーを挿入すると、キーフレーム（金色の球体）が追加されます。キーフレームを狙っている状態でセカンダリーキーを挿入すると、キーフレームが削除されます。新しいキーフレームは、プレイヤーの視線の方向を向きます。
-aetherhaven.pathTool.legendHotkeyAim=キーフレームを見て選択します。移動モードでは、地面上のプライマリキーでポイントが移動します。同じノード上のプライマリキーでは何も起こりません。
-aetherhaven.pathTool.legendHotkeyUse=F: 回転モードでは、選択したノードのヨーをステップします。移動モードでは、F は何もしません。配置モードでは、F はパスを配置します (2 つのノードが必要です)。Q: モードの切り替え。E: 幅 1～8。3 番目のツール機能: パス スタイル (内部ブロック。設定の PathToolStyles を参照)。キーフレームに対してセカンダリを押すと、パスが削除されます。
-aetherhaven.pathTool.legendHotkeyCrouchUse=オプション：モード変更にしゃがむ必要はなくなりました。代わりにツールアビリティ（Q）を使用してください。
-aetherhaven.pathTool.legendVisuals=プレビュー: 白 = ノードとスプライン、茶色 = パスストリップ、緑 = エッジの草、赤 = ブロック。スラブは表面に配置されます。幅: 2 番目のツールアビリティ (1～8)。スタイル: 3 番目のツールアビリティ。コミットすると、パスの上にある背の高い植物 (Plant_Grass) が削除されます。
+aetherhaven.pathTool.legendBlurb=パスを作成し、プレビューしてから配置します。ツールを保持している間はステータスパネルが表示されます。
+aetherhaven.pathTool.legendHotkeyAdd=地上でのセカンダリー攻撃はノードを追加します。ノードを狙っている状態でセカンダリー攻撃を行うと、ノードが削除されます。
+aetherhaven.pathTool.legendHotkeyAim=プライマリがノードを選択します。移動モードでは、地上のプライマリが選択されたノードを移動します。
+aetherhaven.pathTool.legendHotkeyUse=Qキーでモードを切り替えます：移動、回転、配置、削除、スタイルデザイナー。Fキーでモードを切り替えます：方向の微調整、パスの配置、パスの削除、スタイルマネージャーを開く。Eキーで幅を切り替えます。Rキーでスタイルを切り替えます。
+aetherhaven.pathTool.legendHotkeyCrouchUse=しゃがむ代わりにQキーでモードを切り替えてください。
+aetherhaven.pathTool.legendVisuals=プレビュー：白いノードと線、茶色のパス、緑色のエッジ。削除モードでは、配置済みのパスがオレンジ色で表示されます。スタイルデザイナーは、パススタイルを作成するためのグリッドを開きます。
 aetherhaven.pathTool.statusHeader=工具を持ちながら
 aetherhaven.pathTool.statusLine1=ポイントを追加したとき、モードを切り替えたとき（Qキー）、またはコミットモードで確定したときに、トーストとチャットが表示されます。
 aetherhaven.pathTool.statusLine2=選択：球体を狙います。外れても現在の選択範囲は維持されます。Qキーでモードを切り替え、2番目のアビリティで幅を切り替え、3番目のアビリティでパススタイルを切り替えます。
@@ -50,78 +103,232 @@ aetherhaven.pathTool.hudTitle=パスツール
 aetherhaven.pathTool.hudNameTranslate=動く
 aetherhaven.pathTool.hudNameRotate=回転
 aetherhaven.pathTool.hudNameCommit=場所
-aetherhaven.pathTool.hudHelpTranslate=プライマリ：ノードを選択してから、ブロック上でプライマリを押すと移動します。セカンダリ：地面上でノードを追加し、ノードを狙うとノードを削除します。Q：次のモード。
-aetherhaven.pathTool.hudHelpRotate=プライマリ：ノードを選択して照準を合わせる。セカンダリ：地面に照準を合わせるとノードが追加され、ノードを照準を合わせるとノードが削除される。Fキーで選択したノードをヨー方向に微調整する。Qキーで次のモードに進む。
-aetherhaven.pathTool.hudHelpCommit=プライマリ：ノードを選択して選択します。セカンダリ：地面にノードを追加し、ノードを狙うとノードを削除します。F：パスを配置します（2つ以上のノード）。Q：次のモード。
+aetherhaven.pathTool.hudNameRemove=取り除く
+aetherhaven.pathTool.hudNameStyleDesigner=スタイルデザイナー
+aetherhaven.pathTool.hudDescTranslate=ノードを追加したり移動したりして、パスの形状を調整します。
+aetherhaven.pathTool.hudDescRotate=選択したノードを回転させてパスを曲げます。
+aetherhaven.pathTool.hudDescCommit=準備ができたら、地面に道筋を描いてください。
+aetherhaven.pathTool.hudDescRemove=配置済みのパスを表示し、不要になったパスを削除してください。
+aetherhaven.pathTool.hudDescStyleDesigner=チェストグリッドを使用してパススタイルを作成および編集します。
 aetherhaven.pathTool.hudStyle=スタイル: {style}
-aetherhaven.pathTool.hudWidth=幅：{w}ブロック（Eでサイクル）
+aetherhaven.pathTool.hudWidth=幅: {w} ブロック
 aetherhaven.pathTool.hudNodes=ノード: {n}
-aetherhaven.pathTool.hudHint=プライマリ = 選択/移動 | セカンダリ = 地面に追加、ノードから削除 | Q: モード | E: 幅 | R: スタイル | F: 回転/配置
+aetherhaven.pathTool.hudPlaceReminder=パスを配置するには、「配置」モードに切り替えてください。
+
+aetherhaven.pathTool.hud.move.primary=ノードを選択し、地面をクリックして移動します。
+aetherhaven.pathTool.hud.move.secondary=地面をクリックするとノードが追加され、ノードをクリックするとノードが削除されます。
+aetherhaven.pathTool.hud.move.q=次のモード
+aetherhaven.pathTool.hud.move.e=自転車道の幅
+aetherhaven.pathTool.hud.move.r=自転車道スタイル
+
+aetherhaven.pathTool.hud.rotate.primary=ノードを選択します
+aetherhaven.pathTool.hud.rotate.secondary=地面をクリックするとノードが追加され、ノードをクリックするとノードが削除されます。
+aetherhaven.pathTool.hud.rotate.f=選択したノードの方向を微調整する
+aetherhaven.pathTool.hud.rotate.q=次のモード
+aetherhaven.pathTool.hud.rotate.e=自転車道の幅
+aetherhaven.pathTool.hud.rotate.r=自転車道スタイル
+
+aetherhaven.pathTool.hud.place.primary=ノードを選択します
+aetherhaven.pathTool.hud.place.secondary=地面をクリックするとノードが追加され、ノードをクリックするとノードが削除されます。
+aetherhaven.pathTool.hud.place.f=パスを配置する
+aetherhaven.pathTool.hud.place.q=次のモード
+aetherhaven.pathTool.hud.place.e=自転車道の幅
+aetherhaven.pathTool.hud.place.r=自転車道スタイル
+
+aetherhaven.pathTool.hud.remove.primary=パスを選択してください
+aetherhaven.pathTool.hud.remove.f=選択したパスを削除します
+aetherhaven.pathTool.hud.remove.q=次のモード
+
+aetherhaven.pathTool.hud.styleDesigner.f=スタイルマネージャーを開く
+aetherhaven.pathTool.hud.styleDesigner.e=自転車道の幅
+aetherhaven.pathTool.hud.styleDesigner.fContinue=編集を続けるには宝箱を開けてください
+aetherhaven.pathTool.hud.styleDesigner.eSave=パススタイルを保存する
+aetherhaven.pathTool.hud.styleDesigner.q=次のモード
+aetherhaven.pathTool.hud.styleDesigner.infoColumns=左側の列は左端から内側に向かって埋められ、右側の列は右端から内側に向かって埋められ、中央の列はパスの中央を埋めます。
+aetherhaven.pathTool.hud.styleDesigner.infoRows=ブロックを縦一列に並べて、その中から選択する
+aetherhaven.pathTool.hud.styleDesigner.infoWeight=同じブロックが列内に複数あると、表示頻度が高くなります。
 
 aetherhaven.pathTool.addedNode=ノード {n} が追加されました。
-aetherhaven.pathTool.modeCycledToTranslate=モード：キーフレームの移動と配置。
-aetherhaven.pathTool.modeCycledToRotate=モード: 回転 — F で選択したノードのヨーを微調整します。
-aetherhaven.pathTool.modeCycledToCommit=モード：配置 — F はパスを配置します（ノードが 2 個以上ある場合）。
-aetherhaven.pathTool.widthCycled=パス幅: {w} (1-8)
+aetherhaven.pathTool.modeCycledToTranslate=モード: 移動
+aetherhaven.pathTool.modeCycledToRotate=モード：回転
+aetherhaven.pathTool.modeCycledToCommit=モード: 場所
+aetherhaven.pathTool.modeCycledToRemove=モード: 削除
+aetherhaven.pathTool.modeCycledToStyleDesigner=モード：スタイルデザイナー
+aetherhaven.pathTool.widthCycled=パス幅: {w}
 aetherhaven.pathTool.styleCycled=パススタイル: {style}
 aetherhaven.pathTool.toastStyleCycled=パススタイルが変更されました
-aetherhaven.pathTool.useInTranslateMode=移動モードではFキーは何も機能しません。Qキーを押して配置モードに切り替え、Fキーを押して配置するか、回転させ、Fキーでヨー方向を微調整します。
-aetherhaven.pathTool.rotateNoSelection=回転させるキーフレームを選択するか（金色の球体を狙う）、Qキーを押してモードを変更します。
+aetherhaven.pathTool.useInTranslateMode=配置モードになるまでQキーを押し、次にFキーを押してパスを配置します。
+aetherhaven.pathTool.rotateNoSelection=まずノードを選択するか、Qキーを押してモードを変更してください。
+aetherhaven.pathTool.wrongMode=このモードではその入力は機能しません。Qキーを押してモードを変更してください。
 aetherhaven.pathTool.modeToggled=モード: {m}
 aetherhaven.pathTool.selectedNode=ノードが選択されました。
 aetherhaven.pathTool.movedNode=ノードが移動しました。
-aetherhaven.pathTool.noNodeHit=制御ノードが範囲内にありません。ノードを選択した状態で移動モードの場合、プライマリノードを地面に置いて移動を試みてください。
-aetherhaven.pathTool.noNodeOnAim=十字線にキーフレームはありません。金色の円盤を狙って選択してください。選択範囲は変更されません。
+aetherhaven.pathTool.noNodeHit=制御ノードが範囲内にありません。ノードを選択した状態で移動モードの場合、プライマリを地面に置いて移動を試みてください。
+aetherhaven.pathTool.noNodeOnAim=十字線上にノードがありません。選択範囲は変更されていません。
 aetherhaven.pathTool.toastAdd=制御ポイントが追加されました
-aetherhaven.pathTool.toastModeTranslate=移動：ブロック上のプライマリは選択範囲を移動します。セカンダリはキーフレームを追加します。
-aetherhaven.pathTool.toastModeRotate=回転: F キーを押すと、選択したノードのヨー角がわずかに変化します。
-aetherhaven.pathTool.toastModeCommit=配置：Fはパス（2つ以上のノード）を配置します。Qと切り替えます。
+aetherhaven.pathTool.toastModeTranslate=移動モード
+aetherhaven.pathTool.toastModeRotate=回転モード
+aetherhaven.pathTool.toastModeCommit=配置モード
+aetherhaven.pathTool.toastModeRemove=削除モード
+aetherhaven.pathTool.toastModeStyleDesigner=スタイルデザイナーモード
 aetherhaven.pathTool.toastMoved=ノードの位置が更新されました
 aetherhaven.pathTool.toastRemoved=制御ポイントが削除されました
-aetherhaven.pathTool.toastRotated=ヨーが軽くつついた
-aetherhaven.pathTool.toastCemented=経路が確定しました。元に戻すIDについてはチャットを確認してください。
-aetherhaven.pathTool.rotated={deg}°回転。
+aetherhaven.pathTool.toastRotated=方向を軽く押した
+aetherhaven.pathTool.toastCemented=パスを配置しました
+aetherhaven.pathTool.toastRemovedPath=パスが削除されました
+aetherhaven.pathTool.rotated={deg}度回転させました。
 aetherhaven.pathTool.removedNode=ノードが削除されました。残りのノードは{n}です。
-aetherhaven.pathTool.needTwoNodes=少なくとも2つのキーフレームが必要です。セカンダリキーフレームを追加するか、Qキーを押してコミットモードを終了し、編集を続行してください。
-aetherhaven.pathTool.emptyPlan=経路沿いに地面が見つかりませんでした（急勾配/空洞/読み込まれていないチャンク）。
-aetherhaven.pathTool.cementFail=設置場所がありません：代替可能な地面が見つからないか、設置に失敗しました。
-aetherhaven.pathTool.cemented=パスが配置されました。リバートID: {id} (aetherhaven path revert <id> with aetherhaven.path.revert)
+aetherhaven.pathTool.needTwoNodes=最低2つのノードが必要です。セカンダリノードを追加するか、Qキーを押してモードを変更してください。
+aetherhaven.pathTool.emptyPlan=道沿いには地面は見つからなかった。
+aetherhaven.pathTool.cementFail=道沿いに置くものは何もない。
+aetherhaven.pathTool.cemented=パスが配置されました。
+aetherhaven.pathTool.removeSelected=パスが選択されました。
+aetherhaven.pathTool.removeNoHit=十字線上に経路がありません。
+aetherhaven.pathTool.removeNeedSelection=まずプライマリパスを選択してください。
+aetherhaven.pathTool.removeUnknown=その道はもう存在しない。
+aetherhaven.pathTool.removedPath=パスが削除されました。{cells} ブロックが復元されました。
 aetherhaven.pathTool.revertNoPerm=aetherhaven.path.revert の権限がありません
 aetherhaven.pathTool.badUuid=無効なID: {raw}
 aetherhaven.pathTool.unknownId=そのIDを持つ保存済みパスはありません。
 aetherhaven.pathTool.reverted={cells} ブロックを {id} に元に戻しました
-aetherhaven.pathTool.navvizOn=パスナビゲーションのデバッグ：オン（サーバーはコミットされたパスノードを線として表示します。再度実行するとオフになります）
+aetherhaven.pathTool.navvizOn=パスナビゲーションのデバッグ: オン
 aetherhaven.pathTool.navvizOff=パスナビゲーションのデバッグ: オフ
 aetherhaven.pathTool.navvizNoPerm=パスナビゲーションのデバッグには、aetherhaven.path.toolが必要です。
 
-commands.aetherhaven.path.root.desc=パス/スプライン配置ヘルパー
-commands.aetherhaven.path.revert.desc=アンドゥファイル（aetherhaven.path.revert）から固定されたパスを復元します。
-commands.aetherhaven.path.revert.id=パスコミットID（セメントチャットメッセージのUUID）
-commands.aetherhaven.path.navviz.desc=パスナビゲーションポリラインのデバッグ描画の切り替え (aetherhaven.path.tool; サブ: navviz)
+aetherhaven.pathTool.styleListTitle=パススタイル
+aetherhaven.pathTool.styleListSelected=選択済み: {name}
+aetherhaven.pathTool.styleListEmpty=パススタイルはまだ作成されていません。新規作成するには、[新規]をクリックしてください。
+aetherhaven.pathTool.styleListRowSelected=選ばれた
+aetherhaven.pathTool.styleListPickOne=まず、リストからスタイルを選んでください。
+aetherhaven.pathTool.styleListCreate=新しい
+aetherhaven.pathTool.styleListEdit=編集
+aetherhaven.pathTool.styleListCancel=キャンセル
+aetherhaven.pathTool.styleNameTitle=新しいパススタイル
+aetherhaven.pathTool.styleNameHint=自分のスタイルを指定したら、宝箱に進んでブロックを選びましょう。
+aetherhaven.pathTool.styleNameContinue=続く
+aetherhaven.pathTool.styleEditNameLabel=スタイル名
+aetherhaven.pathTool.styleEditNamePlaceholder=私のパススタイル
+aetherhaven.pathTool.toastStyleSaved=パススタイルが保存されました
+aetherhaven.pathTool.styleEditNeedBlocks=保存する前に、チェストに少なくとも1つのブロックを追加してください。
+aetherhaven.pathTool.styleEditNoSession=スタイルエディターのセッションが期限切れになりました。スタイルマネージャーを再度開いてください。
+aetherhaven.pathTool.styleSaved=保存されたパススタイル: {name}
+
+commands.aetherhaven.path.root.desc=パスツールヘルパー
+commands.aetherhaven.path.revert.desc=配置したパスを、配置時にチャットで取得したIDを使用して取り消す
+commands.aetherhaven.path.revert.id=パスを配置した際のチャットからのパスID
+commands.aetherhaven.path.navviz.desc=デバッグ: パスナビゲーションのデバッグ行を切り替える
 
 items.Aetherhaven_Path_Tool.name=パスデザイナーシャベル
-items.Aetherhaven_Path_Tool.description=スプラインパスをデザインします (aetherhaven.path.tool)。セカンダリ: ノードを追加します。プライマリ: 選択します。移動モードでは、地面をクリックして移動します。Q: モードを切り替えます。2 番目の機能: パスの幅 1～8。3 番目の機能: パスのスタイル (内部ブロック; 設定の PathToolStyles)。F: 回転モードでヨーを微調整するか、配置モードで配置します (2 つ以上のノード)。元に戻す: aetherhaven パスを元に戻す。設定: PathToolStyles、raycast、および置換リスト。
+items.Aetherhaven_Path_Tool.description=街の経路をデザインします。Q キーでモードを切り替えます。セカンダリ キーでノードを追加または削除します。F キーで、モードに応じて配置、削除、またはスタイルマネージャを開きます。E キーで幅を設定します。R キーでスタイルを設定します。
+
+items.Aetherhaven_Patrol_Wand.name=パトロールワンド
+items.Aetherhaven_Patrol_Wand.description=町の警備隊の巡回ルートを設定します（<color is="#5AB5B5">aetherhaven.patrol.wand</color>）。町の計画デスクで作成できます。手に持っている間は画面上の凡例をご覧ください。
+
+aetherhaven.patrolWand.legendPageTitle=パトロールワンド
+aetherhaven.patrolWand.legendBlurb=巡回地点を設定し、ルートを保存してから、警備員を割り当ててください。青い光は、この杖を持っている間だけルートを示します。
+aetherhaven.patrolWand.legendHotkeyAdd=建築モード：地面を右クリックするとポイントを追加できます。ポイントを右クリックすると削除できます。
+aetherhaven.patrolWand.legendHotkeySelect=保存済みのルート上の地点を左クリックすると、そのルートを選択して編集できます。
+aetherhaven.patrolWand.legendHotkeyUse=構築モード：Fキーを押すと名前入力画面が表示され、ルートが保存されます（最低2つのポイントが必要です）。割り当てモード：Fキーを押すと、選択したルートのガードリストが表示されます。
+aetherhaven.patrolWand.legendHotkeyAbility=Qキーは構築モードと割り当てモードを切り替えます。Eキーは構築モードで新しいルートを開始するか、割り当てモードで選択したルートからガードを削除します。Rキーは構築モードで閉ループを切り替えます。
+aetherhaven.patrolWand.legendVisuals=選択されたルートは緑色に光ります。その他のルートは青色のままです。複数のルートを担当する警備員は、各周回ルートを交代で巡回します。
+aetherhaven.patrolWand.nameRouteTitle=巡回ルート名
+aetherhaven.patrolWand.nameRouteHint=このルートには{n}個のポイントがあります。名前を選択して保存してください。
+aetherhaven.patrolWand.nameRouteLabel=ルート名
+aetherhaven.patrolWand.nameRoutePlaceholder=ゲートパトロール
+aetherhaven.patrolWand.nameRouteSave=ルートを保存
+aetherhaven.patrolWand.nameRouteCancel=キャンセル
+
+aetherhaven.patrolWand.hudTitle=パトロールワンド
+aetherhaven.patrolWand.hudNameBuild=ルートを作成する
+aetherhaven.patrolWand.hudNameAssign=警備員を配置する
+aetherhaven.patrolWand.hudHelpBuild=地面を右クリックしてポイントを追加します。ポイントを右クリックして削除します。F キーで名前を付けて保存します。R キーでクローズドループを切り替えます。E キーで最初からやり直します。Q キーでモードを切り替えます。
+aetherhaven.patrolWand.hudHelpAssign=ルートポイントを左クリックして選択します。Fキーでガードリストを開きます。Eキーでガードをクリアします。Qキーでモードを切り替えます。
+aetherhaven.patrolWand.hudRoute=ルート: {name}
+aetherhaven.patrolWand.hudNodes=ポイント: {n}
+aetherhaven.patrolWand.hudLoopClosed=経路: 閉ループ
+aetherhaven.patrolWand.hudLoopOpen=経路：往復
+aetherhaven.patrolWand.hudGuard=警備員: {guard}
+aetherhaven.patrolWand.hudGuardNone=警備員なし
+aetherhaven.patrolWand.hudGuardAssigned=割り当てられた
+aetherhaven.patrolWand.hudRouteNew=新ルート
+aetherhaven.patrolWand.hudHint=構築: ポイントを追加、R ループ、F 名前、保存 | 割り当て: F ガード リスト | Q: モード | E: 新しいルートまたはガードのクリア
+
+aetherhaven.patrolWand.addedNode=ポイントが追加されました。このルートには {n} があります。
+aetherhaven.patrolWand.removedNode=ポイントが削除されました。このルートには{n}が残っています。
+aetherhaven.patrolWand.needBuildMode=Qキーを押して建築モードに切り替え、ポイントを追加または削除します。
+aetherhaven.patrolWand.notInTown=パトロールワンドを使用するには、町の中に立ってください。
+aetherhaven.patrolWand.notMember=巡回ルートを編集するには、町の住民である必要があります。
+aetherhaven.patrolWand.noRouteHit=照準にルートポイントがありません。
+aetherhaven.patrolWand.selectedRoute={name}が選択されました。ビルドモードで保存するにはFキーを、割り当てモードでガードを割り当てるにはFキーを押してください。
+aetherhaven.patrolWand.needTwoNodes=セーブするには最低2ポイント必要です。
+aetherhaven.patrolWand.needTwoNodesForLoop=ループを切り替えるには、少なくとも2つのポイントが必要です。
+aetherhaven.patrolWand.loopClosed=ルート閉鎖中 ― 警備員は最終地点から最初の地点までループ状に移動する。
+aetherhaven.patrolWand.loopOpen=通行可能――警備員が通路を往復している。
+aetherhaven.patrolWand.savedRoute={name} を {n} ポイントで保存しました。警備員を選択して割り当ててください。
+aetherhaven.patrolWand.selectRouteFirst=まずルートを選択します。次に、そのルート上のいずれかの地点を左クリックします。
+aetherhaven.patrolWand.routeMissing=そのルートはもう存在しません。
+aetherhaven.patrolWand.invalidGuard=あれはこの町の警備員ではない。
+aetherhaven.patrolWand.assignedGuard={name}を{route}に取り付けてください。
+aetherhaven.patrolWand.clearedGuard={route}からガードを取り外しました。
+aetherhaven.patrolWand.modeBuild=建築モード。巡回地点を配置します。
+aetherhaven.patrolWand.modeAssign=モードを割り当てます。ルートを選択し、Fキーを押して警備員を選択します。
+aetherhaven.patrolWand.newRoute=新しいルートを開始しました。
+aetherhaven.patrolWand.assignPageTitle=警備員を配置する
+aetherhaven.patrolWand.assignPageHint={route} のガードを選択してください。
+aetherhaven.patrolWand.assignPageNoGuards=町には衛兵がいない。まずはギルドホールで衛兵を雇おう。
+aetherhaven.patrolWand.assignPageAssignButton=割り当てる
+aetherhaven.patrolWand.guardTypeKnight=騎士
+aetherhaven.patrolWand.guardTypeArcher=射手
+aetherhaven.patrolWand.guardTypeMage=メイジ
+aetherhaven.patrolWand.toastAdded=追加ポイント
+aetherhaven.patrolWand.toastRemoved=ポイントが削除されました
+aetherhaven.patrolWand.toastSelected=ルートが選択されました
+aetherhaven.patrolWand.toastSaved=ルートが保存されました
+aetherhaven.patrolWand.toastAssigned=警備員が配置されました
+aetherhaven.patrolWand.toastCleared=警備員が外された
+aetherhaven.patrolWand.toastNewRoute=新ルート
 
 items.Aetherhaven_Plot_Token_Inn.name=宿屋区画トークン
 items.Aetherhaven_Plot_Token_Inn.description=宿屋の敷地配置に区画配置スタッフを使用するには、在庫に必要です。
 
 items.Aetherhaven_Plot_Token_Market_Stall.name=市場の屋台区画トークン
 items.Aetherhaven_Plot_Token_Market_Stall.description=区画配置担当者から指示された通りに、市場の屋台の設置場所を決定する必要がある。
+items.Aetherhaven_Plot_Token_Player_Shop.name=プレイヤーショップ区画トークン
+items.Aetherhaven_Plot_Token_Player_Shop.description=プレイヤーショップの設置場所は、区画配置担当者から指示された場所に配置する必要があります。
 
 items.Aetherhaven_Plot_Token_Farm.name=農地区画トークン
 items.Aetherhaven_Plot_Token_Farm.description=区画配置担当者から提供された農地区画の配置図を作成する必要があります。
+
+items.Aetherhaven_Plot_Token.name=プロットトークン
+items.Aetherhaven_Plot_Token.description=区画配置スタッフからカスタムの町の建物を配置します。各トークンは1種類の建物タイプに対応しています。
+items.Aetherhaven_Plot_Token.instance.name={building} プロットトークン
+items.Aetherhaven_Plot_Token.instance.description=区画配置担当者から{building}の設置場所を指定する必要があります。
+items.Aetherhaven_Plot_Token.instance.descriptionDecoration=区画配置スタッフから{building}の設置指示を受ける必要があります。設置完了後、この装飾は町区画として登録されません。撤去または移動するには、ブロックを自分で破壊または移動してください。町の記録から取得することはできません。
+
+items.Aetherhaven_Plot_Token_Unlock_Page.name=区画設計図
+items.Aetherhaven_Plot_Token_Unlock_Page.description=特別な設計図ページです。これを使って、プロット作成台で新しいプロットを習得しましょう。
+items.Aetherhaven_Plot_Token_Unlock_Page.instance.name=プロット設計図: {building}
+items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=これを読んで、区画作成台で{building}区画を永久にアンロックしましょう。
+
+items.Aetherhaven_Plot_Creator_Staff.name=プロット作成スタッフ
+items.Aetherhaven_Plot_Creator_Staff.description=建物をカスタムタウンビルディングに変換します。タウンジャーナルガイドを参照してください。Fキーで現在のステップを開始または実行します。プライマリークリックで境界とスポットをブロックします。Q/Eキーで前/次に進みます。Rキーでキャンセルします。
 
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=鍛冶屋の区画トークン
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=区画配置担当者から鍛冶屋の設置場所を指定する必要がある。
 
 items.Aetherhaven_Plot_Token_Park.name=公園区画トークン
 items.Aetherhaven_Plot_Token_Park.description=区画配置担当者から公園の敷地配置図を入手し、配置する必要がある。
+items.Aetherhaven_Plot_Token_Tourist_Portal.name=観光ポータル区画トークン
+items.Aetherhaven_Plot_Token_Tourist_Portal.description=観光案内所の設置場所を区画配置担当者から指示された通りに配置する必要があります。
 
 items.Aetherhaven_Plot_Token_House.name=住宅用地トークン
 items.Aetherhaven_Plot_Token_House.description=区画配置担当者から提供された共有住宅の配置図を作成する必要があります。
 
 items.Aetherhaven_Plot_Token_Town_Hall.name=市役所区画トークン
 items.Aetherhaven_Plot_Token_Town_Hall.description=区画配置担当者から町役場の敷地配置図を入手する必要がある。
+
+items.Aetherhaven_Plot_Token_Guild_Hall.name=ギルドホール区画トークン
+items.Aetherhaven_Plot_Token_Guild_Hall.description=ギルドホールのプレハブを建設できる場所を示すマーク。都市計画デスクで製作できます。
 
 items.Aetherhaven_Gold_Coin.name=金貨
 items.Aetherhaven_Gold_Coin.description=町の通貨は金庫に保管されている。
@@ -130,10 +337,14 @@ items.Aetherhaven_Geode.name=晶洞
 items.Aetherhaven_Geode.description=水晶、宝石、鉱石などが中に詰まっている可能性のある、中が空洞の石。鍛冶屋に依頼して割ってもらうと良い。
 
 items.Aetherhaven_Geode_Anvil.name=ジオードアンビル
-items.Aetherhaven_Geode_Anvil.description=鍛冶屋の手数料なしで晶洞を開けることができます。設置して使用してください。作成するには、都市計画デスクで設計図を知っている必要があります。
+items.Aetherhaven_Geode_Anvil.description=鍛冶屋の手数料なしで晶洞を開けます。設置して使用してください。<color is="#ffa726">設計図を知っている必要があります</color>。都市計画デスクで作成してください。
+
+items.Aetherhaven_Crystallized_Person.name=結晶化した人
 
 items.Aetherhaven_Treasury.name=町の財政
 items.Aetherhaven_Treasury.description=町の金貨を保管します。預け入れまたは引き出しに使用します（町の所有者）。
+items.Aetherhaven_Shop_Safe.name=安全に買い物をしましょう
+items.Aetherhaven_Shop_Safe.description=プレイヤーショップでの売上金（ゴールド）を保管します。収益の回収にご利用ください。
 
-items.Aetherhaven_Quest_Journal.name=町のクエストジャーナル
-items.Aetherhaven_Quest_Journal.description=二次的な用途：進行中の町のクエストを確認する。宿屋が建設された後、長老からクエストを与えられることがある。
+items.Aetherhaven_Quest_Journal.name=タウンジャーナル
+items.Aetherhaven_Quest_Journal.description=二次的な用途：町のジャーナルを開いてください。ここでクエストを確認できます。

@@ -1,0 +1,135 @@
+aetherhaven.questBoard.miner.stone_haul.title=Stein für den Schuppen
+aetherhaven.questBoard.miner.stone_haul.description=Gorruk möchte, dass vor dem nächsten Regen Steine vor seiner Hütte aufgestapelt werden.
+aetherhaven.questBoard.miner.copper_ore.title=Kupfer für die Werkbank
+aetherhaven.questBoard.miner.copper_ore.description=Gorruk benötigt dringend geschmolzenes Kupfererz für die Werkzeuge der Stadt.
+aetherhaven.questBoard.miner.iron_ore.title=Eisen für die Schmiedelinie
+aetherhaven.questBoard.miner.iron_ore.description=Gorruk hat einen Eisenerzmangel und hat den Vorstand um Hilfe gebeten.
+aetherhaven.questBoard.miner.silver_ore.title=Silber für den Tresor
+aetherhaven.questBoard.miner.silver_ore.description=Gorruk benötigt Silbererz, das für eine Stadtreserve zurückgestellt werden soll.
+aetherhaven.questBoard.miner.gold_ore.title=Gold für die Chartertruhe
+aetherhaven.questBoard.miner.gold_ore.description=Gorruk hat einen seltenen Golderz-Auftrag für vertrauenswürdige Hände veröffentlicht.
+
+aetherhaven.questBoard.farmer.wheat_bundle.title=Weizen für die Speisekammer
+aetherhaven.questBoard.farmer.wheat_bundle.description=Seren benötigt gebündelten Weizen für Brot und Saatgut.
+aetherhaven.questBoard.farmer.carrot_crate.title=Karotten für die Küche
+aetherhaven.questBoard.farmer.carrot_crate.description=Seren möchte frische Karotten für Eintopf und Einmachgläser tauschen.
+aetherhaven.questBoard.farmer.potato_sack.title=Kartoffeln für den Keller
+aetherhaven.questBoard.farmer.potato_sack.description=Seren benötigt Kartoffeln, die vor der Frostwoche eingelagert werden.
+aetherhaven.questBoard.farmer.harvest_feast.title=Ernte für das Quadrat
+aetherhaven.questBoard.farmer.harvest_feast.description=Seren plant ein Erntefest und benötigt dafür verschiedene Feldfrüchte.
+
+aetherhaven.questBoard.blacksmith.iron_bars.title=Eisenstangen für Bestellungen
+aetherhaven.questBoard.blacksmith.iron_bars.description=Der Schmied hat einen Auftragsstau und braucht jetzt Eisenstangen.
+aetherhaven.questBoard.blacksmith.coal_fuel.title=Holzkohle für die Schmiede
+aetherhaven.questBoard.blacksmith.coal_fuel.description=Der Schmiedeofen hatte über Nacht wenig Brennstoff. Bringt Holzkohle mit.
+aetherhaven.questBoard.blacksmith.gold_bars.title=Goldbarren für Gildenarbeit
+aetherhaven.questBoard.blacksmith.gold_bars.description=Der Schmied benötigt Goldbarren für einen hochrangigen Auftrag.
+aetherhaven.questBoard.blacksmith.master_smithing.title=Meister-Schmiede-Orden
+aetherhaven.questBoard.blacksmith.master_smithing.description=Ich brauche Hilfe bei der Ausführung eines Auftrags von legendärem Ausmaß.
+
+aetherhaven.questBoard.logger.oak_logs.title=Eiche für Reparaturen
+aetherhaven.questBoard.logger.oak_logs.description=Die Stadtzäune benötigen vor dem nächsten Sturm Eichenstämme.
+aetherhaven.questBoard.logger.timber_contract.title=Holz für den Flurrahmen
+aetherhaven.questBoard.logger.timber_contract.description=Ein großer Holzauftrag für gemischtes Eichen- und Kiefernholz wurde ausgeschrieben.
+
+aetherhaven.questBoard.rancher.raw_meat.title=Fleisch fürs Räucherhaus
+aetherhaven.questBoard.rancher.raw_meat.description=Thalen benötigt rohes Fleisch, verpackt für die Küche des Gasthauses.
+aetherhaven.questBoard.rancher.leather_hide.title=Verstecken Sie sich für den Sattel.
+aetherhaven.questBoard.rancher.leather_hide.description=Thalen flickt Pferdegeschirre und benötigt dafür leichtes Leder.
+aetherhaven.questBoard.rancher.ranch_provisions.title=Ranch-Proviant
+aetherhaven.questBoard.rancher.ranch_provisions.description=Thalen benötigt Fleisch und Leder für die Lager des Gildenmeisters.
+
+aetherhaven.questBoard.priestess.life_essence.title=Lebensessenz für den Altar
+aetherhaven.questBoard.priestess.life_essence.description=Die Priesterin braut Tränke und benötigt Lebensessenz.
+aetherhaven.questBoard.priestess.sacred_offering.title=Heiliges Opferbündel
+aetherhaven.questBoard.priestess.sacred_offering.description=Die Priesterin bat um Essenz und Gold für ein Ritual.
+aetherhaven.questBoard.priestess.cull_undead.title=Räumt die ruhelosen Toten auf!
+aetherhaven.questBoard.priestess.cull_undead.description={villager} hat eine Belohnung ausgesetzt, um die Untoten in der Nähe der Straßen zu dezimieren.
+aetherhaven.questBoard.priestess.purge_undead.title=Säubert die wandelnden Toten
+aetherhaven.questBoard.priestess.purge_undead.description={villager} möchte, dass vor dem nächsten Ritus mehr Untote vernichtet werden.
+aetherhaven.questBoard.priestess.undead_raid.title=Untote marschieren in die Stadt
+aetherhaven.questBoard.priestess.undead_raid.description={villager} warnt, dass Untote auf die Charta marschieren.
+aetherhaven.questBoard.priestess.void_raid.title=Leere-Eindringen in die Stadt
+aetherhaven.questBoard.priestess.void_raid.description={villager} spürt, wie Leerenbrut auf den Charterstein zustürmt.
+
+aetherhaven.questBoard.targets.undead=Untote
+aetherhaven.questBoard.targets.void=Leerenbrut
+aetherhaven.questBoard.targets.trork=Trorks
+aetherhaven.questBoard.targets.outlander=Fremde
+aetherhaven.questBoard.targets.goblin=Kobolde
+aetherhaven.questBoard.targets.vermin=Ungeziefer
+
+aetherhaven.questBoard.innkeeper.bread_loaves.title=Brot für den Gemeinschaftsraum
+aetherhaven.questBoard.innkeeper.bread_loaves.description=Corin möchte, dass die Brote fertig sind, bevor die Reisenden in der Abenddämmerung eintreffen.
+aetherhaven.questBoard.innkeeper.traveler_rations.title=Reiserationen
+aetherhaven.questBoard.innkeeper.traveler_rations.description=Corin benötigt Brot und Fleisch, verpackt für die müden Gäste.
+aetherhaven.questBoard.innkeeper.hearty_stew.title=Zutaten für herzhaften Eintopf
+aetherhaven.questBoard.innkeeper.hearty_stew.description=Corin wünscht sich Kartoffeln und Fleisch für den abendlichen Kessel.
+aetherhaven.questBoard.innkeeper.inn_feast.title=Vorbereitungen für das Gasthausfest
+aetherhaven.questBoard.innkeeper.inn_feast.description=Corin kocht für ein volles Haus und braucht Getreide und Brot.
+aetherhaven.questBoard.innkeeper.noble_banquet.title=Edle Bankettausstattung
+aetherhaven.questBoard.innkeeper.noble_banquet.description=Corin veröffentlichte eine Liste für ein Festmahl mit Brot, Fleisch und Gold.
+aetherhaven.questBoard.innkeeper.grand_hospitality.title=Großartige Gastfreundschaft
+aetherhaven.questBoard.innkeeper.grand_hospitality.description=Corin benötigt eine große Fläche für die anreisenden Händler.
+aetherhaven.questBoard.innkeeper.royal_table.title=Königliche Tischdekoration
+aetherhaven.questBoard.innkeeper.royal_table.description=Corin wünscht sich Goldbarren, Essenz und Brot für die Ehrengäste.
+aetherhaven.questBoard.innkeeper.legendary_feast.title=Legendäres Festmahl
+aetherhaven.questBoard.innkeeper.legendary_feast.description=Corin möchte ein großes Fest für die Stadt veranstalten.
+
+aetherhaven.questBoard.elder.foundation_stones.title=Grundsteine
+aetherhaven.questBoard.elder.foundation_stones.description=Lyren wünscht sich, dass Steine für neue Charta-Markierungen gesammelt werden.
+aetherhaven.questBoard.elder.village_timber.title=Dorfholz
+aetherhaven.questBoard.elder.village_timber.description=Lyren benötigt Eichenstämme für Bänke in der Nähe der Gildehalle.
+aetherhaven.questBoard.elder.community_grain.title=Getreideläden in der Gemeinde
+aetherhaven.questBoard.elder.community_grain.description=Lyren bat um Weizen und Karotten für die Dorfvorratskammer.
+aetherhaven.questBoard.elder.town_supplies.title=Material für Charterarbeiten
+aetherhaven.questBoard.elder.town_supplies.description=Lyren befestigte Steine und Holz für Wege in der Nähe des Charta-Steins.
+aetherhaven.questBoard.elder.iron_tribute.title=Eiserner Tribut
+aetherhaven.questBoard.elder.iron_tribute.description=Lyren benötigt Eisenerz und Eisenerzbarren für die Verteidigungsgeschäfte der Stadt.
+aetherhaven.questBoard.elder.silver_tribute.title=Silberne Ehrung
+aetherhaven.questBoard.elder.silver_tribute.description=Lyren legte einen silbernen Tribut für die Stadtkasse beiseite.
+aetherhaven.questBoard.elder.gold_tribute.title=Goldener Tribut
+aetherhaven.questBoard.elder.gold_tribute.description=Lyren veröffentlichte eine goldene Hommage an den Charter-Tresor.
+aetherhaven.questBoard.elder.elder_legacy.title=Vermächtnisangebot für Älteste
+aetherhaven.questBoard.elder.elder_legacy.description=Lyren sucht Gold, Barren und Essenz für ein Gründungsritual.
+aetherhaven.questBoard.elder.vermin_clear.title=Ungeziefer beseitigen
+aetherhaven.questBoard.elder.vermin_clear.description={villager} wünscht, dass die Wege rund um die Stadt von Ungeziefer befreit werden.
+aetherhaven.questBoard.elder.vermin_raid.title=Ungeziefer wimmelt vor den Toren
+aetherhaven.questBoard.elder.vermin_raid.description={villager} meldet Ungeziefer, das sich in Richtung des Gründungssteins drängt.
+
+aetherhaven.questBoard.guild_master.recruit_gear.title=Rekruten-Starterkit
+aetherhaven.questBoard.guild_master.recruit_gear.description=Der Gildenmeister benötigt Stein und Holzkohle für neue Rekruten.
+aetherhaven.questBoard.guild_master.apprentice_tools.title=Lehrlingswerkzeuge
+aetherhaven.questBoard.guild_master.apprentice_tools.description=Der Gildenmeister benötigt Kupfererz für Trainingssets.
+aetherhaven.questBoard.guild_master.journeyman_armor.title=Journeyman-Rüstungsbestand
+aetherhaven.questBoard.guild_master.journeyman_armor.description=Der Gildenmeister benötigt Eisenbarren und Leder für die Rüstung.
+aetherhaven.questBoard.guild_master.veteran_weapons.title=Waffenbestellung für Veteranen
+aetherhaven.questBoard.guild_master.veteran_weapons.description=Der Gildenmeister hat Eisen und Leder als Ausrüstung für Veteranen angeboten.
+aetherhaven.questBoard.guild_master.adventurer_gear.title=Ausrüstung für neue Mitarbeiter
+aetherhaven.questBoard.guild_master.adventurer_gear.description=Der Gildenmeister rüstet Abenteurer aus und benötigt dafür Eisen und Leder.
+aetherhaven.questBoard.guild_master.elite_contract.title=Elite-Vertrag
+aetherhaven.questBoard.guild_master.elite_contract.description=Der Gildenmeister benötigt Goldbarren und Eisen für Elite-Kits.
+aetherhaven.questBoard.guild_master.master_gear.title=Master-Ausrüstungspaket
+aetherhaven.questBoard.guild_master.master_gear.description=Der Gildenmeister hat einen Ausrüstungsvertrag der Meisterklasse ausgeschrieben.
+aetherhaven.questBoard.guild_master.legendary_contract.title=Legendärer Vertrag
+aetherhaven.questBoard.guild_master.legendary_contract.description=Lyra benötigt hochwertige Schwerter für eine bevorstehende Schlacht epischen Ausmaßes.
+aetherhaven.questBoard.guild_master.goblin_trouble.title=Koboldprobleme
+aetherhaven.questBoard.guild_master.goblin_trouble.description={villager} hat ein Kopfgeld auf Kobolde ausgesetzt, die die Straßen unsicher machen.
+aetherhaven.questBoard.guild_master.trork_patrol.title=Trork-Patrouille
+aetherhaven.questBoard.guild_master.trork_patrol.description={villager} will, dass die Trorks von den Handelswegen vertrieben werden.
+aetherhaven.questBoard.guild_master.outlander_raid.title=Outlander-Überfall
+aetherhaven.questBoard.guild_master.outlander_raid.description={villager} hat eine Vergütung für die Beseitigung von Fremden in der Nähe der Stadt veröffentlicht.
+aetherhaven.questBoard.guild_master.goblin_raid.title=Goblinüberfall auf die Stadt
+aetherhaven.questBoard.guild_master.goblin_raid.description={villager} entdeckte eine Kobold-Kriegerschar, die in die Stadt marschierte.
+aetherhaven.questBoard.guild_master.trork_raid.title=Trork-Kriegsbande
+aetherhaven.questBoard.guild_master.trork_raid.description={villager} bittet um Hilfe, um die Trorks daran zu hindern, auf die Charta vorzudringen.
+aetherhaven.questBoard.guild_master.outlander_assault.title=Outlander-Angriff
+aetherhaven.questBoard.guild_master.outlander_assault.description={villager} warnt davor, dass Fremde die Charta angreifen.
+
+aetherhaven.questBoard.builder.marble_statue.title=Eine glorreiche Statue
+
+aetherhaven.questBoard.builder.marble_statue.description=Rowan benötigt Marmor für eine in Auftrag gegebene Statue.
+
+aetherhaven.questBoard.logger.fir_logs.title=Tanne für Gerüste
+
+aetherhaven.questBoard.logger.fir_logs.description=Die Bauarbeiter baten um Tannenstämme zur Abstützung eines neuen Mauerabschnitts.

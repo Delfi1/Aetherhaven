@@ -1,0 +1,21 @@
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house=Über einen Wohnort...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_finish=Ihr Haus ist fertig.
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_remind=Über Ihr Haus...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.c_house_waiting=Zum Thema Wohnen...
+aetherhaven.dialogue.aetherhaven_guard.main_hub.leave=Auf Wiedersehen
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.body=Ich bin zwar in eure Stadt gezogen, schlafe aber immer noch im Freien. Könntet ihr mir ein Haus bauen und meinen Namen auf das Schild schreiben?
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.accept=Ich werde dir ein Haus bauen
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.decline=Vielleicht später
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.body=Danke. Reserviere ein Baugrundstück, baue das Haus fertig und markiere mich dann auf dem Hausschild. Komm wieder, wenn ich dort wohne.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.ok=Wird tun
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.body=Ich brauche noch ein Dach. Bau das Haus fertig und wähle mich auf dem Hausschild aus.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.ok=Rechts
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.body=Ein anderer Wachmann wartet zunächst auf ein Haus. Schließ die Kontrolle über dieses Haus ab, dann sprich mit mir.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.ok=Verstanden
+
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.body=Gut. Ich habe eine Tür und ein Bett. Ich werde meinen Anteil bezahlen wie alle anderen auch.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.ok=Danke

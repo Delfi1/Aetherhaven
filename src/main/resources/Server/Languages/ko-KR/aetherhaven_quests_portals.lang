@@ -25,7 +25,7 @@ aetherhaven.villager.locateOpRequired=순간이동에는 운영자(OP 그룹)가
 aetherhaven.villager.teleported=순간 이동했습니다.
 aetherhaven.reputation.setFailed={detail}
 aetherhaven.debug.loot.noContainer=해당 블록에 아이템 컨테이너가 없습니다(청크가 로드되지 않았거나, 필러/베이스가 일치하지 않거나, 컨테이너 블록이 아닙니다).
-aetherhaven.debug.loot.bonusApplied=이 컨테이너에 에테르헤이븐 보너스 전리품 확률이 적용되었습니다(강제 적용).
+aetherhaven.debug.loot.bonusApplied=이 컨테이너에 에테르헤이븐 보너스 전리품 획득 확률이 적용되었습니다(강제 적용).
 aetherhaven.townsCommand.line={id} 이름="{name}" 세계={world} 소유자={owner} 청크={cx},{cz} r{radius}
 aetherhaven.list.none=(없음)
 aetherhaven.questdebug.statusActiveLine=활성: {list}

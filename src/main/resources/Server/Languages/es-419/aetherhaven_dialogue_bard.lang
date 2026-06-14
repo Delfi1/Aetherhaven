@@ -1,0 +1,37 @@
+aetherhaven.dialogue.aetherhaven_bard.main_hub.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.main_hub.fallback=Las cuerdas están calientes. ¿Qué necesitas?
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.0=Buenos días. El salón del gremio tiene buena acústica hoy.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.1=Hola amigo. Estaba afinando mi laúd.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.2=Bienvenidos. La música da vida a un pueblo.
+
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_play=Pídele que toque una canción.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_stop=Pídele que deje de jugar
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house=Pregunte por una casa para Elías.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_finish=Confirma que Elias tiene un hogar.
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_remind=Pregunta de nuevo por la casa
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_goodbye=Di adiós
+
+aetherhaven.dialogue.aetherhaven_bard.music_pick.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.music_pick.body=¿Qué melodía te gustaría?
+aetherhaven.dialogue.aetherhaven_bard.music_pick.c_back=Volver
+
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.body=Todo tranquilo de nuevo. Avísame si quieres otra canción.
+aetherhaven.dialogue.aetherhaven_bard.music_stopped.c_ok=Volver al chat
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.body=Juego aquí casi todos los días, pero me gustaría tener un pequeño espacio propio cuando se ponga el sol.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_yes=Ayúdalo a encontrar un hogar.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_offer.c_later=Ahora mismo no.
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.body=Gracias. Un techo propio significaría muchísimo para mí.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_accepted.c_ok=Adiós
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.body=Construye el terreno para la casa y asígname al bloque de administración cuando esté listo.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_remind.c_ok=Seguiré trabajando en ello.
+
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.speaker=Elias Thornwood
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.body=Mi pequeño rincón del pueblo. Mantendré el salón del gremio animado para ti.
+aetherhaven.dialogue.aetherhaven_bard.elias_house_finish.c_ok=Maravilloso

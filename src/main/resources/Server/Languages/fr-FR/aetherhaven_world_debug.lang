@@ -12,6 +12,32 @@ aetherhaven.poi.clearedInteractionTarget=Cible d'interaction dégagée ; les PN
 aetherhaven.poi.setInteractionTarget=Définir la cible d'interaction sur {x}, {y}, {z}.
 aetherhaven.poi.selected=Point d'intérêt sélectionné {id} à {x}, {y}, {z}
 aetherhaven.poi.targetBlockMismatch=Le bloc cible doit correspondre au type attendu {type} pour ce POI.
+aetherhaven.poi.removed=Point d'intérêt supprimé.
+aetherhaven.poi.noTownPlot=Aucun terrain constructible n'est achevé à cet emplacement.
+
+aetherhaven.adventurerSpawnMarker.label=Lieu d'aventurier
+aetherhaven.adventurerSpawnMarker.placed=Emplacement pour aventurier.
+aetherhaven.adventurerSpawnMarker.removed=Emplacement d'aventurier supprimé.
+aetherhaven.adventurerSpawnMarker.alreadyHere=Un lieu d'aventuriers existe déjà.
+
+aetherhaven.poiMarker.label=Point d'intérêt
+
+aetherhaven.poiMarkerConfig.title=Configurer les points d'intérêt
+aetherhaven.poiMarkerConfig.needHeader=Besoin satisfait
+aetherhaven.poiMarkerConfig.presetSleep=Dormir
+aetherhaven.poiMarkerConfig.presetEat=Manger
+aetherhaven.poiMarkerConfig.presetSit=Assis / amusant
+aetherhaven.poiMarkerConfig.presetWork=Travail
+aetherhaven.poiMarkerConfig.summary={preset} ({kind})
+aetherhaven.poiMarkerConfig.capacity=Emplacements PNJ (1–4)
+aetherhaven.poiMarkerConfig.mountToggle=À fixer sur les meubles (lits, chaises)
+aetherhaven.poiMarkerConfig.workAction=Action de travail
+aetherhaven.poiMarkerConfig.workNone=Aucun
+aetherhaven.poiMarkerConfig.workMine=Le mien
+aetherhaven.poiMarkerConfig.workChop=Hacher
+aetherhaven.poiMarkerConfig.confirm=Lieu POI
+aetherhaven.poiMarkerConfig.cancel=Annuler
+aetherhaven.poiMarkerConfig.placed=Point d'intérêt placé.
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
@@ -53,7 +79,7 @@ aetherhaven.debug.gift.fillDone=Ajout de lignes de journal de cadeaux {added} po
 # Needs debug
 aetherhaven.debug.needs.whichInvalid=qui doit être la faim, l'énergie ou le plaisir (les valeurs sont de 0..{max}).
 aetherhaven.debug.needs.elderNoTown=Aucune ville pour toi dans ce monde (nécessaire pour l'Ancien).
-aetherhaven.debug.needs.noElderUuid=La ville ne possède pas encore d'identifiant unique d'ancien enregistré.
+aetherhaven.debug.needs.noElderUuid=La ville ne possède pas encore d'identifiant UUID d'ancien enregistré.
 aetherhaven.debug.needs.noMatch=Aucun villageois correspondant (essayez de vérifier le nom d'utilisateur, l'ancien ou l'UUID complet).
 aetherhaven.debug.needs.multipleMatch=Plusieurs PNJ correspondent à ce descripteur ; utilisez l’UUID complet indiqué dans l’inspecteur.
 aetherhaven.debug.needs.entityNotLoaded=Entité non chargée ou sans besoins de villageois : {id}
@@ -84,3 +110,14 @@ aetherhaven.debug.poi.listEmpty=Aucun bâtiment n'est enregistré pour cette vil
 aetherhaven.debug.poi.listLine={x},{y},{z} type={kind} type_bloc={block} étiquettes={tags} cap={cap} tracé={plot}
 aetherhaven.debug.poi.dumpHeader=Tous les points d'intérêt inscrits au registre mondial ({count}) :
 aetherhaven.debug.poi.dumpLine=ville={town} {x},{y},{z} type={kind} type_bloc={block} étiquettes={tags} parcelle={plot}
+
+aetherhaven.debug.tourist.noTown=Vous n'avez pas de ville au monde.
+aetherhaven.debug.tourist.targetsHeader=Objectifs de visites touristiques pour {town} (parcelles {count}) :
+aetherhaven.debug.tourist.targetsEmpty=Aucune parcelle n'est terminée avec l'option touristDestination activée (vérifiez le créateur de parcelle ou le fichier JSON du bâtiment).
+aetherhaven.debug.tourist.plotLine={building} tracé={plot} entrée=({entryX},{entryY},{entryZ}) préféré={preferred} point de visite={poiCount}
+aetherhaven.debug.tourist.poiLine=poi {x},{y},{z} type={kind} étiquettes={tags}
+
+# Wall wand placement debug (/ah walldebug)
+aetherhaven.debug.wall.on=Débogage de la baguette murale activé (chat + journal du serveur).
+aetherhaven.debug.wall.off=Débogage de la baguette murale désactivé.
+aetherhaven.debug.wall.noSession=Aucune session active avec la baguette murale. Veuillez d'abord ouvrir la baguette murale.

@@ -1,0 +1,71 @@
+# Pyrotechnic dialogue (Grubble Sparkmatch)
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.body=Ha! Du hast den klebrigen Beutel aufgemacht! Grubble saß ewig darin fest. Hat deine Stadt ein Gasthaus? Gut. Vielleicht kommt Grubble ja mal vorbei, wenn er Lust auf warmes Essen und eine trockene Bank hat.
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.c0=Aufpassen.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.fallback=Wenn Grubble über Werkstatt, Haus oder Sprengstoff reden muss, sag es, bevor das Pulver auf dumme Gedanken kommt.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.0=Heute ein großer Knall? Oder ein kleiner Knall? Grubble hat beides erwischt.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.1=Niese nicht in der Nähe des Pulverregals. Grubble hat diese Lektion gelernt.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.2=Deine Stadt riecht nach Holzrauch. Grubble mag das.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.3=Brauchst du was, das knallt? Dann bist du hier genau richtig, Goblin.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.0=Bring Grubble-Boompulver oder eine schöne runde Bombe mit.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.love.1=Popberry-Bomben machen Grubble sehr glücklich.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.0=Grubble möchte keinen Müll oder Knochen als Geschenke.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.hint.dislike.1=Die Leere jagt Grubble einen Schauer über den Rücken. Halte sie fern.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house=Grubble, du wolltest über ein Haus sprechen.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house_done=Dein Name steht im Hausregal. Grubble soll es von mir erfahren.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_house_remind=Der Hausbau ist noch im Gange.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_done=Grubble, ich wollte mal nachfragen, jetzt, wo der Bombenladen steht.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_complete=Die Bombenwerkstatt ist fertig. Grubble, ich bin hier, um die Sache abzuschließen.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_building=Der Laden befindet sich noch im Aufbau. Wie ist der aktuelle Stand?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_offer=Grubble, ich möchte dir helfen, einen richtigen Laden in der Stadt zu eröffnen.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_goodbye=Das war’s für heute. Grubble, wir sehen uns später.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=Grubble kann nicht ewig Bombenkram aus der Tasche verkaufen. Die Leute werden nervös. Wir brauchen einen richtigen Laden mit dicken Wänden, einem guten Schild und Regalen, die nicht wackeln, wenn mal eine kleine Bombe niest. Grubble hat die Pläne auf feuerfestes Papier gezeichnet. Du baust für die Stadt, Grubble gibt dir das Blatt.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=Wir werden Grubble einen Laden besorgen.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1=Nicht jetzt. Grubble wartet.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=Nimm die Bauplanseite. Lerne am Stadtplanungsschalter. Stelle eine Marke her. Baue einen Laden, wo ihn die Leute finden können, ohne sich zu verirren oder ihn versehentlich in die Luft zu jagen. Grubble wartet im Gasthaus. Das Pulver bleibt im Beutel, bis die Wände dick genug sind.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=Wir sehen uns, wenn das Schild steht.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=Der Laden ist noch nicht fertig? Grubble wartet. Powder wird unruhig, wenn Grubble zu lange wartet. Lernst du immer noch die Pläne und baust Wände, oder sollte Grubble die Hoffnung aufgeben?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c0=Grubble, ich muss die Quest vorerst abbrechen.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c1=Ich arbeite noch daran. Grubble, ich mache weiter.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.body=Heute nicht einkaufen? Na gut. Grubble hat Bomben in der Tasche und träumt von Regalen. Wir sprechen uns wieder, falls wir unsere Meinung ändern.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.c0=Okay. Grubble, man sieht sich.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.body=Der Laden ist fertig! Die Regale sind bereit! Die Wände sind dick! Grubble kann jetzt wie ein richtiger Geschäftsmann-Goblin tolle Sachen verkaufen, anstatt aus dem Mantel zu flüstern. Danke, Freund.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.c0=Gern geschehen. Grubble, komm zu mir, wenn die Stadt mehr Einwohner braucht.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.body=Sogar der Boom-Goblin braucht ein Bett. Ein ruhiges Bett. Weit weg vom Pulverregal und der Spinnenecke. Der Laden ist zum Arbeiten da. Grubble will dasselbe kleine Haus wie die anderen. Willst du eins pfänden?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c0=Grubble, ich werde dir ein Haus sichern.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c1=Ein anderes Mal.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.body=Wenn die Wände real sind, schreibe Grubbles Namen wie in der Charta beschrieben auf den Block im Inneren. Dann geh zu Grubble und sag es ihm mündlich. Grubble will es hören, nicht raten.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.c0=Grubble wird es von mir erfahren.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.body=Nimm dir Zeit für den Rahmen. Wenn das Haus steht, schreib „Grubble“ auf das Regal im Inneren und komm dann wieder. Grubble hat es nicht eilig. Er will nur seinen Namen an der Wand.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.c0=Verstanden.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.body=Schöne Wände. Gutes Dach. Grubble kann jetzt ohne Spinnen- oder Pulveralpträume schlafen. Das reicht völlig.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_finish.c0=Gut, dass Grubble eine richtige Tür bekommen hat.
+
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.confirm=Du gibst Grubble etwas?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.love=Ja! Das ist der Hammer! Grubble liebt dich dafür.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.like=Gutes Geschenk. Grubble nickt zustimmend.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.neutral=Hmm. Nicht genug Wumms. Aber trotzdem danke.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.dislike=Grubble will das nicht. Denk nochmal darüber nach.

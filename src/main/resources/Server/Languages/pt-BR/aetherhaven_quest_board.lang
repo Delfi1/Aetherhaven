@@ -1,0 +1,135 @@
+aetherhaven.questBoard.miner.stone_haul.title=Pedra para o galpão
+aetherhaven.questBoard.miner.stone_haul.description=Gorruk quer que pedras sejam empilhadas perto de sua cabana antes da próxima chuva.
+aetherhaven.questBoard.miner.copper_ore.title=Cobre para o banco
+aetherhaven.questBoard.miner.copper_ore.description=Gorruk precisa que o minério de cobre seja fundido em breve para fabricar ferramentas para a cidade.
+aetherhaven.questBoard.miner.iron_ore.title=Ferro para a linha de forja
+aetherhaven.questBoard.miner.iron_ore.description=Gorruk está com falta de minério de ferro e pediu ao conselho que encontrasse ajuda.
+aetherhaven.questBoard.miner.silver_ore.title=Prata para o cofre
+aetherhaven.questBoard.miner.silver_ore.description=Gorruk precisa de minério de prata reservado para uma reserva municipal.
+aetherhaven.questBoard.miner.gold_ore.title=Ouro para o baú da carta
+aetherhaven.questBoard.miner.gold_ore.description=Gorruk publicou um contrato para minério de ouro raro, buscando profissionais de confiança.
+
+aetherhaven.questBoard.farmer.wheat_bundle.title=Trigo para a despensa
+aetherhaven.questBoard.farmer.wheat_bundle.description=Seren precisa de feixes de trigo para fazer pão e para ter sementes.
+aetherhaven.questBoard.farmer.carrot_crate.title=Cenouras para a cozinha
+aetherhaven.questBoard.farmer.carrot_crate.description=Seren quer cenouras frescas para ensopado e potes para trocar.
+aetherhaven.questBoard.farmer.potato_sack.title=Batatas para a adega
+aetherhaven.questBoard.farmer.potato_sack.description=Seren precisa armazenar batatas antes da semana da geada.
+aetherhaven.questBoard.farmer.harvest_feast.title=Colheita para a praça
+aetherhaven.questBoard.farmer.harvest_feast.description=Seren está planejando um banquete de colheita e precisa de uma variedade de produtos.
+
+aetherhaven.questBoard.blacksmith.iron_bars.title=Barras de ferro para encomendas
+aetherhaven.questBoard.blacksmith.iron_bars.description=O ferreiro tem encomendas atrasadas e precisa de barras de ferro agora.
+aetherhaven.questBoard.blacksmith.coal_fuel.title=Carvão para a forja
+aetherhaven.questBoard.blacksmith.coal_fuel.description=A forja ficou sem combustível durante a noite. Traga carvão.
+aetherhaven.questBoard.blacksmith.gold_bars.title=Barras de ouro para trabalho de guilda
+aetherhaven.questBoard.blacksmith.gold_bars.description=O ferreiro precisa de barras de ouro para uma encomenda de alto nível.
+aetherhaven.questBoard.blacksmith.master_smithing.title=Ordem dos Mestres Ferreiros
+aetherhaven.questBoard.blacksmith.master_smithing.description=Preciso de ajuda para atender a um pedido de magnitude lendária.
+
+aetherhaven.questBoard.logger.oak_logs.title=Carvalho para reparos
+aetherhaven.questBoard.logger.oak_logs.description=As cercas da cidade precisam de toras de carvalho antes da próxima tempestade.
+aetherhaven.questBoard.logger.timber_contract.title=Madeira para a estrutura do hall
+aetherhaven.questBoard.logger.timber_contract.description=Foi publicado um grande contrato para fornecimento de madeira mista de carvalho e pinheiro.
+
+aetherhaven.questBoard.rancher.raw_meat.title=Carne para defumar
+aetherhaven.questBoard.rancher.raw_meat.description=Thalen precisa que a carne crua seja embalada para a cozinha da estalagem.
+aetherhaven.questBoard.rancher.leather_hide.title=Esconder para tachas
+aetherhaven.questBoard.rancher.leather_hide.description=Thalen está consertando arreios e precisa de couro leve.
+aetherhaven.questBoard.rancher.ranch_provisions.title=Abastecimento do rancho
+aetherhaven.questBoard.rancher.ranch_provisions.description=Thalen precisa de carne e couro para os depósitos do intendente da guilda.
+
+aetherhaven.questBoard.priestess.life_essence.title=Essência vital para o altar
+aetherhaven.questBoard.priestess.life_essence.description=A sacerdotisa está preparando poções e precisa de essência vital.
+aetherhaven.questBoard.priestess.sacred_offering.title=Pacote de oferenda sagrada
+aetherhaven.questBoard.priestess.sacred_offering.description=A sacerdotisa pediu essência e ouro para um rito.
+aetherhaven.questBoard.priestess.cull_undead.title=Limpem os mortos inquietos
+aetherhaven.questBoard.priestess.cull_undead.description={villager} ofereceu uma recompensa para eliminar os mortos-vivos perto das estradas.
+aetherhaven.questBoard.priestess.purge_undead.title=Expurgar os mortos-vivos
+aetherhaven.questBoard.priestess.purge_undead.description={villager} quer que mais mortos-vivos sejam eliminados antes do próximo rito.
+aetherhaven.questBoard.priestess.undead_raid.title=Mortos-vivos marcham sobre a cidade
+aetherhaven.questBoard.priestess.undead_raid.description={villager} alerta que mortos-vivos estão marchando sobre a carta.
+aetherhaven.questBoard.priestess.void_raid.title=Incursão do Vazio na cidade
+aetherhaven.questBoard.priestess.void_raid.description={villager} sente a presença de criaturas do vazio avançando em direção à pedra fundamental.
+
+aetherhaven.questBoard.targets.undead=mortos-vivos
+aetherhaven.questBoard.targets.void=voidspawn
+aetherhaven.questBoard.targets.trork=trorks
+aetherhaven.questBoard.targets.outlander=forasteiros
+aetherhaven.questBoard.targets.goblin=goblins
+aetherhaven.questBoard.targets.vermin=vermes
+
+aetherhaven.questBoard.innkeeper.bread_loaves.title=Pão para a sala comum
+aetherhaven.questBoard.innkeeper.bread_loaves.description=Corin quer os pães prontos antes da chegada dos viajantes ao entardecer.
+aetherhaven.questBoard.innkeeper.traveler_rations.title=Ração para viajantes
+aetherhaven.questBoard.innkeeper.traveler_rations.description=Corin precisa que sejam embalados pão e carne para os hóspedes cansados da viagem.
+aetherhaven.questBoard.innkeeper.hearty_stew.title=Ingredientes para um ensopado substancioso
+aetherhaven.questBoard.innkeeper.hearty_stew.description=Corin quer batatas e carne para o jantar.
+aetherhaven.questBoard.innkeeper.inn_feast.title=Preparação do banquete na pousada
+aetherhaven.questBoard.innkeeper.inn_feast.description=Corin está cozinhando para uma casa cheia e precisa de grãos e pão.
+aetherhaven.questBoard.innkeeper.noble_banquet.title=estoque nobre de banquete
+aetherhaven.questBoard.innkeeper.noble_banquet.description=Corin publicou uma lista de itens para o banquete, incluindo pão, carne e ouro.
+aetherhaven.questBoard.innkeeper.grand_hospitality.title=Grande hospitalidade
+aetherhaven.questBoard.innkeeper.grand_hospitality.description=Corin precisa de um amplo espaço para receber os mercadores visitantes.
+aetherhaven.questBoard.innkeeper.royal_table.title=Mesa posta em estilo real
+aetherhaven.questBoard.innkeeper.royal_table.description=Corin deseja barras de ouro, essência e pão para os convidados de honra.
+aetherhaven.questBoard.innkeeper.legendary_feast.title=banquete lendário
+aetherhaven.questBoard.innkeeper.legendary_feast.description=Corin quer dar um grande banquete para a cidade.
+
+aetherhaven.questBoard.elder.foundation_stones.title=Pedra fundamental
+aetherhaven.questBoard.elder.foundation_stones.description=Lyren quer que sejam recolhidas pedras para novas placas comemorativas.
+aetherhaven.questBoard.elder.village_timber.title=Madeira da aldeia
+aetherhaven.questBoard.elder.village_timber.description=Lyren precisa de toras de carvalho para fazer bancos perto da sede da guilda.
+aetherhaven.questBoard.elder.community_grain.title=Armazéns comunitários de grãos
+aetherhaven.questBoard.elder.community_grain.description=Lyren pediu trigo e cenouras para a despensa da cidade.
+aetherhaven.questBoard.elder.town_supplies.title=Materiais para trabalho de fretamento
+aetherhaven.questBoard.elder.town_supplies.description=Lyren colocou pedras e madeira para construir caminhos perto da pedra da carta régia.
+aetherhaven.questBoard.elder.iron_tribute.title=Homenagem de ferro
+aetherhaven.questBoard.elder.iron_tribute.description=Lyren precisa de minério de ferro e barras de ferro para os depósitos de defesa da cidade.
+aetherhaven.questBoard.elder.silver_tribute.title=Homenagem em prata
+aetherhaven.questBoard.elder.silver_tribute.description=Lyren reservou uma quantia em prata para o tesouro da cidade.
+aetherhaven.questBoard.elder.gold_tribute.title=Homenagem em ouro
+aetherhaven.questBoard.elder.gold_tribute.description=Lyren publicou uma homenagem em ouro para o cofre da carta constitutiva.
+aetherhaven.questBoard.elder.elder_legacy.title=Oferta de legado de ancião
+aetherhaven.questBoard.elder.elder_legacy.description=Lyren busca ouro, barras e essência para um rito de fundação.
+aetherhaven.questBoard.elder.vermin_clear.title=Elimine as pragas
+aetherhaven.questBoard.elder.vermin_clear.description={villager} quer que as pragas sejam removidas dos caminhos ao redor da cidade.
+aetherhaven.questBoard.elder.vermin_raid.title=Pragas infestam os portões.
+aetherhaven.questBoard.elder.vermin_raid.description={villager} relata uma infestação de vermes em direção à pedra fundamental.
+
+aetherhaven.questBoard.guild_master.recruit_gear.title=Kit inicial de recrutamento
+aetherhaven.questBoard.guild_master.recruit_gear.description=O mestre da guilda precisa de pedra e carvão para novos recrutas.
+aetherhaven.questBoard.guild_master.apprentice_tools.title=Ferramentas de aprendiz
+aetherhaven.questBoard.guild_master.apprentice_tools.description=O mestre da guilda quer minério de cobre para kits de treinamento.
+aetherhaven.questBoard.guild_master.journeyman_armor.title=estoque de armadura de jornaleiro
+aetherhaven.questBoard.guild_master.journeyman_armor.description=O mestre da guilda precisa de barras de ferro e couro para fazer armaduras.
+aetherhaven.questBoard.guild_master.veteran_weapons.title=Ordem de armas para veteranos
+aetherhaven.questBoard.guild_master.veteran_weapons.description=O mestre da guilda ofereceu ferro e couro para equipamentos de veterano.
+aetherhaven.questBoard.guild_master.adventurer_gear.title=Equipamentos para novos funcionários
+aetherhaven.questBoard.guild_master.adventurer_gear.description=O mestre da guilda está equipando aventureiros e precisa de ferro e couro.
+aetherhaven.questBoard.guild_master.elite_contract.title=Contrato de elite
+aetherhaven.questBoard.guild_master.elite_contract.description=O mestre da guilda precisa de barras de ouro e ferro para kits de elite.
+aetherhaven.questBoard.guild_master.master_gear.title=Pacote de equipamentos Master
+aetherhaven.questBoard.guild_master.master_gear.description=O mestre da guilda publicou um contrato de equipamento de nível mestre.
+aetherhaven.questBoard.guild_master.legendary_contract.title=Contrato lendário
+aetherhaven.questBoard.guild_master.legendary_contract.description=Lyra precisa de espadas de alta qualidade para uma batalha épica que se aproxima.
+aetherhaven.questBoard.guild_master.goblin_trouble.title=Problemas com goblins
+aetherhaven.questBoard.guild_master.goblin_trouble.description={villager} ofereceu uma recompensa por goblins que estivessem causando problemas nas estradas.
+aetherhaven.questBoard.guild_master.trork_patrol.title=Patrulha Trork
+aetherhaven.questBoard.guild_master.trork_patrol.description={villager} quer que os trorks sejam expulsos das rotas comerciais.
+aetherhaven.questBoard.guild_master.outlander_raid.title=Ataque de Outlander
+aetherhaven.questBoard.guild_master.outlander_raid.description={villager} anunciou pagamento para a remoção de forasteiros das proximidades da cidade.
+aetherhaven.questBoard.guild_master.goblin_raid.title=Ataque de goblins à cidade
+aetherhaven.questBoard.guild_master.goblin_raid.description={villager} avistou um bando de goblins marchando em direção à cidade.
+aetherhaven.questBoard.guild_master.trork_raid.title=Banda de guerra Trork
+aetherhaven.questBoard.guild_master.trork_raid.description={villager} precisa de ajuda para impedir que tropas avancem sobre a embarcação fretada.
+aetherhaven.questBoard.guild_master.outlander_assault.title=Ataque Outlander
+aetherhaven.questBoard.guild_master.outlander_assault.description={villager} alerta que forasteiros estão atacando a carta.
+
+aetherhaven.questBoard.builder.marble_statue.title=Uma estátua gloriosa
+
+aetherhaven.questBoard.builder.marble_statue.description=Rowan precisa de mármore para uma estátua que foi encomendada.
+
+aetherhaven.questBoard.logger.fir_logs.title=Abeto para andaimes
+
+aetherhaven.questBoard.logger.fir_logs.description=Os construtores pediram toras de abeto para reforçar uma nova parede.

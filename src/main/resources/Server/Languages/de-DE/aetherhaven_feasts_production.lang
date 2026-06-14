@@ -39,9 +39,17 @@ aetherhaven.ui.production.err.permission=Dieser Lagerraum kann für diese Stadt 
 aetherhaven.ui.production.err.plot=Dieser Block befindet sich nicht innerhalb eines fertiggestellten Arbeitsplatzgrundstücks (Bauernhof, Scheune, Mühle oder Bergmannshütte) für Ihre Stadt.
 aetherhaven.ui.production.err.catalog=Für dieses Gebäude ist kein Produktionskatalog konfiguriert.
 aetherhaven.ui.production.err.inventoryFull=Ihr Lager ist zu voll, um so viel aufzunehmen.
-aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
+aetherhaven.ui.production.err.inventoryPartial=Ihr Lager war voll, bevor alles bewegt werden konnte. Der Rest verblieb in diesem Lagerraum am Arbeitsplatz.
 aetherhaven.ui.production.unlockButton=Schaltet frei
 aetherhaven.ui.production.unlockTooltip=Zugriff auf gesperrte Arbeitsplatz-Outputs für dieses Gebäude einsehen und erwerben.
+aetherhaven.ui.production.pickTooltip=Wähle aus, was diese Zeile bewirkt.
+aetherhaven.ui.production.collectAllButton=Sammle alle
+aetherhaven.ui.production.collectAllTooltip=Nehmen Sie alles, was in jeder Zeile gespeichert ist.
+
+aetherhaven.ui.materialPicker.title=Ausgabe auswählen
+aetherhaven.ui.materialPicker.intro=Wählen Sie für diese Zeile einen Ihrer freigeschalteten Ausgänge aus.
+aetherhaven.ui.materialPicker.back=Zurück
+aetherhaven.ui.materialPicker.backTooltip=Rückkehr zu den Filialen am Arbeitsplatz
 
 aetherhaven.ui.productionUnlocks.title=Arbeitsplatz freischalten
 aetherhaven.ui.productionUnlocks.intro=Wählen Sie unten einen Ausgang aus, um dessen Namen und Anforderungen im Bedienfeld anzuzeigen. Bewegen Sie den Mauszeiger über ein Symbol, um die Anzahl der vorhandenen bzw. benötigten Einheiten anzuzeigen. Sobald Sie die erforderlichen Mengen an Gegenständen und Gold erreicht haben, klicken Sie auf einen gesperrten Ausgang, um ihn zu entsperren.
@@ -53,7 +61,7 @@ aetherhaven.ui.productionUnlocks.err.empty=Für diesen Arbeitsplatz ist keine En
 aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=Für diesen Arbeitsplatz bereits freigeschaltet.
 aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=Artikel: {held} / {need}
 aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=Goldmünzen: {held} / {need}
-aetherhaven.ui.productionUnlocks.notify.needResource=Sie benötigen mindestens {need} dieses Gegenstands in Ihrem Inventar (kombinierte Taschen).
+aetherhaven.ui.productionUnlocks.notify.needResource=Sie benötigen mindestens {need} dieses Artikels in Ihrem Inventar (kombinierte Taschen).
 aetherhaven.ui.productionUnlocks.notify.needGold=Sie benötigen genügend Goldmünzen zwischen der Stadtkasse und Ihrem Inventar ({need} insgesamt).
 aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=Die benötigten Artikel konnten nicht aus Ihrem Inventar entfernt werden.
 aetherhaven.ui.productionUnlocks.notify.payGoldFailed=Da der Goldpreis nicht bezahlt werden konnte, wurden Ihre Artikel zurückgeschickt.

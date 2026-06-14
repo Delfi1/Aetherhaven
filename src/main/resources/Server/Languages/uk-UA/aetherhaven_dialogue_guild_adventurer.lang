@@ -1,0 +1,7 @@
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire=Найняти {type} охоронця ({gold} золото)
+aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.leave=Прощавай
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.body=Заплатіть, і цей шукач пригод патрулюватиме ваше місто. Вони залишатимуться там, поки не загинуть у бою.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes=Так, найміть їх
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no=Не зараз
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.body=Вони ваші. Годуйте їх і тримайте вдома, якщо хочете, щоб вони залишалися надовго.
+aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_done.leave=Прощавай

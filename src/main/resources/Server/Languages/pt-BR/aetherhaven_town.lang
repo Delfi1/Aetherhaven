@@ -39,15 +39,27 @@ aetherhaven.ui.memberPermissions.title=Permissões de membro
 aetherhaven.ui.memberPermissions.backTooltip=Voltar à lista de jogadores
 aetherhaven.ui.memberPermissions.placePlots=Planos de localização
 aetherhaven.ui.memberPermissions.manageConstructions=Construir e gerir obras (assembleia, produção, festas, alterações de estatutos, mudança de edifícios)
+aetherhaven.ui.memberPermissions.removePlots=Remover edifícios do diário da cidade
 aetherhaven.ui.memberPermissions.spendTreasuryGold=Gastar o ouro do tesouro municipal em custos de construção.
 aetherhaven.ui.memberPermissions.openTreasuryPanel=Tesouraria aberta (depósito/saque)
 aetherhaven.ui.memberPermissions.acceptQuests=Aceitar/iniciar missões da cidade
 aetherhaven.ui.memberPermissions.completeQuests=Complete as missões da cidade e receba recompensas de reputação.
 aetherhaven.ui.memberPermissions.abandonQuests=Abandonar missões ativas da cidade
 aetherhaven.ui.memberPermissions.reviveVillagers=Reviver os aldeões junto à estátua de Gaia
+aetherhaven.ui.memberPermissions.useShopSpots=Anuncie e venda em espaços da loja do jogador
 aetherhaven.ui.memberPermissions.err.notOwner=Somente o proprietário da cidade pode editar as permissões.
 aetherhaven.ui.memberPermissions.err.notInTown=Esse jogador não está nesta cidade.
 aetherhaven.town.rolecmd.playerMustBeOnline=O jogador precisa estar online.
+
+# === /aetherhaven replace-charter ===
+aetherhaven.town.charterReplace.notOwner=Somente o proprietário da cidade pode reparar a carta (a menos que você tenha permissão da administração municipal).
+aetherhaven.town.charterReplace.wrongWorld=Essa cidade não existe neste mundo.
+aetherhaven.town.charterReplace.chunkNotLoaded=O bloco de código da carta não foi carregado — aproxime-se das coordenadas da carta da sua cidade e tente novamente.
+aetherhaven.town.charterReplace.clearFirst=A posição da carta salva ainda contém um bloco sólido — quebre-o até que a célula esteja vazia e, em seguida, execute este comando novamente.
+aetherhaven.town.charterReplace.placeFailed=Não foi possível inserir o bloco de fretamento (local bloqueado?).
+aetherhaven.town.charterReplace.linkFailed=O bloco de fretamento não conseguiu ser vinculado (consulte o registro do servidor).
+aetherhaven.town.charterReplace.alreadyOk=Este bloco de terrenos já está vinculado à sua cidade.
+aetherhaven.town.charterReplace.done=Bloco de carta restaurado para "{town}".
 aetherhaven.town.rolecmd.roleInvalid=A função deve ser CONSTRUIR, MISSÃO ou AMBAS.
 aetherhaven.town.leave.notInTown=Você não está em uma cidade.
 aetherhaven.town.leave.ownerCannotLeave=Os proprietários não podem sair; a transferência de propriedade ainda não foi implementada.

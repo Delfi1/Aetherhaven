@@ -26,6 +26,7 @@ aetherhaven.common.invalidVillager=无效村民。
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter
 aetherhaven.charter.alreadyInTown=你已经身处这个世界的一个城镇之中。在建立新的城镇之前，先离开它吧。
+aetherhaven.charter.notInPersistentWorld=你无法在这里建立城镇。请先返回你的主世界。
 aetherhaven.charter.townFounded=城镇已建立：{name}。村长已抵达。请使用宪章重新命名城镇。
 aetherhaven.chartertown.info.notLinked=该宪章目前尚未与任何城镇关联。
 aetherhaven.chartertown.info.invalidTownId=宪章上的城镇 ID 无效。

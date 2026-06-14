@@ -1,0 +1,135 @@
+aetherhaven.questBoard.miner.stone_haul.title=棚子的石頭
+aetherhaven.questBoard.miner.stone_haul.description=戈魯克希望下次下雨前，有人在他的小屋旁堆放好石頭。
+aetherhaven.questBoard.miner.copper_ore.title=長椅用的銅
+aetherhaven.questBoard.miner.copper_ore.description=戈魯克需要盡快冶煉銅礦石來製作城鎮工具。
+aetherhaven.questBoard.miner.iron_ore.title=鍛造線所需的鐵
+aetherhaven.questBoard.miner.iron_ore.description=Gorruk公司鐵礦石短缺，請求董事會尋求協助。
+aetherhaven.questBoard.miner.silver_ore.title=金庫裡的銀子
+aetherhaven.questBoard.miner.silver_ore.description=戈魯克需要預留一些銀礦石作為城鎮儲備。
+aetherhaven.questBoard.miner.gold_ore.title=憲章寶箱的金幣
+aetherhaven.questBoard.miner.gold_ore.description=Gorruk 發布了一份罕見的金礦開採合同，僅限信譽良好的人士參與。
+
+aetherhaven.questBoard.farmer.wheat_bundle.title=糧食儲備
+aetherhaven.questBoard.farmer.wheat_bundle.description=Seren需要捆紮好的小麥用來製作麵包和儲備種子。
+aetherhaven.questBoard.farmer.carrot_crate.title=廚房裡的紅蘿蔔
+aetherhaven.questBoard.farmer.carrot_crate.description=塞倫想要新鮮胡蘿蔔做燉菜和交換罐。
+aetherhaven.questBoard.farmer.potato_sack.title=地窖裡的土豆
+aetherhaven.questBoard.farmer.potato_sack.description=塞倫需要在霜凍週之前儲存馬鈴薯。
+aetherhaven.questBoard.farmer.harvest_feast.title=廣場的收穫
+aetherhaven.questBoard.farmer.harvest_feast.description=塞倫正計劃舉辦一場豐收盛宴，需要各種不同的農作物。
+
+aetherhaven.questBoard.blacksmith.iron_bars.title=用於訂單的鐵條
+aetherhaven.questBoard.blacksmith.iron_bars.description=鐵匠積壓了許多訂單，現在急需鐵條。
+aetherhaven.questBoard.blacksmith.coal_fuel.title=鍛爐用的木炭
+aetherhaven.questBoard.blacksmith.coal_fuel.description=鍛爐一夜之間燃料就用完了。帶些木炭來。
+aetherhaven.questBoard.blacksmith.gold_bars.title=公會工作所得金條
+aetherhaven.questBoard.blacksmith.gold_bars.description=鐵匠需要金條來完成一項高階委託。
+aetherhaven.questBoard.blacksmith.master_smithing.title=大師鍛造師團
+aetherhaven.questBoard.blacksmith.master_smithing.description=我需要協助完成一筆規模空前的訂單。
+
+aetherhaven.questBoard.logger.oak_logs.title=用於維修的橡木
+aetherhaven.questBoard.logger.oak_logs.description=城鎮圍欄需要在下次暴風雨來臨之前用橡木原木修繕。
+aetherhaven.questBoard.logger.timber_contract.title=大廳框架的木材
+aetherhaven.questBoard.logger.timber_contract.description=一份大型木材合約已發布，採購橡木和松木的混合木材。
+
+aetherhaven.questBoard.rancher.raw_meat.title=培根房
+aetherhaven.questBoard.rancher.raw_meat.description=薩倫需要一些包裝好的生肉送到旅館廚房。
+aetherhaven.questBoard.rancher.leather_hide.title=藏匿釘子
+aetherhaven.questBoard.rancher.leather_hide.description=泰倫正在修補馬具，需要一些輕質皮革。
+aetherhaven.questBoard.rancher.ranch_provisions.title=牧場供應
+aetherhaven.questBoard.rancher.ranch_provisions.description=薩倫需要肉類和皮革來充實公會軍需倉庫。
+
+aetherhaven.questBoard.priestess.life_essence.title=祭壇上的生命精華
+aetherhaven.questBoard.priestess.life_essence.description=女祭司正在熬製藥劑，需要生命精華。
+aetherhaven.questBoard.priestess.sacred_offering.title=聖物供品包
+aetherhaven.questBoard.priestess.sacred_offering.description=女祭司請求提供神香和黃金用於祭祀儀式。
+aetherhaven.questBoard.priestess.cull_undead.title=清除不安的亡靈
+aetherhaven.questBoard.priestess.cull_undead.description={villager} 發布懸賞，清除道路附近的亡靈。
+aetherhaven.questBoard.priestess.purge_undead.title=清除行屍走肉
+aetherhaven.questBoard.priestess.purge_undead.description={villager}希望在下次儀式前清除更多的亡靈。
+aetherhaven.questBoard.priestess.undead_raid.title=亡靈向城鎮進發
+aetherhaven.questBoard.priestess.undead_raid.description={villager} 警告說，亡靈正在向憲章進軍。
+aetherhaven.questBoard.priestess.void_raid.title=虛空入侵城鎮
+aetherhaven.questBoard.priestess.void_raid.description={villager} 感知到虛空生物正朝著契約石撕咬而來。
+
+aetherhaven.questBoard.targets.undead=亡靈
+aetherhaven.questBoard.targets.void=虛空生物
+aetherhaven.questBoard.targets.trork=trorks
+aetherhaven.questBoard.targets.outlander=異鄉人
+aetherhaven.questBoard.targets.goblin=哥布林
+aetherhaven.questBoard.targets.vermin=害蟲
+
+aetherhaven.questBoard.innkeeper.bread_loaves.title=公共休息室的麵包
+aetherhaven.questBoard.innkeeper.bread_loaves.description=科林希望在黃昏時分旅客抵達前準備好麵包。
+aetherhaven.questBoard.innkeeper.traveler_rations.title=旅客口糧
+aetherhaven.questBoard.innkeeper.traveler_rations.description=科林需要為旅途勞頓的客人準備麵包和肉類。
+aetherhaven.questBoard.innkeeper.hearty_stew.title=豐盛的燉菜
+aetherhaven.questBoard.innkeeper.hearty_stew.description=科林想在晚上煮馬鈴薯和肉。
+aetherhaven.questBoard.innkeeper.inn_feast.title=客棧宴席準備
+aetherhaven.questBoard.innkeeper.inn_feast.description=科琳要為滿屋子的人做飯，需要穀物和麵包。
+aetherhaven.questBoard.innkeeper.noble_banquet.title=貴族宴會用品
+aetherhaven.questBoard.innkeeper.noble_banquet.description=科林公佈了一份宴會清單，上面列出麵包、肉和黃金。
+aetherhaven.questBoard.innkeeper.grand_hospitality.title=盛情款待
+aetherhaven.questBoard.innkeeper.grand_hospitality.description=科林需要為來訪的商家準備豐盛的餐點。
+aetherhaven.questBoard.innkeeper.royal_table.title=皇家餐桌佈置
+aetherhaven.questBoard.innkeeper.royal_table.description=科林想用金條、香精和麵包招待貴賓。
+aetherhaven.questBoard.innkeeper.legendary_feast.title=傳奇盛宴
+aetherhaven.questBoard.innkeeper.legendary_feast.description=科林想為鎮上舉辦一場盛大的宴會。
+
+aetherhaven.questBoard.elder.foundation_stones.title=奠基石
+aetherhaven.questBoard.elder.foundation_stones.description=萊倫希望收集石頭，用於製作新的憲章標誌。
+aetherhaven.questBoard.elder.village_timber.title=村莊木材
+aetherhaven.questBoard.elder.village_timber.description=萊倫需要橡木原木來製作公會大廳附近的長凳。
+aetherhaven.questBoard.elder.community_grain.title=社區糧倉
+aetherhaven.questBoard.elder.community_grain.description=萊倫請求鎮上的食品儲藏室提供小麥和胡蘿蔔。
+aetherhaven.questBoard.elder.town_supplies.title=包機工作所需用品
+aetherhaven.questBoard.elder.town_supplies.description=萊倫在憲章石附近放置了石頭和木頭，用來鋪設小路。
+aetherhaven.questBoard.elder.iron_tribute.title=鐵貢品
+aetherhaven.questBoard.elder.iron_tribute.description=萊倫需要鐵礦石和鐵錠來建造城鎮防禦商店。
+aetherhaven.questBoard.elder.silver_tribute.title=銀飾
+aetherhaven.questBoard.elder.silver_tribute.description=萊倫為鎮上的國庫預留了一筆銀貢。
+aetherhaven.questBoard.elder.gold_tribute.title=黃金致敬
+aetherhaven.questBoard.elder.gold_tribute.description=Lyren 為憲章金庫發布了一枚金幣作為致敬。
+aetherhaven.questBoard.elder.elder_legacy.title=長者遺贈
+aetherhaven.questBoard.elder.elder_legacy.description=萊倫尋找黃金、金條和精華，用於舉行奠基儀式。
+aetherhaven.questBoard.elder.vermin_clear.title=清除害蟲
+aetherhaven.questBoard.elder.vermin_clear.description={villager} 希望清除城鎮周圍道路上的害蟲。
+aetherhaven.questBoard.elder.vermin_raid.title=害蟲聚集在大門外
+aetherhaven.questBoard.elder.vermin_raid.description={villager} 報告稱，害蟲正向憲章石湧去。
+
+aetherhaven.questBoard.guild_master.recruit_gear.title=新兵入門套件
+aetherhaven.questBoard.guild_master.recruit_gear.description=公會會長需要石頭和木炭來招募新成員。
+aetherhaven.questBoard.guild_master.apprentice_tools.title=學徒工具
+aetherhaven.questBoard.guild_master.apprentice_tools.description=公會會長需要銅礦石來製作訓練工具包。
+aetherhaven.questBoard.guild_master.journeyman_armor.title=工匠級護甲庫存
+aetherhaven.questBoard.guild_master.journeyman_armor.description=公會會長需要鐵條和皮革來製作盔甲。
+aetherhaven.questBoard.guild_master.veteran_weapons.title=退伍軍人武器訂單
+aetherhaven.questBoard.guild_master.veteran_weapons.description=公會會長發布了鐵和皮革，用於製作老兵裝備。
+aetherhaven.questBoard.guild_master.adventurer_gear.title=新進員工裝備
+aetherhaven.questBoard.guild_master.adventurer_gear.description=公會會長正在為冒險者準備裝備，需要鐵和皮革。
+aetherhaven.questBoard.guild_master.elite_contract.title=精英合約
+aetherhaven.questBoard.guild_master.elite_contract.description=公會會長需要金條和鐵來製作菁英裝備。
+aetherhaven.questBoard.guild_master.master_gear.title=大師齒輪套裝
+aetherhaven.questBoard.guild_master.master_gear.description=公會會長發布了大師級裝備契約。
+aetherhaven.questBoard.guild_master.legendary_contract.title=傳奇合約
+aetherhaven.questBoard.guild_master.legendary_contract.description=萊拉需要高品質的寶劍來應對即將到來的史詩級大戰。
+aetherhaven.questBoard.guild_master.goblin_trouble.title=哥布林的麻煩
+aetherhaven.questBoard.guild_master.goblin_trouble.description={villager} 發布了懸賞通緝擾亂道路的哥布林的公告。
+aetherhaven.questBoard.guild_master.trork_patrol.title=特羅克巡邏隊
+aetherhaven.questBoard.guild_master.trork_patrol.description={villager} 希望將運輸者從貿易路線上驅逐出去。
+aetherhaven.questBoard.guild_master.outlander_raid.title=外鄉人突襲
+aetherhaven.questBoard.guild_master.outlander_raid.description={villager} 發布了清除城鎮附近外來者的報酬。
+aetherhaven.questBoard.guild_master.goblin_raid.title=哥布林襲擊城鎮
+aetherhaven.questBoard.guild_master.goblin_raid.description={villager} 發現一支哥布林戰隊正向鎮子進發。
+aetherhaven.questBoard.guild_master.trork_raid.title=特羅克戰幫
+aetherhaven.questBoard.guild_master.trork_raid.description={villager} 希望得到幫助，阻止 trorks 違反憲章前進。
+aetherhaven.questBoard.guild_master.outlander_assault.title=《異鄉人》突襲
+aetherhaven.questBoard.guild_master.outlander_assault.description={villager} 警告說，外來者正在攻擊憲章。
+
+aetherhaven.questBoard.builder.marble_statue.title=一座輝煌的雕像
+
+aetherhaven.questBoard.builder.marble_statue.description=羅文需要大理石來製作一座受委託製作的雕像。
+
+aetherhaven.questBoard.logger.fir_logs.title=用於鷹架的杉木
+
+aetherhaven.questBoard.logger.fir_logs.description=建築工人需要杉木原木來加固新建的牆體。

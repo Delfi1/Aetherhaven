@@ -1,0 +1,58 @@
+items.Aetherhaven_Command_Post.name=Командний пункт охорони
+items.Aetherhaven_Command_Post.description=Сядьте на цей стілець, щоб командувати міською вартою зверху.
+
+items.Aetherhaven_Rts_Flag.name=Прапор команди
+items.Aetherhaven_Rts_Flag.description=Відправте охоронців на місце на землі.
+
+items.Aetherhaven_Rts_Sword.name=Командний меч
+items.Aetherhaven_Rts_Sword.description=Зосередьте свою охорону на одній істоті.
+
+items.Aetherhaven_Rts_Select_All.name=Вибрати всіх охоронців
+items.Aetherhaven_Rts_Select_All.description=Оберіть кожного найманого охоронця в місті.
+
+items.Aetherhaven_Rts_Select_Knight.name=Оберіть лицарів
+items.Aetherhaven_Rts_Select_Knight.description=Виберіть усіх лицарів-гвардійців.
+
+items.Aetherhaven_Rts_Select_Archer.name=Оберіть лучників
+items.Aetherhaven_Rts_Select_Archer.description=Виберіть усіх лучників-охоронців.
+
+items.Aetherhaven_Rts_Select_Mage.name=Виберіть магів
+items.Aetherhaven_Rts_Select_Mage.description=Виберіть усіх магів-охоронців.
+
+items.Aetherhaven_Rts_Stance_Banner.name=Банер позиції
+items.Aetherhaven_Rts_Stance_Banner.description=Встановіть, як б'ються вибрані охоронці.
+
+items.Aetherhaven_Rts_Free.name=Звільнення персоналу
+items.Aetherhaven_Rts_Free.description=Повернути вибраних охоронців до звичайного виконання обов'язків.
+
+items.Aetherhaven_Rts_Exit.name=Команда «Залишити»
+items.Aetherhaven_Rts_Exit.description=Вийдіть з режиму командування захисника та поверніться до звичайної гри.
+
+aetherhaven.rts.hudTitle=Командування гвардії
+aetherhaven.rts.rosterTitle=Міська варта
+aetherhaven.rts.orderAttackMove=Порядок: Атака-хід
+aetherhaven.rts.orderMove=Наказ: Переміщення
+aetherhaven.rts.orderFocusAttack=Наказ: Зосередити вогонь
+aetherhaven.rts.stanceDefensive=Стійка: Оборонна
+aetherhaven.rts.stanceAggressive=Позиція: Агресивна
+aetherhaven.rts.stanceStandGround=Стійка: Стійте на місці
+aetherhaven.rts.stanceHoldFire=Стійка: Не стріляти
+aetherhaven.rts.hudSelected=Вибрано {n} охоронців
+aetherhaven.rts.hudControls=WASD переміщує поле бою вгору та вниз. Клавіші пробілу та Ctrl літають вгору та вниз для масштабування. Клавіші прокручування або цифрові клавіші перемикають інструменти. Клацніть на охоронцях, щоб вибрати. Утримуйте Shift і клацніть, щоб додати або видалити одного. Перетягніть рамку, щоб вибрати кілька. Використовуйте інструмент команди «Вийти» (слот 8 на панелі швидкого доступу) для виходу.
+aetherhaven.rts.helpFlag=Клацніть правою кнопкою миші на землі, щоб відправити охоронців. Здібність 1 перемикається між атакою-рухом та рухом. Здібність 2 зупиняє вибраних охоронців.
+aetherhaven.rts.helpSword=Клацніть правою кнопкою миші на істоті, щоб зосередити на ній свою охорону. Вони не нападатимуть на селян, туристів чи охоронців.
+aetherhaven.rts.helpSelectAll=Натисніть, щоб вибрати всіх охоронців у місті та скасувати вибір інших.
+aetherhaven.rts.helpStance=Здібність1 циклічно змінює бойову стійку та застосовує її до вибраних охоронців.
+aetherhaven.rts.helpFree=Клацніть правою кнопкою миші, щоб звільнити вибраних охоронців від ваших наказів.
+aetherhaven.rts.helpSelectType=Натисніть, щоб вибрати всіх охоронців цього типу в місті та скасувати вибір інших.
+aetherhaven.rts.helpExit=Натисніть, щоб вийти з режиму керування охороною.
+aetherhaven.rts.errorUseExitTool=Використайте інструмент «Вийти з командного режиму» на панелі швидкого доступу, щоб вийти з командного режиму.
+aetherhaven.rts.errorNoGuards=Щоб скористатися цим, потрібні найняті охоронці.
+aetherhaven.rts.errorNoSelection=Спочатку оберіть охоронців.
+aetherhaven.rts.errorNotEnemy=Ваші охоронці на це не нападуть.
+aetherhaven.rts.errorNotInTown=Командний пункт має бути в межах землі вашого міста, щоб його можна було використовувати.
+aetherhaven.rts.errorCommandPostInUse=Хтось інший вже використовує командний пункт у цьому місті.
+aetherhaven.rts.recoverInventorySuccess=Відновлено вашу гарячу панель з останнього сеансу команди охорони.
+aetherhaven.rts.recoverInventorySuccessExited=Відновлено вашу гарячу панель та вихід з режиму командування охорони.
+aetherhaven.rts.recoverInventoryNone=Не знайдено збереженої панелі швидкого доступу з режиму команди охорони.
+aetherhaven.rts.recoverInventoryAuto=Вашу панель швидкого доступу було відновлено після перерваного сеансу командування охорони.

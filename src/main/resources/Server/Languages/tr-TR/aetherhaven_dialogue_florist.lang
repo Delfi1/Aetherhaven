@@ -1,0 +1,67 @@
+# Florist dialogue (Ivy Bloomwell)
+
+aetherhaven.dialogue.aetherhaven_florist.root.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.main_hub.fallback=Dükkanın yapım aşamaları, evin genel görünümü veya çiçek açan bitkiler hakkında bilgi vermeniz gerekiyorsa, söyleyin.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.0=Günaydın. Yapraklar bugün çok mutlu görünüyor.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.1=Cebime fazladan tohum koydum. Eski bir alışkanlık.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.2=Şehrinizde bitki yetiştirmek için güzel bir ışık var.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.3=Toprak kokuyorsam kusura bakmayın. Buraya gelmeden önce saksı değiştiriyordum.
+
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.0=Taze çiçekler veya orkideler tüm günümü güzelleştirirdi.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.love.1=Gülümsememi görmek istiyorsanız bana yeşil ve çiçekli bir şeyler getirin.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.0=Lütfen bana çöp veya ölü bitki getirmeyin.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.hint.dislike.1=Bahçede boşluk maddelerinin ve kemiklerin yeri yoktur.
+
+aetherhaven.dialogue.aetherhaven_florist.root.c_house=Bir ev hakkında konuşmak istiyordunuz.
+aetherhaven.dialogue.aetherhaven_florist.root.c_house_done=Adın evin rafında yazılı. Bunu benden duymanı istedim.
+aetherhaven.dialogue.aetherhaven_florist.root.c_house_remind=Ev hala yapım aşamasında.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_done=Çiçekçi dükkanı açıldığına göre bir kontrol yapmak istedim.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_complete=Çiçekçi dükkanı kapandı. Sizinle hesaplaşmak için buradayım.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_building=Dükkan hâlâ yapım aşamasında. Son durum hakkında bilgi almak istedim.
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_offer=Şehirde bir çiçekçi dükkanı açmanıza yardımcı olmak istiyorum.
+aetherhaven.dialogue.aetherhaven_florist.root.c_goodbye=Şimdilik bu kadar. Daha sonra görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=Küçük bitkilerim kasalardan ve el arabalarından daha iyisini hak ediyor. Büyüyebilecekleri, sergileyebilecekleri ve nefes alabilecekleri gerçek bir çiçekçi dükkanına ihtiyacım var. Planın taslağını buradaki yola çizdim. Eğer bunu kasaba için hayata geçirirseniz, planları sizinle paylaşabilirim.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c0=Dükkanınızı inşa edeceğiz.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c1=Şu an olmaz. Biraz daha zamana ihtiyacım var.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.body=İşte dükkan planlarım. Şehir planlama masasında inceleyin, hazır olduğunuzda bir arsa belirteci oluşturun ve dükkanı, güneş ışığının fidelerin ulaşabileceği bir yere kurun. Kapı açılana kadar ben de saksılarımla handa bekleyeceğim.
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.c0=Raflar yerleştirildiğinde görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.body=Fideler tepsilerinde huzursuzlanmaya başladı. Planları öğrendin mi ve yapım aşamasına başladın mı, yoksa gerçekleşmeyebilecek bir dükkan için umudumu kesmeli miyim?
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.c0=Şimdilik bu görevi bırakmam gerekiyor.
+aetherhaven.dialogue.aetherhaven_florist.ivy_building.c1=Üzerinde çalışmaya devam ediyorum ve devam edeceğim.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.body=Sorun değil. Bitkiler saksılarında biraz daha bekleyebilirler. Fikrinizi değiştirirseniz, beni bulun ve tekrar deneyelim.
+aetherhaven.dialogue.aetherhaven_florist.ivy_abandoned.c0=Anlaştık. Görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.body=Ah, bakın işte. Sıcak ışık, düzgün raflar ve yolculukta getirdiğim her bir fide için yer. Bitkilerim sonunda sizin şehrinizde uygun bir yuvaya kavuştu. Burada büyümelerine yardımcı olduğunuz için teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_florist.ivy_done.c0=Yardımcı olmaktan mutluluk duyarım. Kasabanın daha fazla yeşilliğe ihtiyacı varsa beni bulun.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.body=Dükkan iş için. Yine de saksıdaki dostlarım için güneş alan bir penceresi ve günün sonunda çayımı koyabileceğim bir rafı olan küçük bir evim olsun isterdim. Herkesle aynı arsa üzerinde, eğer siz de isterseniz.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c0=Senin için bir ev rezervasyonu yapacağım.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c1=Başka bir zaman.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.body=Duvarlar örüldüğünde, tüzükte belirtildiği gibi içerideki bloğa adımı yazın, sonra da gelip bana şahsen söyleyin. Saksıları taşımaya başlamadan önce bunu sizden duymak istiyorum.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.c0=Bunu benden duyacaksınız.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.body=Çerçeveyi hazırlarken acele etmeyin. Çerçeve dikildiğinde, beni içerideki rafa kaydedin, sonra geri gelin. Sizi acele ettirmiyorum. Sadece yazılı olarak kaydetmenizi istiyorum.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.c0=Anlaşıldı.
+
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.speaker=Ivy Bloomwell
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.body=Ah, burası çok güzel. Sıcak ışık, sessiz duvarlar ve pencere pervazına birkaç saksı daha sığacak kadar yer. Sonunda şehrinizin bir köşesini kendime ait sayabilirim.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_finish.c0=İyi ki düzgün bir kapınız var.
+
+aetherhaven.dialogue.aetherhaven_florist.gift.confirm=Bana bir şey vermek ister misiniz?
+aetherhaven.dialogue.aetherhaven_florist.gift.love=Ah! Bu mükemmel. Bir bahçıvanın nelerden hoşlandığını gerçekten biliyorsunuz.
+aetherhaven.dialogue.aetherhaven_florist.gift.like=Ne kadar tatlı. Beni düşündüğünüz için teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_florist.gift.neutral=Hmm. Tam benim zevkime göre değil ama yine de teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_florist.gift.dislike=Bunu tutmayı tercih etmem. Bitkiler daha iyi bir arkadaşlığı hak ediyor.

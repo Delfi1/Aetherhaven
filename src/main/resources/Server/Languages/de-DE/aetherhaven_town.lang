@@ -39,15 +39,27 @@ aetherhaven.ui.memberPermissions.title=Mitgliedsberechtigungen
 aetherhaven.ui.memberPermissions.backTooltip=Zurück zur Spielerliste
 aetherhaven.ui.memberPermissions.placePlots=Parzellen platzieren
 aetherhaven.ui.memberPermissions.manageConstructions=Bau und Verwaltung von Bauwerken (Montage, Produktion, Feste, Satzungsänderungen, Versetzung von Gebäuden)
+aetherhaven.ui.memberPermissions.removePlots=Gebäude aus dem Stadtjournal entfernen
 aetherhaven.ui.memberPermissions.spendTreasuryGold=Das Gold aus der Stadtkasse für Baukosten ausgeben
 aetherhaven.ui.memberPermissions.openTreasuryPanel=Kasse öffnen (Einzahlung / Auszahlung)
 aetherhaven.ui.memberPermissions.acceptQuests=Stadtquests annehmen/starten
 aetherhaven.ui.memberPermissions.completeQuests=Schließe Stadtquests ab und sichere dir Rufbelohnungen.
 aetherhaven.ui.memberPermissions.abandonQuests=Aktive Stadtquests abbrechen
 aetherhaven.ui.memberPermissions.reviveVillagers=Erwecke die Dorfbewohner an der Gaia-Statue wieder zum Leben.
+aetherhaven.ui.memberPermissions.useShopSpots=Angebote und Verkäufe in Spielershop-Slots
 aetherhaven.ui.memberPermissions.err.notOwner=Nur der Stadtbesitzer kann die Berechtigungen bearbeiten.
 aetherhaven.ui.memberPermissions.err.notInTown=Dieser Spieler befindet sich nicht in dieser Stadt.
 aetherhaven.town.rolecmd.playerMustBeOnline=Der Spieler muss online sein.
+
+# === /aetherhaven replace-charter ===
+aetherhaven.town.charterReplace.notOwner=Nur der Stadtbesitzer kann die Charta reparieren (es sei denn, Sie haben die Berechtigung zur Stadtverwaltung).
+aetherhaven.town.charterReplace.wrongWorld=Diese Stadt existiert nicht auf dieser Welt.
+aetherhaven.town.charterReplace.chunkNotLoaded=Der Charta-Abschnitt wurde nicht geladen – bewegen Sie sich näher an die Charta-Koordinaten Ihrer Stadt heran und versuchen Sie es erneut.
+aetherhaven.town.charterReplace.clearFirst=Die gespeicherte Charterposition enthält noch einen Vollblock – lösen Sie ihn auf, bis die Zelle leer ist, und führen Sie dann diesen Befehl erneut aus.
+aetherhaven.town.charterReplace.placeFailed=Der Charterblock konnte nicht platziert werden (Platz gesperrt?).
+aetherhaven.town.charterReplace.linkFailed=Charterblock konnte nicht verbunden werden (siehe Serverprotokoll).
+aetherhaven.town.charterReplace.alreadyOk=Dieser Charterblock ist bereits mit Ihrer Stadt verknüpft.
+aetherhaven.town.charterReplace.done=Charterblock für "{town}" wiederhergestellt.
 aetherhaven.town.rolecmd.roleInvalid=Die Rolle muss BAUEN, QUEST oder BEIDES sein.
 aetherhaven.town.leave.notInTown=Du bist nicht in einer Stadt.
 aetherhaven.town.leave.ownerCannotLeave=Eigentümer können nicht ausziehen; eine Eigentumsübertragung ist noch nicht möglich.
