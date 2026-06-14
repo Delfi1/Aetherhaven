@@ -56,6 +56,21 @@ public final class ShopSpotStatusHud extends CustomUIHud {
         }
         b.set("#OpenPanel.Visible", true);
         b.set("#ClosedPanel.Visible", false);
+        UUID sellerUuid = record.getSellerUuid();
+        if (record.isPlayerControlled() && sellerUuid != null) {
+            String sellerName = record.sellerDisplayName(world);
+            if (!sellerName.isBlank()) {
+                b.set("#SellerLine.Visible", true);
+                b.set(
+                    "#SellerLine.TextSpans",
+                    Message.translation(MSG + ".seller").param("seller", sellerName)
+                );
+            } else {
+                b.set("#SellerLine.Visible", false);
+            }
+        } else {
+            b.set("#SellerLine.Visible", false);
+        }
         String itemId = record.getItemId();
         if (itemId != null) {
             Message itemName = UiMaterialLabels.itemNameMessage(itemId);

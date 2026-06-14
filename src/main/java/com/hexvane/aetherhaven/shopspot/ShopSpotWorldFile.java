@@ -60,6 +60,8 @@ public final class ShopSpotWorldFile {
         @Nullable
         public String sellerUuid;
         @Nullable
+        public String sellerName;
+        @Nullable
         public String displayEntityUuid;
     }
 
@@ -112,6 +114,7 @@ public final class ShopSpotWorldFile {
             row.jewelryMetaJson = r.getJewelryMetaJson();
             UUID seller = r.getSellerUuid();
             row.sellerUuid = seller != null ? seller.toString() : null;
+            row.sellerName = r.getSellerName();
             UUID display = r.getDisplayEntityUuid();
             row.displayEntityUuid = display != null ? display.toString() : null;
             f.getSpots().add(row);
@@ -161,6 +164,7 @@ public final class ShopSpotWorldFile {
             if (row.sellerUuid != null && !row.sellerUuid.isBlank()) {
                 r.setSellerUuid(UUID.fromString(row.sellerUuid.trim()));
             }
+            r.setSellerName(row.sellerName);
             if (row.displayEntityUuid != null && !row.displayEntityUuid.isBlank()) {
                 r.setDisplayEntityUuid(UUID.fromString(row.displayEntityUuid.trim()));
             }

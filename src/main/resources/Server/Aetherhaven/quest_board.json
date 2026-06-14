@@ -91,6 +91,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 8,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -118,8 +123,13 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 14,
+              "count": 50,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -147,8 +157,13 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 22,
+              "count": 75,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -176,8 +191,13 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 38,
+              "count": 100,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -205,8 +225,13 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 52,
+              "count": 120,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -238,8 +263,13 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 8,
+              "count": 40,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -267,8 +297,13 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 12,
+              "count": 50,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -296,8 +331,13 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 16,
+              "count": 80,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -335,6 +375,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 22,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -368,6 +413,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 16,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -396,6 +446,17 @@
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 20,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            },
+            {
+              "kind": "item",
+              "itemId": "Ingredient_Bar_Iron",
+              "count": 8,
               "grantTo": "player"
             }
           ]
@@ -426,6 +487,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 30,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -443,16 +509,16 @@
               "weight": 1,
               "items": [
                 {
-                  "itemId": "Ingredient_Bar_Iron",
-                  "count": 16
+                  "itemId": "Ingredient_Bar_Thorium",
+                  "count": 10
                 },
                 {
-                  "itemId": "Ingredient_Bar_Gold",
-                  "count": 6
+                  "itemId": "Ingredient_Bar_Adamantite",
+                  "count": 10
                 },
                 {
-                  "itemId": "Ingredient_Charcoal",
-                  "count": 24
+                  "itemId": "Ingredient_Bar_Cobalt",
+                  "count": 10
                 }
               ]
             }
@@ -461,8 +527,19 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 70,
+              "count": 150,
               "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Geode",
+              "count": 3,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -496,24 +573,29 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 8,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
         {
-          "id": "pine_logs",
+          "id": "fir_logs",
           "rank": "D",
           "minRank": "D",
           "maxRank": "B",
           "weight": 10,
           "daysLimit": 4,
-          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.logger.pine_logs.title",
-          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.logger.pine_logs.description",
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.logger.fir_logs.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.logger.fir_logs.description",
           "itemSets": [
             {
               "weight": 1,
               "items": [
                 {
-                  "itemId": "Wood_Pine_Trunk",
+                  "itemId": "Wood_Fir_Trunk",
                   "count": 28
                 }
               ]
@@ -525,8 +607,14 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 12,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
-          ]
+          ],
+          "rankXpReward": 3
         },
         {
           "id": "timber_contract",
@@ -558,6 +646,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 38,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -579,7 +672,7 @@
               "weight": 1,
               "items": [
                 {
-                  "itemId": "Food_Meat_Raw",
+                  "itemId": "Food_Wildmeat_Raw",
                   "count": 16
                 }
               ]
@@ -589,8 +682,13 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 10,
+              "count": 30,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -620,6 +718,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 14,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -653,6 +756,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 52,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -686,6 +794,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 20,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -715,6 +828,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 52,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -745,6 +863,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 8,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -773,6 +896,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 22,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -822,6 +950,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 18,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -873,6 +1006,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 24,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -906,6 +1044,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 8,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -939,6 +1082,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 11,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -972,6 +1120,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 15,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1005,6 +1158,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 20,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1042,6 +1200,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 28,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1079,6 +1242,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 38,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1116,6 +1284,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 52,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1133,20 +1306,20 @@
               "weight": 1,
               "items": [
                 {
-                  "itemId": "Ingredient_Bar_Gold",
-                  "count": 6
+                  "itemId": "Food_Pie_Apple",
+                  "count": 4
                 },
                 {
-                  "itemId": "Ore_Gold",
-                  "count": 8
+                  "itemId": "Food_Pie_Meat",
+                  "count": 4
                 },
                 {
                   "itemId": "Food_Bread",
-                  "count": 20
+                  "count": 10
                 },
                 {
-                  "itemId": "Food_Meat_Raw",
-                  "count": 24
+                  "itemId": "Food_Pie_Pumpkin",
+                  "count": 4
                 }
               ]
             }
@@ -1155,8 +1328,19 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 70,
+              "count": 150,
               "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Food_Candy_Cane",
+              "count": 8,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -1190,6 +1374,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 8,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1219,6 +1408,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 11,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1252,6 +1446,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 15,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1285,6 +1484,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 28,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1318,6 +1522,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 28,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1347,6 +1556,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 38,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1380,6 +1594,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 52,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1415,8 +1634,19 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 70,
+              "count": 150,
               "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Deco_Book_Pile_Large",
+              "count": 8,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -1447,6 +1677,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 8,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -1492,6 +1727,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 10,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -1529,6 +1769,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 8,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1558,6 +1803,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 11,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1591,6 +1841,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 15,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1628,6 +1883,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 20,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1661,6 +1921,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 36,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1694,6 +1959,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 38,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1731,6 +2001,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 52,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1748,16 +2023,8 @@
               "weight": 1,
               "items": [
                 {
-                  "itemId": "Ingredient_Bar_Gold",
-                  "count": 8
-                },
-                {
-                  "itemId": "Ingredient_Essence_Life",
-                  "count": 6
-                },
-                {
-                  "itemId": "Ingredient_Leather_Light",
-                  "count": 14
+                  "itemId": "Weapon_Sword_Adamantite",
+                  "count": 4
                 }
               ]
             }
@@ -1766,8 +2033,19 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 70,
+              "count": 150,
               "grantTo": "player"
+            },
+            {
+              "kind": "item",
+              "itemId": "Weapon_Longsword_Adamantite_Saurian",
+              "count": 1,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -1798,6 +2076,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 14,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1826,6 +2109,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 14,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1854,6 +2142,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 22,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         }
@@ -1903,6 +2196,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 28,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1950,6 +2248,11 @@
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 28,
               "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
             }
           ]
         },
@@ -1995,6 +2298,44 @@
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 32,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "grantTo": "quest_giver_npc"
+            }
+          ]
+        }
+      ]
+    },
+    "Aetherhaven_Builder": {
+      "fetchEntries": [
+        {
+          "id": "marble_statue",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 10,
+          "daysLimit": 3,
+          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.builder.marble_statue.title",
+          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.builder.marble_statue.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [
+                {
+                  "itemId": "Rock_Marble_Cobble",
+                  "count": 50
+                }
+              ]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 60,
               "grantTo": "player"
             }
           ]

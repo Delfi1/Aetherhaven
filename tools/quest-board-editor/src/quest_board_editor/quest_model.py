@@ -10,6 +10,7 @@ from .lang_keys import (
     quest_title_lang_key,
     target_label_lang_key,
 )
+from .rewards_util import GRANT_TO_QUEST_BENEFICIARY, GRANT_TO_QUEST_GIVER
 
 QUEST_TYPES = ("fetch", "hunt", "raid")
 ENTRIES_KEY = {
@@ -78,10 +79,19 @@ class QuestBoardDocument:
                         )
         return refs
 
+    def ensure_villager(self, villager_id: str) -> dict:
+        villagers = self.data.setdefault("villagers", {})
+        if not isinstance(villagers, dict):
+            villagers = {}
+            self.data["villagers"] = villagers
+        entry = villagers.get(villager_id)
+        if not isinstance(entry, dict):
+            entry = {}
+            villagers[villager_id] = entry
+        return entry
+
     def entries_list(self, villager_id: str, quest_type: str) -> List[dict]:
-        villager = self.villagers.get(villager_id)
-        if not isinstance(villager, dict):
-            return []
+        villager = self.ensure_villager(villager_id)
         key = ENTRIES_KEY[quest_type]
         entries = villager.get(key)
         if not isinstance(entries, list):
@@ -333,11 +343,71 @@ def validate_document(doc: QuestBoardDocument, lang_getter) -> List[str]:
                 if not (s or {}).get("mobCountsByRank"):
                     errors.append(f"[{qid}] raidSet needs mobCountsByRank")
 
+        for i, reward in enumerate(e.get("rewards") or []):
+            if not isinstance(reward, dict):
+                errors.append(f"[{qid}] reward #{i + 1} is not an object")
+                continue
+            kind = str(reward.get("kind", "")).strip()
+            if kind == "item":
+                if not str(reward.get("itemId", "")).strip():
+                    errors.append(f"[{qid}] item reward #{i + 1} missing itemId")
+            elif kind == "reputation":
+                amount = reward.get("amount", 0)
+                if not isinstance(amount, int) or amount < 1:
+                    errors.append(f"[{qid}] reputation reward #{i + 1} amount must be >= 1")
+                grant_to = str(reward.get("grantTo", "")).strip()
+                if grant_to not in (GRANT_TO_QUEST_GIVER, GRANT_TO_QUEST_BENEFICIARY):
+                    errors.append(
+                        f"[{qid}] reputation reward #{i + 1} grantTo must be "
+                        f"{GRANT_TO_QUEST_GIVER} or {GRANT_TO_QUEST_BENEFICIARY}"
+                    )
+            elif kind == "learn_recipe":
+                if not str(reward.get("recipeItemId", "")).strip():
+                    errors.append(f"[{qid}] learn_recipe reward #{i + 1} missing recipeItemId")
+
     for qid, locs in seen_global.items():
         if len(locs) > 1:
             errors.append(f"Global duplicate id '{qid}' in: {', '.join(locs)}")
 
     return errors
+
+
+def regenerate_entry_lang_keys(
+    entry: dict,
+    villager_id: str,
+    quest_id: str,
+    quest_type: str,
+    *,
+    title_text: str,
+    desc_text: str,
+    target_text: str = "",
+) -> Tuple[Dict[str, str], List[str]]:
+    """Rewrite quest lang keys from villager + quest id; keep current UI text.
+
+    Returns pending texts keyed by json lang key, and stale json keys to remove.
+    """
+    old_title = str(entry.get("titleLangKey", ""))
+    old_desc = str(entry.get("descriptionLangKey", ""))
+
+    entry["titleLangKey"] = quest_title_lang_key(villager_id, quest_id)
+    entry["descriptionLangKey"] = quest_description_lang_key(villager_id, quest_id)
+    if quest_type in ("hunt", "raid") and not entry.get("targetLabelLangKey"):
+        entry["targetLabelLangKey"] = target_label_lang_key("vermin")
+
+    pending: Dict[str, str] = {}
+    title_key = str(entry.get("titleLangKey", ""))
+    desc_key = str(entry.get("descriptionLangKey", ""))
+    if title_key:
+        pending[title_key] = title_text
+    if desc_key:
+        pending[desc_key] = desc_text
+    target_key = str(entry.get("targetLabelLangKey", ""))
+    if target_key:
+        pending[target_key] = target_text
+
+    new_keys = set(pending.keys())
+    stale = [k for k in (old_title, old_desc) if k and k not in new_keys]
+    return pending, stale
 
 
 def sync_lang_from_quests(doc: QuestBoardDocument, lang_doc, texts: Dict[str, str]) -> None:

@@ -24,13 +24,11 @@ aetherhaven.questBoard.blacksmith.coal_fuel.title=Charcoal for the forge
 aetherhaven.questBoard.blacksmith.coal_fuel.description=The forge ran low on fuel overnight. Bring charcoal.
 aetherhaven.questBoard.blacksmith.gold_bars.title=Gold bars for guild work
 aetherhaven.questBoard.blacksmith.gold_bars.description=The smith needs gold bars for a high tier commission.
-aetherhaven.questBoard.blacksmith.master_smithing.title=Master smithing stock
-aetherhaven.questBoard.blacksmith.master_smithing.description=The smith posted a legendary order for iron, gold, and fuel.
+aetherhaven.questBoard.blacksmith.master_smithing.title=Master Smithing Order
+aetherhaven.questBoard.blacksmith.master_smithing.description=I need help fulfilling an order of legendary magnitude.
 
 aetherhaven.questBoard.logger.oak_logs.title=Oak for repairs
 aetherhaven.questBoard.logger.oak_logs.description=Town fences need oak logs before the next storm.
-aetherhaven.questBoard.logger.pine_logs.title=Pine for scaffolding
-aetherhaven.questBoard.logger.pine_logs.description=Builders asked for pine logs to brace a new wall run.
 aetherhaven.questBoard.logger.timber_contract.title=Timber for the hall frame
 aetherhaven.questBoard.logger.timber_contract.description=A large timber contract was posted for mixed oak and pine.
 
@@ -76,7 +74,7 @@ aetherhaven.questBoard.innkeeper.grand_hospitality.description=Corin needs a lar
 aetherhaven.questBoard.innkeeper.royal_table.title=Royal table setting
 aetherhaven.questBoard.innkeeper.royal_table.description=Corin wants gold bars, essence, and bread for honored guests.
 aetherhaven.questBoard.innkeeper.legendary_feast.title=Legendary feast
-aetherhaven.questBoard.innkeeper.legendary_feast.description=Corin posted the town's grandest feast contract on the board.
+aetherhaven.questBoard.innkeeper.legendary_feast.description=Corin wants to throw a grand feast for the town.
 
 aetherhaven.questBoard.elder.foundation_stones.title=Foundation stones
 aetherhaven.questBoard.elder.foundation_stones.description=Lyren wants stone gathered for new charter markers.
@@ -114,7 +112,7 @@ aetherhaven.questBoard.guild_master.elite_contract.description=The guild master 
 aetherhaven.questBoard.guild_master.master_gear.title=Master gear bundle
 aetherhaven.questBoard.guild_master.master_gear.description=The guild master posted a master tier gear contract.
 aetherhaven.questBoard.guild_master.legendary_contract.title=Legendary contract
-aetherhaven.questBoard.guild_master.legendary_contract.description=The guild master seeks gold ore, bars, and leather for legends.
+aetherhaven.questBoard.guild_master.legendary_contract.description=Lyra needs high quality swords for an upcoming battle of epic proportions.
 aetherhaven.questBoard.guild_master.goblin_trouble.title=Goblin trouble
 aetherhaven.questBoard.guild_master.goblin_trouble.description={villager} posted a bounty on goblins troubling the roads.
 aetherhaven.questBoard.guild_master.trork_patrol.title=Trork patrol
@@ -127,3 +125,11 @@ aetherhaven.questBoard.guild_master.trork_raid.title=Trork war band
 aetherhaven.questBoard.guild_master.trork_raid.description={villager} wants help stopping trorks advancing on the charter.
 aetherhaven.questBoard.guild_master.outlander_assault.title=Outlander assault
 aetherhaven.questBoard.guild_master.outlander_assault.description={villager} warns that outlanders are assaulting the charter.
+
+aetherhaven.questBoard.builder.marble_statue.title=A Glorious Statue
+
+aetherhaven.questBoard.builder.marble_statue.description=Rowan needs marble for a statue that was comissioned.
+
+aetherhaven.questBoard.logger.fir_logs.title=Fir for scaffolding
+
+aetherhaven.questBoard.logger.fir_logs.description=Builders asked for fir logs to brace a new wall run.

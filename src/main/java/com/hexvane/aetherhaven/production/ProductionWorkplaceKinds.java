@@ -26,6 +26,19 @@ public final class ProductionWorkplaceKinds {
         return AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(trimOrNull(gameplayConstructionId));
     }
 
+    /**
+     * Elder and innkeeper must stay assigned to town hall / inn; the management UI blocks clearing their workplace.
+     */
+    public static boolean isMandatoryWorkplaceResidentKind(@Nullable String residentKind) {
+        if (residentKind == null || residentKind.isBlank()) {
+            return false;
+        }
+        return switch (residentKind.trim()) {
+            case TownVillagerBinding.KIND_ELDER, TownVillagerBinding.KIND_INNKEEPER -> true;
+            default -> false;
+        };
+    }
+
     @Nullable
     public static String residentBindingKindForGameplayConstruction(@Nullable String gameplayConstructionId) {
         if (gameplayConstructionId == null || gameplayConstructionId.isBlank()) {

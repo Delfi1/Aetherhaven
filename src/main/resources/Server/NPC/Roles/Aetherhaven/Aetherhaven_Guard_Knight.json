@@ -8,7 +8,7 @@
       "Description": "Translation key for NPC name display"
     },
     "ViewRange": { "Value": 24, "Description": "Combat detection range for aggressive mobs" },
-    "AttackDistance": { "Value": 2.5, "Description": "Melee attack range" },
+    "AttackDistance": { "Value": 3.0, "Description": "Melee attack range" },
     "AetherhavenWanderPhaseTime": { "Value": [6, 14], "Description": "Patrol wander phase (seconds)" },
     "AetherhavenPausePhaseTime": { "Value": [2, 5], "Description": "Patrol pause (seconds)" }
   },
@@ -25,7 +25,7 @@
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.5,
   "ApplySeparation": true,
-  "SeparationDistance": 2.5,
+  "SeparationDistance": 1.8,
   "SeparationMode": "Push",
   "SeparationPushDistanceWeightTarget": 8,
   "SeparationPushDistanceWeightAttacker": 8,
@@ -96,6 +96,10 @@
           "Sensor": { "Type": "State", "State": "Idle" },
           "Instructions": [
             {
+              "Reference": "Component_Instruction_Aetherhaven_Guard_Damage_Aggro",
+              "Modify": { "_ExportStates": ["Combat"] }
+            },
+            {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Idle_Aggro",
               "Modify": {
                 "_ExportStates": ["Combat"],
@@ -115,11 +119,8 @@
           "Sensor": { "Type": "State", "State": "Patrol", "IgnoreMissingSetState": true },
           "Instructions": [
             {
-              "Reference": "Component_Instruction_Aetherhaven_Guard_Idle_Aggro",
-              "Modify": {
-                "_ExportStates": ["Combat"],
-                "ViewRange": { "Compute": "ViewRange" }
-              }
+              "Reference": "Component_Instruction_Aetherhaven_Guard_Damage_Aggro",
+              "Modify": { "_ExportStates": ["Combat"] }
             },
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Patrol_Seek"
@@ -129,6 +130,10 @@
         {
           "Sensor": { "Type": "State", "State": "RtsCommand", "IgnoreMissingSetState": true },
           "Instructions": [
+            {
+              "Reference": "Component_Instruction_Aetherhaven_Guard_Damage_Aggro",
+              "Modify": { "_ExportStates": ["Combat"] }
+            },
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Patrol_Seek"
             }
@@ -144,15 +149,23 @@
                   {
                     "Type": "Mob",
                     "Range": { "Compute": "ViewRange" },
-                    "LockOnTarget": false,
-                    "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
+                    "LockOnTarget": true,
+                    "Filters": [
+                      { "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] },
+                      { "Type": "LineOfSight" }
+                    ],
                     "Collector": { "Type": "CombatTargets" }
                   },
-                  { "Type": "HasHostileTargetMemory" },
+                  {
+                    "Type": "Target",
+                    "Range": { "Compute": "ViewRange" },
+                    "Filters": [{ "Type": "LineOfSight" }]
+                  },
                   {
                     "Type": "Target",
                     "TargetSlot": "LockedTarget",
-                    "Range": { "Compute": "ViewRange" }
+                    "Range": { "Compute": "ViewRange" },
+                    "Filters": [{ "Type": "LineOfSight" }]
                   }
                 ]
               },

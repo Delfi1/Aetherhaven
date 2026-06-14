@@ -1,5 +1,10 @@
 {
+  "$Comment": "Town villagers, guards, and staff. Excludes quest-board raid spawn roles (matched by Aetherhaven_* wildcard).",
   "IncludeRoles": [
     "Aetherhaven_*"
+  ],
+  "ExcludeRoles": [
+    "Aetherhaven_Raid_*",
+    "Aetherhaven_Raid_Vermin_*"
   ]
 }

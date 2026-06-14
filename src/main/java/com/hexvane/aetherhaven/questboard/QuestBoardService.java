@@ -1,11 +1,12 @@
 package com.hexvane.aetherhaven.questboard;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.quest.QuestRewardService;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardFetchEntryJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardHuntEntryJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardRaidEntryJson;
-import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.TownVillagerDirectory;
@@ -18,6 +19,7 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -573,7 +575,7 @@ public final class QuestBoardService {
         if (player == null) {
             return false;
         }
-        grantRewards(slot, player, playerRef, store);
+        grantRewards(slot, town, tm, player, playerRef, store, giverEntityUuid);
         int oldXp = town.getQuestBoardRankXp();
         Message completedName = displayTitle(slot, town, store, catalog);
         town.addQuestBoardRankXp(slot.getRankXpReward());
@@ -606,9 +608,12 @@ public final class QuestBoardService {
 
     private static void grantRewards(
         @Nonnull QuestBoardSlotRecord slot,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
         @Nonnull Player player,
         @Nonnull Ref<EntityStore> playerRef,
-        @Nonnull Store<EntityStore> store
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID giverEntityUuid
     ) {
         for (QuestReward r : slot.rewardsOrEmpty()) {
             if (r.kind() == null) {
@@ -621,6 +626,21 @@ public final class QuestBoardService {
                 }
             }
         }
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        String giverRoleId = slot.getGiverRoleId();
+        if (pu == null || giverRoleId == null || giverRoleId.isBlank()) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        QuestRewardService.grantVillagerReputationRewards(
+            slot.rewardsOrEmpty(),
+            pu.getUuid(),
+            giverEntityUuid,
+            giverRoleId.trim(),
+            world,
+            town,
+            tm
+        );
     }
 
     public static void failExpiredQuest(
@@ -695,13 +715,25 @@ public final class QuestBoardService {
         return Math.max(0, slot.getDaysLimit() - slot.getOnlineDaysElapsed());
     }
 
-    @Nullable
-    public static QuestReward firstItemReward(@Nonnull QuestBoardSlotRecord slot) {
+    @Nonnull
+    public static List<QuestReward> itemRewards(@Nonnull QuestBoardSlotRecord slot) {
+        List<QuestReward> out = new ArrayList<>();
         for (QuestReward r : slot.rewardsOrEmpty()) {
             if (r.kind() != null && "item".equalsIgnoreCase(r.kind().trim()) && r.itemId() != null && !r.itemId().isBlank()) {
-                return r;
+                out.add(r);
             }
         }
-        return null;
+        return out;
+    }
+
+    @Nullable
+    public static QuestReward firstItemReward(@Nonnull QuestBoardSlotRecord slot) {
+        List<QuestReward> items = itemRewards(slot);
+        return items.isEmpty() ? null : items.get(0);
+    }
+
+    @Nullable
+    public static QuestRewardService.ReputationRewardPreview firstReputationReward(@Nonnull QuestBoardSlotRecord slot) {
+        return QuestRewardService.firstQuestBoardReputationReward(slot.rewardsOrEmpty());
     }
 }

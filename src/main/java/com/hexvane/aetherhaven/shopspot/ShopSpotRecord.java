@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.shopspot;
 
+import com.hexvane.aetherhaven.town.TownPlayerLookup;
+import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,6 +31,8 @@ public final class ShopSpotRecord {
     private transient String listingDisplaySignature;
     @Nullable
     private UUID sellerUuid;
+    @Nullable
+    private String sellerName;
     @Nullable
     private UUID displayEntityUuid;
 
@@ -177,6 +181,31 @@ public final class ShopSpotRecord {
 
     public void setSellerUuid(@Nullable UUID sellerUuid) {
         this.sellerUuid = sellerUuid;
+        if (sellerUuid == null) {
+            this.sellerName = null;
+        }
+    }
+
+    @Nullable
+    public String getSellerName() {
+        return sellerName != null && !sellerName.isBlank() ? sellerName.trim() : null;
+    }
+
+    public void setSellerName(@Nullable String sellerName) {
+        this.sellerName = sellerName != null && !sellerName.isBlank() ? sellerName.trim() : null;
+    }
+
+    @Nonnull
+    public String sellerDisplayName(@Nonnull World world) {
+        String stored = getSellerName();
+        if (stored != null) {
+            return stored;
+        }
+        UUID seller = getSellerUuid();
+        if (seller == null) {
+            return "";
+        }
+        return TownPlayerLookup.displayNameForUuid(world, seller);
     }
 
     @Nullable

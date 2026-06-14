@@ -5,8 +5,8 @@ import tempfile
 from pathlib import Path
 
 from quest_board_editor.io_json import load_quest_board, save_quest_board
-from quest_board_editor.lang_keys import json_key_to_lang_key, quest_title_lang_key
-from quest_board_editor.quest_model import QuestBoardDocument, QuestFilter, filter_quests
+from quest_board_editor.lang_keys import json_key_to_lang_key, quest_description_lang_key, quest_title_lang_key
+from quest_board_editor.quest_model import QuestBoardDocument, QuestFilter, filter_quests, regenerate_entry_lang_keys
 
 
 SAMPLE_BOARD = {
@@ -140,6 +140,28 @@ def test_lang_key_generation():
     key = quest_title_lang_key("Aetherhaven_Miner", "stone_haul")
     assert key.startswith("aetherhaven_quest_board.")
     assert json_key_to_lang_key(key) == "aetherhaven.questBoard.miner.stone_haul.title"
+
+
+def test_regenerate_entry_lang_keys():
+    entry = {
+        "id": "old_id",
+        "titleLangKey": quest_title_lang_key("Aetherhaven_Miner", "old_id"),
+        "descriptionLangKey": quest_description_lang_key("Aetherhaven_Miner", "old_id"),
+    }
+    pending, stale = regenerate_entry_lang_keys(
+        entry,
+        "Aetherhaven_Miner",
+        "new_id",
+        "fetch",
+        title_text="My title",
+        desc_text="My description",
+    )
+    assert entry["titleLangKey"] == quest_title_lang_key("Aetherhaven_Miner", "new_id")
+    assert entry["descriptionLangKey"] == quest_description_lang_key("Aetherhaven_Miner", "new_id")
+    assert pending[entry["titleLangKey"]] == "My title"
+    assert pending[entry["descriptionLangKey"]] == "My description"
+    assert len(stale) == 2
+    assert quest_title_lang_key("Aetherhaven_Miner", "old_id") in stale
 
 
 def test_repo_quest_board_loads():

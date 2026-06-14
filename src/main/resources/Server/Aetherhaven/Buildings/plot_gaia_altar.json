@@ -47,7 +47,7 @@
       "localX": 0,
       "localY": 2,
       "localZ": 0,
-      "blockTypeId": "Aetherhaven_Statue_of_Gaia",
+      "blockTypeId": "Aetherhaven_Statue_Of_Gaia",
       "interactionKind": "WORK_SURFACE",
       "tags": ["WORK"],
       "capacity": 1,

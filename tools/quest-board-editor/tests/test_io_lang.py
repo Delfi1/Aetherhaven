@@ -20,7 +20,13 @@ def test_upsert_new_key():
     assert doc.get("aetherhaven.questBoard.test.title") == "Hello"
 
 
-def test_prefix_mapping():
+def test_remove_key():
+    doc = parse_lang("aetherhaven.questBoard.miner.stone_haul.title=Stone\n")
+    assert doc.remove("aetherhaven.questBoard.miner.stone_haul.title")
+    assert doc.get("aetherhaven.questBoard.miner.stone_haul.title") == ""
+    assert not doc.remove("missing.key")
+
+
     jk = lang_key_to_json_key("aetherhaven.questBoard.miner.stone_haul.title")
     assert jk == "aetherhaven_quest_board.aetherhaven.questBoard.miner.stone_haul.title"
     assert json_key_to_lang_key(jk) == "aetherhaven.questBoard.miner.stone_haul.title"

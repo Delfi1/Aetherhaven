@@ -25,6 +25,7 @@ import org.joml.Vector3i;
 public final class RtsHostileQuery {
     private static final String AGGRESSIVE_GROUP = "Aggressive";
     private static final String TOWNSFOLK_GROUP = "Aetherhaven_Townsfolk";
+    private static final String RAID_GROUP = "Aetherhaven_Raid";
 
     /** Radius around a ground click to pick a hostile under the RTS cursor. */
     private static final double FOCUS_PICK_RADIUS = 6.0;
@@ -125,6 +126,8 @@ public final class RtsHostileQuery {
 
     /**
      * True for any NPC guards may focus-fire except town villagers, tourists, guards, and other town staff.
+     * Quest-board raid mobs ({@code Aetherhaven_Raid_*}) are always attackable even though their role id
+     * matches the {@code Aetherhaven_*} townsfolk group wildcard.
      */
     public static boolean isGuardAttackableTarget(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         if (!ref.isValid()) {
@@ -138,7 +141,26 @@ public final class RtsHostileQuery {
             return false;
         }
         int roleIndex = npc.getRole().getRoleIndex();
+        if (roleIndex >= 0 && npcInRaidGroup(roleIndex)) {
+            return true;
+        }
         return roleIndex < 0 || !npcInTownsfolkGroup(roleIndex);
+    }
+
+    /** True when {@code observerRef} has unobstructed line of sight to {@code targetRef}. */
+    public static boolean hasLineOfSight(
+        @Nonnull Ref<EntityStore> observerRef,
+        @Nonnull Ref<EntityStore> targetRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (!observerRef.isValid() || !targetRef.isValid()) {
+            return false;
+        }
+        NPCEntity observer = store.getComponent(observerRef, NPCEntity.getComponentType());
+        if (observer == null || observer.getRole() == null) {
+            return false;
+        }
+        return observer.getRole().getPositionCache().hasLineOfSight(observerRef, targetRef, store);
     }
 
     @Nullable
@@ -149,6 +171,18 @@ public final class RtsHostileQuery {
         double centerZ,
         double radius
     ) {
+        return nearestHostile(store, centerX, centerY, centerZ, radius, null);
+    }
+
+    @Nullable
+    public static Ref<EntityStore> nearestHostile(
+        @Nonnull Store<EntityStore> store,
+        double centerX,
+        double centerY,
+        double centerZ,
+        double radius,
+        @Nullable Ref<EntityStore> observerRef
+    ) {
         SpatialResource<Ref<EntityStore>, EntityStore> spatial =
             store.getResource(EntityModule.get().getEntitySpatialResourceType());
         List<Ref<EntityStore>> hits = SpatialResource.getThreadLocalReferenceList();
@@ -157,6 +191,9 @@ public final class RtsHostileQuery {
         double bestSq = Double.MAX_VALUE;
         for (Ref<EntityStore> ref : hits) {
             if (!ref.isValid() || !isAggressiveNpc(ref, store)) {
+                continue;
+            }
+            if (observerRef != null && !hasLineOfSight(observerRef, ref, store)) {
                 continue;
             }
             TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
@@ -295,6 +332,10 @@ public final class RtsHostileQuery {
 
     private static boolean npcInTownsfolkGroup(int roleIndex) {
         return npcInGroup(TOWNSFOLK_GROUP, roleIndex);
+    }
+
+    private static boolean npcInRaidGroup(int roleIndex) {
+        return npcInGroup(RAID_GROUP, roleIndex);
     }
 
     private static boolean npcInGroup(@Nonnull String groupName, int roleIndex) {

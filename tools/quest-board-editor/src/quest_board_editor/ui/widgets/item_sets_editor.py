@@ -82,7 +82,27 @@ class ItemSetsEditor(QWidget):
         self._loading = False
 
     def get_item_sets(self) -> List[dict]:
+        self._flush_table_to_data()
         return copy.deepcopy(self._sets)
+
+    def _flush_table_to_data(self) -> None:
+        if self._loading:
+            return
+        self._loading = True
+        try:
+            self.table.clearFocus()
+            items = self._current().setdefault("items", [])
+            row_count = min(len(items), self.table.rowCount())
+            for row in range(row_count):
+                id_item = self.table.item(row, 0)
+                cnt_item = self.table.item(row, 1)
+                items[row]["itemId"] = id_item.text() if id_item else ""
+                try:
+                    items[row]["count"] = int(cnt_item.text()) if cnt_item else 1
+                except ValueError:
+                    items[row]["count"] = 1
+        finally:
+            self._loading = False
 
     def _current(self) -> dict:
         if not self._sets:

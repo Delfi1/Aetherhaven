@@ -1,6 +1,6 @@
 $C = "../Common.ui";
 
-@BoardPanelHeight = 620;
+@BoardPanelHeight = 670;
 @BoardPanelWidth = 980;
 @BoardContentHeight = @BoardPanelHeight - $C.@TitleHeight - 32;
 @BoardRankBarHeight = 72;

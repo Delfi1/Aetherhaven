@@ -150,7 +150,7 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
             return;
         }
 
-        handleJobVillagerDeath(town, tm, entityUuid, kind);
+        handleJobVillagerDeath(town, tm, entityUuid, kind, roleId, binding.getJobPlotId());
         TownVillagerDeathNotifier.DeathCategory category =
             TownVillagerBinding.isRescueKind(kind)
                 ? TownVillagerDeathNotifier.DeathCategory.VISITOR
@@ -202,11 +202,14 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
         @Nonnull TownRecord town,
         @Nonnull TownManager tm,
         @Nullable UUID entityUuid,
-        @Nonnull String kind
+        @Nonnull String kind,
+        @Nonnull String roleId,
+        @Nullable UUID jobPlotId
     ) {
         if (entityUuid == null) {
             return;
         }
+        ResidentRegistryService.markPendingDawnRevivalOnDeath(town, tm, entityUuid, roleId, kind, jobPlotId);
         if (entityUuid.equals(town.getElderEntityUuid())) {
             town.setElderEntityUuid(null);
         }

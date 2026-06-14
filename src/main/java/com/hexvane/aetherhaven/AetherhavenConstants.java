@@ -543,7 +543,7 @@ public final class AetherhavenConstants {
     public static final String PAGE_GAIA_STATUE = "AetherhavenGaiaStatue";
 
     /** Block and item id for the Statue of Gaia (revival interaction). */
-    public static final String STATUE_OF_GAIA_BLOCK_TYPE_ID = "Aetherhaven_Statue_of_Gaia";
+    public static final String STATUE_OF_GAIA_BLOCK_TYPE_ID = "Aetherhaven_Statue_Of_Gaia";
 
     /** Vanilla ingredient consumed to revive a missing villager at the statue. */
     public static final String ITEM_LIFE_ESSENCE = "Ingredient_Life_Essence";
@@ -701,7 +701,7 @@ public final class AetherhavenConstants {
     /** Attack-move: max horizontal chase distance from the order point while still traveling. */
     public static final double RTS_ATTACK_MOVE_CHASE_RADIUS = 28.0;
     /** Melee guards begin RTS combat when a hostile is within this horizontal distance. */
-    public static final double RTS_MELEE_ENGAGE_RANGE = 3.5;
+    public static final double RTS_MELEE_ENGAGE_RANGE = 3.0;
     /** Ranged guards begin RTS combat when a hostile is within this horizontal distance. */
     public static final double RTS_RANGED_ENGAGE_RANGE = 15.0;
     /** Extra blocks beyond town territory chunk radius for camera pan clamp. */

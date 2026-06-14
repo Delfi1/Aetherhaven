@@ -244,19 +244,14 @@ public final class QuestCatalog {
         if (def == null) {
             return null;
         }
-        for (QuestReward rw : def.rewardsOrEmpty()) {
-            if (rw.kind() == null || !"reputation".equalsIgnoreCase(rw.kind().trim())) {
-                continue;
-            }
-            String grantTo = rw.grantTo();
-            if (grantTo != null && "quest_beneficiary_npc".equalsIgnoreCase(grantTo.trim())) {
-                String role = rw.npcRoleId();
-                if (role != null && !role.isBlank()) {
-                    return new QuestReputationGrant(rw.amount(), role.trim());
-                }
-            }
+        QuestRewardService.ReputationRewardPreview preview = QuestRewardService.firstReputationReward(
+            def.rewardsOrEmpty(),
+            QuestRewardService.GRANT_TO_QUEST_BENEFICIARY_NPC
+        );
+        if (preview == null || preview.npcRoleId() == null || preview.npcRoleId().isBlank()) {
+            return null;
         }
-        return null;
+        return new QuestReputationGrant(preview.amount(), preview.npcRoleId());
     }
 
     public record QuestReputationGrant(int amount, @Nonnull String beneficiaryRoleId) {}

@@ -19,6 +19,7 @@ import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.patrol.PatrolRouteRecord;
 import com.hexvane.aetherhaven.patrol.PatrolRouteRegistry;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
+import com.hexvane.aetherhaven.quest.QuestRewardService;
 import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
 import com.hexvane.aetherhaven.questboard.QuestBoardService;
 import com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord;
@@ -476,7 +477,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                         "#QuestStepsBody.TextSpans",
                         QuestBoardService.objectivesText(boardSlot, town, entityStore, boardCatalog)
                     );
-                    applyBoardQuestRewardPreview(commandBuilder, boardSlot);
+                    applyBoardQuestRewardPreview(commandBuilder, boardSlot, entityStore, town);
                 }
             } else {
                 commandBuilder.set("#QuestDetailTitle.TextSpans", quests.journalTitle(sel, town, entityStore, plugin));
@@ -1537,33 +1538,76 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         }
     }
 
-    private static void applyBoardQuestRewardPreview(@Nonnull UICommandBuilder commandBuilder, @Nonnull QuestBoardSlotRecord slot) {
-        com.hexvane.aetherhaven.quest.data.QuestReward itemRw = QuestBoardService.firstItemReward(slot);
-        boolean hasItem = itemRw != null && itemRw.itemId() != null && !itemRw.itemId().isBlank();
-        if (hasItem) {
+    private static void applyBoardQuestRewardPreview(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull QuestBoardSlotRecord slot,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town
+    ) {
+        List<com.hexvane.aetherhaven.quest.data.QuestReward> itemRewards = QuestBoardService.itemRewards(slot);
+        QuestRewardService.ReputationRewardPreview repRw = QuestBoardService.firstReputationReward(slot);
+        boolean hasItems = !itemRewards.isEmpty();
+        boolean hasRep = repRw != null;
+
+        if (hasItems) {
             commandBuilder.set("#RewardRow.Visible", true);
-            commandBuilder.set(
-                "#RewardSlot.Slots",
-                new ItemGridSlot[]{new ItemGridSlot(new ItemStack(itemRw.itemId().trim(), Math.max(1, itemRw.count())))}
-            );
-            commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(String.valueOf(Math.max(1, itemRw.count()))));
-            Item assetItem = Item.getAssetMap().getAsset(itemRw.itemId().trim());
-            if (assetItem != null
-                && assetItem.getTranslationKey() != null
-                && !assetItem.getTranslationKey().isBlank()) {
-                commandBuilder.set("#RewardTitle.TextSpans", Message.translation(assetItem.getTranslationKey()));
+            if (itemRewards.size() == 1) {
+                com.hexvane.aetherhaven.quest.data.QuestReward itemRw = itemRewards.get(0);
+                commandBuilder.set("#RewardTextCluster.Visible", true);
+                commandBuilder.set(
+                    "#RewardSlot.Slots",
+                    new ItemGridSlot[]{new ItemGridSlot(new ItemStack(itemRw.itemId().trim(), Math.max(1, itemRw.count())))}
+                );
+                commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(String.valueOf(Math.max(1, itemRw.count()))));
+                Item assetItem = Item.getAssetMap().getAsset(itemRw.itemId().trim());
+                if (assetItem != null
+                    && assetItem.getTranslationKey() != null
+                    && !assetItem.getTranslationKey().isBlank()) {
+                    commandBuilder.set("#RewardTitle.TextSpans", Message.translation(assetItem.getTranslationKey()));
+                } else {
+                    commandBuilder.set("#RewardTitle.TextSpans", Message.raw(itemRw.itemId().trim()));
+                }
             } else {
-                commandBuilder.set("#RewardTitle.TextSpans", Message.raw(itemRw.itemId().trim()));
+                ItemGridSlot[] gridSlots = new ItemGridSlot[itemRewards.size()];
+                for (int i = 0; i < itemRewards.size(); i++) {
+                    com.hexvane.aetherhaven.quest.data.QuestReward itemRw = itemRewards.get(i);
+                    gridSlots[i] = new ItemGridSlot(new ItemStack(itemRw.itemId().trim(), Math.max(1, itemRw.count())));
+                }
+                commandBuilder.set("#RewardSlot.Slots", gridSlots);
+                commandBuilder.set("#RewardTextCluster.Visible", false);
+                commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(""));
+                commandBuilder.set("#RewardTitle.TextSpans", Message.raw(""));
             }
         } else {
             commandBuilder.set("#RewardRow.Visible", false);
+            commandBuilder.set("#RewardTextCluster.Visible", false);
             commandBuilder.set("#RewardSlot.Slots", new ItemGridSlot[]{new ItemGridSlot()});
             commandBuilder.set("#RewardQuantity.TextSpans", Message.raw(""));
             commandBuilder.set("#RewardTitle.TextSpans", Message.raw(""));
         }
-        commandBuilder.set("#RewardReputationLine.Visible", false);
-        commandBuilder.set("#RewardReputationLine.TextSpans", Message.raw(""));
-        if (!hasItem) {
+
+        if (hasRep) {
+            commandBuilder.set("#RewardReputationLine.Visible", true);
+            String roleId = repRw.npcRoleId();
+            if (roleId == null || roleId.isBlank()) {
+                roleId = slot.getGiverRoleId();
+            }
+            Message villagerName =
+                roleId != null && !roleId.isBlank()
+                    ? Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + roleId.trim() + ".name")
+                    : Message.raw(com.hexvane.aetherhaven.questboard.QuestBoardGiverDisplay.giverName(slot, store, town));
+            commandBuilder.set(
+                "#RewardReputationLine.TextSpans",
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.rewardReputationLine")
+                    .param("amount", String.valueOf(repRw.amount()))
+                    .param("villager", villagerName)
+            );
+        } else {
+            commandBuilder.set("#RewardReputationLine.Visible", false);
+            commandBuilder.set("#RewardReputationLine.TextSpans", Message.raw(""));
+        }
+
+        if (!hasItems && !hasRep) {
             commandBuilder.set("#RewardFallback.Visible", true);
             commandBuilder.set(
                 "#RewardFallback.TextSpans",

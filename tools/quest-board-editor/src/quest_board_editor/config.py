@@ -26,6 +26,21 @@ def default_quest_board_path() -> Path:
     return p
 
 
+def default_villagers_dir() -> Path:
+    override = os.environ.get("AETHERHAVEN_VILLAGERS")
+    if override:
+        return Path(override).resolve()
+    root = _repo_root_from_here()
+    p = root / "src" / "main" / "resources" / "Server" / "Aetherhaven" / "Villagers"
+    if p.is_dir():
+        return p
+    for anc in Path(__file__).resolve().parents:
+        q = anc / "src" / "main" / "resources" / "Server" / "Aetherhaven" / "Villagers"
+        if q.is_dir():
+            return q
+    return p
+
+
 def default_lang_path() -> Path:
     override = os.environ.get("AETHERHAVEN_QUEST_BOARD_LANG")
     if override:

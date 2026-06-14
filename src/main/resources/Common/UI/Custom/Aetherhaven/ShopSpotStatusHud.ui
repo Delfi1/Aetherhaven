@@ -61,6 +61,16 @@ Group #ShopSpotStatusRoot {
         Group {
           LayoutMode: Center;
           Anchor: (Bottom: 4, Horizontal: 0);
+          Label #SellerLine {
+            Visible: false;
+            Text: " ";
+            Style: (...$C.@DefaultLabelStyle, TextColor: #a8b8c8, FontSize: 15, Wrap: true, HorizontalAlignment: Center);
+            Anchor: (Width: 380);
+          }
+        }
+        Group {
+          LayoutMode: Center;
+          Anchor: (Bottom: 4, Horizontal: 0);
           Label #PriceLine {
             Text: " ";
             Style: @ShopHudDetailStyle;

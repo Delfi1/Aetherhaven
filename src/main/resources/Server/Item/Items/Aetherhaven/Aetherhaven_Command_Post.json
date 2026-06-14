@@ -30,7 +30,6 @@
     "Furniture.Decorative"
   ],
   "Set": "Aetherhaven",
-  "Creative": 6,
   "Interactions": {
     "Primary": "Block_Primary",
     "Secondary": "Block_Secondary"

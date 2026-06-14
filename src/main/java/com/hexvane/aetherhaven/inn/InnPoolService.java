@@ -107,6 +107,50 @@ public final class InnPoolService {
         return true;
     }
 
+    private static boolean isRoleInInnPoolCatalog(@Nonnull List<InnPoolEntry> pool, @Nonnull String roleId) {
+        for (InnPoolEntry e : pool) {
+            if (roleId.equals(e.npcRoleId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Full visitor-slot eligibility: catalog role, {@link InnPoolRequires}, no resident duplicate, not excluded after
+     * promotion.
+     */
+    public static boolean isVisitorRoleEligible(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String roleId
+    ) {
+        return isVisitorRoleEligible(plugin, town, store, innPoolOrLegacy(plugin), roleId.trim());
+    }
+
+    private static boolean isVisitorRoleEligible(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<InnPoolEntry> pool,
+        @Nonnull String roleId
+    ) {
+        if (!isRoleInInnPoolCatalog(pool, roleId)) {
+            return false;
+        }
+        if (!isRoleEligibleForInnPool(plugin, town, pool, roleId)) {
+            return false;
+        }
+        if (town.getInnVisitorPoolExcludedRoleIds().contains(roleId)) {
+            return false;
+        }
+        if (townHasResidentWithNpcRole(store, town, roleId)) {
+            return false;
+        }
+        return true;
+    }
+
     @Nullable
     private static int[] resolveSpawnLocal(
         @Nonnull List<InnPoolEntry> pool,
@@ -352,13 +396,13 @@ public final class InnPoolService {
      * Remove pool UUIDs for NPCs that are no longer inn visitors (e.g. merchant promoted to {@link
      * TownVillagerBinding#KIND_MERCHANT}).
      */
-    private static void syncInnPoolWithResidentBindings(
+    private static int syncInnPoolWithResidentBindings(
         @Nonnull TownRecord town,
         @Nonnull Store<EntityStore> store,
         @Nonnull TownManager tm
     ) {
         List<String> ids = town.getInnPoolNpcIds();
-        boolean changed = false;
+        int removed = 0;
         Iterator<String> it = ids.iterator();
         while (it.hasNext()) {
             String s = it.next();
@@ -375,15 +419,16 @@ public final class InnPoolService {
                 var npcType = NPCEntity.getComponentType();
                 NPCEntity npc = npcType != null ? store.getComponent(ref, npcType) : null;
                 if (npc != null && npc.getRoleName() != null) {
-                    town.addInnVisitorPoolExcludedRoleId(npc.getRoleName());
+                    town.addInnVisitorPoolExcludedRoleId(npc.getRoleName().trim());
                 }
                 it.remove();
-                changed = true;
+                removed++;
             }
         }
-        if (changed) {
+        if (removed > 0) {
             tm.updateTown(town);
         }
+        return removed;
     }
 
     /** Drop duplicate UUID strings; order preserved. */
@@ -1378,14 +1423,158 @@ public final class InnPoolService {
         @Nonnull TownManager tm,
         @Nonnull Store<EntityStore> store
     ) {
+        return repairInnPoolForTown(world, plugin, town, tm, store, true);
+    }
+
+    @Nonnull
+    public static RepairReport repairInnPoolForTown(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        boolean fillOpenSlots
+    ) {
         RepairReport report = new RepairReport();
+        List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
         town.migrateInnFieldsIfNeeded();
         dedupeInnPoolIds(town, tm);
+        syncExcludedRolesFromResidents(town, store, tm, pool);
         report.lockedQuestVisitors = repairQuestLocksCount(town, store);
         autoLockQuestCriticalVisitors(town, tm, store);
         report.promotedResidents = promoteEligibleVisitorsToResidents(world, plugin, town, tm, store);
-        report.removedPoolEntries = removeNonVisitorPoolEntries(town, store, tm);
+        report.removedPoolEntries = syncInnPoolWithResidentBindings(town, store, tm);
+        report.removedPoolEntries += removeIneligiblePoolVisitors(town, plugin, tm, store, pool);
+        trimInnPoolListToMax(town, tm, store);
+        if (fillOpenSlots && town.getInnPoolNpcIds().size() < MAX_VISITORS) {
+            PlotInstance innPlot =
+                town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+            if (innPlot != null) {
+                ConstructionDefinition innDef = plugin.getConstructionCatalog().get(AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+                if (innDef != null) {
+                    fillEmptyInnVisitorSlotsAtSpawns(world, plugin, town, tm, store, innPlot, innDef);
+                }
+            }
+        }
         return report;
+    }
+
+    /**
+     * Removes every inn visitor NPC for this town ({@link TownVillagerBinding#isVisitorKind}). Used before the inn bell
+     * respawns guests so listed, orphaned, or stale visitors cannot duplicate pool slots.
+     */
+    public static void despawnAllTownInnVisitors(@Nonnull TownRecord town, @Nonnull Store<EntityStore> store) {
+        java.util.Queue<Ref<EntityStore>> refs = new java.util.concurrent.ConcurrentLinkedQueue<>();
+        store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
+            Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+            if (ref == null || !ref.isValid()) {
+                return;
+            }
+            TownVillagerBinding b = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
+            if (b == null || !b.getTownId().equals(town.getTownId()) || !TownVillagerBinding.isVisitorKind(b.getKind())) {
+                return;
+            }
+            refs.add(ref);
+        });
+        for (Ref<EntityStore> ref : refs) {
+            if (ref.isValid()) {
+                store.removeEntity(ref, RemoveReason.REMOVE);
+            }
+        }
+    }
+
+    /** Mark inn-pool roles that already have a non-visitor town member so fill logic does not spawn duplicates. */
+    private static void syncExcludedRolesFromResidents(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownManager tm,
+        @Nonnull List<InnPoolEntry> pool
+    ) {
+        Set<String> poolRoleIds = new LinkedHashSet<>();
+        for (InnPoolEntry e : pool) {
+            String rid = e.npcRoleId();
+            if (rid != null && !rid.isBlank()) {
+                poolRoleIds.add(rid.trim());
+            }
+        }
+        if (poolRoleIds.isEmpty()) {
+            return;
+        }
+        Set<String> residentPoolRoles = ConcurrentHashMap.newKeySet();
+        store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
+            TownVillagerBinding b = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
+            if (b == null || !b.getTownId().equals(town.getTownId()) || TownVillagerBinding.isVisitorKind(b.getKind())) {
+                return;
+            }
+            var npcType = NPCEntity.getComponentType();
+            NPCEntity npc = npcType != null ? archetypeChunk.getComponent(index, npcType) : null;
+            String roleName = npc != null ? npc.getRoleName() : null;
+            if (roleName == null || roleName.isBlank()) {
+                return;
+            }
+            String rid = roleName.trim();
+            if (poolRoleIds.contains(rid)) {
+                residentPoolRoles.add(rid);
+            }
+        });
+        boolean changed = false;
+        for (String rid : residentPoolRoles) {
+            if (!town.getInnVisitorPoolExcludedRoleIds().contains(rid)) {
+                town.addInnVisitorPoolExcludedRoleId(rid);
+                changed = true;
+            }
+        }
+        if (changed) {
+            tm.updateTown(town);
+        }
+    }
+
+    /**
+     * Drop unlocked pool visitors whose role is no longer eligible (requirements, excluded after promotion, or a
+     * resident already holds that role). Quest-locked visitors stay until their quest no longer needs them.
+     */
+    private static int removeIneligiblePoolVisitors(
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<InnPoolEntry> pool
+    ) {
+        int removed = 0;
+        for (String sid : new ArrayList<>(town.getInnPoolNpcIds())) {
+            UUID u = parseUuid(sid);
+            if (u == null) {
+                town.getInnPoolNpcIds().remove(sid);
+                removed++;
+                continue;
+            }
+            if (town.isInnVisitorLocked(u) || shouldPreserveInnVisitorFromQuestState(town, store, u)) {
+                continue;
+            }
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
+            if (ref == null || !ref.isValid()) {
+                continue;
+            }
+            NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+            String roleId = npc != null ? npc.getRoleName() : null;
+            if (roleId == null || roleId.isBlank()) {
+                continue;
+            }
+            roleId = roleId.trim();
+            if (isVisitorRoleEligible(plugin, town, store, pool, roleId)) {
+                continue;
+            }
+            town.getInnPoolNpcIds().removeIf(s -> sid.equalsIgnoreCase(s != null ? s.trim() : ""));
+            town.removeInnLockedEntity(u);
+            removed++;
+            if (isInnPoolListedEntityVisitorToDespawn(town, store, ref, u)) {
+                store.removeEntity(ref, RemoveReason.REMOVE);
+            }
+        }
+        if (removed > 0) {
+            tm.updateTown(town);
+        }
+        return removed;
     }
 
     private static int repairQuestLocksCount(@Nonnull TownRecord town, @Nonnull Store<EntityStore> store) {
@@ -1400,34 +1589,6 @@ public final class InnPoolService {
             }
         }
         return count;
-    }
-
-    private static int removeNonVisitorPoolEntries(
-        @Nonnull TownRecord town,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull TownManager tm
-    ) {
-        int removed = 0;
-        Iterator<String> it = town.getInnPoolNpcIds().iterator();
-        while (it.hasNext()) {
-            UUID u = parseUuid(it.next());
-            if (u == null) {
-                continue;
-            }
-            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
-            if (ref == null || !ref.isValid()) {
-                continue;
-            }
-            TownVillagerBinding b = store.getComponent(ref, TownVillagerBinding.getComponentType());
-            if (b != null && b.getTownId().equals(town.getTownId()) && !TownVillagerBinding.isVisitorKind(b.getKind())) {
-                it.remove();
-                removed++;
-            }
-        }
-        if (removed > 0) {
-            tm.updateTown(town);
-        }
-        return removed;
     }
 
     /**

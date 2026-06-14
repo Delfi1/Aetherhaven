@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.production.ProductionWorkplaceKinds;
+import com.hexvane.aetherhaven.ui.WorkplaceWorkerDirectory;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hypixel.hytale.component.query.Query;
@@ -89,24 +90,31 @@ public final class WorkplacePlotAssignment {
             return null;
         }
 
+        UUIDComponent assignedUuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        String clearBlock =
+            clearBlockReason(
+                plugin,
+                store,
+                town,
+                gameplayId,
+                workplacePlotId,
+                residentKind,
+                assignedUuidComp != null ? assignedUuidComp.getUuid() : null
+            );
+        if (clearBlock != null) {
+            return clearBlock;
+        }
+
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         String roleId = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : null;
-        String visitorKind = visitorKindForResidentKind(residentKind);
+        UUIDComponent uuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
         store.putComponent(
             npcRef,
             TownVillagerBinding.getComponentType(),
-            new TownVillagerBinding(town.getTownId(), visitorKind, null, null)
+            new TownVillagerBinding(town.getTownId(), residentKind, null, null)
         );
-        if (roleId != null && !roleId.isBlank()) {
-            town.getInnVisitorPoolExcludedRoleIds().remove(roleId);
-            UUIDComponent uuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
-            if (uuidComp != null) {
-                String sid = uuidComp.getUuid().toString();
-                if (!town.getInnPoolNpcIds().contains(sid)) {
-                    town.getInnPoolNpcIds().add(sid);
-                }
-                ResidentRegistryService.upsert(town, tm, roleId, visitorKind, null, uuidComp.getUuid());
-            }
+        if (roleId != null && !roleId.isBlank() && uuidComp != null) {
+            ResidentRegistryService.upsert(town, tm, roleId, residentKind, null, uuidComp.getUuid());
         }
         if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gameplayId)
             && TownVillagerBinding.KIND_GUILD_MASTER.equals(residentKind)) {
@@ -116,21 +124,73 @@ public final class WorkplacePlotAssignment {
         return null;
     }
 
-    @Nonnull
-    private static String visitorKindForResidentKind(@Nonnull String residentKind) {
-        return switch (residentKind) {
-            case TownVillagerBinding.KIND_GUILD_MASTER -> TownVillagerBinding.KIND_VISITOR_GUILD_MASTER;
-            case TownVillagerBinding.KIND_BARD -> TownVillagerBinding.KIND_VISITOR_BARD;
-            case TownVillagerBinding.KIND_INNKEEPER -> TownVillagerBinding.KIND_VISITOR_MERCHANT;
-            case TownVillagerBinding.KIND_FARMER -> TownVillagerBinding.KIND_VISITOR_FARMER;
-            case TownVillagerBinding.KIND_BLACKSMITH -> TownVillagerBinding.KIND_VISITOR_BLACKSMITH;
-            case TownVillagerBinding.KIND_PRIESTESS -> TownVillagerBinding.KIND_VISITOR_PRIESTESS;
-            case TownVillagerBinding.KIND_MINER -> TownVillagerBinding.KIND_VISITOR_MINER;
-            case TownVillagerBinding.KIND_LOGGER -> TownVillagerBinding.KIND_VISITOR_LOGGER;
-            case TownVillagerBinding.KIND_RANCHER -> TownVillagerBinding.KIND_VISITOR_RANCHER;
-            case TownVillagerBinding.KIND_MERCHANT -> TownVillagerBinding.KIND_VISITOR_MERCHANT;
-            default -> TownVillagerBinding.KIND_TOWNSFOLK;
-        };
+    /**
+     * @return null when clearing is allowed, otherwise a short English reason for the player
+     */
+    @Nullable
+    public static String clearBlockReason(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull String gameplayWorkplaceId,
+        @Nonnull UUID workplacePlotId,
+        @Nonnull String residentKind,
+        @Nullable UUID currentlyAssignedUuid
+    ) {
+        if (ProductionWorkplaceKinds.isMandatoryWorkplaceResidentKind(residentKind)) {
+            return "This villager must stay assigned to the building.";
+        }
+        String filterNpcRoleId = npcRoleFilterForWorkplaceResidentKind(residentKind);
+        if (WorkplaceWorkerDirectory.hasAlternateEligibleWorker(
+            store,
+            town,
+            plugin,
+            gameplayWorkplaceId,
+            filterNpcRoleId,
+            currentlyAssignedUuid
+        )) {
+            return "Assign another worker before removing this one.";
+        }
+        return null;
+    }
+
+    /** True when the management UI may offer an Unassigned choice for this workplace role. */
+    public static boolean allowsWorkplaceUnassign(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull String gameplayWorkplaceId,
+        @Nonnull UUID workplacePlotId,
+        @Nonnull String residentKind
+    ) {
+        UUID assigned = findAssignedWorkerUuid(store, town.getTownId(), workplacePlotId, residentKind);
+        return clearBlockReason(plugin, store, town, gameplayWorkplaceId, workplacePlotId, residentKind, assigned) == null;
+    }
+
+    @Nullable
+    private static String npcRoleFilterForWorkplaceResidentKind(@Nonnull String residentKind) {
+        if (TownVillagerBinding.KIND_GUILD_MASTER.equals(residentKind)) {
+            return AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID;
+        }
+        if (TownVillagerBinding.KIND_BARD.equals(residentKind)) {
+            return AetherhavenConstants.BARD_NPC_ROLE_ID;
+        }
+        return null;
+    }
+
+    @Nullable
+    private static UUID findAssignedWorkerUuid(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID townId,
+        @Nonnull UUID workplacePlotId,
+        @Nonnull String residentKind
+    ) {
+        Ref<EntityStore> ref = findWorkerOnPlot(store, townId, workplacePlotId, residentKind);
+        if (ref == null || !ref.isValid()) {
+            return null;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        return uc != null ? uc.getUuid() : null;
     }
 
     @Nullable

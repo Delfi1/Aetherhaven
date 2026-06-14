@@ -28,7 +28,6 @@ public final class DialogueResolver {
     private static final String DEFAULT_DIALOGUE_KIND = "merchant";
     private static final String DEFAULT_RESIDENT_DIALOGUE_TREE = "aetherhaven_merchant";
     public static final String KIND_ELDER_LYREN = "elder_lyren";
-    public static final String TREE_ELDER_WEEK1 = "aetherhaven_elder_week1";
     public static final String TREE_ELDER_WEEK2 = "aetherhaven_elder_week2";
     public static final String KIND_INNKEEPER = "innkeeper";
     public static final String TREE_INN_WELCOME = "aetherhaven_inn_welcome";

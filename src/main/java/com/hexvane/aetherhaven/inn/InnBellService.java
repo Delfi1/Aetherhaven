@@ -8,7 +8,6 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -69,7 +68,7 @@ public final class InnBellService {
             return RingOutcome.NO_VISITORS;
         }
 
-        InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
+        InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
 
         int actions = respawnAllPoolVisitorsAtSpawns(world, plugin, town, tm, store, innPlot, innDef);
 
@@ -81,7 +80,7 @@ public final class InnBellService {
             }
         }
 
-        InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
+        InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
         tm.updateTown(town);
 
         if (actions > 0) {
@@ -99,8 +98,8 @@ public final class InnBellService {
     }
 
     /**
-     * Removes every listed inn pool visitor from the world and spawns a fresh NPC at that slot's guest spawn local.
-     * Preserves role and quest lock per slot (same role when the entity was loaded; inferred when missing).
+     * Snapshots listed pool slots, removes every inn visitor for this town, then spawns fresh NPCs at guest spawn locals.
+     * Preserves role and quest lock per slot when the entity was loaded; inferred when missing.
      */
     private static int respawnAllPoolVisitorsAtSpawns(
         @Nonnull World world,
@@ -134,14 +133,11 @@ public final class InnBellService {
                     || npc.getRoleName().isBlank()
                     || !town.getTownId().equals(binding.getTownId())
                     || !TownVillagerBinding.isVisitorKind(binding.getKind())) {
-                    town.getInnPoolNpcIds().removeIf(s -> sid.equalsIgnoreCase(s != null ? s.trim() : ""));
                     town.removeInnLockedEntity(oldUuid);
-                    tm.updateTown(town);
                     continue;
                 }
                 roleId = npc.getRoleName().trim();
                 kind = binding.getKind();
-                store.removeEntity(ref, RemoveReason.REMOVE);
             }
 
             snapshots.add(new PoolSlotSnapshot(slotIndex, oldUuid, roleId, kind, questLocked));
@@ -150,11 +146,15 @@ public final class InnBellService {
 
         town.getInnPoolNpcIds().clear();
         tm.updateTown(town);
+        InnPoolService.despawnAllTownInnVisitors(town, store);
 
         int respawned = 0;
         LinkedHashSet<String> rolesTaken = new LinkedHashSet<>();
         for (PoolSlotSnapshot snap : snapshots) {
             String roleId = snap.roleId();
+            if (roleId != null && !InnPoolService.isVisitorRoleEligible(plugin, town, store, roleId)) {
+                roleId = null;
+            }
             if (roleId == null) {
                 roleId = inferRoleForMissingVisitor(town, plugin, store, rolesTaken);
             }
@@ -211,10 +211,7 @@ public final class InnBellService {
             if (rolesTaken.contains(candidate)) {
                 continue;
             }
-            if (town.getInnVisitorPoolExcludedRoleIds().contains(candidate)) {
-                continue;
-            }
-            if (InnPoolService.townHasResidentWithNpcRole(store, town, candidate)) {
+            if (!InnPoolService.isVisitorRoleEligible(plugin, town, store, candidate)) {
                 continue;
             }
             rolesTaken.add(candidate);

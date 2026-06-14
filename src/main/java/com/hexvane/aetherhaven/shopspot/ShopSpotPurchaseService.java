@@ -304,6 +304,10 @@ public final class ShopSpotPurchaseService {
         record.setItemId(itemId);
         record.setStock(qty);
         record.setSellerUuid(playerUuid);
+        PlayerRef sellerRef = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+        if (sellerRef != null) {
+            record.setSellerName(sellerRef.getUsername());
+        }
         registry.put(record);
         ShopSpotPersistence.save(world, plugin, registry);
         ShopSpotDisplayService.syncDisplay(world, store, commandBuffer, plugin, registry, record, town);

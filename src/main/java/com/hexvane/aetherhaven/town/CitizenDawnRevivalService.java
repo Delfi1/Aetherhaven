@@ -27,9 +27,9 @@ import javax.annotation.Nonnull;
 import org.joml.Vector3d;
 
 /**
- * At dawn, missing town villagers who can be revived at the Gaia statue return to the charter instead. Prevents
- * softlocks when a key villager dies before the Gaia altar is built. Runs only while an owner or member of the town
- * is online so unloaded chunks are not mistaken for dead villagers.
+ * At dawn, town villagers who <em>confirmed died</em> ({@link ResidentNpcRecord#isPendingDawnRevival()}) return to the
+ * charter. Prevents softlocks when a key villager dies before the Gaia altar is built. Never infers death from a
+ * missing entity ref — unloaded chunks and dead entities look identical in the entity index.
  */
 public final class CitizenDawnRevivalService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -118,12 +118,15 @@ public final class CitizenDawnRevivalService {
             if (!TownOnlinePresence.hasAffiliatedPlayerOnline(town, onlinePlayers)) {
                 continue;
             }
+            if (!TownTerritoryChunkUtil.isCharterChunkLoaded(world, town)) {
+                continue;
+            }
             String revivalKey = townRevivalKey(worldName, town.getTownId());
             Long last = LAST_MORNING_REVIVAL_EPOCH_DAY_BY_TOWN.get(revivalKey);
             if (last != null && last >= epochDay) {
                 continue;
             }
-            List<ResidentNpcRecord> candidates = ResidentRegistryService.revivalCandidates(town);
+            List<ResidentNpcRecord> candidates = ResidentRegistryService.dawnRevivalCandidates(town, tm, store);
             if (candidates.isEmpty()) {
                 LAST_MORNING_REVIVAL_EPOCH_DAY_BY_TOWN.put(revivalKey, epochDay);
                 continue;
@@ -131,7 +134,14 @@ public final class CitizenDawnRevivalService {
             Vector3d spawnPos = charterSpawnPos(world, town);
             boolean anyRevived = false;
             for (ResidentNpcRecord record : candidates) {
+                if (ResidentRegistryService.hasLiveTownRevivalNpcForRole(store, town, record)) {
+                    record.setPendingDawnRevival(false);
+                    tm.updateTown(town);
+                    continue;
+                }
                 if (VillagerRevivalService.validateCanRevive(store, record) != null) {
+                    record.setPendingDawnRevival(false);
+                    tm.updateTown(town);
                     continue;
                 }
                 boolean ok = VillagerRevivalService.reviveResident(world, plugin, town, tm, store, record, spawnPos);

@@ -2,7 +2,7 @@
   "Type": "Component",
   "Class": "Instruction",
   "Interface": "Hytale.Instruction",
-  "$Comment": "Gate combat instructions when an aggressive mob, hostile memory, or locked RTS target is present.",
+  "$Comment": "Stay in combat while an aggressive mob or current target is visible (line of sight).",
   "Parameters": {
     "ViewRange": {
       "Value": 24,
@@ -16,17 +16,26 @@
         {
           "Type": "Mob",
           "Range": { "Compute": "ViewRange" },
-          "LockOnTarget": false,
-          "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
+          "LockOnTarget": true,
+          "Filters": [
+            { "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] },
+            { "Type": "LineOfSight" }
+          ],
           "Collector": { "Type": "CombatTargets" }
         },
-        { "Type": "HasHostileTargetMemory" },
         {
           "Type": "Target",
           "Range": { "Compute": "ViewRange" },
-          "TargetSlot": "LockedTarget"
+          "Filters": [{ "Type": "LineOfSight" }]
+        },
+        {
+          "Type": "Target",
+          "TargetSlot": "LockedTarget",
+          "Range": { "Compute": "ViewRange" },
+          "Filters": [{ "Type": "LineOfSight" }]
         }
       ]
-    }
+    },
+    "Instructions": []
   }
 }

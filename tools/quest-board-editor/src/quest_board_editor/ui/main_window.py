@@ -43,6 +43,7 @@ from ..quest_model import (
     validate_document,
     villager_short_label,
 )
+from ..villager_catalog import merged_villager_ids
 from .quest_form import QuestForm
 from .quest_list import QuestListView
 
@@ -101,8 +102,10 @@ class MainWindow(QMainWindow):
         self._lang_doc: Optional[LangDocument] = None
         self._all_refs: List[QuestRef] = []
         self._filtered_indices: List[int] = []
+        self._all_villager_ids: List[str] = []
         self._dirty = False
         self._pending_lang: Dict[str, str] = {}
+        self._removed_lang_json_keys: set[str] = set()
 
         self.setWindowTitle("Aetherhaven Quest Board Editor")
         self.resize(1200, 780)
@@ -226,6 +229,7 @@ class MainWindow(QMainWindow):
         self._doc = QuestBoardDocument(data)
         self._lang_doc = lang_doc
         self._pending_lang.clear()
+        self._removed_lang_json_keys.clear()
         self._dirty = False
         self._rebuild_index()
         self._update_filters()
@@ -245,12 +249,16 @@ class MainWindow(QMainWindow):
     def _update_filters(self) -> None:
         if self._doc is None:
             return
+        self._all_villager_ids = merged_villager_ids(self._doc.villager_ids())
         self.villager_filter.blockSignals(True)
         self.rank_filter.blockSignals(True)
+        cur_villager = self.villager_filter.currentText()
         self.villager_filter.clear()
         self.villager_filter.addItem("All")
-        for vid in self._doc.villager_ids():
+        for vid in self._all_villager_ids:
             self.villager_filter.addItem(vid)
+        if cur_villager and self.villager_filter.findText(cur_villager) >= 0:
+            self.villager_filter.setCurrentText(cur_villager)
         self.rank_filter.clear()
         self.rank_filter.addItem("All")
         for r in self._doc.ranks:
@@ -258,7 +266,7 @@ class MainWindow(QMainWindow):
         self.villager_filter.blockSignals(False)
         self.rank_filter.blockSignals(False)
         self.quest_form.set_ranks(self._doc.ranks)
-        self.quest_form.set_villagers(self._doc.villager_ids())
+        self.quest_form.set_villagers(self._all_villager_ids)
 
     def _current_filter(self) -> QuestFilter:
         vf = self.villager_filter.currentText()
@@ -317,6 +325,9 @@ class MainWindow(QMainWindow):
         self._update_title()
         pending = self.quest_form.pending_lang_texts()
         self._pending_lang.update(pending)
+        for stale in self.quest_form.consume_stale_lang_keys():
+            self._pending_lang.pop(stale, None)
+            self._removed_lang_json_keys.add(stale)
 
     def _update_title(self) -> None:
         name = self._json_path.name if self._json_path else "untitled"
@@ -348,6 +359,8 @@ class MainWindow(QMainWindow):
         self._apply_form_to_selected()
 
         lang_getter = lambda k, d="": self._lang_doc.get(k, d) if self._lang_doc else d  # noqa: E731
+        for json_key in self._removed_lang_json_keys:
+            self._lang_doc.remove(json_key_to_lang_key(json_key))
         for json_key, text in self._pending_lang.items():
             self._lang_doc.set(json_key_to_lang_key(json_key), text)
         sync_lang_from_quests(self._doc, self._lang_doc, self._pending_lang)
@@ -371,6 +384,7 @@ class MainWindow(QMainWindow):
 
         self._dirty = False
         self._pending_lang.clear()
+        self._removed_lang_json_keys.clear()
         self._update_title()
         self._refresh_list()
         return True
@@ -434,7 +448,7 @@ class MainWindow(QMainWindow):
         vf = self.villager_filter.currentText()
         tf = self.type_filter.currentText()
         villager_id = vf if vf != "All" else (
-            self._doc.villager_ids()[0] if self._doc.villager_ids() else "Aetherhaven_Miner"
+            self._all_villager_ids[0] if self._all_villager_ids else "Aetherhaven_Miner"
         )
         quest_type = tf if tf != "All" else "fetch"
 

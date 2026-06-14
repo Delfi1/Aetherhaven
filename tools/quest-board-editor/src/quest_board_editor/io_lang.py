@@ -41,6 +41,14 @@ class LangDocument:
         self.lines.append(LangLine(raw=f"{lang_key}={value}", key=lang_key, value=value))
         self._index[lang_key] = len(self.lines) - 1
 
+    def remove(self, lang_key: str) -> bool:
+        idx = self._index.get(lang_key)
+        if idx is None:
+            return False
+        del self.lines[idx]
+        self.rebuild_index()
+        return True
+
 
 def parse_lang(text: str) -> LangDocument:
     lines: List[LangLine] = []

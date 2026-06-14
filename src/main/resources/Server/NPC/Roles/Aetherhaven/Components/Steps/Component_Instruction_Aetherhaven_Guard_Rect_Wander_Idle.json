@@ -2,7 +2,7 @@
   "Type": "Component",
   "Class": "Instruction",
   "Interface": "Hytale.Instruction.Intelligent.Idle.Motion",
-  "$Comment": "Large patrol rect for hired town guards (48x48).",
+  "$Comment": "Large patrol rect (48x48) with ground-preference wander.",
   "Parameters": {
     "WanderRectTimer": {
       "Value": [6, 14],

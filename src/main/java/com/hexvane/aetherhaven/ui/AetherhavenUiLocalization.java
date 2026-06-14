@@ -29,12 +29,12 @@ public final class AetherhavenUiLocalization {
         applyManagementTabTooltips(b);
         b.set("#MaterialsHeader.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.materials"));
         b.set("#ChooseHouseResidentButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.chooseHouseResident"));
+        b.set("#ChooseWorkplaceWorkerButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.chooseWorkplaceWorker"));
+        b.set("#ChooseWorkplaceBardButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.chooseWorkplaceBard"));
         b.set("#HouseResidentPickerTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResidentPickerTitle"));
+        b.set("#WorkplaceWorkerPickerTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceWorkerPickerTitle"));
         b.set("#HouseResidentPickerCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResidentPickerCancel"));
-        b.set("#WorkplaceAssignDropdown #WorkplaceAssignFieldLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceWorker"));
-        b.set("#AssignWorkplaceButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.assignWorkplace"));
-        b.set("#WorkplaceAssignBardDropdown #WorkplaceAssignBardFieldLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceBard"));
-        b.set("#AssignWorkplaceBardButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.assignWorkplaceBard"));
+        b.set("#WorkplaceWorkerPickerCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceWorkerPickerCancel"));
         b.set("#HouseResidentHideElsewhereCheckbox #HouseResidentHideElsewhereLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere"));
         b.set("#HouseResidentHideElsewhereCheckbox #HouseResidentHideElsewhereLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip"));
         b.set("#PickUpPlotButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlot"));

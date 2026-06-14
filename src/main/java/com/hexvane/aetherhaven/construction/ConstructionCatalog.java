@@ -58,6 +58,9 @@ public final class ConstructionCatalog {
         List<PackJsonFile> packFiles = AetherhavenPackAssetScanner.listJsonFilesUnderAllPacks(AetherhavenAssetPaths.BUILDINGS);
         if (!packFiles.isEmpty()) {
             for (PackJsonFile f : packFiles) {
+                if (!isConstructionDefinitionFile(f.absolutePath().toString())) {
+                    continue;
+                }
                 try (InputStream in = Files.newInputStream(f.absolutePath())) {
                     loadFromStream(gson, in, f.packName() + ":" + f.absolutePath(), map);
                 } catch (Exception e) {
@@ -68,6 +71,9 @@ public final class ConstructionCatalog {
         } else {
             List<String> paths = ClasspathResourceScanner.listJsonFiles(classLoader, AetherhavenAssetPaths.buildingsPrefix());
             for (String path : paths) {
+                if (!isConstructionDefinitionFile(path)) {
+                    continue;
+                }
                 loadFromClasspath(classLoader, gson, path, map);
             }
             LOGGER.atInfo().log("Loaded %s construction(s) from classpath %s", map.size(), AetherhavenAssetPaths.buildingsPrefix());
@@ -123,6 +129,10 @@ public final class ConstructionCatalog {
                 walk = next.trim();
             }
         }
+    }
+
+    private static boolean isConstructionDefinitionFile(@Nonnull String path) {
+        return !path.replace('\\', '/').contains("/PrefabMaterials/");
     }
 
     private static void loadFromStream(

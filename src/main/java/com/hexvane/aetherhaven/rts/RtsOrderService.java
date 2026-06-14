@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -133,6 +134,11 @@ public final class RtsOrderService {
                 guardNpc.getRole().getStateSupport().setState(guardRef, "Combat", null, accessor);
             } else {
                 cmd.setPhase(RtsCommandPhase.TRAVELING);
+                RtsGuardCombatSupport.lockCombatTarget(guardNpc, targetRef, accessor);
+                guardNpc.setLeashPoint(new Vector3d(cmd.getHoldX(), cmd.getHoldY(), cmd.getHoldZ()));
+                guardNpc.getRole()
+                    .getStateSupport()
+                    .setState(guardRef, AetherhavenConstants.NPC_STATE_GUARD_RTS_COMMAND, null, accessor);
             }
             accessor.putComponent(guardRef, GuardRtsCommandState.getComponentType(), cmd);
             accessor.putComponent(guardRef, NPCEntity.getComponentType(), guardNpc);

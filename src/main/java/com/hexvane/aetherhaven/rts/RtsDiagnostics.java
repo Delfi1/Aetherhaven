@@ -37,23 +37,6 @@ public final class RtsDiagnostics {
         boolean sprintHeld,
         boolean hadInput
     ) {
-        int tick = wishTick.merge(playerRef.getUuid(), 1, Integer::sum);
-        if (hadInput || tick % PERIODIC_TICKS == 0) {
-            LOGGER.atInfo().log(
-                "[RTS-WASD] player=%s queue=%d wish=%d rel=%d abs=%d states=%d wish=(%.2f,%.2f) fwd=%.3f sprint=%s hadInput=%s",
-                playerRef.getUsername(),
-                queueSize,
-                wishCount,
-                relCount,
-                absCount,
-                statesCount,
-                wishX,
-                wishZ,
-                forwardAxis,
-                sprintHeld,
-                hadInput
-            );
-        }
     }
 
     public static void panApplied(
@@ -64,51 +47,18 @@ public final class RtsDiagnostics {
         double focusZ,
         @Nonnull String source
     ) {
-        if (Math.abs(dx) < 0.0005 && Math.abs(dz) < 0.0005) {
-            return;
-        }
-        LOGGER.atInfo().log(
-            "[RTS-PAN] player=%s source=%s delta=(%.3f,%.3f) focus=(%.2f,%.2f)",
-            playerRef.getUsername(),
-            source,
-            dx,
-            dz,
-            focusX,
-            focusZ
-        );
     }
 
     public static void panSkipped(@Nonnull PlayerRef playerRef, @Nonnull String reason) {
-        int tick = panTick.merge(playerRef.getUuid(), 1, Integer::sum);
-        if (tick % PERIODIC_TICKS == 0) {
-            LOGGER.atInfo().log("[RTS-PAN] player=%s skipped: %s", playerRef.getUsername(), reason);
-        }
     }
 
     public static void hotbarSync(@Nonnull PlayerRef playerRef, @Nonnull String reason, byte serverSlot) {
-        LOGGER.atInfo().log(
-            "[RTS-HOTBAR] player=%s reason=%s serverSlot=%d",
-            playerRef.getUsername(),
-            reason,
-            serverSlot
-        );
     }
 
     public static void hotbarClick(@Nonnull PlayerRef playerRef, byte serverSlot, @Nonnull String action) {
-        LOGGER.atInfo().log(
-            "[RTS-HOTBAR] player=%s click action=%s serverSlot=%d (compare to failedGetActiveSlot packet= in chat)",
-            playerRef.getUsername(),
-            action,
-            serverSlot
-        );
     }
 
     public static void mousePacketReceived(@Nonnull PlayerRef playerRef, int clientSlot) {
-        LOGGER.atInfo().log(
-            "[RTS-MOUSE-PKT] player=%s slot=%d",
-            playerRef.getUsername(),
-            clientSlot
-        );
     }
 
     public static void mouseClick(
@@ -117,13 +67,6 @@ public final class RtsDiagnostics {
         @Nullable org.joml.Vector3i targetBlock,
         @Nullable org.joml.Vector2fc screen
     ) {
-        LOGGER.atInfo().log(
-            "[RTS-CLICK] player=%s state=%s block=%s screen=%s",
-            playerRef.getUsername(),
-            state,
-            targetBlock != null ? targetBlock.x() + "," + targetBlock.y() + "," + targetBlock.z() : "null",
-            screen != null ? String.format("(%.3f,%.3f)", screen.x(), screen.y()) : "null"
-        );
     }
 
     public static void primaryInteraction(
@@ -132,13 +75,6 @@ public final class RtsDiagnostics {
         @Nullable org.joml.Vector3i targetBlock,
         @Nullable Ref<EntityStore> targetEntity
     ) {
-        LOGGER.atInfo().log(
-            "[RTS-PRIMARY] player=%s item=%s block=%s entity=%s",
-            playerRef.getUsername(),
-            itemId,
-            targetBlock != null ? targetBlock.x() + "," + targetBlock.y() + "," + targetBlock.z() : "null",
-            targetEntity != null && targetEntity.isValid() ? "yes" : "no"
-        );
     }
 
     public static void primaryInteractionFailed(@Nonnull PlayerRef playerRef, @Nonnull String reason) {
@@ -150,12 +86,6 @@ public final class RtsDiagnostics {
         boolean handled,
         @Nullable RtsScreenPickUtil.GroundPick pick
     ) {
-        LOGGER.atInfo().log(
-            "[RTS-CLICK] player=%s guardHandled=%s pick=%s",
-            playerRef.getUsername(),
-            handled,
-            pick != null ? String.format("(%.1f,%.1f,%.1f)", pick.x(), pick.y(), pick.z()) : "null"
-        );
     }
 
     public static void moveOrderPick(
@@ -166,27 +96,9 @@ public final class RtsDiagnostics {
         @Nullable org.joml.Vector2fc screen,
         @Nonnull String source
     ) {
-        LOGGER.atInfo().log(
-            "[RTS-MOVE-PICK] player=%s source=%s pick=(%.1f,%.1f,%.1f) block=%s screen=%s ortho=(%.2f,%.2f)",
-            playerRef.getUsername(),
-            source,
-            pick.x(),
-            pick.y(),
-            pick.z(),
-            targetBlock != null ? targetBlock.x() + "," + targetBlock.y() + "," + targetBlock.z() : "null",
-            screen != null ? String.format("(%.3f,%.3f)", screen.x(), screen.y()) : "null",
-            RtsScreenPickUtil.orthoHalfWidth(session),
-            RtsScreenPickUtil.orthoHalfHeight(session)
-        );
     }
 
     public static void movementProfile(@Nonnull PlayerRef playerRef, boolean enabling, boolean canFly) {
-        LOGGER.atInfo().log(
-            "[RTS-MOVE] player=%s %s canFly=%s",
-            playerRef.getUsername(),
-            enabling ? "enable-command-profile" : "restore-default-profile",
-            canFly
-        );
     }
 
     public static void boxDragPulse(

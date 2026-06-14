@@ -2,7 +2,7 @@
   "Type": "Component",
   "Class": "Instruction",
   "Interface": "Hytale.Instruction",
-  "$Comment": "Detect aggressive mobs and transition to parent Combat state.",
+  "$Comment": "Detect aggressive mobs in line of sight and transition to parent Combat state.",
   "Parameters": {
     "_ImportStates": ["Combat"],
     "ViewRange": {
@@ -15,7 +15,10 @@
       "Type": "Mob",
       "Range": { "Compute": "ViewRange" },
       "LockOnTarget": true,
-      "Filters": [{ "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] }],
+      "Filters": [
+        { "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] },
+        { "Type": "LineOfSight" }
+      ],
       "Collector": { "Type": "CombatTargets" }
     },
     "Actions": [

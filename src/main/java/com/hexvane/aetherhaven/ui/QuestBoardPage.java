@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.quest.QuestRewardService;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
 import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
 import com.hexvane.aetherhaven.questboard.HuntQuestBoardHandler;
@@ -22,8 +23,8 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.ui.ItemGridSlot;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -39,6 +40,7 @@ import javax.annotation.Nullable;
 public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<QuestBoardPage.PageData> {
     private static final String CARD_ROW = "#QuestBoardRoot #Content #CardRowScroll #CardRow";
     private static final int MAX_ITEMS = 6;
+    private static final int MAX_REWARD_ITEMS = 6;
 
     /**
      * {@code append(ui)} must run only once per page instance; repeating it on every {@link #sendUpdate} duplicates the
@@ -201,7 +203,7 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
             cmd.set(card + " #QuestDescription.TextSpans", QuestBoardService.displayDescription(slot, town, store, catalog));
 
             applyObjectiveRow(cmd, card, slot);
-            applyRewardRow(cmd, card, slot);
+            applyRewardRow(cmd, card, slot, store, town);
 
             if (state == QuestBoardSlotState.ACCEPTED) {
                 cmd.set(card + " #DaysLeft.Visible", true);
@@ -264,43 +266,76 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
             cmd.set(card + " #ObjectiveText.TextSpans", HuntQuestBoardHandler.huntObjectiveCardText(slot));
             return;
         }
-        cmd.set(card + " #ItemRow.Visible", true);
         cmd.set(card + " #ObjectiveText.Visible", false);
         cmd.clear(card + " #ItemRow");
         List<QuestBoardItemRequirement> items = slot.requiredItemsOrEmpty();
         int count = Math.min(items.size(), MAX_ITEMS);
+        int slotIndex = 0;
         for (int j = 0; j < count; j++) {
             QuestBoardItemRequirement req = items.get(j);
+            ItemGridSlot gridSlot = AetherhavenUiItemGrids.slotForKnownItem(req.itemIdOrEmpty(), req.count());
+            if (gridSlot == null) {
+                continue;
+            }
             cmd.append(card + " #ItemRow", "Aetherhaven/QuestBoardItemSlot.ui");
-            String itemSel = card + " #ItemRow[" + j + "]";
-            cmd.set(itemSel + " #ItemIcon.ItemId", req.itemIdOrEmpty());
-            cmd.set(itemSel + " #ItemCount.TextSpans", Message.raw("x" + req.count()));
+            String itemSel = card + " #ItemRow[" + slotIndex + "]";
+            slotIndex++;
+            AetherhavenUiItemGrids.setSingleSlot(cmd, itemSel + " #ItemIcon", gridSlot);
         }
+        cmd.set(card + " #ItemRow.Visible", slotIndex > 0);
     }
 
-    private static void applyRewardRow(@Nonnull UICommandBuilder cmd, @Nonnull String card, @Nonnull QuestBoardSlotRecord slot) {
-        QuestReward rw = QuestBoardService.firstItemReward(slot);
-        if (rw == null || rw.itemId() == null || rw.itemId().isBlank()) {
-            cmd.set(card + " #RewardRow.Visible", false);
-            return;
+    private static void applyRewardRow(
+        @Nonnull UICommandBuilder cmd,
+        @Nonnull String card,
+        @Nonnull QuestBoardSlotRecord slot,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town
+    ) {
+        List<QuestReward> itemRewards = QuestBoardService.itemRewards(slot);
+        QuestRewardService.ReputationRewardPreview repRw = QuestBoardService.firstReputationReward(slot);
+        boolean hasItems = !itemRewards.isEmpty();
+        boolean hasRep = repRw != null;
+
+        cmd.clear(card + " #RewardItemsRow");
+        if (hasItems) {
+            int count = Math.min(itemRewards.size(), MAX_REWARD_ITEMS);
+            int slotIndex = 0;
+            for (int j = 0; j < count; j++) {
+                QuestReward rw = itemRewards.get(j);
+                ItemGridSlot gridSlot = AetherhavenUiItemGrids.slotForKnownItem(rw.itemId().trim(), rw.count());
+                if (gridSlot == null) {
+                    continue;
+                }
+                cmd.append(card + " #RewardItemsRow", "Aetherhaven/QuestBoardItemSlot.ui");
+                String itemSel = card + " #RewardItemsRow[" + slotIndex + "]";
+                slotIndex++;
+                AetherhavenUiItemGrids.setSingleSlot(cmd, itemSel + " #ItemIcon", gridSlot);
+            }
+            cmd.set(card + " #RewardItemsRow.Visible", slotIndex > 0);
+        } else {
+            cmd.set(card + " #RewardItemsRow.Visible", false);
         }
-        cmd.set(card + " #RewardRow.Visible", true);
-        cmd.set(card + " #RewardSlot.ItemId", rw.itemId().trim());
-        Item asset = Item.getAssetMap().getAsset(rw.itemId().trim());
-        if (asset != null && asset.getTranslationKey() != null && !asset.getTranslationKey().isBlank()) {
+
+        if (hasRep) {
+            cmd.set(card + " #RewardReputationLine.Visible", true);
+            String roleId = repRw.npcRoleId();
+            if (roleId == null || roleId.isBlank()) {
+                roleId = slot.getGiverRoleId();
+            }
+            Message villagerName =
+                roleId != null && !roleId.isBlank()
+                    ? Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + roleId.trim() + ".name")
+                    : Message.raw(QuestBoardGiverDisplay.giverName(slot, store, town));
             cmd.set(
-                card + " #RewardLabel.TextSpans",
-                Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.rewardLine")
-                    .param("count", String.valueOf(Math.max(1, rw.count())))
-                    .param("item", Message.translation(asset.getTranslationKey()))
+                card + " #RewardReputationLine.TextSpans",
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.rewardReputationLine")
+                    .param("amount", String.valueOf(repRw.amount()))
+                    .param("villager", villagerName)
             );
         } else {
-            cmd.set(
-                card + " #RewardLabel.TextSpans",
-                Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.rewardLine")
-                    .param("count", String.valueOf(Math.max(1, rw.count())))
-                    .param("item", rw.itemId().trim())
-            );
+            cmd.set(card + " #RewardReputationLine.Visible", false);
+            cmd.set(card + " #RewardReputationLine.TextSpans", Message.raw(""));
         }
     }
 

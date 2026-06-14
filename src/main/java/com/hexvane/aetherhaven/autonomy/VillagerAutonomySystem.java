@@ -668,6 +668,14 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         }
         UUID poiId = autonomy.getTargetPoiUuid();
         PoiEntry poi = poiId != null ? reg.get(poiId) : null;
+        VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
+        if (poi != null && shouldHoldWorkShiftAtStation(schedTick, binding, needs, poi)) {
+            float dur = PoiEffectTable.useDurationSeconds(poi.getInteractionKind());
+            autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            return;
+        }
         if (poi != null) {
             PoiAutonomyVisuals.cleanupAfterPoiUse(ref, store, commandBuffer, poi);
             PoiEffectTable.applyUseComplete(needs, poi);
@@ -687,6 +695,26 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         autonomy.setNextDecisionEpochMs(now + 2500L);
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         clearAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    /** During a {@code work} schedule segment, stay at the role's work POI instead of cycling back to plot wander. */
+    private static boolean shouldHoldWorkShiftAtStation(
+        @Nullable VillagerScheduleTickState schedTick,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull VillagerNeeds needs,
+        @Nonnull PoiEntry poi
+    ) {
+        if (schedTick == null || !PoiScoring.isWorkScheduleSegment(schedTick.getLastAppliedScheduleSegment())) {
+            return false;
+        }
+        if (PoiScoring.needsBreakForSchedule(needs)) {
+            return false;
+        }
+        UUID preferredPlot = binding.getPreferredPlotId();
+        if (preferredPlot == null || poi.getPlotId() == null || !preferredPlot.equals(poi.getPlotId())) {
+            return false;
+        }
+        return PoiScoring.matchesWorkPoiForBindingKind(poi, binding.getKind());
     }
 
     private static void tryPlayerShopPurchase(

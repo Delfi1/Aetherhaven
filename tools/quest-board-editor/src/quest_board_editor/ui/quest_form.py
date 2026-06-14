@@ -18,10 +18,8 @@ from PySide6.QtWidgets import (
 
 from ..lang_keys import (
     json_key_to_lang_key,
-    quest_description_lang_key,
-    quest_title_lang_key,
 )
-from ..quest_model import QuestRef, migrate_entry_type
+from ..quest_model import QuestRef, migrate_entry_type, regenerate_entry_lang_keys
 from .widgets.item_sets_editor import ItemSetsEditor
 from .widgets.kill_sets_editor import KillSetsEditor
 from .widgets.raid_sets_editor import RaidSetsEditor
@@ -44,6 +42,7 @@ class QuestForm(QWidget):
         self._ref: Optional[QuestRef] = None
         self._loading = False
         self._pending_lang: Dict[str, str] = {}
+        self._stale_lang_keys: List[str] = []
 
         outer = QVBoxLayout(self)
         scroll = QScrollArea()
@@ -188,6 +187,7 @@ class QuestForm(QWidget):
             return
         self.setEnabled(True)
         e = ref.entry
+        self.rewards_editor.set_default_npc_role_id(ref.villager_id)
         self.villager_combo.setCurrentText(ref.villager_id)
         self.type_combo.setCurrentText(ref.quest_type)
         self.id_edit.setText(str(e.get("id", "")))
@@ -220,6 +220,11 @@ class QuestForm(QWidget):
 
     def pending_lang_texts(self) -> Dict[str, str]:
         return dict(self._pending_lang)
+
+    def consume_stale_lang_keys(self) -> List[str]:
+        stale = self._stale_lang_keys
+        self._stale_lang_keys = []
+        return stale
 
     def apply(self) -> None:
         if self._ref is None:
@@ -280,6 +285,7 @@ class QuestForm(QWidget):
     def _identity_changed(self) -> None:
         if self._loading:
             return
+        self.rewards_editor.set_default_npc_role_id(self.villager_combo.currentText())
         self._on_dirty()
 
     def _type_changed(self, quest_type: str) -> None:
@@ -324,14 +330,26 @@ class QuestForm(QWidget):
             return
         vid = self.villager_combo.currentText()
         qid = self.id_edit.text().strip() or "new_quest"
-        e = self._ref.entry
-        e["titleLangKey"] = quest_title_lang_key(vid, qid)
-        e["descriptionLangKey"] = quest_description_lang_key(vid, qid)
-        if self.type_combo.currentText() in ("hunt", "raid") and not e.get("targetLabelLangKey"):
-            from ..lang_keys import target_label_lang_key
-
-            e["targetLabelLangKey"] = target_label_lang_key("vermin")
+        qtype = self.type_combo.currentText()
+        pending, stale = regenerate_entry_lang_keys(
+            self._ref.entry,
+            vid,
+            qid,
+            qtype,
+            title_text=self.title_edit.text(),
+            desc_text=self.desc_edit.text(),
+            target_text=self.target_edit.text(),
+        )
+        self._stale_lang_keys = stale
         self.load_quest(self._ref)
+        self._loading = True
+        self._pending_lang = pending
+        self.title_edit.setText(pending.get(str(self._ref.entry.get("titleLangKey", "")), ""))
+        self.desc_edit.setText(pending.get(str(self._ref.entry.get("descriptionLangKey", "")), ""))
+        target_key = str(self._ref.entry.get("targetLabelLangKey", ""))
+        if target_key:
+            self.target_edit.setText(pending.get(target_key, ""))
+        self._loading = False
         self._on_dirty()
 
     def current_villager(self) -> str:

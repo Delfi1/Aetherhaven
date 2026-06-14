@@ -1,0 +1,12 @@
+{
+  "$Comment": "Raid march vermin: allied with each other, hostile to town defenders (like Vermin toward townsfolk).",
+  "Groups": {
+    "Friendly": [
+      "Aetherhaven_Raid_Vermin"
+    ],
+    "Hostile": [
+      "Critters",
+      "Aetherhaven_Townsfolk"
+    ]
+  }
+}
