@@ -2,7 +2,165 @@
   "constructionId": "plot_guild_hall",
   "prefabPath": "Guild_Hall.prefab.json",
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 520 },
-    { "resourceTypeId": "Rock", "count": 280 }
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 233
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 191
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 182
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 178
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 175
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof",
+      "count": 130
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 121
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 75
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 70
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 64
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 45
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 39
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 38
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Beam",
+      "count": 36
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 26
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 25
+    },
+    {
+      "itemId": "Wood_Softwood_Beam",
+      "count": 24
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 18
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 14
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Window",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Half",
+      "count": 12
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Crude_Torch",
+      "count": 7
+    },
+    {
+      "itemId": "Furniture_Village_Chair",
+      "count": 6
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 4
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Table",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Roof_Flat",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Wall",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Steep",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Book_Pile_Large",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Pie_Apple",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Salad_Berry",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Ancient_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Crude_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Feran_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Chandelier",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Softwood_Fence_Gate",
+      "count": 1
+    }
   ]
 }

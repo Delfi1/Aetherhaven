@@ -1,0 +1,82 @@
+{
+  "constructionId": "plot_flower_shop",
+  "prefabPath": "plot_flower_shop.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 115
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 102
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 90
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 78
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 65
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 58
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 51
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 46
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 35
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 26
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 25
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 16
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 14
+    },
+    {
+      "itemId": "Wood_Softwood_Beam",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Kweebec_Lantern_Ceiling",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Crude_Torch",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "constructionId": "plot_jtmessenger_s_warehouse",
+  "prefabPath": "plot_jtmessenger_s_warehouse.prefab.json",
+  "materials": [
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 312
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 184
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 154
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 114
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 102
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 92
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 92
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 81
+    },
+    {
+      "itemId": "Wood_Drywood_Planks",
+      "count": 78
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 62
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 34
+    },
+    {
+      "itemId": "Furniture_Village_Chest_Large",
+      "count": 24
+    },
+    {
+      "itemId": "Wood_Softwood_Beam",
+      "count": 24
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 19
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Wall",
+      "count": 13
+    },
+    {
+      "itemId": "Wood_Softwood_Fence",
+      "count": 13
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 10
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 10
+    },
+    {
+      "itemId": "Ingredient_Hay",
+      "count": 9
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Gray",
+      "count": 8
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Gray_Light",
+      "count": 8
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 8
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Half",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 5
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Tavern_Bench",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Roof_Flat",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Builders",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Target",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Table",
+      "count": 1
+    }
+  ]
+}

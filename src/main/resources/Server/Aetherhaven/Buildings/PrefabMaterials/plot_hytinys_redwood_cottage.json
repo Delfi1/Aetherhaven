@@ -1,0 +1,318 @@
+{
+  "constructionId": "plot_hytinys_redwood_cottage",
+  "prefabPath": "plot_hytinys_redwood_cottage.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 1005
+    },
+    {
+      "itemId": "Wood_Redwood_Trunk",
+      "count": 301
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 244
+    },
+    {
+      "itemId": "Rock_Shale_Cobble",
+      "count": 217
+    },
+    {
+      "itemId": "Wood_Redwood_Planks",
+      "count": 153
+    },
+    {
+      "itemId": "Wood_Redwood_Roof",
+      "count": 134
+    },
+    {
+      "itemId": "Deco_Bone_Full",
+      "count": 130
+    },
+    {
+      "itemId": "Wood_Darkwood_Beam",
+      "count": 96
+    },
+    {
+      "itemId": "Wood_Darkwood_Planks",
+      "count": 86
+    },
+    {
+      "itemId": "Wood_Redwood_Stairs",
+      "count": 73
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 69
+    },
+    {
+      "itemId": "Wood_Redwood_Planks_Half",
+      "count": 69
+    },
+    {
+      "itemId": "Wood_Redwood_Roof_Steep",
+      "count": 69
+    },
+    {
+      "itemId": "Wood_Redwood_Beam",
+      "count": 60
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Shelf",
+      "count": 46
+    },
+    {
+      "itemId": "Rock_Basalt",
+      "count": 42
+    },
+    {
+      "itemId": "Rock_Shale_Cobble_Stairs",
+      "count": 42
+    },
+    {
+      "itemId": "Furniture_Tavern_Platform",
+      "count": 38
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Ladder",
+      "count": 26
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 22
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 20
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Trapdoor",
+      "count": 18
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Shelf",
+      "count": 18
+    },
+    {
+      "itemId": "Wood_Redwood_Fence",
+      "count": 16
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 16
+    },
+    {
+      "itemId": "WinterHoliday_Garland",
+      "count": 14
+    },
+    {
+      "itemId": "Furniture_Tavern_Ladder",
+      "count": 12
+    },
+    {
+      "itemId": "Furniture_Crude_Chest_Large",
+      "count": 10
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Darkwood_Fence",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Tavern_Door",
+      "count": 5
+    },
+    {
+      "itemId": "Rock_Shale_Brick_Pillar_Base",
+      "count": 5
+    },
+    {
+      "itemId": "Rock_Shale_Brick_Pillar_Middle",
+      "count": 5
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Banner",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Kweebec_Candle",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Shale_Brick_Beam",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Shale_Brick_Half",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Shale_Brick_Ornate",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Shale_Cobble_Half",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Shale_Cobble_Wall",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Redwood_Roof_Flat",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Ancient_Candle",
+      "count": 3
+    },
+    {
+      "itemId": "Furniture_Tavern_Bench",
+      "count": 3
+    },
+    {
+      "itemId": "Wood_Cedar_Trunk",
+      "count": 3
+    },
+    {
+      "itemId": "Bench_Furniture",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Chair",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Door",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Lantern_Ceiling",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Spices",
+      "count": 2
+    },
+    {
+      "itemId": "Tool_Feedbag",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Sticks",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Armour",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Builders",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Campfire",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Weapon",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    },
+    {
+      "itemId": "Container_Bucket",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Halloween_Pumpkin_Cute",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Map",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Tankard",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Wildmeat_Cooked",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Feran_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Wardrobe",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Chair",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Lantern",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Table",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Bed",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Chandelier",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Stool",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Temple_Wind_Chandelier",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Shelf_Full",
+      "count": 1
+    },
+    {
+      "itemId": "Halloween_Wagon",
+      "count": 1
+    },
+    {
+      "itemId": "Recipe_Book_Magic_Void",
+      "count": 1
+    }
+  ]
+}

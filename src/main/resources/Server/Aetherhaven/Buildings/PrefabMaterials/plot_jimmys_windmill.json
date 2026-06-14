@@ -1,0 +1,106 @@
+{
+  "constructionId": "plot_jimmys_windmill",
+  "prefabPath": "plot_jimmys_windmill.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 253
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 157
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 147
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 142
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 103
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 77
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 64
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence",
+      "count": 64
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 60
+    },
+    {
+      "itemId": "Rock_Stone",
+      "count": 56
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 51
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 45
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 44
+    },
+    {
+      "itemId": "Ingredient_Hay",
+      "count": 40
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 31
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 24
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Decorative",
+      "count": 21
+    },
+    {
+      "itemId": "Ingredient_Flour",
+      "count": 20
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 12
+    },
+    {
+      "itemId": "Furniture_Village_Platform",
+      "count": 10
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 6
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth_Half",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Village_Ladder",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Beech_Trunk_Full",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 2
+    }
+  ]
+}

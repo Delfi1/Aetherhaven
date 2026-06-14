@@ -1,0 +1,110 @@
+{
+  "constructionId": "plot_bomb_shop",
+  "prefabPath": "plot_bomb_shop.prefab.json",
+  "materials": [
+    {
+      "itemId": "Cloth_Block_Wool_Black",
+      "count": 134
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 81
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 62
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 56
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 55
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 54
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 41
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 32
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 28
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 28
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 24
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 17
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Deadwood_Planks",
+      "count": 13
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Yellow_Light",
+      "count": 11
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 6
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 6
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 5
+    },
+    {
+      "itemId": "Wood_Deadwood_Stairs",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Deadwood_Planks_Half",
+      "count": 3
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Candle",
+      "count": 2
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Orange",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Chandelier",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Deadwood_Fence_Gate",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "constructionId": "plot_tourist_portal",
+  "prefabPath": "plot_tourist_portal.prefab.json",
+  "materials": [
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 68
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth",
+      "count": 40
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 24
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 8
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Decorative",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Roof",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Village_Brazier",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Ornate",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Roof_Flat",
+      "count": 2
+    }
+  ]
+}

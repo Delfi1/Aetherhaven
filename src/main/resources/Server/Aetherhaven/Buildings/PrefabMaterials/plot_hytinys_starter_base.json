@@ -1,0 +1,286 @@
+{
+  "constructionId": "plot_hytinys_starter_base",
+  "prefabPath": "plot_hytinys_starter_base.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 476
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Cobble",
+      "count": 455
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 448
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 423
+    },
+    {
+      "itemId": "Wood_Darkwood_Planks",
+      "count": 365
+    },
+    {
+      "itemId": "Wood_Darkwood_Decorative",
+      "count": 318
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof",
+      "count": 221
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Cobble_Stairs",
+      "count": 143
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Shelf",
+      "count": 123
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 100
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof_Steep",
+      "count": 86
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Brick_Stairs",
+      "count": 80
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Brick_Pillar_Base",
+      "count": 77
+    },
+    {
+      "itemId": "Wood_Darkwood_Planks_Half",
+      "count": 71
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 71
+    },
+    {
+      "itemId": "Wood_Darkwood_Beam",
+      "count": 70
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 66
+    },
+    {
+      "itemId": "Wood_Darkwood_Stairs",
+      "count": 64
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Brick_Wall",
+      "count": 59
+    },
+    {
+      "itemId": "Rock_Crystal_White_Block",
+      "count": 53
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof_Flat",
+      "count": 52
+    },
+    {
+      "itemId": "Wood_Darkwood_Fence",
+      "count": 48
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 44
+    },
+    {
+      "itemId": "Furniture_Village_Ladder",
+      "count": 23
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 22
+    },
+    {
+      "itemId": "Furniture_Village_Platform",
+      "count": 18
+    },
+    {
+      "itemId": "Wood_Darkwood_Ornate",
+      "count": 18
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Chest_Large",
+      "count": 16
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Brick",
+      "count": 16
+    },
+    {
+      "itemId": "WinterHoliday_Garland",
+      "count": 12
+    },
+    {
+      "itemId": "Wood_Darkwood_Roof_Shallow",
+      "count": 11
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 8
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Brick_Pillar_Middle",
+      "count": 6
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 5
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Stairs",
+      "count": 5
+    },
+    {
+      "itemId": "Furniture_Village_Stool",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Sandstone_Red_Cobble_Half",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Half",
+      "count": 3
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Shutter",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Kweebec_Candle",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Kweebec_Painting",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Chandelier",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Temple_Emerald_Door_Medium",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Wardrobe",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Spices",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Alchemy",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Arcane",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Armour",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Builders",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furniture",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Salvage",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Tannery",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Weapon",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Book_Pile_Large",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Inkwell",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Kweebec_Plush",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Map",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Plate",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Candy_Cane",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Torch",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Bed",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Bench",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Chair",
+      "count": 1
+    },
+    {
+      "itemId": "Potion_Stamina_Large",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Beam",
+      "count": 1
+    },
+    {
+      "itemId": "Teleporter",
+      "count": 1
+    }
+  ]
+}

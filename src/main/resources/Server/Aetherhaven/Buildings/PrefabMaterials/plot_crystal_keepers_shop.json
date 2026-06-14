@@ -1,0 +1,158 @@
+{
+  "constructionId": "plot_crystal_keepers_shop",
+  "prefabPath": "plot_crystal_keepers_shop.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Lightwood_Planks",
+      "count": 92
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 91
+    },
+    {
+      "itemId": "Wood_Birch_Trunk",
+      "count": 80
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 75
+    },
+    {
+      "itemId": "Wood_Lightwood_Roof",
+      "count": 66
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 36
+    },
+    {
+      "itemId": "Rock_Crystal_Green_Block",
+      "count": 33
+    },
+    {
+      "itemId": "Wood_Lightwood_Stairs",
+      "count": 32
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 21
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 18
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 17
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Lightwood_Roof_Flat",
+      "count": 15
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 14
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Window",
+      "count": 12
+    },
+    {
+      "itemId": "Wood_Softwood_Beam",
+      "count": 10
+    },
+    {
+      "itemId": "Wood_Lightwood_Roof_Shallow",
+      "count": 9
+    },
+    {
+      "itemId": "Rock_Crystal_Green_Small",
+      "count": 6
+    },
+    {
+      "itemId": "Wood_Lightwood_Roof_Steep",
+      "count": 5
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 3
+    },
+    {
+      "itemId": "Rock_Crystal_Red_Block",
+      "count": 3
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Candle",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Crystal_Green_Medium",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Crystal_Purple_Block",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Crystal_Purple_Small",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Crystal_Red_Small",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Crystal_Yellow_Block",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Temple_Light_Lantern_Ceiling",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Sign",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Crystal_Blue_Small",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Crystal_Pink_Small",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Crystal_White_Small",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Crystal_Yellow_Large",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Crystal_Yellow_Medium",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Crystal_Yellow_Small",
+      "count": 1
+    }
+  ]
+}

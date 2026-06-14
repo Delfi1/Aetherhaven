@@ -2,7 +2,137 @@
   "constructionId": "plot_builders_hut",
   "prefabPath": "plot_builders_hut.prefab.json",
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 360 },
-    { "resourceTypeId": "Rock", "count": 80 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 107
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 75
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 72
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 53
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 42
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 35
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 22
+    },
+    {
+      "itemId": "Furniture_Village_Window",
+      "count": 18
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 14
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 13
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 9
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Mossy",
+      "count": 5
+    },
+    {
+      "itemId": "Wood_Softwood_Beam",
+      "count": 4
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 3
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Chair",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Basalt_Brick",
+      "count": 2
+    },
+    {
+      "itemId": "Aetherhaven_Wood_Scaffold",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Builders",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Candle",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Sign",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Aqua_Brick",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Aqua_Brick_Decorative",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Basalt_Brick_Ornate",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Chalk_Brick",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Ledge_Brick",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Lime_Brick",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Deadwood_Planks",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Drywood_Planks",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Goldenwood_Ornate",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Greenwood_Planks",
+      "count": 1
+    }
   ]
 }

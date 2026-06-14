@@ -1,0 +1,66 @@
+{
+  "constructionId": "plot_lonestar_144_s_guard_tower",
+  "prefabPath": "plot_lonestar_144_s_guard_tower.prefab.json",
+  "materials": [
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 216
+    },
+    {
+      "itemId": "Rock_Stone",
+      "count": 77
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 43
+    },
+    {
+      "itemId": "Rock_Basalt_Cobble_Roof",
+      "count": 42
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 40
+    },
+    {
+      "itemId": "Wood_Oak_Trunk",
+      "count": 37
+    },
+    {
+      "itemId": "Rock_Basalt_Cobble_Roof_Flat",
+      "count": 13
+    },
+    {
+      "itemId": "Furniture_Village_Ladder",
+      "count": 12
+    },
+    {
+      "itemId": "Wood_Hardwood_Stairs",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Half",
+      "count": 8
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Wall",
+      "count": 6
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Beam",
+      "count": 5
+    },
+    {
+      "itemId": "Furniture_Crude_Trapdoor",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Ancient_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Wood_Hardwood_Beam",
+      "count": 1
+    }
+  ]
+}

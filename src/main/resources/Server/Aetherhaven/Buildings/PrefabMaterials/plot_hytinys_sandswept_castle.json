@@ -1,0 +1,126 @@
+{
+  "constructionId": "plot_hytinys_sandswept_castle",
+  "prefabPath": "plot_hytinys_sandswept_castle.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 1338
+    },
+    {
+      "itemId": "Rock_Sandstone_Brick",
+      "count": 783
+    },
+    {
+      "itemId": "Rock_Sandstone_Brick_Decorative",
+      "count": 336
+    },
+    {
+      "itemId": "Rock_Sandstone_Brick_Wall",
+      "count": 289
+    },
+    {
+      "itemId": "Rock_Sandstone_Brick_Ornate",
+      "count": 278
+    },
+    {
+      "itemId": "Wood_Drywood_Roof_Steep",
+      "count": 136
+    },
+    {
+      "itemId": "Rock_Sandstone_Brick_Smooth",
+      "count": 119
+    },
+    {
+      "itemId": "Rock_Sandstone_Brick_Stairs",
+      "count": 109
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 84
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 68
+    },
+    {
+      "itemId": "Wood_Darkwood_Beam",
+      "count": 46
+    },
+    {
+      "itemId": "Wood_Darkwood_Planks_Half",
+      "count": 45
+    },
+    {
+      "itemId": "Furniture_Desert_Lantern_Tall",
+      "count": 36
+    },
+    {
+      "itemId": "Furniture_Temple_Wind_Ladder",
+      "count": 28
+    },
+    {
+      "itemId": "Deco_Shutter",
+      "count": 24
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 22
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 20
+    },
+    {
+      "itemId": "Furniture_Desert_Lantern",
+      "count": 15
+    },
+    {
+      "itemId": "Furniture_Crude_Shelf",
+      "count": 12
+    },
+    {
+      "itemId": "Furniture_Temple_Wind_Window",
+      "count": 12
+    },
+    {
+      "itemId": "Wood_Darkwood_Stairs",
+      "count": 12
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Temple_Wind_Chest_Small",
+      "count": 6
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 6
+    },
+    {
+      "itemId": "Rock_Sandstone_Brick_Half",
+      "count": 5
+    },
+    {
+      "itemId": "Furniture_Desert_Lantern_Ceiling",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Tavern_Bench",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Darkwood_Planks",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Temple_Wind_Door_Medium",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Marble_Brick_Pillar_Base",
+      "count": 1
+    }
+  ]
+}

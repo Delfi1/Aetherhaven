@@ -1,0 +1,194 @@
+{
+  "constructionId": "plot_hytinys_witch_hut",
+  "prefabPath": "plot_hytinys_witch_hut.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 1656
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 634
+    },
+    {
+      "itemId": "Wood_Blackwood_Planks",
+      "count": 286
+    },
+    {
+      "itemId": "Wood_Blackwood_Roof",
+      "count": 107
+    },
+    {
+      "itemId": "Wood_Blackwood_Roof_Steep",
+      "count": 93
+    },
+    {
+      "itemId": "Wood_Blackwood_Beam",
+      "count": 81
+    },
+    {
+      "itemId": "Wood_Blackwood_Decorative",
+      "count": 78
+    },
+    {
+      "itemId": "Wood_Blackwood_Planks_Half",
+      "count": 75
+    },
+    {
+      "itemId": "Rock_Slate_Cobble",
+      "count": 73
+    },
+    {
+      "itemId": "Rock_Basalt_Cobble_Half",
+      "count": 41
+    },
+    {
+      "itemId": "Rock_Slate_Cobble_Stairs",
+      "count": 36
+    },
+    {
+      "itemId": "Wood_Blackwood_Stairs",
+      "count": 33
+    },
+    {
+      "itemId": "Ore_Cobalt_Slate_Cracked",
+      "count": 32
+    },
+    {
+      "itemId": "Rock_Crystal_Purple_Block",
+      "count": 27
+    },
+    {
+      "itemId": "Wood_Blackwood_Roof_Shallow",
+      "count": 26
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 20
+    },
+    {
+      "itemId": "Wood_Blackwood_Fence",
+      "count": 20
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 18
+    },
+    {
+      "itemId": "Wood_Blackwood_Ornate",
+      "count": 18
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 18
+    },
+    {
+      "itemId": "Rock_Basalt_Cobble",
+      "count": 17
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Shelf",
+      "count": 15
+    },
+    {
+      "itemId": "Rock_Slate_Cobble_Half",
+      "count": 14
+    },
+    {
+      "itemId": "Wood_Blackwood_Roof_Flat",
+      "count": 10
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 10
+    },
+    {
+      "itemId": "WinterHoliday_Garland",
+      "count": 9
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Ancient_Ladder",
+      "count": 6
+    },
+    {
+      "itemId": "Rock_Slate_Stalactite_Small",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Ash_Trunk",
+      "count": 3
+    },
+    {
+      "itemId": "Wood_Ash_Trunk_Full",
+      "count": 3
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Banner",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Door_Medium",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Royal_Magic_Chair",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Royal_Magic_Wardrobe",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Alchemy",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Arcane",
+      "count": 1
+    },
+    {
+      "itemId": "Container_Bucket",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Bucket",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Coral_Shell_Swirly",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Scarecrow",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Human_Ruins_Lantern",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Chandelier",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Stool",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Temple_Dark_Brazier",
+      "count": 1
+    },
+    {
+      "itemId": "Teleporter",
+      "count": 1
+    }
+  ]
+}

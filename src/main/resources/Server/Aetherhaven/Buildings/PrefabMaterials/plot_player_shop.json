@@ -1,6 +1,6 @@
 {
-  "constructionId": "plot_market_stall",
-  "prefabPath": "plot_merchant_shop.prefab.json",
+  "constructionId": "plot_player_shop",
+  "prefabPath": "plot_player_shop.prefab.json",
   "materials": [
     {
       "resourceTypeId": "Wood_All",
@@ -40,11 +40,11 @@
     },
     {
       "itemId": "Wood_Hardwood_Planks",
-      "count": 32
+      "count": 30
     },
     {
       "itemId": "Ingredient_Fibre",
-      "count": 24
+      "count": 28
     },
     {
       "itemId": "Furniture_Village_Window",
