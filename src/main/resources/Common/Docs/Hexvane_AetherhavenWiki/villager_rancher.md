@@ -28,7 +28,10 @@ Thalen wants a house for boots and sleep, not just straw and feed buckets by the
 
 ### Friendship rewards
 
-No milestone gifts are scripted yet. Keep chatting and helping out in town.
+Visit them after your friendship reaches each level to pick up the reward through dialogue.
+
+- **Friendship 50:** teaches you to craft **Growth Serum**
+- **Friendship 100:** teaches you to craft **Hunting Knife**
 
 
 ## Weekly routine

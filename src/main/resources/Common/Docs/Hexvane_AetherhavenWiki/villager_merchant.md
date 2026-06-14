@@ -7,7 +7,7 @@ npcRoleId: Aetherhaven_Merchant
 
 ![](wiki/villager_merchant.png)
 
-**Vex Sunderlane** is usually found at **the market stall** when they are on shift.
+**Vex Sunderlane** runs a **general store** through **shop spots** in the market stall once it is built. Stock restocks at dawn; press **F** on a spot to buy. See **Player shop and shop spots** under Mechanics.
 
 ### Quests
 
@@ -25,6 +25,14 @@ Give Vex a counter and a roof so salvage has somewhere honest to land.
 1. Take the market stall plot token from Vex.
 2. Stake and build the market stall prefab.
 3. Find Vex at the stall and close the quest in dialogue.
+
+#### Your own shop
+Build a shop where you can sell goods to townsfolk and tourists.
+
+1. Finish **Vex's market stall** first.
+2. Take the **player shop** plot token from Vex.
+3. Stake and build the player shop prefab.
+4. Find Vex and close the quest in dialogue.
 
 ### Friendship rewards
 

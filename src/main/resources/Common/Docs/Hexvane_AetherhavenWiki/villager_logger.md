@@ -28,7 +28,10 @@ Raise a mill so Seren can turn rings of timber into stacks for the town instead 
 
 ### Friendship rewards
 
-No milestone gifts are scripted yet. Keep chatting and helping out in town.
+Visit them after your friendship reaches each level to pick up the reward through dialogue.
+
+- **Friendship 50:** teaches you to craft **Firewood**
+- **Friendship 100:** teaches you to craft **Root Remover**
 
 
 ## Weekly routine

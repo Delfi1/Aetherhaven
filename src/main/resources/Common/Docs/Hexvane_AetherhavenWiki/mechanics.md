@@ -20,6 +20,11 @@ sub-topics:
   - mechanic_inn_pool_visitors
   - mechanic_treasury_taxes
   - mechanic_plot_tokens
+  - mechanic_path_designer_shovel
+  - mechanic_quest_board
+  - mechanic_guild_hall_and_guards
+  - mechanic_player_shop
+  - mechanic_tourist_portal
 ---
 
 ![Mechanics hub art](wiki/mechanics_hub.png)

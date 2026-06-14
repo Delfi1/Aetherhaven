@@ -8,15 +8,16 @@ author: Hexvane
 
 # Roadmap
 
+## Shipped in 2.0
+
+Many former milestone items are now in the game: **guild hall and guards**, **quest board** dailies, **player shops**, **tourist portal**, new villagers (Builder, Florist, Pyrotechnic, Crystal Keeper, Bard), **plot blueprints**, **production upgrades**, and the overhauled **path designer shovel**. See **Mechanics** and **Villagers** in this journal for details.
+
 ## Milestones (current order)
 
-1. **Production Update** — *In progress*
-2. **Building Upgrades**
-3. **Combat / Guard Update**
-4. **Custom Building Update**
-5. **Museum Update**
-6. **Trade Network Update**
-7. **Player Housing Update**
+1. **Museum Update**
+2. **Trade Network Update**
+3. **Player Housing Update**
+4. **Custom Building Update** (expanded plot creator workflows)
 
 ## Miscellaneous planned features
 
@@ -26,7 +27,6 @@ These are planned or under consideration but **not** tied to a specific mileston
 - More building styles
 - More quests
 - Villager home decor quests
-- Villager: Pyrotechnic
 - Villager: Wizard
 - Villager: Witch
 - Villager: Druid

@@ -66,4 +66,5 @@ When you are ready to grow, take quest offers from villagers and visitors at the
 
 * Build a **park** if villagers often run low on **fun**. Park benches are the main way to refill fun. Open **Mechanics** and read the Villager needs page for hunger, energy, and fun in detail.
 * Talk to villagers often and bring gifts if you want better prices, recipes, and milestone rewards. See **Reputation** under Mechanics.
+* After the **town hall**, read **Mechanics** for the **guild hall and guards**, **quest board**, **tourist portal**, and other mid-game systems.
 * Server hosts can use creative mode tools such as `/ah starterkit` to skip crafting. That is for testing, not the normal player path.

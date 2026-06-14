@@ -28,7 +28,10 @@ Give Gorruk a proper shed and bench so he can haul stone and ore without crowdin
 
 ### Friendship rewards
 
-No milestone gifts are scripted yet. Keep chatting and helping out in town.
+Visit them after your friendship reaches each level to pick up the reward through dialogue.
+
+- **Friendship 50:** gives you **1** × **Glow Ring**
+- **Friendship 100:** gives you **1** × **Large Glow Ring**
 
 
 ## Weekly routine
