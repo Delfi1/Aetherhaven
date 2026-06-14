@@ -2,7 +2,7 @@
 # Bundle: /aetherhaven subcommand help (tab completion)
 
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
-commands.aetherhaven.towns.desc=Перечислите города Этерхейвена в современном мире.
+commands.aetherhaven.towns.desc=Отладка: Список всех городов в текущем мире
 
 commands.aetherhaven.town.desc=Членство в городском совете: приглашение, роли, выход
 commands.aetherhaven.town.invite.desc=Пригласите онлайн-игрока в свой город.
@@ -22,11 +22,16 @@ commands.aetherhaven.poi.list.desc=Список достопримечатель
 commands.aetherhaven.poi.town.desc=UUID города, или меня, или опустить для города, который вызывает вызов.
 commands.aetherhaven.poi.dump.desc=Перечислите все объекты POI, находящиеся в памяти этого мира (любой город).
 
-commands.aetherhaven.plots.desc=Экземпляры графиков: список, завершение сборки (творческий режим), удаление plotId (творческий режим). Используйте plots, чтобы избежать конфликта с графиком /aetherhaven.
-commands.aetherhaven.plots.list.desc=Перечислите экземпляры участков для вашего города (UUID участка, идентификатор строительства, штат, местоположение вывески).
-commands.aetherhaven.plots.finishassembly.desc=Творческий режим: мгновенно завершайте все текущие сборки в вашем городе (требуются загруженные чанки / активные задания).
-commands.aetherhaven.plots.remove.desc=Творческий режим: снесите один участок по UUID и удалите его из данных вашего города.
-commands.aetherhaven.plots.remove.plotId.desc=Вывести UUID графика из списка /aetherhaven plots
+commands.aetherhaven.poi.desc=Отладка: вспомогательный инструмент для Точек Интереса
+commands.aetherhaven.poi.list.desc=Список всех Точек Интереса города
+commands.aetherhaven.poi.town.desc=Введите id города или игрока. Или ничего (для своего города)
+commands.aetherhaven.poi.dump.desc=Перечислить все Точки Интереса для данного мира
+
+commands.aetherhaven.plots.desc=Отладка: вспомогательные функции для участка (в креативе - finishassembly / remove)
+commands.aetherhaven.plots.list.desc=Отладка: Список строящихся участков вашего города
+commands.aetherhaven.plots.finishassembly.desc=Креатив: закончить каждую недостроенную постройку в городе
+commands.aetherhaven.plots.remove.desc=Креатив: удалить один участок из города
+commands.aetherhaven.plots.remove.plotId.desc=Id участка из списка
 
 commands.aetherhaven.needs.desc=Отладка: потребности жителей деревни
 commands.aetherhaven.needs.inspect.desc=Список объектов в загруженных чанках, имеющих потребность в жителях (VillagerNeeds).
